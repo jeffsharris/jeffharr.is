@@ -57,8 +57,13 @@
           <div class="preview-card__title">${data.name || 'GitHub'}</div>
           <p class="preview-card__content">${data.bio || ''}</p>
           ${data.recentActivity ? `
-            <p class="preview-card__content" style="margin-top: 8px;">
+            <p class="preview-card__content">
               <strong>Recent:</strong> ${data.recentActivity}
+            </p>
+          ` : ''}
+          ${data.publicRepos ? `
+            <p class="preview-card__content" style="margin-top: 8px; opacity: 0.7;">
+              ${data.publicRepos} public repos
             </p>
           ` : ''}
         `;
@@ -72,15 +77,31 @@
           ${data.excerpt ? `<p class="preview-card__content">${data.excerpt}</p>` : ''}
         `;
 
-      case 'twitter':
+      case 'x':
         return `
           <div class="preview-card__title">@jeffintime</div>
-          <p class="preview-card__content">${data.tweet || data.bio || 'Follow me on Twitter'}</p>
+          ${data.recentTweets && data.recentTweets.length > 0 ? `
+            <p class="preview-card__content">"${data.recentTweets[0]}"</p>
+          ` : `
+            <p class="preview-card__content">${data.bio || 'Follow me on X'}</p>
+          `}
         `;
 
       case 'goodreads':
+        if (data.books && data.books.length > 0) {
+          const booksHtml = data.books.map(book => `
+            <li class="preview-card__book">
+              <span class="preview-card__book-title">${book.title}</span>
+              ${book.author ? `<br><small>by ${book.author}</small>` : ''}
+            </li>
+          `).join('');
+          return `
+            <div class="preview-card__title">${data.shelf || 'Reading'}</div>
+            <ul class="preview-card__books">${booksHtml}</ul>
+          `;
+        }
         return `
-          <div class="preview-card__title">Currently Reading</div>
+          <div class="preview-card__title">Reading</div>
           <p class="preview-card__content">
             ${data.currentlyReading || 'Check out my reading list'}
           </p>
@@ -93,8 +114,6 @@
 
   // Update preview card with data
   async function updatePreviewCard(card, platform) {
-    card.innerHTML = '<div class="preview-card__loading">Loading...</div>';
-
     const data = await fetchPreviewData(platform);
     card.innerHTML = renderPreviewContent(platform, data);
   }

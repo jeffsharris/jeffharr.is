@@ -1,69 +1,86 @@
 /**
  * Goodreads API endpoint for Cloudflare Pages Functions
- * Fetches currently reading from RSS feed
+ * Fetches currently reading and recently read books from RSS feed
  *
  * Goodreads RSS feed URL format:
- * https://www.goodreads.com/review/list_rss/USER_ID?shelf=currently-reading
+ * https://www.goodreads.com/review/list_rss/USER_ID?shelf=SHELF_NAME
  */
 
 export async function onRequest(context) {
-  // Jeff's Goodreads user ID
   const userId = '2632308';
-  const feedUrl = `https://www.goodreads.com/review/list_rss/${userId}?shelf=currently-reading`;
 
-  try {
-    const response = await fetch(feedUrl, {
-      headers: {
-        'User-Agent': 'jeffharr.is'
+  // Try to fetch currently-reading first, then fall back to recent reads
+  const shelves = [
+    { name: 'currently-reading', label: 'Currently Reading' },
+    { name: 'read', label: 'Recently Read' }
+  ];
+
+  for (const shelf of shelves) {
+    try {
+      const feedUrl = `https://www.goodreads.com/review/list_rss/${userId}?shelf=${shelf.name}`;
+
+      const response = await fetch(feedUrl, {
+        headers: {
+          'User-Agent': 'jeffharr.is'
+        }
+      });
+
+      if (!response.ok) continue;
+
+      const xml = await response.text();
+
+      // Parse multiple books from the RSS feed
+      const books = [];
+      const itemRegex = /<item>([\s\S]*?)<\/item>/g;
+      let match;
+      let count = 0;
+
+      while ((match = itemRegex.exec(xml)) !== null && count < 3) {
+        const itemXml = match[1];
+
+        // Try to extract title (with or without CDATA)
+        const titleMatch = itemXml.match(/<title><!\[CDATA\[(.*?)\]\]><\/title>/) ||
+                          itemXml.match(/<title>(.*?)<\/title>/);
+
+        // Try to extract author
+        const authorMatch = itemXml.match(/<author_name>(.*?)<\/author_name>/);
+
+        if (titleMatch) {
+          books.push({
+            title: titleMatch[1].trim(),
+            author: authorMatch ? authorMatch[1].trim() : null
+          });
+          count++;
+        }
       }
-    });
 
-    if (!response.ok) {
-      throw new Error('Failed to fetch Goodreads feed');
+      if (books.length > 0) {
+        return new Response(JSON.stringify({
+          books,
+          shelf: shelf.label,
+          profileUrl: `https://www.goodreads.com/user/show/${userId}`
+        }), {
+          headers: {
+            'Content-Type': 'application/json',
+            'Cache-Control': 'public, max-age=3600' // Cache for 1 hour
+          }
+        });
+      }
+    } catch (error) {
+      console.error(`Error fetching ${shelf.name} shelf:`, error);
+      continue;
     }
-
-    const xml = await response.text();
-
-    // Parse the first book from the RSS feed
-    const titleMatch = xml.match(/<item>[\s\S]*?<title><!\[CDATA\[(.*?)\]\]><\/title>/);
-    const authorMatch = xml.match(/<item>[\s\S]*?<author_name>(.*?)<\/author_name>/);
-
-    // Try alternative formats
-    const titleAlt = xml.match(/<item>[\s\S]*?<title>(.*?)<\/title>/);
-
-    const title = titleMatch?.[1] || titleAlt?.[1];
-    const author = authorMatch?.[1];
-
-    let currentlyReading;
-    if (title) {
-      currentlyReading = author ? `"${title}" by ${author}` : `"${title}"`;
-    } else {
-      currentlyReading = null;
-    }
-
-    const data = {
-      currentlyReading,
-      profileUrl: `https://www.goodreads.com/user/show/${userId}`
-    };
-
-    return new Response(JSON.stringify(data), {
-      headers: {
-        'Content-Type': 'application/json',
-        'Cache-Control': 'public, max-age=3600' // Cache for 1 hour
-      }
-    });
-
-  } catch (error) {
-    console.error('Goodreads feed error:', error);
-
-    return new Response(JSON.stringify({
-      currentlyReading: 'Check out my reading list',
-      profileUrl: 'https://www.goodreads.com/user/show/2632308'
-    }), {
-      headers: {
-        'Content-Type': 'application/json',
-        'Cache-Control': 'public, max-age=300'
-      }
-    });
   }
+
+  // Fallback if no books found
+  return new Response(JSON.stringify({
+    books: [],
+    currentlyReading: 'Check out my reading list',
+    profileUrl: `https://www.goodreads.com/user/show/${userId}`
+  }), {
+    headers: {
+      'Content-Type': 'application/json',
+      'Cache-Control': 'public, max-age=300'
+    }
+  });
 }

@@ -34,20 +34,22 @@
 <body>
   <!-- Theme Toggle -->
   <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
-    <span class="theme-toggle__icon">&#9790;</span>
+    <span class="theme-toggle__icon"></span>
   </button>
 
   <div class="container">
     <!-- Hero Section -->
-    <section class="hero">
-      <img
-        src="/images/profile.jpg"
-        alt="Jeff Harris releasing a sky lantern"
-        class="profile-photo"
-        width="140"
-        height="140"
-      >
-      <h1>Jeff Harris</h1>
+    <section class="hero animate-fade-in">
+      <div class="profile-photo-wrapper">
+        <img
+          src="/images/profile.jpg"
+          alt="Jeff Harris releasing a sky lantern"
+          class="profile-photo"
+          width="140"
+          height="140"
+        >
+      </div>
+      <h1 class="site-title">Jeff Harris</h1>
       <p class="tagline">Building things, raising humans, tending my inner and outer worlds.</p>
       <p class="bio">
         I'm a technologist who loves understanding how things work—whether that's recommendation systems, beehives, or my own mind. I've spent my career building products at Google (founding PM for Docs), Pinterest, and now OpenAI's developer platform. Outside of work, I meditate, keep bees, chase puzzles, and recently became a father. I live in community and have been to Burning Man more times than I'll admit. I'm trying to perfect the gem of my own heart from imperfect beginnings.
@@ -55,40 +57,67 @@
     </section>
 
     <!-- Social Links Section -->
-    <section class="social-section">
+    <section class="social-section animate-fade-in-delayed">
       <h2>Find me around the internet</h2>
 
       <!-- Primary social links with previews -->
       <div class="social-grid" id="social-grid-primary">
         <a href="https://github.com/jeffsharris" class="social-link" data-preview="github" target="_blank" rel="noopener">
-          <img src="/images/github.png" alt="" width="48" height="48">
+          <div class="social-link__icon">
+            <img src="/images/github.png" alt="" width="48" height="48">
+          </div>
           <span>GitHub</span>
           <div class="preview-card" id="preview-github">
-            <div class="preview-card__loading">Loading...</div>
+            <div class="preview-card__loading">
+              <span class="loading-dot"></span>
+              <span class="loading-dot"></span>
+              <span class="loading-dot"></span>
+            </div>
           </div>
         </a>
 
         <a href="https://wakingpatiently.substack.com/" class="social-link" data-preview="substack" target="_blank" rel="noopener">
-          <img src="/images/substack.png" alt="" width="48" height="48">
+          <div class="social-link__icon">
+            <img src="/images/substack.png" alt="" width="48" height="48">
+          </div>
           <span>Substack</span>
           <div class="preview-card" id="preview-substack">
-            <div class="preview-card__loading">Loading...</div>
+            <div class="preview-card__loading">
+              <span class="loading-dot"></span>
+              <span class="loading-dot"></span>
+              <span class="loading-dot"></span>
+            </div>
           </div>
         </a>
 
-        <a href="https://twitter.com/jeffintime" class="social-link" data-preview="twitter" target="_blank" rel="noopener">
-          <img src="/images/twitter.png" alt="" width="48" height="48">
-          <span>Twitter</span>
-          <div class="preview-card" id="preview-twitter">
-            <div class="preview-card__loading">Loading...</div>
+        <a href="https://x.com/jeffintime" class="social-link" data-preview="x" target="_blank" rel="noopener">
+          <div class="social-link__icon">
+            <svg width="48" height="48" viewBox="0 0 48 48" fill="currentColor" class="x-icon">
+              <rect width="48" height="48" rx="4" fill="currentColor" fill-opacity="0.1"/>
+              <path d="M27.3 21.6L35.5 12H33.3L26.3 20.2L20.6 12H13L21.6 25.3L13 35.5H15.2L22.6 26.7L28.6 35.5H35.2L27.3 21.6ZM23.8 25.4L22.8 24L15.8 13.6H19.5L24.7 21.1L25.7 22.5L33.3 33.9H29.6L23.8 25.4Z" fill="currentColor"/>
+            </svg>
+          </div>
+          <span>X</span>
+          <div class="preview-card" id="preview-x">
+            <div class="preview-card__loading">
+              <span class="loading-dot"></span>
+              <span class="loading-dot"></span>
+              <span class="loading-dot"></span>
+            </div>
           </div>
         </a>
 
         <a href="https://www.goodreads.com/user/show/2632308-jeff-harris" class="social-link" data-preview="goodreads" target="_blank" rel="noopener">
-          <img src="/images/goodreads.png" alt="" width="48" height="48">
+          <div class="social-link__icon">
+            <img src="/images/goodreads.png" alt="" width="48" height="48">
+          </div>
           <span>Goodreads</span>
-          <div class="preview-card" id="preview-goodreads">
-            <div class="preview-card__loading">Loading...</div>
+          <div class="preview-card preview-card--wide" id="preview-goodreads">
+            <div class="preview-card__loading">
+              <span class="loading-dot"></span>
+              <span class="loading-dot"></span>
+              <span class="loading-dot"></span>
+            </div>
           </div>
         </a>
       </div>
@@ -96,54 +125,44 @@
       <!-- Secondary social links -->
       <div class="social-grid social-grid--secondary">
         <a href="https://www.linkedin.com/in/jeffreysharris" class="social-link" target="_blank" rel="noopener">
-          <img src="/images/linkedin.png" alt="" width="32" height="32">
+          <div class="social-link__icon">
+            <img src="/images/linkedin.png" alt="" width="32" height="32">
+          </div>
           <span>LinkedIn</span>
         </a>
 
         <a href="https://www.youtube.com/@jeffsharris" class="social-link" target="_blank" rel="noopener">
-          <img src="/images/youtube.png" alt="" width="32" height="32">
+          <div class="social-link__icon">
+            <img src="/images/youtube.png" alt="" width="32" height="32">
+          </div>
           <span>YouTube</span>
         </a>
 
         <a href="https://instagram.com/jeffsharris/" class="social-link" target="_blank" rel="noopener">
-          <img src="/images/instagram.png" alt="" width="32" height="32">
+          <div class="social-link__icon">
+            <img src="/images/instagram.png" alt="" width="32" height="32">
+          </div>
           <span>Instagram</span>
         </a>
 
         <a href="https://www.facebook.com/jeffharris" class="social-link" target="_blank" rel="noopener">
-          <img src="/images/facebook.png" alt="" width="32" height="32">
+          <div class="social-link__icon">
+            <img src="/images/facebook.png" alt="" width="32" height="32">
+          </div>
           <span>Facebook</span>
         </a>
 
         <a href="https://www.pinterest.com/jeffsharris/" class="social-link" target="_blank" rel="noopener">
-          <img src="/images/pinterest.png" alt="" width="32" height="32">
+          <div class="social-link__icon">
+            <img src="/images/pinterest.png" alt="" width="32" height="32">
+          </div>
           <span>Pinterest</span>
-        </a>
-
-        <a href="https://www.reddit.com/user/jeffsharris" class="social-link" target="_blank" rel="noopener">
-          <img src="/images/reddit.png" alt="" width="32" height="32">
-          <span>Reddit</span>
-        </a>
-
-        <a href="https://www.twitch.tv/jeffsharris" class="social-link" target="_blank" rel="noopener">
-          <img src="/images/twitch.png" alt="" width="32" height="32">
-          <span>Twitch</span>
-        </a>
-
-        <a href="https://getpocket.com/@jeffharris" class="social-link" target="_blank" rel="noopener">
-          <img src="/images/pocket.png" alt="" width="32" height="32">
-          <span>Pocket</span>
-        </a>
-
-        <a href="https://tinyletter.com/jeffharris" class="social-link" target="_blank" rel="noopener">
-          <img src="/images/tinyletter.png" alt="" width="32" height="32">
-          <span>TinyLetter</span>
         </a>
       </div>
     </section>
 
     <!-- Garden Teaser -->
-    <section class="garden-section">
+    <section class="garden-section animate-fade-in-delayed-2">
       <h2>From the garden</h2>
       <div class="garden-teaser">
         <p class="text-secondary text-center">
@@ -151,20 +170,10 @@
           <a href="https://wakingpatiently.substack.com/">Substack</a>.
         </p>
       </div>
-      <!--
-      <div class="garden-teaser">
-        <div class="garden-teaser__post">
-          <span class="garden-teaser__status">🌿</span>
-          <div class="garden-teaser__title">On Paying Attention</div>
-          <p class="garden-teaser__excerpt">What meditation taught me about building products...</p>
-        </div>
-      </div>
-      <a href="/posts/" class="garden-link">View all posts &rarr;</a>
-      -->
     </section>
 
     <!-- Footer -->
-    <footer class="site-footer">
+    <footer class="site-footer animate-fade-in-delayed-2">
       <p>
         <a href="/now/">What I'm doing now</a>
       </p>
