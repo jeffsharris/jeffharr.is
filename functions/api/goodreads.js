@@ -35,7 +35,7 @@ export async function onRequest(context) {
       let match;
       let count = 0;
 
-      while ((match = itemRegex.exec(xml)) !== null && count < 3) {
+      while ((match = itemRegex.exec(xml)) !== null && count < 10) {
         const itemXml = match[1];
 
         // Try to extract title (with or without CDATA)
@@ -45,10 +45,23 @@ export async function onRequest(context) {
         // Try to extract author
         const authorMatch = itemXml.match(/<author_name>(.*?)<\/author_name>/);
 
+        // Try to extract book link
+        const linkMatch = itemXml.match(/<link>(.*?)<\/link>/);
+
+        // Try to extract rating (user's rating, if any)
+        const ratingMatch = itemXml.match(/<user_rating>(\d+)<\/user_rating>/);
+
+        // Try to extract book image
+        const imageMatch = itemXml.match(/<book_medium_image_url>(.*?)<\/book_medium_image_url>/) ||
+                          itemXml.match(/<book_small_image_url>(.*?)<\/book_small_image_url>/);
+
         if (titleMatch) {
           books.push({
             title: titleMatch[1].trim(),
-            author: authorMatch ? authorMatch[1].trim() : null
+            author: authorMatch ? authorMatch[1].trim() : null,
+            url: linkMatch ? linkMatch[1].trim() : null,
+            rating: ratingMatch ? parseInt(ratingMatch[1]) : null,
+            imageUrl: imageMatch ? imageMatch[1].trim() : null
           });
           count++;
         }

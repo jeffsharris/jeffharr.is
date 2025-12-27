@@ -19,28 +19,52 @@ export async function onRequest(context) {
 
     const xml = await response.text();
 
-    // Simple XML parsing for RSS feed
-    const titleMatch = xml.match(/<item>[\s\S]*?<title><!\[CDATA\[(.*?)\]\]><\/title>/);
-    const descMatch = xml.match(/<item>[\s\S]*?<description><!\[CDATA\[(.*?)\]\]><\/description>/);
-    const linkMatch = xml.match(/<item>[\s\S]*?<link>(.*?)<\/link>/);
+    // Parse multiple posts from the RSS feed
+    const posts = [];
+    const itemRegex = /<item>([\s\S]*?)<\/item>/g;
+    let match;
+    let count = 0;
 
-    // Also try without CDATA wrapper
-    const titleAlt = xml.match(/<item>[\s\S]*?<title>(.*?)<\/title>/);
-    const descAlt = xml.match(/<item>[\s\S]*?<description>(.*?)<\/description>/);
+    while ((match = itemRegex.exec(xml)) !== null && count < 10) {
+      const itemXml = match[1];
 
-    const title = titleMatch?.[1] || titleAlt?.[1] || 'Latest from Waking Patiently';
+      // Try to extract title (with or without CDATA)
+      const titleMatch = itemXml.match(/<title><!\[CDATA\[(.*?)\]\]><\/title>/) ||
+                         itemXml.match(/<title>(.*?)<\/title>/);
 
-    // Clean up description - remove HTML tags and truncate
-    let excerpt = descMatch?.[1] || descAlt?.[1] || '';
-    excerpt = excerpt.replace(/<[^>]*>/g, '').trim();
-    if (excerpt.length > 120) {
-      excerpt = excerpt.substring(0, 120) + '...';
+      // Try to extract description
+      const descMatch = itemXml.match(/<description><!\[CDATA\[([\s\S]*?)\]\]><\/description>/) ||
+                        itemXml.match(/<description>([\s\S]*?)<\/description>/);
+
+      // Try to extract link
+      const linkMatch = itemXml.match(/<link>(.*?)<\/link>/);
+
+      // Try to extract pubDate
+      const dateMatch = itemXml.match(/<pubDate>(.*?)<\/pubDate>/);
+
+      if (titleMatch) {
+        // Clean up description - remove HTML tags and truncate
+        let excerpt = descMatch?.[1] || '';
+        excerpt = excerpt.replace(/<[^>]*>/g, '').trim();
+        if (excerpt.length > 200) {
+          excerpt = excerpt.substring(0, 200) + '...';
+        }
+
+        posts.push({
+          title: titleMatch[1].trim(),
+          excerpt,
+          url: linkMatch?.[1] || 'https://wakingpatiently.substack.com',
+          date: dateMatch?.[1] || null
+        });
+        count++;
+      }
     }
 
     const data = {
-      title,
-      excerpt,
-      link: linkMatch?.[1] || 'https://wakingpatiently.substack.com'
+      posts,
+      newsletterName: 'Waking Patiently',
+      description: 'Thoughts on technology, consciousness, and the inner life.',
+      profileUrl: 'https://wakingpatiently.substack.com'
     };
 
     return new Response(JSON.stringify(data), {
@@ -54,9 +78,10 @@ export async function onRequest(context) {
     console.error('Substack feed error:', error);
 
     return new Response(JSON.stringify({
-      title: 'Waking Patiently',
-      excerpt: 'Thoughts on technology, consciousness, and the inner life.',
-      link: 'https://wakingpatiently.substack.com'
+      posts: [],
+      newsletterName: 'Waking Patiently',
+      description: 'Thoughts on technology, consciousness, and the inner life.',
+      profileUrl: 'https://wakingpatiently.substack.com'
     }), {
       headers: {
         'Content-Type': 'application/json',
