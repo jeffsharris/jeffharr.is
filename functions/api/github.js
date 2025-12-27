@@ -1,6 +1,6 @@
 /**
  * GitHub API endpoint for Cloudflare Pages Functions
- * Fetches comprehensive activity data for jeffsharris
+ * Fetches recent commits across all repositories
  */
 
 export async function onRequest(context) {
@@ -11,75 +11,44 @@ export async function onRequest(context) {
   };
 
   try {
-    // Fetch user profile, events, and repos in parallel
-    const [userResponse, eventsResponse, reposResponse] = await Promise.all([
-      fetch(`https://api.github.com/users/${username}`, { headers }),
-      fetch(`https://api.github.com/users/${username}/events/public?per_page=15`, { headers }),
-      fetch(`https://api.github.com/users/${username}/repos?sort=updated&per_page=10`, { headers })
-    ]);
+    // Fetch recent events (includes push events with commits)
+    const eventsResponse = await fetch(
+      `https://api.github.com/users/${username}/events/public?per_page=100`,
+      { headers }
+    );
 
-    if (!userResponse.ok) {
+    if (!eventsResponse.ok) {
       throw new Error('GitHub API error');
     }
 
-    const userData = await userResponse.json();
+    const events = await eventsResponse.json();
 
-    // Process events
-    let recentEvents = [];
-    if (eventsResponse.ok) {
-      const events = await eventsResponse.json();
+    // Extract commits from PushEvents
+    const commits = [];
+    for (const event of events) {
+      if (event.type === 'PushEvent' && event.payload?.commits) {
+        const repoName = event.repo?.name?.replace(`${username}/`, '') || event.repo?.name;
 
-      const eventDescriptions = {
-        'PushEvent': (e) => `Pushed ${e.payload?.commits?.length || 1} commit(s)`,
-        'CreateEvent': (e) => `Created ${e.payload?.ref_type}${e.payload?.ref ? ` "${e.payload.ref}"` : ''}`,
-        'WatchEvent': () => 'Starred',
-        'ForkEvent': () => 'Forked',
-        'IssuesEvent': (e) => `${capitalize(e.payload?.action)} issue`,
-        'PullRequestEvent': (e) => `${capitalize(e.payload?.action)} pull request`,
-        'IssueCommentEvent': () => 'Commented on issue',
-        'PullRequestReviewEvent': () => 'Reviewed pull request',
-        'PullRequestReviewCommentEvent': () => 'Commented on pull request',
-        'ReleaseEvent': (e) => `Released ${e.payload?.release?.tag_name || 'new version'}`,
-        'DeleteEvent': (e) => `Deleted ${e.payload?.ref_type}`,
-      };
-
-      recentEvents = events
-        .filter(e => eventDescriptions[e.type])
-        .slice(0, 10)
-        .map(event => ({
-          repo: event.repo?.name?.replace(`${username}/`, '') || event.repo?.name,
-          action: eventDescriptions[event.type]?.(event) || 'Activity',
-          date: event.created_at,
-          type: event.type
-        }));
+        for (const commit of event.payload.commits) {
+          // Skip merge commits and commits by others
+          if (commit.author?.email && commit.message && !commit.message.startsWith('Merge')) {
+            commits.push({
+              repo: repoName,
+              message: commit.message.split('\n')[0], // First line only
+              sha: commit.sha?.substring(0, 7),
+              date: event.created_at,
+              url: `https://github.com/${event.repo?.name}/commit/${commit.sha}`
+            });
+          }
+        }
+      }
     }
 
-    // Process repos
-    let repos = [];
-    if (reposResponse.ok) {
-      const reposData = await reposResponse.json();
-      repos = reposData
-        .filter(repo => !repo.fork) // Exclude forks
-        .slice(0, 8)
-        .map(repo => ({
-          name: repo.name,
-          description: repo.description,
-          language: repo.language,
-          stars: repo.stargazers_count,
-          url: repo.html_url,
-          updatedAt: repo.updated_at
-        }));
-    }
+    // Limit to most recent 20 commits
+    const recentCommits = commits.slice(0, 20);
 
     const data = {
-      name: userData.name || username,
-      bio: userData.bio,
-      avatarUrl: userData.avatar_url,
-      followers: userData.followers,
-      following: userData.following,
-      publicRepos: userData.public_repos,
-      recentEvents,
-      repos,
+      commits: recentCommits,
       profileUrl: `https://github.com/${username}`
     };
 
@@ -93,12 +62,8 @@ export async function onRequest(context) {
   } catch (error) {
     console.error('GitHub API error:', error);
 
-    // Return fallback data
     return new Response(JSON.stringify({
-      name: 'Jeff Harris',
-      bio: 'Check out my projects on GitHub',
-      recentEvents: [],
-      repos: [],
+      commits: [],
       profileUrl: `https://github.com/${username}`
     }), {
       headers: {
@@ -107,9 +72,4 @@ export async function onRequest(context) {
       }
     });
   }
-}
-
-function capitalize(str) {
-  if (!str) return '';
-  return str.charAt(0).toUpperCase() + str.slice(1);
 }

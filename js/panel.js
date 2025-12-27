@@ -1,5 +1,6 @@
 /**
  * Slide-in Panel for expanded content exploration
+ * Proactively fetches data on page load for instant panel opening
  */
 
 (function() {
@@ -32,7 +33,7 @@
     },
     x: {
       title: 'X',
-      icon: null, // Uses inline SVG
+      icon: null,
       linkText: 'X',
       profileUrl: 'https://x.com/jeffintime'
     },
@@ -46,6 +47,26 @@
 
   // Cache for API responses
   const cache = new Map();
+
+  // Proactively fetch all platform data on page load
+  function prefetchAll() {
+    const platforms = ['github', 'substack', 'goodreads'];
+    platforms.forEach(platform => {
+      fetch(`/api/${platform}`)
+        .then(response => response.ok ? response.json() : null)
+        .then(data => {
+          if (data) cache.set(platform, data);
+        })
+        .catch(() => {}); // Silently fail, will retry on panel open
+    });
+    // X doesn't need fetching - it's static profile data
+    cache.set('x', {
+      handle: '@jeffintime',
+      name: 'Jeff Harris',
+      profileUrl: 'https://x.com/jeffintime',
+      profileImageUrl: '/images/profile.jpg'
+    });
+  }
 
   // Open panel
   function openPanel(platform) {
@@ -69,26 +90,29 @@
     panelLink.href = config.profileUrl;
     panelLinkText.textContent = config.linkText;
 
-    // Show loading state
-    panelContent.innerHTML = `
-      <div class="panel-loading">
-        <div class="panel-loading__dots">
-          <span class="panel-loading__dot"></span>
-          <span class="panel-loading__dot"></span>
-          <span class="panel-loading__dot"></span>
+    // Check if data is already cached
+    if (cache.has(platform)) {
+      renderContent(platform, cache.get(platform));
+    } else {
+      // Show loading state and fetch
+      panelContent.innerHTML = `
+        <div class="panel-loading">
+          <div class="panel-loading__dots">
+            <span class="panel-loading__dot"></span>
+            <span class="panel-loading__dot"></span>
+            <span class="panel-loading__dot"></span>
+          </div>
+          <span>Loading...</span>
         </div>
-        <span>Loading...</span>
-      </div>
-    `;
+      `;
+      fetchContent(platform);
+    }
 
     // Open panel
     document.body.classList.add('panel-open');
     panel.classList.add('is-open');
     panelOverlay.classList.add('is-visible');
     panel.setAttribute('aria-hidden', 'false');
-
-    // Fetch and render content
-    fetchContent(platform);
   }
 
   // Close panel
@@ -101,12 +125,6 @@
 
   // Fetch content from API
   async function fetchContent(platform) {
-    // Check cache first
-    if (cache.has(platform)) {
-      renderContent(platform, cache.get(platform));
-      return;
-    }
-
     try {
       const response = await fetch(`/api/${platform}`);
       if (!response.ok) throw new Error('API request failed');
@@ -144,103 +162,53 @@
     }
   }
 
-  // GitHub content
+  // GitHub content - recent commits
   function renderGitHub(data) {
-    let html = '';
-
-    // Profile info
-    if (data.name || data.bio) {
-      html += `
-        <div class="panel-section">
-          <div class="content-item">
-            <h3 class="content-item__title">${data.name || 'jeffsharris'}</h3>
-            ${data.bio ? `<p class="content-item__description">${data.bio}</p>` : ''}
-          </div>
-        </div>
-      `;
+    if (!data.commits || data.commits.length === 0) {
+      panelContent.innerHTML = '<div class="panel-empty">No recent commits found</div>';
+      return;
     }
 
-    // Recent activity
-    if (data.recentEvents && data.recentEvents.length > 0) {
-      html += `
-        <div class="panel-section">
-          <h4 class="panel-section__title">Recent Activity</h4>
-          ${data.recentEvents.map(event => `
-            <div class="content-item">
-              <div class="content-item__header">
-                <h3 class="content-item__title">${event.repo}</h3>
-                <span class="content-item__meta">${formatDate(event.date)}</span>
-              </div>
-              <p class="content-item__description">${event.action}</p>
+    const html = `
+      <div class="panel-section">
+        <h4 class="panel-section__title">Recent Commits</h4>
+        ${data.commits.map(commit => `
+          <a href="${commit.url}" target="_blank" rel="noopener" class="content-item content-item--commit">
+            <div class="content-item__header">
+              <span class="content-item__repo">${commit.repo}</span>
+              <span class="content-item__meta">${formatDate(commit.date)}</span>
             </div>
-          `).join('')}
-        </div>
-      `;
-    }
-
-    // Repositories
-    if (data.repos && data.repos.length > 0) {
-      html += `
-        <div class="panel-section">
-          <h4 class="panel-section__title">Repositories</h4>
-          ${data.repos.map(repo => `
-            <div class="content-item">
-              <div class="content-item__header">
-                <h3 class="content-item__title">${repo.name}</h3>
-                ${repo.stars ? `<span class="content-item__meta">★ ${repo.stars}</span>` : ''}
-              </div>
-              ${repo.description ? `<p class="content-item__description">${repo.description}</p>` : ''}
-              ${repo.language ? `
-                <div class="content-item__tags">
-                  <span class="content-item__tag">${repo.language}</span>
-                </div>
-              ` : ''}
-            </div>
-          `).join('')}
-        </div>
-      `;
-    }
-
-    if (!html) {
-      html = '<div class="panel-empty">No recent activity found</div>';
-    }
+            <p class="content-item__message">${escapeHtml(commit.message)}</p>
+            <span class="content-item__sha">${commit.sha}</span>
+          </a>
+        `).join('')}
+      </div>
+    `;
 
     panelContent.innerHTML = html;
   }
 
   // Substack content
   function renderSubstack(data) {
-    let html = '';
-
-    if (data.posts && data.posts.length > 0) {
-      html = `
-        <div class="panel-section">
-          <h4 class="panel-section__title">Recent Posts</h4>
-          ${data.posts.map(post => `
-            <a href="${post.url || '#'}" target="_blank" rel="noopener" class="content-item" style="text-decoration: none; display: block;">
-              <div class="content-item__header">
-                <h3 class="content-item__title">${post.title}</h3>
-                ${post.date ? `<span class="content-item__meta">${formatDate(post.date)}</span>` : ''}
-              </div>
-              ${post.excerpt ? `<p class="content-item__description">${post.excerpt}</p>` : ''}
-            </a>
-          `).join('')}
-        </div>
-      `;
-    } else if (data.title) {
-      // Single post fallback
-      html = `
-        <div class="panel-section">
-          <h4 class="panel-section__title">Latest Post</h4>
-          <div class="content-item">
-            <h3 class="content-item__title">${data.title}</h3>
-            ${data.excerpt ? `<p class="content-item__description">${data.excerpt}</p>` : ''}
-          </div>
-        </div>
-      `;
-    } else {
-      html = '<div class="panel-empty">No posts found</div>';
+    if (!data.posts || data.posts.length === 0) {
+      panelContent.innerHTML = '<div class="panel-empty">No posts found</div>';
+      return;
     }
+
+    const html = `
+      <div class="panel-section">
+        <h4 class="panel-section__title">Recent Posts</h4>
+        ${data.posts.map(post => `
+          <a href="${post.url || '#'}" target="_blank" rel="noopener" class="content-item">
+            <div class="content-item__header">
+              <h3 class="content-item__title">${post.title}</h3>
+              ${post.date ? `<span class="content-item__meta">${formatDate(post.date)}</span>` : ''}
+            </div>
+            ${post.excerpt ? `<p class="content-item__description">${post.excerpt}</p>` : ''}
+          </a>
+        `).join('')}
+      </div>
+    `;
 
     panelContent.innerHTML = html;
   }
@@ -265,11 +233,43 @@
     panelContent.innerHTML = html;
   }
 
-  // Goodreads content
+  // Goodreads content - currently reading + recently read
   function renderGoodreads(data) {
     let html = '';
 
-    if (data.books && data.books.length > 0) {
+    // Currently Reading section (if any)
+    if (data.currentlyReading && data.currentlyReading.length > 0) {
+      html += `
+        <div class="panel-section">
+          <h4 class="panel-section__title">Currently Reading</h4>
+          ${data.currentlyReading.map(book => `
+            <div class="content-item content-item--book">
+              <h3 class="content-item__title">${book.title}</h3>
+              ${book.author ? `<p class="content-item__author">by ${book.author}</p>` : ''}
+            </div>
+          `).join('')}
+        </div>
+      `;
+    }
+
+    // Recently Read section
+    if (data.recentlyRead && data.recentlyRead.length > 0) {
+      html += `
+        <div class="panel-section">
+          <h4 class="panel-section__title">Recently Read</h4>
+          ${data.recentlyRead.map(book => `
+            <div class="content-item content-item--book">
+              <h3 class="content-item__title">${book.title}</h3>
+              ${book.author ? `<p class="content-item__author">by ${book.author}</p>` : ''}
+              ${book.rating ? `<span class="content-item__rating">${'★'.repeat(book.rating)}${'☆'.repeat(5 - book.rating)}</span>` : ''}
+            </div>
+          `).join('')}
+        </div>
+      `;
+    }
+
+    // Fallback for old API format
+    if (!html && data.books && data.books.length > 0) {
       html = `
         <div class="panel-section">
           <h4 class="panel-section__title">${data.shelf || 'Reading'}</h4>
@@ -281,7 +281,9 @@
           `).join('')}
         </div>
       `;
-    } else {
+    }
+
+    if (!html) {
       html = '<div class="panel-empty">No books found</div>';
     }
 
@@ -303,6 +305,13 @@
     return date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
   }
 
+  // Escape HTML to prevent XSS
+  function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+  }
+
   // Event listeners
   socialButtons.forEach(btn => {
     btn.addEventListener('click', () => {
@@ -320,5 +329,8 @@
       closePanel();
     }
   });
+
+  // Prefetch data on page load
+  prefetchAll();
 
 })();

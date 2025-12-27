@@ -465,6 +465,43 @@ body.panel-open .main {
   margin-top: 4px;
 }
 
+.content-item__rating {
+  display: block;
+  font-size: 12px;
+  color: var(--accent);
+  margin-top: 6px;
+  letter-spacing: 1px;
+}
+
+/* Commit-specific styles */
+.content-item--commit {
+  text-decoration: none;
+  display: block;
+}
+
+.content-item__repo {
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--accent);
+  background: var(--bg-hover);
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.content-item__message {
+  font-size: 14px;
+  color: var(--text);
+  margin: 8px 0 6px 0;
+  line-height: 1.5;
+}
+
+.content-item__sha {
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-size: 11px;
+  color: var(--text-light);
+}
+
 /* X Profile Card */
 .x-profile-card {
   display: flex;
