@@ -113,8 +113,7 @@ body.panel-open {
 }
 
 body.panel-open .main {
-  transform: translateX(-60px);
-  opacity: 0.4;
+  /* Panel opens independently without moving main content */
 }
 
 .card {
@@ -549,8 +548,7 @@ body.panel-open .main {
   }
 
   body.panel-open .main {
-    transform: none;
-    opacity: 0.3;
+    /* Panel opens independently without moving main content */
   }
 
   .card {
