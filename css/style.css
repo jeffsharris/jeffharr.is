@@ -465,15 +465,58 @@ body.panel-open .main {
   margin-top: 4px;
 }
 
-/* Tweet-specific styles */
-.content-item--tweet {
-  position: relative;
+/* X Profile Card */
+.x-profile-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 48px 24px;
 }
 
-.content-item--tweet .content-item__text {
-  font-size: 14px;
+.x-profile-card__header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.x-profile-card__avatar {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: var(--shadow);
+}
+
+.x-profile-card__info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.x-profile-card__name {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 600;
   color: var(--text);
+  margin: 0;
+}
+
+.x-profile-card__handle {
+  font-size: 15px;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.x-profile-card__cta {
+  color: var(--text-muted);
+  font-size: 14px;
   line-height: 1.6;
+}
+
+.x-profile-card__cta p {
   margin: 0;
 }
 

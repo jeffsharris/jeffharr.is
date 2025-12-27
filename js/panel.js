@@ -245,39 +245,22 @@
     panelContent.innerHTML = html;
   }
 
-  // X (Twitter) content
+  // X (Twitter) content - profile card only
   function renderX(data) {
-    let html = '';
-
-    // Bio
-    if (data.handle || data.bio) {
-      html += `
-        <div class="panel-section">
-          <div class="content-item">
-            <h3 class="content-item__title">${data.handle || '@jeffintime'}</h3>
-            ${data.bio ? `<p class="content-item__description">${data.bio}</p>` : ''}
+    const html = `
+      <div class="x-profile-card">
+        <div class="x-profile-card__header">
+          <img src="${data.profileImageUrl || '/images/profile.jpg'}" alt="${data.name || 'Profile'}" class="x-profile-card__avatar">
+          <div class="x-profile-card__info">
+            <h3 class="x-profile-card__name">${data.name || 'Jeff Harris'}</h3>
+            <p class="x-profile-card__handle">${data.handle || '@jeffintime'}</p>
           </div>
         </div>
-      `;
-    }
-
-    // Tweets
-    if (data.recentTweets && data.recentTweets.length > 0) {
-      html += `
-        <div class="panel-section">
-          <h4 class="panel-section__title">Featured Posts</h4>
-          ${data.recentTweets.map(tweet => `
-            <div class="content-item content-item--tweet">
-              <p class="content-item__text">"${tweet}"</p>
-            </div>
-          `).join('')}
+        <div class="x-profile-card__cta">
+          <p>Follow me on X to see my posts and thoughts.</p>
         </div>
-      `;
-    }
-
-    if (!html) {
-      html = '<div class="panel-empty">No content available</div>';
-    }
+      </div>
+    `;
 
     panelContent.innerHTML = html;
   }
