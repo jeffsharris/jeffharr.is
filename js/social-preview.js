@@ -1,178 +1,140 @@
 /**
- * Social Preview Cards for jeffharr.is
- * Handles hover/tap interactions and fetches preview data from APIs
+ * Social Preview Cards
+ * Preloads all data on page load for instant hover experience
  */
 
 (function() {
   'use strict';
 
-  // Cache for API responses
   const cache = new Map();
-  const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
+  const platforms = ['github', 'substack', 'x', 'goodreads'];
 
-  // Debounce helper
-  function debounce(fn, delay) {
-    let timeoutId;
-    return function(...args) {
-      clearTimeout(timeoutId);
-      timeoutId = setTimeout(() => fn.apply(this, args), delay);
-    };
-  }
-
-  // Check if we're on mobile
-  function isMobile() {
-    return window.matchMedia('(max-width: 640px)').matches;
-  }
-
-  // Fetch preview data from API
+  // Fetch preview data
   async function fetchPreviewData(platform) {
-    // Check cache first
-    const cached = cache.get(platform);
-    if (cached && Date.now() - cached.timestamp < CACHE_DURATION) {
-      return cached.data;
-    }
-
     try {
       const response = await fetch(`/api/${platform}`);
       if (!response.ok) throw new Error('API request failed');
-
-      const data = await response.json();
-      cache.set(platform, { data, timestamp: Date.now() });
-      return data;
+      return await response.json();
     } catch (error) {
-      console.warn(`Failed to fetch ${platform} preview:`, error);
+      console.warn(`Failed to fetch ${platform}:`, error);
       return null;
     }
   }
 
-  // Render preview card content
-  function renderPreviewContent(platform, data) {
+  // Render content for each platform
+  function renderContent(platform, data) {
     if (!data) {
-      return `<p class="preview-card__content">Unable to load preview</p>`;
+      return '<p class="preview-card__content">Unable to load</p>';
     }
 
     switch (platform) {
       case 'github':
         return `
           <div class="preview-card__title">${data.name || 'GitHub'}</div>
-          <p class="preview-card__content">${data.bio || ''}</p>
-          ${data.recentActivity ? `
-            <p class="preview-card__content">
-              <strong>Recent:</strong> ${data.recentActivity}
-            </p>
-          ` : ''}
-          ${data.publicRepos ? `
-            <p class="preview-card__content" style="margin-top: 8px; opacity: 0.7;">
-              ${data.publicRepos} public repos
-            </p>
-          ` : ''}
+          ${data.bio ? `<p class="preview-card__content">${data.bio}</p>` : ''}
+          ${data.recentActivity ? `<p class="preview-card__content"><strong>Recent:</strong> ${data.recentActivity}</p>` : ''}
         `;
 
       case 'substack':
         return `
           <div class="preview-card__title">Latest Post</div>
-          <p class="preview-card__content">
-            <strong>${data.title || 'No recent posts'}</strong>
-          </p>
+          <p class="preview-card__content"><strong>${data.title || 'Waking Patiently'}</strong></p>
           ${data.excerpt ? `<p class="preview-card__content">${data.excerpt}</p>` : ''}
         `;
 
       case 'x':
+        const tweet = data.recentTweets?.[0];
         return `
           <div class="preview-card__title">@jeffintime</div>
-          ${data.recentTweets && data.recentTweets.length > 0 ? `
-            <p class="preview-card__content">"${data.recentTweets[0]}"</p>
-          ` : `
-            <p class="preview-card__content">${data.bio || 'Follow me on X'}</p>
-          `}
+          <p class="preview-card__content">${tweet ? `"${tweet}"` : data.bio || 'Follow me on X'}</p>
         `;
 
       case 'goodreads':
-        if (data.books && data.books.length > 0) {
-          const booksHtml = data.books.map(book => `
+        if (data.books?.length > 0) {
+          const books = data.books.map(b => `
             <li class="preview-card__book">
-              <span class="preview-card__book-title">${book.title}</span>
-              ${book.author ? `<br><small>by ${book.author}</small>` : ''}
+              <span class="preview-card__book-title">${b.title}</span>
+              ${b.author ? `<br><small>by ${b.author}</small>` : ''}
             </li>
           `).join('');
           return `
             <div class="preview-card__title">${data.shelf || 'Reading'}</div>
-            <ul class="preview-card__books">${booksHtml}</ul>
+            <ul class="preview-card__books">${books}</ul>
           `;
         }
         return `
           <div class="preview-card__title">Reading</div>
-          <p class="preview-card__content">
-            ${data.currentlyReading || 'Check out my reading list'}
-          </p>
+          <p class="preview-card__content">${data.currentlyReading || 'Check out my reading list'}</p>
         `;
 
       default:
-        return `<p class="preview-card__content">Preview not available</p>`;
+        return '<p class="preview-card__content">Preview unavailable</p>';
     }
   }
 
-  // Update preview card with data
-  async function updatePreviewCard(card, platform) {
-    const data = await fetchPreviewData(platform);
-    card.innerHTML = renderPreviewContent(platform, data);
+  // Preload all preview data
+  async function preloadAll() {
+    const promises = platforms.map(async (platform) => {
+      const data = await fetchPreviewData(platform);
+      cache.set(platform, data);
+
+      // Update the card immediately
+      const card = document.querySelector(`.preview-card[data-platform="${platform}"]`);
+      if (card) {
+        card.innerHTML = renderContent(platform, data);
+      }
+    });
+
+    await Promise.all(promises);
   }
 
-  // Initialize preview cards
-  function initPreviews() {
-    const socialLinks = document.querySelectorAll('[data-preview]');
+  // Initialize
+  function init() {
+    // Show loading state initially
+    platforms.forEach(platform => {
+      const card = document.querySelector(`.preview-card[data-platform="${platform}"]`);
+      if (card) {
+        card.innerHTML = `
+          <div class="preview-card__loading">
+            <span class="loading-dot"></span>
+            <span class="loading-dot"></span>
+            <span class="loading-dot"></span>
+          </div>
+        `;
+      }
+    });
 
-    socialLinks.forEach(link => {
-      const platform = link.dataset.preview;
-      const card = link.querySelector('.preview-card');
+    // Preload all data
+    preloadAll();
 
-      if (!card) return;
-
-      // Track if we've loaded this preview
-      let loaded = false;
-
-      // Desktop: load on hover
-      const handleHover = debounce(() => {
-        if (!loaded && !isMobile()) {
-          loaded = true;
-          updatePreviewCard(card, platform);
-        }
-      }, 100);
-
-      link.addEventListener('mouseenter', handleHover);
-
-      // Mobile: load on first tap, second tap follows link
-      if (isMobile()) {
+    // Mobile tap handling
+    if (window.matchMedia('(max-width: 480px)').matches) {
+      const links = document.querySelectorAll('.social-link[data-preview]');
+      links.forEach(link => {
         let tapped = false;
+        const card = link.querySelector('.preview-card');
 
         link.addEventListener('click', (e) => {
           if (!tapped) {
             e.preventDefault();
             tapped = true;
-            card.classList.add('is-visible');
-
-            if (!loaded) {
-              loaded = true;
-              updatePreviewCard(card, platform);
-            }
+            card?.classList.add('is-visible');
           }
         });
 
-        // Close on tap outside
         document.addEventListener('click', (e) => {
           if (!link.contains(e.target)) {
             tapped = false;
-            card.classList.remove('is-visible');
+            card?.classList.remove('is-visible');
           }
         });
-      }
-    });
+      });
+    }
   }
 
-  // Run on DOM ready
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initPreviews);
+    document.addEventListener('DOMContentLoaded', init);
   } else {
-    initPreviews();
+    init();
   }
 })();

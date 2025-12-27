@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Jeff Harris</title>
-  <meta name="description" content="Technologist, father, and student of the inner world. Building things at OpenAI, keeping bees, and trying to pay attention.">
+  <meta name="description" content="Building things, raising humans, tending my inner and outer worlds.">
 
   <!-- Open Graph -->
   <meta property="og:title" content="Jeff Harris">
@@ -18,12 +18,11 @@
   <meta name="twitter:site" content="@jeffintime">
   <meta name="twitter:title" content="Jeff Harris">
   <meta name="twitter:description" content="Building things, raising humans, tending my inner and outer worlds.">
-  <meta name="twitter:image" content="https://jeffharr.is/images/profile.jpg">
 
-  <!-- Fonts -->
+  <!-- Fonts - Sora (clean geometric) + Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600&family=Inter:wght@400;500&display=swap" rel="stylesheet">
 
   <!-- Favicon -->
   <link rel="icon" href="/favicon.ico">
@@ -32,153 +31,78 @@
   <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
+  <!-- Background decoration -->
+  <div class="bg-gradient"></div>
+  <div class="bg-noise"></div>
+
   <!-- Theme Toggle -->
   <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
     <span class="theme-toggle__icon"></span>
   </button>
 
-  <div class="container">
-    <!-- Hero Section -->
-    <section class="hero animate-fade-in">
-      <div class="profile-photo-wrapper">
+  <main class="main">
+    <div class="card">
+      <!-- Profile -->
+      <div class="profile">
         <img
           src="/images/profile.jpg"
-          alt="Jeff Harris releasing a sky lantern"
-          class="profile-photo"
-          width="140"
-          height="140"
+          alt="Jeff Harris"
+          class="profile__photo"
+          width="120"
+          height="120"
         >
+        <h1 class="profile__name">Jeff Harris</h1>
+        <p class="profile__tagline">Building things, raising humans, tending my inner and outer worlds.</p>
       </div>
-      <h1 class="site-title">Jeff Harris</h1>
-      <p class="tagline">Building things, raising humans, tending my inner and outer worlds.</p>
-      <p class="bio">
-        I'm a technologist who loves understanding how things work—whether that's recommendation systems, beehives, or my own mind. I've spent my career building products at Google (founding PM for Docs), Pinterest, and now OpenAI's developer platform. Outside of work, I meditate, keep bees, chase puzzles, and recently became a father. I live in community and have been to Burning Man more times than I'll admit. I'm trying to perfect the gem of my own heart from imperfect beginnings.
-      </p>
-    </section>
 
-    <!-- Social Links Section -->
-    <section class="social-section animate-fade-in-delayed">
-      <h2>Find me around the internet</h2>
-
-      <!-- Primary social links with previews -->
-      <div class="social-grid" id="social-grid-primary">
+      <!-- Social Grid -->
+      <div class="social-grid">
         <a href="https://github.com/jeffsharris" class="social-link" data-preview="github" target="_blank" rel="noopener">
           <div class="social-link__icon">
-            <img src="/images/github.png" alt="" width="48" height="48">
+            <img src="/images/github.png" alt="" width="40" height="40">
           </div>
-          <span>GitHub</span>
-          <div class="preview-card" id="preview-github">
-            <div class="preview-card__loading">
-              <span class="loading-dot"></span>
-              <span class="loading-dot"></span>
-              <span class="loading-dot"></span>
-            </div>
-          </div>
+          <span class="social-link__label">GitHub</span>
+          <div class="preview-card" data-platform="github"></div>
         </a>
 
         <a href="https://wakingpatiently.substack.com/" class="social-link" data-preview="substack" target="_blank" rel="noopener">
           <div class="social-link__icon">
-            <img src="/images/substack.png" alt="" width="48" height="48">
+            <img src="/images/substack.png" alt="" width="40" height="40">
           </div>
-          <span>Substack</span>
-          <div class="preview-card" id="preview-substack">
-            <div class="preview-card__loading">
-              <span class="loading-dot"></span>
-              <span class="loading-dot"></span>
-              <span class="loading-dot"></span>
-            </div>
-          </div>
+          <span class="social-link__label">Substack</span>
+          <div class="preview-card" data-platform="substack"></div>
         </a>
 
         <a href="https://x.com/jeffintime" class="social-link" data-preview="x" target="_blank" rel="noopener">
           <div class="social-link__icon">
-            <svg width="48" height="48" viewBox="0 0 48 48" fill="currentColor" class="x-icon">
-              <rect width="48" height="48" rx="4" fill="currentColor" fill-opacity="0.1"/>
-              <path d="M27.3 21.6L35.5 12H33.3L26.3 20.2L20.6 12H13L21.6 25.3L13 35.5H15.2L22.6 26.7L28.6 35.5H35.2L27.3 21.6ZM23.8 25.4L22.8 24L15.8 13.6H19.5L24.7 21.1L25.7 22.5L33.3 33.9H29.6L23.8 25.4Z" fill="currentColor"/>
+            <svg width="40" height="40" viewBox="0 0 40 40" fill="currentColor" class="x-icon">
+              <rect width="40" height="40" rx="6" fill="currentColor" fill-opacity="0.08"/>
+              <path d="M23.5 18.3L30 11H28.2L22.7 17.1L18.3 11H12.5L19.3 21.5L12.5 29H14.3L20.1 22.7L24.7 29H30.5L23.5 18.3ZM21 21.8L20.2 20.7L14.9 12.2H17.5L21.7 18L22.5 19.1L28.2 27.9H25.6L21 21.8Z" fill="currentColor"/>
             </svg>
           </div>
-          <span>X</span>
-          <div class="preview-card" id="preview-x">
-            <div class="preview-card__loading">
-              <span class="loading-dot"></span>
-              <span class="loading-dot"></span>
-              <span class="loading-dot"></span>
-            </div>
-          </div>
+          <span class="social-link__label">X</span>
+          <div class="preview-card" data-platform="x"></div>
         </a>
 
         <a href="https://www.goodreads.com/user/show/2632308-jeff-harris" class="social-link" data-preview="goodreads" target="_blank" rel="noopener">
           <div class="social-link__icon">
-            <img src="/images/goodreads.png" alt="" width="48" height="48">
+            <img src="/images/goodreads.png" alt="" width="40" height="40">
           </div>
-          <span>Goodreads</span>
-          <div class="preview-card preview-card--wide" id="preview-goodreads">
-            <div class="preview-card__loading">
-              <span class="loading-dot"></span>
-              <span class="loading-dot"></span>
-              <span class="loading-dot"></span>
-            </div>
-          </div>
+          <span class="social-link__label">Goodreads</span>
+          <div class="preview-card preview-card--wide" data-platform="goodreads"></div>
         </a>
       </div>
 
-      <!-- Secondary social links -->
-      <div class="social-grid social-grid--secondary">
-        <a href="https://www.linkedin.com/in/jeffreysharris" class="social-link" target="_blank" rel="noopener">
-          <div class="social-link__icon">
-            <img src="/images/linkedin.png" alt="" width="32" height="32">
-          </div>
-          <span>LinkedIn</span>
-        </a>
-
-        <a href="https://www.youtube.com/@jeffsharris" class="social-link" target="_blank" rel="noopener">
-          <div class="social-link__icon">
-            <img src="/images/youtube.png" alt="" width="32" height="32">
-          </div>
-          <span>YouTube</span>
-        </a>
-
-        <a href="https://instagram.com/jeffsharris/" class="social-link" target="_blank" rel="noopener">
-          <div class="social-link__icon">
-            <img src="/images/instagram.png" alt="" width="32" height="32">
-          </div>
-          <span>Instagram</span>
-        </a>
-
-        <a href="https://www.facebook.com/jeffharris" class="social-link" target="_blank" rel="noopener">
-          <div class="social-link__icon">
-            <img src="/images/facebook.png" alt="" width="32" height="32">
-          </div>
-          <span>Facebook</span>
-        </a>
-
-        <a href="https://www.pinterest.com/jeffsharris/" class="social-link" target="_blank" rel="noopener">
-          <div class="social-link__icon">
-            <img src="/images/pinterest.png" alt="" width="32" height="32">
-          </div>
-          <span>Pinterest</span>
-        </a>
+      <!-- Secondary Links -->
+      <div class="secondary-links">
+        <a href="https://www.linkedin.com/in/jeffreysharris" target="_blank" rel="noopener">LinkedIn</a>
+        <span class="secondary-links__dot"></span>
+        <a href="https://www.youtube.com/@jeffsharris" target="_blank" rel="noopener">YouTube</a>
+        <span class="secondary-links__dot"></span>
+        <a href="https://instagram.com/jeffsharris/" target="_blank" rel="noopener">Instagram</a>
       </div>
-    </section>
-
-    <!-- Garden Teaser -->
-    <section class="garden-section animate-fade-in-delayed-2">
-      <h2>From the garden</h2>
-      <div class="garden-teaser">
-        <p class="text-secondary text-center">
-          Writing coming soon. In the meantime, find my thoughts on
-          <a href="https://wakingpatiently.substack.com/">Substack</a>.
-        </p>
-      </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="site-footer animate-fade-in-delayed-2">
-      <p>
-        <a href="/now/">What I'm doing now</a>
-      </p>
-    </footer>
-  </div>
+    </div>
+  </main>
 
   <!-- Scripts -->
   <script src="/js/main.js"></script>
