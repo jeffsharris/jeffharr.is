@@ -142,7 +142,19 @@
     .card__back {
       transform: rotateY(180deg);
       padding: 24px;
-      overflow-y: auto;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .card__back::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 80px;
+      background: linear-gradient(transparent, var(--bg-card));
+      pointer-events: none;
     }
 
     .card__title {
@@ -264,7 +276,7 @@
       line-height: 1.8;
       white-space: pre-line;
       margin: 0;
-      text-align: center;
+      text-align: left;
     }
 
     .modal__close {
@@ -296,13 +308,11 @@
       color: var(--text-muted);
     }
 
-    /* Scrollbar */
-    .card__back::-webkit-scrollbar,
+    /* Scrollbar (modal only) */
     .modal__body::-webkit-scrollbar {
       width: 4px;
     }
 
-    .card__back::-webkit-scrollbar-thumb,
     .modal__body::-webkit-scrollbar-thumb {
       background: var(--border);
       border-radius: 2px;
