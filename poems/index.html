@@ -20,6 +20,7 @@
       --text-muted: #6B6560;
       --text-light: #9A9590;
       --accent: #8B7355;
+      --accent-light: rgba(139, 115, 85, 0.1);
       --border: rgba(0, 0, 0, 0.08);
       --shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
       --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.12);
@@ -36,6 +37,7 @@
         --text-muted: #9A9590;
         --text-light: #6B6560;
         --accent: #C4A77D;
+        --accent-light: rgba(196, 167, 125, 0.15);
         --border: rgba(255, 255, 255, 0.1);
         --shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
         --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.5);
@@ -55,9 +57,8 @@
 
     /* Header */
     .header {
-      padding: 32px 24px;
+      padding: 32px 24px 24px;
       text-align: center;
-      border-bottom: 1px solid var(--border);
     }
 
     .header__back {
@@ -86,24 +87,36 @@
     .header__subtitle {
       font-size: 14px;
       color: var(--text-muted);
-      margin: 0 0 24px 0;
+      margin: 0;
     }
 
-    /* Search */
-    .search {
-      max-width: 320px;
+    /* Search Bar */
+    .search-bar {
+      max-width: 1400px;
       margin: 0 auto;
+      padding: 20px 24px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .search {
       position: relative;
+      flex: 1;
+      min-width: 200px;
+      max-width: 400px;
     }
 
     .search__input {
       width: 100%;
-      padding: 12px 16px 12px 42px;
+      padding: 10px 14px 10px 38px;
       font-family: var(--font-sans);
       font-size: 14px;
       background: var(--bg-card);
       border: 1px solid var(--border);
-      border-radius: 8px;
+      border-radius: 6px;
       color: var(--text);
       outline: none;
       transition: border-color 0.2s, box-shadow 0.2s;
@@ -115,29 +128,58 @@
 
     .search__input:focus {
       border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(139, 115, 85, 0.1);
+      box-shadow: 0 0 0 3px var(--accent-light);
     }
 
     .search__icon {
       position: absolute;
-      left: 14px;
+      left: 12px;
       top: 50%;
       transform: translateY(-50%);
       color: var(--text-light);
       pointer-events: none;
     }
 
+    /* Filter Toggles */
+    .filters {
+      display: flex;
+      gap: 8px;
+    }
+
+    .filter-btn {
+      padding: 8px 14px;
+      font-family: var(--font-sans);
+      font-size: 13px;
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .filter-btn:hover {
+      background: var(--bg-hover);
+      color: var(--text);
+    }
+
+    .filter-btn.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: white;
+    }
+
+    .search-bar__count {
+      font-size: 13px;
+      color: var(--text-light);
+      margin-left: auto;
+    }
+
     /* Main */
     .main {
       max-width: 1400px;
       margin: 0 auto;
-      padding: 32px 24px;
-    }
-
-    .main__count {
-      font-size: 13px;
-      color: var(--text-light);
-      margin-bottom: 24px;
+      padding: 24px 24px 48px;
     }
 
     /* Grid */
@@ -147,66 +189,54 @@
       gap: 24px;
     }
 
-    /* Card */
+    /* Card - Fade Animation */
     .card {
-      perspective: 1000px;
-      height: 320px;
+      position: relative;
+      height: 300px;
       cursor: pointer;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      transition: box-shadow 0.3s, transform 0.3s;
+    }
+
+    .card:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-2px);
     }
 
     .card.hidden {
       display: none;
     }
 
-    .card__inner {
-      position: relative;
-      width: 100%;
-      height: 100%;
-      transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-      transform-style: preserve-3d;
-    }
-
-    .card:hover .card__inner {
-      transform: rotateY(180deg);
-    }
-
-    .card__face {
+    .card__layer {
       position: absolute;
-      width: 100%;
-      height: 100%;
-      backface-visibility: hidden;
-      border-radius: 12px;
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      box-shadow: var(--shadow);
-      overflow: hidden;
+      inset: 0;
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      transition: opacity 0.4s ease;
     }
 
     .card__front {
-      display: flex;
-      flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 32px;
       text-align: center;
+      opacity: 1;
     }
 
     .card__back {
-      transform: rotateY(180deg);
-      padding: 24px;
-      overflow: hidden;
-      position: relative;
+      opacity: 0;
     }
 
-    .card__back::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      height: 80px;
-      background: linear-gradient(transparent, var(--bg-card));
-      pointer-events: none;
+    .card:hover .card__front {
+      opacity: 0;
+    }
+
+    .card:hover .card__back {
+      opacity: 1;
     }
 
     .card__title {
@@ -231,64 +261,32 @@
       line-height: 1.7;
       white-space: pre-line;
       margin: 0;
-    }
-
-    /* Memorized badge */
-    .card__badge {
-      position: absolute;
-      top: 12px;
-      right: 12px;
-      width: 24px;
-      height: 24px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--accent);
-      opacity: 0.7;
-      transition: opacity 0.2s;
-    }
-
-    .card__badge:hover {
-      opacity: 1;
-    }
-
-    .card__badge::after {
-      content: 'Memorized';
-      position: absolute;
-      top: 100%;
-      right: 0;
-      margin-top: 4px;
-      padding: 4px 8px;
-      background: var(--text);
-      color: var(--bg);
-      font-size: 11px;
-      font-family: var(--font-sans);
-      border-radius: 4px;
-      white-space: nowrap;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.2s;
-    }
-
-    .card__badge:hover::after {
-      opacity: 1;
+      flex: 1;
+      overflow: hidden;
+      mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+      -webkit-mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
     }
 
     .card__expand {
       position: absolute;
       bottom: 16px;
       right: 16px;
-      width: 32px;
-      height: 32px;
+      width: 36px;
+      height: 36px;
       display: flex;
       align-items: center;
       justify-content: center;
-      background: var(--bg-hover);
+      background: var(--bg);
       border: 1px solid var(--border);
       border-radius: 50%;
       color: var(--text-muted);
-      transition: all 0.2s;
+      opacity: 0;
+      transition: all 0.3s;
       z-index: 1;
+    }
+
+    .card:hover .card__expand {
+      opacity: 1;
     }
 
     .card__expand:hover {
@@ -305,7 +303,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 24px;
+      padding: 16px;
       opacity: 0;
       visibility: hidden;
       transition: all 0.3s ease;
@@ -326,8 +324,8 @@
     .modal__content {
       position: relative;
       width: 100%;
-      max-width: 600px;
-      max-height: 85vh;
+      max-width: 900px;
+      max-height: 90vh;
       background: var(--bg-card);
       border-radius: 16px;
       box-shadow: var(--shadow-lg);
@@ -358,10 +356,40 @@
       font-style: italic;
     }
 
+    .modal__author-link {
+      color: var(--accent);
+      text-decoration: none;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+
+    .modal__author-link:hover {
+      opacity: 0.8;
+      text-decoration: underline;
+    }
+
+    .modal__badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 12px;
+      padding: 6px 12px;
+      background: var(--accent-light);
+      border-radius: 20px;
+      font-size: 12px;
+      color: var(--accent);
+      font-style: normal;
+    }
+
+    .modal__badge svg {
+      width: 14px;
+      height: 14px;
+    }
+
     .modal__body {
       padding: 32px;
       overflow-y: auto;
-      max-height: calc(85vh - 140px);
+      max-height: calc(90vh - 160px);
     }
 
     .modal__poem {
@@ -404,18 +432,60 @@
 
     /* Scrollbar (modal only) */
     .modal__body::-webkit-scrollbar {
-      width: 4px;
+      width: 6px;
+    }
+
+    .modal__body::-webkit-scrollbar-track {
+      background: transparent;
     }
 
     .modal__body::-webkit-scrollbar-thumb {
       background: var(--border);
-      border-radius: 2px;
+      border-radius: 3px;
     }
 
     /* Responsive */
-    @media (max-width: 600px) {
+    @media (min-width: 1200px) {
+      .modal__content {
+        max-width: 1000px;
+      }
+
+      .modal__poem {
+        font-size: 1.25rem;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .header {
+        padding: 24px 20px 20px;
+      }
+
       .header__title {
         font-size: 2rem;
+      }
+
+      .search-bar {
+        padding: 16px 20px;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+      }
+
+      .search {
+        max-width: none;
+      }
+
+      .filters {
+        justify-content: flex-start;
+      }
+
+      .search-bar__count {
+        margin-left: 0;
+        text-align: center;
+      }
+
+      .main {
+        padding: 20px 16px 40px;
       }
 
       .grid {
@@ -423,20 +493,73 @@
         gap: 16px;
       }
 
-      .main {
-        padding: 20px 16px;
+      .card {
+        height: 260px;
       }
 
-      .card {
-        height: 280px;
+      .card__layer {
+        padding: 24px;
+      }
+
+      .card__title {
+        font-size: 1.3rem;
+      }
+
+      .modal {
+        padding: 8px;
       }
 
       .modal__content {
-        max-height: 90vh;
+        max-height: 95vh;
+        border-radius: 12px;
+      }
+
+      .modal__header {
+        padding: 24px 24px 0;
+      }
+
+      .modal__title {
+        font-size: 1.5rem;
+        padding-right: 32px;
       }
 
       .modal__body {
-        max-height: calc(90vh - 140px);
+        padding: 24px;
+        max-height: calc(95vh - 140px);
+      }
+
+      .modal__poem {
+        font-size: 1rem;
+      }
+
+      .modal__close {
+        top: 12px;
+        right: 12px;
+        width: 36px;
+        height: 36px;
+      }
+    }
+
+    @media (max-width: 400px) {
+      .header__title {
+        font-size: 1.75rem;
+      }
+
+      .card {
+        height: 240px;
+      }
+
+      .card__title {
+        font-size: 1.2rem;
+      }
+
+      .card__preview {
+        font-size: 14px;
+      }
+
+      .filter-btn {
+        padding: 6px 10px;
+        font-size: 12px;
       }
     }
   </style>
@@ -451,17 +574,24 @@
     </a>
     <h1 class="header__title">Poems</h1>
     <p class="header__subtitle">Collections of words that I love</p>
+  </header>
+
+  <div class="search-bar">
     <div class="search">
-      <svg class="search__icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <svg class="search__icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <circle cx="11" cy="11" r="8"/>
         <path d="M21 21l-4.35-4.35"/>
       </svg>
-      <input type="text" class="search__input" id="search" placeholder="Search by title or author..." autocomplete="off">
+      <input type="text" class="search__input" id="search" placeholder="Search titles, authors, or text..." autocomplete="off">
     </div>
-  </header>
+    <div class="filters">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="memorized">Memorized</button>
+    </div>
+    <span class="search-bar__count" id="count"></span>
+  </div>
 
   <main class="main">
-    <p class="main__count" id="count"></p>
     <div class="grid" id="grid">
       <div class="loading">Loading poems...</div>
     </div>
@@ -478,7 +608,15 @@
       </button>
       <div class="modal__header">
         <h2 class="modal__title" id="modal-title"></h2>
-        <p class="modal__author" id="modal-author"></p>
+        <p class="modal__author">
+          <a class="modal__author-link" id="modal-author"></a>
+        </p>
+        <div class="modal__badge" id="modal-badge" style="display: none;">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+          </svg>
+          Memorized
+        </div>
       </div>
       <div class="modal__body">
         <p class="modal__poem" id="modal-poem"></p>
@@ -490,13 +628,16 @@
     const grid = document.getElementById('grid');
     const countEl = document.getElementById('count');
     const searchInput = document.getElementById('search');
+    const filterBtns = document.querySelectorAll('.filter-btn');
     const modal = document.getElementById('modal');
     const modalTitle = document.getElementById('modal-title');
     const modalAuthor = document.getElementById('modal-author');
+    const modalBadge = document.getElementById('modal-badge');
     const modalPoem = document.getElementById('modal-poem');
 
     let allPoems = [];
     let memorizedSet = new Set();
+    let currentFilter = 'all';
 
     // Shuffle array (Fisher-Yates)
     function shuffle(array) {
@@ -528,50 +669,40 @@
       card.className = 'card';
       card.dataset.title = poem.title.toLowerCase();
       card.dataset.author = poem.author.toLowerCase();
+      card.dataset.content = poem.content.toLowerCase();
+      card.dataset.memorized = isMemorized ? 'true' : 'false';
 
-      const lines = poem.content.split('\n').slice(0, 8);
+      const lines = poem.content.split('\n').slice(0, 10);
       const preview = lines.join('\n');
 
-      const badgeHTML = isMemorized ? `
-        <span class="card__badge" title="Memorized">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-          </svg>
-        </span>
-      ` : '';
-
       card.innerHTML = `
-        <div class="card__inner">
-          <div class="card__face card__front">
-            ${badgeHTML}
-            <h2 class="card__title">${poem.title}</h2>
-            <p class="card__author">${poem.author}</p>
-          </div>
-          <div class="card__face card__back">
-            <p class="card__preview">${preview}</p>
-            <button class="card__expand" aria-label="Expand poem">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/>
-              </svg>
-            </button>
-          </div>
+        <div class="card__layer card__front">
+          <h2 class="card__title">${poem.title}</h2>
+          <p class="card__author">${poem.author}</p>
+        </div>
+        <div class="card__layer card__back">
+          <p class="card__preview">${preview}</p>
+          <button class="card__expand" aria-label="Expand poem">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/>
+            </svg>
+          </button>
         </div>
       `;
 
       card.addEventListener('click', (e) => {
-        if (e.target.closest('.card__expand') || e.target.closest('.card__back')) {
-          openModal(poem);
-        }
+        openModal(poem, isMemorized);
       });
 
       return card;
     }
 
     // Open modal
-    function openModal(poem) {
+    function openModal(poem, isMemorized) {
       modalTitle.textContent = poem.title;
       modalAuthor.textContent = poem.author;
       modalPoem.textContent = poem.content;
+      modalBadge.style.display = isMemorized ? 'inline-flex' : 'none';
       modal.classList.add('is-open');
       document.body.style.overflow = 'hidden';
     }
@@ -582,28 +713,67 @@
       document.body.style.overflow = '';
     }
 
+    // Author link click - search by author
+    modalAuthor.addEventListener('click', (e) => {
+      e.preventDefault();
+      const authorName = modalAuthor.textContent;
+      closeModal();
+      searchInput.value = authorName;
+      filterPoems(authorName);
+    });
+
     modal.querySelector('.modal__overlay').addEventListener('click', closeModal);
     modal.querySelector('.modal__close').addEventListener('click', closeModal);
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') closeModal();
     });
 
+    // Filter buttons
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentFilter = btn.dataset.filter;
+        filterPoems(searchInput.value);
+      });
+    });
+
     // Search/filter
     function filterPoems(query) {
       const q = query.toLowerCase().trim();
       let visible = 0;
+      let total = 0;
 
       document.querySelectorAll('.card').forEach(card => {
         const title = card.dataset.title;
         const author = card.dataset.author;
-        const matches = !q || title.includes(q) || author.includes(q);
-        card.classList.toggle('hidden', !matches);
-        if (matches) visible++;
+        const content = card.dataset.content;
+        const isMemorized = card.dataset.memorized === 'true';
+
+        // Check filter
+        const passesFilter = currentFilter === 'all' ||
+          (currentFilter === 'memorized' && isMemorized);
+
+        // Check search (title, author, or poem text)
+        const matchesSearch = !q ||
+          title.includes(q) ||
+          author.includes(q) ||
+          content.includes(q);
+
+        const show = passesFilter && matchesSearch;
+        card.classList.toggle('hidden', !show);
+
+        if (passesFilter) total++;
+        if (show) visible++;
       });
 
-      countEl.textContent = q
-        ? `${visible} of ${allPoems.length} poems`
-        : `${allPoems.length} poems`;
+      // Update count
+      const filterLabel = currentFilter === 'memorized' ? 'memorized' : 'total';
+      if (q) {
+        countEl.textContent = `${visible} of ${total} poems`;
+      } else {
+        countEl.textContent = `${visible} poems`;
+      }
     }
 
     searchInput.addEventListener('input', (e) => filterPoems(e.target.value));

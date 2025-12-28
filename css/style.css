@@ -619,7 +619,14 @@ body.panel-open .main {
   height: 18px;
 }
 
-/* Responsive */
+/* Responsive - Tablet */
+@media (max-width: 768px) {
+  .panel {
+    max-width: 100%;
+  }
+}
+
+/* Responsive - Mobile */
 @media (max-width: 540px) {
   .main {
     padding: 16px;
@@ -635,17 +642,87 @@ body.panel-open .main {
     padding: 32px 24px;
   }
 
-  .social-grid {
-    grid-template-columns: repeat(2, 1fr);
+  .profile__name {
+    font-size: 22px;
   }
 
-  .panel {
-    max-width: 100%;
+  .social-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .social-btn {
+    padding: 14px 8px;
+    min-height: 80px;
+  }
+
+  .secondary-links {
+    gap: 12px;
+  }
+
+  .secondary-links a {
+    padding: 4px 0;
   }
 
   .theme-toggle {
     top: 12px;
     right: 12px;
+  }
+
+  .panel__header {
+    padding: 16px 20px;
+  }
+
+  .panel__content {
+    padding: 20px;
+  }
+
+  .panel__footer {
+    padding: 12px 20px;
+  }
+}
+
+/* Responsive - Small Mobile */
+@media (max-width: 380px) {
+  .main {
+    padding: 12px;
+    padding-top: 56px;
+  }
+
+  .card {
+    padding: 28px 20px;
+  }
+
+  .profile__photo {
+    width: 80px;
+    height: 80px;
+  }
+
+  .profile__name {
+    font-size: 20px;
+  }
+
+  .profile__tagline {
+    font-size: 13px;
+  }
+
+  .social-btn__icon img,
+  .social-btn__icon .x-icon {
+    width: 32px;
+    height: 32px;
+  }
+
+  .secondary-links {
+    gap: 10px;
+  }
+
+  .secondary-links a {
+    font-size: 12px;
+  }
+
+  .secondary-links__dot {
+    width: 2px;
+    height: 2px;
   }
 }
 
