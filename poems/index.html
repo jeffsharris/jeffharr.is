@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Poems | Jeff Harris</title>
+  <meta name="description" content="A collection of poems I've memorized.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+
+  <link rel="icon" href="/favicon.ico">
+  <style>
+    :root {
+      --bg: #FDFCFA;
+      --bg-card: #FFFFFF;
+      --bg-hover: #F8F6F3;
+      --text: #2D2A26;
+      --text-muted: #6B6560;
+      --text-light: #9A9590;
+      --accent: #8B7355;
+      --border: rgba(0, 0, 0, 0.08);
+      --shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+      --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.12);
+      --font-serif: 'Cormorant Garamond', Georgia, serif;
+      --font-sans: 'Inter', system-ui, sans-serif;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1A1918;
+        --bg-card: #242220;
+        --bg-hover: #2D2A28;
+        --text: #E8E4DF;
+        --text-muted: #9A9590;
+        --text-light: #6B6560;
+        --accent: #C4A77D;
+        --border: rgba(255, 255, 255, 0.1);
+        --shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+        --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.5);
+      }
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Header */
+    .header {
+      padding: 32px 24px;
+      text-align: center;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .header__back {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      color: var(--text-muted);
+      text-decoration: none;
+      margin-bottom: 16px;
+      transition: color 0.2s;
+    }
+
+    .header__back:hover {
+      color: var(--accent);
+    }
+
+    .header__title {
+      font-family: var(--font-serif);
+      font-size: 2.5rem;
+      font-weight: 400;
+      margin: 0 0 8px 0;
+      letter-spacing: 0.02em;
+    }
+
+    .header__subtitle {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin: 0;
+    }
+
+    /* Grid */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 24px;
+      padding: 32px 24px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    /* Card */
+    .card {
+      perspective: 1000px;
+      height: 320px;
+      cursor: pointer;
+    }
+
+    .card__inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      transform-style: preserve-3d;
+    }
+
+    .card:hover .card__inner {
+      transform: rotateY(180deg);
+    }
+
+    .card__face {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      border-radius: 12px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .card__front {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 32px;
+      text-align: center;
+    }
+
+    .card__back {
+      transform: rotateY(180deg);
+      padding: 24px;
+      overflow-y: auto;
+    }
+
+    .card__title {
+      font-family: var(--font-serif);
+      font-size: 1.5rem;
+      font-weight: 500;
+      margin: 0 0 8px 0;
+      color: var(--text);
+      line-height: 1.3;
+    }
+
+    .card__author {
+      font-size: 14px;
+      color: var(--text-muted);
+      font-style: italic;
+    }
+
+    .card__preview {
+      font-family: var(--font-serif);
+      font-size: 15px;
+      color: var(--text);
+      line-height: 1.7;
+      white-space: pre-line;
+      margin: 0;
+    }
+
+    .card__expand {
+      position: absolute;
+      bottom: 16px;
+      right: 16px;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg-hover);
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      color: var(--text-muted);
+      transition: all 0.2s;
+    }
+
+    .card__expand:hover {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: white;
+    }
+
+    /* Modal */
+    .modal {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .modal.is-open {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal__overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(4px);
+    }
+
+    .modal__content {
+      position: relative;
+      width: 100%;
+      max-width: 600px;
+      max-height: 85vh;
+      background: var(--bg-card);
+      border-radius: 16px;
+      box-shadow: var(--shadow-lg);
+      overflow: hidden;
+      transform: scale(0.95) translateY(20px);
+      transition: transform 0.3s ease;
+    }
+
+    .modal.is-open .modal__content {
+      transform: scale(1) translateY(0);
+    }
+
+    .modal__header {
+      padding: 32px 32px 0;
+      text-align: center;
+    }
+
+    .modal__title {
+      font-family: var(--font-serif);
+      font-size: 2rem;
+      font-weight: 500;
+      margin: 0 0 8px 0;
+    }
+
+    .modal__author {
+      font-size: 15px;
+      color: var(--text-muted);
+      font-style: italic;
+    }
+
+    .modal__body {
+      padding: 32px;
+      overflow-y: auto;
+      max-height: calc(85vh - 140px);
+    }
+
+    .modal__poem {
+      font-family: var(--font-serif);
+      font-size: 1.125rem;
+      line-height: 1.8;
+      white-space: pre-line;
+      margin: 0;
+      text-align: center;
+    }
+
+    .modal__close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      cursor: pointer;
+      color: var(--text-muted);
+      transition: all 0.2s;
+    }
+
+    .modal__close:hover {
+      background: var(--bg-hover);
+      color: var(--text);
+    }
+
+    /* Loading */
+    .loading {
+      text-align: center;
+      padding: 64px;
+      color: var(--text-muted);
+    }
+
+    /* Scrollbar */
+    .card__back::-webkit-scrollbar,
+    .modal__body::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .card__back::-webkit-scrollbar-thumb,
+    .modal__body::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 2px;
+    }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      .header__title {
+        font-size: 2rem;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+        padding: 20px 16px;
+        gap: 16px;
+      }
+
+      .card {
+        height: 280px;
+      }
+
+      .modal__content {
+        max-height: 90vh;
+      }
+
+      .modal__body {
+        max-height: calc(90vh - 140px);
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <a href="/" class="header__back">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M19 12H5M12 19l-7-7 7-7"/>
+      </svg>
+      Back
+    </a>
+    <h1 class="header__title">Poems</h1>
+    <p class="header__subtitle">A collection of verses I've committed to memory</p>
+  </header>
+
+  <main class="grid" id="grid">
+    <div class="loading">Loading poems...</div>
+  </main>
+
+  <div class="modal" id="modal">
+    <div class="modal__overlay"></div>
+    <div class="modal__content">
+      <button class="modal__close" aria-label="Close">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+      <div class="modal__header">
+        <h2 class="modal__title" id="modal-title"></h2>
+        <p class="modal__author" id="modal-author"></p>
+      </div>
+      <div class="modal__body">
+        <p class="modal__poem" id="modal-poem"></p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const grid = document.getElementById('grid');
+    const modal = document.getElementById('modal');
+    const modalTitle = document.getElementById('modal-title');
+    const modalAuthor = document.getElementById('modal-author');
+    const modalPoem = document.getElementById('modal-poem');
+
+    // Parse markdown frontmatter and content
+    function parsePoem(markdown) {
+      const match = markdown.match(/^---\n([\s\S]*?)\n---\n([\s\S]*)$/);
+      if (!match) return null;
+
+      const frontmatter = match[1];
+      const content = match[2].trim();
+
+      const title = frontmatter.match(/title:\s*(.+)/)?.[1] || 'Untitled';
+      const author = frontmatter.match(/author:\s*(.+)/)?.[1] || 'Unknown';
+
+      return { title, author, content };
+    }
+
+    // Create card element
+    function createCard(poem) {
+      const card = document.createElement('div');
+      card.className = 'card';
+
+      // Truncate content for preview
+      const lines = poem.content.split('\n').slice(0, 8);
+      const preview = lines.join('\n') + (poem.content.split('\n').length > 8 ? '\n...' : '');
+
+      card.innerHTML = `
+        <div class="card__inner">
+          <div class="card__face card__front">
+            <h2 class="card__title">${poem.title}</h2>
+            <p class="card__author">${poem.author}</p>
+          </div>
+          <div class="card__face card__back">
+            <p class="card__preview">${preview}</p>
+            <button class="card__expand" aria-label="Expand poem">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+      `;
+
+      // Click to expand
+      card.addEventListener('click', (e) => {
+        if (e.target.closest('.card__expand') || e.target.closest('.card__back')) {
+          openModal(poem);
+        }
+      });
+
+      return card;
+    }
+
+    // Open modal
+    function openModal(poem) {
+      modalTitle.textContent = poem.title;
+      modalAuthor.textContent = poem.author;
+      modalPoem.textContent = poem.content;
+      modal.classList.add('is-open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    // Close modal
+    function closeModal() {
+      modal.classList.remove('is-open');
+      document.body.style.overflow = '';
+    }
+
+    modal.querySelector('.modal__overlay').addEventListener('click', closeModal);
+    modal.querySelector('.modal__close').addEventListener('click', closeModal);
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeModal();
+    });
+
+    // Load poems
+    async function loadPoems() {
+      try {
+        const manifestRes = await fetch('/poems/manifest.json');
+        const manifest = await manifestRes.json();
+
+        const poems = await Promise.all(
+          manifest.map(async (slug) => {
+            const res = await fetch(`/poems/content/${slug}.md`);
+            const markdown = await res.text();
+            return parsePoem(markdown);
+          })
+        );
+
+        grid.innerHTML = '';
+        poems.filter(Boolean).forEach((poem) => {
+          grid.appendChild(createCard(poem));
+        });
+      } catch (error) {
+        grid.innerHTML = '<div class="loading">Unable to load poems</div>';
+        console.error('Failed to load poems:', error);
+      }
+    }
+
+    loadPoems();
+  </script>
+</body>
+</html>
