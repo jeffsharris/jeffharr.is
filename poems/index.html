@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Poems | Jeff Harris</title>
-  <meta name="description" content="Poems stored in my brain.">
+  <meta name="description" content="Collections of words that I love.">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -127,37 +127,17 @@
       pointer-events: none;
     }
 
-    /* Section */
-    .section {
+    /* Main */
+    .main {
       max-width: 1400px;
       margin: 0 auto;
       padding: 32px 24px;
     }
 
-    .section__header {
-      margin-bottom: 24px;
-    }
-
-    .section__title {
-      font-family: var(--font-serif);
-      font-size: 1.25rem;
-      font-weight: 500;
-      color: var(--text-muted);
-      margin: 0;
-    }
-
-    .section__count {
+    .main__count {
       font-size: 13px;
       color: var(--text-light);
-      margin-top: 4px;
-    }
-
-    .section--candidates {
-      border-top: 1px solid var(--border);
-    }
-
-    .section--candidates .section__title {
-      font-style: italic;
+      margin-bottom: 24px;
     }
 
     /* Grid */
@@ -253,6 +233,47 @@
       margin: 0;
     }
 
+    /* Memorized badge */
+    .card__badge {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent);
+      opacity: 0.7;
+      transition: opacity 0.2s;
+    }
+
+    .card__badge:hover {
+      opacity: 1;
+    }
+
+    .card__badge::after {
+      content: 'Memorized';
+      position: absolute;
+      top: 100%;
+      right: 0;
+      margin-top: 4px;
+      padding: 4px 8px;
+      background: var(--text);
+      color: var(--bg);
+      font-size: 11px;
+      font-family: var(--font-sans);
+      border-radius: 4px;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s;
+    }
+
+    .card__badge:hover::after {
+      opacity: 1;
+    }
+
     .card__expand {
       position: absolute;
       bottom: 16px;
@@ -274,14 +295,6 @@
       background: var(--accent);
       border-color: var(--accent);
       color: white;
-    }
-
-    /* Empty state */
-    .empty {
-      text-align: center;
-      padding: 48px 24px;
-      color: var(--text-muted);
-      font-style: italic;
     }
 
     /* Modal */
@@ -410,7 +423,7 @@
         gap: 16px;
       }
 
-      .section {
+      .main {
         padding: 20px 16px;
       }
 
@@ -437,7 +450,7 @@
       Back
     </a>
     <h1 class="header__title">Poems</h1>
-    <p class="header__subtitle">Poems stored in my brain</p>
+    <p class="header__subtitle">Collections of words that I love</p>
     <div class="search">
       <svg class="search__icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <circle cx="11" cy="11" r="8"/>
@@ -447,23 +460,12 @@
     </div>
   </header>
 
-  <section class="section" id="memorized-section">
-    <div class="section__header">
-      <h2 class="section__title">Memorized</h2>
-      <p class="section__count" id="memorized-count"></p>
-    </div>
-    <div class="grid" id="memorized-grid">
+  <main class="main">
+    <p class="main__count" id="count"></p>
+    <div class="grid" id="grid">
       <div class="loading">Loading poems...</div>
     </div>
-  </section>
-
-  <section class="section section--candidates" id="candidates-section" style="display: none;">
-    <div class="section__header">
-      <h2 class="section__title">On the List</h2>
-      <p class="section__count" id="candidates-count"></p>
-    </div>
-    <div class="grid" id="candidates-grid"></div>
-  </section>
+  </main>
 
   <div class="modal" id="modal">
     <div class="modal__overlay"></div>
@@ -485,19 +487,16 @@
   </div>
 
   <script>
-    const memorizedGrid = document.getElementById('memorized-grid');
-    const candidatesGrid = document.getElementById('candidates-grid');
-    const candidatesSection = document.getElementById('candidates-section');
-    const memorizedCount = document.getElementById('memorized-count');
-    const candidatesCount = document.getElementById('candidates-count');
+    const grid = document.getElementById('grid');
+    const countEl = document.getElementById('count');
     const searchInput = document.getElementById('search');
     const modal = document.getElementById('modal');
     const modalTitle = document.getElementById('modal-title');
     const modalAuthor = document.getElementById('modal-author');
     const modalPoem = document.getElementById('modal-poem');
 
-    let allMemorized = [];
-    let allCandidates = [];
+    let allPoems = [];
+    let memorizedSet = new Set();
 
     // Shuffle array (Fisher-Yates)
     function shuffle(array) {
@@ -524,7 +523,7 @@
     }
 
     // Create card element
-    function createCard(poem) {
+    function createCard(poem, isMemorized) {
       const card = document.createElement('div');
       card.className = 'card';
       card.dataset.title = poem.title.toLowerCase();
@@ -533,9 +532,18 @@
       const lines = poem.content.split('\n').slice(0, 8);
       const preview = lines.join('\n');
 
+      const badgeHTML = isMemorized ? `
+        <span class="card__badge" title="Memorized">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+          </svg>
+        </span>
+      ` : '';
+
       card.innerHTML = `
         <div class="card__inner">
           <div class="card__face card__front">
+            ${badgeHTML}
             <h2 class="card__title">${poem.title}</h2>
             <p class="card__author">${poem.author}</p>
           </div>
@@ -583,27 +591,19 @@
     // Search/filter
     function filterPoems(query) {
       const q = query.toLowerCase().trim();
+      let visible = 0;
 
       document.querySelectorAll('.card').forEach(card => {
         const title = card.dataset.title;
         const author = card.dataset.author;
         const matches = !q || title.includes(q) || author.includes(q);
         card.classList.toggle('hidden', !matches);
+        if (matches) visible++;
       });
 
-      // Update counts
-      const visibleMemorized = memorizedGrid.querySelectorAll('.card:not(.hidden)').length;
-      const visibleCandidates = candidatesGrid.querySelectorAll('.card:not(.hidden)').length;
-
-      memorizedCount.textContent = q
-        ? `${visibleMemorized} of ${allMemorized.length} poems`
-        : `${allMemorized.length} poems`;
-
-      if (allCandidates.length > 0) {
-        candidatesCount.textContent = q
-          ? `${visibleCandidates} of ${allCandidates.length} poems`
-          : `${allCandidates.length} poems`;
-      }
+      countEl.textContent = q
+        ? `${visible} of ${allPoems.length} poems`
+        : `${allPoems.length} poems`;
     }
 
     searchInput.addEventListener('input', (e) => filterPoems(e.target.value));
@@ -614,52 +614,33 @@
         const manifestRes = await fetch('/poems/manifest.json');
         const manifest = await manifestRes.json();
 
-        // Load memorized poems
-        const memorizedPoems = await Promise.all(
-          manifest.memorized.map(async (slug) => {
+        memorizedSet = new Set(manifest.memorized || []);
+
+        const poems = await Promise.all(
+          manifest.poems.map(async (slug) => {
             try {
               const res = await fetch(`/poems/content/${slug}.md`);
               const markdown = await res.text();
-              return parsePoem(markdown);
+              const poem = parsePoem(markdown);
+              if (poem) poem.slug = slug;
+              return poem;
             } catch {
               return null;
             }
           })
         );
-        allMemorized = shuffle(memorizedPoems.filter(Boolean));
 
-        memorizedGrid.innerHTML = '';
-        allMemorized.forEach((poem) => {
-          memorizedGrid.appendChild(createCard(poem));
+        allPoems = shuffle(poems.filter(Boolean));
+
+        grid.innerHTML = '';
+        allPoems.forEach((poem) => {
+          const isMemorized = memorizedSet.has(poem.slug);
+          grid.appendChild(createCard(poem, isMemorized));
         });
-        memorizedCount.textContent = `${allMemorized.length} poems`;
-
-        // Load candidate poems
-        if (manifest.candidates && manifest.candidates.length > 0) {
-          const candidatePoems = await Promise.all(
-            manifest.candidates.map(async (slug) => {
-              try {
-                const res = await fetch(`/poems/candidates/${slug}.md`);
-                const markdown = await res.text();
-                return parsePoem(markdown);
-              } catch {
-                return null;
-              }
-            })
-          );
-          allCandidates = shuffle(candidatePoems.filter(Boolean));
-
-          if (allCandidates.length > 0) {
-            candidatesSection.style.display = 'block';
-            allCandidates.forEach((poem) => {
-              candidatesGrid.appendChild(createCard(poem));
-            });
-            candidatesCount.textContent = `${allCandidates.length} poems`;
-          }
-        }
+        countEl.textContent = `${allPoems.length} poems`;
 
       } catch (error) {
-        memorizedGrid.innerHTML = '<div class="loading">Unable to load poems</div>';
+        grid.innerHTML = '<div class="loading">Unable to load poems</div>';
         console.error('Failed to load poems:', error);
       }
     }
