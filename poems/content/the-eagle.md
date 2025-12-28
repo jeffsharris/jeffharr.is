@@ -1,0 +1,12 @@
+---
+title: The Eagle
+author: Alfred Tennyson
+---
+
+He clasps the crag with crooked hands;
+Close to the sun in lonely lands,
+Ring'd with the azure world, he stands.
+
+The wrinkled sea beneath him crawls;
+He watches from his mountain walls,
+And like a thunderbolt he falls.
