@@ -336,6 +336,7 @@ body.panel-open .main {
 .panel__content {
   flex: 1;
   overflow-y: auto;
+  overflow-x: hidden;
   padding: 24px;
 }
 
@@ -406,7 +407,6 @@ body.panel-open .main {
 
 .content-item:hover {
   border-color: var(--accent);
-  transform: translateX(4px);
 }
 
 .content-item:last-child {

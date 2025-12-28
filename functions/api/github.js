@@ -1,6 +1,6 @@
 /**
  * GitHub API endpoint for Cloudflare Pages Functions
- * Fetches recent commits across all repositories
+ * Fetches recent commits across all public repositories
  */
 
 export async function onRequest(context) {
@@ -11,51 +11,55 @@ export async function onRequest(context) {
   };
 
   try {
-    // Fetch recent events (includes push events with commits)
-    const eventsResponse = await fetch(
-      `https://api.github.com/users/${username}/events/public?per_page=100`,
+    // First, get user's recently updated repos
+    const reposResponse = await fetch(
+      `https://api.github.com/users/${username}/repos?sort=pushed&per_page=10`,
       { headers }
     );
 
-    if (!eventsResponse.ok) {
-      throw new Error('GitHub API error');
+    if (!reposResponse.ok) {
+      throw new Error('GitHub API error fetching repos');
     }
 
-    const events = await eventsResponse.json();
+    const repos = await reposResponse.json();
 
-    // Extract commits from PushEvents
-    const commits = [];
-    for (const event of events) {
-      if (event.type === 'PushEvent' && event.payload?.commits) {
-        const repoName = event.repo?.name?.replace(`${username}/`, '') || event.repo?.name;
+    // Fetch commits from each repo in parallel
+    const commitPromises = repos.slice(0, 5).map(async (repo) => {
+      try {
+        const commitsResponse = await fetch(
+          `https://api.github.com/repos/${username}/${repo.name}/commits?per_page=10`,
+          { headers }
+        );
 
-        for (const commit of event.payload.commits) {
-          // Skip merge commits and commits by others
-          if (commit.author?.email && commit.message && !commit.message.startsWith('Merge')) {
-            commits.push({
-              repo: repoName,
-              message: commit.message.split('\n')[0], // First line only
-              sha: commit.sha?.substring(0, 7),
-              date: event.created_at,
-              url: `https://github.com/${event.repo?.name}/commit/${commit.sha}`
-            });
-          }
-        }
+        if (!commitsResponse.ok) return [];
+
+        const commits = await commitsResponse.json();
+        return commits.map(c => ({
+          repo: repo.name,
+          message: c.commit?.message?.split('\n')[0] || 'No message',
+          sha: c.sha?.substring(0, 7),
+          date: c.commit?.author?.date,
+          url: c.html_url
+        }));
+      } catch {
+        return [];
       }
-    }
+    });
 
-    // Limit to most recent 20 commits
-    const recentCommits = commits.slice(0, 20);
+    const allCommitArrays = await Promise.all(commitPromises);
+    const allCommits = allCommitArrays.flat();
 
-    const data = {
+    // Sort by date (newest first) and take top 20
+    allCommits.sort((a, b) => new Date(b.date) - new Date(a.date));
+    const recentCommits = allCommits.slice(0, 20);
+
+    return new Response(JSON.stringify({
       commits: recentCommits,
       profileUrl: `https://github.com/${username}`
-    };
-
-    return new Response(JSON.stringify(data), {
+    }), {
       headers: {
         'Content-Type': 'application/json',
-        'Cache-Control': 'public, max-age=300' // Cache for 5 minutes
+        'Cache-Control': 'public, max-age=300'
       }
     });
 
