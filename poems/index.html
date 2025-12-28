@@ -573,7 +573,7 @@
       Back
     </a>
     <h1 class="header__title">Poems</h1>
-    <p class="header__subtitle">Collections of words that I love</p>
+    <p class="header__subtitle"><em>collections of words I love</em></p>
   </header>
 
   <div class="search-bar">
@@ -784,10 +784,14 @@
         const manifestRes = await fetch('/poems/manifest.json');
         const manifest = await manifestRes.json();
 
-        memorizedSet = new Set(manifest.memorized || []);
+        // Combine memorized and learning into single list
+        const memorizedSlugs = manifest.memorized || [];
+        const learningSlugs = manifest.learning || [];
+        const allSlugs = [...memorizedSlugs, ...learningSlugs];
+        memorizedSet = new Set(memorizedSlugs);
 
         const poems = await Promise.all(
-          manifest.poems.map(async (slug) => {
+          allSlugs.map(async (slug) => {
             try {
               const res = await fetch(`/poems/content/${slug}.md`);
               const markdown = await res.text();
