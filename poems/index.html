@@ -111,7 +111,7 @@
 
     .search__input {
       width: 100%;
-      padding: 10px 14px 10px 38px;
+      padding: 10px 36px 10px 38px;
       font-family: var(--font-sans);
       font-size: 14px;
       background: var(--bg-card);
@@ -138,6 +138,34 @@
       transform: translateY(-50%);
       color: var(--text-light);
       pointer-events: none;
+    }
+
+    .search__clear {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 20px;
+      height: 20px;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg-hover);
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      color: var(--text-muted);
+      padding: 0;
+      transition: all 0.2s;
+    }
+
+    .search__clear:hover {
+      background: var(--text-light);
+      color: var(--bg);
+    }
+
+    .search__clear.visible {
+      display: flex;
     }
 
     /* Filter Toggles */
@@ -583,6 +611,12 @@
         <path d="M21 21l-4.35-4.35"/>
       </svg>
       <input type="text" class="search__input" id="search" placeholder="Search titles, authors, or text..." autocomplete="off">
+      <button class="search__clear" id="search-clear" aria-label="Clear search">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
     </div>
     <div class="filters">
       <button class="filter-btn active" data-filter="all">All</button>
@@ -628,6 +662,7 @@
     const grid = document.getElementById('grid');
     const countEl = document.getElementById('count');
     const searchInput = document.getElementById('search');
+    const searchClear = document.getElementById('search-clear');
     const filterBtns = document.querySelectorAll('.filter-btn');
     const modal = document.getElementById('modal');
     const modalTitle = document.getElementById('modal-title');
@@ -719,6 +754,7 @@
       const authorName = modalAuthor.textContent;
       closeModal();
       searchInput.value = authorName;
+      searchClear.classList.add('visible');
       filterPoems(authorName);
     });
 
@@ -776,7 +812,17 @@
       }
     }
 
-    searchInput.addEventListener('input', (e) => filterPoems(e.target.value));
+    searchInput.addEventListener('input', (e) => {
+      filterPoems(e.target.value);
+      searchClear.classList.toggle('visible', e.target.value.length > 0);
+    });
+
+    searchClear.addEventListener('click', () => {
+      searchInput.value = '';
+      searchClear.classList.remove('visible');
+      filterPoems('');
+      searchInput.focus();
+    });
 
     // Load poems
     async function loadPoems() {
