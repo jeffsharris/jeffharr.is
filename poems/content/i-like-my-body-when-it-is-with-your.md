@@ -1,5 +1,5 @@
 ---
-title: I Like My Body WHen It Is With Your
+title: I Like My Body When It Is With Your
 author: E.E. Cummings
 ---
 

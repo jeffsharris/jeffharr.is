@@ -414,6 +414,58 @@
       height: 14px;
     }
 
+    .modal__actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
+
+    .modal__action-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text);
+      font-size: 13px;
+      min-height: 42px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: var(--shadow);
+    }
+
+    .modal__action-btn:hover {
+      background: var(--bg-hover);
+      border-color: var(--accent);
+      color: var(--accent);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .modal__action-btn svg {
+      width: 16px;
+      height: 16px;
+      color: currentColor;
+    }
+
+    .modal__feedback {
+      font-size: 12px;
+      color: var(--text-muted);
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+
+    .modal__feedback.is-visible {
+      opacity: 1;
+    }
+
+    .modal__feedback.is-error {
+      color: #B15B4A;
+    }
+
     .modal__body {
       padding: 32px;
       overflow-y: auto;
@@ -589,6 +641,16 @@
         padding: 6px 10px;
         font-size: 12px;
       }
+
+      .modal__actions {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .modal__action-btn {
+        width: 100%;
+        justify-content: center;
+      }
     }
   </style>
 </head>
@@ -651,6 +713,26 @@
           </svg>
           Memorized
         </div>
+        <div class="modal__actions">
+          <button class="modal__action-btn" id="copy-poem">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+            </svg>
+            Copy poem
+          </button>
+          <button class="modal__action-btn" id="share-poem">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="18" cy="5" r="3"></circle>
+              <circle cx="6" cy="12" r="3"></circle>
+              <circle cx="18" cy="19" r="3"></circle>
+              <path d="M8.59 13.51l6.83 3.98"></path>
+              <path d="M15.41 6.51l-6.82 3.98"></path>
+            </svg>
+            Share
+          </button>
+          <span class="modal__feedback" id="action-feedback" aria-live="polite"></span>
+        </div>
       </div>
       <div class="modal__body">
         <p class="modal__poem" id="modal-poem"></p>
@@ -669,10 +751,15 @@
     const modalAuthor = document.getElementById('modal-author');
     const modalBadge = document.getElementById('modal-badge');
     const modalPoem = document.getElementById('modal-poem');
+    const copyButton = document.getElementById('copy-poem');
+    const shareButton = document.getElementById('share-poem');
+    const actionFeedback = document.getElementById('action-feedback');
 
     let allPoems = [];
     let memorizedSet = new Set();
     let currentFilter = 'all';
+    let currentSlug = '';
+    let feedbackTimeout;
 
     // Shuffle array (Fisher-Yates)
     function shuffle(array) {
@@ -682,6 +769,48 @@
         [arr[i], arr[j]] = [arr[j], arr[i]];
       }
       return arr;
+    }
+
+    function getSlugFromLocation() {
+      const params = new URLSearchParams(window.location.search);
+      const hashSlug = window.location.hash.replace('#', '').trim();
+      return params.get('poem') || hashSlug || '';
+    }
+
+    function setPoemUrl(slug) {
+      const url = new URL(window.location);
+      if (slug) {
+        url.searchParams.set('poem', slug);
+      } else {
+        url.searchParams.delete('poem');
+      }
+      history.replaceState(null, '', url);
+    }
+
+    function getPoemUrl() {
+      const url = new URL(window.location);
+      if (currentSlug) {
+        url.searchParams.set('poem', currentSlug);
+      }
+      return url.toString();
+    }
+
+    function showFeedback(message, isError = false) {
+      if (!actionFeedback) return;
+      actionFeedback.textContent = message;
+      actionFeedback.classList.toggle('is-error', isError);
+      actionFeedback.classList.add('is-visible');
+      clearTimeout(feedbackTimeout);
+      feedbackTimeout = setTimeout(() => {
+        actionFeedback.classList.remove('is-visible');
+      }, 2200);
+    }
+
+    function resetFeedback() {
+      if (!actionFeedback) return;
+      actionFeedback.textContent = '';
+      actionFeedback.classList.remove('is-visible', 'is-error');
+      clearTimeout(feedbackTimeout);
     }
 
     // Parse markdown frontmatter and content
@@ -706,6 +835,7 @@
       card.dataset.author = poem.author.toLowerCase();
       card.dataset.content = poem.content.toLowerCase();
       card.dataset.memorized = isMemorized ? 'true' : 'false';
+      card.dataset.slug = poem.slug || '';
 
       const lines = poem.content.split('\n').slice(0, 10);
       const preview = lines.join('\n');
@@ -738,6 +868,9 @@
       modalAuthor.textContent = poem.author;
       modalPoem.textContent = poem.content;
       modalBadge.style.display = isMemorized ? 'inline-flex' : 'none';
+      currentSlug = poem.slug || '';
+      setPoemUrl(currentSlug);
+      resetFeedback();
       modal.classList.add('is-open');
       document.body.style.overflow = 'hidden';
     }
@@ -746,6 +879,45 @@
     function closeModal() {
       modal.classList.remove('is-open');
       document.body.style.overflow = '';
+      currentSlug = '';
+      setPoemUrl('');
+      resetFeedback();
+    }
+
+    async function copyPoemToClipboard() {
+      const poemText = modalPoem.textContent || '';
+      try {
+        await navigator.clipboard.writeText(poemText);
+        showFeedback('Copied poem');
+      } catch {
+        showFeedback('Unable to copy', true);
+      }
+    }
+
+    async function sharePoemLink() {
+      const url = getPoemUrl();
+      const shareData = {
+        title: modalTitle.textContent,
+        text: `${modalTitle.textContent} — ${modalAuthor.textContent}`,
+        url
+      };
+
+      if (navigator.share) {
+        try {
+          await navigator.share(shareData);
+          showFeedback('Sharing link...');
+          return;
+        } catch (error) {
+          if (error?.name === 'AbortError') return;
+        }
+      }
+
+      try {
+        await navigator.clipboard.writeText(url);
+        showFeedback('Link copied');
+      } catch {
+        showFeedback('Unable to copy link', true);
+      }
     }
 
     // Author link click - search by author
@@ -762,6 +934,14 @@
     modal.querySelector('.modal__close').addEventListener('click', closeModal);
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') closeModal();
+    });
+    copyButton.addEventListener('click', (e) => {
+      e.stopPropagation();
+      copyPoemToClipboard();
+    });
+    shareButton.addEventListener('click', (e) => {
+      e.stopPropagation();
+      sharePoemLink();
     });
 
     // Filter buttons
@@ -824,6 +1004,14 @@
       searchInput.focus();
     });
 
+    function openPoemBySlug(slug) {
+      const poem = allPoems.find((p) => p.slug === slug);
+      if (!poem) return false;
+      const isMemorized = memorizedSet.has(slug);
+      openModal(poem, isMemorized);
+      return true;
+    }
+
     // Load poems
     async function loadPoems() {
       try {
@@ -858,6 +1046,14 @@
           grid.appendChild(createCard(poem, isMemorized));
         });
         countEl.textContent = `${allPoems.length} poems`;
+
+        const initialSlug = getSlugFromLocation();
+        if (initialSlug) {
+          const opened = openPoemBySlug(initialSlug);
+          if (!opened) {
+            setPoemUrl('');
+          }
+        }
 
       } catch (error) {
         grid.innerHTML = '<div class="loading">Unable to load poems</div>';
