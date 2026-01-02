@@ -1,6 +1,6 @@
 ---
 title: White Owl Flies Into And Out Of The Field
-author: Mary Olivier
+author: Mary Oliver
 ---
 
 Coming down

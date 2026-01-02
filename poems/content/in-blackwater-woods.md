@@ -1,6 +1,6 @@
 ---
 title: In Blackwater Woods
-author: Mary Olivier
+author: Mary Oliver
 ---
 
 Look, the trees

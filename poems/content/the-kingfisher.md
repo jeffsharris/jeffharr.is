@@ -1,6 +1,6 @@
 ---
 title: The Kingfisher
-author: Mary Olivier
+author: Mary Oliver
 ---
 
 The kingfisher rises out of the black wave
