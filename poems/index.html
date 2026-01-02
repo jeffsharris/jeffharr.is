@@ -331,7 +331,7 @@
       display: flex;
       align-items: flex-start;
       justify-content: center;
-      padding: calc(16px + env(safe-area-inset-top, 0px)) 16px 16px;
+      padding: calc(16px + env(safe-area-inset-top, 0px)) 16px calc(16px + env(safe-area-inset-bottom, 0px));
       opacity: 0;
       visibility: hidden;
       transition: all 0.3s ease;
@@ -354,6 +354,7 @@
       width: 100%;
       max-width: 900px;
       max-height: 90vh;
+      max-height: 90dvh;
       background: var(--bg-card);
       border: 1px solid var(--border);
       border-radius: 16px;
@@ -488,8 +489,10 @@
 
     .modal__body {
       padding: 32px;
+      padding-bottom: calc(32px + env(safe-area-inset-bottom, 0px));
       overflow-y: auto;
       max-height: calc(90vh - 160px);
+      max-height: calc(90dvh - 160px);
     }
 
     .modal__poem {
@@ -606,11 +609,12 @@
       }
 
       .modal {
-        padding: 8px;
+        padding: 8px 8px calc(8px + env(safe-area-inset-bottom, 0px));
       }
 
       .modal__content {
         max-height: 95vh;
+        max-height: 95dvh;
         border-radius: 12px;
       }
 
@@ -625,7 +629,9 @@
 
       .modal__body {
         padding: 24px;
+        padding-bottom: calc(24px + env(safe-area-inset-bottom, 0px));
         max-height: calc(95vh - 140px);
+        max-height: calc(95dvh - 140px);
       }
 
       .modal__poem {
