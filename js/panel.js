@@ -48,7 +48,7 @@
       title: 'Letterboxd',
       icon: '/images/letterboxd.svg',
       linkText: 'Letterboxd',
-      profileUrl: 'https://letterboxd.com/jeffintime/'
+      profileUrl: 'https://letterboxd.com/jeffharris/'
     },
     poems: {
       title: 'Poems',
@@ -196,6 +196,12 @@
   function renderContent(platform, data) {
     if (data && data.profileUrl) {
       panelLink.href = data.profileUrl;
+    }
+    if (platform === 'letterboxd' && data && (data.watchlistUrl || data.profileUrl)) {
+      panelLink.href = data.watchlistUrl || data.profileUrl;
+      panelLinkText.textContent = data.watchlistUrl ? 'Letterboxd Watchlist' : 'Letterboxd';
+    } else {
+      panelLinkText.textContent = platformConfig[platform]?.linkText || 'Link';
     }
 
     switch (platform) {

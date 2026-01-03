@@ -7,26 +7,28 @@ const USER_AGENT = 'Mozilla/5.0 (compatible; jeffharr.is/1.0; +https://jeffharr.
 const MAX_ITEMS = 6;
 
 export async function onRequest(context) {
-  const rawUsername = (context.env?.LETTERBOXD_USERNAME || 'jeffintime').trim();
-  const sanitizedUsername = rawUsername.replace(/[^\w-]/g, '') || 'jeffintime';
+  const rawUsername = (context.env?.LETTERBOXD_USERNAME || 'jeffharris').trim();
+  const sanitizedUsername = rawUsername.replace(/[^\w-]/g, '') || 'jeffharris';
 
   const profileUrl = `https://letterboxd.com/${sanitizedUsername}/`;
   const diaryFeedUrl = `${profileUrl}rss/`;
+  const diaryByDateUrl = `${profileUrl}films/by/date/`;
   const watchlistFeedUrl = `${profileUrl}watchlist/rss/`;
+  const watchlistPageUrl = `${profileUrl}watchlist/`;
 
   const headers = { 'User-Agent': USER_AGENT };
 
   try {
     const [diaryEntries, watchlist] = await Promise.all([
-      fetchDiary(diaryFeedUrl, profileUrl, headers),
-      fetchWatchlist(watchlistFeedUrl, profileUrl, headers)
+      fetchDiary(diaryFeedUrl, diaryByDateUrl, profileUrl, headers),
+      fetchWatchlist(watchlistFeedUrl, watchlistPageUrl, headers)
     ]);
 
     const payload = {
       entries: diaryEntries,
       watchlist,
       profileUrl,
-      watchlistUrl: `${profileUrl}watchlist/`
+      watchlistUrl: watchlistPageUrl
     };
 
     return new Response(JSON.stringify(payload), {
@@ -41,7 +43,7 @@ export async function onRequest(context) {
       entries: [],
       watchlist: [],
       profileUrl,
-      watchlistUrl: `${profileUrl}watchlist/`
+      watchlistUrl: watchlistPageUrl
     }), {
       headers: {
         'Content-Type': 'application/json',
@@ -52,7 +54,7 @@ export async function onRequest(context) {
   }
 }
 
-async function fetchDiary(feedUrl, profileUrl, headers) {
+async function fetchDiary(feedUrl, diaryByDateUrl, profileUrl, headers) {
   try {
     const response = await fetch(feedUrl, { headers });
     if (!response.ok) throw new Error('RSS feed unavailable');
@@ -63,7 +65,18 @@ async function fetchDiary(feedUrl, profileUrl, headers) {
     console.warn('Diary RSS failed, attempting HTML fallback:', error.message);
   }
 
-  // Fallback: parse the public diary page
+  // Fallback: parse the films by date page (public)
+  try {
+    const response = await fetch(diaryByDateUrl, { headers });
+    if (!response.ok) throw new Error('Diary by date page unavailable');
+    const html = await response.text();
+    const parsed = parseDiaryByDateHtml(html);
+    if (parsed.length) return parsed.slice(0, MAX_ITEMS);
+  } catch (error) {
+    console.warn('Diary by date HTML fallback failed:', error.message);
+  }
+
+  // Fallback: parse the classic diary page
   try {
     const diaryUrl = `${profileUrl}films/diary/`;
     const response = await fetch(diaryUrl, { headers });
@@ -76,7 +89,7 @@ async function fetchDiary(feedUrl, profileUrl, headers) {
   }
 }
 
-async function fetchWatchlist(feedUrl, profileUrl, headers) {
+async function fetchWatchlist(feedUrl, watchlistPageUrl, headers) {
   try {
     const response = await fetch(feedUrl, { headers });
     if (!response.ok) throw new Error('Watchlist feed unavailable');
@@ -88,8 +101,7 @@ async function fetchWatchlist(feedUrl, profileUrl, headers) {
   }
 
   try {
-    const watchlistPage = `${profileUrl}watchlist/`;
-    const response = await fetch(watchlistPage, { headers });
+    const response = await fetch(watchlistPageUrl, { headers });
     if (!response.ok) throw new Error('Watchlist page unavailable');
     const html = await response.text();
     return parseWatchlistHtml(html).slice(0, MAX_ITEMS);
@@ -120,7 +132,7 @@ function parseRssItems(xml, { includeReviews = true } = {}) {
       watchedDate: extractTag(block, 'letterboxd:watchedDate') || extractTag(block, 'pubDate'),
       rating: isNaN(rating) ? null : rating,
       link: extractTag(block, 'link'),
-      poster: extractPoster(block),
+      poster: normalizePoster(extractPoster(block)),
       blurb
     });
   }
@@ -140,7 +152,7 @@ function parseDiaryHtml(html) {
 
     const ratingRaw = getAttr(block, 'data-rating') || getAttr(block, 'data-entry-rating');
     const rating = ratingRaw ? normalizeRating(ratingRaw) : null;
-    const poster = getAttr(block, 'data-poster-url') || getPosterFromImg(block);
+    const poster = normalizePoster(getAttr(block, 'data-poster-url') || getPosterFromImg(block));
     const link = getAttr(block, 'data-film-link') || getAttr(block, 'data-target-link') || extractHref(block);
 
     items.push({
@@ -149,6 +161,33 @@ function parseDiaryHtml(html) {
       watchedDate: getAttr(block, 'data-viewing-date') || getTimeDate(block),
       rating,
       link: link ? `https://letterboxd.com${link}` : null,
+      poster,
+      blurb: null
+    });
+  }
+
+  return items;
+}
+
+function parseDiaryByDateHtml(html) {
+  const items = [];
+  const entryRegex = /<li[^>]*data-film-slug="([^"]+)"[\s\S]*?<\/li>/gi;
+  let match;
+
+  while ((match = entryRegex.exec(html)) !== null && items.length < MAX_ITEMS) {
+    const block = match[0];
+    const slug = match[1];
+    const title = getAttr(block, 'data-film-name') || getAttr(block, 'data-film-title');
+    if (!title) continue;
+
+    const poster = normalizePoster(getAttr(block, 'data-poster-url') || getPosterFromImg(block));
+
+    items.push({
+      title,
+      year: getAttr(block, 'data-film-year') || getAttr(block, 'data-film-release-year'),
+      watchedDate: getAttr(block, 'data-viewing-date') || getTimeDate(block),
+      rating: normalizeRating(getAttr(block, 'data-rating') || getAttr(block, 'data-entry-rating')),
+      link: slug ? `https://letterboxd.com${slug}` : null,
       poster,
       blurb: null
     });
@@ -170,7 +209,7 @@ function parseWatchlistHtml(html) {
       watchedDate: null,
       rating: null,
       link: `https://letterboxd.com${slug}`,
-      poster,
+      poster: normalizePoster(poster),
       blurb: null
     });
   }
@@ -212,6 +251,12 @@ function extractHref(block) {
 function getTimeDate(block) {
   const match = /<time[^>]*datetime="([^"]+)"/i.exec(block);
   return match ? match[1] : null;
+}
+
+function normalizePoster(url) {
+  if (!url) return null;
+  if (url.startsWith('//')) return `https:${url}`;
+  return url;
 }
 
 function normalizeRating(raw) {
