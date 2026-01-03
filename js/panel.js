@@ -43,6 +43,18 @@
       icon: '/images/goodreads.png',
       linkText: 'Goodreads',
       profileUrl: 'https://www.goodreads.com/user/show/2632308'
+    },
+    letterboxd: {
+      title: 'Letterboxd',
+      icon: '/images/letterboxd.svg',
+      linkText: 'Letterboxd',
+      profileUrl: 'https://letterboxd.com/jeffintime/'
+    },
+    poems: {
+      title: 'Poems',
+      icon: '/images/poems.svg',
+      linkText: 'Poems',
+      profileUrl: '/poems'
     }
   };
 
@@ -52,7 +64,7 @@
 
   // Proactively fetch all platform data on page load
   function prefetchAll() {
-    const platforms = ['github', 'substack', 'goodreads'];
+    const platforms = ['github', 'substack', 'goodreads', 'letterboxd', 'poems'];
     platforms.forEach(platform => {
       fetch(`/api/${platform}`)
         .then(response => response.ok ? response.json() : null)
@@ -182,6 +194,10 @@
 
   // Render content based on platform
   function renderContent(platform, data) {
+    if (data && data.profileUrl) {
+      panelLink.href = data.profileUrl;
+    }
+
     switch (platform) {
       case 'github':
         renderGitHub(data);
@@ -194,6 +210,12 @@
         break;
       case 'goodreads':
         renderGoodreads(data);
+        break;
+      case 'letterboxd':
+        renderLetterboxd(data);
+        break;
+      case 'poems':
+        renderPoems(data);
         break;
       default:
         panelContent.innerHTML = '<div class="panel-empty">Content unavailable</div>';
@@ -328,6 +350,67 @@
     panelContent.innerHTML = html;
   }
 
+  // Letterboxd content - diary + watchlist
+  function renderLetterboxd(data) {
+    const entries = data.entries || [];
+    const watchlist = data.watchlist || [];
+    let html = '';
+
+    if (entries.length > 0) {
+      html += `
+        <div class="panel-section">
+          <h4 class="panel-section__title">Latest Diary</h4>
+          <div class="film-grid">
+            ${entries.slice(0, 4).map(entry => renderFilmCard(entry, { includeBlurb: true })).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    if (watchlist.length > 0) {
+      html += `
+        <div class="panel-section">
+          <h4 class="panel-section__title">Watchlist</h4>
+          <div class="film-grid">
+            ${watchlist.slice(0, 4).map(entry => renderFilmCard(entry, { includeBlurb: false })).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    if (!html) {
+      html = '<div class="panel-empty">No recent films found</div>';
+    }
+
+    panelContent.innerHTML = html;
+  }
+
+  // Poems content - quick summary
+  function renderPoems(data) {
+    const highlights = data.highlights || [];
+    const stats = [];
+    if (typeof data.memorizedCount === 'number') stats.push(`${data.memorizedCount} memorized`);
+    if (typeof data.learningCount === 'number') stats.push(`${data.learningCount} in progress`);
+
+    const html = `
+      <div class="panel-section">
+        <h4 class="panel-section__title">Poems</h4>
+        <div class="content-item">
+          <p class="content-item__description">
+            ${stats.length ? stats.join(' · ') : 'Poem collection'}
+          </p>
+          ${highlights.length ? `
+            <div class="content-item__tags">
+              ${highlights.map(title => `<span class="content-item__tag">${escapeHtml(title)}</span>`).join('')}
+            </div>
+          ` : ''}
+        </div>
+      </div>
+    `;
+
+    panelContent.innerHTML = html;
+  }
+
   // Format date helper
   function formatDate(dateStr) {
     if (!dateStr) return '';
@@ -348,6 +431,53 @@
     const div = document.createElement('div');
     div.textContent = text;
     return div.innerHTML;
+  }
+
+  function formatRating(rating) {
+    if (!rating && rating !== 0) return '';
+    const rounded = Math.round(rating * 2) / 2;
+    const fullStars = Math.floor(rounded);
+    const halfStar = rounded % 1 !== 0;
+    const emptyStars = 5 - fullStars - (halfStar ? 1 : 0);
+    return `${'★'.repeat(fullStars)}${halfStar ? '½' : ''}${'☆'.repeat(Math.max(emptyStars, 0))}`;
+  }
+
+  function posterHtml(title, posterUrl) {
+    if (!posterUrl) {
+      return `<div class="film-card__poster film-card__poster--placeholder">No Art</div>`;
+    }
+    return `<img src=\"${posterUrl}\" alt=\"${escapeHtml(title)} poster\" class=\"film-card__poster\">`;
+  }
+
+  function joinMeta(parts) {
+    const cleanParts = parts
+      .filter(Boolean)
+      .map(part => `<span>${escapeHtml(part)}</span>`);
+    if (!cleanParts.length) return '';
+    return cleanParts.join('<span aria-hidden=\"true\">•</span>');
+  }
+
+  function renderFilmCard(entry, { includeBlurb = false } = {}) {
+    const Wrapper = entry.link ? 'a' : 'div';
+    const attrs = entry.link ? `href=\"${entry.link}\" target=\"_blank\" rel=\"noopener\"` : '';
+    const meta = joinMeta([entry.year, entry.watchedDate ? formatDate(entry.watchedDate) : null]);
+    const rating = entry.rating ? `<span class=\"film-card__rating\">${formatRating(entry.rating)}</span>` : '';
+    const blurb = includeBlurb && entry.blurb ? `<p class=\"film-card__blurb\">${escapeHtml(entry.blurb)}</p>` : '';
+
+    return `
+      <${Wrapper} class=\"film-card\" ${attrs}>
+        ${posterHtml(entry.title || 'Film', entry.poster)}
+        <div class=\"film-card__body\">
+          <h3 class=\"film-card__title\">${escapeHtml(entry.title || 'Untitled')}</h3>
+          <div class=\"film-card__meta\">
+            ${meta}
+            ${meta && rating ? '<span aria-hidden=\"true\">•</span>' : ''}
+            ${rating}
+          </div>
+          ${blurb}
+        </div>
+      </${Wrapper}>
+    `;
   }
 
   // Event listeners

@@ -168,7 +168,7 @@ body.panel-open .main {
 /* Social Grid */
 .social-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 8px;
   margin-bottom: 24px;
 }
@@ -504,6 +504,85 @@ body.panel-open .main {
   font-family: 'JetBrains Mono', 'Fira Code', monospace;
   font-size: 11px;
   color: var(--text-light);
+}
+
+/* Film cards (Letterboxd) */
+.film-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+}
+
+.film-card {
+  display: grid;
+  grid-template-columns: 56px 1fr;
+  gap: 12px;
+  padding: 14px;
+  background: var(--bg-item);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  align-items: center;
+  color: inherit;
+  text-decoration: none;
+}
+
+.film-card__poster {
+  width: 56px;
+  height: 84px;
+  border-radius: 8px;
+  object-fit: cover;
+  box-shadow: var(--shadow);
+  background: var(--bg-hover);
+}
+
+.film-card__poster--placeholder {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  color: var(--text-muted);
+  border: 1px dashed var(--border);
+  box-shadow: none;
+}
+
+.film-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.film-card__title {
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 600;
+  margin: 0;
+  color: var(--text);
+}
+
+.film-card__meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--text-light);
+}
+
+.film-card__meta span {
+  display: inline-flex;
+  align-items: center;
+}
+
+.film-card__rating {
+  font-size: 13px;
+  color: var(--accent);
+  letter-spacing: 0.4px;
+}
+
+.film-card__blurb {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin: 0;
+  line-height: 1.5;
 }
 
 /* X Profile Card */
