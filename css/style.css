@@ -82,6 +82,10 @@ body.panel-open {
   overflow: hidden;
 }
 
+body.panel-open .theme-toggle {
+  display: none;
+}
+
 /* Background */
 .bg-gradient {
   position: fixed;

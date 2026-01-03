@@ -16,6 +16,7 @@
   const panelLink = document.getElementById('panel-link');
   const panelLinkText = document.getElementById('panel-link-text');
   const socialButtons = document.querySelectorAll('.social-btn[data-platform]');
+  const VIEW_PARAM = 'view';
 
   // Platform configurations
   const platformConfig = {
@@ -47,6 +48,7 @@
 
   // Cache for API responses
   const cache = new Map();
+  let currentPlatform = null;
 
   // Proactively fetch all platform data on page load
   function prefetchAll() {
@@ -68,10 +70,35 @@
     });
   }
 
+  // Read the platform from the URL (if valid)
+  function getPlatformFromUrl() {
+    const params = new URLSearchParams(window.location.search);
+    const platform = params.get(VIEW_PARAM);
+    return platformConfig[platform] ? platform : null;
+  }
+
+  // Update the URL to include/remove the deep link
+  function setDeepLink(platform, { replace = false } = {}) {
+    const url = new URL(window.location.href);
+
+    if (platform) {
+      url.searchParams.set(VIEW_PARAM, platform);
+      const method = replace ? 'replaceState' : 'pushState';
+      history[method]({ panel: platform }, '', url.toString());
+    } else {
+      url.searchParams.delete(VIEW_PARAM);
+      history.replaceState({ panel: null }, '', url.toString());
+    }
+  }
+
   // Open panel
-  function openPanel(platform) {
+  function openPanel(platform, options = {}) {
+    const { skipHistory = false } = options;
     const config = platformConfig[platform];
     if (!config) return;
+
+    const previousPlatform = currentPlatform;
+    currentPlatform = platform;
 
     // Update header
     panelTitle.textContent = config.title;
@@ -113,14 +140,25 @@
     panel.classList.add('is-open');
     panelOverlay.classList.add('is-visible');
     panel.setAttribute('aria-hidden', 'false');
+
+    if (!skipHistory) {
+      const replace = previousPlatform === platform;
+      setDeepLink(platform, { replace });
+    }
   }
 
   // Close panel
-  function closePanel() {
+  function closePanel(options = {}) {
+    const { skipHistory = false } = options;
     document.body.classList.remove('panel-open');
     panel.classList.remove('is-open');
     panelOverlay.classList.remove('is-visible');
     panel.setAttribute('aria-hidden', 'true');
+    currentPlatform = null;
+
+    if (!skipHistory) {
+      setDeepLink(null);
+    }
   }
 
   // Fetch content from API
@@ -330,7 +368,23 @@
     }
   });
 
+  // Keep panel state in sync with history navigation
+  window.addEventListener('popstate', () => {
+    const platform = getPlatformFromUrl();
+    if (platform) {
+      openPanel(platform, { skipHistory: true });
+    } else {
+      closePanel({ skipHistory: true });
+    }
+  });
+
   // Prefetch data on page load
   prefetchAll();
+
+  // Open panel from deep link if present
+  const initialPlatform = getPlatformFromUrl();
+  if (initialPlatform) {
+    openPanel(initialPlatform, { skipHistory: true });
+  }
 
 })();
