@@ -406,11 +406,15 @@ body.panel-open .main {
   border-radius: var(--radius);
   padding: 16px;
   margin-bottom: 12px;
+  display: block;
+  color: inherit;
+  text-decoration: none;
   transition: all var(--transition);
 }
 
 .content-item:hover {
   border-color: var(--accent);
+  text-decoration: none;
 }
 
 .content-item:last-child {
