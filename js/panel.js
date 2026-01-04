@@ -197,6 +197,13 @@
     if (data && data.profileUrl) {
       panelLink.href = data.profileUrl;
     }
+    const isPoems = platform === 'poems';
+    panelLink.target = isPoems ? '_self' : '_blank';
+    if (isPoems) {
+      panelLink.removeAttribute('rel');
+    } else {
+      panelLink.rel = 'noopener';
+    }
     if (platform === 'letterboxd' && data && (data.watchlistUrl || data.profileUrl)) {
       panelLink.href = data.watchlistUrl || data.profileUrl;
       panelLinkText.textContent = data.watchlistUrl ? 'Letterboxd Watchlist' : 'Letterboxd';
@@ -393,10 +400,7 @@
 
   // Poems content - quick summary
   function renderPoems(data) {
-    const poems = data.poems || [];
-    const stats = [];
-    if (typeof data.memorizedCount === 'number') stats.push(`${data.memorizedCount} memorized`);
-    if (typeof data.learningCount === 'number') stats.push(`${data.learningCount} in progress`);
+    const poems = (data.poems || []).slice(0, 10);
 
     if (!poems.length) {
       panelContent.innerHTML = '<div class="panel-empty">Poems are loading—visit the collection to explore them all.</div>';
@@ -406,7 +410,6 @@
     const html = `
       <div class="panel-section">
         <h4 class="panel-section__title">Random Picks</h4>
-        ${stats.length ? `<p class="content-item__description">${stats.join(' · ')}</p>` : ''}
         <div class="panel-list">
           ${poems.map(poem => `
             <div class="content-item content-item--poem">
