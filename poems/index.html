@@ -1083,16 +1083,15 @@
 
         const validPoems = poems.filter(Boolean);
         const randomized = shuffle(validPoems);
-        const previewPoems = randomized.slice(0, 10);
 
         allPoems = validPoems;
 
         grid.innerHTML = '';
-        previewPoems.forEach((poem) => {
+        randomized.forEach((poem) => {
           const isMemorized = memorizedSet.has(poem.slug);
           grid.appendChild(createCard(poem, isMemorized));
         });
-        countEl.textContent = `${previewPoems.length} poems`;
+        countEl.textContent = `${validPoems.length} poems`;
 
         const initialSlug = getSlugFromLocation();
         if (initialSlug) {

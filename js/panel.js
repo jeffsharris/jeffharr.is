@@ -393,23 +393,30 @@
 
   // Poems content - quick summary
   function renderPoems(data) {
-    const highlights = data.highlights || [];
+    const poems = data.poems || [];
     const stats = [];
     if (typeof data.memorizedCount === 'number') stats.push(`${data.memorizedCount} memorized`);
-    if (typeof data.learningCount === 'number') stats.push(`${data.learningCount} learning`);
+    if (typeof data.learningCount === 'number') stats.push(`${data.learningCount} in progress`);
+
+    if (!poems.length) {
+      panelContent.innerHTML = '<div class="panel-empty">Poems are loading—visit the collection to explore them all.</div>';
+      return;
+    }
 
     const html = `
       <div class="panel-section">
-        <h4 class="panel-section__title">Poems</h4>
-        <div class="content-item">
-          <p class="content-item__description">
-            ${stats.length ? stats.join(' · ') : 'Poem collection'}
-          </p>
-          ${highlights.length ? `
-            <div class="content-item__tags">
-              ${highlights.map(title => `<span class="content-item__tag">${escapeHtml(title)}</span>`).join('')}
+        <h4 class="panel-section__title">Random Picks</h4>
+        ${stats.length ? `<p class="content-item__description">${stats.join(' · ')}</p>` : ''}
+        <div class="panel-list">
+          ${poems.map(poem => `
+            <div class="content-item content-item--poem">
+              <div class="content-item__header">
+                <h3 class="content-item__title">${escapeHtml(poem.title)}</h3>
+                ${poem.author ? `<span class="content-item__meta">${escapeHtml(poem.author)}</span>` : ''}
+              </div>
+              ${poem.excerpt ? `<p class="content-item__description">${escapeHtml(poem.excerpt)}</p>` : ''}
             </div>
-          ` : ''}
+          `).join('')}
         </div>
       </div>
     `;
