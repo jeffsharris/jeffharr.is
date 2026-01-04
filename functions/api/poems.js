@@ -51,8 +51,9 @@ export async function onRequest(context) {
 }
 
 function selectHighlights(memorized, learning) {
-  const titles = [...memorized.slice(0, 3), ...learning.slice(0, 2)];
-  return titles.map(slugToTitle).filter(Boolean);
+  const allSlugs = [...memorized, ...learning];
+  const selected = shuffle(allSlugs).slice(0, 10);
+  return selected.map(slugToTitle).filter(Boolean);
 }
 
 function slugToTitle(slug = '') {
@@ -61,4 +62,13 @@ function slugToTitle(slug = '') {
     .filter(Boolean)
     .map(word => word.charAt(0).toUpperCase() + word.slice(1))
     .join(' ');
+}
+
+function shuffle(items = []) {
+  const array = [...items];
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
 }
