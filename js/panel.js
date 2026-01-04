@@ -396,7 +396,7 @@
     const highlights = data.highlights || [];
     const stats = [];
     if (typeof data.memorizedCount === 'number') stats.push(`${data.memorizedCount} memorized`);
-    if (typeof data.learningCount === 'number') stats.push(`${data.learningCount} in progress`);
+    if (typeof data.learningCount === 'number') stats.push(`${data.learningCount} learning`);
 
     const html = `
       <div class="panel-section">

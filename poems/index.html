@@ -807,14 +807,15 @@
       return params.get('poem') || hashSlug || '';
     }
 
-    function setPoemUrl(slug) {
+    function setPoemUrl(slug, { method = 'replace' } = {}) {
       const url = new URL(window.location);
       if (slug) {
         url.searchParams.set('poem', slug);
       } else {
         url.searchParams.delete('poem');
       }
-      history.replaceState(null, '', url);
+      const historyMethod = method === 'push' ? 'pushState' : 'replaceState';
+      history[historyMethod](null, '', url);
     }
 
     function getPoemUrl() {
@@ -893,13 +894,13 @@
     }
 
     // Open modal
-    function openModal(poem, isMemorized) {
+    function openModal(poem, isMemorized, { historyMethod = 'push' } = {}) {
       modalTitle.textContent = poem.title;
       modalAuthor.textContent = poem.author;
       modalPoem.textContent = poem.content;
       modalBadge.style.display = isMemorized ? 'inline-flex' : 'none';
       currentSlug = poem.slug || '';
-      setPoemUrl(currentSlug);
+      setPoemUrl(currentSlug, { method: historyMethod });
       resetFeedback();
       modal.classList.add('is-open');
       document.body.style.overflow = 'hidden';
@@ -1034,12 +1035,24 @@
       searchInput.focus();
     });
 
-    function openPoemBySlug(slug) {
+    function openPoemBySlug(slug, { historyMethod = 'replace' } = {}) {
       const poem = allPoems.find((p) => p.slug === slug);
       if (!poem) return false;
       const isMemorized = memorizedSet.has(slug);
-      openModal(poem, isMemorized);
+      openModal(poem, isMemorized, { historyMethod });
       return true;
+    }
+
+    function handlePopstate() {
+      const slug = getSlugFromLocation();
+      if (slug) {
+        openPoemBySlug(slug, { historyMethod: 'replace' });
+      } else if (modal.classList.contains('is-open')) {
+        modal.classList.remove('is-open');
+        document.body.style.overflow = '';
+        currentSlug = '';
+        resetFeedback();
+      }
     }
 
     // Load poems
@@ -1068,18 +1081,22 @@
           })
         );
 
-        allPoems = shuffle(poems.filter(Boolean));
+        const validPoems = poems.filter(Boolean);
+        const randomized = shuffle(validPoems);
+        const previewPoems = randomized.slice(0, 10);
+
+        allPoems = validPoems;
 
         grid.innerHTML = '';
-        allPoems.forEach((poem) => {
+        previewPoems.forEach((poem) => {
           const isMemorized = memorizedSet.has(poem.slug);
           grid.appendChild(createCard(poem, isMemorized));
         });
-        countEl.textContent = `${allPoems.length} poems`;
+        countEl.textContent = `${previewPoems.length} poems`;
 
         const initialSlug = getSlugFromLocation();
         if (initialSlug) {
-          const opened = openPoemBySlug(initialSlug);
+          const opened = openPoemBySlug(initialSlug, { historyMethod: 'replace' });
           if (!opened) {
             setPoemUrl('');
           }
@@ -1091,6 +1108,7 @@
       }
     }
 
+    window.addEventListener('popstate', handlePopstate);
     loadPoems();
   </script>
 </body>
