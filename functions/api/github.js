@@ -9,12 +9,14 @@ export async function onRequest(context) {
     'Accept': 'application/vnd.github.v3+json',
     'User-Agent': 'jeffharr.is'
   };
+  const FETCH_TIMEOUT_MS = 8000;
 
   try {
     // First, get user's recently updated repos
-    const reposResponse = await fetch(
+    const reposResponse = await fetchWithTimeout(
       `https://api.github.com/users/${username}/repos?sort=pushed&per_page=10`,
-      { headers }
+      { headers },
+      FETCH_TIMEOUT_MS
     );
 
     if (!reposResponse.ok) {
@@ -26,9 +28,10 @@ export async function onRequest(context) {
     // Fetch commits from each repo in parallel
     const commitPromises = repos.slice(0, 5).map(async (repo) => {
       try {
-        const commitsResponse = await fetch(
+        const commitsResponse = await fetchWithTimeout(
           `https://api.github.com/repos/${username}/${repo.name}/commits?per_page=10`,
-          { headers }
+          { headers },
+          FETCH_TIMEOUT_MS
         );
 
         if (!commitsResponse.ok) return [];
@@ -50,7 +53,7 @@ export async function onRequest(context) {
     const allCommits = allCommitArrays.flat();
 
     // Sort by date (newest first) and take top 20
-    allCommits.sort((a, b) => new Date(b.date) - new Date(a.date));
+    allCommits.sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
     const recentCommits = allCommits.slice(0, 20);
 
     return new Response(JSON.stringify({
@@ -75,5 +78,15 @@ export async function onRequest(context) {
         'Cache-Control': 'public, max-age=60'
       }
     });
+  }
+}
+
+async function fetchWithTimeout(url, options = {}, timeoutMs = 8000) {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    return await fetch(url, { ...options, signal: controller.signal });
+  } finally {
+    clearTimeout(timeoutId);
   }
 }

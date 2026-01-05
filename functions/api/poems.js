@@ -86,7 +86,7 @@ async function loadPoem(slug, context) {
 }
 
 function parsePoem(markdown = '') {
-  const match = markdown.match(/^---\n([\s\S]*?)\n---\n([\s\S]*)$/);
+  const match = markdown.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n([\s\S]*)$/);
   if (!match) return { title: '', author: '', excerpt: '' };
 
   const frontmatter = parseFrontmatter(match[1]);
@@ -131,3 +131,5 @@ function shuffle(items = []) {
   }
   return array;
 }
+
+export { parsePoem, parseFrontmatter, createExcerpt, slugToTitle, shuffle };

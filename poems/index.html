@@ -812,6 +812,36 @@
       shareButton.classList.add('is-supported');
     }
 
+    async function writeToClipboard(text) {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        await navigator.clipboard.writeText(text);
+        return true;
+      }
+
+      const textarea = document.createElement('textarea');
+      textarea.value = text;
+      textarea.setAttribute('readonly', '');
+      textarea.style.position = 'absolute';
+      textarea.style.left = '-9999px';
+      document.body.appendChild(textarea);
+      textarea.select();
+
+      let success = false;
+      try {
+        success = document.execCommand('copy');
+      } catch {
+        success = false;
+      }
+
+      document.body.removeChild(textarea);
+
+      if (!success) {
+        throw new Error('Clipboard copy failed');
+      }
+
+      return true;
+    }
+
     // Shuffle array (Fisher-Yates)
     function shuffle(array) {
       const arr = [...array];
@@ -867,16 +897,27 @@
 
     // Parse markdown frontmatter and content
     function parsePoem(markdown) {
-      const match = markdown.match(/^---\n([\s\S]*?)\n---\n([\s\S]*)$/);
+      const match = markdown.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n([\s\S]*)$/);
       if (!match) return null;
 
-      const frontmatter = match[1];
+      const frontmatter = parseFrontmatter(match[1]);
       const content = match[2].trim();
 
-      const title = frontmatter.match(/title:\s*(.+)/)?.[1] || 'Untitled';
-      const author = frontmatter.match(/author:\s*(.+)/)?.[1] || 'Unknown';
+      const title = frontmatter.title || 'Untitled';
+      const author = frontmatter.author || 'Unknown';
 
       return { title, author, content };
+    }
+
+    function parseFrontmatter(block = '') {
+      return block.split('\n').reduce((acc, line) => {
+        const [rawKey, ...rest] = line.split(':');
+        if (!rawKey || rest.length === 0) return acc;
+        const key = rawKey.trim().toLowerCase();
+        const value = rest.join(':').trim();
+        acc[key] = value;
+        return acc;
+      }, {});
     }
 
     // Create card element
@@ -919,7 +960,9 @@
       modalTitle.textContent = poem.title;
       modalAuthor.textContent = poem.author;
       modalPoem.textContent = poem.content;
-      modalBadge.style.display = isMemorized ? 'inline-flex' : 'none';
+      if (modalBadge) {
+        modalBadge.style.display = isMemorized ? 'inline-flex' : 'none';
+      }
       currentSlug = poem.slug || '';
       setPoemUrl(currentSlug, { method: historyMethod });
       resetFeedback();
@@ -939,7 +982,7 @@
     async function copyPoemToClipboard() {
       const poemText = modalPoem.textContent || '';
       try {
-        await navigator.clipboard.writeText(poemText);
+        await writeToClipboard(poemText);
         showFeedback('Copied poem');
       } catch {
         showFeedback('Unable to copy', true);
@@ -965,7 +1008,7 @@
       }
 
       try {
-        await navigator.clipboard.writeText(url);
+        await writeToClipboard(url);
         showFeedback('Link copied');
       } catch {
         showFeedback('Unable to copy link', true);
@@ -973,14 +1016,16 @@
     }
 
     // Author link click - search by author
-    modalAuthor.addEventListener('click', (e) => {
-      e.preventDefault();
-      const authorName = modalAuthor.textContent;
-      closeModal();
-      searchInput.value = authorName;
-      searchClear.classList.add('visible');
-      filterPoems(authorName);
-    });
+    if (modalAuthor) {
+      modalAuthor.addEventListener('click', (e) => {
+        e.preventDefault();
+        const authorName = modalAuthor.textContent;
+        closeModal();
+        searchInput.value = authorName;
+        searchClear.classList.add('visible');
+        filterPoems(authorName);
+      });
+    }
 
     modal.querySelector('.modal__overlay').addEventListener('click', closeModal);
     modal.querySelector('.modal__close').addEventListener('click', closeModal);
@@ -1080,6 +1125,7 @@
     async function loadPoems() {
       try {
         const manifestRes = await fetch('/poems/manifest.json');
+        if (!manifestRes.ok) throw new Error('Manifest unavailable');
         const manifest = await manifestRes.json();
 
         // Combine memorized and learning into single list
@@ -1092,6 +1138,7 @@
           allSlugs.map(async (slug) => {
             try {
               const res = await fetch(`/poems/content/${slug}.md`);
+              if (!res.ok) return null;
               const markdown = await res.text();
               const poem = parsePoem(markdown);
               if (poem) poem.slug = slug;

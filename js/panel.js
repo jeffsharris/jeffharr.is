@@ -61,6 +61,7 @@
   // Cache for API responses
   const cache = new Map();
   let currentPlatform = null;
+  let latestRequestId = 0;
 
   // Proactively fetch all platform data on page load
   function prefetchAll() {
@@ -126,7 +127,7 @@
     }
 
     // Update footer link
-    panelLink.href = config.profileUrl;
+    panelLink.href = safeUrl(config.profileUrl);
     panelLinkText.textContent = config.linkText;
 
     // Check if data is already cached
@@ -175,27 +176,32 @@
 
   // Fetch content from API
   async function fetchContent(platform) {
+    const requestId = ++latestRequestId;
     try {
       const response = await fetch(`/api/${platform}`);
       if (!response.ok) throw new Error('API request failed');
       const data = await response.json();
       cache.set(platform, data);
-      renderContent(platform, data);
+      if (currentPlatform === platform && requestId === latestRequestId) {
+        renderContent(platform, data);
+      }
     } catch (error) {
       console.error(`Failed to fetch ${platform}:`, error);
-      panelContent.innerHTML = `
-        <div class="panel-empty">
-          <p>Unable to load content</p>
-          <p>Visit the profile directly to see more.</p>
-        </div>
-      `;
+      if (currentPlatform === platform && requestId === latestRequestId) {
+        panelContent.innerHTML = `
+          <div class="panel-empty">
+            <p>Unable to load content</p>
+            <p>Visit the profile directly to see more.</p>
+          </div>
+        `;
+      }
     }
   }
 
   // Render content based on platform
   function renderContent(platform, data) {
     if (data && data.profileUrl) {
-      panelLink.href = data.profileUrl;
+      panelLink.href = safeUrl(data.profileUrl);
     }
     const isPoems = platform === 'poems';
     panelLink.target = isPoems ? '_self' : '_blank';
@@ -211,7 +217,7 @@
     // Re-grab the span element after updating innerHTML
     const linkTextEl = document.getElementById('panel-link-text');
     if (platform === 'letterboxd' && data && (data.watchlistUrl || data.profileUrl)) {
-      panelLink.href = data.watchlistUrl || data.profileUrl;
+      panelLink.href = safeUrl(data.watchlistUrl || data.profileUrl);
       if (linkTextEl) linkTextEl.textContent = data.watchlistUrl ? 'Letterboxd Watchlist' : 'Letterboxd';
     } else if (!isPoems) {
       if (linkTextEl) linkTextEl.textContent = platformConfig[platform]?.linkText || 'Link';
@@ -252,13 +258,13 @@
       <div class="panel-section">
         <h4 class="panel-section__title">Recent Commits</h4>
         ${data.commits.map(commit => `
-          <a href="${commit.url}" target="_blank" rel="noopener" class="content-item content-item--commit">
+          <a href="${safeUrl(commit.url)}" target="_blank" rel="noopener" class="content-item content-item--commit">
             <div class="content-item__header">
-              <span class="content-item__repo">${commit.repo}</span>
+              <span class="content-item__repo">${escapeHtml(commit.repo)}</span>
               <span class="content-item__meta">${formatDate(commit.date)}</span>
             </div>
             <p class="content-item__message">${escapeHtml(commit.message)}</p>
-            <span class="content-item__sha">${commit.sha}</span>
+            <span class="content-item__sha">${escapeHtml(commit.sha)}</span>
           </a>
         `).join('')}
       </div>
@@ -278,12 +284,12 @@
       <div class="panel-section">
         <h4 class="panel-section__title">Recent Posts</h4>
         ${data.posts.map(post => `
-          <a href="${post.url || '#'}" target="_blank" rel="noopener" class="content-item">
+          <a href="${safeUrl(post.url)}" target="_blank" rel="noopener" class="content-item">
             <div class="content-item__header">
-              <h3 class="content-item__title">${post.title}</h3>
+              <h3 class="content-item__title">${escapeHtml(post.title)}</h3>
               ${post.date ? `<span class="content-item__meta">${formatDate(post.date)}</span>` : ''}
             </div>
-            ${post.excerpt ? `<p class="content-item__description">${post.excerpt}</p>` : ''}
+            ${post.excerpt ? `<p class="content-item__description">${escapeHtml(post.excerpt)}</p>` : ''}
           </a>
         `).join('')}
       </div>
@@ -294,13 +300,14 @@
 
   // X (Twitter) content - profile card only
   function renderX(data) {
+    const avatarUrl = safeUrl(data.profileImageUrl || '/images/profile.jpg');
     const html = `
       <div class="x-profile-card">
         <div class="x-profile-card__header">
-          <img src="${data.profileImageUrl || '/images/profile.jpg'}" alt="${data.name || 'Profile'}" class="x-profile-card__avatar">
+          <img src="${avatarUrl}" alt="${escapeHtml(data.name || 'Profile')}" class="x-profile-card__avatar">
           <div class="x-profile-card__info">
-            <h3 class="x-profile-card__name">${data.name || 'Jeff Harris'}</h3>
-            <p class="x-profile-card__handle">${data.handle || '@jeffintime'}</p>
+            <h3 class="x-profile-card__name">${escapeHtml(data.name || 'Jeff Harris')}</h3>
+            <p class="x-profile-card__handle">${escapeHtml(data.handle || '@jeffintime')}</p>
           </div>
         </div>
         <div class="x-profile-card__cta">
@@ -323,8 +330,8 @@
           <h4 class="panel-section__title">Currently Reading</h4>
           ${data.currentlyReading.map(book => `
             <div class="content-item content-item--book">
-              <h3 class="content-item__title">${book.title}</h3>
-              ${book.author ? `<p class="content-item__author">by ${book.author}</p>` : ''}
+              <h3 class="content-item__title">${escapeHtml(book.title)}</h3>
+              ${book.author ? `<p class="content-item__author">by ${escapeHtml(book.author)}</p>` : ''}
             </div>
           `).join('')}
         </div>
@@ -338,8 +345,8 @@
           <h4 class="panel-section__title">Recently Read</h4>
           ${data.recentlyRead.map(book => `
             <div class="content-item content-item--book">
-              <h3 class="content-item__title">${book.title}</h3>
-              ${book.author ? `<p class="content-item__author">by ${book.author}</p>` : ''}
+              <h3 class="content-item__title">${escapeHtml(book.title)}</h3>
+              ${book.author ? `<p class="content-item__author">by ${escapeHtml(book.author)}</p>` : ''}
               ${book.rating ? `<span class="content-item__rating">${'★'.repeat(book.rating)}${'☆'.repeat(5 - book.rating)}</span>` : ''}
             </div>
           `).join('')}
@@ -351,11 +358,11 @@
     if (!html && data.books && data.books.length > 0) {
       html = `
         <div class="panel-section">
-          <h4 class="panel-section__title">${data.shelf || 'Reading'}</h4>
+          <h4 class="panel-section__title">${escapeHtml(data.shelf || 'Reading')}</h4>
           ${data.books.map(book => `
             <div class="content-item content-item--book">
-              <h3 class="content-item__title">${book.title}</h3>
-              ${book.author ? `<p class="content-item__author">by ${book.author}</p>` : ''}
+              <h3 class="content-item__title">${escapeHtml(book.title)}</h3>
+              ${book.author ? `<p class="content-item__author">by ${escapeHtml(book.author)}</p>` : ''}
             </div>
           `).join('')}
         </div>
@@ -437,11 +444,13 @@
   function formatDate(dateStr) {
     if (!dateStr) return '';
     const date = new Date(dateStr);
+    if (Number.isNaN(date.getTime())) return '';
     const now = new Date();
     const diffDays = Math.floor((now - date) / (1000 * 60 * 60 * 24));
 
     if (diffDays === 0) return 'Today';
     if (diffDays === 1) return 'Yesterday';
+    if (diffDays < 0) return date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
     if (diffDays < 7) return `${diffDays}d ago`;
     if (diffDays < 30) return `${Math.floor(diffDays / 7)}w ago`;
     if (diffDays < 365) return `${Math.floor(diffDays / 30)}mo ago`;
@@ -451,13 +460,14 @@
   // Escape HTML to prevent XSS
   function escapeHtml(text) {
     const div = document.createElement('div');
-    div.textContent = text;
+    div.textContent = text == null ? '' : String(text);
     return div.innerHTML;
   }
 
   function formatRating(rating) {
     if (!rating && rating !== 0) return '';
-    const rounded = Math.round(rating * 2) / 2;
+    const normalized = Math.min(Math.max(rating, 0), 5);
+    const rounded = Math.round(normalized * 2) / 2;
     const fullStars = Math.floor(rounded);
     const halfStar = rounded % 1 !== 0;
     const emptyStars = 5 - fullStars - (halfStar ? 1 : 0);
@@ -465,10 +475,11 @@
   }
 
   function posterHtml(title, posterUrl) {
-    if (!posterUrl) {
+    const safePosterUrl = safeUrl(posterUrl, { fallback: '' });
+    if (!safePosterUrl) {
       return `<div class="film-card__poster film-card__poster--placeholder">No Art</div>`;
     }
-    return `<img src=\"${posterUrl}\" alt=\"${escapeHtml(title)} poster\" class=\"film-card__poster\">`;
+    return `<img src=\"${safePosterUrl}\" alt=\"${escapeHtml(title)} poster\" class=\"film-card__poster\">`;
   }
 
   function joinMeta(parts) {
@@ -480,8 +491,9 @@
   }
 
   function renderFilmCard(entry, { includeBlurb = false } = {}) {
-    const Wrapper = entry.link ? 'a' : 'div';
-    const attrs = entry.link ? `href=\"${entry.link}\" target=\"_blank\" rel=\"noopener\"` : '';
+    const link = safeUrl(entry.link, { fallback: '' });
+    const Wrapper = link ? 'a' : 'div';
+    const attrs = link ? `href=\"${link}\" target=\"_blank\" rel=\"noopener\"` : '';
     const meta = joinMeta([entry.year, entry.watchedDate ? formatDate(entry.watchedDate) : null]);
     const rating = entry.rating ? `<span class=\"film-card__rating\">${formatRating(entry.rating)}</span>` : '';
     const blurb = includeBlurb && entry.blurb ? `<p class=\"film-card__blurb\">${escapeHtml(entry.blurb)}</p>` : '';
@@ -500,6 +512,17 @@
         </div>
       </${Wrapper}>
     `;
+  }
+
+  function safeUrl(url, { fallback = '#'} = {}) {
+    if (!url) return fallback;
+    try {
+      const parsed = new URL(url, window.location.origin);
+      if (parsed.protocol === 'http:' || parsed.protocol === 'https:') {
+        return parsed.href;
+      }
+    } catch {}
+    return fallback;
   }
 
   // Event listeners

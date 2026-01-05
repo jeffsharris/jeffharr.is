@@ -5,13 +5,14 @@
 
 export async function onRequest(context) {
   const userId = '2632308';
+  const FETCH_TIMEOUT_MS = 8000;
 
   const fetchShelf = async (shelfName) => {
     try {
       const feedUrl = `https://www.goodreads.com/review/list_rss/${userId}?shelf=${shelfName}`;
-      const response = await fetch(feedUrl, {
+      const response = await fetchWithTimeout(feedUrl, {
         headers: { 'User-Agent': 'jeffharr.is' }
-      });
+      }, FETCH_TIMEOUT_MS);
 
       if (!response.ok) return [];
 
@@ -31,8 +32,8 @@ export async function onRequest(context) {
 
         if (titleMatch) {
           books.push({
-            title: titleMatch[1].trim(),
-            author: authorMatch ? authorMatch[1].trim() : null,
+            title: decodeXmlEntities(titleMatch[1].trim()),
+            author: authorMatch ? decodeXmlEntities(authorMatch[1].trim()) : null,
             url: linkMatch ? linkMatch[1].trim() : null,
             rating: ratingMatch ? parseInt(ratingMatch[1]) : null
           });
@@ -64,4 +65,24 @@ export async function onRequest(context) {
       'Cache-Control': 'public, max-age=3600' // Cache for 1 hour
     }
   });
+}
+
+function decodeXmlEntities(text = '') {
+  return text
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&apos;/g, "'");
+}
+
+async function fetchWithTimeout(url, options = {}, timeoutMs = 8000) {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    return await fetch(url, { ...options, signal: controller.signal });
+  } finally {
+    clearTimeout(timeoutId);
+  }
 }

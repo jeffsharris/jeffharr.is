@@ -5,13 +5,14 @@
 
 export async function onRequest(context) {
   const feedUrl = 'https://wakingpatiently.substack.com/feed';
+  const FETCH_TIMEOUT_MS = 8000;
 
   try {
-    const response = await fetch(feedUrl, {
+    const response = await fetchWithTimeout(feedUrl, {
       headers: {
         'User-Agent': 'jeffharr.is'
       }
-    });
+    }, FETCH_TIMEOUT_MS);
 
     if (!response.ok) {
       throw new Error('Failed to fetch Substack feed');
@@ -45,13 +46,14 @@ export async function onRequest(context) {
       if (titleMatch) {
         // Clean up description - remove HTML tags and truncate
         let excerpt = descMatch?.[1] || '';
-        excerpt = excerpt.replace(/<[^>]*>/g, '').trim();
+        excerpt = stripHtml(excerpt);
+        excerpt = decodeXmlEntities(excerpt);
         if (excerpt.length > 200) {
           excerpt = excerpt.substring(0, 200) + '...';
         }
 
         posts.push({
-          title: titleMatch[1].trim(),
+          title: decodeXmlEntities(titleMatch[1].trim()),
           excerpt,
           url: linkMatch?.[1] || 'https://wakingpatiently.substack.com',
           date: dateMatch?.[1] || null
@@ -88,5 +90,29 @@ export async function onRequest(context) {
         'Cache-Control': 'public, max-age=300'
       }
     });
+  }
+}
+
+function stripHtml(input = '') {
+  return input.replace(/<[^>]*>/g, '').trim();
+}
+
+function decodeXmlEntities(text = '') {
+  return text
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&apos;/g, "'");
+}
+
+async function fetchWithTimeout(url, options = {}, timeoutMs = 8000) {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    return await fetch(url, { ...options, signal: controller.signal });
+  } finally {
+    clearTimeout(timeoutId);
   }
 }

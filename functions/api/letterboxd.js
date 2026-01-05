@@ -5,6 +5,7 @@
 
 const USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36';
 const MAX_ITEMS = 5;
+const FETCH_TIMEOUT_MS = 8000;
 
 export async function onRequest(context) {
   const rawUsername = (context.env?.LETTERBOXD_USERNAME || 'jeffharris').trim();
@@ -54,7 +55,7 @@ export async function onRequest(context) {
 
 async function fetchRecentlyWatched(url, headers) {
   try {
-    const response = await fetch(url, { headers });
+    const response = await fetchWithTimeout(url, { headers }, FETCH_TIMEOUT_MS);
     if (!response.ok) throw new Error('Films page unavailable');
     const html = await response.text();
     return parseFilmsHtml(html, { includeRating: true });
@@ -66,7 +67,7 @@ async function fetchRecentlyWatched(url, headers) {
 
 async function fetchWatchlist(url, headers) {
   try {
-    const response = await fetch(url, { headers });
+    const response = await fetchWithTimeout(url, { headers }, FETCH_TIMEOUT_MS);
     if (!response.ok) throw new Error('Watchlist page unavailable');
     const html = await response.text();
     return parseFilmsHtml(html, { includeRating: false });
@@ -77,6 +78,7 @@ async function fetchWatchlist(url, headers) {
 }
 
 function parseFilmsHtml(html, { includeRating = false } = {}) {
+  if (!html) return [];
   const items = [];
   const seen = new Set();
 
@@ -184,3 +186,15 @@ function decodeHtmlEntities(text) {
     .replace(/&#39;/g, "'")
     .replace(/&apos;/g, "'");
 }
+
+async function fetchWithTimeout(url, options = {}, timeoutMs = 8000) {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    return await fetch(url, { ...options, signal: controller.signal });
+  } finally {
+    clearTimeout(timeoutId);
+  }
+}
+
+export { parseFilmsHtml, buildPosterUrl, decodeHtmlEntities };
