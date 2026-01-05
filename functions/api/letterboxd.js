@@ -142,25 +142,32 @@ function parseFilmsHtml(html, { includeRating = false } = {}) {
 
 /**
  * Build the Letterboxd poster URL
- * Format: https://a.ltrbxd.com/resized/film-poster/{id_path}/{film_id}-{slug_base}-0-{w}-0-{h}-crop.jpg?k={cacheKey}
+ * Format: https://a.ltrbxd.com/resized/film-poster/{id_path}/{film_id}-{slug}-0-{w}-0-{h}-crop.jpg
+ *
+ * Letterboxd changed their poster URL scheme around film ID 1,000,000:
+ * - Older films (ID < 1M): use slug WITHOUT year suffix (e.g., "carol" not "carol-2015")
+ * - Newer films (ID >= 1M): use full slug WITH year suffix (e.g., "the-mastermind-2025")
  *
  * @param {string} filmId - The numeric film ID
  * @param {string} slug - The film slug (may include year suffix)
- * @param {string} cacheKey - The cache busting key
+ * @param {string} cacheKey - The cache busting key (optional)
  * @returns {string} The poster URL
  */
 function buildPosterUrl(filmId, slug, cacheKey) {
   // Split film ID into path segments (e.g., 182142 -> 1/8/2/1/4/2)
   const idPath = filmId.split('').join('/');
 
-  // Remove year suffix from slug if present (e.g., "carol-2015" -> "carol")
-  const slugBase = slug.replace(/-\d{4}$/, '');
-
   // Use 125x187 size which is common for thumbnails
   const width = 125;
   const height = 187;
 
-  let url = `https://a.ltrbxd.com/resized/film-poster/${idPath}/${filmId}-${slugBase}-0-${width}-0-${height}-crop.jpg`;
+  // Determine which slug format to use based on film ID
+  // Films with ID >= 1,000,000 use the full slug including year suffix
+  // Older films use the slug with year suffix stripped
+  const filmIdNum = parseInt(filmId, 10);
+  const slugForUrl = filmIdNum >= 1000000 ? slug : slug.replace(/-\d{4}$/, '');
+
+  let url = `https://a.ltrbxd.com/resized/film-poster/${idPath}/${filmId}-${slugForUrl}-0-${width}-0-${height}-crop.jpg`;
   if (cacheKey) {
     url += `?k=${cacheKey}`;
   }
