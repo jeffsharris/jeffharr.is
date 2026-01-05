@@ -201,14 +201,20 @@
     panelLink.target = isPoems ? '_self' : '_blank';
     if (isPoems) {
       panelLink.removeAttribute('rel');
+      // Use custom "Browse" CTA for poems
+      panelLink.innerHTML = 'Browse <span id="panel-link-text">Poems</span> \u2192';
     } else {
       panelLink.rel = 'noopener';
+      // Reset to default "View on" format for other platforms
+      panelLink.innerHTML = 'View on <span id="panel-link-text"></span> \u2192';
     }
+    // Re-grab the span element after updating innerHTML
+    const linkTextEl = document.getElementById('panel-link-text');
     if (platform === 'letterboxd' && data && (data.watchlistUrl || data.profileUrl)) {
       panelLink.href = data.watchlistUrl || data.profileUrl;
-      panelLinkText.textContent = data.watchlistUrl ? 'Letterboxd Watchlist' : 'Letterboxd';
-    } else {
-      panelLinkText.textContent = platformConfig[platform]?.linkText || 'Link';
+      if (linkTextEl) linkTextEl.textContent = data.watchlistUrl ? 'Letterboxd Watchlist' : 'Letterboxd';
+    } else if (!isPoems) {
+      if (linkTextEl) linkTextEl.textContent = platformConfig[platform]?.linkText || 'Link';
     }
 
     switch (platform) {
@@ -363,7 +369,7 @@
     panelContent.innerHTML = html;
   }
 
-  // Letterboxd content - diary + watchlist
+  // Letterboxd content - recently watched + watchlist
   function renderLetterboxd(data) {
     const entries = data.entries || [];
     const watchlist = data.watchlist || [];
@@ -372,9 +378,9 @@
     if (entries.length > 0) {
       html += `
         <div class="panel-section">
-          <h4 class="panel-section__title">Latest Diary</h4>
+          <h4 class="panel-section__title">Recently Watched</h4>
           <div class="film-grid">
-            ${entries.slice(0, 4).map(entry => renderFilmCard(entry, { includeBlurb: true })).join('')}
+            ${entries.slice(0, 5).map(entry => renderFilmCard(entry, { includeBlurb: false })).join('')}
           </div>
         </div>
       `;
@@ -385,7 +391,7 @@
         <div class="panel-section">
           <h4 class="panel-section__title">Watchlist</h4>
           <div class="film-grid">
-            ${watchlist.slice(0, 4).map(entry => renderFilmCard(entry, { includeBlurb: false })).join('')}
+            ${watchlist.slice(0, 5).map(entry => renderFilmCard(entry, { includeBlurb: false })).join('')}
           </div>
         </div>
       `;
@@ -412,13 +418,13 @@
         <h4 class="panel-section__title">Random Picks</h4>
         <div class="panel-list">
           ${poems.map(poem => `
-            <div class="content-item content-item--poem">
+            <a href="/poems?poem=${encodeURIComponent(poem.slug || '')}" class="content-item content-item--poem">
               <div class="content-item__header">
                 <h3 class="content-item__title">${escapeHtml(poem.title)}</h3>
                 ${poem.author ? `<span class="content-item__meta">${escapeHtml(poem.author)}</span>` : ''}
               </div>
               ${poem.excerpt ? `<p class="content-item__description">${escapeHtml(poem.excerpt)}</p>` : ''}
-            </div>
+            </a>
           `).join('')}
         </div>
       </div>

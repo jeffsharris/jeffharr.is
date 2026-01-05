@@ -1,31 +1,29 @@
 /**
  * Letterboxd API endpoint for Cloudflare Pages Functions
- * Uses public RSS/HTML endpoints to surface recent diary activity and watchlist picks.
+ * Parses public HTML pages to surface recently watched and watchlist films.
  */
 
-const USER_AGENT = 'Mozilla/5.0 (compatible; jeffharr.is/1.0; +https://jeffharr.is)';
-const MAX_ITEMS = 6;
+const USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36';
+const MAX_ITEMS = 5;
 
 export async function onRequest(context) {
   const rawUsername = (context.env?.LETTERBOXD_USERNAME || 'jeffharris').trim();
   const sanitizedUsername = rawUsername.replace(/[^\w-]/g, '') || 'jeffharris';
 
   const profileUrl = `https://letterboxd.com/${sanitizedUsername}/`;
-  const diaryFeedUrl = `${profileUrl}rss/`;
-  const diaryByDateUrl = `${profileUrl}films/by/date/`;
-  const watchlistFeedUrl = `${profileUrl}watchlist/rss/`;
+  const recentFilmsUrl = `${profileUrl}films/by/date/`;
   const watchlistPageUrl = `${profileUrl}watchlist/`;
 
   const headers = { 'User-Agent': USER_AGENT };
 
   try {
-    const [diaryEntries, watchlist] = await Promise.all([
-      fetchDiary(diaryFeedUrl, diaryByDateUrl, profileUrl, headers),
-      fetchWatchlist(watchlistFeedUrl, watchlistPageUrl, headers)
+    const [recentlyWatched, watchlist] = await Promise.all([
+      fetchRecentlyWatched(recentFilmsUrl, headers),
+      fetchWatchlist(watchlistPageUrl, headers)
     ]);
 
     const payload = {
-      entries: diaryEntries,
+      entries: recentlyWatched,
       watchlist,
       profileUrl,
       watchlistUrl: watchlistPageUrl
@@ -54,162 +52,87 @@ export async function onRequest(context) {
   }
 }
 
-async function fetchDiary(feedUrl, diaryByDateUrl, profileUrl, headers) {
+async function fetchRecentlyWatched(url, headers) {
   try {
-    const response = await fetch(feedUrl, { headers });
-    if (!response.ok) throw new Error('RSS feed unavailable');
-    const xml = await response.text();
-    const parsed = parseRssItems(xml);
-    if (parsed.length) return parsed.slice(0, MAX_ITEMS);
-  } catch (error) {
-    console.warn('Diary RSS failed, attempting HTML fallback:', error.message);
-  }
-
-  // Fallback: parse the films by date page (public)
-  try {
-    const response = await fetch(diaryByDateUrl, { headers });
-    if (!response.ok) throw new Error('Diary by date page unavailable');
+    const response = await fetch(url, { headers });
+    if (!response.ok) throw new Error('Films page unavailable');
     const html = await response.text();
-    const parsed = parseDiaryByDateHtml(html);
-    if (parsed.length) return parsed.slice(0, MAX_ITEMS);
+    return parseFilmsHtml(html, { includeRating: true });
   } catch (error) {
-    console.warn('Diary by date HTML fallback failed:', error.message);
-  }
-
-  // Fallback: parse the classic diary page
-  try {
-    const diaryUrl = `${profileUrl}films/diary/`;
-    const response = await fetch(diaryUrl, { headers });
-    if (!response.ok) throw new Error('Diary page unavailable');
-    const html = await response.text();
-    return parseDiaryHtml(html).slice(0, MAX_ITEMS);
-  } catch (error) {
-    console.error('Diary HTML fallback failed:', error);
+    console.error('Recently watched fetch failed:', error);
     return [];
   }
 }
 
-async function fetchWatchlist(feedUrl, watchlistPageUrl, headers) {
+async function fetchWatchlist(url, headers) {
   try {
-    const response = await fetch(feedUrl, { headers });
-    if (!response.ok) throw new Error('Watchlist feed unavailable');
-    const xml = await response.text();
-    const parsed = parseRssItems(xml, { includeReviews: false });
-    if (parsed.length) return parsed.slice(0, MAX_ITEMS);
-  } catch (error) {
-    console.warn('Watchlist RSS failed, attempting HTML fallback:', error.message);
-  }
-
-  try {
-    const response = await fetch(watchlistPageUrl, { headers });
+    const response = await fetch(url, { headers });
     if (!response.ok) throw new Error('Watchlist page unavailable');
     const html = await response.text();
-    return parseWatchlistHtml(html).slice(0, MAX_ITEMS);
+    return parseFilmsHtml(html, { includeRating: false });
   } catch (error) {
-    console.error('Watchlist HTML fallback failed:', error);
+    console.error('Watchlist fetch failed:', error);
     return [];
   }
 }
 
-function parseRssItems(xml, { includeReviews = true } = {}) {
+function parseFilmsHtml(html, { includeRating = false } = {}) {
   const items = [];
-  const itemRegex = /<item>([\s\S]*?)<\/item>/gi;
-  let match;
+  const seen = new Set();
 
-  while ((match = itemRegex.exec(xml)) !== null && items.length < MAX_ITEMS) {
-    const block = match[1];
-    const title = extractTag(block, 'letterboxd:filmTitle') || extractTag(block, 'title');
-    if (!title) continue;
+  // Match the LazyPoster react components that contain film data
+  // The HTML structure includes: data-item-name, data-item-slug, data-target-link, data-film-id, and poster path info
+  const filmBlocks = html.split('data-component-class="LazyPoster"');
 
-    const ratingRaw = extractTag(block, 'letterboxd:memberRating') || extractTag(block, 'letterboxd:rating');
-    const rating = ratingRaw ? parseFloat(ratingRaw) : null;
-    const description = includeReviews ? cleanHtml(extractTag(block, 'description') || '') : '';
-    const blurb = description ? truncate(description, 200) : null;
+  for (let i = 1; i < filmBlocks.length && items.length < MAX_ITEMS; i++) {
+    const block = filmBlocks[i];
 
-    items.push({
-      title,
-      year: extractTag(block, 'letterboxd:filmYear'),
-      watchedDate: extractTag(block, 'letterboxd:watchedDate') || extractTag(block, 'pubDate'),
-      rating: isNaN(rating) ? null : rating,
-      link: extractTag(block, 'link'),
-      poster: normalizePoster(extractPoster(block)),
-      blurb
-    });
-  }
+    // Extract film data from attributes
+    const nameMatch = block.match(/data-item-name="([^"]+)"/);
+    const slugMatch = block.match(/data-item-slug="([^"]+)"/);
+    const linkMatch = block.match(/data-target-link="([^"]+)"/);
+    const filmIdMatch = block.match(/data-film-id="(\d+)"/);
 
-  return items;
-}
+    if (!nameMatch || !slugMatch) continue;
 
-function parseDiaryHtml(html) {
-  const items = [];
-  const entryRegex = /<li class="diary-entry-row[\s\S]*?<\/li>/gi;
-  let match;
+    const slug = slugMatch[1];
+    if (seen.has(slug)) continue;
+    seen.add(slug);
 
-  while ((match = entryRegex.exec(html)) !== null && items.length < MAX_ITEMS) {
-    const block = match[0];
-    const title = getAttr(block, 'data-film-name') || getAttr(block, 'data-film-title');
-    if (!title) continue;
+    const fullName = decodeHtmlEntities(nameMatch[1]);
+    const link = linkMatch ? linkMatch[1] : `/film/${slug}/`;
+    const filmId = filmIdMatch ? filmIdMatch[1] : null;
 
-    const ratingRaw = getAttr(block, 'data-rating') || getAttr(block, 'data-entry-rating');
-    const rating = ratingRaw ? normalizeRating(ratingRaw) : null;
-    const poster = normalizePoster(getAttr(block, 'data-poster-url') || getPosterFromImg(block));
-    const link = getAttr(block, 'data-film-link') || getAttr(block, 'data-target-link') || extractHref(block);
+    // Parse year from name (e.g., "Bad Santa (2003)")
+    const yearMatch = fullName.match(/\((\d{4})\)$/);
+    const year = yearMatch ? yearMatch[1] : null;
+    const title = yearMatch ? fullName.replace(/\s*\(\d{4}\)$/, '') : fullName;
 
-    items.push({
-      title,
-      year: getAttr(block, 'data-film-release-year') || getAttr(block, 'data-film-year'),
-      watchedDate: getAttr(block, 'data-viewing-date') || getTimeDate(block),
-      rating,
-      link: link ? `https://letterboxd.com${link}` : null,
-      poster,
-      blurb: null
-    });
-  }
+    // Try to find rating if requested
+    let rating = null;
+    if (includeRating) {
+      // Rating appears after the poster div in format: rated-N (where N is 1-10)
+      const ratingMatch = block.match(/class="rating[^"]*rated-(\d+)"/);
+      if (ratingMatch) {
+        // Convert from 1-10 scale to 0.5-5 scale
+        rating = parseInt(ratingMatch[1], 10) / 2;
+      }
+    }
 
-  return items;
-}
+    // Extract cache busting key for poster URL
+    let posterUrl = null;
+    if (filmId) {
+      const cacheKeyMatch = block.match(/cacheBustingKey":"([^"]+)"/);
+      const cacheKey = cacheKeyMatch ? cacheKeyMatch[1] : null;
+      posterUrl = buildPosterUrl(filmId, slug, cacheKey);
+    }
 
-function parseDiaryByDateHtml(html) {
-  const items = [];
-  const entryRegex = /<li[^>]*data-film-slug="([^"]+)"[\s\S]*?<\/li>/gi;
-  let match;
-
-  while ((match = entryRegex.exec(html)) !== null && items.length < MAX_ITEMS) {
-    const block = match[0];
-    const slug = match[1];
-    const title = getAttr(block, 'data-film-name') || getAttr(block, 'data-film-title');
-    if (!title) continue;
-
-    const poster = normalizePoster(getAttr(block, 'data-poster-url') || getPosterFromImg(block));
-
-    items.push({
-      title,
-      year: getAttr(block, 'data-film-year') || getAttr(block, 'data-film-release-year'),
-      watchedDate: getAttr(block, 'data-viewing-date') || getTimeDate(block),
-      rating: normalizeRating(getAttr(block, 'data-rating') || getAttr(block, 'data-entry-rating')),
-      link: slug ? `https://letterboxd.com${slug}` : null,
-      poster,
-      blurb: null
-    });
-  }
-
-  return items;
-}
-
-function parseWatchlistHtml(html) {
-  const items = [];
-  const cardRegex = /data-film-slug="([^"]+)"[\s\S]*?data-film-title="([^"]+)"[\s\S]*?data-film-year="(\d{4})"[\s\S]*?data-poster-url="([^"]+)"/gi;
-  let match;
-
-  while ((match = cardRegex.exec(html)) !== null && items.length < MAX_ITEMS) {
-    const [, slug, title, year, poster] = match;
     items.push({
       title,
       year,
-      watchedDate: null,
-      rating: null,
-      link: `https://letterboxd.com${slug}`,
-      poster: normalizePoster(poster),
+      rating,
+      link: link.startsWith('http') ? link : `https://letterboxd.com${link}`,
+      poster: posterUrl,
       blurb: null
     });
   }
@@ -217,63 +140,40 @@ function parseWatchlistHtml(html) {
   return items;
 }
 
-function extractTag(xml, tag) {
-  const cdata = new RegExp(`<${tag}><!\[CDATA\[([\s\S]*?)\]\]><\/${tag}>`, 'i').exec(xml);
-  if (cdata) return cdata[1].trim();
-  const text = new RegExp(`<${tag}>([\s\S]*?)<\/${tag}>`, 'i').exec(xml);
-  if (text) return text[1].trim();
-  return null;
-}
+/**
+ * Build the Letterboxd poster URL
+ * Format: https://a.ltrbxd.com/resized/film-poster/{id_path}/{film_id}-{slug_base}-0-{w}-0-{h}-crop.jpg?k={cacheKey}
+ *
+ * @param {string} filmId - The numeric film ID
+ * @param {string} slug - The film slug (may include year suffix)
+ * @param {string} cacheKey - The cache busting key
+ * @returns {string} The poster URL
+ */
+function buildPosterUrl(filmId, slug, cacheKey) {
+  // Split film ID into path segments (e.g., 182142 -> 1/8/2/1/4/2)
+  const idPath = filmId.split('').join('/');
 
-function extractPoster(block) {
-  const thumb = /<media:thumbnail[^>]*url="([^"]+)"/i.exec(block);
-  if (thumb) return thumb[1];
-  const enclosure = /<enclosure[^>]*url="([^"]+)"/i.exec(block);
-  if (enclosure) return enclosure[1];
-  return null;
-}
+  // Remove year suffix from slug if present (e.g., "carol-2015" -> "carol")
+  const slugBase = slug.replace(/-\d{4}$/, '');
 
-function getAttr(block, attr) {
-  const match = new RegExp(`${attr}="([^"]+)"`).exec(block);
-  return match ? match[1] : null;
-}
+  // Use 125x187 size which is common for thumbnails
+  const width = 125;
+  const height = 187;
 
-function getPosterFromImg(block) {
-  const match = /<img[^>]*src="([^"]+)"/i.exec(block);
-  return match ? match[1] : null;
-}
+  let url = `https://a.ltrbxd.com/resized/film-poster/${idPath}/${filmId}-${slugBase}-0-${width}-0-${height}-crop.jpg`;
+  if (cacheKey) {
+    url += `?k=${cacheKey}`;
+  }
 
-function extractHref(block) {
-  const match = /<a[^>]*href="([^"]+)"/i.exec(block);
-  return match ? match[1] : null;
-}
-
-function getTimeDate(block) {
-  const match = /<time[^>]*datetime="([^"]+)"/i.exec(block);
-  return match ? match[1] : null;
-}
-
-function normalizePoster(url) {
-  if (!url) return null;
-  if (url.startsWith('//')) return `https:${url}`;
   return url;
 }
 
-function normalizeRating(raw) {
-  // Some pages store ratings as 35 (for 3.5) or as "3.5"
-  const numeric = parseFloat(raw);
-  if (isNaN(numeric)) return null;
-  return numeric > 10 ? numeric / 10 : numeric;
-}
-
-function cleanHtml(value) {
-  return value
-    .replace(/<[^>]*>/g, ' ')
-    .replace(/\s+/g, ' ')
-    .trim();
-}
-
-function truncate(value, max) {
-  if (!value || value.length <= max) return value;
-  return `${value.slice(0, max - 1).trim()}…`;
+function decodeHtmlEntities(text) {
+  return text
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&apos;/g, "'");
 }
