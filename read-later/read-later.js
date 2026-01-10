@@ -44,6 +44,8 @@
     error: ''
   };
 
+  const REFRESH_INTERVAL_MS = 60000;
+
   const dateFormatter = new Intl.DateTimeFormat(undefined, {
     dateStyle: 'medium'
   });
@@ -265,4 +267,10 @@
   } else {
     loadItems();
   }
+
+  setInterval(() => {
+    if (!document.hidden && !state.loading) {
+      loadItems();
+    }
+  }, REFRESH_INTERVAL_MS);
 })();
