@@ -10,6 +10,32 @@
   const countUnreadEl = document.getElementById('count-unread');
   const countReadEl = document.getElementById('count-read');
 
+  const ICON_MARK_READ = `
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+      stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M9 12l2 2 4-4"></path>
+      <path d="M12 21a9 9 0 1 0-9-9 9 9 0 0 0 9 9z"></path>
+    </svg>
+  `;
+
+  const ICON_MARK_UNREAD = `
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+      stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M3 7v6h6"></path>
+      <path d="M21 17a8 8 0 0 0-13.66-5.66L3 13"></path>
+    </svg>
+  `;
+
+  const ICON_DELETE = `
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+      stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M3 6h18"></path>
+      <path d="M8 6v12"></path>
+      <path d="M16 6v12"></path>
+      <path d="M5 6l1-2h12l1 2"></path>
+    </svg>
+  `;
+
   const state = {
     items: [],
     filter: 'unread',
@@ -67,6 +93,7 @@
       const domain = node.querySelector('.item__domain');
       const time = node.querySelector('.item__time');
       const toggle = node.querySelector('.item__toggle');
+      const remove = node.querySelector('.item__delete');
 
       if (item.read) {
         article.classList.add('is-read');
@@ -77,8 +104,15 @@
 
       domain.textContent = formatDomain(item.url);
       time.textContent = formatDate(item.savedAt);
-      toggle.textContent = item.read ? 'Mark unread' : 'Mark read';
+      toggle.innerHTML = item.read ? ICON_MARK_UNREAD : ICON_MARK_READ;
+      toggle.setAttribute('aria-label', item.read ? 'Mark unread' : 'Mark read');
+      toggle.title = item.read ? 'Mark unread' : 'Mark read';
       toggle.addEventListener('click', () => updateReadStatus(item.id, !item.read, toggle));
+
+      remove.innerHTML = ICON_DELETE;
+      remove.classList.add('is-danger');
+      remove.title = 'Delete';
+      remove.addEventListener('click', () => deleteItem(item.id, remove));
 
       listEl.appendChild(node);
     });
@@ -162,6 +196,37 @@
     } catch (error) {
       console.error(error);
       state.error = 'Update failed. Refresh and try again.';
+    } finally {
+      button.disabled = false;
+      render();
+    }
+  }
+
+  async function deleteItem(id, button) {
+    if (!id) return;
+    if (!window.confirm('Delete this item?')) return;
+
+    button.disabled = true;
+    state.error = '';
+    renderStatus();
+
+    try {
+      const response = await fetch('/api/read-later', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id })
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to delete item');
+      }
+
+      const data = await response.json();
+      const deletedId = data?.item?.id || id;
+      state.items = state.items.filter(item => item.id !== deletedId);
+    } catch (error) {
+      console.error(error);
+      state.error = 'Delete failed. Refresh and try again.';
     } finally {
       button.disabled = false;
       render();

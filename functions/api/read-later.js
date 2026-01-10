@@ -31,6 +31,10 @@ export async function onRequest(context) {
       return handleUpdate(request, kv);
     }
 
+    if (request.method === 'DELETE') {
+      return handleDelete(request, kv);
+    }
+
     if (request.method === 'OPTIONS') {
       return new Response(null, { status: 204 });
     }
@@ -126,6 +130,43 @@ async function handleUpdate(request, kv) {
     console.error('Read later update error:', error);
     return jsonResponse(
       { ok: false, error: 'Failed to update item' },
+      { status: 500, cache: 'no-store' }
+    );
+  }
+}
+
+async function handleDelete(request, kv) {
+  const payload = await parseJson(request);
+  const idFromQuery = new URL(request.url).searchParams.get('id');
+  const id = typeof payload?.id === 'string' ? payload.id.trim() : (idFromQuery || '').trim();
+
+  if (!id) {
+    return jsonResponse(
+      { ok: false, error: 'Invalid payload' },
+      { status: 400, cache: 'no-store' }
+    );
+  }
+
+  try {
+    const key = `${KV_PREFIX}${id}`;
+    const item = await kv.get(key, { type: 'json' });
+
+    if (!item) {
+      return jsonResponse(
+        { ok: false, error: 'Item not found' },
+        { status: 404, cache: 'no-store' }
+      );
+    }
+
+    await kv.delete(key);
+    return jsonResponse(
+      { ok: true, item },
+      { status: 200, cache: 'no-store' }
+    );
+  } catch (error) {
+    console.error('Read later delete error:', error);
+    return jsonResponse(
+      { ok: false, error: 'Failed to delete item' },
       { status: 500, cache: 'no-store' }
     );
   }
