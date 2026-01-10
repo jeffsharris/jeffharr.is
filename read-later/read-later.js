@@ -8,6 +8,9 @@
   const sortSelect = document.getElementById('sort-select');
   const countUnreadEl = document.getElementById('count-unread');
   const countReadEl = document.getElementById('count-read');
+  const toastEl = document.getElementById('toast');
+  const toastMessageEl = document.getElementById('toast-message');
+  const toastUndoBtn = document.getElementById('toast-undo');
 
   const ICON_MARK_READ = `
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -42,6 +45,10 @@
   };
 
   const REFRESH_INTERVAL_MS = 60000;
+  const TOAST_DURATION_MS = 5000;
+
+  let toastTimeout = null;
+  let undoAction = null;
 
   const dateFormatter = new Intl.DateTimeFormat(undefined, {
     dateStyle: 'medium'
@@ -106,12 +113,12 @@
       toggle.innerHTML = item.read ? ICON_MARK_UNREAD : ICON_MARK_READ;
       toggle.setAttribute('aria-label', item.read ? 'Mark unread' : 'Mark read');
       toggle.title = item.read ? 'Mark unread' : 'Mark read';
-      toggle.addEventListener('click', () => updateReadStatus(item.id, !item.read, toggle));
+      toggle.addEventListener('click', () => updateReadStatus(item.id, !item.read));
 
       remove.innerHTML = ICON_DELETE;
       remove.classList.add('is-danger');
       remove.title = 'Delete';
-      remove.addEventListener('click', () => deleteItem(item.id, remove));
+      remove.addEventListener('click', () => deleteItem(item.id));
 
       listEl.appendChild(node);
     });
@@ -168,12 +175,28 @@
     render();
   }
 
-  async function updateReadStatus(id, read, button) {
+  async function updateReadStatus(id, read) {
     if (!id) return;
-    button.disabled = true;
     state.error = '';
-    renderStatus();
 
+    const index = state.items.findIndex(item => item.id === id);
+    if (index < 0) return;
+
+    const previousState = state.items[index].read;
+    state.items[index] = { ...state.items[index], read };
+    render();
+
+    const message = read ? 'Marked as read' : 'Marked as unread';
+    showToast(message, async () => {
+      state.items[index] = { ...state.items[index], read: previousState };
+      render();
+      await syncReadStatus(id, previousState);
+    });
+
+    await syncReadStatus(id, read);
+  }
+
+  async function syncReadStatus(id, read) {
     try {
       const response = await fetch('/api/read-later', {
         method: 'PATCH',
@@ -191,24 +214,36 @@
 
       if (updated && index >= 0) {
         state.items[index] = updated;
+        render();
       }
     } catch (error) {
       console.error(error);
-      state.error = 'Update failed. Refresh and try again.';
-    } finally {
-      button.disabled = false;
+      state.error = 'Sync failed. Please refresh.';
       render();
     }
   }
 
-  async function deleteItem(id, button) {
+  async function deleteItem(id) {
     if (!id) return;
-    if (!window.confirm('Delete this item?')) return;
-
-    button.disabled = true;
     state.error = '';
-    renderStatus();
 
+    const index = state.items.findIndex(item => item.id === id);
+    if (index < 0) return;
+
+    const deletedItem = state.items[index];
+    state.items = state.items.filter(item => item.id !== id);
+    render();
+
+    showToast('Item deleted', async () => {
+      state.items.splice(index, 0, deletedItem);
+      render();
+      await restoreItem(deletedItem);
+    });
+
+    await syncDeleteItem(id);
+  }
+
+  async function syncDeleteItem(id) {
     try {
       const response = await fetch('/api/read-later', {
         method: 'DELETE',
@@ -219,15 +254,36 @@
       if (!response.ok) {
         throw new Error('Failed to delete item');
       }
-
-      const data = await response.json();
-      const deletedId = data?.item?.id || id;
-      state.items = state.items.filter(item => item.id !== deletedId);
     } catch (error) {
       console.error(error);
-      state.error = 'Delete failed. Refresh and try again.';
-    } finally {
-      button.disabled = false;
+      state.error = 'Sync failed. Please refresh.';
+      render();
+    }
+  }
+
+  async function restoreItem(item) {
+    try {
+      const response = await fetch('/api/read-later', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url: item.url, title: item.title, read: item.read })
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to restore item');
+      }
+
+      const data = await response.json();
+      if (data.item) {
+        const index = state.items.findIndex(i => i.url === item.url);
+        if (index >= 0) {
+          state.items[index] = data.item;
+        }
+        render();
+      }
+    } catch (error) {
+      console.error(error);
+      state.error = 'Restore failed. Please refresh.';
       render();
     }
   }
@@ -247,6 +303,48 @@
     if (Number.isNaN(date.getTime())) return 'Unknown date';
     return dateFormatter.format(date);
   }
+
+  function showToast(message, onUndo) {
+    if (toastTimeout) {
+      clearTimeout(toastTimeout);
+    }
+
+    toastMessageEl.textContent = message;
+    undoAction = onUndo;
+    toastEl.hidden = false;
+
+    requestAnimationFrame(() => {
+      toastEl.classList.add('is-visible');
+    });
+
+    toastTimeout = setTimeout(hideToast, TOAST_DURATION_MS);
+  }
+
+  function hideToast() {
+    toastEl.classList.remove('is-visible');
+    setTimeout(() => {
+      toastEl.hidden = true;
+      undoAction = null;
+    }, 300);
+  }
+
+  async function handleUndo() {
+    if (!undoAction) return;
+
+    hideToast();
+    const action = undoAction;
+    undoAction = null;
+
+    try {
+      await action();
+    } catch (error) {
+      console.error('Undo failed:', error);
+      state.error = 'Undo failed. Please refresh.';
+      render();
+    }
+  }
+
+  toastUndoBtn.addEventListener('click', handleUndo);
 
   filterButtons.forEach(button => {
     button.addEventListener('click', () => setFilter(button.dataset.filter));
