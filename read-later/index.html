@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Read Later | Jeff Harris</title>
+  <meta name="description" content="A public list of links and videos I'm planning to read or watch.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+
+  <link rel="icon" href="/favicon.ico">
+  <link rel="stylesheet" href="/read-later/read-later.css">
+</head>
+<body>
+  <div class="bg-gradient"></div>
+  <div class="bg-noise"></div>
+
+  <header class="header">
+    <a class="back-link" href="/">← Home</a>
+    <div class="header__content">
+      <h1>Read Later</h1>
+      <p>A running list of the links and videos I'm saving for later.</p>
+    </div>
+    <button class="refresh-btn" id="refresh-btn" type="button">Refresh</button>
+  </header>
+
+  <main class="main">
+    <section class="controls">
+      <div class="filter-group" role="tablist" aria-label="Filter read later items">
+        <button class="filter-btn is-active" data-filter="unread" aria-pressed="true">
+          Unread <span class="count" id="count-unread">0</span>
+        </button>
+        <button class="filter-btn" data-filter="read" aria-pressed="false">
+          Read <span class="count" id="count-read">0</span>
+        </button>
+      </div>
+      <label class="sort">
+        Sort
+        <select id="sort-select">
+          <option value="saved-desc">Newest</option>
+          <option value="saved-asc">Oldest</option>
+        </select>
+      </label>
+    </section>
+
+    <section class="status" id="status" aria-live="polite"></section>
+    <section class="list" id="list" aria-live="polite"></section>
+  </main>
+
+  <template id="item-template">
+    <article class="item">
+      <div class="item__main">
+        <a class="item__title" href="#" target="_blank" rel="noopener"></a>
+        <div class="item__meta">
+          <span class="item__domain"></span>
+          <span class="item__dot"></span>
+          <time class="item__time"></time>
+        </div>
+      </div>
+      <div class="item__actions">
+        <button class="item__toggle" type="button"></button>
+      </div>
+    </article>
+  </template>
+
+  <script src="/read-later/read-later.js"></script>
+</body>
+</html>
