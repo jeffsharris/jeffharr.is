@@ -32,12 +32,6 @@
       linkText: 'Substack',
       profileUrl: 'https://wakingpatiently.substack.com'
     },
-    x: {
-      title: 'X',
-      icon: null,
-      linkText: 'X',
-      profileUrl: 'https://x.com/jeffintime'
-    },
     goodreads: {
       title: 'Goodreads',
       icon: '/images/goodreads.png',
@@ -55,6 +49,12 @@
       icon: '/images/poems.svg',
       linkText: 'Poems',
       profileUrl: '/poems'
+    },
+    'read-later': {
+      title: 'Read Later',
+      icon: '/images/read-later.svg',
+      linkText: 'Read Later',
+      profileUrl: '/read-later'
     }
   };
 
@@ -65,7 +65,7 @@
 
   // Proactively fetch all platform data on page load
   function prefetchAll() {
-    const platforms = ['github', 'substack', 'goodreads', 'letterboxd', 'poems'];
+    const platforms = ['github', 'substack', 'goodreads', 'letterboxd', 'poems', 'read-later'];
     platforms.forEach(platform => {
       fetch(`/api/${platform}`)
         .then(response => response.ok ? response.json() : null)
@@ -73,13 +73,6 @@
           if (data) cache.set(platform, data);
         })
         .catch(() => {}); // Silently fail, will retry on panel open
-    });
-    // X doesn't need fetching - it's static profile data
-    cache.set('x', {
-      handle: '@jeffintime',
-      name: 'Jeff Harris',
-      profileUrl: 'https://x.com/jeffintime',
-      profileImageUrl: '/images/profile.jpg'
     });
   }
 
@@ -117,13 +110,6 @@
     panelTitle.textContent = config.title;
     if (config.icon) {
       panelIcon.innerHTML = `<img src="${config.icon}" alt="" width="28" height="28">`;
-    } else if (platform === 'x') {
-      panelIcon.innerHTML = `
-        <svg width="28" height="28" viewBox="0 0 40 40" fill="currentColor">
-          <rect width="40" height="40" rx="6" fill="currentColor" fill-opacity="0.08"/>
-          <path d="M23.5 18.3L30 11H28.2L22.7 17.1L18.3 11H12.5L19.3 21.5L12.5 29H14.3L20.1 22.7L24.7 29H30.5L23.5 18.3ZM21 21.8L20.2 20.7L14.9 12.2H17.5L21.7 18L22.5 19.1L28.2 27.9H25.6L21 21.8Z" fill="currentColor"/>
-        </svg>
-      `;
     }
 
     // Update footer link
@@ -203,15 +189,16 @@
     if (data && data.profileUrl) {
       panelLink.href = safeUrl(data.profileUrl);
     }
-    const isPoems = platform === 'poems';
-    panelLink.target = isPoems ? '_self' : '_blank';
-    if (isPoems) {
+    const isInlinePage = platform === 'poems' || platform === 'read-later';
+    panelLink.target = isInlinePage ? '_self' : '_blank';
+    if (platform === 'poems') {
       panelLink.removeAttribute('rel');
-      // Use custom "Browse" CTA for poems
       panelLink.innerHTML = 'Browse <span id="panel-link-text">Poems</span> \u2192';
+    } else if (platform === 'read-later') {
+      panelLink.removeAttribute('rel');
+      panelLink.innerHTML = 'View all <span id="panel-link-text">Read Later</span> \u2192';
     } else {
       panelLink.rel = 'noopener';
-      // Reset to default "View on" format for other platforms
       panelLink.innerHTML = 'View on <span id="panel-link-text"></span> \u2192';
     }
     // Re-grab the span element after updating innerHTML
@@ -219,7 +206,7 @@
     if (platform === 'letterboxd' && data && (data.watchlistUrl || data.profileUrl)) {
       panelLink.href = safeUrl(data.watchlistUrl || data.profileUrl);
       if (linkTextEl) linkTextEl.textContent = data.watchlistUrl ? 'Letterboxd Watchlist' : 'Letterboxd';
-    } else if (!isPoems) {
+    } else if (!isInlinePage) {
       if (linkTextEl) linkTextEl.textContent = platformConfig[platform]?.linkText || 'Link';
     }
 
@@ -230,9 +217,6 @@
       case 'substack':
         renderSubstack(data);
         break;
-      case 'x':
-        renderX(data);
-        break;
       case 'goodreads':
         renderGoodreads(data);
         break;
@@ -241,6 +225,9 @@
         break;
       case 'poems':
         renderPoems(data);
+        break;
+      case 'read-later':
+        renderReadLater(data);
         break;
       default:
         panelContent.innerHTML = '<div class="panel-empty">Content unavailable</div>';
@@ -292,27 +279,6 @@
             ${post.excerpt ? `<p class="content-item__description">${escapeHtml(post.excerpt)}</p>` : ''}
           </a>
         `).join('')}
-      </div>
-    `;
-
-    panelContent.innerHTML = html;
-  }
-
-  // X (Twitter) content - profile card only
-  function renderX(data) {
-    const avatarUrl = safeUrl(data.profileImageUrl || '/images/profile.jpg');
-    const html = `
-      <div class="x-profile-card">
-        <div class="x-profile-card__header">
-          <img src="${avatarUrl}" alt="${escapeHtml(data.name || 'Profile')}" class="x-profile-card__avatar">
-          <div class="x-profile-card__info">
-            <h3 class="x-profile-card__name">${escapeHtml(data.name || 'Jeff Harris')}</h3>
-            <p class="x-profile-card__handle">${escapeHtml(data.handle || '@jeffintime')}</p>
-          </div>
-        </div>
-        <div class="x-profile-card__cta">
-          <p>Follow me on X to see my posts and thoughts.</p>
-        </div>
       </div>
     `;
 
@@ -438,6 +404,67 @@
     `;
 
     panelContent.innerHTML = html;
+  }
+
+  // Read Later content - saved and read items
+  function renderReadLater(data) {
+    const items = data.items || [];
+    const unread = items.filter(item => !item.read).slice(0, 5);
+    const read = items.filter(item => item.read).slice(0, 5);
+
+    if (!items.length) {
+      panelContent.innerHTML = '<div class="panel-empty">Nothing saved yet. Share a link to start your list.</div>';
+      return;
+    }
+
+    let html = '';
+
+    if (unread.length > 0) {
+      html += `
+        <div class="panel-section">
+          <h4 class="panel-section__title">Recently Saved</h4>
+          <div class="panel-list">
+            ${unread.map(item => renderReadLaterItem(item)).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    if (read.length > 0) {
+      html += `
+        <div class="panel-section">
+          <h4 class="panel-section__title">Recently Read</h4>
+          <div class="panel-list">
+            ${read.map(item => renderReadLaterItem(item)).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    panelContent.innerHTML = html;
+  }
+
+  function renderReadLaterItem(item) {
+    const domain = formatDomain(item.url);
+    const date = item.savedAt ? formatDate(item.savedAt) : '';
+    return `
+      <a href="${safeUrl(item.url)}" target="_blank" rel="noopener" class="content-item content-item--read-later">
+        <div class="content-item__header">
+          <h3 class="content-item__title">${escapeHtml(item.title || domain)}</h3>
+          ${date ? `<span class="content-item__meta">${date}</span>` : ''}
+        </div>
+        <p class="content-item__description">${escapeHtml(domain)}</p>
+      </a>
+    `;
+  }
+
+  function formatDomain(url) {
+    try {
+      const parsed = new URL(url);
+      return parsed.hostname.replace(/^www\./, '');
+    } catch {
+      return 'Unknown source';
+    }
   }
 
   // Format date helper
