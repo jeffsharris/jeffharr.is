@@ -409,6 +409,34 @@ body {
   margin: 0 0 1em;
 }
 
+.reader__fallback {
+  text-align: center;
+  padding: 48px 24px;
+  color: var(--text-muted);
+}
+
+.reader__fallback p {
+  margin: 0 0 16px;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.reader__fallback-link {
+  display: inline-block;
+  padding: 10px 20px;
+  background: var(--accent);
+  color: white;
+  text-decoration: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background var(--transition);
+}
+
+.reader__fallback-link:hover {
+  background: var(--accent-strong);
+}
+
 .toast {
   position: fixed;
   bottom: 24px;

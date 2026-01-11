@@ -333,25 +333,37 @@
   }
 
   function renderReaderContent(elements, reader) {
-    const { readerTitle, readerMeta, readerStatus, readerBody } = elements;
+    const { item, readerTitle, readerMeta, readerStatus, readerBody } = elements;
     readerTitle.textContent = reader.title || 'Untitled';
     readerMeta.textContent = formatReaderMeta(reader);
     readerStatus.textContent = '';
-    readerBody.innerHTML = reader.contentHtml || '';
+
+    // Check for poor extraction (too short or empty content)
+    const MIN_WORD_COUNT = 50;
+    if (!reader.contentHtml || reader.wordCount < MIN_WORD_COUNT) {
+      renderReaderError(item, readerStatus, readerBody);
+      return;
+    }
+
+    readerBody.innerHTML = reader.contentHtml;
   }
 
   function renderReaderError(item, readerStatus, readerBody) {
     readerStatus.innerHTML = '';
     readerBody.innerHTML = '';
-    const text = document.createElement('span');
-    text.textContent = 'Reader view unavailable. ';
+    const container = document.createElement('div');
+    container.className = 'reader__fallback';
+    const text = document.createElement('p');
+    text.textContent = 'Reader view isn\'t available for this page—some sites load content dynamically.';
     const link = document.createElement('a');
     link.href = item.url;
     link.target = '_blank';
     link.rel = 'noopener';
-    link.textContent = 'Open the original link.';
-    readerStatus.appendChild(text);
-    readerStatus.appendChild(link);
+    link.className = 'reader__fallback-link';
+    link.textContent = 'Read on ' + formatDomain(item.url) + ' →';
+    container.appendChild(text);
+    container.appendChild(link);
+    readerBody.appendChild(container);
   }
 
   function formatReaderMeta(reader) {
