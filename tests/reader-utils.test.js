@@ -1,6 +1,12 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { shouldCacheReader, absolutizeUrl, absolutizeSrcset } from '../functions/api/read-later/reader-utils.js';
+import {
+  shouldCacheReader,
+  absolutizeUrl,
+  absolutizeSrcset,
+  countWords,
+  looksClientRendered
+} from '../functions/api/read-later/reader-utils.js';
 
 test('shouldCacheReader requires content and minimum word count', () => {
   assert.equal(shouldCacheReader(null), false);
@@ -27,4 +33,17 @@ test('absolutizeSrcset resolves multiple candidates', () => {
     absolutizeSrcset(srcset, 'https://example.com/articles/'),
     'https://example.com/articles/image-1x.jpg 1x, https://example.com/img-2x.jpg 2x'
   );
+});
+
+test('countWords returns word count for trimmed text', () => {
+  assert.equal(countWords(''), 0);
+  assert.equal(countWords('   '), 0);
+  assert.equal(countWords('hello world'), 2);
+  assert.equal(countWords('one\ttwo\nthree'), 3);
+});
+
+test('looksClientRendered detects hydration markers', () => {
+  assert.equal(looksClientRendered('<script src=\"/_next/static/app.js\"></script>'), true);
+  assert.equal(looksClientRendered('window.__NUXT__ = {}'), true);
+  assert.equal(looksClientRendered('<html><body><p>hi</p></body></html>'), false);
 });

@@ -6,8 +6,15 @@
 import puppeteer from '@cloudflare/puppeteer';
 import { Readability } from '@mozilla/readability';
 import { parseHTML } from 'linkedom';
-import { deriveTitleFromUrl } from '../read-later.js';
-import { shouldCacheReader, absolutizeUrl, absolutizeSrcset } from './reader-utils.js';
+import {
+  DEFAULT_MIN_WORD_COUNT,
+  deriveTitleFromUrl,
+  shouldCacheReader,
+  absolutizeUrl,
+  absolutizeSrcset,
+  countWords,
+  looksClientRendered
+} from './reader-utils.js';
 
 const KV_PREFIX = 'item:';
 const READER_PREFIX = 'reader:';
@@ -15,13 +22,35 @@ const FETCH_TIMEOUT_MS = 10000;
 const RENDER_TIMEOUT_MS = 15000;
 const RENDER_SETTLE_MS = 1200;
 const USER_AGENT = 'Mozilla/5.0 (compatible; jeffharr.is/1.0; +https://jeffharr.is)';
+const TEXT_STABILITY_THRESHOLD = 24;
+const TEXT_POLL_INTERVAL_MS = 300;
+
+const CONTENT_SELECTORS = [
+  'article',
+  '[role="main"]',
+  'main',
+  '[itemprop="articleBody"]',
+  '.post-content',
+  '.post-body',
+  '.entry-content',
+  '.article-body',
+  '.article-content',
+  '.story-body',
+  '.content__body',
+  '.content-body',
+  '[data-testid="post-content"]',
+  '[data-test="post-content"]'
+];
+
+const CONTENT_SELECTOR = CONTENT_SELECTORS.join(',');
+const NOISE_TAGS = new Set(['nav', 'footer', 'header', 'aside']);
 
 const ALLOWED_TAGS = new Set([
   'a', 'abbr', 'b', 'blockquote', 'br', 'code', 'del', 'div', 'em', 'figure',
   'figcaption', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'hr', 'i', 'img', 'li',
   'ol', 'p', 'picture', 'pre', 'section', 'small', 'source', 'span', 'strong',
   'sub', 'sup', 'table', 'tbody', 'td', 'th', 'thead', 'tr', 'ul', 'time',
-  'article'
+  'article', 'caption'
 ]);
 
 const REMOVE_TAGS = new Set([
@@ -68,27 +97,21 @@ export async function onRequest(context) {
       );
     }
 
-    const cached = await kv.get(`${READER_PREFIX}${id}`, { type: 'json' });
-    if (cached?.contentHtml && shouldCacheReader(cached)) {
-      return jsonResponse(
-        { ok: true, item: pickItem(item), reader: cached },
-        { status: 200, cache: 'public, max-age=3600' }
-      );
-    }
+    const reader = await fetchAndCacheReader({
+      kv,
+      id,
+      url: item.url,
+      title: item.title,
+      browser: env.BROWSER
+    });
 
-    if (cached?.contentHtml && !shouldCacheReader(cached)) {
-      await kv.delete(`${READER_PREFIX}${id}`);
-    }
-
-    const reader = await buildReaderContent(item.url, item.title, env.BROWSER);
-    if (!reader?.contentHtml || !shouldCacheReader(reader)) {
+    if (!reader) {
       return jsonResponse(
         { ok: false, reader: null, error: 'Reader unavailable' },
         { status: 200, cache: 'public, max-age=60' }
       );
     }
 
-    await kv.put(`${READER_PREFIX}${id}`, JSON.stringify(reader));
     return jsonResponse(
       { ok: true, item: pickItem(item), reader },
       { status: 200, cache: 'public, max-age=3600' }
@@ -104,18 +127,44 @@ export async function onRequest(context) {
 
 async function buildReaderContent(url, fallbackTitle, browserBinding) {
   const html = await fetchHtml(url);
-  let reader = extractReader(html, url, fallbackTitle);
+  const preferBrowser = Boolean(browserBinding) && looksClientRendered(html);
+  let reader = preferBrowser ? null : extractReader(html, url, fallbackTitle);
 
   if (!shouldCacheReader(reader) && browserBinding) {
     const renderedHtml = await renderWithBrowser(url, browserBinding);
     if (renderedHtml) {
       const renderedReader = extractReader(renderedHtml, url, fallbackTitle);
-      if (shouldCacheReader(renderedReader)) {
+      if (shouldCacheReader(renderedReader) || !reader) {
         reader = renderedReader;
       }
     }
   }
 
+  if (!reader && preferBrowser) {
+    reader = extractReader(html, url, fallbackTitle);
+  }
+
+  return reader;
+}
+
+async function fetchAndCacheReader({ kv, id, url, title, browser }) {
+  if (!kv || !id || !url) return null;
+
+  const cached = await kv.get(`${READER_PREFIX}${id}`, { type: 'json' });
+  if (cached?.contentHtml && shouldCacheReader(cached)) {
+    return cached;
+  }
+
+  if (cached?.contentHtml && !shouldCacheReader(cached)) {
+    await kv.delete(`${READER_PREFIX}${id}`);
+  }
+
+  const reader = await buildReaderContent(url, title, browser);
+  if (!reader?.contentHtml || !shouldCacheReader(reader)) {
+    return null;
+  }
+
+  await kv.put(`${READER_PREFIX}${id}`, JSON.stringify(reader));
   return reader;
 }
 
@@ -137,15 +186,56 @@ async function fetchHtml(url) {
 function extractReader(html, url, fallbackTitle) {
   if (!html) return null;
   const { document } = parseHTML(html);
+  prepareDocument(document, url);
 
+  const primaryReader = extractReaderFromDocument(document, url, fallbackTitle);
+  if (shouldCacheReader(primaryReader)) {
+    return primaryReader;
+  }
+
+  const contentRoot = findContentRoot(document);
+  if (contentRoot) {
+    const rootReader = extractReaderFromNode(contentRoot, url, fallbackTitle);
+    if (shouldCacheReader(rootReader)) {
+      return rootReader;
+    }
+
+    const metadata = deriveReaderMetadata({
+      reader: primaryReader,
+      document,
+      fallbackTitle,
+      url
+    });
+
+    const fallbackReader = buildReaderFromNode(contentRoot, url, metadata);
+    if (fallbackReader) {
+      return fallbackReader;
+    }
+  }
+
+  return primaryReader;
+}
+
+function prepareDocument(document, url) {
+  if (!document) return;
   try {
     document.URL = url;
     document.baseURI = url;
   } catch {
     // Ignore if not supported.
   }
+}
 
-  const reader = new Readability(document).parse();
+function extractReaderFromDocument(document, url, fallbackTitle) {
+  if (!document) return null;
+  let reader;
+
+  try {
+    reader = new Readability(document).parse();
+  } catch {
+    return null;
+  }
+
   if (!reader?.content) {
     return null;
   }
@@ -155,15 +245,142 @@ function extractReader(html, url, fallbackTitle) {
     return null;
   }
 
+  const metadata = deriveReaderMetadata({
+    reader,
+    document,
+    fallbackTitle,
+    url
+  });
+
   return {
-    title: reader.title || fallbackTitle || deriveTitleFromUrl(url),
-    byline: reader.byline || '',
-    excerpt: reader.excerpt || '',
-    siteName: reader.siteName || '',
+    ...metadata,
     wordCount: reader.length || 0,
     contentHtml,
     retrievedAt: new Date().toISOString()
   };
+}
+
+function extractReaderFromNode(node, url, fallbackTitle) {
+  const html = node?.outerHTML || node?.innerHTML || '';
+  if (!html) return null;
+  const { document } = parseHTML(`<!doctype html><html><body>${html}</body></html>`);
+  prepareDocument(document, url);
+  return extractReaderFromDocument(document, url, fallbackTitle);
+}
+
+function buildReaderFromNode(node, url, metadata) {
+  if (!node) return null;
+  const textContent = node.textContent || '';
+  const wordCount = countWords(textContent);
+  if (!wordCount) return null;
+
+  const contentHtml = sanitizeContent(node.innerHTML || '', url);
+  if (!contentHtml) return null;
+
+  return {
+    title: metadata.title,
+    byline: metadata.byline || '',
+    excerpt: metadata.excerpt || '',
+    siteName: metadata.siteName || '',
+    wordCount,
+    contentHtml,
+    retrievedAt: new Date().toISOString()
+  };
+}
+
+function deriveReaderMetadata({ reader, document, fallbackTitle, url }) {
+  return {
+    title: resolveTitle(reader, document, fallbackTitle, url),
+    byline: reader?.byline || '',
+    excerpt: reader?.excerpt || '',
+    siteName: reader?.siteName || ''
+  };
+}
+
+function resolveTitle(reader, document, fallbackTitle, url) {
+  const docTitle = typeof document?.title === 'string' ? document.title.trim() : '';
+  return reader?.title || docTitle || fallbackTitle || deriveTitleFromUrl(url);
+}
+
+function findContentRoot(document) {
+  if (!document) return null;
+  const candidates = getCandidateRoots(document);
+  const bestCandidate = pickBestCandidate(candidates);
+  if (bestCandidate) return bestCandidate;
+  return findLargestTextBlock(document);
+}
+
+function getCandidateRoots(document) {
+  const nodes = new Set();
+  CONTENT_SELECTORS.forEach((selector) => {
+    document.querySelectorAll(selector).forEach((node) => {
+      if (!isNoiseNode(node)) {
+        nodes.add(node);
+      }
+    });
+  });
+  return Array.from(nodes);
+}
+
+function pickBestCandidate(nodes) {
+  let best = null;
+  let bestScore = 0;
+
+  nodes.forEach((node) => {
+    const textContent = node.textContent || '';
+    const wordCount = countWords(textContent);
+    if (!wordCount) return;
+
+    const pCount = node.querySelectorAll ? node.querySelectorAll('p').length : 0;
+    if (pCount === 0 && wordCount < DEFAULT_MIN_WORD_COUNT) return;
+
+    const score = wordCount + pCount * 20;
+    if (score > bestScore) {
+      best = node;
+      bestScore = score;
+    }
+  });
+
+  return best;
+}
+
+function findLargestTextBlock(document) {
+  const nodes = Array.from(document.querySelectorAll('article, main, section, div'));
+  let best = null;
+  let bestScore = 0;
+
+  nodes.forEach((node) => {
+    if (isNoiseNode(node)) return;
+    const pCount = node.querySelectorAll ? node.querySelectorAll('p').length : 0;
+    if (pCount < 2) return;
+    const wordCount = countWords(node.textContent || '');
+    if (!wordCount) return;
+    const score = wordCount + pCount * 20;
+    if (score > bestScore) {
+      best = node;
+      bestScore = score;
+    }
+  });
+
+  return best;
+}
+
+function isNoiseNode(node) {
+  if (!node) return false;
+  if (typeof node.closest === 'function' && node.closest('nav, footer, header, aside')) {
+    return true;
+  }
+
+  let current = node.parentNode;
+  while (current) {
+    const tag = current.tagName ? current.tagName.toLowerCase() : '';
+    if (tag && NOISE_TAGS.has(tag)) {
+      return true;
+    }
+    current = current.parentNode;
+  }
+
+  return false;
 }
 
 function sanitizeContent(html, baseUrl) {
@@ -318,13 +535,14 @@ async function renderWithBrowser(url, browserBinding) {
     await page.setUserAgent(USER_AGENT);
     await page.setViewport({ width: 1280, height: 720 });
     page.setDefaultNavigationTimeout(RENDER_TIMEOUT_MS);
+    page.setDefaultTimeout(RENDER_TIMEOUT_MS);
 
     await page.goto(url, {
       waitUntil: 'networkidle2',
       timeout: RENDER_TIMEOUT_MS
     });
 
-    await page.waitForTimeout(RENDER_SETTLE_MS);
+    await waitForRenderedContent(page);
     return await page.content();
   } catch (error) {
     console.error('Reader browser render failed:', error);
@@ -343,6 +561,60 @@ async function renderWithBrowser(url, browserBinding) {
   }
 }
 
+async function waitForRenderedContent(page) {
+  if (!page) return;
+
+  try {
+    await page.waitForFunction(
+      (selector, minWords) => {
+        const el = document.querySelector(selector);
+        if (!el) return false;
+        const text = (el.innerText || '').trim();
+        if (!text) return false;
+        return text.split(/\s+/).length >= minWords;
+      },
+      { timeout: Math.min(6000, RENDER_TIMEOUT_MS) },
+      CONTENT_SELECTOR,
+      DEFAULT_MIN_WORD_COUNT
+    );
+  } catch {
+    // Selector wait is best-effort.
+  }
+
+  await waitForTextStability(page);
+}
+
+async function waitForTextStability(page) {
+  const start = Date.now();
+  let lastLength = 0;
+  let stableFor = 0;
+
+  while (Date.now() - start < RENDER_TIMEOUT_MS) {
+    let length = 0;
+    try {
+      length = await page.evaluate(() => {
+        if (!document.body) return 0;
+        return document.body.innerText.length;
+      });
+    } catch {
+      break;
+    }
+
+    if (Math.abs(length - lastLength) <= TEXT_STABILITY_THRESHOLD) {
+      stableFor += TEXT_POLL_INTERVAL_MS;
+    } else {
+      stableFor = 0;
+    }
+
+    lastLength = length;
+    if (stableFor >= RENDER_SETTLE_MS) {
+      break;
+    }
+
+    await page.waitForTimeout(TEXT_POLL_INTERVAL_MS);
+  }
+}
+
 
 function jsonResponse(payload, { status = 200, cache = 'no-store' } = {}) {
   return new Response(JSON.stringify(payload), {
@@ -354,4 +626,4 @@ function jsonResponse(payload, { status = 200, cache = 'no-store' } = {}) {
   });
 }
 
-export { sanitizeContent };
+export { sanitizeContent, fetchAndCacheReader };
