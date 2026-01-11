@@ -3,6 +3,7 @@
  * Fetches remote content, extracts readable HTML, sanitizes, and caches in KV.
  */
 
+import puppeteer from '@cloudflare/puppeteer';
 import { Readability } from '@mozilla/readability';
 import { parseHTML } from 'linkedom';
 import { deriveTitleFromUrl } from '../read-later.js';
@@ -11,6 +12,8 @@ import { shouldCacheReader, absolutizeUrl, absolutizeSrcset } from './reader-uti
 const KV_PREFIX = 'item:';
 const READER_PREFIX = 'reader:';
 const FETCH_TIMEOUT_MS = 10000;
+const RENDER_TIMEOUT_MS = 15000;
+const RENDER_SETTLE_MS = 1200;
 const USER_AGENT = 'Mozilla/5.0 (compatible; jeffharr.is/1.0; +https://jeffharr.is)';
 
 const ALLOWED_TAGS = new Set([
@@ -77,7 +80,7 @@ export async function onRequest(context) {
       await kv.delete(`${READER_PREFIX}${id}`);
     }
 
-    const reader = await buildReaderContent(item.url, item.title);
+    const reader = await buildReaderContent(item.url, item.title, env.BROWSER);
     if (!reader?.contentHtml || !shouldCacheReader(reader)) {
       return jsonResponse(
         { ok: false, reader: null, error: 'Reader unavailable' },
@@ -99,7 +102,24 @@ export async function onRequest(context) {
   }
 }
 
-async function buildReaderContent(url, fallbackTitle) {
+async function buildReaderContent(url, fallbackTitle, browserBinding) {
+  const html = await fetchHtml(url);
+  let reader = extractReader(html, url, fallbackTitle);
+
+  if (!shouldCacheReader(reader) && browserBinding) {
+    const renderedHtml = await renderWithBrowser(url, browserBinding);
+    if (renderedHtml) {
+      const renderedReader = extractReader(renderedHtml, url, fallbackTitle);
+      if (shouldCacheReader(renderedReader)) {
+        reader = renderedReader;
+      }
+    }
+  }
+
+  return reader;
+}
+
+async function fetchHtml(url) {
   const response = await fetchWithTimeout(url, {
     headers: {
       'User-Agent': USER_AGENT,
@@ -111,7 +131,11 @@ async function buildReaderContent(url, fallbackTitle) {
     throw new Error(`Reader fetch failed with ${response.status}`);
   }
 
-  const html = await response.text();
+  return response.text();
+}
+
+function extractReader(html, url, fallbackTitle) {
+  if (!html) return null;
   const { document } = parseHTML(html);
 
   try {
@@ -283,6 +307,42 @@ async function fetchWithTimeout(url, options = {}, timeoutMs = FETCH_TIMEOUT_MS)
     clearTimeout(timeoutId);
   }
 }
+
+async function renderWithBrowser(url, browserBinding) {
+  let browser;
+  let page;
+
+  try {
+    browser = await puppeteer.launch(browserBinding);
+    page = await browser.newPage();
+    await page.setUserAgent(USER_AGENT);
+    await page.setViewport({ width: 1280, height: 720 });
+    page.setDefaultNavigationTimeout(RENDER_TIMEOUT_MS);
+
+    await page.goto(url, {
+      waitUntil: 'networkidle2',
+      timeout: RENDER_TIMEOUT_MS
+    });
+
+    await page.waitForTimeout(RENDER_SETTLE_MS);
+    return await page.content();
+  } catch (error) {
+    console.error('Reader browser render failed:', error);
+    return null;
+  } finally {
+    if (page) {
+      try {
+        await page.close();
+      } catch {}
+    }
+    if (browser) {
+      try {
+        await browser.close();
+      } catch {}
+    }
+  }
+}
+
 
 function jsonResponse(payload, { status = 200, cache = 'no-store' } = {}) {
   return new Response(JSON.stringify(payload), {
