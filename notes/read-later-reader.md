@@ -37,6 +37,12 @@
 - Extraction flow: Readability on full document -> Readability on best content container -> sanitized container fallback.
 - This pipeline successfully extracts long-form LessWrong posts that previously returned near-empty content.
 
+## Kindle delivery (Resend)
+- On save, the backend now extracts reader content synchronously and emails a Kindle-friendly HTML attachment via Resend.
+- If reader extraction fails, a minimal HTML document with the source link is sent instead.
+- Required environment variables (Cloudflare): `RESEND_API_KEY` (secret), `KINDLE_TO_EMAIL`, `KINDLE_FROM_EMAIL`.
+- The `KINDLE_FROM_EMAIL` must be a verified Resend sender and approved in Amazon's "Personal Document Settings".
+
 ## Debug ideas for next session
 - Capture and store a compact debug record per failed extraction:
   - `status`, `readabilityWordCount`, `renderedWordCount`, `renderedHtmlLength`

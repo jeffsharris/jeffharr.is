@@ -3,6 +3,10 @@
  * Supports listing, saving, and updating read status for saved links.
  */
 
+import { deriveTitleFromUrl } from './read-later/reader-utils.js';
+import { buildReaderContent, cacheReader } from './read-later/reader.js';
+import { sendToKindle, shouldCacheKindleReader } from './read-later/kindle.js';
+
 const KV_PREFIX = 'item:';
 const MAX_TITLE_LENGTH = 220;
 const MAX_URL_LENGTH = 2048;
@@ -24,7 +28,7 @@ export async function onRequest(context) {
     }
 
     if (request.method === 'POST') {
-      return handleSave(request, kv);
+      return handleSave(request, kv, env);
     }
 
     if (request.method === 'PATCH') {
@@ -66,7 +70,7 @@ async function handleList(kv) {
   }
 }
 
-async function handleSave(request, kv) {
+async function handleSave(request, kv, env) {
   const payload = await parseJson(request);
   const normalizedUrl = normalizeUrl(payload?.url);
   const incomingRead = payload?.read;
@@ -83,7 +87,12 @@ async function handleSave(request, kv) {
   const item = createItem({ url: normalizedUrl, title, read });
 
   try {
+    const reader = await buildReaderForKindle(item, env);
+    await sendToKindle({ item, reader, env });
     await kv.put(`${KV_PREFIX}${item.id}`, JSON.stringify(item));
+    if (reader && shouldCacheKindleReader(reader)) {
+      await cacheReader(kv, item.id, reader);
+    }
     return jsonResponse(
       { ok: true, item },
       { status: 201, cache: 'no-store' }
@@ -232,12 +241,13 @@ function normalizeTitle(input, fallbackUrl) {
   return title;
 }
 
-function deriveTitleFromUrl(url) {
+async function buildReaderForKindle(item, env) {
+  if (!item?.url) return null;
   try {
-    const parsed = new URL(url);
-    return parsed.hostname.replace(/^www\./, '') || url;
-  } catch {
-    return url || 'Untitled';
+    return await buildReaderContent(item.url, item.title, env?.BROWSER);
+  } catch (error) {
+    console.error('Read later Kindle reader error:', error);
+    return null;
   }
 }
 

@@ -168,6 +168,13 @@ async function fetchAndCacheReader({ kv, id, url, title, browser }) {
   return reader;
 }
 
+async function cacheReader(kv, id, reader) {
+  if (!kv || !id || !reader) return false;
+  if (!shouldCacheReader(reader)) return false;
+  await kv.put(`${READER_PREFIX}${id}`, JSON.stringify(reader));
+  return true;
+}
+
 async function fetchHtml(url) {
   const response = await fetchWithTimeout(url, {
     headers: {
@@ -627,4 +634,9 @@ function jsonResponse(payload, { status = 200, cache = 'no-store' } = {}) {
   });
 }
 
-export { sanitizeContent, fetchAndCacheReader };
+export {
+  sanitizeContent,
+  fetchAndCacheReader,
+  buildReaderContent,
+  cacheReader
+};
