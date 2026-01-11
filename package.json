@@ -6,6 +6,7 @@
     "test": "node --test tests/*.test.js"
   },
   "dependencies": {
+    "@cloudflare/puppeteer": "^0.0.26",
     "@mozilla/readability": "^0.5.0",
     "linkedom": "^0.15.1"
   }
