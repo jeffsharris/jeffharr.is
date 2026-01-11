@@ -188,6 +188,7 @@ function extractReader(html, url, fallbackTitle) {
   const { document } = parseHTML(html);
   prepareDocument(document, url);
 
+  // Pipeline: full-doc Readability, then container-focused Readability, then sanitized container fallback.
   const primaryReader = extractReaderFromDocument(document, url, fallbackTitle);
   if (shouldCacheReader(primaryReader)) {
     return primaryReader;

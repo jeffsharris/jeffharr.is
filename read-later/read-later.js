@@ -128,16 +128,26 @@
       time.textContent = formatDate(item.savedAt);
 
       const isOpen = state.openId === item.id;
+      const readerId = `reader-${item.id}`;
+      readerPane.id = readerId;
+      summary.setAttribute('aria-controls', readerId);
+      summary.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
       summary.addEventListener('click', (event) => {
-        if (event.target.closest('a, button')) {
+        if (!shouldToggleReader(event, summary)) {
           return;
         }
-        if (state.openId === item.id) {
-          state.openId = null;
-        } else {
-          state.openId = item.id;
+        event.preventDefault();
+        toggleReader(item.id);
+      });
+      summary.addEventListener('keydown', (event) => {
+        if (event.key !== 'Enter' && event.key !== ' ') {
+          return;
         }
-        render();
+        if (!shouldToggleReader(event, summary)) {
+          return;
+        }
+        event.preventDefault();
+        toggleReader(item.id);
       });
 
       toggle.innerHTML = item.read ? ICON_MARK_UNREAD : ICON_MARK_READ;
@@ -195,6 +205,60 @@
     }
 
     statusEl.textContent = `${items.length} item${items.length === 1 ? '' : 's'} shown.`;
+  }
+
+  function toggleReader(id) {
+    state.openId = state.openId === id ? null : id;
+    render();
+  }
+
+  function shouldToggleReader(event, summary) {
+    if (!event || !summary) return false;
+    const target = event.target;
+    if (!(target instanceof Element)) return false;
+    if (target.closest('button')) return false;
+
+    if (event.type === 'keydown') {
+      return !target.closest('.item__title');
+    }
+
+    const title = summary.querySelector('.item__title');
+    if (title && isEventOnTitle(event, title)) {
+      return false;
+    }
+
+    return true;
+  }
+
+  function isEventOnTitle(event, title) {
+    if (!title) return false;
+    const { clientX, clientY } = event;
+    if (typeof clientX !== 'number' || typeof clientY !== 'number') {
+      return true;
+    }
+    const rects = getTextClientRects(title);
+    if (rects.length === 0) {
+      return title.contains(event.target);
+    }
+    return rects.some((rect) => (
+      clientX >= rect.left &&
+      clientX <= rect.right &&
+      clientY >= rect.top &&
+      clientY <= rect.bottom
+    ));
+  }
+
+  function getTextClientRects(element) {
+    const rects = [];
+    const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT);
+
+    while (walker.nextNode()) {
+      const range = document.createRange();
+      range.selectNodeContents(walker.currentNode);
+      rects.push(...Array.from(range.getClientRects()));
+    }
+
+    return rects;
   }
 
   function getFilteredItems() {
