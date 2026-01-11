@@ -36,14 +36,6 @@
     </svg>
   `;
 
-  const ICON_READER = `
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-      stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-      <path d="M4 5.5C4 4.1 5.1 3 6.5 3H12v16H6.5C5.1 19 4 17.9 4 16.5z"></path>
-      <path d="M20 16.5c0 1.4-1.1 2.5-2.5 2.5H12V3h5.5C18.9 3 20 4.1 20 5.5z"></path>
-    </svg>
-  `;
-
   const state = {
     items: [],
     filter: 'unread',
@@ -116,7 +108,7 @@
       const title = node.querySelector('.item__title');
       const domain = node.querySelector('.item__domain');
       const time = node.querySelector('.item__time');
-      const readerToggle = node.querySelector('.item__reader-toggle');
+      const summary = node.querySelector('.item__summary');
       const toggle = node.querySelector('.item__toggle');
       const remove = node.querySelector('.item__delete');
       const readerPane = node.querySelector('.item__reader');
@@ -135,16 +127,16 @@
       domain.textContent = formatDomain(item.url);
       time.textContent = formatDate(item.savedAt);
 
-      readerToggle.innerHTML = ICON_READER;
       const isOpen = state.openId === item.id;
-      setReaderButtonState(readerToggle, isOpen);
-      readerToggle.addEventListener('click', () => {
-        if (state.openId === item.id) {
-          state.openId = null;
-          render();
+      summary.addEventListener('click', (event) => {
+        if (event.target.closest('a, button')) {
           return;
         }
-        state.openId = item.id;
+        if (state.openId === item.id) {
+          state.openId = null;
+        } else {
+          state.openId = item.id;
+        }
         render();
       });
 
@@ -167,8 +159,7 @@
           readerTitle,
           readerMeta,
           readerStatus,
-          readerBody,
-          readerToggle
+          readerBody
         });
       } else {
         readerPane.hidden = true;
@@ -278,16 +269,8 @@
     }
   }
 
-  function setReaderButtonState(button, isOpen) {
-    button.classList.toggle('is-active', isOpen);
-    button.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-    button.setAttribute('aria-label', isOpen ? 'Close reader' : 'Open reader');
-    button.title = isOpen ? 'Close reader' : 'Open reader';
-  }
-
   async function openReader(elements) {
-    const { item, readerPane, readerTitle, readerMeta, readerStatus, readerBody, readerToggle } = elements;
-    setReaderButtonState(readerToggle, true);
+    const { item, readerPane, readerTitle, readerMeta, readerStatus, readerBody } = elements;
 
     const cached = readerCache.get(item.id);
     if (cached) {
