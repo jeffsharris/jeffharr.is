@@ -412,12 +412,15 @@ body {
 .reader__fallback {
   text-align: center;
   padding: 48px 24px;
-  color: var(--text-muted);
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border);
+  border-radius: 14px;
 }
 
 .reader__fallback p {
   margin: 0 0 16px;
-  font-size: 14px;
+  font-size: 15px;
   line-height: 1.6;
 }
 
