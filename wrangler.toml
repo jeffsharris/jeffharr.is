@@ -2,3 +2,10 @@ name = "jeffharr-is"
 compatibility_date = "2026-01-11"
 compatibility_flags = ["nodejs_compat"]
 pages_build_output_dir = "."
+
+[[kv_namespaces]]
+binding = "READ_LATER"
+id = "1ab7a301e16e47f7a17651e89f7442b6"
+
+[browser]
+binding = "BROWSER"
