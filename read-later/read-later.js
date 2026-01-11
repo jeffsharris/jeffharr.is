@@ -482,10 +482,18 @@
 
   async function restoreItem(item) {
     try {
-      const response = await fetch('/api/read-later', {
+      const response = await fetch('/api/read-later/restore', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ url: item.url, title: item.title, read: item.read })
+        body: JSON.stringify({
+          id: item.id,
+          url: item.url,
+          title: item.title,
+          savedAt: item.savedAt,
+          read: item.read,
+          readAt: item.readAt,
+          progress: item.progress || null
+        })
       });
 
       if (!response.ok) {
@@ -494,7 +502,7 @@
 
       const data = await response.json();
       if (data.item) {
-        const index = state.items.findIndex(i => i.url === item.url);
+        const index = state.items.findIndex(i => i.id === item.id);
         if (index >= 0) {
           state.items[index] = data.item;
         }

@@ -6,6 +6,7 @@
 import { Readability } from '@mozilla/readability';
 import { parseHTML } from 'linkedom';
 import { deriveTitleFromUrl } from '../read-later.js';
+import { shouldCacheReader, absolutizeUrl, absolutizeSrcset } from './reader-utils.js';
 
 const KV_PREFIX = 'item:';
 const READER_PREFIX = 'reader:';
@@ -65,15 +66,19 @@ export async function onRequest(context) {
     }
 
     const cached = await kv.get(`${READER_PREFIX}${id}`, { type: 'json' });
-    if (cached?.contentHtml) {
+    if (cached?.contentHtml && shouldCacheReader(cached)) {
       return jsonResponse(
         { ok: true, item: pickItem(item), reader: cached },
         { status: 200, cache: 'public, max-age=3600' }
       );
     }
 
+    if (cached?.contentHtml && !shouldCacheReader(cached)) {
+      await kv.delete(`${READER_PREFIX}${id}`);
+    }
+
     const reader = await buildReaderContent(item.url, item.title);
-    if (!reader?.contentHtml) {
+    if (!reader?.contentHtml || !shouldCacheReader(reader)) {
       return jsonResponse(
         { ok: false, reader: null, error: 'Reader unavailable' },
         { status: 200, cache: 'public, max-age=60' }
@@ -261,34 +266,6 @@ function unwrapElement(element) {
   parent.removeChild(element);
 }
 
-function absolutizeUrl(value, baseUrl) {
-  if (!value) return null;
-
-  try {
-    const url = new URL(value, baseUrl);
-    if (!['http:', 'https:'].includes(url.protocol)) return null;
-    return url.toString();
-  } catch {
-    return null;
-  }
-}
-
-function absolutizeSrcset(value, baseUrl) {
-  if (!value) return null;
-
-  const parts = value.split(',').map((candidate) => {
-    const trimmed = candidate.trim();
-    if (!trimmed) return null;
-
-    const segments = trimmed.split(/\s+/);
-    const url = absolutizeUrl(segments[0], baseUrl);
-    if (!url) return null;
-    return [url, ...segments.slice(1)].join(' ');
-  }).filter(Boolean);
-
-  return parts.length > 0 ? parts.join(', ') : null;
-}
-
 function pickItem(item) {
   return {
     id: item.id,
@@ -317,8 +294,4 @@ function jsonResponse(payload, { status = 200, cache = 'no-store' } = {}) {
   });
 }
 
-export {
-  sanitizeContent,
-  absolutizeUrl,
-  absolutizeSrcset
-};
+export { sanitizeContent };
