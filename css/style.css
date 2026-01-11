@@ -148,6 +148,12 @@ body.panel-open .main {
   object-fit: cover;
   margin-bottom: 16px;
   box-shadow: var(--shadow);
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+
+.profile__photo:hover {
+  transform: scale(1.03);
+  box-shadow: var(--shadow-lg);
 }
 
 .profile__name {
@@ -196,6 +202,19 @@ body.panel-open .main {
 
 .social-btn:active {
   transform: translateY(0);
+}
+
+.social-btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Active/selected social button state */
+.social-btn.is-active,
+body.panel-open .social-btn[data-platform]:focus {
+  border-color: var(--accent);
+  background: var(--bg-hover);
+  box-shadow: 0 0 0 3px rgba(201, 151, 59, 0.15);
 }
 
 .social-btn__icon {
@@ -284,6 +303,22 @@ body.panel-open .main {
 
 .panel.is-open {
   transform: translateX(0);
+}
+
+/* Panel content entrance animation */
+.panel.is-open .panel__content {
+  animation: panelContentFade 0.4s ease 0.15s both;
+}
+
+@keyframes panelContentFade {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .panel__header {
@@ -415,6 +450,13 @@ body.panel-open .main {
 .content-item:hover {
   border-color: var(--accent);
   text-decoration: none;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.content-item:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }
 
 .content-item:last-child {

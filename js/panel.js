@@ -106,6 +106,11 @@
     const previousPlatform = currentPlatform;
     currentPlatform = platform;
 
+    // Update active state on buttons
+    socialButtons.forEach(btn => {
+      btn.classList.toggle('is-active', btn.dataset.platform === platform);
+    });
+
     // Update header
     panelTitle.textContent = config.title;
     if (config.icon) {
@@ -154,6 +159,9 @@
     panelOverlay.classList.remove('is-visible');
     panel.setAttribute('aria-hidden', 'true');
     currentPlatform = null;
+
+    // Remove active state from all buttons
+    socialButtons.forEach(btn => btn.classList.remove('is-active'));
 
     if (!skipHistory) {
       setDeepLink(null);
