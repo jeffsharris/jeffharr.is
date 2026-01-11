@@ -1,0 +1,3 @@
+name = "jeffharr-is"
+compatibility_date = "2026-01-11"
+compatibility_flags = ["nodejs_compat"]
