@@ -69,6 +69,7 @@ async function handleList(kv) {
 async function handleSave(request, kv) {
   const payload = await parseJson(request);
   const normalizedUrl = normalizeUrl(payload?.url);
+  const incomingRead = payload?.read;
 
   if (!normalizedUrl) {
     return jsonResponse(
@@ -78,7 +79,8 @@ async function handleSave(request, kv) {
   }
 
   const title = normalizeTitle(payload?.title, normalizedUrl);
-  const item = createItem({ url: normalizedUrl, title });
+  const read = typeof incomingRead === 'boolean' ? incomingRead : false;
+  const item = createItem({ url: normalizedUrl, title, read });
 
   try {
     await kv.put(`${KV_PREFIX}${item.id}`, JSON.stringify(item));
@@ -239,14 +241,23 @@ function deriveTitleFromUrl(url) {
   }
 }
 
-function createItem({ url, title, id = createId(), savedAt = new Date().toISOString() }) {
+function createItem({
+  url,
+  title,
+  id = createId(),
+  savedAt = new Date().toISOString(),
+  read = false,
+  readAt = null,
+  progress = null
+}) {
   return {
     id,
     url,
     title,
     savedAt,
-    read: false,
-    readAt: null
+    read,
+    readAt: read ? readAt || new Date().toISOString() : null,
+    progress
   };
 }
 

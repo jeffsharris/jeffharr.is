@@ -36,19 +36,32 @@
     </svg>
   `;
 
+  const ICON_READER = `
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+      stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M4 5.5C4 4.1 5.1 3 6.5 3H12v16H6.5C5.1 19 4 17.9 4 16.5z"></path>
+      <path d="M20 16.5c0 1.4-1.1 2.5-2.5 2.5H12V3h5.5C18.9 3 20 4.1 20 5.5z"></path>
+    </svg>
+  `;
+
   const state = {
     items: [],
     filter: 'unread',
     sort: 'saved-desc',
     loading: false,
-    error: ''
+    error: '',
+    openId: null
   };
 
   const REFRESH_INTERVAL_MS = 60000;
   const TOAST_DURATION_MS = 5000;
+  const PROGRESS_DEBOUNCE_MS = 800;
 
   let toastTimeout = null;
   let undoAction = null;
+  const readerCache = new Map();
+  const readerRequests = new Map();
+  const progressTimers = new Map();
 
   const dateFormatter = new Intl.DateTimeFormat(undefined, {
     dateStyle: 'medium'
@@ -91,6 +104,11 @@
   function renderList() {
     listEl.innerHTML = '';
     const items = getFilteredItems();
+    const hasOpenItem = items.some(item => item.id === state.openId);
+
+    if (state.openId && !hasOpenItem) {
+      state.openId = null;
+    }
 
     items.forEach(item => {
       const node = template.content.cloneNode(true);
@@ -98,8 +116,14 @@
       const title = node.querySelector('.item__title');
       const domain = node.querySelector('.item__domain');
       const time = node.querySelector('.item__time');
+      const readerToggle = node.querySelector('.item__reader-toggle');
       const toggle = node.querySelector('.item__toggle');
       const remove = node.querySelector('.item__delete');
+      const readerPane = node.querySelector('.item__reader');
+      const readerTitle = node.querySelector('.reader__title');
+      const readerMeta = node.querySelector('.reader__meta');
+      const readerStatus = node.querySelector('.reader__status');
+      const readerBody = node.querySelector('.reader__body');
 
       if (item.read) {
         article.classList.add('is-read');
@@ -110,6 +134,20 @@
 
       domain.textContent = formatDomain(item.url);
       time.textContent = formatDate(item.savedAt);
+
+      readerToggle.innerHTML = ICON_READER;
+      const isOpen = state.openId === item.id;
+      setReaderButtonState(readerToggle, isOpen);
+      readerToggle.addEventListener('click', () => {
+        if (state.openId === item.id) {
+          state.openId = null;
+          render();
+          return;
+        }
+        state.openId = item.id;
+        render();
+      });
+
       toggle.innerHTML = item.read ? ICON_MARK_UNREAD : ICON_MARK_READ;
       toggle.setAttribute('aria-label', item.read ? 'Mark unread' : 'Mark read');
       toggle.title = item.read ? 'Mark unread' : 'Mark read';
@@ -119,6 +157,23 @@
       remove.classList.add('is-danger');
       remove.title = 'Delete';
       remove.addEventListener('click', () => deleteItem(item.id));
+
+      if (isOpen) {
+        readerPane.hidden = false;
+        article.classList.add('is-open');
+        openReader({
+          item,
+          readerPane,
+          readerTitle,
+          readerMeta,
+          readerStatus,
+          readerBody,
+          readerToggle
+        });
+      } else {
+        readerPane.hidden = true;
+        article.classList.remove('is-open');
+      }
 
       listEl.appendChild(node);
     });
@@ -221,6 +276,158 @@
       state.error = 'Sync failed. Please refresh.';
       render();
     }
+  }
+
+  function setReaderButtonState(button, isOpen) {
+    button.classList.toggle('is-active', isOpen);
+    button.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    button.setAttribute('aria-label', isOpen ? 'Close reader' : 'Open reader');
+    button.title = isOpen ? 'Close reader' : 'Open reader';
+  }
+
+  async function openReader(elements) {
+    const { item, readerPane, readerTitle, readerMeta, readerStatus, readerBody, readerToggle } = elements;
+    setReaderButtonState(readerToggle, true);
+
+    const cached = readerCache.get(item.id);
+    if (cached) {
+      renderReaderContent({ item, readerTitle, readerMeta, readerStatus, readerBody }, cached);
+      restoreProgress(item, readerBody);
+      attachProgressListener(item, readerBody);
+      return;
+    }
+
+    readerStatus.textContent = 'Loading reader...';
+    readerBody.innerHTML = '';
+
+    try {
+      const reader = await fetchReader(item.id);
+      if (!reader) {
+        throw new Error('Reader unavailable');
+      }
+
+      readerCache.set(item.id, reader);
+      renderReaderContent({ item, readerTitle, readerMeta, readerStatus, readerBody }, reader);
+      restoreProgress(item, readerBody);
+      attachProgressListener(item, readerBody);
+    } catch (error) {
+      console.error(error);
+      renderReaderError(item, readerStatus, readerBody);
+    }
+  }
+
+  async function fetchReader(id) {
+    if (readerRequests.has(id)) {
+      return readerRequests.get(id);
+    }
+
+    const request = fetch(`/api/read-later/reader?id=${encodeURIComponent(id)}`)
+      .then(response => response.json())
+      .then(data => (data.ok ? data.reader : null))
+      .finally(() => {
+        readerRequests.delete(id);
+      });
+
+    readerRequests.set(id, request);
+    return request;
+  }
+
+  function renderReaderContent(elements, reader) {
+    const { readerTitle, readerMeta, readerStatus, readerBody } = elements;
+    readerTitle.textContent = reader.title || 'Untitled';
+    readerMeta.textContent = formatReaderMeta(reader);
+    readerStatus.textContent = '';
+    readerBody.innerHTML = reader.contentHtml || '';
+  }
+
+  function renderReaderError(item, readerStatus, readerBody) {
+    readerStatus.innerHTML = '';
+    readerBody.innerHTML = '';
+    const text = document.createElement('span');
+    text.textContent = 'Reader view unavailable. ';
+    const link = document.createElement('a');
+    link.href = item.url;
+    link.target = '_blank';
+    link.rel = 'noopener';
+    link.textContent = 'Open the original link.';
+    readerStatus.appendChild(text);
+    readerStatus.appendChild(link);
+  }
+
+  function formatReaderMeta(reader) {
+    const parts = [];
+    if (reader.siteName) parts.push(reader.siteName);
+    if (reader.byline) parts.push(reader.byline);
+    if (reader.wordCount) {
+      const minutes = Math.max(1, Math.round(reader.wordCount / 200));
+      parts.push(`${minutes} min read`);
+    }
+    return parts.join(' · ');
+  }
+
+  function attachProgressListener(item, readerBody) {
+    if (readerBody.dataset.progressListener === 'true') {
+      return;
+    }
+
+    readerBody.dataset.progressListener = 'true';
+    readerBody.addEventListener('scroll', () => {
+      const maxScroll = readerBody.scrollHeight - readerBody.clientHeight;
+      const scrollTop = readerBody.scrollTop;
+      const ratio = maxScroll > 0 ? scrollTop / maxScroll : 0;
+      updateProgress(item.id, scrollTop, ratio);
+    }, { passive: true });
+  }
+
+  function updateProgress(id, scrollTop, scrollRatio) {
+    const item = state.items.find(entry => entry.id === id);
+    if (item) {
+      item.progress = {
+        scrollTop,
+        scrollRatio,
+        updatedAt: new Date().toISOString()
+      };
+    }
+
+    if (progressTimers.has(id)) {
+      clearTimeout(progressTimers.get(id));
+    }
+
+    const timer = setTimeout(() => {
+      saveProgress(id, scrollTop, scrollRatio);
+    }, PROGRESS_DEBOUNCE_MS);
+
+    progressTimers.set(id, timer);
+  }
+
+  async function saveProgress(id, scrollTop, scrollRatio) {
+    try {
+      await fetch('/api/read-later/progress', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id, scrollTop, scrollRatio })
+      });
+    } catch (error) {
+      console.error('Failed to save progress:', error);
+    }
+  }
+
+  function restoreProgress(item, readerBody) {
+    const progress = item.progress;
+    if (!progress) return;
+
+    const ratio = Number.isFinite(progress.scrollRatio) ? progress.scrollRatio : null;
+    const scrollTop = Number.isFinite(progress.scrollTop) ? progress.scrollTop : null;
+
+    requestAnimationFrame(() => {
+      const maxScroll = readerBody.scrollHeight - readerBody.clientHeight;
+      if (maxScroll <= 0) return;
+      if (ratio !== null) {
+        readerBody.scrollTop = Math.round(maxScroll * ratio);
+      } else if (scrollTop !== null) {
+        readerBody.scrollTop = Math.min(scrollTop, maxScroll);
+      }
+    });
   }
 
   async function deleteItem(id) {
@@ -356,7 +563,7 @@
   });
 
   document.addEventListener('visibilitychange', () => {
-    if (!document.hidden && !state.loading) {
+    if (!document.hidden && !state.loading && !state.openId) {
       loadItems();
     }
   });
@@ -368,7 +575,7 @@
   }
 
   setInterval(() => {
-    if (!document.hidden && !state.loading) {
+    if (!document.hidden && !state.loading && !state.openId) {
       loadItems();
     }
   }, REFRESH_INTERVAL_MS);

@@ -196,9 +196,7 @@ body {
 }
 
 .item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  display: block;
   gap: 16px;
   padding: 18px 20px;
   border-radius: var(--radius);
@@ -215,6 +213,13 @@ body {
 
 .item.is-read {
   opacity: 0.7;
+}
+
+.item__summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
 }
 
 .item__main {
@@ -287,6 +292,12 @@ body {
   color: var(--accent);
 }
 
+.icon-btn.is-active {
+  border-color: var(--accent);
+  background: rgba(201, 134, 29, 0.12);
+  color: var(--accent);
+}
+
 .icon-btn.is-danger {
   color: var(--danger);
 }
@@ -300,6 +311,102 @@ body {
 .icon-btn:disabled {
   opacity: 0.6;
   cursor: default;
+}
+
+.item__reader {
+  margin-top: 16px;
+  padding: 16px;
+  border-radius: 16px;
+  background: var(--bg-soft);
+  border: 1px solid var(--border);
+}
+
+.reader__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.reader__kicker {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--text-light);
+  margin-bottom: 6px;
+}
+
+.reader__title {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  margin: 0 0 6px;
+}
+
+.reader__meta {
+  font-size: 12px;
+  color: var(--text-muted);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.reader__status {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+}
+
+.reader__status a {
+  color: var(--accent);
+}
+
+.reader__body {
+  max-height: 70vh;
+  overflow-y: auto;
+  padding-right: 6px;
+}
+
+.reader__body p {
+  margin: 0 0 1em;
+}
+
+.reader__body h1,
+.reader__body h2,
+.reader__body h3,
+.reader__body h4,
+.reader__body h5,
+.reader__body h6 {
+  font-family: var(--font-display);
+  margin: 1.4em 0 0.6em;
+}
+
+.reader__body img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 16px auto;
+  border-radius: 12px;
+  box-shadow: var(--shadow-soft);
+}
+
+.reader__body blockquote {
+  margin: 1.2em 0;
+  padding: 0.8em 1em;
+  border-left: 3px solid var(--accent);
+  background: rgba(201, 134, 29, 0.08);
+}
+
+.reader__body a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-decoration-color: rgba(201, 134, 29, 0.4);
+}
+
+.reader__body ul,
+.reader__body ol {
+  padding-left: 1.2em;
+  margin: 0 0 1em;
 }
 
 .toast {
@@ -347,7 +454,7 @@ body {
 }
 
 @media (max-width: 720px) {
-  .item {
+  .item__summary {
     flex-direction: column;
     align-items: flex-start;
   }

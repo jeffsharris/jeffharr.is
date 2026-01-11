@@ -50,17 +50,31 @@
 
   <template id="item-template">
     <article class="item">
-      <div class="item__main">
-        <a class="item__title" href="#" target="_blank" rel="noopener"></a>
-        <div class="item__meta">
-          <span class="item__domain"></span>
-          <span class="item__dot"></span>
-          <time class="item__time"></time>
+      <div class="item__summary">
+        <div class="item__main">
+          <a class="item__title" href="#" target="_blank" rel="noopener"></a>
+          <div class="item__meta">
+            <span class="item__domain"></span>
+            <span class="item__dot"></span>
+            <time class="item__time"></time>
+          </div>
+        </div>
+        <div class="item__actions">
+          <button class="icon-btn item__reader-toggle" type="button" aria-label="Open reader"></button>
+          <button class="icon-btn item__toggle" type="button" aria-label="Mark read"></button>
+          <button class="icon-btn item__delete" type="button" aria-label="Delete"></button>
         </div>
       </div>
-      <div class="item__actions">
-        <button class="icon-btn item__toggle" type="button" aria-label="Mark read"></button>
-        <button class="icon-btn item__delete" type="button" aria-label="Delete"></button>
+      <div class="item__reader" hidden>
+        <div class="reader__header">
+          <div>
+            <div class="reader__kicker">Reader view</div>
+            <h2 class="reader__title"></h2>
+            <div class="reader__meta"></div>
+          </div>
+        </div>
+        <div class="reader__status"></div>
+        <div class="reader__body"></div>
       </div>
     </article>
   </template>
