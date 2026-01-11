@@ -36,6 +36,14 @@
     </svg>
   `;
 
+  const ICON_REFRESH = `
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+      stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M21 12a9 9 0 1 1-2.64-6.36"></path>
+      <polyline points="21 3 21 9 15 9"></polyline>
+    </svg>
+  `;
+
   const state = {
     items: [],
     filter: 'unread',
@@ -132,6 +140,10 @@
       time.textContent = formatDate(item.savedAt);
       renderKindleState(item, kindleStatus, kindleButton);
 
+      kindleStatus.addEventListener('click', () => {
+        syncKindle(item.id);
+      });
+
       kindleButton.addEventListener('click', () => {
         syncKindle(item.id);
       });
@@ -222,19 +234,20 @@
     const status = getKindleStatus(item);
     const label = getKindleLabel(status);
     statusEl.textContent = label;
-    statusEl.title = item?.kindle?.lastError || '';
+    statusEl.title = getKindleStatusTitle(status, item?.kindle?.lastError || '');
     statusEl.classList.toggle('is-synced', status === 'synced');
     statusEl.classList.toggle('is-failed', status === 'failed');
 
     const isSending = kindleRequests.has(item.id);
     const showButton = status !== 'synced';
 
+    statusEl.disabled = isSending;
+
+    buttonEl.hidden = !showButton;
     if (!showButton) {
-      buttonEl.hidden = true;
       return;
     }
 
-    buttonEl.hidden = false;
     buttonEl.disabled = isSending;
     buttonEl.textContent = isSending ? 'Sending...' : getKindleButtonLabel(status);
   }
@@ -265,6 +278,19 @@
       default:
         return 'Send to Kindle';
     }
+  }
+
+  function getKindleStatusTitle(status, errorMessage) {
+    if (status === 'synced') {
+      return 'Click to resend to Kindle';
+    }
+    if (status === 'failed') {
+      return errorMessage ? `Last error: ${errorMessage}` : 'Click to retry';
+    }
+    if (status === 'needs-content') {
+      return 'Reader content missing; click to try again';
+    }
+    return 'Click to send to Kindle';
   }
 
   async function syncKindle(id) {
@@ -481,6 +507,8 @@
   function attachRefreshListener(elements) {
     const { item, readerTitle, readerMeta, readerStatus, readerBody, readerRefresh } = elements;
     if (!readerRefresh) return;
+    readerRefresh.innerHTML = ICON_REFRESH;
+    readerRefresh.title = 'Refresh reader';
     readerRefresh.onclick = () => {
       refreshReader({ item, readerTitle, readerMeta, readerStatus, readerBody, readerRefresh });
     };

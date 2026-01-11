@@ -275,6 +275,7 @@ body {
   background: var(--bg-soft);
   text-transform: uppercase;
   letter-spacing: 0.08em;
+  cursor: pointer;
 }
 
 .item__kindle-status.is-synced {
@@ -415,12 +416,15 @@ body {
   border: 1px solid var(--border);
   background: var(--bg-card);
   color: var(--text);
-  font-family: var(--font-body);
-  font-size: 12px;
-  padding: 6px 12px;
+  width: 36px;
+  height: 36px;
+  padding: 0;
   border-radius: 999px;
   cursor: pointer;
   transition: all var(--transition);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .reader__refresh:hover {
@@ -431,6 +435,11 @@ body {
 .reader__refresh:disabled {
   opacity: 0.6;
   cursor: default;
+}
+
+.reader__refresh svg {
+  width: 18px;
+  height: 18px;
 }
 
 .reader__status {
