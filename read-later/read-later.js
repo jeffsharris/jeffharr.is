@@ -53,6 +53,7 @@
   let undoAction = null;
   const readerCache = new Map();
   const readerRequests = new Map();
+  const kindleRequests = new Set();
   const progressTimers = new Map();
 
   const dateFormatter = new Intl.DateTimeFormat(undefined, {
@@ -111,11 +112,14 @@
       const summary = node.querySelector('.item__summary');
       const toggle = node.querySelector('.item__toggle');
       const remove = node.querySelector('.item__delete');
+      const kindleStatus = node.querySelector('.item__kindle-status');
+      const kindleButton = node.querySelector('.item__kindle-button');
       const readerPane = node.querySelector('.item__reader');
       const readerTitle = node.querySelector('.reader__title');
       const readerMeta = node.querySelector('.reader__meta');
       const readerStatus = node.querySelector('.reader__status');
       const readerBody = node.querySelector('.reader__body');
+      const readerRefresh = node.querySelector('.reader__refresh');
 
       if (item.read) {
         article.classList.add('is-read');
@@ -126,6 +130,11 @@
 
       domain.textContent = formatDomain(item.url);
       time.textContent = formatDate(item.savedAt);
+      renderKindleState(item, kindleStatus, kindleButton);
+
+      kindleButton.addEventListener('click', () => {
+        syncKindle(item.id);
+      });
 
       const isOpen = state.openId === item.id;
       const readerId = `reader-${item.id}`;
@@ -169,7 +178,8 @@
           readerTitle,
           readerMeta,
           readerStatus,
-          readerBody
+          readerBody,
+          readerRefresh
         });
       } else {
         readerPane.hidden = true;
@@ -205,6 +215,84 @@
     }
 
     statusEl.textContent = `${items.length} item${items.length === 1 ? '' : 's'} shown.`;
+  }
+
+  function renderKindleState(item, statusEl, buttonEl) {
+    if (!statusEl || !buttonEl) return;
+    const status = getKindleStatus(item);
+    const label = getKindleLabel(status);
+    statusEl.textContent = label;
+    statusEl.title = item?.kindle?.lastError || '';
+    statusEl.classList.toggle('is-synced', status === 'synced');
+    statusEl.classList.toggle('is-failed', status === 'failed');
+
+    const isSending = kindleRequests.has(item.id);
+    const showButton = status !== 'synced';
+
+    if (!showButton) {
+      buttonEl.hidden = true;
+      return;
+    }
+
+    buttonEl.hidden = false;
+    buttonEl.disabled = isSending;
+    buttonEl.textContent = isSending ? 'Sending...' : getKindleButtonLabel(status);
+  }
+
+  function getKindleStatus(item) {
+    return item?.kindle?.status || 'unsynced';
+  }
+
+  function getKindleLabel(status) {
+    switch (status) {
+      case 'synced':
+        return 'Kindle synced';
+      case 'failed':
+        return 'Kindle failed';
+      case 'needs-content':
+        return 'Needs reader';
+      default:
+        return 'Not on Kindle';
+    }
+  }
+
+  function getKindleButtonLabel(status) {
+    switch (status) {
+      case 'failed':
+        return 'Retry Kindle';
+      case 'needs-content':
+        return 'Try Kindle';
+      default:
+        return 'Send to Kindle';
+    }
+  }
+
+  async function syncKindle(id) {
+    if (!id || kindleRequests.has(id)) return;
+    kindleRequests.add(id);
+    render();
+
+    try {
+      const response = await fetch('/api/read-later/kindle-sync', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id })
+      });
+      const data = await response.json().catch(() => null);
+      const updated = data?.item;
+
+      if (updated) {
+        const index = state.items.findIndex(item => item.id === id);
+        if (index >= 0) {
+          state.items[index] = updated;
+        }
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      kindleRequests.delete(id);
+      render();
+    }
   }
 
   function toggleReader(id) {
@@ -334,7 +422,8 @@
   }
 
   async function openReader(elements) {
-    const { item, readerPane, readerTitle, readerMeta, readerStatus, readerBody } = elements;
+    const { item, readerPane, readerTitle, readerMeta, readerStatus, readerBody, readerRefresh } = elements;
+    attachRefreshListener({ item, readerTitle, readerMeta, readerStatus, readerBody, readerRefresh });
 
     const cached = readerCache.get(item.id);
     if (cached) {
@@ -363,20 +452,63 @@
     }
   }
 
-  async function fetchReader(id) {
-    if (readerRequests.has(id)) {
+  async function fetchReader(id, { refresh = false } = {}) {
+    if (!refresh && readerRequests.has(id)) {
       return readerRequests.get(id);
     }
 
-    const request = fetch(`/api/read-later/reader?id=${encodeURIComponent(id)}`)
+    const url = new URL('/api/read-later/reader', window.location.origin);
+    url.searchParams.set('id', id);
+    if (refresh) {
+      url.searchParams.set('refresh', '1');
+    }
+
+    const request = fetch(url.toString())
       .then(response => response.json())
       .then(data => (data.ok ? data.reader : null))
       .finally(() => {
-        readerRequests.delete(id);
+        if (!refresh) {
+          readerRequests.delete(id);
+        }
       });
 
-    readerRequests.set(id, request);
+    if (!refresh) {
+      readerRequests.set(id, request);
+    }
     return request;
+  }
+
+  function attachRefreshListener(elements) {
+    const { item, readerTitle, readerMeta, readerStatus, readerBody, readerRefresh } = elements;
+    if (!readerRefresh) return;
+    readerRefresh.onclick = () => {
+      refreshReader({ item, readerTitle, readerMeta, readerStatus, readerBody, readerRefresh });
+    };
+  }
+
+  async function refreshReader(elements) {
+    const { item, readerTitle, readerMeta, readerStatus, readerBody, readerRefresh } = elements;
+    if (!item?.id) return;
+    readerRefresh.disabled = true;
+    readerStatus.textContent = 'Refreshing reader...';
+    readerBody.innerHTML = '';
+    readerCache.delete(item.id);
+
+    try {
+      const reader = await fetchReader(item.id, { refresh: true });
+      if (!reader) {
+        throw new Error('Reader unavailable');
+      }
+      readerCache.set(item.id, reader);
+      renderReaderContent({ item, readerTitle, readerMeta, readerStatus, readerBody }, reader);
+      restoreProgress(item, readerBody);
+      attachProgressListener(item, readerBody);
+    } catch (error) {
+      console.error(error);
+      renderReaderError(item, readerStatus, readerBody);
+    } finally {
+      readerRefresh.disabled = false;
+    }
   }
 
   function renderReaderContent(elements, reader) {

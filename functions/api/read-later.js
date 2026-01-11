@@ -4,8 +4,8 @@
  */
 
 import { deriveTitleFromUrl } from './read-later/reader-utils.js';
-import { buildReaderContent, cacheReader } from './read-later/reader.js';
-import { sendToKindle, shouldCacheKindleReader } from './read-later/kindle.js';
+import { cacheReader } from './read-later/reader.js';
+import { syncKindleForItem, shouldCacheKindleReader } from './read-later/kindle.js';
 
 const KV_PREFIX = 'item:';
 const MAX_TITLE_LENGTH = 220;
@@ -87,8 +87,8 @@ async function handleSave(request, kv, env) {
   const item = createItem({ url: normalizedUrl, title, read });
 
   try {
-    const reader = await buildReaderForKindle(item, env);
-    await sendToKindle({ item, reader, env });
+    const { reader, kindle } = await syncKindleForItem(item, env);
+    item.kindle = kindle;
     await kv.put(`${KV_PREFIX}${item.id}`, JSON.stringify(item));
     if (reader && shouldCacheKindleReader(reader)) {
       await cacheReader(kv, item.id, reader);
@@ -239,16 +239,6 @@ function normalizeTitle(input, fallbackUrl) {
   }
 
   return title;
-}
-
-async function buildReaderForKindle(item, env) {
-  if (!item?.url) return null;
-  try {
-    return await buildReaderContent(item.url, item.title, env?.BROWSER);
-  } catch (error) {
-    console.error('Read later Kindle reader error:', error);
-    return null;
-  }
 }
 
 function createItem({

@@ -79,6 +79,7 @@ export async function onRequest(context) {
 
   const url = new URL(request.url);
   const id = (url.searchParams.get('id') || '').trim();
+  const forceRefresh = url.searchParams.get('refresh') === '1';
 
   if (!id) {
     return jsonResponse(
@@ -102,7 +103,8 @@ export async function onRequest(context) {
       id,
       url: item.url,
       title: item.title,
-      browser: env.BROWSER
+      browser: env.BROWSER,
+      forceRefresh
     });
 
     if (!reader) {
@@ -147,11 +149,18 @@ async function buildReaderContent(url, fallbackTitle, browserBinding) {
   return reader;
 }
 
-async function fetchAndCacheReader({ kv, id, url, title, browser }) {
+async function fetchAndCacheReader({
+  kv,
+  id,
+  url,
+  title,
+  browser,
+  forceRefresh = false
+}) {
   if (!kv || !id || !url) return null;
 
   const cached = await kv.get(`${READER_PREFIX}${id}`, { type: 'json' });
-  if (cached?.contentHtml && shouldCacheReader(cached)) {
+  if (!forceRefresh && cached?.contentHtml && shouldCacheReader(cached)) {
     return cached;
   }
 
@@ -161,6 +170,9 @@ async function fetchAndCacheReader({ kv, id, url, title, browser }) {
 
   const reader = await buildReaderContent(url, title, browser);
   if (!reader?.contentHtml || !shouldCacheReader(reader)) {
+    if (forceRefresh && cached?.contentHtml && shouldCacheReader(cached)) {
+      return cached;
+    }
     return null;
   }
 

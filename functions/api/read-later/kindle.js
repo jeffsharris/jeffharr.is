@@ -1,7 +1,13 @@
 import { deriveTitleFromUrl, shouldCacheReader } from './reader-utils.js';
+import { buildReaderContent } from './reader.js';
 
 const RESEND_ENDPOINT = 'https://api.resend.com/emails';
 const RESEND_TIMEOUT_MS = 10000;
+const KINDLE_STATUS = {
+  SYNCED: 'synced',
+  FAILED: 'failed',
+  NEEDS_CONTENT: 'needs-content'
+};
 
 function buildKindleHtml(item, reader) {
   const title = resolveTitle(item, reader);
@@ -98,6 +104,52 @@ async function sendToKindle({ item, reader, env }) {
   return response.json();
 }
 
+async function syncKindleForItem(item, env) {
+  const attemptedAt = new Date().toISOString();
+
+  if (!item?.url) {
+    return {
+      reader: null,
+      kindle: buildKindleState(KINDLE_STATUS.NEEDS_CONTENT, attemptedAt, 'Missing URL')
+    };
+  }
+
+  let reader = null;
+  try {
+    reader = await buildReaderContent(item.url, item.title, env?.BROWSER);
+  } catch (error) {
+    return {
+      reader: null,
+      kindle: buildKindleState(KINDLE_STATUS.NEEDS_CONTENT, attemptedAt, compactError(error))
+    };
+  }
+
+  if (!reader || !shouldCacheKindleReader(reader)) {
+    return {
+      reader,
+      kindle: buildKindleState(KINDLE_STATUS.NEEDS_CONTENT, attemptedAt, 'Reader unavailable')
+    };
+  }
+
+  try {
+    await sendToKindle({ item, reader, env });
+    return {
+      reader,
+      kindle: {
+        status: KINDLE_STATUS.SYNCED,
+        lastAttemptAt: attemptedAt,
+        lastSyncedAt: attemptedAt,
+        lastError: null
+      }
+    };
+  } catch (error) {
+    return {
+      reader,
+      kindle: buildKindleState(KINDLE_STATUS.FAILED, attemptedAt, compactError(error))
+    };
+  }
+}
+
 function resolveTitle(item, reader) {
   return reader?.title || item?.title || deriveTitleFromUrl(item?.url || '');
 }
@@ -159,10 +211,26 @@ function shouldCacheKindleReader(reader) {
   return shouldCacheReader(reader);
 }
 
+function buildKindleState(status, attemptedAt, error) {
+  return {
+    status,
+    lastAttemptAt: attemptedAt,
+    lastSyncedAt: status === KINDLE_STATUS.SYNCED ? attemptedAt : null,
+    lastError: error || null
+  };
+}
+
+function compactError(error) {
+  if (!error) return 'Unknown error';
+  const message = error instanceof Error ? error.message : String(error);
+  return message.trim().slice(0, 240) || 'Unknown error';
+}
+
 export {
   buildKindleHtml,
   buildKindleAttachment,
   sendToKindle,
+  syncKindleForItem,
   formatFilename,
   shouldCacheKindleReader
 };

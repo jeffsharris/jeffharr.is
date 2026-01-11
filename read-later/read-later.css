@@ -258,6 +258,59 @@ body {
   color: var(--text-muted);
 }
 
+.item__kindle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 6px;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.item__kindle-status {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--bg-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.item__kindle-status.is-synced {
+  color: var(--accent-strong);
+  border-color: rgba(201, 134, 29, 0.4);
+  background: rgba(201, 134, 29, 0.12);
+}
+
+.item__kindle-status.is-failed {
+  color: var(--danger);
+  border-color: rgba(180, 83, 76, 0.4);
+  background: var(--danger-soft);
+}
+
+.pill-btn {
+  border: 1px solid var(--border);
+  background: var(--bg-soft);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 11px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.pill-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.pill-btn:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
 .item__dot {
   width: 3px;
   height: 3px;
@@ -356,6 +409,28 @@ body {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
+}
+
+.reader__refresh {
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 12px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.reader__refresh:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.reader__refresh:disabled {
+  opacity: 0.6;
+  cursor: default;
 }
 
 .reader__status {
@@ -500,6 +575,10 @@ body {
   .item__actions {
     width: 100%;
     justify-content: flex-end;
+  }
+
+  .item__kindle {
+    flex-wrap: wrap;
   }
 
   .toast {

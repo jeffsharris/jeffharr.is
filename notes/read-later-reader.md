@@ -39,7 +39,8 @@
 
 ## Kindle delivery (Resend)
 - On save, the backend now extracts reader content synchronously and emails a Kindle-friendly HTML attachment via Resend.
-- If reader extraction fails, a minimal HTML document with the source link is sent instead.
+- If reader extraction fails, the item is saved but no email is sent (status becomes `needs-content`).
+- Failed sends are stored on the item and can be retried via the read-later UI.
 - Required environment variables (Cloudflare): `RESEND_API_KEY` (secret), `KINDLE_TO_EMAIL`, `KINDLE_FROM_EMAIL`.
 - The `KINDLE_FROM_EMAIL` must be a verified Resend sender and approved in Amazon's "Personal Document Settings".
 
