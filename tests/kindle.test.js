@@ -87,3 +87,16 @@ test('buildEpubAttachment bakes title into cover SVG', async () => {
   const coverText = new TextDecoder().decode(coverSvg);
   assert.ok(coverText.includes('Cover Title'));
 });
+
+test('buildEpubAttachment escapes ampersands in chapter XHTML', async () => {
+  const item = { url: 'https://example.com', title: 'Amp Test', id: 'test-4' };
+  const reader = {
+    title: 'Amp Test',
+    contentHtml: '<p><a href="https://example.com/?a=1&b=2">Link</a></p>'
+  };
+  const result = await buildEpubAttachment(item, reader);
+  const bytes = Buffer.from(result.attachment.content, 'base64');
+  const files = unzipSync(bytes);
+  const chapterText = new TextDecoder().decode(files['OEBPS/chapter.xhtml']);
+  assert.ok(chapterText.includes('a=1&amp;b=2'));
+});

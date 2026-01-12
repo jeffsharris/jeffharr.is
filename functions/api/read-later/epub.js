@@ -445,7 +445,7 @@ function buildEpubFiles({ title, item, reader, contentHtml, coverImage, coverSou
     `    <h1>${safeTitle}</h1>\n` +
     (author || siteName ? `    <p class="meta">${[author, siteName].filter(Boolean).join(' - ')}</p>\n` : '') +
     (safeUrl ? `    <p class="source">Source: ${safeUrl}</p>\n` : '') +
-    `    <article>\n${indentHtml(contentHtml)}\n    </article>\n` +
+    `    <article>\n${indentHtml(escapeXhtml(contentHtml))}\n    </article>\n` +
     `  </body>\n` +
     `</html>\n`;
 
@@ -531,6 +531,10 @@ function escapeXml(value) {
     .replace(/>/g, '&gt;')
     .replace(/\"/g, '&quot;')
     .replace(/'/g, '&#39;');
+}
+
+function escapeXhtml(html) {
+  return String(html || '').replace(/&(?!(?:[a-zA-Z]+|#\d+|#x[0-9A-Fa-f]+);)/g, '&amp;');
 }
 
 function indentHtml(html) {
