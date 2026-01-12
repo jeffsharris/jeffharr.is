@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { buildKindleHtml, buildKindleAttachment, formatFilename } from '../functions/api/read-later/kindle.js';
+import { buildEpubAttachment } from '../functions/api/read-later/epub.js';
 
 test('formatFilename slugifies titles', () => {
   assert.equal(formatFilename('Hello World!'), 'hello-world');
@@ -30,4 +31,38 @@ test('buildKindleAttachment base64 encodes HTML', () => {
   assert.ok(attachment.filename.endsWith('.html'));
   assert.ok(decoded.includes('<h1>'));
   assert.ok(decoded.includes('Reader Title'));
+});
+
+test('buildEpubAttachment returns a zip payload', async () => {
+  const item = { url: 'https://example.com', title: 'Example', id: 'test-1' };
+  const reader = { title: 'Reader Title', contentHtml: '<p>Hi there.</p>' };
+  const result = await buildEpubAttachment(item, reader, { maxEncodedBytes: 5 * 1024 * 1024 });
+  assert.ok(result?.attachment.filename.endsWith('.epub'));
+  assert.equal(result?.attachment.contentType, 'application/epub+zip');
+  const bytes = Buffer.from(result.attachment.content, 'base64');
+  assert.equal(bytes[0], 0x50);
+  assert.equal(bytes[1], 0x4b);
+});
+
+test('buildEpubAttachment falls back when images are too large', async () => {
+  const item = { url: 'https://example.com', title: 'Example', id: 'test-2' };
+  const reader = {
+    title: 'Reader Title',
+    contentHtml: '<p>Hello.</p><img src="https://example.com/a.jpg" alt="A" /><img src="https://example.com/b.jpg" alt="B" />'
+  };
+  const baseResult = await buildEpubAttachment(item, reader, { modes: ['none'] });
+  assert.ok(baseResult?.meta);
+
+  const maxEncodedBytes = baseResult.meta.encodedBytes + 2000;
+  const fetchImage = async () => {
+    const bytes = new Uint8Array(2 * 1024 * 1024);
+    for (let i = 0; i < bytes.length; i += 1) {
+      bytes[i] = i % 251;
+    }
+    return { bytes, contentType: 'image/jpeg' };
+  };
+
+  const result = await buildEpubAttachment(item, reader, { maxEncodedBytes, fetchImage });
+  assert.equal(result?.meta.embedMode, 'none');
+  assert.ok(result?.meta.placeholderCount >= 2);
 });

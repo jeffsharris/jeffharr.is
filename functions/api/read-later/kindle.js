@@ -1,5 +1,6 @@
 import { deriveTitleFromUrl, shouldCacheReader } from './reader-utils.js';
 import { buildReaderContent } from './reader.js';
+import { buildEpubAttachment } from './epub.js';
 
 const RESEND_ENDPOINT = 'https://api.resend.com/emails';
 const RESEND_TIMEOUT_MS = 10000;
@@ -76,7 +77,7 @@ async function sendToKindle({ item, reader, env }) {
     throw new Error('Kindle send not configured');
   }
 
-  const attachment = buildKindleAttachment(item, reader);
+  const attachment = await buildKindleAttachmentWithFallback(item, reader);
   const subject = resolveTitle(item, reader);
 
   const payload = {
@@ -102,6 +103,19 @@ async function sendToKindle({ item, reader, env }) {
   }
 
   return response.json();
+}
+
+async function buildKindleAttachmentWithFallback(item, reader) {
+  try {
+    const epubResult = await buildEpubAttachment(item, reader);
+    if (epubResult?.attachment) {
+      return epubResult.attachment;
+    }
+  } catch (error) {
+    console.warn('EPUB build failed, falling back to HTML:', error);
+  }
+
+  return buildKindleAttachment(item, reader);
 }
 
 async function syncKindleForItem(item, env) {
