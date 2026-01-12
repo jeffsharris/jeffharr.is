@@ -73,16 +73,18 @@ async function buildEpubVariant({ item, reader, embedMode, fetchImage, imageCach
     embedSet,
     coverSrc,
     fetchImage,
-    imageCache
+    imageCache,
+    title
   });
 
-  const rewritten = rewriteContentHtml(contentHtml, baseUrl, assets, embedSet, coverSrc);
+  const rewritten = rewriteContentHtml(contentHtml, baseUrl, assets, embedSet);
   const epubFiles = buildEpubFiles({
     title,
     item,
     reader,
     contentHtml: rewritten.contentHtml,
-    cover: assets.cover,
+    coverImage: assets.coverImage,
+    coverSource: assets.coverSource,
     images: assets.items
   });
 
@@ -99,9 +101,9 @@ async function buildEpubVariant({ item, reader, embedMode, fetchImage, imageCach
     meta: {
       embedMode,
       encodedBytes,
-      imageCount: assets.items.length,
+      imageCount: assets.items.length + (assets.coverSource ? 1 : 0),
       placeholderCount: rewritten.placeholderCount,
-      coverIncluded: Boolean(assets.cover)
+      coverIncluded: Boolean(assets.coverImage)
     }
   };
 }
@@ -138,9 +140,10 @@ function selectEmbedSet(images, embedMode, coverSrc) {
   return new Set(images.map((image) => image.src));
 }
 
-async function buildImageAssets({ images, embedSet, coverSrc, fetchImage, imageCache }) {
+async function buildImageAssets({ images, embedSet, coverSrc, fetchImage, imageCache, title }) {
   const items = [];
-  let cover = null;
+  let coverSource = null;
+  let coverImage = null;
   let imageIndex = 0;
 
   for (const image of images) {
@@ -148,9 +151,12 @@ async function buildImageAssets({ images, embedSet, coverSrc, fetchImage, imageC
       continue;
     }
 
-    const isCover = coverSrc && image.src === coverSrc;
+    const isCoverSource = coverSrc && image.src === coverSrc;
     const cached = imageCache.get(image.src);
-    const asset = cached || (await fetchImageAsset(image.src, fetchImage, isCover, imageIndex + 1));
+    const filenamePrefix = isCoverSource
+      ? 'cover-source'
+      : `image-${String(imageIndex + 1).padStart(3, '0')}`;
+    const asset = cached || (await fetchImageAsset(image.src, fetchImage, filenamePrefix));
 
     if (!asset) {
       continue;
@@ -158,18 +164,22 @@ async function buildImageAssets({ images, embedSet, coverSrc, fetchImage, imageC
 
     imageCache.set(image.src, asset);
 
-    if (asset.isCover) {
-      cover = asset;
+    if (isCoverSource) {
+      coverSource = asset;
     } else {
       imageIndex += 1;
       items.push(asset);
     }
   }
 
-  return { cover, items };
+  if (coverSource) {
+    coverImage = buildCoverSvgAsset(title, coverSource);
+  }
+
+  return { coverImage, coverSource, items };
 }
 
-async function fetchImageAsset(src, fetchImage, isCover, index) {
+async function fetchImageAsset(src, fetchImage, filenamePrefix) {
   if (!src.startsWith('http://') && !src.startsWith('https://')) {
     return null;
   }
@@ -184,15 +194,98 @@ async function fetchImageAsset(src, fetchImage, isCover, index) {
     return null;
   }
 
-  const filename = isCover ? `images/cover.${ext}` : `images/image-${String(index).padStart(3, '0')}.${ext}`;
+  const filename = `images/${filenamePrefix}.${ext}`;
 
   return {
     src,
-    isCover,
     href: filename,
     mediaType,
     bytes: response.bytes
   };
+}
+
+function buildCoverSvgAsset(title, coverSource) {
+  const svg = buildCoverSvg(title, coverSource);
+  return {
+    href: 'images/cover.svg',
+    mediaType: 'image/svg+xml',
+    bytes: strToU8(svg)
+  };
+}
+
+function buildCoverSvg(title, coverSource) {
+  const rawTitle = String(title || '');
+  const coverDataUri = coverSource
+    ? `data:${coverSource.mediaType};base64,${toBase64(coverSource.bytes)}`
+    : '';
+  const lines = wrapTitle(rawTitle, 28, 3);
+  const lineHeight = 80;
+  const startY = 160;
+  const textLines = lines.map((line, index) => (
+    `<tspan x="600" dy="${index === 0 ? 0 : lineHeight}">${escapeXml(line)}</tspan>`
+  )).join('');
+
+  return `<?xml version="1.0" encoding="UTF-8"?>\n` +
+    `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1600" viewBox="0 0 1200 1600">\n` +
+    `  <rect width="1200" height="1600" fill="#0c0c0c"/>\n` +
+    (coverDataUri
+      ? `  <image href="${coverDataUri}" x="0" y="0" width="1200" height="1600" preserveAspectRatio="xMidYMid slice"/>\n`
+      : '') +
+    `  <rect x="0" y="0" width="1200" height="460" fill="#000" fill-opacity="0.55"/>\n` +
+    `  <text x="600" y="${startY}" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="64" fill="#fff" paint-order="stroke" stroke="#000" stroke-width="2">\n` +
+    `    ${textLines}\n` +
+    `  </text>\n` +
+    `</svg>\n`;
+}
+
+function wrapTitle(title, maxLineLength, maxLines) {
+  const words = String(title || '').split(/\s+/).filter(Boolean);
+  const lines = [];
+  let current = '';
+  let truncated = false;
+
+  for (const word of words) {
+    const candidate = current ? `${current} ${word}` : word;
+    if (candidate.length <= maxLineLength) {
+      current = candidate;
+      continue;
+    }
+
+    if (current) {
+      lines.push(current);
+      current = word;
+    } else {
+      lines.push(word.slice(0, maxLineLength));
+      current = word.slice(maxLineLength);
+    }
+
+    if (lines.length >= maxLines) {
+      truncated = true;
+      break;
+    }
+  }
+
+  if (lines.length < maxLines && current) {
+    lines.push(current);
+  }
+
+  if (lines.length > maxLines) {
+    lines.length = maxLines;
+  }
+
+  if (!truncated && words.length > 0 && lines.length === maxLines) {
+    const lineLength = lines.join(' ').length;
+    truncated = lineLength < words.join(' ').length;
+  }
+
+  if (truncated && lines.length > 0) {
+    const lastIndex = lines.length - 1;
+    if (!lines[lastIndex].endsWith('...')) {
+      lines[lastIndex] = `${lines[lastIndex].slice(0, Math.max(0, maxLineLength - 3))}...`;
+    }
+  }
+
+  return lines;
 }
 
 function resolveMediaType(src, contentType) {
@@ -220,14 +313,14 @@ function resolveMediaType(src, contentType) {
   return { mediaType: null, ext: null };
 }
 
-function rewriteContentHtml(html, baseUrl, assets, embedSet, coverSrc) {
+function rewriteContentHtml(html, baseUrl, assets, embedSet) {
   const { document } = parseHTML(`<!doctype html><html><body>${html}</body></html>`);
   const nodes = Array.from(document.querySelectorAll('img'));
   let placeholderCount = 0;
   const assetMap = new Map();
 
-  if (assets?.cover) {
-    assetMap.set(assets.cover.src, assets.cover);
+  if (assets?.coverSource) {
+    assetMap.set(assets.coverSource.src, assets.coverSource);
   }
   assets?.items?.forEach((item) => {
     assetMap.set(item.src, item);
@@ -268,7 +361,7 @@ function rewriteContentHtml(html, baseUrl, assets, embedSet, coverSrc) {
   };
 }
 
-function buildEpubFiles({ title, item, reader, contentHtml, cover, images }) {
+function buildEpubFiles({ title, item, reader, contentHtml, coverImage, coverSource, images }) {
   const files = {};
   const safeTitle = escapeXml(title);
   const safeUrl = escapeXml(item?.url || '');
@@ -285,12 +378,18 @@ function buildEpubFiles({ title, item, reader, contentHtml, cover, images }) {
 
   const spineItems = [];
 
-  if (cover) {
+  if (coverImage) {
     manifestItems.push(
       buildManifestItem('cover-page', 'cover.xhtml', 'application/xhtml+xml'),
-      buildManifestItem('cover-image', cover.href, cover.mediaType, 'cover-image')
+      buildManifestItem('cover-image', coverImage.href, coverImage.mediaType, 'cover-image')
     );
     spineItems.push('cover-page');
+  }
+
+  if (coverSource) {
+    manifestItems.push(
+      buildManifestItem('cover-source', coverSource.href, coverSource.mediaType)
+    );
   }
 
   images.forEach((image, index) => {
@@ -350,7 +449,7 @@ function buildEpubFiles({ title, item, reader, contentHtml, cover, images }) {
     `  </body>\n` +
     `</html>\n`;
 
-  const coverPage = cover
+  const coverPage = coverImage
     ? `<?xml version="1.0" encoding="utf-8"?>\n` +
       `<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">\n` +
       `  <head>\n` +
@@ -358,7 +457,7 @@ function buildEpubFiles({ title, item, reader, contentHtml, cover, images }) {
       `    <link rel="stylesheet" href="styles.css" />\n` +
       `  </head>\n` +
       `  <body class="cover">\n` +
-      `    <img src="${cover.href}" alt="Cover image" />\n` +
+      `    <img src="${coverImage.href}" alt="Cover image" />\n` +
       `  </body>\n` +
       `</html>\n`
     : '';
@@ -391,11 +490,14 @@ function buildEpubFiles({ title, item, reader, contentHtml, cover, images }) {
     files['OEBPS']['cover.xhtml'] = strToU8(coverPage);
   }
 
-  if (cover || images.length > 0) {
+  if (coverImage || coverSource || images.length > 0) {
     files['OEBPS']['images'] = {};
   }
-  if (cover) {
-    files['OEBPS']['images'][cover.href.replace('images/', '')] = cover.bytes;
+  if (coverImage) {
+    files['OEBPS']['images'][coverImage.href.replace('images/', '')] = coverImage.bytes;
+  }
+  if (coverSource) {
+    files['OEBPS']['images'][coverSource.href.replace('images/', '')] = coverSource.bytes;
   }
   images.forEach((image) => {
     const name = image.href.replace('images/', '');

@@ -41,6 +41,7 @@
 - On save, the backend extracts reader content synchronously and emails a Kindle-friendly attachment via Resend.
 - EPUB is attempted first (with embedded images when under the 50 MB email limit); if the EPUB build fails or exceeds the size cap, it falls back to the HTML attachment.
 - When over the size cap, inline images are replaced with placeholder text and only the cover image is retained (if possible).
+- Cover images are generated as SVG with the article title overlaid on the first image (so the Kindle thumbnail shows the title).
 - If reader extraction fails, the item is saved but no email is sent (status becomes `needs-content`).
 - Failed sends are stored on the item and can be retried via the read-later UI.
 - Required environment variables (Cloudflare): `RESEND_API_KEY` (secret), `KINDLE_TO_EMAIL`, `KINDLE_FROM_EMAIL`.

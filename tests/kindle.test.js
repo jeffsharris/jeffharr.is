@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { buildKindleHtml, buildKindleAttachment, formatFilename } from '../functions/api/read-later/kindle.js';
 import { buildEpubAttachment } from '../functions/api/read-later/epub.js';
+import { unzipSync } from 'fflate';
 
 test('formatFilename slugifies titles', () => {
   assert.equal(formatFilename('Hello World!'), 'hello-world');
@@ -65,4 +66,24 @@ test('buildEpubAttachment falls back when images are too large', async () => {
   const result = await buildEpubAttachment(item, reader, { maxEncodedBytes, fetchImage });
   assert.equal(result?.meta.embedMode, 'none');
   assert.ok(result?.meta.placeholderCount >= 2);
+});
+
+test('buildEpubAttachment bakes title into cover SVG', async () => {
+  const item = { url: 'https://example.com', title: 'Cover Title', id: 'test-3' };
+  const reader = {
+    title: 'Cover Title',
+    contentHtml: '<p>Hello.</p><img src="https://example.com/cover.jpg" alt="Cover" />'
+  };
+  const fetchImage = async () => ({
+    bytes: new Uint8Array([1, 2, 3, 4]),
+    contentType: 'image/jpeg'
+  });
+
+  const result = await buildEpubAttachment(item, reader, { fetchImage });
+  const bytes = Buffer.from(result.attachment.content, 'base64');
+  const files = unzipSync(bytes);
+  const coverSvg = files['OEBPS/images/cover.svg'];
+  assert.ok(coverSvg);
+  const coverText = new TextDecoder().decode(coverSvg);
+  assert.ok(coverText.includes('Cover Title'));
 });
