@@ -252,8 +252,9 @@ body {
 
 .item__meta {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 8px;
+  gap: 6px 8px;
   font-size: 12px;
   color: var(--text-muted);
 }
@@ -261,24 +262,22 @@ body {
 .item__kindle-link {
   border: none;
   background: transparent;
-  color: var(--accent);
+  color: var(--text-muted);
   font-family: var(--font-body);
   font-size: 12px;
   padding: 0;
   cursor: pointer;
-  text-decoration: underline;
-  text-underline-offset: 2px;
-  transition: opacity var(--transition);
+  text-decoration: none;
+  transition: color var(--transition);
 }
 
 .item__kindle-link:hover {
-  opacity: 0.8;
+  color: var(--accent);
 }
 
 .item__kindle-link:disabled {
   opacity: 0.6;
   cursor: default;
-  text-decoration: none;
 }
 
 .item__kindle-link.is-failed {
@@ -286,7 +285,7 @@ body {
 }
 
 .item__kindle-link.is-synced {
-  color: var(--text-muted);
+  color: var(--text-light);
 }
 
 .item__dot {
