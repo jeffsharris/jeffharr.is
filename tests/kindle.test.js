@@ -68,7 +68,7 @@ test('buildEpubAttachment falls back when images are too large', async () => {
   assert.ok(result?.meta.placeholderCount >= 2);
 });
 
-test('buildEpubAttachment bakes title into cover SVG', async () => {
+test('buildEpubAttachment includes title on cover page', async () => {
   const item = { url: 'https://example.com', title: 'Cover Title', id: 'test-3' };
   const reader = {
     title: 'Cover Title',
@@ -82,9 +82,9 @@ test('buildEpubAttachment bakes title into cover SVG', async () => {
   const result = await buildEpubAttachment(item, reader, { fetchImage });
   const bytes = Buffer.from(result.attachment.content, 'base64');
   const files = unzipSync(bytes);
-  const coverSvg = files['OEBPS/images/cover.svg'];
-  assert.ok(coverSvg);
-  const coverText = new TextDecoder().decode(coverSvg);
+  const coverPage = files['OEBPS/cover.xhtml'];
+  assert.ok(coverPage);
+  const coverText = new TextDecoder().decode(coverPage);
   assert.ok(coverText.includes('Cover Title'));
 });
 

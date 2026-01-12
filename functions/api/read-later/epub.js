@@ -73,9 +73,9 @@ async function buildEpubVariant({ item, reader, embedMode, fetchImage, imageCach
     embedSet,
     coverSrc,
     fetchImage,
-    imageCache,
-    title
+    imageCache
   });
+  const coverImage = assets.coverSource;
 
   const rewritten = rewriteContentHtml(contentHtml, baseUrl, assets, embedSet);
   const epubFiles = buildEpubFiles({
@@ -83,7 +83,7 @@ async function buildEpubVariant({ item, reader, embedMode, fetchImage, imageCach
     item,
     reader,
     contentHtml: rewritten.contentHtml,
-    coverImage: assets.coverImage,
+    coverImage,
     coverSource: assets.coverSource,
     images: assets.items
   });
@@ -103,7 +103,7 @@ async function buildEpubVariant({ item, reader, embedMode, fetchImage, imageCach
       encodedBytes,
       imageCount: assets.items.length + (assets.coverSource ? 1 : 0),
       placeholderCount: rewritten.placeholderCount,
-      coverIncluded: Boolean(assets.coverImage)
+      coverIncluded: Boolean(coverImage)
     }
   };
 }
@@ -140,10 +140,9 @@ function selectEmbedSet(images, embedMode, coverSrc) {
   return new Set(images.map((image) => image.src));
 }
 
-async function buildImageAssets({ images, embedSet, coverSrc, fetchImage, imageCache, title }) {
+async function buildImageAssets({ images, embedSet, coverSrc, fetchImage, imageCache }) {
   const items = [];
   let coverSource = null;
-  let coverImage = null;
   let imageIndex = 0;
 
   for (const image of images) {
@@ -172,11 +171,7 @@ async function buildImageAssets({ images, embedSet, coverSrc, fetchImage, imageC
     }
   }
 
-  if (coverSource) {
-    coverImage = buildCoverSvgAsset(title, coverSource);
-  }
-
-  return { coverImage, coverSource, items };
+  return { coverSource, items };
 }
 
 async function fetchImageAsset(src, fetchImage, filenamePrefix) {
@@ -204,89 +199,6 @@ async function fetchImageAsset(src, fetchImage, filenamePrefix) {
   };
 }
 
-function buildCoverSvgAsset(title, coverSource) {
-  const svg = buildCoverSvg(title, coverSource);
-  return {
-    href: 'images/cover.svg',
-    mediaType: 'image/svg+xml',
-    bytes: strToU8(svg)
-  };
-}
-
-function buildCoverSvg(title, coverSource) {
-  const rawTitle = String(title || '');
-  const coverDataUri = coverSource
-    ? `data:${coverSource.mediaType};base64,${toBase64(coverSource.bytes)}`
-    : '';
-  const lines = wrapTitle(rawTitle, 28, 3);
-  const lineHeight = 80;
-  const startY = 160;
-  const textLines = lines.map((line, index) => (
-    `<tspan x="600" dy="${index === 0 ? 0 : lineHeight}">${escapeXml(line)}</tspan>`
-  )).join('');
-
-  return `<?xml version="1.0" encoding="UTF-8"?>\n` +
-    `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1600" viewBox="0 0 1200 1600">\n` +
-    `  <rect width="1200" height="1600" fill="#0c0c0c"/>\n` +
-    (coverDataUri
-      ? `  <image href="${coverDataUri}" x="0" y="0" width="1200" height="1600" preserveAspectRatio="xMidYMid slice"/>\n`
-      : '') +
-    `  <rect x="0" y="0" width="1200" height="460" fill="#000" fill-opacity="0.55"/>\n` +
-    `  <text x="600" y="${startY}" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="64" fill="#fff" paint-order="stroke" stroke="#000" stroke-width="2">\n` +
-    `    ${textLines}\n` +
-    `  </text>\n` +
-    `</svg>\n`;
-}
-
-function wrapTitle(title, maxLineLength, maxLines) {
-  const words = String(title || '').split(/\s+/).filter(Boolean);
-  const lines = [];
-  let current = '';
-  let truncated = false;
-
-  for (const word of words) {
-    const candidate = current ? `${current} ${word}` : word;
-    if (candidate.length <= maxLineLength) {
-      current = candidate;
-      continue;
-    }
-
-    if (current) {
-      lines.push(current);
-      current = word;
-    } else {
-      lines.push(word.slice(0, maxLineLength));
-      current = word.slice(maxLineLength);
-    }
-
-    if (lines.length >= maxLines) {
-      truncated = true;
-      break;
-    }
-  }
-
-  if (lines.length < maxLines && current) {
-    lines.push(current);
-  }
-
-  if (lines.length > maxLines) {
-    lines.length = maxLines;
-  }
-
-  if (!truncated && words.length > 0 && lines.length === maxLines) {
-    const lineLength = lines.join(' ').length;
-    truncated = lineLength < words.join(' ').length;
-  }
-
-  if (truncated && lines.length > 0) {
-    const lastIndex = lines.length - 1;
-    if (!lines[lastIndex].endsWith('...')) {
-      lines[lastIndex] = `${lines[lastIndex].slice(0, Math.max(0, maxLineLength - 3))}...`;
-    }
-  }
-
-  return lines;
-}
 
 function resolveMediaType(src, contentType) {
   const normalized = (contentType || '').split(';')[0].trim().toLowerCase();
@@ -457,6 +369,7 @@ function buildEpubFiles({ title, item, reader, contentHtml, coverImage, coverSou
       `    <link rel="stylesheet" href="styles.css" />\n` +
       `  </head>\n` +
       `  <body class="cover">\n` +
+      `    <h1 class="cover__title">${safeTitle}</h1>\n` +
       `    <img src="${coverImage.href}" alt="Cover image" />\n` +
       `  </body>\n` +
       `</html>\n`
@@ -469,6 +382,7 @@ function buildEpubFiles({ title, item, reader, contentHtml, coverImage, coverSou
     `.image-placeholder { color: #777; font-style: italic; border-left: 2px solid #ddd; padding-left: 0.5rem; }\n` +
     `img { max-width: 100%; height: auto; }\n` +
     `.cover { margin: 0; padding: 0; text-align: center; }\n` +
+    `.cover__title { font-size: 1.6rem; margin: 1.5rem 1rem 1rem; }\n` +
     `.cover img { max-width: 100%; height: auto; }\n`;
 
   files['mimetype'] = [strToU8('application/epub+zip'), { level: 0 }];
