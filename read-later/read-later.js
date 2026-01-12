@@ -120,8 +120,7 @@
       const summary = node.querySelector('.item__summary');
       const toggle = node.querySelector('.item__toggle');
       const remove = node.querySelector('.item__delete');
-      const kindleStatus = node.querySelector('.item__kindle-status');
-      const kindleButton = node.querySelector('.item__kindle-button');
+      const kindleLink = node.querySelector('.item__kindle-link');
       const readerPane = node.querySelector('.item__reader');
       const readerTitle = node.querySelector('.reader__title');
       const readerMeta = node.querySelector('.reader__meta');
@@ -138,13 +137,9 @@
 
       domain.textContent = formatDomain(item.url);
       time.textContent = formatDate(item.savedAt);
-      renderKindleState(item, kindleStatus, kindleButton);
+      renderKindleState(item, kindleLink);
 
-      kindleStatus.addEventListener('click', () => {
-        syncKindle(item.id);
-      });
-
-      kindleButton.addEventListener('click', () => {
+      kindleLink.addEventListener('click', () => {
         syncKindle(item.id);
       });
 
@@ -229,52 +224,34 @@
     statusEl.textContent = `${items.length} item${items.length === 1 ? '' : 's'} shown.`;
   }
 
-  function renderKindleState(item, statusEl, buttonEl) {
-    if (!statusEl || !buttonEl) return;
+  function renderKindleState(item, linkEl) {
+    if (!linkEl) return;
     const status = getKindleStatus(item);
-    const label = getKindleLabel(status);
-    statusEl.textContent = label;
-    statusEl.title = getKindleStatusTitle(status, item?.kindle?.lastError || '');
-    statusEl.classList.toggle('is-synced', status === 'synced');
-    statusEl.classList.toggle('is-failed', status === 'failed');
-
     const isSending = kindleRequests.has(item.id);
-    const showButton = status !== 'synced';
+    const label = getKindleLinkLabel(status, isSending);
 
-    statusEl.disabled = isSending;
-
-    buttonEl.hidden = !showButton;
-    if (!showButton) {
-      return;
-    }
-
-    buttonEl.disabled = isSending;
-    buttonEl.textContent = isSending ? 'Sending...' : getKindleButtonLabel(status);
+    linkEl.textContent = label;
+    linkEl.title = getKindleStatusTitle(status, item?.kindle?.lastError || '');
+    linkEl.disabled = isSending;
+    linkEl.classList.toggle('is-synced', status === 'synced');
+    linkEl.classList.toggle('is-failed', status === 'failed');
   }
 
   function getKindleStatus(item) {
     return item?.kindle?.status || 'unsynced';
   }
 
-  function getKindleLabel(status) {
-    switch (status) {
-      case 'synced':
-        return 'Kindle synced';
-      case 'failed':
-        return 'Kindle failed';
-      case 'needs-content':
-        return 'Needs reader';
-      default:
-        return 'Not on Kindle';
+  function getKindleLinkLabel(status, isSending) {
+    if (isSending) {
+      return 'Syncing...';
     }
-  }
-
-  function getKindleButtonLabel(status) {
     switch (status) {
+      case 'needs-content':
+        return 'Send to Kindle';
       case 'failed':
         return 'Retry Kindle';
-      case 'needs-content':
-        return 'Try Kindle';
+      case 'synced':
+        return 'Kindle synced';
       default:
         return 'Send to Kindle';
     }
