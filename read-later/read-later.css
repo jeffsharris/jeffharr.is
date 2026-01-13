@@ -118,71 +118,6 @@ body {
   border-color: var(--accent);
 }
 
-.save-banner {
-  max-width: 1000px;
-  margin: 0 auto 16px;
-  padding: 12px 24px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow-soft);
-  font-size: 14px;
-  color: var(--text);
-  animation: slideDown 200ms ease;
-}
-
-@keyframes slideDown {
-  from {
-    opacity: 0;
-    transform: translateY(-8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.save-banner.is-success {
-  border-color: var(--accent);
-  background: rgba(201, 134, 29, 0.08);
-}
-
-.save-banner.is-error {
-  border-color: var(--danger);
-  background: var(--danger-soft);
-}
-
-.save-banner__icon {
-  width: 18px;
-  height: 18px;
-  flex-shrink: 0;
-}
-
-.save-banner__icon svg {
-  width: 100%;
-  height: 100%;
-}
-
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
-
-.save-banner__icon.is-loading {
-  animation: spin 1s linear infinite;
-  color: var(--accent);
-}
-
-.save-banner__icon.is-success {
-  color: var(--accent);
-}
-
-.save-banner__icon.is-error {
-  color: var(--danger);
-}
-
 .main {
   max-width: 1000px;
   margin: 0 auto;
@@ -278,6 +213,33 @@ body {
 
 .item.is-read {
   opacity: 0.7;
+}
+
+.item.is-saving {
+  opacity: 0.8;
+}
+
+.item.is-saving:hover {
+  transform: none;
+  box-shadow: var(--shadow-soft);
+}
+
+.item__saving-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-muted);
+}
+
+.item__saving-indicator svg {
+  width: 14px;
+  height: 14px;
+  animation: spin 1s linear infinite;
+  color: var(--accent);
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }
 
 .item__summary {

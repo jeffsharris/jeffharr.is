@@ -11,9 +11,6 @@
   const toastEl = document.getElementById('toast');
   const toastMessageEl = document.getElementById('toast-message');
   const toastUndoBtn = document.getElementById('toast-undo');
-  const saveBannerEl = document.getElementById('save-banner');
-  const saveBannerIconEl = document.getElementById('save-banner-icon');
-  const saveBannerTextEl = document.getElementById('save-banner-text');
 
   const ICON_MARK_READ = `
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -54,29 +51,14 @@
     </svg>
   `;
 
-  const ICON_SUCCESS = `
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-      stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-      <path d="M20 6L9 17l-5-5"></path>
-    </svg>
-  `;
-
-  const ICON_ERROR = `
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-      stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-      <circle cx="12" cy="12" r="10"></circle>
-      <line x1="15" y1="9" x2="9" y2="15"></line>
-      <line x1="9" y1="9" x2="15" y2="15"></line>
-    </svg>
-  `;
-
   const state = {
     items: [],
     filter: 'unread',
     sort: 'saved-desc',
     loading: false,
     error: '',
-    openId: null
+    openId: null,
+    savingItem: null  // Placeholder item while saving
   };
 
   const REFRESH_INTERVAL_MS = 60000;
@@ -130,6 +112,12 @@
 
   function renderList() {
     listEl.innerHTML = '';
+
+    // Render saving item first if exists
+    if (state.savingItem && state.filter === 'unread') {
+      renderSavingItem(state.savingItem);
+    }
+
     const items = getFilteredItems();
     const hasOpenItem = items.some(item => item.id === state.openId);
 
@@ -138,89 +126,119 @@
     }
 
     items.forEach(item => {
-      const node = template.content.cloneNode(true);
-      const article = node.querySelector('.item');
-      const title = node.querySelector('.item__title');
-      const domain = node.querySelector('.item__domain');
-      const time = node.querySelector('.item__time');
-      const summary = node.querySelector('.item__summary');
-      const toggle = node.querySelector('.item__toggle');
-      const remove = node.querySelector('.item__delete');
-      const kindleLink = node.querySelector('.item__kindle-link');
-      const readerPane = node.querySelector('.item__reader');
-      const readerTitle = node.querySelector('.reader__title');
-      const readerMeta = node.querySelector('.reader__meta');
-      const readerStatus = node.querySelector('.reader__status');
-      const readerBody = node.querySelector('.reader__body');
-      const readerRefresh = node.querySelector('.reader__refresh');
-
-      if (item.read) {
-        article.classList.add('is-read');
-      }
-
-      title.textContent = item.title || item.url;
-      title.href = item.url;
-
-      domain.textContent = formatDomain(item.url);
-      time.textContent = formatDate(item.savedAt);
-      renderKindleState(item, kindleLink);
-
-      kindleLink.addEventListener('click', () => {
-        syncKindle(item.id);
-      });
-
-      const isOpen = state.openId === item.id;
-      const readerId = `reader-${item.id}`;
-      readerPane.id = readerId;
-      summary.setAttribute('aria-controls', readerId);
-      summary.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-      summary.addEventListener('click', (event) => {
-        if (!shouldToggleReader(event, summary)) {
-          return;
-        }
-        event.preventDefault();
-        toggleReader(item.id);
-      });
-      summary.addEventListener('keydown', (event) => {
-        if (event.key !== 'Enter' && event.key !== ' ') {
-          return;
-        }
-        if (!shouldToggleReader(event, summary)) {
-          return;
-        }
-        event.preventDefault();
-        toggleReader(item.id);
-      });
-
-      toggle.innerHTML = item.read ? ICON_MARK_UNREAD : ICON_MARK_READ;
-      toggle.setAttribute('aria-label', item.read ? 'Mark unread' : 'Mark read');
-      toggle.title = item.read ? 'Mark unread' : 'Mark read';
-      toggle.addEventListener('click', () => updateReadStatus(item.id, !item.read));
-
-      remove.innerHTML = ICON_DELETE;
-      remove.classList.add('is-danger');
-      remove.title = 'Delete';
-      remove.addEventListener('click', () => deleteItem(item.id));
-
-      if (isOpen) {
-        readerPane.hidden = false;
-        article.classList.add('is-open');
-        openReader({
-          item,
-          readerPane,
-          readerTitle,
-          readerMeta,
-          readerStatus,
-          readerBody,
-          readerRefresh
-        });
-      } else {
-        readerPane.hidden = true;
-        article.classList.remove('is-open');
-      }
-
-      listEl.appendChild(node);
+      renderItem(item);
     });
+  }
+
+  function renderSavingItem(item) {
+    const node = template.content.cloneNode(true);
+    const article = node.querySelector('.item');
+    const title = node.querySelector('.item__title');
+    const meta = node.querySelector('.item__meta');
+    const summary = node.querySelector('.item__summary');
+    const actionsEl = node.querySelector('.item__actions');
+    const readerPane = node.querySelector('.item__reader');
+
+    article.classList.add('is-saving');
+    title.textContent = item.title || item.url;
+    title.href = item.url;
+
+    // Replace meta content with saving indicator
+    meta.innerHTML = `<span class="item__saving-indicator">${ICON_LOADING} Saving...</span>`;
+
+    // Disable interaction
+    summary.removeAttribute('role');
+    summary.removeAttribute('tabindex');
+    summary.style.cursor = 'default';
+    actionsEl.innerHTML = '';
+    readerPane.remove();
+
+    listEl.appendChild(node);
+  }
+
+  function renderItem(item) {
+    const node = template.content.cloneNode(true);
+    const article = node.querySelector('.item');
+    const title = node.querySelector('.item__title');
+    const domain = node.querySelector('.item__domain');
+    const time = node.querySelector('.item__time');
+    const summary = node.querySelector('.item__summary');
+    const toggle = node.querySelector('.item__toggle');
+    const remove = node.querySelector('.item__delete');
+    const kindleLink = node.querySelector('.item__kindle-link');
+    const readerPane = node.querySelector('.item__reader');
+    const readerTitle = node.querySelector('.reader__title');
+    const readerMeta = node.querySelector('.reader__meta');
+    const readerStatus = node.querySelector('.reader__status');
+    const readerBody = node.querySelector('.reader__body');
+    const readerRefresh = node.querySelector('.reader__refresh');
+
+    if (item.read) {
+      article.classList.add('is-read');
+    }
+
+    title.textContent = item.title || item.url;
+    title.href = item.url;
+
+    domain.textContent = formatDomain(item.url);
+    time.textContent = formatDate(item.savedAt);
+    renderKindleState(item, kindleLink);
+
+    kindleLink.addEventListener('click', () => {
+      syncKindle(item.id);
+    });
+
+    const isOpen = state.openId === item.id;
+    const readerId = `reader-${item.id}`;
+    readerPane.id = readerId;
+    summary.setAttribute('aria-controls', readerId);
+    summary.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    summary.addEventListener('click', (event) => {
+      if (!shouldToggleReader(event, summary)) {
+        return;
+      }
+      event.preventDefault();
+      toggleReader(item.id);
+    });
+    summary.addEventListener('keydown', (event) => {
+      if (event.key !== 'Enter' && event.key !== ' ') {
+        return;
+      }
+      if (!shouldToggleReader(event, summary)) {
+        return;
+      }
+      event.preventDefault();
+      toggleReader(item.id);
+    });
+
+    toggle.innerHTML = item.read ? ICON_MARK_UNREAD : ICON_MARK_READ;
+    toggle.setAttribute('aria-label', item.read ? 'Mark unread' : 'Mark read');
+    toggle.title = item.read ? 'Mark unread' : 'Mark read';
+    toggle.addEventListener('click', () => updateReadStatus(item.id, !item.read));
+
+    remove.innerHTML = ICON_DELETE;
+    remove.classList.add('is-danger');
+    remove.title = 'Delete';
+    remove.addEventListener('click', () => deleteItem(item.id));
+
+    if (isOpen) {
+      readerPane.hidden = false;
+      article.classList.add('is-open');
+      openReader({
+        item,
+        readerPane,
+        readerTitle,
+        readerMeta,
+        readerStatus,
+        readerBody,
+        readerRefresh
+      });
+    } else {
+      readerPane.hidden = true;
+      article.classList.remove('is-open');
+    }
+
+    listEl.appendChild(node);
   }
 
   function renderStatus() {
@@ -798,41 +816,12 @@
     }
   });
 
-  function showSaveBanner(status, message) {
-    if (!saveBannerEl) return;
-
-    saveBannerEl.hidden = false;
-    saveBannerEl.classList.remove('is-success', 'is-error');
-    saveBannerIconEl.classList.remove('is-loading', 'is-success', 'is-error');
-
-    if (status === 'loading') {
-      saveBannerIconEl.innerHTML = ICON_LOADING;
-      saveBannerIconEl.classList.add('is-loading');
-      saveBannerTextEl.textContent = message || 'Saving...';
-    } else if (status === 'success') {
-      saveBannerIconEl.innerHTML = ICON_SUCCESS;
-      saveBannerIconEl.classList.add('is-success');
-      saveBannerEl.classList.add('is-success');
-      saveBannerTextEl.textContent = message || 'Saved!';
-    } else if (status === 'error') {
-      saveBannerIconEl.innerHTML = ICON_ERROR;
-      saveBannerIconEl.classList.add('is-error');
-      saveBannerEl.classList.add('is-error');
-      saveBannerTextEl.textContent = message || 'Failed to save';
-    }
-  }
-
-  function hideSaveBanner() {
-    if (!saveBannerEl) return;
-    saveBannerEl.hidden = true;
-  }
-
   async function saveFromUrlParams() {
     const params = new URLSearchParams(window.location.search);
     const rawUrl = params.get('url') || params.get('u');
     const rawTitle = params.get('title') || params.get('t') || '';
 
-    if (!rawUrl) return false;
+    if (!rawUrl) return null;
 
     // Clean the URL immediately
     const cleanUrl = new URL(window.location.href);
@@ -842,7 +831,13 @@
     cleanUrl.searchParams.delete('t');
     window.history.replaceState({}, '', cleanUrl.pathname + cleanUrl.search);
 
-    showSaveBanner('loading', 'Saving...');
+    // Create placeholder item and show it
+    state.savingItem = {
+      url: rawUrl,
+      title: rawTitle || rawUrl,
+      saving: true
+    };
+    render();
 
     try {
       const response = await fetch('/api/read-later', {
@@ -857,14 +852,24 @@
         throw new Error(data.error || 'Save failed');
       }
 
-      showSaveBanner('success', 'Saved!');
-      setTimeout(hideSaveBanner, 3000);
-      return true;
+      // Clear saving state and reload
+      state.savingItem = null;
+
+      // Show appropriate toast message
+      if (data.duplicate) {
+        if (data.unarchived) {
+          showToast('Already saved — restored from archive', null);
+        } else {
+          showToast('Already saved — bumped to top', null);
+        }
+      }
+
+      return data;
     } catch (error) {
       console.error('Save error:', error);
-      showSaveBanner('error', 'Failed to save');
-      setTimeout(hideSaveBanner, 5000);
-      return false;
+      state.savingItem = null;
+      showToast('Failed to save', null);
+      return null;
     }
   }
 
@@ -873,9 +878,9 @@
     const hasUrlToSave = params.has('url') || params.has('u');
 
     if (hasUrlToSave) {
-      // Show saving banner and save first
-      const saved = await saveFromUrlParams();
-      // Then load items (will include the new one if save succeeded)
+      // Save first, showing placeholder
+      await saveFromUrlParams();
+      // Then load items (will include the new/updated item)
       await loadItems();
     } else {
       // Just load items normally

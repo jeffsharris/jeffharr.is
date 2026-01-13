@@ -84,9 +84,37 @@ async function handleSave(request, kv, env) {
 
   const title = normalizeTitle(payload?.title, normalizedUrl);
   const read = typeof incomingRead === 'boolean' ? incomingRead : false;
-  const item = createItem({ url: normalizedUrl, title, read });
 
   try {
+    // Check for existing item with same URL
+    const existingItem = await findItemByUrl(kv, normalizedUrl);
+
+    if (existingItem) {
+      // Item already exists - update it
+      const wasRead = existingItem.read;
+      existingItem.savedAt = new Date().toISOString();
+      existingItem.read = false;
+      existingItem.readAt = null;
+      // Update title if a new one was provided
+      if (payload?.title) {
+        existingItem.title = title;
+      }
+
+      await kv.put(`${KV_PREFIX}${existingItem.id}`, JSON.stringify(existingItem));
+
+      return jsonResponse(
+        {
+          ok: true,
+          item: existingItem,
+          duplicate: true,
+          unarchived: wasRead
+        },
+        { status: 200, cache: 'no-store' }
+      );
+    }
+
+    // New item - create it
+    const item = createItem({ url: normalizedUrl, title, read });
     const { reader, kindle } = await syncKindleForItem(item, env);
     item.kindle = kindle;
     await kv.put(`${KV_PREFIX}${item.id}`, JSON.stringify(item));
@@ -198,6 +226,11 @@ async function listAllItems(kv) {
   } while (cursor);
 
   return items;
+}
+
+async function findItemByUrl(kv, url) {
+  const items = await listAllItems(kv);
+  return items.find((item) => item.url === url) || null;
 }
 
 async function parseJson(request) {
