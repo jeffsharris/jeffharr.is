@@ -290,6 +290,22 @@ body {
   display: none;
 }
 
+.item__thumb-placeholder {
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 32px;
+  height: 32px;
+  color: var(--text-light);
+  opacity: 0.5;
+}
+
+.item__thumb.is-empty .item__thumb-placeholder {
+  display: block;
+}
+
 .item__thumb.is-loading::after {
   content: '';
   position: absolute;
