@@ -1,4 +1,5 @@
 import { deriveTitleFromUrl, shouldCacheReader } from './reader-utils.js';
+import { getYouTubeInfo } from './media-utils.js';
 import { buildReaderContent } from './reader.js';
 import { buildEpubAttachment } from './epub.js';
 import { ensureCoverImage } from './covers.js';
@@ -8,7 +9,8 @@ const RESEND_TIMEOUT_MS = 10000;
 const KINDLE_STATUS = {
   SYNCED: 'synced',
   FAILED: 'failed',
-  NEEDS_CONTENT: 'needs-content'
+  NEEDS_CONTENT: 'needs-content',
+  UNSUPPORTED: 'unsupported'
 };
 
 function buildKindleHtml(item, reader) {
@@ -128,6 +130,14 @@ async function syncKindleForItem(item, env, options = {}) {
     return {
       reader: null,
       kindle: buildKindleState(KINDLE_STATUS.NEEDS_CONTENT, attemptedAt, 'Missing URL'),
+      cover: null
+    };
+  }
+
+  if (getYouTubeInfo(item.url)) {
+    return {
+      reader: null,
+      kindle: buildKindleState(KINDLE_STATUS.UNSUPPORTED, attemptedAt, 'YouTube videos are not sent to Kindle'),
       cover: null
     };
   }

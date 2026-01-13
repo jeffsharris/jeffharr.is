@@ -6,6 +6,7 @@
 import { createItem, normalizeTitle, normalizeUrl } from '../read-later.js';
 
 const KV_PREFIX = 'item:';
+const MIN_VIDEO_SECONDS = 300;
 
 export async function onRequest(context) {
   const { request, env } = context;
@@ -85,15 +86,35 @@ function normalizeIsoDate(value) {
 
 function normalizeProgress(progress) {
   if (!progress || typeof progress !== 'object') return null;
-  const scrollTop = Number(progress.scrollTop ?? 0);
-  const scrollRatio = Number(progress.scrollRatio ?? 0);
-  if (Number.isNaN(scrollTop) || Number.isNaN(scrollRatio)) return null;
 
-  return {
-    scrollTop: Math.max(0, scrollTop),
-    scrollRatio: clamp(scrollRatio, 0, 1),
-    updatedAt: normalizeIsoDate(progress.updatedAt) || new Date().toISOString()
-  };
+  const result = {};
+  const scrollTop = Number(progress.scrollTop);
+  const scrollRatio = Number(progress.scrollRatio);
+  const hasScroll = Number.isFinite(scrollTop) && Number.isFinite(scrollRatio);
+
+  if (hasScroll) {
+    result.scrollTop = Math.max(0, scrollTop);
+    result.scrollRatio = clamp(scrollRatio, 0, 1);
+    result.updatedAt = normalizeIsoDate(progress.updatedAt) || new Date().toISOString();
+  }
+
+  const video = progress.video;
+  if (video && typeof video === 'object') {
+    const currentTime = Number(video.currentTime);
+    const duration = Number(video.duration);
+    if (Number.isFinite(currentTime) && Number.isFinite(duration) && duration >= MIN_VIDEO_SECONDS) {
+      const safeDuration = Math.max(duration, 0);
+      const safeTime = clamp(currentTime, 0, safeDuration || 0);
+      result.video = {
+        currentTime: safeTime,
+        duration: safeDuration,
+        ratio: safeDuration ? clamp(safeTime / safeDuration, 0, 1) : 0,
+        updatedAt: normalizeIsoDate(video.updatedAt) || new Date().toISOString()
+      };
+    }
+  }
+
+  return Object.keys(result).length > 0 ? result : null;
 }
 
 function clamp(value, min, max) {

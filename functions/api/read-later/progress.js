@@ -4,6 +4,7 @@
  */
 
 const KV_PREFIX = 'item:';
+const MIN_VIDEO_SECONDS = 300;
 
 export async function onRequest(context) {
   const { request, env } = context;
@@ -26,10 +27,15 @@ export async function onRequest(context) {
   try {
     const payload = await parseJson(request);
     const id = typeof payload?.id === 'string' ? payload.id.trim() : '';
-    const scrollTop = Number(payload?.scrollTop ?? 0);
-    const scrollRatio = Number(payload?.scrollRatio ?? 0);
+    const scrollTop = Number(payload?.scrollTop);
+    const scrollRatio = Number(payload?.scrollRatio);
+    const videoCurrentTime = Number(payload?.videoCurrentTime);
+    const videoDuration = Number(payload?.videoDuration);
 
-    if (!id || Number.isNaN(scrollTop) || Number.isNaN(scrollRatio)) {
+    const hasScroll = Number.isFinite(scrollTop) && Number.isFinite(scrollRatio);
+    const hasVideo = Number.isFinite(videoCurrentTime) && Number.isFinite(videoDuration);
+
+    if (!id || (!hasScroll && !hasVideo)) {
       return jsonResponse(
         { ok: false, error: 'Invalid payload' },
         { status: 400, cache: 'no-store' }
@@ -46,11 +52,33 @@ export async function onRequest(context) {
       );
     }
 
-    item.progress = {
-      scrollTop: Math.max(0, scrollTop),
-      scrollRatio: clamp(scrollRatio, 0, 1),
-      updatedAt: new Date().toISOString()
-    };
+    const progress = item.progress && typeof item.progress === 'object'
+      ? { ...item.progress }
+      : {};
+    const updatedAt = new Date().toISOString();
+
+    if (hasScroll) {
+      progress.scrollTop = Math.max(0, scrollTop);
+      progress.scrollRatio = clamp(scrollRatio, 0, 1);
+      progress.updatedAt = updatedAt;
+    }
+
+    if (hasVideo) {
+      if (videoDuration >= MIN_VIDEO_SECONDS) {
+        const safeDuration = Math.max(videoDuration, 0);
+        const safeTime = clamp(videoCurrentTime, 0, safeDuration || 0);
+        progress.video = {
+          currentTime: safeTime,
+          duration: safeDuration,
+          ratio: safeDuration ? clamp(safeTime / safeDuration, 0, 1) : 0,
+          updatedAt
+        };
+      } else {
+        delete progress.video;
+      }
+    }
+
+    item.progress = Object.keys(progress).length > 0 ? progress : null;
 
     await kv.put(key, JSON.stringify(item));
 
