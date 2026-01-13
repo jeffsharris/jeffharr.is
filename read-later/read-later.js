@@ -1367,7 +1367,9 @@
       render();
 
       // Show appropriate toast message
-      if (data.duplicate) {
+      if (data.syncFailed) {
+        showToast('Saved — Kindle sync will retry later', null);
+      } else if (data.duplicate) {
         if (data.unarchived) {
           showToast('Already saved — restored from archive', null);
         } else {
@@ -1436,6 +1438,7 @@
     const decoder = new TextDecoder();
     let buffer = '';
     let result = null;
+    let savedItem = null;
 
     while (true) {
       const { done, value } = await reader.read();
@@ -1456,6 +1459,12 @@
           return;
         }
 
+        if (event.event === 'saved') {
+          // Item is now safely persisted - track it
+          savedItem = payload.item;
+          return;
+        }
+
         if (event.event === 'partial_image') {
           if (state.savingItem) {
             state.savingItem.coverPreview = payload.image;
@@ -1470,11 +1479,21 @@
         }
 
         if (event.event === 'error') {
-          state.savingItem = null;
-          result = payload;
-          render();
+          // If we have a saved item, return it as success despite the error
+          if (savedItem) {
+            result = { ok: true, item: savedItem, syncFailed: true };
+          } else {
+            state.savingItem = null;
+            result = payload;
+            render();
+          }
         }
       });
+    }
+
+    // If stream ended without done/error but we have saved item, return it
+    if (!result && savedItem) {
+      result = { ok: true, item: savedItem, syncFailed: true };
     }
 
     return result;

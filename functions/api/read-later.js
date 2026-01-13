@@ -116,17 +116,27 @@ async function handleSave(request, kv, env) {
       );
     }
 
-    // New item - create it
+    // New item - save basic item FIRST before expensive operations
     const item = createItem({ url: normalizedUrl, title, read });
-    const { reader, kindle, cover } = await syncKindleForItem(item, env, { kv });
-    item.kindle = kindle;
-    if (cover?.createdAt) {
-      item.cover = { updatedAt: cover.createdAt };
-    }
     await kv.put(`${KV_PREFIX}${item.id}`, JSON.stringify(item));
-    if (reader && shouldCacheKindleReader(reader)) {
-      await cacheReader(kv, item.id, reader);
+
+    // Now do expensive work (cover generation, kindle sync)
+    try {
+      const { reader, kindle, cover } = await syncKindleForItem(item, env, { kv });
+      item.kindle = kindle;
+      if (cover?.createdAt) {
+        item.cover = { updatedAt: cover.createdAt };
+      }
+      // Update item with kindle/cover info
+      await kv.put(`${KV_PREFIX}${item.id}`, JSON.stringify(item));
+      if (reader && shouldCacheKindleReader(reader)) {
+        await cacheReader(kv, item.id, reader);
+      }
+    } catch (syncError) {
+      // Log but don't fail - basic item is already saved
+      console.warn('Kindle sync failed, item saved without sync:', syncError);
     }
+
     return jsonResponse(
       { ok: true, item },
       { status: 201, cache: 'no-store' }
@@ -350,6 +360,8 @@ async function handleSaveStream(request, kv, env) {
   const stream = createEventStream();
 
   (async () => {
+    let savedItem = null;
+
     try {
       const payload = await parseJson(request);
       const normalizedUrl = normalizeUrl(payload?.url);
@@ -383,32 +395,52 @@ async function handleSaveStream(request, kv, env) {
         return;
       }
 
-      await stream.send('status', { ok: true, message: 'Generating cover' });
+      // Save basic item FIRST - this ensures we never lose the URL/title
       const item = createItem({ url: normalizedUrl, title, read });
-      const { reader, kindle, cover } = await syncKindleForItem(item, env, {
-        kv,
-        onCoverPartial: async (partial) => {
-          await stream.send('partial_image', {
-            index: partial.index,
-            image: partial.base64
-          });
-        }
-      });
-
-      item.kindle = kindle;
-      if (cover?.createdAt) {
-        item.cover = { updatedAt: cover.createdAt };
-      }
-
       await kv.put(`${KV_PREFIX}${item.id}`, JSON.stringify(item));
-      if (reader && shouldCacheKindleReader(reader)) {
-        await cacheReader(kv, item.id, reader);
+      savedItem = item;
+
+      // Notify client that item is safely saved
+      await stream.send('saved', { ok: true, item: { ...item } });
+
+      // Now do expensive work (cover generation, kindle sync)
+      await stream.send('status', { ok: true, message: 'Generating cover' });
+
+      try {
+        const { reader, kindle, cover } = await syncKindleForItem(item, env, {
+          kv,
+          onCoverPartial: async (partial) => {
+            await stream.send('partial_image', {
+              index: partial.index,
+              image: partial.base64
+            });
+          }
+        });
+
+        item.kindle = kindle;
+        if (cover?.createdAt) {
+          item.cover = { updatedAt: cover.createdAt };
+        }
+
+        // Update item with kindle/cover info
+        await kv.put(`${KV_PREFIX}${item.id}`, JSON.stringify(item));
+        if (reader && shouldCacheKindleReader(reader)) {
+          await cacheReader(kv, item.id, reader);
+        }
+      } catch (syncError) {
+        // Log but don't fail - basic item is already saved
+        console.warn('Kindle sync failed, item saved without sync:', syncError);
       }
 
       await stream.send('done', { ok: true, item });
     } catch (error) {
       console.error('Read later save error:', error);
-      await stream.send('error', { ok: false, error: 'Failed to save item' });
+      // If we already saved the item, send it even though there was an error
+      if (savedItem) {
+        await stream.send('done', { ok: true, item: savedItem, syncFailed: true });
+      } else {
+        await stream.send('error', { ok: false, error: 'Failed to save item' });
+      }
     } finally {
       await stream.close();
     }
