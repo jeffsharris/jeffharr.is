@@ -1043,13 +1043,20 @@
     const hasUrlToSave = params.has('url') || params.has('u');
 
     if (hasUrlToSave) {
+      // Load existing items in background while saving
       const loadPromise = loadItems();
 
-      // Save first, showing placeholder
-      await saveFromUrlParams();
+      // Save the new item (will merge it into state.items and render)
+      const saveResult = await saveFromUrlParams();
+
+      // Wait for initial load to complete
       await loadPromise;
-      // Then load items (will include the new/updated item)
-      await loadItems();
+
+      // Only reload if save failed (to get fresh state)
+      // If save succeeded, the item is already merged into state
+      if (!saveResult?.item) {
+        await loadItems();
+      }
     } else {
       // Just load items normally
       await loadItems();
