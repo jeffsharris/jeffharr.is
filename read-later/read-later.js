@@ -175,6 +175,7 @@
     const article = node.querySelector('.item');
     const thumb = node.querySelector('.item__thumb');
     const thumbImg = node.querySelector('.item__thumb-img');
+    const thumbRegenerate = node.querySelector('.item__thumb-regenerate');
     const title = node.querySelector('.item__title');
     const domain = node.querySelector('.item__domain');
     const time = node.querySelector('.item__time');
@@ -206,6 +207,14 @@
     kindleLink.addEventListener('click', () => {
       syncKindle(item.id);
     });
+
+    // Regenerate cover button (only visible on hover for items without covers)
+    if (thumbRegenerate) {
+      thumbRegenerate.addEventListener('click', (event) => {
+        event.stopPropagation();
+        regenerateCover(item.id, thumbRegenerate, thumb, thumbImg);
+      });
+    }
 
     const isOpen = state.openId === item.id;
     const readerId = `reader-${item.id}`;
@@ -432,6 +441,54 @@
     } finally {
       kindleRequests.delete(id);
       render();
+    }
+  }
+
+  const coverRequests = new Set();
+
+  async function regenerateCover(id, button, thumbEl, imgEl) {
+    if (!id || coverRequests.has(id)) return;
+    coverRequests.add(id);
+    button.classList.add('is-loading');
+
+    try {
+      const response = await fetch('/api/read-later/regenerate-cover', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id })
+      });
+      const data = await response.json().catch(() => null);
+
+      if (data?.ok && data?.item) {
+        const index = state.items.findIndex(item => item.id === id);
+        if (index >= 0) {
+          state.items[index] = data.item;
+        }
+
+        // Update the thumbnail immediately
+        if (data.item.cover?.updatedAt && imgEl && thumbEl) {
+          const url = new URL('/api/read-later/cover', window.location.origin);
+          url.searchParams.set('id', id);
+          url.searchParams.set('v', data.item.cover.updatedAt);
+          imgEl.onload = () => {
+            thumbEl.classList.remove('is-empty');
+          };
+          imgEl.src = url.toString();
+        }
+
+        showToast('Cover generated', null);
+      } else if (data?.coverExists) {
+        showToast('Cover already exists', null);
+        render();
+      } else {
+        showToast('Could not generate cover', null);
+      }
+    } catch (error) {
+      console.error('Cover regeneration error:', error);
+      showToast('Could not generate cover', null);
+    } finally {
+      coverRequests.delete(id);
+      button.classList.remove('is-loading');
     }
   }
 
