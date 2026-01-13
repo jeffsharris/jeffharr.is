@@ -11,6 +11,9 @@
   const toastEl = document.getElementById('toast');
   const toastMessageEl = document.getElementById('toast-message');
   const toastUndoBtn = document.getElementById('toast-undo');
+  const saveBannerEl = document.getElementById('save-banner');
+  const saveBannerIconEl = document.getElementById('save-banner-icon');
+  const saveBannerTextEl = document.getElementById('save-banner-text');
 
   const ICON_MARK_READ = `
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -41,6 +44,29 @@
       stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
       <path d="M21 12a9 9 0 1 1-2.64-6.36"></path>
       <polyline points="21 3 21 9 15 9"></polyline>
+    </svg>
+  `;
+
+  const ICON_LOADING = `
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+      stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M21 12a9 9 0 1 1-6.219-8.56"></path>
+    </svg>
+  `;
+
+  const ICON_SUCCESS = `
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+      stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M20 6L9 17l-5-5"></path>
+    </svg>
+  `;
+
+  const ICON_ERROR = `
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+      stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <circle cx="12" cy="12" r="10"></circle>
+      <line x1="15" y1="9" x2="9" y2="15"></line>
+      <line x1="9" y1="9" x2="15" y2="15"></line>
     </svg>
   `;
 
@@ -772,10 +798,95 @@
     }
   });
 
+  function showSaveBanner(status, message) {
+    if (!saveBannerEl) return;
+
+    saveBannerEl.hidden = false;
+    saveBannerEl.classList.remove('is-success', 'is-error');
+    saveBannerIconEl.classList.remove('is-loading', 'is-success', 'is-error');
+
+    if (status === 'loading') {
+      saveBannerIconEl.innerHTML = ICON_LOADING;
+      saveBannerIconEl.classList.add('is-loading');
+      saveBannerTextEl.textContent = message || 'Saving...';
+    } else if (status === 'success') {
+      saveBannerIconEl.innerHTML = ICON_SUCCESS;
+      saveBannerIconEl.classList.add('is-success');
+      saveBannerEl.classList.add('is-success');
+      saveBannerTextEl.textContent = message || 'Saved!';
+    } else if (status === 'error') {
+      saveBannerIconEl.innerHTML = ICON_ERROR;
+      saveBannerIconEl.classList.add('is-error');
+      saveBannerEl.classList.add('is-error');
+      saveBannerTextEl.textContent = message || 'Failed to save';
+    }
+  }
+
+  function hideSaveBanner() {
+    if (!saveBannerEl) return;
+    saveBannerEl.hidden = true;
+  }
+
+  async function saveFromUrlParams() {
+    const params = new URLSearchParams(window.location.search);
+    const rawUrl = params.get('url') || params.get('u');
+    const rawTitle = params.get('title') || params.get('t') || '';
+
+    if (!rawUrl) return false;
+
+    // Clean the URL immediately
+    const cleanUrl = new URL(window.location.href);
+    cleanUrl.searchParams.delete('url');
+    cleanUrl.searchParams.delete('u');
+    cleanUrl.searchParams.delete('title');
+    cleanUrl.searchParams.delete('t');
+    window.history.replaceState({}, '', cleanUrl.pathname + cleanUrl.search);
+
+    showSaveBanner('loading', 'Saving...');
+
+    try {
+      const response = await fetch('/api/read-later', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url: rawUrl, title: rawTitle })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok || !data.ok) {
+        throw new Error(data.error || 'Save failed');
+      }
+
+      showSaveBanner('success', 'Saved!');
+      setTimeout(hideSaveBanner, 3000);
+      return true;
+    } catch (error) {
+      console.error('Save error:', error);
+      showSaveBanner('error', 'Failed to save');
+      setTimeout(hideSaveBanner, 5000);
+      return false;
+    }
+  }
+
+  async function init() {
+    const params = new URLSearchParams(window.location.search);
+    const hasUrlToSave = params.has('url') || params.has('u');
+
+    if (hasUrlToSave) {
+      // Show saving banner and save first
+      const saved = await saveFromUrlParams();
+      // Then load items (will include the new one if save succeeded)
+      await loadItems();
+    } else {
+      // Just load items normally
+      await loadItems();
+    }
+  }
+
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', loadItems);
+    document.addEventListener('DOMContentLoaded', init);
   } else {
-    loadItems();
+    init();
   }
 
   setInterval(() => {
