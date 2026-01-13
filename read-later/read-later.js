@@ -292,6 +292,15 @@
 
     imgEl.removeAttribute('src');
     thumbEl.classList.add('is-empty');
+    thumbEl.classList.toggle('is-loading', Boolean(item?.saving));
+
+    const preview = item?.coverPreview;
+    if (preview) {
+      thumbEl.classList.remove('is-empty');
+      thumbEl.classList.remove('is-loading');
+      imgEl.src = `data:image/png;base64,${preview}`;
+      return;
+    }
 
     const updatedAt = item?.cover?.updatedAt;
     if (!updatedAt || !item?.id) {
@@ -304,9 +313,11 @@
 
     imgEl.onload = () => {
       thumbEl.classList.remove('is-empty');
+      thumbEl.classList.remove('is-loading');
     };
     imgEl.onerror = () => {
       thumbEl.classList.add('is-empty');
+      thumbEl.classList.remove('is-loading');
       imgEl.removeAttribute('src');
     };
 
@@ -867,25 +878,24 @@
     state.savingItem = {
       url: rawUrl,
       title: rawTitle || rawUrl,
-      saving: true
+      saving: true,
+      coverPreview: null
     };
     render();
 
     try {
-      const response = await fetch('/api/read-later', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ url: rawUrl, title: rawTitle })
-      });
+      const streamResult = await saveWithStream(rawUrl, rawTitle);
+      const data = streamResult
+        ? streamResult.data
+        : await saveWithJson(rawUrl, rawTitle);
 
-      const data = await response.json();
-
-      if (!response.ok || !data.ok) {
-        throw new Error(data.error || 'Save failed');
+      if (!data) {
+        throw new Error('Save failed');
       }
 
-      // Clear saving state and reload
-      state.savingItem = null;
+      if (data.ok === false) {
+        throw new Error(data.error || 'Save failed');
+      }
 
       // Show appropriate toast message
       if (data.duplicate) {
@@ -903,6 +913,115 @@
       showToast('Failed to save', null);
       return null;
     }
+  }
+
+  async function saveWithJson(rawUrl, rawTitle) {
+    const response = await fetch('/api/read-later', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ url: rawUrl, title: rawTitle })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok || !data.ok) {
+      throw new Error(data.error || 'Save failed');
+    }
+
+    state.savingItem = null;
+    return data;
+  }
+
+  async function saveWithStream(rawUrl, rawTitle) {
+    if (!window.ReadableStream) return null;
+
+    const response = await fetch('/api/read-later?stream=1', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'text/event-stream'
+      },
+      body: JSON.stringify({ url: rawUrl, title: rawTitle })
+    });
+
+    const contentType = response.headers.get('content-type') || '';
+    if (!response.ok || !response.body || !contentType.includes('text/event-stream')) {
+      return null;
+    }
+
+    const data = await consumeSaveStream(response);
+    return { data };
+  }
+
+  async function consumeSaveStream(response) {
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = '';
+    let result = null;
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+
+      buffer += decoder.decode(value, { stream: true });
+      const parts = buffer.split('\n\n');
+      buffer = parts.pop() || '';
+
+      parts.forEach((part) => {
+        const event = parseEvent(part);
+        if (!event?.data || event.data === '[DONE]') return;
+
+        let payload = null;
+        try {
+          payload = JSON.parse(event.data);
+        } catch {
+          return;
+        }
+
+        if (event.event === 'partial_image') {
+          if (state.savingItem) {
+            state.savingItem.coverPreview = payload.image;
+            render();
+          }
+          return;
+        }
+
+        if (event.event === 'done') {
+          result = payload;
+          state.savingItem = null;
+          render();
+          return;
+        }
+
+        if (event.event === 'error') {
+          state.savingItem = null;
+          result = payload;
+          render();
+        }
+      });
+    }
+
+    return result;
+  }
+
+  function parseEvent(chunk) {
+    const lines = chunk.split('\n').filter(Boolean);
+    if (!lines.length) return null;
+
+    let event = 'message';
+    const dataLines = [];
+
+    lines.forEach((line) => {
+      if (line.startsWith('event:')) {
+        event = line.slice(6).trim();
+        return;
+      }
+      if (line.startsWith('data:')) {
+        dataLines.push(line.slice(5).trim());
+      }
+    });
+
+    return { event, data: dataLines.join('\n') };
   }
 
   async function init() {

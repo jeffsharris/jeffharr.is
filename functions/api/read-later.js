@@ -28,6 +28,9 @@ export async function onRequest(context) {
     }
 
     if (request.method === 'POST') {
+      if (shouldStreamResponse(request)) {
+        return handleSaveStream(request, kv, env);
+      }
       return handleSave(request, kv, env);
     }
 
@@ -311,6 +314,112 @@ function jsonResponse(payload, { status = 200, cache = 'no-store' } = {}) {
     headers: {
       'Content-Type': 'application/json',
       'Cache-Control': cache
+    }
+  });
+}
+
+function shouldStreamResponse(request) {
+  const url = new URL(request.url);
+  if (url.searchParams.get('stream') === '1') return true;
+  const accept = request.headers.get('accept') || '';
+  return accept.includes('text/event-stream');
+}
+
+function createEventStream() {
+  const { readable, writable } = new TransformStream();
+  const writer = writable.getWriter();
+  const encoder = new TextEncoder();
+
+  const send = async (event, data) => {
+    const payload = `event: ${event}\ndata: ${JSON.stringify(data)}\n\n`;
+    await writer.write(encoder.encode(payload));
+  };
+
+  const close = async () => {
+    try {
+      await writer.close();
+    } catch {
+      // Ignore broken pipe.
+    }
+  };
+
+  return { readable, send, close };
+}
+
+async function handleSaveStream(request, kv, env) {
+  const stream = createEventStream();
+
+  (async () => {
+    try {
+      const payload = await parseJson(request);
+      const normalizedUrl = normalizeUrl(payload?.url);
+      const incomingRead = payload?.read;
+
+      if (!normalizedUrl) {
+        await stream.send('error', { ok: false, error: 'Invalid URL' });
+        return;
+      }
+
+      const title = normalizeTitle(payload?.title, normalizedUrl);
+      const read = typeof incomingRead === 'boolean' ? incomingRead : false;
+
+      const existingItem = await findItemByUrl(kv, normalizedUrl);
+      if (existingItem) {
+        const wasRead = existingItem.read;
+        existingItem.savedAt = new Date().toISOString();
+        existingItem.read = false;
+        existingItem.readAt = null;
+        if (payload?.title) {
+          existingItem.title = title;
+        }
+
+        await kv.put(`${KV_PREFIX}${existingItem.id}`, JSON.stringify(existingItem));
+        await stream.send('done', {
+          ok: true,
+          item: existingItem,
+          duplicate: true,
+          unarchived: wasRead
+        });
+        return;
+      }
+
+      await stream.send('status', { ok: true, message: 'Generating cover' });
+      const item = createItem({ url: normalizedUrl, title, read });
+      const { reader, kindle, cover } = await syncKindleForItem(item, env, {
+        kv,
+        onCoverPartial: async (partial) => {
+          await stream.send('partial_image', {
+            index: partial.index,
+            image: partial.base64
+          });
+        }
+      });
+
+      item.kindle = kindle;
+      if (cover?.createdAt) {
+        item.cover = { updatedAt: cover.createdAt };
+      }
+
+      await kv.put(`${KV_PREFIX}${item.id}`, JSON.stringify(item));
+      if (reader && shouldCacheKindleReader(reader)) {
+        await cacheReader(kv, item.id, reader);
+      }
+
+      await stream.send('done', { ok: true, item });
+    } catch (error) {
+      console.error('Read later save error:', error);
+      await stream.send('error', { ok: false, error: 'Failed to save item' });
+    } finally {
+      await stream.close();
+    }
+  })();
+
+  return new Response(stream.readable, {
+    status: 200,
+    headers: {
+      'Content-Type': 'text/event-stream',
+      'Cache-Control': 'no-store',
+      'Connection': 'keep-alive'
     }
   });
 }

@@ -122,6 +122,7 @@ async function buildKindleAttachmentWithFallback(item, reader, cover) {
 async function syncKindleForItem(item, env, options = {}) {
   const attemptedAt = new Date().toISOString();
   const kv = options.kv;
+  const onCoverPartial = options.onCoverPartial;
 
   if (!item?.url) {
     return {
@@ -153,7 +154,7 @@ async function syncKindleForItem(item, env, options = {}) {
   let cover = null;
   if (kv) {
     try {
-      cover = await ensureCoverImage({ item, reader, env, kv });
+      cover = await ensureCoverImage({ item, reader, env, kv, onPartial: onCoverPartial });
     } catch (error) {
       console.warn('Cover generation failed:', error);
       cover = null;

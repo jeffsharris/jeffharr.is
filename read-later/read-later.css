@@ -286,6 +286,23 @@ body {
   display: block;
 }
 
+.item__thumb.is-empty .item__thumb-img {
+  display: none;
+}
+
+.item__thumb.is-loading::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  border-top-color: var(--accent);
+  animation: spin 0.9s linear infinite;
+}
+
 .item__title {
   display: inline-block;
   color: var(--text);

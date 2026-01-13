@@ -129,7 +129,100 @@ async function generateCoverImage({ title, url, snippet, truncated, env }) {
   };
 }
 
-async function ensureCoverImage({ item, reader, env, kv }) {
+async function generateCoverImageStream({ title, url, snippet, truncated, env, onPartial }) {
+  const apiKey = env?.OPENAI_API_KEY;
+  if (!apiKey) return null;
+
+  const prompt = buildCoverPrompt({ title, url, snippet, truncated });
+  const payload = {
+    model: 'gpt-5',
+    input: [
+      {
+        role: 'user',
+        content: [
+          { type: 'input_text', text: prompt }
+        ]
+      }
+    ],
+    stream: true,
+    tool_choice: { type: 'image_generation' },
+    tools: [
+      {
+        type: 'image_generation',
+        model: 'gpt-image-1.5',
+        size: '1024x1536',
+        quality: 'high',
+        output_format: 'png',
+        partial_images: 2
+      }
+    ]
+  };
+
+  const response = await fetchWithTimeout(OPENAI_ENDPOINT, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${apiKey}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(payload)
+  }, OPENAI_TIMEOUT_MS);
+
+  if (!response.ok) {
+    const details = await readResponseBody(response);
+    throw new Error(`OpenAI cover request failed with ${response.status}${details}`);
+  }
+
+  let finalResult = null;
+  await consumeEventStream(response, (event) => {
+    if (!event?.data || event.data === '[DONE]') return;
+
+    let payload = null;
+    try {
+      payload = JSON.parse(event.data);
+    } catch {
+      return;
+    }
+
+    const type = payload.type || event.event;
+    if (type === 'response.image_generation_call.partial_image') {
+      if (payload.partial_image_b64 && typeof onPartial === 'function') {
+        onPartial({
+          index: payload.partial_image_index,
+          base64: payload.partial_image_b64
+        });
+      }
+      return;
+    }
+
+    if (type === 'response.output_item.done') {
+      const item = payload.item;
+      if (item?.type === 'image_generation_call' && item.result) {
+        finalResult = item.result;
+      }
+      return;
+    }
+
+    if (type === 'response.completed') {
+      const output = payload.response?.output;
+      if (Array.isArray(output)) {
+        const imageCall = output.find((entry) => entry.type === 'image_generation_call' && entry.result);
+        if (imageCall?.result) {
+          finalResult = imageCall.result;
+        }
+      }
+    }
+  });
+
+  if (!finalResult) return null;
+
+  return {
+    base64: finalResult,
+    contentType: 'image/png',
+    createdAt: new Date().toISOString()
+  };
+}
+
+async function ensureCoverImage({ item, reader, env, kv, onPartial }) {
   if (!kv || !item?.id || !reader?.contentHtml) return null;
 
   const existing = await getCoverImage(kv, item.id);
@@ -139,16 +232,74 @@ async function ensureCoverImage({ item, reader, env, kv }) {
   if (!snippetInfo) return null;
 
   const title = reader?.title || item?.title || deriveTitleFromUrl(item?.url || '');
-  const cover = await generateCoverImage({
-    title,
-    url: item?.url || '',
-    snippet: snippetInfo.snippet,
-    truncated: snippetInfo.truncated,
-    env
-  });
+  const cover = onPartial
+    ? await generateCoverImageStream({
+      title,
+      url: item?.url || '',
+      snippet: snippetInfo.snippet,
+      truncated: snippetInfo.truncated,
+      env,
+      onPartial
+    })
+    : await generateCoverImage({
+      title,
+      url: item?.url || '',
+      snippet: snippetInfo.snippet,
+      truncated: snippetInfo.truncated,
+      env
+    });
 
   if (!cover?.base64) return null;
   return saveCoverImage(kv, item.id, cover);
+}
+
+async function consumeEventStream(response, onEvent) {
+  if (!response?.body) return;
+
+  const reader = response.body.getReader();
+  const decoder = new TextDecoder();
+  let buffer = '';
+
+  while (true) {
+    const { value, done } = await reader.read();
+    if (done) break;
+    buffer += decoder.decode(value, { stream: true });
+
+    const parts = buffer.split('\n\n');
+    buffer = parts.pop() || '';
+
+    parts.forEach((part) => {
+      const event = parseEvent(part);
+      if (event) {
+        onEvent(event);
+      }
+    });
+  }
+
+  if (buffer.trim()) {
+    const event = parseEvent(buffer);
+    if (event) onEvent(event);
+  }
+}
+
+function parseEvent(chunk) {
+  const lines = chunk.split('\n').filter(Boolean);
+  if (!lines.length) return null;
+
+  let event = 'message';
+  const dataLines = [];
+
+  lines.forEach((line) => {
+    if (line.startsWith('event:')) {
+      event = line.slice(6).trim();
+      return;
+    }
+    if (line.startsWith('data:')) {
+      dataLines.push(line.slice(5).trim());
+    }
+  });
+
+  return { event, data: dataLines.join('\n') };
 }
 
 async function fetchWithTimeout(url, options = {}, timeoutMs = OPENAI_TIMEOUT_MS) {
