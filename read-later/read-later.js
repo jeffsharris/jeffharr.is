@@ -897,6 +897,13 @@
         throw new Error(data.error || 'Save failed');
       }
 
+      if (data.item) {
+        mergeSavedItem(data.item);
+      }
+
+      state.savingItem = null;
+      render();
+
       // Show appropriate toast message
       if (data.duplicate) {
         if (data.unarchived) {
@@ -915,6 +922,16 @@
     }
   }
 
+  function mergeSavedItem(item) {
+    if (!item || !item.id) return;
+    const index = state.items.findIndex(existing => existing.id === item.id);
+    if (index >= 0) {
+      state.items[index] = item;
+      return;
+    }
+    state.items.unshift(item);
+  }
+
   async function saveWithJson(rawUrl, rawTitle) {
     const response = await fetch('/api/read-later', {
       method: 'POST',
@@ -928,7 +945,6 @@
       throw new Error(data.error || 'Save failed');
     }
 
-    state.savingItem = null;
     return data;
   }
 
@@ -988,8 +1004,6 @@
 
         if (event.event === 'done') {
           result = payload;
-          state.savingItem = null;
-          render();
           return;
         }
 
@@ -1029,8 +1043,11 @@
     const hasUrlToSave = params.has('url') || params.has('u');
 
     if (hasUrlToSave) {
+      const loadPromise = loadItems();
+
       // Save first, showing placeholder
       await saveFromUrlParams();
+      await loadPromise;
       // Then load items (will include the new/updated item)
       await loadItems();
     } else {
