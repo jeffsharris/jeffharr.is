@@ -1,6 +1,7 @@
 import { deriveTitleFromUrl, shouldCacheReader } from './reader-utils.js';
 import { buildReaderContent } from './reader.js';
 import { buildEpubAttachment } from './epub.js';
+import { ensureCoverImage } from './covers.js';
 
 const RESEND_ENDPOINT = 'https://api.resend.com/emails';
 const RESEND_TIMEOUT_MS = 10000;
@@ -68,7 +69,7 @@ function buildKindleAttachment(item, reader) {
   };
 }
 
-async function sendToKindle({ item, reader, env }) {
+async function sendToKindle({ item, reader, env, cover }) {
   const apiKey = env?.RESEND_API_KEY;
   const toEmail = env?.KINDLE_TO_EMAIL;
   const fromEmail = env?.KINDLE_FROM_EMAIL;
@@ -77,7 +78,7 @@ async function sendToKindle({ item, reader, env }) {
     throw new Error('Kindle send not configured');
   }
 
-  const attachment = await buildKindleAttachmentWithFallback(item, reader);
+  const attachment = await buildKindleAttachmentWithFallback(item, reader, cover);
   const subject = resolveTitle(item, reader);
 
   const payload = {
@@ -105,9 +106,9 @@ async function sendToKindle({ item, reader, env }) {
   return response.json();
 }
 
-async function buildKindleAttachmentWithFallback(item, reader) {
+async function buildKindleAttachmentWithFallback(item, reader, cover) {
   try {
-    const epubResult = await buildEpubAttachment(item, reader);
+    const epubResult = await buildEpubAttachment(item, reader, { coverImage: cover });
     if (epubResult?.attachment) {
       return epubResult.attachment;
     }
@@ -118,13 +119,15 @@ async function buildKindleAttachmentWithFallback(item, reader) {
   return buildKindleAttachment(item, reader);
 }
 
-async function syncKindleForItem(item, env) {
+async function syncKindleForItem(item, env, options = {}) {
   const attemptedAt = new Date().toISOString();
+  const kv = options.kv;
 
   if (!item?.url) {
     return {
       reader: null,
-      kindle: buildKindleState(KINDLE_STATUS.NEEDS_CONTENT, attemptedAt, 'Missing URL')
+      kindle: buildKindleState(KINDLE_STATUS.NEEDS_CONTENT, attemptedAt, 'Missing URL'),
+      cover: null
     };
   }
 
@@ -134,19 +137,31 @@ async function syncKindleForItem(item, env) {
   } catch (error) {
     return {
       reader: null,
-      kindle: buildKindleState(KINDLE_STATUS.NEEDS_CONTENT, attemptedAt, compactError(error))
+      kindle: buildKindleState(KINDLE_STATUS.NEEDS_CONTENT, attemptedAt, compactError(error)),
+      cover: null
     };
   }
 
   if (!reader || !shouldCacheKindleReader(reader)) {
     return {
       reader,
-      kindle: buildKindleState(KINDLE_STATUS.NEEDS_CONTENT, attemptedAt, 'Reader unavailable')
+      kindle: buildKindleState(KINDLE_STATUS.NEEDS_CONTENT, attemptedAt, 'Reader unavailable'),
+      cover: null
     };
   }
 
+  let cover = null;
+  if (kv) {
+    try {
+      cover = await ensureCoverImage({ item, reader, env, kv });
+    } catch (error) {
+      console.warn('Cover generation failed:', error);
+      cover = null;
+    }
+  }
+
   try {
-    await sendToKindle({ item, reader, env });
+    await sendToKindle({ item, reader, env, cover });
     return {
       reader,
       kindle: {
@@ -154,12 +169,14 @@ async function syncKindleForItem(item, env) {
         lastAttemptAt: attemptedAt,
         lastSyncedAt: attemptedAt,
         lastError: null
-      }
+      },
+      cover
     };
   } catch (error) {
     return {
       reader,
-      kindle: buildKindleState(KINDLE_STATUS.FAILED, attemptedAt, compactError(error))
+      kindle: buildKindleState(KINDLE_STATUS.FAILED, attemptedAt, compactError(error)),
+      cover
     };
   }
 }

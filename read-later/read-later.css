@@ -197,12 +197,12 @@ body {
 
 .item {
   display: block;
-  gap: 16px;
-  padding: 18px 20px;
+  padding: 0;
   border-radius: var(--radius);
   background: var(--bg-card);
   border: 1px solid var(--border);
   box-shadow: var(--shadow-soft);
+  overflow: hidden;
   transition: transform var(--transition), box-shadow var(--transition);
 }
 
@@ -245,8 +245,9 @@ body {
 .item__summary {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: stretch;
   gap: 16px;
+  padding: 18px 20px;
   cursor: pointer;
   touch-action: manipulation;
 }
@@ -259,6 +260,30 @@ body {
 .item__main {
   flex: 1 1 auto;
   min-width: 0;
+  align-self: center;
+}
+
+.item__thumb {
+  width: 118px;
+  margin: -18px 12px -18px -20px;
+  border-radius: calc(var(--radius) - 1px) 0 0 calc(var(--radius) - 1px);
+  background: var(--bg-soft);
+  overflow: hidden;
+  position: relative;
+  flex: 0 0 auto;
+}
+
+.item__thumb.is-empty {
+  background:
+    linear-gradient(160deg, rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0)),
+    var(--bg-soft);
+}
+
+.item__thumb-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 
 .item__title {
@@ -327,6 +352,7 @@ body {
   align-items: center;
   gap: 8px;
   flex: 0 0 auto;
+  align-self: center;
 }
 
 .icon-btn {
@@ -378,7 +404,7 @@ body {
 }
 
 .item__reader {
-  margin-top: 16px;
+  margin: 16px 20px 20px;
   padding: 16px;
   border-radius: 16px;
   background: var(--bg-soft);
@@ -581,7 +607,18 @@ body {
 @media (max-width: 720px) {
   .item__summary {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: stretch;
+  }
+
+  .item__thumb {
+    width: 100%;
+    height: 140px;
+    margin: -18px -20px 10px;
+    border-radius: calc(var(--radius) - 1px) calc(var(--radius) - 1px) 0 0;
+  }
+
+  .item__main {
+    align-self: stretch;
   }
 
   .item__actions {

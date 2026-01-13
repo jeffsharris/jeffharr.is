@@ -88,6 +88,25 @@ test('buildEpubAttachment includes title on cover page', async () => {
   assert.ok(coverText.includes('Cover Title'));
 });
 
+test('buildEpubAttachment prefers generated cover image', async () => {
+  const item = { url: 'https://example.com', title: 'Generated Cover', id: 'test-3b' };
+  const reader = {
+    title: 'Generated Cover',
+    contentHtml: '<p>Hello.</p><img src="https://example.com/cover.jpg" alt="Cover" />'
+  };
+  const coverImage = {
+    base64: 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGNgYAAAAAMAASsJTYQAAAAASUVORK5CYII=',
+    contentType: 'image/png'
+  };
+
+  const result = await buildEpubAttachment(item, reader, { coverImage });
+  const bytes = Buffer.from(result.attachment.content, 'base64');
+  const files = unzipSync(bytes);
+  assert.ok(files['OEBPS/images/cover-generated.png']);
+  const coverPage = new TextDecoder().decode(files['OEBPS/cover.xhtml']);
+  assert.ok(coverPage.includes('cover-generated.png'));
+});
+
 test('buildEpubAttachment escapes ampersands in chapter XHTML', async () => {
   const item = { url: 'https://example.com', title: 'Amp Test', id: 'test-4' };
   const reader = {

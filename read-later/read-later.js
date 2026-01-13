@@ -133,6 +133,8 @@
   function renderSavingItem(item) {
     const node = template.content.cloneNode(true);
     const article = node.querySelector('.item');
+    const thumb = node.querySelector('.item__thumb');
+    const thumbImg = node.querySelector('.item__thumb-img');
     const title = node.querySelector('.item__title');
     const meta = node.querySelector('.item__meta');
     const summary = node.querySelector('.item__summary');
@@ -142,6 +144,7 @@
     article.classList.add('is-saving');
     title.textContent = item.title || item.url;
     title.href = item.url;
+    renderCoverThumb(item, thumb, thumbImg);
 
     // Replace meta content with saving indicator
     meta.innerHTML = `<span class="item__saving-indicator">${ICON_LOADING} Saving...</span>`;
@@ -159,6 +162,8 @@
   function renderItem(item) {
     const node = template.content.cloneNode(true);
     const article = node.querySelector('.item');
+    const thumb = node.querySelector('.item__thumb');
+    const thumbImg = node.querySelector('.item__thumb-img');
     const title = node.querySelector('.item__title');
     const domain = node.querySelector('.item__domain');
     const time = node.querySelector('.item__time');
@@ -179,6 +184,7 @@
 
     title.textContent = item.title || item.url;
     title.href = item.url;
+    renderCoverThumb(item, thumb, thumbImg);
 
     domain.textContent = formatDomain(item.url);
     time.textContent = formatDate(item.savedAt);
@@ -279,6 +285,32 @@
     linkEl.disabled = isSending;
     linkEl.classList.toggle('is-synced', status === 'synced');
     linkEl.classList.toggle('is-failed', status === 'failed');
+  }
+
+  function renderCoverThumb(item, thumbEl, imgEl) {
+    if (!thumbEl || !imgEl) return;
+
+    imgEl.removeAttribute('src');
+    thumbEl.classList.add('is-empty');
+
+    const updatedAt = item?.cover?.updatedAt;
+    if (!updatedAt || !item?.id) {
+      return;
+    }
+
+    const url = new URL('/api/read-later/cover', window.location.origin);
+    url.searchParams.set('id', item.id);
+    url.searchParams.set('v', updatedAt);
+
+    imgEl.onload = () => {
+      thumbEl.classList.remove('is-empty');
+    };
+    imgEl.onerror = () => {
+      thumbEl.classList.add('is-empty');
+      imgEl.removeAttribute('src');
+    };
+
+    imgEl.src = url.toString();
   }
 
   function getKindleStatus(item) {

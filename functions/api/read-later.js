@@ -115,8 +115,11 @@ async function handleSave(request, kv, env) {
 
     // New item - create it
     const item = createItem({ url: normalizedUrl, title, read });
-    const { reader, kindle } = await syncKindleForItem(item, env);
+    const { reader, kindle, cover } = await syncKindleForItem(item, env, { kv });
     item.kindle = kindle;
+    if (cover?.createdAt) {
+      item.cover = { updatedAt: cover.createdAt };
+    }
     await kv.put(`${KV_PREFIX}${item.id}`, JSON.stringify(item));
     if (reader && shouldCacheKindleReader(reader)) {
       await cacheReader(kv, item.id, reader);

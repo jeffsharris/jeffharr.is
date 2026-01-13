@@ -46,8 +46,11 @@ export async function onRequest(context) {
       );
     }
 
-    const { reader, kindle } = await syncKindleForItem(item, env);
+    const { reader, kindle, cover } = await syncKindleForItem(item, env, { kv });
     item.kindle = kindle;
+    if (cover?.createdAt) {
+      item.cover = { updatedAt: cover.createdAt };
+    }
 
     await kv.put(key, JSON.stringify(item));
     if (reader && shouldCacheKindleReader(reader)) {

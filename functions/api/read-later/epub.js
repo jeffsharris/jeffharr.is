@@ -26,6 +26,8 @@ const EXT_TO_MIME = new Map([
   ['avif', 'image/avif']
 ]);
 
+const DEFAULT_COVER_NAME = 'cover-generated';
+
 async function buildEpubAttachment(item, reader, options = {}) {
   if (!reader?.contentHtml) return null;
 
@@ -35,6 +37,7 @@ async function buildEpubAttachment(item, reader, options = {}) {
   const fetchImage = options.fetchImage || fetchImageBytes;
   const imageCache = options.imageCache || new Map();
   const modes = options.modes || ['all', 'cover-only', 'none'];
+  const coverOverride = normalizeCoverImage(options.coverImage);
 
   let lastResult = null;
   for (const embedMode of modes) {
@@ -43,7 +46,8 @@ async function buildEpubAttachment(item, reader, options = {}) {
       reader,
       embedMode,
       fetchImage,
-      imageCache
+      imageCache,
+      coverOverride
     });
 
     if (!lastResult?.attachment) {
@@ -58,7 +62,7 @@ async function buildEpubAttachment(item, reader, options = {}) {
   return null;
 }
 
-async function buildEpubVariant({ item, reader, embedMode, fetchImage, imageCache }) {
+async function buildEpubVariant({ item, reader, embedMode, fetchImage, imageCache, coverOverride }) {
   const contentHtml = reader?.contentHtml || '';
   if (!contentHtml) return null;
 
@@ -75,7 +79,7 @@ async function buildEpubVariant({ item, reader, embedMode, fetchImage, imageCach
     fetchImage,
     imageCache
   });
-  const coverImage = assets.coverSource;
+  const coverImage = coverOverride || assets.coverSource;
 
   const rewritten = rewriteContentHtml(contentHtml, baseUrl, assets, embedSet);
   const epubFiles = buildEpubFiles({
@@ -199,6 +203,33 @@ async function fetchImageAsset(src, fetchImage, filenamePrefix) {
   };
 }
 
+function normalizeCoverImage(coverImage) {
+  if (!coverImage?.base64) return null;
+
+  const contentType = (coverImage.contentType || coverImage.mediaType || 'image/png')
+    .split(';')[0]
+    .trim()
+    .toLowerCase();
+  const { mediaType, ext } = resolveCoverMediaType(contentType);
+  if (!mediaType || !ext) return null;
+
+  return {
+    src: 'generated-cover',
+    href: `images/${DEFAULT_COVER_NAME}.${ext}`,
+    mediaType,
+    bytes: decodeBase64(coverImage.base64)
+  };
+}
+
+function resolveCoverMediaType(contentType) {
+  const normalized = (contentType || '').split(';')[0].trim().toLowerCase();
+  if (normalized && MIME_TO_EXT.has(normalized)) {
+    const ext = MIME_TO_EXT.get(normalized);
+    const mime = normalized === 'image/jpg' ? 'image/jpeg' : normalized;
+    return { mediaType: mime, ext };
+  }
+  return { mediaType: null, ext: null };
+}
 
 function resolveMediaType(src, contentType) {
   const normalized = (contentType || '').split(';')[0].trim().toLowerCase();
@@ -476,6 +507,23 @@ function toBase64(bytes) {
   }
 
   throw new Error('Base64 encoding unavailable');
+}
+
+function decodeBase64(base64) {
+  if (typeof Buffer !== 'undefined') {
+    return new Uint8Array(Buffer.from(base64, 'base64'));
+  }
+
+  if (typeof atob === 'function') {
+    const binary = atob(base64);
+    const bytes = new Uint8Array(binary.length);
+    for (let i = 0; i < binary.length; i += 1) {
+      bytes[i] = binary.charCodeAt(i);
+    }
+    return bytes;
+  }
+
+  throw new Error('Base64 decoding unavailable');
 }
 
 async function fetchImageBytes(url, timeoutMs = FETCH_TIMEOUT_MS) {
