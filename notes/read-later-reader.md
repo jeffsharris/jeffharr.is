@@ -47,6 +47,12 @@
 - Required environment variables (Cloudflare): `RESEND_API_KEY` (secret), `KINDLE_TO_EMAIL`, `KINDLE_FROM_EMAIL`.
 - The `KINDLE_FROM_EMAIL` must be a verified Resend sender and approved in Amazon's "Personal Document Settings".
 
+## Save URLs (current flow)
+- The canonical save entry point is the Read Later list page with query params:
+  - `https://jeffharr.is/read-later/?url=<ENCODED_URL>&title=<ENCODED_TITLE>`
+- Bookmarklet (single-line, JavaScript URL):
+  - `javascript:(()=>{const u=encodeURIComponent(location.href);const t=encodeURIComponent(document.title||'');location.href=\`https://jeffharr.is/read-later/?url=${u}&title=${t}\`;})();`
+
 ## Debug ideas for next session
 - Capture and store a compact debug record per failed extraction:
   - `status`, `readabilityWordCount`, `renderedWordCount`, `renderedHtmlLength`
