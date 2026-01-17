@@ -749,6 +749,11 @@ body {
   .item__title {
     font-size: 14px;
     margin-bottom: 4px;
+    white-space: normal;
+    overflow: visible;
+    text-overflow: unset;
+    overflow-wrap: anywhere;
+    word-break: break-word;
   }
 
   .item__meta {
