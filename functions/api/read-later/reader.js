@@ -10,6 +10,7 @@ import {
   DEFAULT_MIN_WORD_COUNT,
   deriveTitleFromUrl,
   shouldCacheReader,
+  preferReaderTitle,
   absolutizeUrl,
   absolutizeSrcset,
   countWords,
@@ -112,6 +113,14 @@ export async function onRequest(context) {
         { ok: false, reader: null, error: 'Reader unavailable' },
         { status: 200, cache: 'public, max-age=60' }
       );
+    }
+
+    if (forceRefresh) {
+      const resolvedTitle = preferReaderTitle(item.title, reader?.title, item.url);
+      if (resolvedTitle && resolvedTitle !== item.title) {
+        item.title = resolvedTitle;
+        await kv.put(`${KV_PREFIX}${id}`, JSON.stringify(item));
+      }
     }
 
     return jsonResponse(

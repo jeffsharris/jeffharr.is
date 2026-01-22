@@ -195,6 +195,7 @@
     if (item.read) {
       article.classList.add('is-read');
     }
+    article.dataset.itemId = item.id;
 
     title.textContent = item.title || item.url;
     title.href = item.url;
@@ -662,13 +663,16 @@
     readerBody.innerHTML = '';
 
     try {
-      const reader = await fetchReader(item.id);
-      if (!reader) {
+      const payload = await fetchReader(item.id);
+      if (!payload?.reader) {
         throw new Error('Reader unavailable');
       }
 
-      readerCache.set(item.id, reader);
-      renderReaderContent({ item, readerTitle, readerMeta, readerStatus, readerBody }, reader);
+      if (payload.item) {
+        updateItemTitle(item, payload.item);
+      }
+      readerCache.set(item.id, payload.reader);
+      renderReaderContent({ item, readerTitle, readerMeta, readerStatus, readerBody }, payload.reader);
       restoreProgress(item, readerBody);
       attachProgressListener(item, readerBody);
     } catch (error) {
@@ -690,7 +694,7 @@
 
     const request = fetch(url.toString())
       .then(response => response.json())
-      .then(data => (data.ok ? data.reader : null))
+      .then(data => (data.ok ? { reader: data.reader, item: data.item } : null))
       .finally(() => {
         if (!refresh) {
           readerRequests.delete(id);
@@ -701,6 +705,20 @@
       readerRequests.set(id, request);
     }
     return request;
+  }
+
+  function updateItemTitle(item, updatedItem) {
+    if (!item || !updatedItem?.title) return;
+    if (updatedItem.title === item.title) return;
+    item.title = updatedItem.title;
+
+    const article = listEl.querySelector(`.item[data-item-id=\"${item.id}\"]`);
+    if (!article) return;
+    const titleEl = article.querySelector('.item__title');
+    if (titleEl) {
+      titleEl.textContent = item.title || item.url;
+      titleEl.href = item.url;
+    }
   }
 
   function attachRefreshListener(elements) {
@@ -724,12 +742,15 @@
     readerCache.delete(item.id);
 
     try {
-      const reader = await fetchReader(item.id, { refresh: true });
-      if (!reader) {
+      const payload = await fetchReader(item.id, { refresh: true });
+      if (!payload?.reader) {
         throw new Error('Reader unavailable');
       }
-      readerCache.set(item.id, reader);
-      renderReaderContent({ item, readerTitle, readerMeta, readerStatus, readerBody }, reader);
+      if (payload.item) {
+        updateItemTitle(item, payload.item);
+      }
+      readerCache.set(item.id, payload.reader);
+      renderReaderContent({ item, readerTitle, readerMeta, readerStatus, readerBody }, payload.reader);
       restoreProgress(item, readerBody);
       attachProgressListener(item, readerBody);
     } catch (error) {

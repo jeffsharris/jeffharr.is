@@ -3,7 +3,7 @@
  * Supports listing, saving, and updating read status for saved links.
  */
 
-import { deriveTitleFromUrl } from './read-later/reader-utils.js';
+import { deriveTitleFromUrl, preferReaderTitle } from './read-later/reader-utils.js';
 import { cacheReader } from './read-later/reader.js';
 import { syncKindleForItem, shouldCacheKindleReader } from './read-later/kindle.js';
 
@@ -292,39 +292,6 @@ function normalizeTitle(input, fallbackUrl) {
   }
 
   return title;
-}
-
-function preferReaderTitle(currentTitle, readerTitle, url) {
-  const current = normalizeTitleValue(currentTitle);
-  const candidate = normalizeTitleValue(readerTitle);
-
-  if (!candidate) return current;
-  if (!current) return candidate;
-
-  if (current.toLowerCase() === candidate.toLowerCase()) {
-    return current;
-  }
-
-  const fallback = normalizeTitleValue(deriveTitleFromUrl(url || ''));
-  if (fallback && current.toLowerCase() === fallback.toLowerCase()) {
-    return candidate;
-  }
-
-  const currentWords = current.split(' ').filter(Boolean);
-  const candidateWords = candidate.split(' ').filter(Boolean);
-
-  if (currentWords.length === 1 && candidateWords.length > 1) {
-    if (candidate.toLowerCase().startsWith(current.toLowerCase())) {
-      return candidate;
-    }
-  }
-
-  return current;
-}
-
-function normalizeTitleValue(value) {
-  if (typeof value !== 'string') return '';
-  return value.replace(/\s+/g, ' ').trim();
 }
 
 function createItem({
