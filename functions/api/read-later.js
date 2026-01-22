@@ -123,6 +123,10 @@ async function handleSave(request, kv, env) {
     // Now do expensive work (cover generation, kindle sync)
     try {
       const { reader, kindle, cover } = await syncKindleForItem(item, env, { kv });
+      const resolvedTitle = preferReaderTitle(item.title, reader?.title, item.url);
+      if (resolvedTitle && resolvedTitle !== item.title) {
+        item.title = resolvedTitle;
+      }
       item.kindle = kindle;
       if (cover?.createdAt) {
         item.cover = { updatedAt: cover.createdAt };
@@ -290,6 +294,39 @@ function normalizeTitle(input, fallbackUrl) {
   return title;
 }
 
+function preferReaderTitle(currentTitle, readerTitle, url) {
+  const current = normalizeTitleValue(currentTitle);
+  const candidate = normalizeTitleValue(readerTitle);
+
+  if (!candidate) return current;
+  if (!current) return candidate;
+
+  if (current.toLowerCase() === candidate.toLowerCase()) {
+    return current;
+  }
+
+  const fallback = normalizeTitleValue(deriveTitleFromUrl(url || ''));
+  if (fallback && current.toLowerCase() === fallback.toLowerCase()) {
+    return candidate;
+  }
+
+  const currentWords = current.split(' ').filter(Boolean);
+  const candidateWords = candidate.split(' ').filter(Boolean);
+
+  if (currentWords.length === 1 && candidateWords.length > 1) {
+    if (candidate.toLowerCase().startsWith(current.toLowerCase())) {
+      return candidate;
+    }
+  }
+
+  return current;
+}
+
+function normalizeTitleValue(value) {
+  if (typeof value !== 'string') return '';
+  return value.replace(/\s+/g, ' ').trim();
+}
+
 function createItem({
   url,
   title,
@@ -417,6 +454,10 @@ async function handleSaveStream(request, kv, env) {
           }
         });
 
+        const resolvedTitle = preferReaderTitle(item.title, reader?.title, item.url);
+        if (resolvedTitle && resolvedTitle !== item.title) {
+          item.title = resolvedTitle;
+        }
         item.kindle = kindle;
         if (cover?.createdAt) {
           item.cover = { updatedAt: cover.createdAt };
@@ -461,5 +502,6 @@ export {
   createId,
   normalizeTitle,
   normalizeUrl,
-  deriveTitleFromUrl
+  deriveTitleFromUrl,
+  preferReaderTitle
 };
