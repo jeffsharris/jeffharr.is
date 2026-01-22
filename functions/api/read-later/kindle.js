@@ -6,6 +6,9 @@ import { ensureCoverImage } from './covers.js';
 
 const RESEND_ENDPOINT = 'https://api.resend.com/emails';
 const RESEND_TIMEOUT_MS = 10000;
+const KINDLE_DOMAIN_BLOCKLIST = [
+  { domain: 'x.com', reason: 'Links from x.com are not sent to Kindle' }
+];
 const KINDLE_STATUS = {
   SYNCED: 'synced',
   FAILED: 'failed',
@@ -134,6 +137,15 @@ async function syncKindleForItem(item, env, options = {}) {
     };
   }
 
+  const blocklisted = getKindleBlocklistEntry(item.url);
+  if (blocklisted) {
+    return {
+      reader: null,
+      kindle: buildKindleState(KINDLE_STATUS.UNSUPPORTED, attemptedAt, blocklisted.reason),
+      cover: null
+    };
+  }
+
   if (getYouTubeInfo(item.url)) {
     return {
       reader: null,
@@ -194,6 +206,22 @@ async function syncKindleForItem(item, env, options = {}) {
 
 function resolveTitle(item, reader) {
   return reader?.title || item?.title || deriveTitleFromUrl(item?.url || '');
+}
+
+function getKindleBlocklistEntry(url) {
+  if (typeof url !== 'string') return null;
+  let parsed;
+  try {
+    parsed = new URL(url);
+  } catch {
+    return null;
+  }
+
+  const hostname = parsed.hostname.toLowerCase().replace(/^www\./, '');
+  return (
+    KINDLE_DOMAIN_BLOCKLIST.find(({ domain }) => hostname === domain || hostname.endsWith(`.${domain}`)) ||
+    null
+  );
 }
 
 function formatFilename(title) {
