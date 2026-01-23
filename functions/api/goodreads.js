@@ -3,7 +3,11 @@
  * Fetches currently reading (3 books) and recently read (10 books)
  */
 
+import { createLogger, formatError } from './lib/logger.js';
+
 export async function onRequest(context) {
+  const logger = createLogger({ request: context.request, source: 'goodreads' });
+  const log = logger.log;
   const userId = '2632308';
   const FETCH_TIMEOUT_MS = 8000;
 
@@ -14,7 +18,15 @@ export async function onRequest(context) {
         headers: { 'User-Agent': 'jeffharr.is' }
       }, FETCH_TIMEOUT_MS);
 
-      if (!response.ok) return [];
+      if (!response.ok) {
+        log('error', 'goodreads_shelf_failed', {
+          stage: 'shelf_fetch',
+          shelf: shelfName,
+          url: feedUrl,
+          status: response.status
+        });
+        return [];
+      }
 
       const xml = await response.text();
       const books = [];
@@ -42,7 +54,11 @@ export async function onRequest(context) {
 
       return books;
     } catch (error) {
-      console.error(`Error fetching ${shelfName} shelf:`, error);
+      log('error', 'goodreads_shelf_error', {
+        stage: 'shelf_fetch',
+        shelf: shelfName,
+        ...formatError(error)
+      });
       return [];
     }
   };

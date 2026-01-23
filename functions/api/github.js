@@ -3,7 +3,11 @@
  * Fetches recent commits across all public repositories
  */
 
+import { createLogger, formatError } from './lib/logger.js';
+
 export async function onRequest(context) {
+  const logger = createLogger({ request: context.request, source: 'github' });
+  const log = logger.log;
   const username = 'jeffsharris';
   const headers = {
     'Accept': 'application/vnd.github.v3+json',
@@ -20,6 +24,11 @@ export async function onRequest(context) {
     );
 
     if (!reposResponse.ok) {
+      log('error', 'github_repos_failed', {
+        stage: 'repos_fetch',
+        username,
+        status: reposResponse.status
+      });
       throw new Error('GitHub API error fetching repos');
     }
 
@@ -34,7 +43,15 @@ export async function onRequest(context) {
           FETCH_TIMEOUT_MS
         );
 
-        if (!commitsResponse.ok) return [];
+        if (!commitsResponse.ok) {
+          log('warn', 'github_commits_failed', {
+            stage: 'commits_fetch',
+            username,
+            repo: repo.name,
+            status: commitsResponse.status
+          });
+          return [];
+        }
 
         const commits = await commitsResponse.json();
         return commits.map(c => ({
@@ -44,7 +61,13 @@ export async function onRequest(context) {
           date: c.commit?.author?.date,
           url: c.html_url
         }));
-      } catch {
+      } catch (error) {
+        log('error', 'github_commits_error', {
+          stage: 'commits_fetch',
+          username,
+          repo: repo.name,
+          ...formatError(error)
+        });
         return [];
       }
     });
@@ -67,7 +90,11 @@ export async function onRequest(context) {
     });
 
   } catch (error) {
-    console.error('GitHub API error:', error);
+    log('error', 'github_request_failed', {
+      stage: 'request',
+      username,
+      ...formatError(error)
+    });
 
     return new Response(JSON.stringify({
       commits: [],

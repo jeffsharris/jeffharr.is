@@ -3,7 +3,11 @@
  * Fetches latest posts from Waking Patiently RSS feed
  */
 
+import { createLogger, formatError } from './lib/logger.js';
+
 export async function onRequest(context) {
+  const logger = createLogger({ request: context.request, source: 'substack' });
+  const log = logger.log;
   const feedUrl = 'https://wakingpatiently.substack.com/feed';
   const FETCH_TIMEOUT_MS = 8000;
 
@@ -15,6 +19,11 @@ export async function onRequest(context) {
     }, FETCH_TIMEOUT_MS);
 
     if (!response.ok) {
+      log('error', 'substack_feed_failed', {
+        stage: 'feed_fetch',
+        url: feedUrl,
+        status: response.status
+      });
       throw new Error('Failed to fetch Substack feed');
     }
 
@@ -77,7 +86,11 @@ export async function onRequest(context) {
     });
 
   } catch (error) {
-    console.error('Substack feed error:', error);
+    log('error', 'substack_request_failed', {
+      stage: 'request',
+      url: feedUrl,
+      ...formatError(error)
+    });
 
     return new Response(JSON.stringify({
       posts: [],

@@ -1,6 +1,7 @@
 import { parseHTML } from 'linkedom';
 import { zipSync, strToU8 } from 'fflate';
 import { deriveTitleFromUrl, absolutizeUrl } from './reader-utils.js';
+import { formatError } from '../lib/logger.js';
 
 const MAX_EMAIL_BYTES = 50 * 1024 * 1024;
 const FETCH_TIMEOUT_MS = 8000;
@@ -38,17 +39,32 @@ async function buildEpubAttachment(item, reader, options = {}) {
   const imageCache = options.imageCache || new Map();
   const modes = options.modes || ['all', 'cover-only', 'none'];
   const coverOverride = normalizeCoverImage(options.coverImage);
+  const log = options.log;
 
   let lastResult = null;
   for (const embedMode of modes) {
-    lastResult = await buildEpubVariant({
-      item,
-      reader,
-      embedMode,
-      fetchImage,
-      imageCache,
-      coverOverride
-    });
+    try {
+      lastResult = await buildEpubVariant({
+        item,
+        reader,
+        embedMode,
+        fetchImage,
+        imageCache,
+        coverOverride
+      });
+    } catch (error) {
+      if (log) {
+        log('warn', 'epub_variant_failed', {
+          stage: 'epub_build',
+          itemId: item?.id || null,
+          url: item?.url || null,
+          title: item?.title || null,
+          embedMode,
+          ...formatError(error)
+        });
+      }
+      continue;
+    }
 
     if (!lastResult?.attachment) {
       continue;

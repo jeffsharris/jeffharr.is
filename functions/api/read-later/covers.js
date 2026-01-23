@@ -1,5 +1,6 @@
 import { parseHTML } from 'linkedom';
 import { deriveTitleFromUrl } from './reader-utils.js';
+import { formatError, truncateString } from '../lib/logger.js';
 
 const COVER_PREFIX = 'cover:';
 const MAX_SNIPPET_WORDS = 1000;
@@ -74,9 +75,19 @@ function buildCoverPrompt({ title, url, snippet, truncated }) {
   ].filter(Boolean).join('\n\n');
 }
 
-async function generateCoverImage({ title, url, snippet, truncated, env }) {
+async function generateCoverImage({ title, url, snippet, truncated, env, log, itemId }) {
   const apiKey = env?.OPENAI_API_KEY;
-  if (!apiKey) return null;
+  if (!apiKey) {
+    if (log) {
+      log('warn', 'cover_api_key_missing', {
+        stage: 'cover_generation',
+        itemId: itemId || null,
+        url: url || null,
+        title: title || null
+      });
+    }
+    return null;
+  }
 
   const prompt = buildCoverPrompt({ title, url, snippet, truncated });
   const payload = {
@@ -112,6 +123,16 @@ async function generateCoverImage({ title, url, snippet, truncated, env }) {
 
   if (!response.ok) {
     const details = await readResponseBody(response);
+    if (log) {
+      log('error', 'cover_response_failed', {
+        stage: 'cover_generation',
+        itemId: itemId || null,
+        url: url || null,
+        title: title || null,
+        status: response.status,
+        response: truncateString(details, 1200)
+      });
+    }
     throw new Error(`OpenAI cover request failed with ${response.status}${details}`);
   }
 
@@ -120,7 +141,17 @@ async function generateCoverImage({ title, url, snippet, truncated, env }) {
     ? data.output.find((item) => item.type === 'image_generation_call' && item.result)
     : null;
 
-  if (!imageCall?.result) return null;
+  if (!imageCall?.result) {
+    if (log) {
+      log('warn', 'cover_result_missing', {
+        stage: 'cover_generation',
+        itemId: itemId || null,
+        url: url || null,
+        title: title || null
+      });
+    }
+    return null;
+  }
 
   return {
     base64: imageCall.result,
@@ -129,9 +160,28 @@ async function generateCoverImage({ title, url, snippet, truncated, env }) {
   };
 }
 
-async function generateCoverImageStream({ title, url, snippet, truncated, env, onPartial }) {
+async function generateCoverImageStream({
+  title,
+  url,
+  snippet,
+  truncated,
+  env,
+  onPartial,
+  log,
+  itemId
+}) {
   const apiKey = env?.OPENAI_API_KEY;
-  if (!apiKey) return null;
+  if (!apiKey) {
+    if (log) {
+      log('warn', 'cover_api_key_missing', {
+        stage: 'cover_generation',
+        itemId: itemId || null,
+        url: url || null,
+        title: title || null
+      });
+    }
+    return null;
+  }
 
   const prompt = buildCoverPrompt({ title, url, snippet, truncated });
   const payload = {
@@ -169,6 +219,16 @@ async function generateCoverImageStream({ title, url, snippet, truncated, env, o
 
   if (!response.ok) {
     const details = await readResponseBody(response);
+    if (log) {
+      log('error', 'cover_response_failed', {
+        stage: 'cover_generation',
+        itemId: itemId || null,
+        url: url || null,
+        title: title || null,
+        status: response.status,
+        response: truncateString(details, 1200)
+      });
+    }
     throw new Error(`OpenAI cover request failed with ${response.status}${details}`);
   }
 
@@ -213,7 +273,17 @@ async function generateCoverImageStream({ title, url, snippet, truncated, env, o
     }
   });
 
-  if (!finalResult) return null;
+  if (!finalResult) {
+    if (log) {
+      log('warn', 'cover_stream_missing', {
+        stage: 'cover_generation',
+        itemId: itemId || null,
+        url: url || null,
+        title: title || null
+      });
+    }
+    return null;
+  }
 
   return {
     base64: finalResult,
@@ -222,14 +292,24 @@ async function generateCoverImageStream({ title, url, snippet, truncated, env, o
   };
 }
 
-async function ensureCoverImage({ item, reader, env, kv, onPartial }) {
+async function ensureCoverImage({ item, reader, env, kv, onPartial, log }) {
   if (!kv || !item?.id || !reader?.contentHtml) return null;
 
   const existing = await getCoverImage(kv, item.id);
   if (existing) return existing;
 
   const snippetInfo = extractSnippetFromHtml(reader.contentHtml);
-  if (!snippetInfo) return null;
+  if (!snippetInfo) {
+    if (log) {
+      log('warn', 'cover_snippet_missing', {
+        stage: 'cover_generation',
+        itemId: item?.id || null,
+        url: item?.url || null,
+        title: item?.title || null
+      });
+    }
+    return null;
+  }
 
   const title = reader?.title || item?.title || deriveTitleFromUrl(item?.url || '');
   const cover = onPartial
@@ -239,18 +319,46 @@ async function ensureCoverImage({ item, reader, env, kv, onPartial }) {
       snippet: snippetInfo.snippet,
       truncated: snippetInfo.truncated,
       env,
-      onPartial
+      onPartial,
+      log,
+      itemId: item?.id || null
     })
     : await generateCoverImage({
       title,
       url: item?.url || '',
       snippet: snippetInfo.snippet,
       truncated: snippetInfo.truncated,
-      env
+      env,
+      log,
+      itemId: item?.id || null
     });
 
-  if (!cover?.base64) return null;
-  return saveCoverImage(kv, item.id, cover);
+  if (!cover?.base64) {
+    if (log) {
+      log('warn', 'cover_missing_result', {
+        stage: 'cover_generation',
+        itemId: item?.id || null,
+        url: item?.url || null,
+        title: item?.title || null
+      });
+    }
+    return null;
+  }
+
+  try {
+    return saveCoverImage(kv, item.id, cover);
+  } catch (error) {
+    if (log) {
+      log('error', 'cover_save_failed', {
+        stage: 'cover_generation',
+        itemId: item?.id || null,
+        url: item?.url || null,
+        title: item?.title || null,
+        ...formatError(error)
+      });
+    }
+    throw error;
+  }
 }
 
 async function consumeEventStream(response, onEvent) {

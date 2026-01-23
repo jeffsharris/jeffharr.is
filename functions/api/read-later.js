@@ -6,6 +6,7 @@
 import { deriveTitleFromUrl, preferReaderTitle } from './read-later/reader-utils.js';
 import { cacheReader } from './read-later/reader.js';
 import { syncKindleForItem, shouldCacheKindleReader } from './read-later/kindle.js';
+import { createLogger, formatError } from './lib/logger.js';
 
 const KV_PREFIX = 'item:';
 const MAX_TITLE_LENGTH = 220;
@@ -14,8 +15,11 @@ const MAX_URL_LENGTH = 2048;
 export async function onRequest(context) {
   const { request, env } = context;
   const kv = env.READ_LATER;
+  const logger = createLogger({ request, source: 'read-later' });
+  const log = logger.log;
 
   if (!kv) {
+    log('error', 'storage_unavailable', { stage: 'init' });
     return jsonResponse(
       { ok: false, error: 'Storage unavailable' },
       { status: 500, cache: 'no-store' }
@@ -24,29 +28,32 @@ export async function onRequest(context) {
 
   try {
     if (request.method === 'GET') {
-      return handleList(kv);
+      return handleList(kv, log);
     }
 
     if (request.method === 'POST') {
       if (shouldStreamResponse(request)) {
-        return handleSaveStream(request, kv, env);
+        return handleSaveStream(request, kv, env, log);
       }
-      return handleSave(request, kv, env);
+      return handleSave(request, kv, env, log);
     }
 
     if (request.method === 'PATCH') {
-      return handleUpdate(request, kv);
+      return handleUpdate(request, kv, log);
     }
 
     if (request.method === 'DELETE') {
-      return handleDelete(request, kv);
+      return handleDelete(request, kv, log);
     }
 
     if (request.method === 'OPTIONS') {
       return new Response(null, { status: 204 });
     }
   } catch (error) {
-    console.error('Read later API error:', error);
+    log('error', 'request_failed', {
+      stage: 'request',
+      ...formatError(error)
+    });
   }
 
   return jsonResponse(
@@ -55,7 +62,7 @@ export async function onRequest(context) {
   );
 }
 
-async function handleList(kv) {
+async function handleList(kv, log) {
   try {
     const items = await listAllItems(kv);
     items.sort((a, b) => new Date(b.savedAt || 0) - new Date(a.savedAt || 0));
@@ -65,7 +72,10 @@ async function handleList(kv) {
       { status: 200, cache: 'no-store' }
     );
   } catch (error) {
-    console.error('Read later list error:', error);
+    log('error', 'list_failed', {
+      stage: 'list',
+      ...formatError(error)
+    });
     return jsonResponse(
       { items: [], count: 0 },
       { status: 200, cache: 'no-store' }
@@ -73,12 +83,17 @@ async function handleList(kv) {
   }
 }
 
-async function handleSave(request, kv, env) {
+async function handleSave(request, kv, env, log) {
   const payload = await parseJson(request);
   const normalizedUrl = normalizeUrl(payload?.url);
   const incomingRead = payload?.read;
 
   if (!normalizedUrl) {
+    log('warn', 'save_invalid_url', {
+      stage: 'save',
+      url: payload?.url || null,
+      title: payload?.title || null
+    });
     return jsonResponse(
       { ok: false, error: 'Invalid URL' },
       { status: 400, cache: 'no-store' }
@@ -104,6 +119,13 @@ async function handleSave(request, kv, env) {
       }
 
       await kv.put(`${KV_PREFIX}${existingItem.id}`, JSON.stringify(existingItem));
+      log('info', 'save_duplicate', {
+        stage: 'save',
+        itemId: existingItem.id,
+        url: normalizedUrl,
+        title: existingItem.title,
+        unarchived: wasRead
+      });
 
       return jsonResponse(
         {
@@ -119,10 +141,19 @@ async function handleSave(request, kv, env) {
     // New item - save basic item FIRST before expensive operations
     const item = createItem({ url: normalizedUrl, title, read });
     await kv.put(`${KV_PREFIX}${item.id}`, JSON.stringify(item));
+    log('info', 'save_persisted', {
+      stage: 'save',
+      itemId: item.id,
+      url: item.url,
+      title: item.title
+    });
 
     // Now do expensive work (cover generation, kindle sync)
     try {
-      const { reader, kindle, cover } = await syncKindleForItem(item, env, { kv });
+      const { reader, kindle, cover } = await syncKindleForItem(item, env, {
+        kv,
+        log
+      });
       const resolvedTitle = preferReaderTitle(item.title, reader?.title, item.url);
       if (resolvedTitle && resolvedTitle !== item.title) {
         item.title = resolvedTitle;
@@ -136,9 +167,23 @@ async function handleSave(request, kv, env) {
       if (reader && shouldCacheKindleReader(reader)) {
         await cacheReader(kv, item.id, reader);
       }
+      log('info', 'save_sync_complete', {
+        stage: 'sync',
+        itemId: item.id,
+        url: item.url,
+        title: item.title,
+        kindleStatus: kindle?.status || null,
+        coverCreatedAt: cover?.createdAt || null
+      });
     } catch (syncError) {
       // Log but don't fail - basic item is already saved
-      console.warn('Kindle sync failed, item saved without sync:', syncError);
+      log('error', 'save_sync_failed', {
+        stage: 'sync',
+        itemId: item.id,
+        url: item.url,
+        title: item.title,
+        ...formatError(syncError)
+      });
     }
 
     return jsonResponse(
@@ -146,7 +191,12 @@ async function handleSave(request, kv, env) {
       { status: 201, cache: 'no-store' }
     );
   } catch (error) {
-    console.error('Read later save error:', error);
+    log('error', 'save_failed', {
+      stage: 'save',
+      url: normalizedUrl,
+      title,
+      ...formatError(error)
+    });
     return jsonResponse(
       { ok: false, error: 'Failed to save item' },
       { status: 500, cache: 'no-store' }
@@ -154,12 +204,16 @@ async function handleSave(request, kv, env) {
   }
 }
 
-async function handleUpdate(request, kv) {
+async function handleUpdate(request, kv, log) {
   const payload = await parseJson(request);
   const id = typeof payload?.id === 'string' ? payload.id.trim() : '';
   const read = payload?.read;
 
   if (!id || typeof read !== 'boolean') {
+    log('warn', 'update_invalid_payload', {
+      stage: 'update',
+      itemId: id || null
+    });
     return jsonResponse(
       { ok: false, error: 'Invalid payload' },
       { status: 400, cache: 'no-store' }
@@ -171,6 +225,10 @@ async function handleUpdate(request, kv) {
     const item = await kv.get(key, { type: 'json' });
 
     if (!item) {
+      log('warn', 'update_item_missing', {
+        stage: 'update',
+        itemId: id
+      });
       return jsonResponse(
         { ok: false, error: 'Item not found' },
         { status: 404, cache: 'no-store' }
@@ -186,7 +244,11 @@ async function handleUpdate(request, kv) {
       { status: 200, cache: 'no-store' }
     );
   } catch (error) {
-    console.error('Read later update error:', error);
+    log('error', 'update_failed', {
+      stage: 'update',
+      itemId: id,
+      ...formatError(error)
+    });
     return jsonResponse(
       { ok: false, error: 'Failed to update item' },
       { status: 500, cache: 'no-store' }
@@ -194,12 +256,15 @@ async function handleUpdate(request, kv) {
   }
 }
 
-async function handleDelete(request, kv) {
+async function handleDelete(request, kv, log) {
   const payload = await parseJson(request);
   const idFromQuery = new URL(request.url).searchParams.get('id');
   const id = typeof payload?.id === 'string' ? payload.id.trim() : (idFromQuery || '').trim();
 
   if (!id) {
+    log('warn', 'delete_invalid_payload', {
+      stage: 'delete'
+    });
     return jsonResponse(
       { ok: false, error: 'Invalid payload' },
       { status: 400, cache: 'no-store' }
@@ -211,6 +276,10 @@ async function handleDelete(request, kv) {
     const item = await kv.get(key, { type: 'json' });
 
     if (!item) {
+      log('warn', 'delete_item_missing', {
+        stage: 'delete',
+        itemId: id
+      });
       return jsonResponse(
         { ok: false, error: 'Item not found' },
         { status: 404, cache: 'no-store' }
@@ -223,7 +292,11 @@ async function handleDelete(request, kv) {
       { status: 200, cache: 'no-store' }
     );
   } catch (error) {
-    console.error('Read later delete error:', error);
+    log('error', 'delete_failed', {
+      stage: 'delete',
+      itemId: id,
+      ...formatError(error)
+    });
     return jsonResponse(
       { ok: false, error: 'Failed to delete item' },
       { status: 500, cache: 'no-store' }
@@ -339,14 +412,25 @@ function shouldStreamResponse(request) {
   return accept.includes('text/event-stream');
 }
 
-function createEventStream() {
+function createEventStream(log) {
   const { readable, writable } = new TransformStream();
   const writer = writable.getWriter();
   const encoder = new TextEncoder();
 
   const send = async (event, data) => {
     const payload = `event: ${event}\ndata: ${JSON.stringify(data)}\n\n`;
-    await writer.write(encoder.encode(payload));
+    try {
+      await writer.write(encoder.encode(payload));
+    } catch (error) {
+      if (log) {
+        log('error', 'stream_write_failed', {
+          stage: 'stream',
+          event,
+          ...formatError(error)
+        });
+      }
+      throw error;
+    }
   };
 
   const close = async () => {
@@ -360,8 +444,8 @@ function createEventStream() {
   return { readable, send, close };
 }
 
-async function handleSaveStream(request, kv, env) {
-  const stream = createEventStream();
+async function handleSaveStream(request, kv, env, log) {
+  const stream = createEventStream(log);
 
   (async () => {
     let savedItem = null;
@@ -372,6 +456,11 @@ async function handleSaveStream(request, kv, env) {
       const incomingRead = payload?.read;
 
       if (!normalizedUrl) {
+        log('warn', 'save_stream_invalid_url', {
+          stage: 'save',
+          url: payload?.url || null,
+          title: payload?.title || null
+        });
         await stream.send('error', { ok: false, error: 'Invalid URL' });
         return;
       }
@@ -390,6 +479,13 @@ async function handleSaveStream(request, kv, env) {
         }
 
         await kv.put(`${KV_PREFIX}${existingItem.id}`, JSON.stringify(existingItem));
+        log('info', 'save_stream_duplicate', {
+          stage: 'save',
+          itemId: existingItem.id,
+          url: normalizedUrl,
+          title: existingItem.title,
+          unarchived: wasRead
+        });
         await stream.send('done', {
           ok: true,
           item: existingItem,
@@ -403,6 +499,12 @@ async function handleSaveStream(request, kv, env) {
       const item = createItem({ url: normalizedUrl, title, read });
       await kv.put(`${KV_PREFIX}${item.id}`, JSON.stringify(item));
       savedItem = item;
+      log('info', 'save_stream_persisted', {
+        stage: 'save',
+        itemId: item.id,
+        url: item.url,
+        title: item.title
+      });
 
       // Notify client that item is safely saved
       await stream.send('saved', { ok: true, item: { ...item } });
@@ -413,6 +515,7 @@ async function handleSaveStream(request, kv, env) {
       try {
         const { reader, kindle, cover } = await syncKindleForItem(item, env, {
           kv,
+          log,
           onCoverPartial: async (partial) => {
             await stream.send('partial_image', {
               index: partial.index,
@@ -435,14 +538,34 @@ async function handleSaveStream(request, kv, env) {
         if (reader && shouldCacheKindleReader(reader)) {
           await cacheReader(kv, item.id, reader);
         }
+        log('info', 'save_stream_sync_complete', {
+          stage: 'sync',
+          itemId: item.id,
+          url: item.url,
+          title: item.title,
+          kindleStatus: kindle?.status || null,
+          coverCreatedAt: cover?.createdAt || null
+        });
       } catch (syncError) {
         // Log but don't fail - basic item is already saved
-        console.warn('Kindle sync failed, item saved without sync:', syncError);
+        log('error', 'save_stream_sync_failed', {
+          stage: 'sync',
+          itemId: item.id,
+          url: item.url,
+          title: item.title,
+          ...formatError(syncError)
+        });
       }
 
       await stream.send('done', { ok: true, item });
     } catch (error) {
-      console.error('Read later save error:', error);
+      log('error', 'save_stream_failed', {
+        stage: 'save',
+        itemId: savedItem?.id || null,
+        url: savedItem?.url || null,
+        title: savedItem?.title || null,
+        ...formatError(error)
+      });
       // If we already saved the item, send it even though there was an error
       if (savedItem) {
         await stream.send('done', { ok: true, item: savedItem, syncFailed: true });

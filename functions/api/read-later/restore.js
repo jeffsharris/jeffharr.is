@@ -4,6 +4,7 @@
  */
 
 import { createItem, normalizeTitle, normalizeUrl } from '../read-later.js';
+import { createLogger, formatError } from '../lib/logger.js';
 
 const KV_PREFIX = 'item:';
 const MIN_VIDEO_SECONDS = 300;
@@ -11,8 +12,11 @@ const MIN_VIDEO_SECONDS = 300;
 export async function onRequest(context) {
   const { request, env } = context;
   const kv = env.READ_LATER;
+  const logger = createLogger({ request, source: 'read-later-restore' });
+  const log = logger.log;
 
   if (!kv) {
+    log('error', 'storage_unavailable', { stage: 'init' });
     return jsonResponse(
       { ok: false, error: 'Storage unavailable' },
       { status: 500, cache: 'no-store' }
@@ -20,6 +24,7 @@ export async function onRequest(context) {
   }
 
   if (request.method !== 'POST') {
+    log('warn', 'method_not_allowed', { stage: 'request' });
     return jsonResponse(
       { ok: false, error: 'Method not allowed' },
       { status: 405, cache: 'no-store' }
@@ -32,6 +37,12 @@ export async function onRequest(context) {
     const normalizedUrl = normalizeUrl(payload?.url);
 
     if (!id || !normalizedUrl) {
+      log('warn', 'invalid_payload', {
+        stage: 'request',
+        itemId: id || null,
+        url: payload?.url || null,
+        title: payload?.title || null
+      });
       return jsonResponse(
         { ok: false, error: 'Invalid payload' },
         { status: 400, cache: 'no-store' }
@@ -56,12 +67,22 @@ export async function onRequest(context) {
 
     await kv.put(`${KV_PREFIX}${id}`, JSON.stringify(item));
 
+    log('info', 'restore_succeeded', {
+      stage: 'save',
+      itemId: id,
+      url: item.url,
+      title: item.title
+    });
+
     return jsonResponse(
       { ok: true, item },
       { status: 200, cache: 'no-store' }
     );
   } catch (error) {
-    console.error('Read later restore error:', error);
+    log('error', 'restore_failed', {
+      stage: 'save',
+      ...formatError(error)
+    });
     return jsonResponse(
       { ok: false, error: 'Failed to restore item' },
       { status: 500, cache: 'no-store' }

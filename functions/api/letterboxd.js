@@ -3,11 +3,15 @@
  * Parses public HTML pages to surface recently watched and watchlist films.
  */
 
+import { createLogger, formatError } from './lib/logger.js';
+
 const USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36';
 const MAX_ITEMS = 5;
 const FETCH_TIMEOUT_MS = 8000;
 
 export async function onRequest(context) {
+  const logger = createLogger({ request: context.request, source: 'letterboxd' });
+  const log = logger.log;
   const rawUsername = (context.env?.LETTERBOXD_USERNAME || 'jeffharris').trim();
   const sanitizedUsername = rawUsername.replace(/[^\w-]/g, '') || 'jeffharris';
 
@@ -19,8 +23,8 @@ export async function onRequest(context) {
 
   try {
     const [recentlyWatched, watchlist] = await Promise.all([
-      fetchRecentlyWatched(recentFilmsUrl, headers),
-      fetchWatchlist(watchlistPageUrl, headers)
+      fetchRecentlyWatched(recentFilmsUrl, headers, log),
+      fetchWatchlist(watchlistPageUrl, headers, log)
     ]);
 
     const payload = {
@@ -37,7 +41,11 @@ export async function onRequest(context) {
       }
     });
   } catch (error) {
-    console.error('Letterboxd error:', error);
+    log('error', 'letterboxd_request_failed', {
+      stage: 'request',
+      profileUrl,
+      ...formatError(error)
+    });
     return new Response(JSON.stringify({
       entries: [],
       watchlist: [],
@@ -53,26 +61,60 @@ export async function onRequest(context) {
   }
 }
 
-async function fetchRecentlyWatched(url, headers) {
+async function fetchRecentlyWatched(url, headers, log) {
   try {
     const response = await fetchWithTimeout(url, { headers }, FETCH_TIMEOUT_MS);
-    if (!response.ok) throw new Error('Films page unavailable');
+    if (!response.ok) {
+      if (log) {
+        log('error', 'letterboxd_recent_failed', {
+          stage: 'recent_fetch',
+          url,
+          status: response.status
+        });
+      }
+      throw new Error('Films page unavailable');
+    }
     const html = await response.text();
     return parseFilmsHtml(html, { includeRating: true });
   } catch (error) {
-    console.error('Recently watched fetch failed:', error);
+    if (log) {
+      log('error', 'letterboxd_recent_error', {
+        stage: 'recent_fetch',
+        url,
+        ...formatError(error)
+      });
+    } else {
+      console.error('Recently watched fetch failed:', error);
+    }
     return [];
   }
 }
 
-async function fetchWatchlist(url, headers) {
+async function fetchWatchlist(url, headers, log) {
   try {
     const response = await fetchWithTimeout(url, { headers }, FETCH_TIMEOUT_MS);
-    if (!response.ok) throw new Error('Watchlist page unavailable');
+    if (!response.ok) {
+      if (log) {
+        log('error', 'letterboxd_watchlist_failed', {
+          stage: 'watchlist_fetch',
+          url,
+          status: response.status
+        });
+      }
+      throw new Error('Watchlist page unavailable');
+    }
     const html = await response.text();
     return parseFilmsHtml(html, { includeRating: false });
   } catch (error) {
-    console.error('Watchlist fetch failed:', error);
+    if (log) {
+      log('error', 'letterboxd_watchlist_error', {
+        stage: 'watchlist_fetch',
+        url,
+        ...formatError(error)
+      });
+    } else {
+      console.error('Watchlist fetch failed:', error);
+    }
     return [];
   }
 }

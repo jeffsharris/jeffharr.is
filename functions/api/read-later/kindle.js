@@ -3,6 +3,7 @@ import { getYouTubeInfo } from './media-utils.js';
 import { buildReaderContent } from './reader.js';
 import { buildEpubAttachment } from './epub.js';
 import { ensureCoverImage } from './covers.js';
+import { formatError, truncateString } from '../lib/logger.js';
 
 const RESEND_ENDPOINT = 'https://api.resend.com/emails';
 const RESEND_TIMEOUT_MS = 10000;
@@ -74,16 +75,27 @@ function buildKindleAttachment(item, reader) {
   };
 }
 
-async function sendToKindle({ item, reader, env, cover }) {
+async function sendToKindle({ item, reader, env, cover, log }) {
   const apiKey = env?.RESEND_API_KEY;
   const toEmail = env?.KINDLE_TO_EMAIL;
   const fromEmail = env?.KINDLE_FROM_EMAIL;
 
   if (!apiKey || !toEmail || !fromEmail) {
+    if (log) {
+      log('error', 'kindle_send_config_missing', {
+        stage: 'kindle_send',
+        itemId: item?.id || null,
+        url: item?.url || null,
+        title: item?.title || null,
+        missingApiKey: !apiKey,
+        missingToEmail: !toEmail,
+        missingFromEmail: !fromEmail
+      });
+    }
     throw new Error('Kindle send not configured');
   }
 
-  const attachment = await buildKindleAttachmentWithFallback(item, reader, cover);
+  const attachment = await buildKindleAttachmentWithFallback(item, reader, cover, log);
   const subject = resolveTitle(item, reader);
 
   const payload = {
@@ -105,20 +117,40 @@ async function sendToKindle({ item, reader, env, cover }) {
 
   if (!response.ok) {
     const details = await readResponseBody(response);
+    if (log) {
+      log('error', 'kindle_send_response_failed', {
+        stage: 'kindle_send',
+        itemId: item?.id || null,
+        url: item?.url || null,
+        title: item?.title || null,
+        status: response.status,
+        response: truncateString(details, 1200)
+      });
+    }
     throw new Error(`Resend failed with ${response.status} ${details}`);
   }
 
   return response.json();
 }
 
-async function buildKindleAttachmentWithFallback(item, reader, cover) {
+async function buildKindleAttachmentWithFallback(item, reader, cover, log) {
   try {
-    const epubResult = await buildEpubAttachment(item, reader, { coverImage: cover });
+    const epubResult = await buildEpubAttachment(item, reader, { coverImage: cover, log });
     if (epubResult?.attachment) {
       return epubResult.attachment;
     }
   } catch (error) {
-    console.warn('EPUB build failed, falling back to HTML:', error);
+    if (log) {
+      log('warn', 'epub_build_failed', {
+        stage: 'epub_build',
+        itemId: item?.id || null,
+        url: item?.url || null,
+        title: item?.title || null,
+        ...formatError(error)
+      });
+    } else {
+      console.warn('EPUB build failed, falling back to HTML:', error);
+    }
   }
 
   return buildKindleAttachment(item, reader);
@@ -128,8 +160,20 @@ async function syncKindleForItem(item, env, options = {}) {
   const attemptedAt = new Date().toISOString();
   const kv = options.kv;
   const onCoverPartial = options.onCoverPartial;
+  const log = options.log;
+  const logContext = {
+    itemId: item?.id || null,
+    url: item?.url || null,
+    title: item?.title || null
+  };
 
   if (!item?.url) {
+    if (log) {
+      log('warn', 'kindle_missing_url', {
+        stage: 'kindle_sync',
+        ...logContext
+      });
+    }
     return {
       reader: null,
       kindle: buildKindleState(KINDLE_STATUS.NEEDS_CONTENT, attemptedAt, 'Missing URL'),
@@ -147,6 +191,12 @@ async function syncKindleForItem(item, env, options = {}) {
   }
 
   if (getYouTubeInfo(item.url)) {
+    if (log) {
+      log('info', 'kindle_unsupported_youtube', {
+        stage: 'kindle_sync',
+        ...logContext
+      });
+    }
     return {
       reader: null,
       kindle: buildKindleState(KINDLE_STATUS.UNSUPPORTED, attemptedAt, 'YouTube videos are not sent to Kindle'),
@@ -156,8 +206,15 @@ async function syncKindleForItem(item, env, options = {}) {
 
   let reader = null;
   try {
-    reader = await buildReaderContent(item.url, item.title, env?.BROWSER);
+    reader = await buildReaderContent(item.url, item.title, env?.BROWSER, { log, ...logContext });
   } catch (error) {
+    if (log) {
+      log('error', 'reader_fetch_failed', {
+        stage: 'reader_fetch',
+        ...logContext,
+        ...formatError(error)
+      });
+    }
     return {
       reader: null,
       kindle: buildKindleState(KINDLE_STATUS.NEEDS_CONTENT, attemptedAt, compactError(error)),
@@ -166,6 +223,14 @@ async function syncKindleForItem(item, env, options = {}) {
   }
 
   if (!reader || !shouldCacheKindleReader(reader)) {
+    if (log) {
+      log('warn', 'reader_unavailable', {
+        stage: 'reader_fetch',
+        ...logContext,
+        wordCount: reader?.wordCount || 0,
+        hasContent: Boolean(reader?.contentHtml)
+      });
+    }
     return {
       reader,
       kindle: buildKindleState(KINDLE_STATUS.NEEDS_CONTENT, attemptedAt, 'Reader unavailable'),
@@ -176,15 +241,36 @@ async function syncKindleForItem(item, env, options = {}) {
   let cover = null;
   if (kv) {
     try {
-      cover = await ensureCoverImage({ item, reader, env, kv, onPartial: onCoverPartial });
+      cover = await ensureCoverImage({
+        item,
+        reader,
+        env,
+        kv,
+        onPartial: onCoverPartial,
+        log
+      });
     } catch (error) {
-      console.warn('Cover generation failed:', error);
+      if (log) {
+        log('error', 'cover_generation_failed', {
+          stage: 'cover_generation',
+          ...logContext,
+          ...formatError(error)
+        });
+      } else {
+        console.warn('Cover generation failed:', error);
+      }
       cover = null;
     }
   }
 
   try {
-    await sendToKindle({ item, reader, env, cover });
+    await sendToKindle({ item, reader, env, cover, log });
+    if (log) {
+      log('info', 'kindle_send_succeeded', {
+        stage: 'kindle_send',
+        ...logContext
+      });
+    }
     return {
       reader,
       kindle: {
@@ -196,6 +282,13 @@ async function syncKindleForItem(item, env, options = {}) {
       cover
     };
   } catch (error) {
+    if (log) {
+      log('error', 'kindle_send_failed', {
+        stage: 'kindle_send',
+        ...logContext,
+        ...formatError(error)
+      });
+    }
     return {
       reader,
       kindle: buildKindleState(KINDLE_STATUS.FAILED, attemptedAt, compactError(error)),

@@ -3,14 +3,19 @@
  * Stores scroll position data on the read-later item.
  */
 
+import { createLogger, formatError } from '../lib/logger.js';
+
 const KV_PREFIX = 'item:';
 const MIN_VIDEO_SECONDS = 300;
 
 export async function onRequest(context) {
   const { request, env } = context;
   const kv = env.READ_LATER;
+  const logger = createLogger({ request, source: 'read-later-progress' });
+  const log = logger.log;
 
   if (!kv) {
+    log('error', 'storage_unavailable', { stage: 'init' });
     return jsonResponse(
       { ok: false, error: 'Storage unavailable' },
       { status: 500, cache: 'no-store' }
@@ -18,6 +23,7 @@ export async function onRequest(context) {
   }
 
   if (!['PATCH', 'POST'].includes(request.method)) {
+    log('warn', 'method_not_allowed', { stage: 'request' });
     return jsonResponse(
       { ok: false, error: 'Method not allowed' },
       { status: 405, cache: 'no-store' }
@@ -36,6 +42,10 @@ export async function onRequest(context) {
     const hasVideo = Number.isFinite(videoCurrentTime) && Number.isFinite(videoDuration);
 
     if (!id || (!hasScroll && !hasVideo)) {
+      log('warn', 'invalid_payload', {
+        stage: 'request',
+        itemId: id || null
+      });
       return jsonResponse(
         { ok: false, error: 'Invalid payload' },
         { status: 400, cache: 'no-store' }
@@ -46,6 +56,10 @@ export async function onRequest(context) {
     const item = await kv.get(key, { type: 'json' });
 
     if (!item) {
+      log('warn', 'item_not_found', {
+        stage: 'lookup',
+        itemId: id
+      });
       return jsonResponse(
         { ok: false, error: 'Item not found' },
         { status: 404, cache: 'no-store' }
@@ -87,7 +101,10 @@ export async function onRequest(context) {
       { status: 200, cache: 'no-store' }
     );
   } catch (error) {
-    console.error('Read later progress error:', error);
+    log('error', 'progress_save_failed', {
+      stage: 'save',
+      ...formatError(error)
+    });
     return jsonResponse(
       { ok: false, error: 'Failed to save progress' },
       { status: 200, cache: 'no-store' }

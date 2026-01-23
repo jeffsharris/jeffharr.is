@@ -16,6 +16,7 @@ import {
   countWords,
   looksClientRendered
 } from './reader-utils.js';
+import { createLogger, formatError } from '../lib/logger.js';
 
 const KV_PREFIX = 'item:';
 const READER_PREFIX = 'reader:';
@@ -70,8 +71,11 @@ const ALLOWED_ATTRS = new Map([
 export async function onRequest(context) {
   const { request, env } = context;
   const kv = env.READ_LATER;
+  const logger = createLogger({ request, source: 'read-later-reader' });
+  const log = logger.log;
 
   if (!kv) {
+    log('error', 'storage_unavailable', { stage: 'init' });
     return jsonResponse(
       { ok: false, reader: null, error: 'Storage unavailable' },
       { status: 500, cache: 'no-store' }
@@ -83,6 +87,7 @@ export async function onRequest(context) {
   const forceRefresh = url.searchParams.get('refresh') === '1';
 
   if (!id) {
+    log('warn', 'reader_missing_id', { stage: 'request' });
     return jsonResponse(
       { ok: false, reader: null, error: 'Missing id' },
       { status: 400, cache: 'no-store' }
@@ -93,6 +98,10 @@ export async function onRequest(context) {
     const item = await kv.get(`${KV_PREFIX}${id}`, { type: 'json' });
 
     if (!item) {
+      log('warn', 'reader_item_missing', {
+        stage: 'lookup',
+        itemId: id
+      });
       return jsonResponse(
         { ok: false, reader: null, error: 'Item not found' },
         { status: 404, cache: 'no-store' }
@@ -105,10 +114,17 @@ export async function onRequest(context) {
       url: item.url,
       title: item.title,
       browser: env.BROWSER,
-      forceRefresh
+      forceRefresh,
+      log
     });
 
     if (!reader) {
+      log('warn', 'reader_unavailable', {
+        stage: 'reader_fetch',
+        itemId: id,
+        url: item.url,
+        title: item.title
+      });
       return jsonResponse(
         { ok: false, reader: null, error: 'Reader unavailable' },
         { status: 200, cache: 'public, max-age=60' }
@@ -128,7 +144,11 @@ export async function onRequest(context) {
       { status: 200, cache: 'public, max-age=3600' }
     );
   } catch (error) {
-    console.error('Read later reader error:', error);
+    log('error', 'reader_request_failed', {
+      stage: 'reader_fetch',
+      itemId: id,
+      ...formatError(error)
+    });
     return jsonResponse(
       { ok: false, reader: null, error: 'Reader unavailable' },
       { status: 200, cache: 'public, max-age=60' }
@@ -136,13 +156,31 @@ export async function onRequest(context) {
   }
 }
 
-async function buildReaderContent(url, fallbackTitle, browserBinding) {
-  const html = await fetchHtml(url);
+async function buildReaderContent(url, fallbackTitle, browserBinding, options = {}) {
+  const log = options.log;
+  const logContext = {
+    itemId: options.itemId || null,
+    url,
+    title: fallbackTitle
+  };
+  let html;
+  try {
+    html = await fetchHtml(url);
+  } catch (error) {
+    if (log) {
+      log('error', 'reader_fetch_failed', {
+        stage: 'reader_fetch',
+        ...logContext,
+        ...formatError(error)
+      });
+    }
+    throw error;
+  }
   const preferBrowser = Boolean(browserBinding) && looksClientRendered(html);
   let reader = preferBrowser ? null : extractReader(html, url, fallbackTitle);
 
   if (!shouldCacheReader(reader) && browserBinding) {
-    const renderedHtml = await renderWithBrowser(url, browserBinding);
+    const renderedHtml = await renderWithBrowser(url, browserBinding, log, logContext);
     if (renderedHtml) {
       const renderedReader = extractReader(renderedHtml, url, fallbackTitle);
       if (shouldCacheReader(renderedReader) || !reader) {
@@ -164,7 +202,8 @@ async function fetchAndCacheReader({
   url,
   title,
   browser,
-  forceRefresh = false
+  forceRefresh = false,
+  log
 }) {
   if (!kv || !id || !url) return null;
 
@@ -177,10 +216,19 @@ async function fetchAndCacheReader({
     await kv.delete(`${READER_PREFIX}${id}`);
   }
 
-  const reader = await buildReaderContent(url, title, browser);
+  const reader = await buildReaderContent(url, title, browser, { log, itemId: id });
   if (!reader?.contentHtml || !shouldCacheReader(reader)) {
     if (forceRefresh && cached?.contentHtml && shouldCacheReader(cached)) {
       return cached;
+    }
+    if (log) {
+      log('warn', 'reader_parse_failed', {
+        stage: 'reader_parse',
+        itemId: id,
+        url,
+        title,
+        wordCount: reader?.wordCount || 0
+      });
     }
     return null;
   }
@@ -554,7 +602,7 @@ async function fetchWithTimeout(url, options = {}, timeoutMs = FETCH_TIMEOUT_MS)
   }
 }
 
-async function renderWithBrowser(url, browserBinding) {
+async function renderWithBrowser(url, browserBinding, log = null, logContext = null) {
   let browser;
   let page;
 
@@ -574,7 +622,17 @@ async function renderWithBrowser(url, browserBinding) {
     await waitForRenderedContent(page);
     return await page.content();
   } catch (error) {
-    console.error('Reader browser render failed:', error);
+    if (log) {
+      log('error', 'browser_render_failed', {
+        stage: 'browser_render',
+        url,
+        title: logContext?.title || null,
+        itemId: logContext?.itemId || null,
+        ...formatError(error)
+      });
+    } else {
+      console.error('Reader browser render failed:', error);
+    }
     return null;
   } finally {
     if (page) {
