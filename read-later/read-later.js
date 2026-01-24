@@ -11,6 +11,7 @@
   const toastEl = document.getElementById('toast');
   const toastMessageEl = document.getElementById('toast-message');
   const toastUndoBtn = document.getElementById('toast-undo');
+  const toastCopyBtn = document.getElementById('toast-copy');
 
   const ICON_MARK_READ = `
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -72,6 +73,7 @@
 
   let toastTimeout = null;
   let undoAction = null;
+  let toastRayId = null;
   const readerCache = new Map();
   const readerRequests = new Map();
   const kindleRequests = new Set();
@@ -451,6 +453,7 @@
     if (!id || coverRequests.has(id)) return;
     coverRequests.add(id);
     button.classList.add('is-loading');
+    let rayId = null;
 
     try {
       const response = await fetch('/api/read-later/regenerate-cover', {
@@ -458,6 +461,7 @@
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ id })
       });
+      rayId = response.headers.get('cf-ray');
       const data = await response.json().catch(() => null);
 
       if (data?.ok && data?.item) {
@@ -482,11 +486,11 @@
         showToast('Cover already exists', null);
         render();
       } else {
-        showToast('Could not generate cover', null);
+        showToast('Could not generate cover', null, { rayId });
       }
     } catch (error) {
       console.error('Cover regeneration error:', error);
-      showToast('Could not generate cover', null);
+      showToast('Could not generate cover', null, { rayId });
     } finally {
       coverRequests.delete(id);
       button.classList.remove('is-loading');
@@ -1342,13 +1346,55 @@
     return dateFormatter.format(date);
   }
 
-  function showToast(message, onUndo) {
+  function setToastRayId(rayId) {
+    toastRayId = typeof rayId === 'string' && rayId.trim() ? rayId.trim() : null;
+    if (!toastCopyBtn) return;
+    toastCopyBtn.hidden = !toastRayId;
+    if (!toastRayId) {
+      toastCopyBtn.textContent = 'Copy Ray ID';
+    }
+  }
+
+  function copyText(text) {
+    if (!text) return;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).catch(() => {});
+      return;
+    }
+
+    const textarea = document.createElement('textarea');
+    textarea.value = text;
+    textarea.setAttribute('readonly', 'true');
+    textarea.style.position = 'absolute';
+    textarea.style.left = '-9999px';
+    document.body.appendChild(textarea);
+    textarea.select();
+    try {
+      document.execCommand('copy');
+    } catch {}
+    document.body.removeChild(textarea);
+  }
+
+  function handleCopyRayId() {
+    if (!toastRayId) return;
+    copyText(toastRayId);
+    if (!toastCopyBtn) return;
+    toastCopyBtn.textContent = 'Copied';
+    setTimeout(() => {
+      if (toastCopyBtn && toastRayId) {
+        toastCopyBtn.textContent = 'Copy Ray ID';
+      }
+    }, 2000);
+  }
+
+  function showToast(message, onUndo, options = {}) {
     if (toastTimeout) {
       clearTimeout(toastTimeout);
     }
 
     toastMessageEl.textContent = message;
     undoAction = onUndo;
+    setToastRayId(options.rayId || null);
     toastEl.hidden = false;
 
     requestAnimationFrame(() => {
@@ -1363,6 +1409,7 @@
     setTimeout(() => {
       toastEl.hidden = true;
       undoAction = null;
+      setToastRayId(null);
     }, 300);
   }
 
@@ -1383,6 +1430,7 @@
   }
 
   toastUndoBtn.addEventListener('click', handleUndo);
+  toastCopyBtn.addEventListener('click', handleCopyRayId);
 
   filterButtons.forEach(button => {
     button.addEventListener('click', () => setFilter(button.dataset.filter));
@@ -1428,6 +1476,7 @@
       const data = streamResult
         ? streamResult.data
         : await saveWithJson(rawUrl, rawTitle);
+      const rayId = streamResult?.rayId || data?._cfRay || null;
 
       if (!data) {
         throw new Error('Save failed');
@@ -1446,7 +1495,7 @@
 
       // Show appropriate toast message
       if (data.syncFailed) {
-        showToast('Saved — Kindle sync will retry later', null);
+        showToast('Saved — Kindle sync will retry later', null, { rayId });
       } else if (data.duplicate) {
         if (data.unarchived) {
           showToast('Already saved — restored from archive', null);
@@ -1459,7 +1508,7 @@
     } catch (error) {
       console.error('Save error:', error);
       state.savingItem = null;
-      showToast('Failed to save', null);
+      showToast('Failed to save', null, { rayId: error?.rayId || null });
       return null;
     }
   }
@@ -1481,12 +1530,18 @@
       body: JSON.stringify({ url: rawUrl, title: rawTitle })
     });
 
+    const rayId = response.headers.get('cf-ray');
     const data = await response.json();
 
     if (!response.ok || !data.ok) {
-      throw new Error(data.error || 'Save failed');
+      const error = new Error(data.error || 'Save failed');
+      error.rayId = rayId;
+      throw error;
     }
 
+    if (rayId) {
+      data._cfRay = rayId;
+    }
     return data;
   }
 
@@ -1502,13 +1557,14 @@
       body: JSON.stringify({ url: rawUrl, title: rawTitle })
     });
 
+    const rayId = response.headers.get('cf-ray');
     const contentType = response.headers.get('content-type') || '';
     if (!response.ok || !response.body || !contentType.includes('text/event-stream')) {
       return null;
     }
 
     const data = await consumeSaveStream(response);
-    return { data };
+    return { data, rayId };
   }
 
   async function consumeSaveStream(response) {

@@ -688,7 +688,9 @@ body {
   transform: translateX(-50%) translateY(100px);
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 16px;
+  row-gap: 8px;
   padding: 14px 20px;
   background: var(--text);
   color: var(--bg);
@@ -722,6 +724,22 @@ body {
 }
 
 .toast__undo:hover {
+  opacity: 0.8;
+}
+
+.toast__copy {
+  border: none;
+  background: transparent;
+  color: var(--accent);
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 600;
+  padding: 0;
+  cursor: pointer;
+  transition: opacity var(--transition);
+}
+
+.toast__copy:hover {
   opacity: 0.8;
 }
 
