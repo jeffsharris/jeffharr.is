@@ -312,11 +312,12 @@
     }
     const status = getKindleStatus(item);
     const isSending = kindleRequests.has(item.id);
+    const isQueued = isKindleQueued(status);
     const label = getKindleLinkLabel(status, isSending);
 
     linkEl.textContent = label;
-    linkEl.title = getKindleStatusTitle(status, item?.kindle?.lastError || '');
-    linkEl.disabled = isSending;
+    linkEl.title = getKindleStatusTitle(status, item?.kindle || null);
+    linkEl.disabled = isSending || isQueued;
     linkEl.classList.toggle('is-synced', status === 'synced');
     linkEl.classList.toggle('is-failed', status === 'failed');
   }
@@ -383,6 +384,10 @@
     return item?.kindle?.status || 'unsynced';
   }
 
+  function isKindleQueued(status) {
+    return status === 'pending' || status === 'retrying';
+  }
+
   function getKindleLinkLabel(status, isSending) {
     if (isSending) {
       return 'Syncing...';
@@ -394,6 +399,9 @@
         return 'Retry Kindle';
       case 'synced':
         return 'Kindle synced';
+      case 'pending':
+      case 'retrying':
+        return 'Kindle syncing...';
       case 'unsupported':
         return 'Not for Kindle';
       default:
@@ -401,9 +409,20 @@
     }
   }
 
-  function getKindleStatusTitle(status, errorMessage) {
+  function getKindleStatusTitle(status, kindleState) {
+    const errorMessage = kindleState?.lastError || '';
+    const attempt = Number(kindleState?.attempt || 0);
+    const maxAttempts = Number(kindleState?.maxAttempts || 0);
+
     if (status === 'synced') {
       return 'Click to resend to Kindle';
+    }
+    if (status === 'pending' || status === 'retrying') {
+      if (maxAttempts > 0) {
+        const currentAttempt = Math.min(Math.max(attempt, 0) + 1, maxAttempts);
+        return `Background sync in progress (attempt ${currentAttempt} of ${maxAttempts})`;
+      }
+      return 'Background sync in progress';
     }
     if (status === 'failed') {
       return errorMessage ? `Last error: ${errorMessage}` : 'Click to retry';
@@ -420,7 +439,7 @@
   async function syncKindle(id) {
     if (!id || kindleRequests.has(id)) return;
     const item = state.items.find(entry => entry.id === id);
-    if (item && getYouTubeInfoFromItem(item)) return;
+    if (item && (getYouTubeInfoFromItem(item) || isKindleQueued(getKindleStatus(item)))) return;
     kindleRequests.add(id);
     render();
 

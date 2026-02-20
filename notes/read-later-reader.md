@@ -38,7 +38,8 @@
 - This pipeline successfully extracts long-form LessWrong posts that previously returned near-empty content.
 
 ## Kindle delivery (Resend)
-- On save, the backend extracts reader content synchronously and emails a Kindle-friendly attachment via Resend.
+- On save, the backend persists the item immediately and enqueues background Kindle sync work.
+- A queue consumer performs extraction/send attempts with bounded retries; item status is persisted as `pending`, `retrying`, `synced`, `failed`, `needs-content`, or `unsupported`.
 - EPUB is attempted first (with embedded images when under the 50 MB email limit); if the EPUB build fails or exceeds the size cap, it falls back to the HTML attachment.
 - When over the size cap, inline images are replaced with placeholder text and only the cover image is retained (if possible).
 - Cover pages include the article title text above the first image to keep Kindle cover thumbnails on raster images.

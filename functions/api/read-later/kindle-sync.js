@@ -1,5 +1,4 @@
-import { cacheReader } from './reader.js';
-import { syncKindleForItem, shouldCacheKindleReader } from './kindle.js';
+import { enqueueKindleSync } from './sync-service.js';
 import { createLogger, formatError } from '../lib/logger.js';
 
 const KV_PREFIX = 'item:';
@@ -56,23 +55,21 @@ export async function onRequest(context) {
       );
     }
 
-    const { reader, kindle, cover } = await syncKindleForItem(item, env, { kv, log });
-    item.kindle = kindle;
-    if (cover?.createdAt) {
-      item.cover = { updatedAt: cover.createdAt };
-    }
-
-    await kv.put(key, JSON.stringify(item));
-    if (reader && shouldCacheKindleReader(reader)) {
-      await cacheReader(kv, id, reader);
-    }
+    await enqueueKindleSync({
+      item,
+      kv,
+      env,
+      log,
+      reason: 'manual-sync',
+      force: true
+    });
 
     log('info', 'kindle_sync_complete', {
       stage: 'sync',
       itemId: id,
       url: item.url,
       title: item.title,
-      kindleStatus: kindle?.status || null
+      kindleStatus: item?.kindle?.status || null
     });
 
     return jsonResponse(

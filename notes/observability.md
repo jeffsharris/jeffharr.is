@@ -63,6 +63,9 @@ node scripts/tail-logs.js --raw
 - `save_persisted` / `save_stream_persisted`
 - `save_sync_complete` / `save_stream_sync_complete`
 - `save_sync_failed` / `save_stream_sync_failed`
+- `kindle_sync_queued`
+- `kindle_sync_queue_missing`
+- `kindle_sync_queue_failed`
 - `save_failed` / `save_stream_failed`
 - `stream_write_failed`
 - `update_invalid_payload`
@@ -89,6 +92,16 @@ node scripts/tail-logs.js --raw
 - `item_not_found`
 - `kindle_sync_complete`
 - `kindle_sync_failed`
+
+### read-later-sync-worker (queue consumer)
+- `kindle_sync_attempt_started`
+- `kindle_sync_retry_scheduled`
+- `kindle_sync_attempt_complete`
+- `kindle_sync_stale_message`
+- `kindle_sync_item_missing`
+- `kindle_sync_retry_queue_missing`
+- `kindle_sync_retry_enqueue_failed`
+- `kindle_sync_worker_failed`
 
 ### read-later-cover (regenerate cover)
 - `storage_unavailable`

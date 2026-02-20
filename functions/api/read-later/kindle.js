@@ -17,6 +17,15 @@ const KINDLE_STATUS = {
   UNSUPPORTED: 'unsupported'
 };
 
+class KindleSyncError extends Error {
+  constructor(message, { code = null, retryable = true } = {}) {
+    super(message);
+    this.name = 'KindleSyncError';
+    this.code = code;
+    this.retryable = retryable;
+  }
+}
+
 function buildKindleHtml(item, reader) {
   const title = resolveTitle(item, reader);
   const safeTitle = escapeHtml(title);
@@ -92,7 +101,10 @@ async function sendToKindle({ item, reader, env, cover, log }) {
         missingFromEmail: !fromEmail
       });
     }
-    throw new Error('Kindle send not configured');
+    throw new KindleSyncError('Kindle send not configured', {
+      code: 'kindle_send_config_missing',
+      retryable: false
+    });
   }
 
   const attachment = await buildKindleAttachmentWithFallback(item, reader, cover, log);
@@ -127,7 +139,10 @@ async function sendToKindle({ item, reader, env, cover, log }) {
         response: truncateString(details, 1200)
       });
     }
-    throw new Error(`Resend failed with ${response.status} ${details}`);
+    throw new KindleSyncError(`Resend failed with ${response.status} ${details}`, {
+      code: `kindle_send_response_${response.status}`,
+      retryable: isRetryableStatus(response.status)
+    });
   }
 
   return response.json();
@@ -176,7 +191,10 @@ async function syncKindleForItem(item, env, options = {}) {
     }
     return {
       reader: null,
-      kindle: buildKindleState(KINDLE_STATUS.NEEDS_CONTENT, attemptedAt, 'Missing URL'),
+      kindle: buildKindleState(KINDLE_STATUS.NEEDS_CONTENT, attemptedAt, 'Missing URL', {
+        errorCode: 'kindle_missing_url',
+        retryable: false
+      }),
       cover: null
     };
   }
@@ -185,7 +203,10 @@ async function syncKindleForItem(item, env, options = {}) {
   if (blocklisted) {
     return {
       reader: null,
-      kindle: buildKindleState(KINDLE_STATUS.UNSUPPORTED, attemptedAt, blocklisted.reason),
+      kindle: buildKindleState(KINDLE_STATUS.UNSUPPORTED, attemptedAt, blocklisted.reason, {
+        errorCode: 'kindle_unsupported_domain',
+        retryable: false
+      }),
       cover: null
     };
   }
@@ -199,7 +220,10 @@ async function syncKindleForItem(item, env, options = {}) {
     }
     return {
       reader: null,
-      kindle: buildKindleState(KINDLE_STATUS.UNSUPPORTED, attemptedAt, 'YouTube videos are not sent to Kindle'),
+      kindle: buildKindleState(KINDLE_STATUS.UNSUPPORTED, attemptedAt, 'YouTube videos are not sent to Kindle', {
+        errorCode: 'kindle_unsupported_youtube',
+        retryable: false
+      }),
       cover: null
     };
   }
@@ -217,7 +241,10 @@ async function syncKindleForItem(item, env, options = {}) {
     }
     return {
       reader: null,
-      kindle: buildKindleState(KINDLE_STATUS.NEEDS_CONTENT, attemptedAt, compactError(error)),
+      kindle: buildKindleState(KINDLE_STATUS.NEEDS_CONTENT, attemptedAt, compactError(error), {
+        errorCode: 'reader_fetch_failed',
+        retryable: true
+      }),
       cover: null
     };
   }
@@ -233,7 +260,10 @@ async function syncKindleForItem(item, env, options = {}) {
     }
     return {
       reader,
-      kindle: buildKindleState(KINDLE_STATUS.NEEDS_CONTENT, attemptedAt, 'Reader unavailable'),
+      kindle: buildKindleState(KINDLE_STATUS.NEEDS_CONTENT, attemptedAt, 'Reader unavailable', {
+        errorCode: 'reader_unavailable',
+        retryable: true
+      }),
       cover: null
     };
   }
@@ -277,21 +307,30 @@ async function syncKindleForItem(item, env, options = {}) {
         status: KINDLE_STATUS.SYNCED,
         lastAttemptAt: attemptedAt,
         lastSyncedAt: attemptedAt,
-        lastError: null
+        lastError: null,
+        errorCode: null,
+        retryable: false
       },
       cover
     };
   } catch (error) {
+    const errorCode = getKindleErrorCode(error);
+    const retryable = isRetryableKindleError(error);
     if (log) {
       log('error', 'kindle_send_failed', {
         stage: 'kindle_send',
         ...logContext,
+        errorCode,
+        retryable,
         ...formatError(error)
       });
     }
     return {
       reader,
-      kindle: buildKindleState(KINDLE_STATUS.FAILED, attemptedAt, compactError(error)),
+      kindle: buildKindleState(KINDLE_STATUS.FAILED, attemptedAt, compactError(error), {
+        errorCode,
+        retryable
+      }),
       cover
     };
   }
@@ -374,12 +413,19 @@ function shouldCacheKindleReader(reader) {
   return shouldCacheReader(reader);
 }
 
-function buildKindleState(status, attemptedAt, error) {
+function buildKindleState(status, attemptedAt, error, options = {}) {
+  const errorCode = options.errorCode || null;
+  const retryable = options.retryable !== false;
+
   return {
     status,
     lastAttemptAt: attemptedAt,
     lastSyncedAt: status === KINDLE_STATUS.SYNCED ? attemptedAt : null,
-    lastError: error || null
+    lastError: error || null,
+    errorCode,
+    retryable: status === KINDLE_STATUS.SYNCED || status === KINDLE_STATUS.UNSUPPORTED
+      ? false
+      : retryable
   };
 }
 
@@ -389,7 +435,38 @@ function compactError(error) {
   return message.trim().slice(0, 240) || 'Unknown error';
 }
 
+function isRetryableStatus(status) {
+  if (!Number.isFinite(status)) return true;
+  return status === 408 || status === 409 || status === 425 || status === 429 || status >= 500;
+}
+
+function isRetryableKindleError(error) {
+  if (error && typeof error.retryable === 'boolean') {
+    return error.retryable;
+  }
+
+  const message = error instanceof Error ? error.message : String(error || '');
+  if (/abort|timeout|network/i.test(message)) {
+    return true;
+  }
+
+  return false;
+}
+
+function getKindleErrorCode(error) {
+  if (error && typeof error.code === 'string' && error.code) {
+    return error.code;
+  }
+
+  const message = error instanceof Error ? error.message : String(error || '');
+  if (/timeout|abort/i.test(message)) {
+    return 'kindle_send_timeout';
+  }
+  return 'kindle_send_failed';
+}
+
 export {
+  KINDLE_STATUS,
   buildKindleHtml,
   buildKindleAttachment,
   sendToKindle,

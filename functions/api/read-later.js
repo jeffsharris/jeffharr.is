@@ -4,8 +4,7 @@
  */
 
 import { deriveTitleFromUrl, preferReaderTitle } from './read-later/reader-utils.js';
-import { cacheReader } from './read-later/reader.js';
-import { syncKindleForItem, shouldCacheKindleReader } from './read-later/kindle.js';
+import { enqueueKindleSync } from './read-later/sync-service.js';
 import { createLogger, formatError } from './lib/logger.js';
 
 const KV_PREFIX = 'item:';
@@ -119,6 +118,14 @@ async function handleSave(request, kv, env, log) {
       }
 
       await kv.put(`${KV_PREFIX}${existingItem.id}`, JSON.stringify(existingItem));
+      await enqueueKindleSync({
+        item: existingItem,
+        kv,
+        env,
+        log,
+        reason: 'duplicate-save',
+        force: true
+      });
       log('info', 'save_duplicate', {
         stage: 'save',
         itemId: existingItem.id,
@@ -141,50 +148,19 @@ async function handleSave(request, kv, env, log) {
     // New item - save basic item FIRST before expensive operations
     const item = createItem({ url: normalizedUrl, title, read });
     await kv.put(`${KV_PREFIX}${item.id}`, JSON.stringify(item));
+    await enqueueKindleSync({
+      item,
+      kv,
+      env,
+      log,
+      reason: 'save'
+    });
     log('info', 'save_persisted', {
       stage: 'save',
       itemId: item.id,
       url: item.url,
       title: item.title
     });
-
-    // Now do expensive work (cover generation, kindle sync)
-    try {
-      const { reader, kindle, cover } = await syncKindleForItem(item, env, {
-        kv,
-        log
-      });
-      const resolvedTitle = preferReaderTitle(item.title, reader?.title, item.url);
-      if (resolvedTitle && resolvedTitle !== item.title) {
-        item.title = resolvedTitle;
-      }
-      item.kindle = kindle;
-      if (cover?.createdAt) {
-        item.cover = { updatedAt: cover.createdAt };
-      }
-      // Update item with kindle/cover info
-      await kv.put(`${KV_PREFIX}${item.id}`, JSON.stringify(item));
-      if (reader && shouldCacheKindleReader(reader)) {
-        await cacheReader(kv, item.id, reader);
-      }
-      log('info', 'save_sync_complete', {
-        stage: 'sync',
-        itemId: item.id,
-        url: item.url,
-        title: item.title,
-        kindleStatus: kindle?.status || null,
-        coverCreatedAt: cover?.createdAt || null
-      });
-    } catch (syncError) {
-      // Log but don't fail - basic item is already saved
-      log('error', 'save_sync_failed', {
-        stage: 'sync',
-        itemId: item.id,
-        url: item.url,
-        title: item.title,
-        ...formatError(syncError)
-      });
-    }
 
     return jsonResponse(
       { ok: true, item },
@@ -444,6 +420,15 @@ function createEventStream(log) {
   return { readable, send, close };
 }
 
+async function safeStreamSend(stream, event, data) {
+  try {
+    await stream.send(event, data);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 async function handleSaveStream(request, kv, env, log) {
   const stream = createEventStream(log);
 
@@ -461,7 +446,7 @@ async function handleSaveStream(request, kv, env, log) {
           url: payload?.url || null,
           title: payload?.title || null
         });
-        await stream.send('error', { ok: false, error: 'Invalid URL' });
+        await safeStreamSend(stream, 'error', { ok: false, error: 'Invalid URL' });
         return;
       }
 
@@ -479,6 +464,14 @@ async function handleSaveStream(request, kv, env, log) {
         }
 
         await kv.put(`${KV_PREFIX}${existingItem.id}`, JSON.stringify(existingItem));
+        await enqueueKindleSync({
+          item: existingItem,
+          kv,
+          env,
+          log,
+          reason: 'duplicate-save',
+          force: true
+        });
         log('info', 'save_stream_duplicate', {
           stage: 'save',
           itemId: existingItem.id,
@@ -486,7 +479,7 @@ async function handleSaveStream(request, kv, env, log) {
           title: existingItem.title,
           unarchived: wasRead
         });
-        await stream.send('done', {
+        await safeStreamSend(stream, 'done', {
           ok: true,
           item: existingItem,
           duplicate: true,
@@ -507,57 +500,21 @@ async function handleSaveStream(request, kv, env, log) {
       });
 
       // Notify client that item is safely saved
-      await stream.send('saved', { ok: true, item: { ...item } });
+      await safeStreamSend(stream, 'saved', { ok: true, item: { ...item } });
 
-      // Now do expensive work (cover generation, kindle sync)
-      await stream.send('status', { ok: true, message: 'Generating cover' });
+      await enqueueKindleSync({
+        item,
+        kv,
+        env,
+        log,
+        reason: 'save'
+      });
+      await safeStreamSend(stream, 'status', {
+        ok: true,
+        message: 'Queued Kindle sync'
+      });
 
-      try {
-        const { reader, kindle, cover } = await syncKindleForItem(item, env, {
-          kv,
-          log,
-          onCoverPartial: async (partial) => {
-            await stream.send('partial_image', {
-              index: partial.index,
-              image: partial.base64
-            });
-          }
-        });
-
-        const resolvedTitle = preferReaderTitle(item.title, reader?.title, item.url);
-        if (resolvedTitle && resolvedTitle !== item.title) {
-          item.title = resolvedTitle;
-        }
-        item.kindle = kindle;
-        if (cover?.createdAt) {
-          item.cover = { updatedAt: cover.createdAt };
-        }
-
-        // Update item with kindle/cover info
-        await kv.put(`${KV_PREFIX}${item.id}`, JSON.stringify(item));
-        if (reader && shouldCacheKindleReader(reader)) {
-          await cacheReader(kv, item.id, reader);
-        }
-        log('info', 'save_stream_sync_complete', {
-          stage: 'sync',
-          itemId: item.id,
-          url: item.url,
-          title: item.title,
-          kindleStatus: kindle?.status || null,
-          coverCreatedAt: cover?.createdAt || null
-        });
-      } catch (syncError) {
-        // Log but don't fail - basic item is already saved
-        log('error', 'save_stream_sync_failed', {
-          stage: 'sync',
-          itemId: item.id,
-          url: item.url,
-          title: item.title,
-          ...formatError(syncError)
-        });
-      }
-
-      await stream.send('done', { ok: true, item });
+      await safeStreamSend(stream, 'done', { ok: true, item });
     } catch (error) {
       log('error', 'save_stream_failed', {
         stage: 'save',
@@ -568,9 +525,9 @@ async function handleSaveStream(request, kv, env, log) {
       });
       // If we already saved the item, send it even though there was an error
       if (savedItem) {
-        await stream.send('done', { ok: true, item: savedItem, syncFailed: true });
+        await safeStreamSend(stream, 'done', { ok: true, item: savedItem, syncFailed: true });
       } else {
-        await stream.send('error', { ok: false, error: 'Failed to save item' });
+        await safeStreamSend(stream, 'error', { ok: false, error: 'Failed to save item' });
       }
     } finally {
       await stream.close();
