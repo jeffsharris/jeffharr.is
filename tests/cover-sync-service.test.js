@@ -105,3 +105,60 @@ test('enqueueCoverGeneration does not enqueue while a job is already active', as
   assert.equal(sendCount, 0);
   assert.equal(kv.store.size, 0);
 });
+
+test('enqueueCoverGeneration requeues when cover metadata exists but image payload is missing', async () => {
+  const kv = createMockKv();
+  const sent = [];
+  const env = {
+    READ_LATER_SYNC_QUEUE: {
+      async send(body, options) {
+        sent.push({ body, options });
+      }
+    }
+  };
+
+  const item = {
+    id: 'cover-item-4',
+    url: 'https://example.com/article',
+    title: 'Metadata-only cover',
+    cover: {
+      updatedAt: '2026-02-21T00:00:00.000Z'
+    }
+  };
+
+  const result = await enqueueCoverGeneration({ item, kv, env });
+  assert.equal(result.queued, true);
+  assert.equal(sent.length, 1);
+});
+
+test('enqueueCoverGeneration skips when cover image payload exists in KV', async () => {
+  const kv = createMockKv({
+    'cover:cover-item-5': JSON.stringify({
+      base64: 'Zm9v',
+      contentType: 'image/png',
+      createdAt: '2026-02-21T00:00:00.000Z'
+    })
+  });
+  let sendCount = 0;
+  const env = {
+    READ_LATER_SYNC_QUEUE: {
+      async send() {
+        sendCount += 1;
+      }
+    }
+  };
+
+  const item = {
+    id: 'cover-item-5',
+    url: 'https://example.com/article',
+    title: 'Has cover bytes',
+    cover: {
+      updatedAt: '2026-02-21T00:00:00.000Z'
+    }
+  };
+
+  const result = await enqueueCoverGeneration({ item, kv, env });
+  assert.equal(result.queued, false);
+  assert.equal(result.coverExists, true);
+  assert.equal(sendCount, 0);
+});

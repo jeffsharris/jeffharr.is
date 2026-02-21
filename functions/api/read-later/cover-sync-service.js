@@ -1,6 +1,7 @@
 import { preferReaderTitle } from './reader-utils.js';
 import { buildReaderContent, fetchAndCacheReader } from './reader.js';
-import { ensureCoverImage, resolveExternalCoverUrl } from './covers.js';
+import { getCoverImage, ensureCoverImage } from './covers.js';
+import { isXStatusUrl } from './x-adapter.js';
 import { formatError } from '../lib/logger.js';
 
 const KV_PREFIX = 'item:';
@@ -212,7 +213,10 @@ async function enqueueCoverGeneration({
   }
 
   if (item?.cover?.updatedAt && !force) {
-    return { queued: false, coverExists: true, item };
+    const existingCover = await getCoverImage(kv, item.id);
+    if (existingCover?.base64) {
+      return { queued: false, coverExists: true, item };
+    }
   }
 
   const now = getNowIso();
@@ -414,6 +418,7 @@ async function processCoverSyncMessage(message, env, log) {
   }
 
   let reader = null;
+  const forceReaderRefresh = isXStatusUrl(item.url);
   try {
     reader = await fetchAndCacheReader({
       kv,
@@ -422,7 +427,7 @@ async function processCoverSyncMessage(message, env, log) {
       title: item.title,
       browser: env?.BROWSER,
       xBearerToken: env?.X_API_BEARER_TOKEN,
-      forceRefresh: false,
+      forceRefresh: forceReaderRefresh,
       log
     });
     if (!reader?.contentHtml) {
@@ -464,54 +469,6 @@ async function processCoverSyncMessage(message, env, log) {
       retryable: false,
       log
     });
-    return;
-  }
-
-  const externalCoverUrl = resolveExternalCoverUrl(reader);
-  if (externalCoverUrl) {
-    const latestItem = await kv.get(key, { type: 'json' });
-    if (!latestItem) return;
-    if (!isCurrentCoverJob(latestItem, jobId)) return;
-
-    const resolvedTitle = preferReaderTitle(latestItem.title, reader?.title, latestItem.url);
-    if (resolvedTitle && resolvedTitle !== latestItem.title) {
-      latestItem.title = resolvedTitle;
-    }
-
-    const completedAt = getNowIso();
-    latestItem.cover = {
-      updatedAt: completedAt,
-      externalUrl: externalCoverUrl
-    };
-    latestItem.coverSync = buildCoverState(latestItem.coverSync, {
-      now: completedAt,
-      status: COVER_SYNC_STATUS.SUCCEEDED,
-      attempt,
-      maxAttempts,
-      jobId,
-      queuedAt,
-      startedAt: latestItem?.coverSync?.startedAt || now,
-      completedAt,
-      nextRetryAt: null,
-      lastError: null,
-      errorCode: null,
-      retryable: false
-    });
-    await saveItem(kv, latestItem);
-
-    if (log) {
-      log('info', 'cover_sync_complete', {
-        stage: 'sync',
-        itemId,
-        url: latestItem.url,
-        title: latestItem.title,
-        attempt,
-        maxAttempts,
-        jobId,
-        coverCreatedAt: completedAt,
-        coverSource: 'external'
-      });
-    }
     return;
   }
 

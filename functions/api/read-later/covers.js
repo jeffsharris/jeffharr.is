@@ -9,6 +9,7 @@ const OPENAI_TIMEOUT_MS = 150000;
 const COVER_FETCH_TIMEOUT_MS = 15000;
 const MAX_COVER_FETCH_BYTES = 8 * 1024 * 1024;
 const OPENAI_ENDPOINT = 'https://api.openai.com/v1/responses';
+const EXTERNAL_COVER_USER_AGENT = 'Mozilla/5.0 (compatible; jeffharr.is/1.0; +https://jeffharr.is)';
 
 function getCoverKey(id) {
   return `${COVER_PREFIX}${id}`;
@@ -400,7 +401,8 @@ function resolveExternalCoverUrl(reader) {
 async function fetchExternalCoverImage(url) {
   const response = await fetchWithTimeout(url, {
     headers: {
-      Accept: 'image/*'
+      Accept: 'image/*',
+      'User-Agent': EXTERNAL_COVER_USER_AGENT
     }
   }, COVER_FETCH_TIMEOUT_MS);
 
@@ -510,6 +512,5 @@ async function readResponseBody(response) {
 
 export {
   getCoverImage,
-  ensureCoverImage,
-  resolveExternalCoverUrl
+  ensureCoverImage
 };
