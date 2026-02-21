@@ -1,5 +1,5 @@
-import { ensureCoverImage, getCoverImage } from './covers.js';
-import { buildReaderContent } from './reader.js';
+import { getCoverImage } from './covers.js';
+import { enqueueCoverGeneration } from './cover-sync-service.js';
 import { createLogger, formatError } from '../lib/logger.js';
 
 const KV_PREFIX = 'item:';
@@ -71,58 +71,39 @@ export async function onRequest(context) {
       );
     }
 
-    // Build reader content first (needed for cover generation)
-    const reader = await buildReaderContent(item.url, item.title, env?.BROWSER, {
+    const enqueueResult = await enqueueCoverGeneration({
+      item,
+      kv,
+      env,
       log,
-      itemId: id
+      reason: 'manual-regenerate'
     });
-    if (!reader?.contentHtml) {
-      log('warn', 'reader_unavailable', {
-        stage: 'reader_fetch',
-        itemId: id,
-        url: item.url,
-        title: item.title
-      });
-      return jsonResponse(
-        { ok: false, error: 'Could not parse article content' },
-        { status: 400, cache: 'no-store' }
-      );
-    }
 
-    // Generate cover
-    const cover = await ensureCoverImage({ item, reader, env, kv, log });
-    if (!cover?.createdAt) {
-      log('error', 'cover_generation_failed', {
-        stage: 'cover_generation',
-        itemId: id,
-        url: item.url,
-        title: item.title
-      });
+    if (enqueueResult.queueMissing || enqueueResult.queueFailed) {
       return jsonResponse(
         {
           ok: false,
-          error: 'Cover generation failed',
-          detail: 'Cover generation returned no image output'
+          error: 'Cover queue unavailable',
+          detail: item?.coverSync?.lastError || 'Failed to queue cover generation'
         },
         { status: 500, cache: 'no-store' }
       );
     }
 
-    // Update item with cover info
-    item.cover = { updatedAt: cover.createdAt };
-    await kv.put(key, JSON.stringify(item));
-
-    log('info', 'cover_generation_succeeded', {
-      stage: 'cover_generation',
-      itemId: id,
-      url: item.url,
-      title: item.title,
-      coverCreatedAt: cover.createdAt
-    });
+    if (enqueueResult.inProgress) {
+      return jsonResponse(
+        { ok: true, item, inProgress: true },
+        { status: 202, cache: 'no-store' }
+      );
+    }
 
     return jsonResponse(
-      { ok: true, item },
-      { status: 200, cache: 'no-store' }
+      {
+        ok: true,
+        item,
+        queued: enqueueResult.queued === true
+      },
+      { status: enqueueResult.queued ? 202 : 200, cache: 'no-store' }
     );
   } catch (error) {
     const formattedError = formatError(error);

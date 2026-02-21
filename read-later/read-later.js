@@ -67,6 +67,8 @@
   };
 
   const REFRESH_INTERVAL_MS = 60000;
+  const COVER_STATUS_POLL_INTERVAL_MS = 3500;
+  const COVER_STATUS_MAX_ERRORS = 3;
   const TOAST_DURATION_MS = 5000;
   const PROGRESS_DEBOUNCE_MS = 800;
   const VIDEO_PROGRESS_DEBOUNCE_MS = 1500;
@@ -82,6 +84,7 @@
   const readerCache = new Map();
   const readerRequests = new Map();
   const kindleRequests = new Set();
+  const coverStatusPollers = new Map();
   const progressTimers = new Map();
   const videoPlayers = new Map();
   const videoDurations = new Map();
@@ -105,6 +108,7 @@
       }
       const data = await response.json();
       state.items = Array.isArray(data.items) ? data.items : [];
+      reconcileCoverStatusPollers();
     } catch (error) {
       console.error(error);
       state.error = 'Could not load the list. Try again shortly.';
@@ -216,8 +220,16 @@
       syncKindle(item.id);
     });
 
+    const isCoverGenerating = isCoverSyncActive(item);
+    if (isCoverGenerating) {
+      startCoverStatusPolling(item.id);
+    }
+
     // Regenerate cover button (only visible on hover for items without covers)
     if (thumbRegenerate) {
+      thumbRegenerate.classList.toggle('is-loading', isCoverGenerating || coverRequests.has(item.id));
+      thumbRegenerate.disabled = isCoverGenerating || coverRequests.has(item.id);
+      thumbRegenerate.title = isCoverGenerating ? 'Generating cover...' : 'Generate cover';
       thumbRegenerate.addEventListener('click', (event) => {
         event.stopPropagation();
         regenerateCover(item.id, thumbRegenerate, thumb, thumbImg);
@@ -332,7 +344,7 @@
 
     imgEl.removeAttribute('src');
     thumbEl.classList.add('is-empty');
-    thumbEl.classList.toggle('is-loading', Boolean(item?.saving));
+    thumbEl.classList.toggle('is-loading', Boolean(item?.saving) || isCoverSyncActive(item));
     thumbEl.classList.remove('is-video');
 
     const youtubeInfo = getYouTubeInfoFromItem(item);
@@ -387,6 +399,15 @@
 
   function getKindleStatus(item) {
     return item?.kindle?.status || 'unsynced';
+  }
+
+  function getCoverSyncStatus(item) {
+    return item?.coverSync?.status || null;
+  }
+
+  function isCoverSyncActive(item) {
+    const status = getCoverSyncStatus(item);
+    return status === 'pending' || status === 'processing' || status === 'retrying';
   }
 
   function isKindleQueued(status) {
@@ -473,8 +494,108 @@
 
   const coverRequests = new Set();
 
+  function reconcileCoverStatusPollers() {
+    const ids = new Set(state.items.map((item) => item.id));
+
+    for (const [id] of coverStatusPollers) {
+      if (!ids.has(id)) {
+        coverStatusPollers.delete(id);
+      }
+    }
+
+    state.items.forEach((item) => {
+      if (isCoverSyncActive(item)) {
+        startCoverStatusPolling(item.id);
+      }
+    });
+  }
+
+  function startCoverStatusPolling(id, options = {}) {
+    if (!id || coverStatusPollers.has(id)) return;
+    const immediate = options.immediate === true;
+    const entry = { errors: 0 };
+    coverStatusPollers.set(id, entry);
+
+    const tick = async () => {
+      if (!coverStatusPollers.has(id)) return;
+      const current = state.items.find((item) => item.id === id);
+      if (!current) {
+        coverStatusPollers.delete(id);
+        return;
+      }
+
+      try {
+        const done = await pollCoverStatusOnce(id);
+        entry.errors = 0;
+        if (done) {
+          coverStatusPollers.delete(id);
+          return;
+        }
+      } catch (error) {
+        entry.errors += 1;
+        console.error('Cover status poll error:', error);
+        if (entry.errors >= COVER_STATUS_MAX_ERRORS) {
+          coverStatusPollers.delete(id);
+          showToast('Could not check cover status', null, {
+            rayId: error?.rayId || null,
+            errorDetail: extractErrorDetail(error) || 'Cover status polling failed'
+          });
+          return;
+        }
+      }
+
+      setTimeout(tick, COVER_STATUS_POLL_INTERVAL_MS);
+    };
+
+    if (immediate) {
+      tick();
+    } else {
+      setTimeout(tick, COVER_STATUS_POLL_INTERVAL_MS);
+    }
+  }
+
+  async function pollCoverStatusOnce(id) {
+    const url = new URL('/api/read-later/cover-sync', window.location.origin);
+    url.searchParams.set('id', id);
+
+    const response = await fetch(url.toString(), { cache: 'no-store' });
+    const rayId = response.headers.get('cf-ray');
+    const data = await response.json().catch(() => null);
+
+    if (!response.ok || !data?.ok || !data?.item) {
+      const error = new Error(data?.error || `Status request failed with ${response.status}`);
+      error.rayId = rayId;
+      error.detail = extractErrorDetail(data) || error.message;
+      throw error;
+    }
+
+    mergeSavedItem(data.item);
+    render();
+
+    if (data.item?.cover?.updatedAt) {
+      showToast('Cover generated', null);
+      return true;
+    }
+
+    if (getCoverSyncStatus(data.item) === 'failed') {
+      showToast('Could not generate cover', null, {
+        rayId,
+        errorDetail: data.item?.coverSync?.lastError || 'Cover generation failed'
+      });
+      return true;
+    }
+
+    return !isCoverSyncActive(data.item);
+  }
+
   async function regenerateCover(id, button, thumbEl, imgEl) {
     if (!id || coverRequests.has(id)) return;
+    const current = state.items.find((item) => item.id === id);
+    if (current && isCoverSyncActive(current)) {
+      startCoverStatusPolling(id, { immediate: true });
+      return;
+    }
+
     coverRequests.add(id);
     button.classList.add('is-loading');
     let rayId = null;
@@ -490,23 +611,34 @@
       const detail = extractErrorDetail(data) || `Request failed with status ${response.status}`;
 
       if (data?.ok && data?.item) {
-        const index = state.items.findIndex(item => item.id === id);
-        if (index >= 0) {
-          state.items[index] = data.item;
+        mergeSavedItem(data.item);
+        render();
+
+        if (data?.coverExists || data.item.cover?.updatedAt) {
+          if (imgEl && thumbEl && data.item.cover?.updatedAt) {
+            const url = new URL('/api/read-later/cover', window.location.origin);
+            url.searchParams.set('id', id);
+            url.searchParams.set('v', data.item.cover.updatedAt);
+            imgEl.onload = () => {
+              thumbEl.classList.remove('is-empty');
+            };
+            imgEl.src = url.toString();
+          }
+          showToast(data?.coverExists ? 'Cover already exists' : 'Cover generated', null);
+          return;
         }
 
-        // Update the thumbnail immediately
-        if (data.item.cover?.updatedAt && imgEl && thumbEl) {
-          const url = new URL('/api/read-later/cover', window.location.origin);
-          url.searchParams.set('id', id);
-          url.searchParams.set('v', data.item.cover.updatedAt);
-          imgEl.onload = () => {
-            thumbEl.classList.remove('is-empty');
-          };
-          imgEl.src = url.toString();
+        if (data?.queued || data?.inProgress || isCoverSyncActive(data.item)) {
+          showToast('Cover generation started', null);
+          startCoverStatusPolling(id, { immediate: true });
+          return;
         }
 
-        showToast('Cover generated', null);
+        showToast('Could not generate cover', null, {
+          rayId,
+          errorDetail: detail
+        });
+        return;
       } else if (data?.coverExists) {
         showToast('Cover already exists', null);
         render();
