@@ -510,5 +510,6 @@ async function readResponseBody(response) {
 
 export {
   getCoverImage,
-  ensureCoverImage
+  ensureCoverImage,
+  resolveExternalCoverUrl
 };
