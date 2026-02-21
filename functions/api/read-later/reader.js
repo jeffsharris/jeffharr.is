@@ -715,8 +715,16 @@ async function waitForTextStability(page) {
       break;
     }
 
-    await page.waitForTimeout(TEXT_POLL_INTERVAL_MS);
+    await waitForDelay(page, TEXT_POLL_INTERVAL_MS);
   }
+}
+
+async function waitForDelay(page, ms) {
+  if (page && typeof page.waitForTimeout === 'function') {
+    await page.waitForTimeout(ms);
+    return;
+  }
+  await new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 

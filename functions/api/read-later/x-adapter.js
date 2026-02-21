@@ -252,13 +252,22 @@ async function safeReadText(response) {
 
 async function buildXReaderFromUrl(url, fallbackTitle, bearerToken, options = {}) {
   if (!isXStatusUrl(url)) return null;
-  if (!bearerToken) return null;
+  const log = options.log;
+  const itemId = options.itemId || null;
+  if (!bearerToken) {
+    if (log) {
+      log('warn', 'x_adapter_token_missing', {
+        stage: 'x_adapter',
+        itemId,
+        url
+      });
+    }
+    return null;
+  }
 
   const tweetId = parseTweetIdFromUrl(url);
   if (!tweetId) return null;
 
-  const log = options.log;
-  const itemId = options.itemId || null;
   const fetchImpl = typeof options.fetchImpl === 'function' ? options.fetchImpl : fetch;
 
   let response;
