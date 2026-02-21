@@ -99,7 +99,11 @@ export async function onRequest(context) {
         title: item.title
       });
       return jsonResponse(
-        { ok: false, error: 'Cover generation failed' },
+        {
+          ok: false,
+          error: 'Cover generation failed',
+          detail: 'Cover generation returned no image output'
+        },
         { status: 500, cache: 'no-store' }
       );
     }
@@ -121,13 +125,18 @@ export async function onRequest(context) {
       { status: 200, cache: 'no-store' }
     );
   } catch (error) {
+    const formattedError = formatError(error);
     log('error', 'cover_regeneration_failed', {
       stage: 'cover_generation',
       itemId: id,
-      ...formatError(error)
+      ...formattedError
     });
     return jsonResponse(
-      { ok: false, error: 'Cover regeneration failed' },
+      {
+        ok: false,
+        error: 'Cover regeneration failed',
+        detail: formattedError.error || null
+      },
       { status: 500, cache: 'no-store' }
     );
   }

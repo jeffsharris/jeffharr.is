@@ -11,7 +11,11 @@
   const toastEl = document.getElementById('toast');
   const toastMessageEl = document.getElementById('toast-message');
   const toastUndoBtn = document.getElementById('toast-undo');
+  const toastErrorBtn = document.getElementById('toast-error');
   const toastCopyBtn = document.getElementById('toast-copy');
+  const errorDialogEl = document.getElementById('error-dialog');
+  const errorDialogBodyEl = document.getElementById('error-dialog-body');
+  const errorDialogCopyBtn = document.getElementById('error-dialog-copy');
 
   const ICON_MARK_READ = `
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -74,6 +78,7 @@
   let toastTimeout = null;
   let undoAction = null;
   let toastRayId = null;
+  let toastErrorDetail = null;
   const readerCache = new Map();
   const readerRequests = new Map();
   const kindleRequests = new Set();
@@ -482,6 +487,7 @@
       });
       rayId = response.headers.get('cf-ray');
       const data = await response.json().catch(() => null);
+      const detail = extractErrorDetail(data) || `Request failed with status ${response.status}`;
 
       if (data?.ok && data?.item) {
         const index = state.items.findIndex(item => item.id === id);
@@ -505,11 +511,14 @@
         showToast('Cover already exists', null);
         render();
       } else {
-        showToast('Could not generate cover', null, { rayId });
+        showToast('Could not generate cover', null, { rayId, errorDetail: detail });
       }
     } catch (error) {
       console.error('Cover regeneration error:', error);
-      showToast('Could not generate cover', null, { rayId });
+      showToast('Could not generate cover', null, {
+        rayId,
+        errorDetail: extractErrorDetail(error) || 'Request failed before a response was returned'
+      });
     } finally {
       coverRequests.delete(id);
       button.classList.remove('is-loading');
@@ -1374,6 +1383,45 @@
     }
   }
 
+  function setToastErrorDetail(value) {
+    toastErrorDetail = extractErrorDetail(value);
+    if (!toastErrorBtn) return;
+    toastErrorBtn.hidden = !toastErrorDetail;
+  }
+
+  function extractErrorDetail(value) {
+    if (!value) return null;
+
+    if (value instanceof Error) {
+      if (typeof value.detail === 'string' && value.detail.trim()) {
+        return value.detail.trim();
+      }
+      if (typeof value.message === 'string' && value.message.trim()) {
+        return value.message.trim();
+      }
+      return null;
+    }
+
+    if (typeof value === 'string') {
+      const trimmed = value.trim();
+      return trimmed || null;
+    }
+
+    if (typeof value === 'object') {
+      if (typeof value.detail === 'string' && value.detail.trim()) {
+        return value.detail.trim();
+      }
+      if (typeof value.error === 'string' && value.error.trim()) {
+        return value.error.trim();
+      }
+      if (typeof value.message === 'string' && value.message.trim()) {
+        return value.message.trim();
+      }
+    }
+
+    return null;
+  }
+
   function copyText(text) {
     if (!text) return;
     if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -1406,6 +1454,36 @@
     }, 2000);
   }
 
+  function handleViewError() {
+    if (!toastErrorDetail) return;
+    const rayLine = toastRayId ? `\n\nRay ID: ${toastRayId}` : '';
+    const detail = `${toastErrorDetail}${rayLine}`;
+
+    if (errorDialogEl && errorDialogBodyEl && typeof errorDialogEl.showModal === 'function') {
+      errorDialogBodyEl.textContent = detail;
+      if (errorDialogEl.open) {
+        return;
+      }
+      errorDialogEl.showModal();
+      return;
+    }
+
+    window.alert(detail);
+  }
+
+  function handleCopyErrorDetail() {
+    const detail = errorDialogBodyEl?.textContent || '';
+    if (!detail) return;
+    copyText(detail);
+    if (!errorDialogCopyBtn) return;
+    errorDialogCopyBtn.textContent = 'Copied';
+    setTimeout(() => {
+      if (errorDialogCopyBtn) {
+        errorDialogCopyBtn.textContent = 'Copy error';
+      }
+    }, 2000);
+  }
+
   function showToast(message, onUndo, options = {}) {
     if (toastTimeout) {
       clearTimeout(toastTimeout);
@@ -1414,6 +1492,7 @@
     toastMessageEl.textContent = message;
     undoAction = onUndo;
     setToastRayId(options.rayId || null);
+    setToastErrorDetail(options.errorDetail || null);
     toastEl.hidden = false;
 
     requestAnimationFrame(() => {
@@ -1429,6 +1508,7 @@
       toastEl.hidden = true;
       undoAction = null;
       setToastRayId(null);
+      setToastErrorDetail(null);
     }, 300);
   }
 
@@ -1448,8 +1528,18 @@
     }
   }
 
-  toastUndoBtn.addEventListener('click', handleUndo);
-  toastCopyBtn.addEventListener('click', handleCopyRayId);
+  if (toastUndoBtn) {
+    toastUndoBtn.addEventListener('click', handleUndo);
+  }
+  if (toastErrorBtn) {
+    toastErrorBtn.addEventListener('click', handleViewError);
+  }
+  if (toastCopyBtn) {
+    toastCopyBtn.addEventListener('click', handleCopyRayId);
+  }
+  if (errorDialogCopyBtn) {
+    errorDialogCopyBtn.addEventListener('click', handleCopyErrorDetail);
+  }
 
   filterButtons.forEach(button => {
     button.addEventListener('click', () => setFilter(button.dataset.filter));
@@ -1502,7 +1592,9 @@
       }
 
       if (data.ok === false) {
-        throw new Error(data.error || 'Save failed');
+        const error = new Error(data.error || 'Save failed');
+        error.detail = extractErrorDetail(data);
+        throw error;
       }
 
       if (data.item) {
@@ -1527,7 +1619,10 @@
     } catch (error) {
       console.error('Save error:', error);
       state.savingItem = null;
-      showToast('Failed to save', null, { rayId: error?.rayId || null });
+      showToast('Failed to save', null, {
+        rayId: error?.rayId || null,
+        errorDetail: extractErrorDetail(error) || 'Save failed for an unknown reason'
+      });
       return null;
     }
   }
@@ -1555,6 +1650,7 @@
     if (!response.ok || !data.ok) {
       const error = new Error(data.error || 'Save failed');
       error.rayId = rayId;
+      error.detail = extractErrorDetail(data);
       throw error;
     }
 
