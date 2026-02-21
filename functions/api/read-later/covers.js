@@ -5,7 +5,7 @@ import { formatError, truncateString } from '../lib/logger.js';
 const COVER_PREFIX = 'cover:';
 const MAX_SNIPPET_WORDS = 1000;
 const MIN_SNIPPET_WORDS = 40;
-const OPENAI_TIMEOUT_MS = 90000;
+const OPENAI_TIMEOUT_MS = 150000;
 const OPENAI_ENDPOINT = 'https://api.openai.com/v1/responses';
 
 function getCoverKey(id) {
