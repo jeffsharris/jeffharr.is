@@ -78,21 +78,28 @@ function buildCoverPrompt({ title, url, snippet, truncated }) {
   ].filter(Boolean).join('\n\n');
 }
 
-async function generateCoverImage({ title, url, snippet, truncated, env, log, itemId }) {
-  const apiKey = env?.OPENAI_API_KEY;
-  if (!apiKey) {
-    if (log) {
-      log('warn', 'cover_api_key_missing', {
-        stage: 'cover_generation',
-        itemId: itemId || null,
-        url: url || null,
-        title: title || null
-      });
-    }
-    return null;
-  }
+function buildFallbackCoverPrompt({ title, url, excerpt }) {
+  const source = url ? `Source: ${url}` : '';
+  return [
+    'Design a portrait book cover inspired by the topic below.',
+    `Title: "${title}".`,
+    'Include only the title as text on the cover (no subtitle, byline, or logo).',
+    'Use bold composition and high contrast with clear, legible title typography.',
+    source,
+    excerpt ? `Theme summary: ${excerpt}` : 'Theme summary: Use an abstract visual tied to the title.'
+  ].filter(Boolean).join('\n\n');
+}
 
-  const prompt = buildCoverPrompt({ title, url, snippet, truncated });
+function findImageResult(data) {
+  const output = Array.isArray(data?.output) ? data.output : [];
+  const imageCall = output.find((item) => item.type === 'image_generation_call' && item.result);
+  return {
+    result: imageCall?.result || null,
+    outputTypes: output.map((item) => item?.type).filter(Boolean)
+  };
+}
+
+async function requestCoverResult({ prompt, apiKey, log, itemId, url, title }) {
   const payload = {
     model: 'gpt-5',
     input: [
@@ -140,13 +147,14 @@ async function generateCoverImage({ title, url, snippet, truncated, env, log, it
   }
 
   const data = await response.json();
-  const imageCall = Array.isArray(data?.output)
-    ? data.output.find((item) => item.type === 'image_generation_call' && item.result)
-    : null;
+  return findImageResult(data);
+}
 
-  if (!imageCall?.result) {
+async function generateCoverImage({ title, url, snippet, truncated, env, log, itemId }) {
+  const apiKey = env?.OPENAI_API_KEY;
+  if (!apiKey) {
     if (log) {
-      log('warn', 'cover_result_missing', {
+      log('warn', 'cover_api_key_missing', {
         stage: 'cover_generation',
         itemId: itemId || null,
         url: url || null,
@@ -156,8 +164,56 @@ async function generateCoverImage({ title, url, snippet, truncated, env, log, it
     return null;
   }
 
+  const prompt = buildCoverPrompt({ title, url, snippet, truncated });
+  const primary = await requestCoverResult({ prompt, apiKey, log, itemId, url, title });
+  if (primary.result) {
+    return {
+      base64: primary.result,
+      contentType: 'image/png',
+      createdAt: new Date().toISOString()
+    };
+  }
+
+  if (log) {
+    log('warn', 'cover_result_missing', {
+      stage: 'cover_generation',
+      itemId: itemId || null,
+      url: url || null,
+      title: title || null,
+      attempt: 'primary',
+      outputTypes: primary.outputTypes.join(',')
+    });
+  }
+
+  const fallbackPrompt = buildFallbackCoverPrompt({
+    title,
+    url,
+    excerpt: snippet.split(/\s+/).slice(0, 48).join(' ')
+  });
+  const fallback = await requestCoverResult({
+    prompt: fallbackPrompt,
+    apiKey,
+    log,
+    itemId,
+    url,
+    title
+  });
+  if (!fallback.result) {
+    if (log) {
+      log('warn', 'cover_result_missing', {
+        stage: 'cover_generation',
+        itemId: itemId || null,
+        url: url || null,
+        title: title || null,
+        attempt: 'fallback',
+        outputTypes: fallback.outputTypes.join(',')
+      });
+    }
+    return null;
+  }
+
   return {
-    base64: imageCall.result,
+    base64: fallback.result,
     contentType: 'image/png',
     createdAt: new Date().toISOString()
   };
