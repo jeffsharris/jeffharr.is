@@ -59,7 +59,7 @@ test('buildXReaderFromUrl returns article content and media metadata', async () 
   assert.ok(reader);
   assert.equal(reader.title, 'Article title');
   assert.equal(reader.siteName, 'X (formerly Twitter)');
-  assert.equal(reader.coverImageUrl, 'https://pbs.twimg.com/media/cover.jpg');
+  assert.equal(reader.coverImageUrl, null);
   assert.deepEqual(reader.imageUrls, ['https://pbs.twimg.com/media/inline-1.jpg']);
   assert.ok(reader.contentHtml.includes('<img src="https://pbs.twimg.com/media/inline-1.jpg"'));
   assert.equal(reader.wordCount, 80);

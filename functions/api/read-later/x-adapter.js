@@ -47,7 +47,7 @@ function createXApiUrl(tweetId) {
   );
   url.searchParams.set(
     'expansions',
-    'author_id,attachments.media_keys,article.cover_media,article.media_entities'
+    'author_id,attachments.media_keys,article.media_entities'
   );
   url.searchParams.set('user.fields', 'name,username,profile_image_url');
   url.searchParams.set('media.fields', 'type,url,preview_image_url,width,height,alt_text,duration_ms');
@@ -209,9 +209,6 @@ function getSourceText(tweet) {
 }
 
 function getMediaUrls(tweet, mediaByKey) {
-  const coverMediaKey = tweet?.article?.cover_media || null;
-  const coverUrl = coverMediaKey ? pickMediaUrl(mediaByKey.get(coverMediaKey)) : null;
-
   const articleMediaKeys = Array.isArray(tweet?.article?.media_entities)
     ? tweet.article.media_entities
     : [];
@@ -226,10 +223,7 @@ function getMediaUrls(tweet, mediaByKey) {
     .map((key) => pickMediaUrl(mediaByKey.get(key)))
     .filter(Boolean);
 
-  return {
-    coverUrl: coverUrl || null,
-    imageUrls: dedupeStrings([...articleMediaUrls, ...attachmentUrls])
-  };
+  return dedupeStrings([...articleMediaUrls, ...attachmentUrls]);
 }
 
 async function fetchWithTimeout(url, options = {}, timeoutMs = X_FETCH_TIMEOUT_MS, fetchImpl = fetch) {
@@ -330,7 +324,7 @@ async function buildXReaderFromUrl(url, fallbackTitle, bearerToken, options = {}
   const sourceText = getSourceText(tweet);
   if (!sourceText) return null;
 
-  const { coverUrl, imageUrls } = getMediaUrls(tweet, mediaByKey);
+  const imageUrls = getMediaUrls(tweet, mediaByKey);
   const contentHtml = buildXContentHtml(sourceText, imageUrls);
   if (!contentHtml) return null;
 
@@ -347,7 +341,7 @@ async function buildXReaderFromUrl(url, fallbackTitle, bearerToken, options = {}
     siteName: X_SITE_NAME,
     wordCount: countWords(sourceText),
     contentHtml,
-    coverImageUrl: coverUrl || null,
+    coverImageUrl: null,
     imageUrls,
     source: 'x-api',
     retrievedAt: new Date().toISOString()
