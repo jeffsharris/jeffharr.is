@@ -2,6 +2,12 @@
 
 This repo uses structured JSON logs from Cloudflare Pages Functions. Every log line is a single JSON object with consistent fields so an agent can filter by source/event/stage and quickly isolate failures.
 
+## Runtime boundaries (critical)
+- `functions/api/*` runs on Cloudflare Pages Functions.
+- `workers/read-later-sync/*` is a separate Worker that consumes the `read-later-sync` queue.
+- Pages logs and Worker logs are different streams.
+- Deploying Pages does not deploy the queue worker.
+
 ## Log format
 Each event is a JSON object logged via `console.*` with these common keys:
 
@@ -52,6 +58,19 @@ If you need raw Wrangler output:
 
 ```sh
 node scripts/tail-logs.js --raw
+```
+
+Queue consumer logs (run from `workers/read-later-sync`):
+
+```sh
+npx wrangler tail --format json
+```
+
+Queue health checks:
+
+```sh
+npx wrangler queues info read-later-sync
+npx wrangler queues resume-delivery read-later-sync
 ```
 
 ## Event catalog

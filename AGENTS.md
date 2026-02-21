@@ -5,6 +5,21 @@
 - Preserve API response shapes; frontend expects the current JSON fields.
 - Avoid adding production dependencies without explicit approval.
 
+## Read Later architecture (critical)
+- There are two deploy targets for Read Later:
+- `Pages Functions` in this repo (`functions/api/*`) for API routes.
+- Separate queue consumer Worker at `workers/read-later-sync/` for background Kindle/cover sync.
+- A Pages deploy does **not** deploy `workers/read-later-sync`.
+- If background sync behavior changes, deploy both surfaces as needed.
+
+## Queue worker gotchas
+- Queue consumer code path: `workers/read-later-sync/index.js`.
+- Worker secrets/vars are independent from Pages env vars. Keep both in sync when required (for example `OPENAI_API_KEY`, `X_API_BEARER_TOKEN`, `RESEND_API_KEY`, Kindle emails).
+- If items stay `pending`/`retrying`, verify:
+- consumer is deployed (`cd workers/read-later-sync && npx wrangler deploy`)
+- queue delivery is not paused (`npx wrangler queues resume-delivery read-later-sync`)
+- consumer binding exists on queue (`npx wrangler queues info read-later-sync`)
+
 ## Cloudflare Pages build notes
 - When adding dependencies used by Pages Functions, update both `package.json` (root) and `functions/package.json` so Pages can resolve them during the root install (missing entries cause build failures).
 - If functions use Node built-ins (ex: puppeteer), keep `wrangler.toml` valid with `pages_build_output_dir = "."` and `compatibility_flags = ["nodejs_compat"]` so Pages applies the config (otherwise deploy fails with `node:*` module errors).

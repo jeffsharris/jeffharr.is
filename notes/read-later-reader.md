@@ -48,6 +48,11 @@
 - Required environment variables (Cloudflare): `RESEND_API_KEY` (secret), `KINDLE_TO_EMAIL`, `KINDLE_FROM_EMAIL`.
 - The `KINDLE_FROM_EMAIL` must be a verified Resend sender and approved in Amazon's "Personal Document Settings".
 
+## Background sync deployment gotcha
+- Queue consumer code is not in Pages Functions; it lives at `workers/read-later-sync/`.
+- Pages deploys do not deploy the queue consumer worker.
+- When changing Kindle/cover queue behavior, deploy worker changes from `workers/read-later-sync` too.
+
 ## Save URLs (current flow)
 - The canonical save entry point is the Read Later list page with query params:
   - `https://jeffharr.is/read-later/?url=<ENCODED_URL>&title=<ENCODED_TITLE>`
