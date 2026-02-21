@@ -1363,12 +1363,13 @@
   }
 
   function updateProgress(id, scrollTop, scrollRatio) {
+    const updatedAt = new Date().toISOString();
     const item = state.items.find(entry => entry.id === id);
     if (item) {
       item.progress = {
         scrollTop,
         scrollRatio,
-        updatedAt: new Date().toISOString()
+        updatedAt
       };
     }
 
@@ -1377,18 +1378,18 @@
     }
 
     const timer = setTimeout(() => {
-      saveProgress(id, scrollTop, scrollRatio);
+      saveProgress(id, scrollTop, scrollRatio, updatedAt);
     }, PROGRESS_DEBOUNCE_MS);
 
     progressTimers.set(id, timer);
   }
 
-  async function saveProgress(id, scrollTop, scrollRatio) {
+  async function saveProgress(id, scrollTop, scrollRatio, updatedAt) {
     try {
       await fetch('/api/read-later/progress', {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id, scrollTop, scrollRatio })
+        body: JSON.stringify({ id, scrollTop, scrollRatio, updatedAt })
       });
     } catch (error) {
       console.error('Failed to save progress:', error);

@@ -35,6 +35,7 @@ export async function onRequest(context) {
     const id = typeof payload?.id === 'string' ? payload.id.trim() : '';
     const scrollTop = Number(payload?.scrollTop);
     const scrollRatio = Number(payload?.scrollRatio);
+    const incomingScrollUpdatedAt = normalizeIsoDate(payload?.updatedAt);
     const videoCurrentTime = Number(payload?.videoCurrentTime);
     const videoDuration = Number(payload?.videoDuration);
 
@@ -69,12 +70,18 @@ export async function onRequest(context) {
     const progress = item.progress && typeof item.progress === 'object'
       ? { ...item.progress }
       : {};
-    const updatedAt = new Date().toISOString();
+    const serverNow = new Date().toISOString();
 
     if (hasScroll) {
-      progress.scrollTop = Math.max(0, scrollTop);
-      progress.scrollRatio = clamp(scrollRatio, 0, 1);
-      progress.updatedAt = updatedAt;
+      const nextScrollUpdatedAt = incomingScrollUpdatedAt || serverNow;
+      const existingScrollUpdatedAt = normalizeIsoDate(progress.updatedAt);
+      const canApplyScroll = isSameOrAfter(nextScrollUpdatedAt, existingScrollUpdatedAt);
+
+      if (canApplyScroll) {
+        progress.scrollTop = Math.max(0, scrollTop);
+        progress.scrollRatio = clamp(scrollRatio, 0, 1);
+        progress.updatedAt = nextScrollUpdatedAt;
+      }
     }
 
     if (hasVideo) {
@@ -85,7 +92,7 @@ export async function onRequest(context) {
           currentTime: safeTime,
           duration: safeDuration,
           ratio: safeDuration ? clamp(safeTime / safeDuration, 0, 1) : 0,
-          updatedAt
+          updatedAt: serverNow
         };
       } else {
         delete progress.video;
@@ -122,6 +129,22 @@ async function parseJson(request) {
 
 function clamp(value, min, max) {
   return Math.min(Math.max(value, min), max);
+}
+
+function normalizeIsoDate(value) {
+  if (typeof value !== 'string') return null;
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return null;
+  return date.toISOString();
+}
+
+function isSameOrAfter(nextIso, existingIso) {
+  if (!nextIso) return true;
+  if (!existingIso) return true;
+  const nextTime = new Date(nextIso).getTime();
+  const existingTime = new Date(existingIso).getTime();
+  if (Number.isNaN(nextTime) || Number.isNaN(existingTime)) return true;
+  return nextTime >= existingTime;
 }
 
 function jsonResponse(payload, { status = 200, cache = 'no-store' } = {}) {
