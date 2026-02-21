@@ -9,10 +9,21 @@ import {
 } from '../functions/api/read-later/reader-utils.js';
 
 test('shouldCacheReader requires content and minimum word count', () => {
+  const manyWords = Array.from({ length: 55 }, (_, index) => `word${index + 1}`).join(' ');
   assert.equal(shouldCacheReader(null), false);
   assert.equal(shouldCacheReader({ contentHtml: '', wordCount: 100 }), false);
   assert.equal(shouldCacheReader({ contentHtml: '<p>Hi</p>', wordCount: 10 }), false);
-  assert.equal(shouldCacheReader({ contentHtml: '<p>Hi</p>', wordCount: 50 }), true);
+  assert.equal(shouldCacheReader({ contentHtml: `<p>${manyWords}</p>`, wordCount: 50 }), true);
+});
+
+test('shouldCacheReader rejects known placeholder extraction text', () => {
+  const placeholder = `
+    <div>
+      <p>Something went wrong, but don't fret — let's give it another shot.</p>
+      <p>${Array.from({ length: 60 }, () => 'word').join(' ')}</p>
+    </div>
+  `;
+  assert.equal(shouldCacheReader({ contentHtml: placeholder, wordCount: 160 }), false);
 });
 
 test('absolutizeUrl resolves relative URLs and rejects non-http', () => {

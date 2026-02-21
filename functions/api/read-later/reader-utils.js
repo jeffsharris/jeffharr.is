@@ -7,6 +7,11 @@ const CLIENT_RENDER_MARKERS = [
   'window.__APOLLO_STATE__',
   'window.__INITIAL_STATE__'
 ];
+const READER_PLACEHOLDER_MARKERS = [
+  'something went wrong, but don’t fret',
+  'something went wrong, but don\'t fret',
+  'privacy related extensions may cause issues on x.com'
+];
 
 function deriveTitleFromUrl(url) {
   try {
@@ -52,8 +57,20 @@ function normalizeTitleValue(value) {
 
 function shouldCacheReader(reader, minWords = DEFAULT_MIN_WORD_COUNT) {
   if (!reader || !reader.contentHtml) return false;
-  const wordCount = Number(reader.wordCount || 0);
-  return Number.isFinite(wordCount) && wordCount >= minWords;
+  const text = extractTextFromHtml(reader.contentHtml);
+  if (!text) return false;
+
+  const lowered = text.toLowerCase();
+  if (READER_PLACEHOLDER_MARKERS.some((marker) => lowered.includes(marker))) {
+    return false;
+  }
+
+  const htmlWordCount = countWords(text);
+  if (!Number.isFinite(htmlWordCount) || htmlWordCount < minWords) {
+    return false;
+  }
+
+  return true;
 }
 
 function countWords(text) {
@@ -61,6 +78,25 @@ function countWords(text) {
   const trimmed = text.replace(/\s+/g, ' ').trim();
   if (!trimmed) return 0;
   return trimmed.split(' ').length;
+}
+
+function extractTextFromHtml(html) {
+  if (typeof html !== 'string' || !html) return '';
+
+  const withoutScripts = html
+    .replace(/<script[\s\S]*?<\/script>/gi, ' ')
+    .replace(/<style[\s\S]*?<\/style>/gi, ' ')
+    .replace(/<[^>]+>/g, ' ');
+
+  return withoutScripts
+    .replace(/&nbsp;/gi, ' ')
+    .replace(/&#39;/g, '\'')
+    .replace(/&quot;/g, '"')
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/\s+/g, ' ')
+    .trim();
 }
 
 function looksClientRendered(html) {
@@ -104,6 +140,7 @@ export {
   normalizeTitleValue,
   shouldCacheReader,
   countWords,
+  extractTextFromHtml,
   looksClientRendered,
   absolutizeUrl,
   absolutizeSrcset

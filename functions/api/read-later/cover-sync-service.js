@@ -415,7 +415,11 @@ async function processCoverSyncMessage(message, env, log) {
 
   let reader = null;
   try {
-    reader = await buildReaderContent(item.url, item.title, env?.BROWSER, { log, itemId });
+    reader = await buildReaderContent(item.url, item.title, env?.BROWSER, {
+      log,
+      itemId,
+      xBearerToken: env?.X_API_BEARER_TOKEN
+    });
   } catch (error) {
     const classified = classifyCoverError(error);
     await markCoverSyncFailure({

@@ -16,6 +16,7 @@ import {
   countWords,
   looksClientRendered
 } from './reader-utils.js';
+import { buildXReaderFromUrl } from './x-adapter.js';
 import { createLogger, formatError } from '../lib/logger.js';
 
 const KV_PREFIX = 'item:';
@@ -114,6 +115,7 @@ export async function onRequest(context) {
       url: item.url,
       title: item.title,
       browser: env.BROWSER,
+      xBearerToken: env.X_API_BEARER_TOKEN,
       forceRefresh,
       log
     });
@@ -158,11 +160,21 @@ export async function onRequest(context) {
 
 async function buildReaderContent(url, fallbackTitle, browserBinding, options = {}) {
   const log = options.log;
+  const xBearerToken = options.xBearerToken || null;
   const logContext = {
     itemId: options.itemId || null,
     url,
     title: fallbackTitle
   };
+
+  const xReader = await buildXReaderFromUrl(url, fallbackTitle, xBearerToken, {
+    log,
+    itemId: options.itemId || null
+  });
+  if (xReader?.contentHtml) {
+    return xReader;
+  }
+
   let html;
   try {
     html = await fetchHtml(url);
@@ -202,6 +214,7 @@ async function fetchAndCacheReader({
   url,
   title,
   browser,
+  xBearerToken,
   forceRefresh = false,
   log
 }) {
@@ -216,7 +229,11 @@ async function fetchAndCacheReader({
     await kv.delete(`${READER_PREFIX}${id}`);
   }
 
-  const reader = await buildReaderContent(url, title, browser, { log, itemId: id });
+  const reader = await buildReaderContent(url, title, browser, {
+    log,
+    itemId: id,
+    xBearerToken
+  });
   if (!reader?.contentHtml || !shouldCacheReader(reader)) {
     if (forceRefresh && cached?.contentHtml && shouldCacheReader(cached)) {
       return cached;

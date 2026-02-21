@@ -200,7 +200,8 @@ async function syncKindleForItem(item, env, options = {}) {
   }
 
   const blocklisted = getKindleBlocklistEntry(item.url);
-  if (blocklisted) {
+  const shouldExtractUnsupportedContent = blocklisted?.domain === 'x.com';
+  if (blocklisted && !shouldExtractUnsupportedContent) {
     return {
       reader: null,
       kindle: buildKindleState(KINDLE_STATUS.UNSUPPORTED, attemptedAt, blocklisted.reason, {
@@ -230,8 +231,23 @@ async function syncKindleForItem(item, env, options = {}) {
 
   let reader = null;
   try {
-    reader = await buildReaderContent(item.url, item.title, env?.BROWSER, { log, ...logContext });
+    reader = await buildReaderContent(item.url, item.title, env?.BROWSER, {
+      log,
+      ...logContext,
+      xBearerToken: env?.X_API_BEARER_TOKEN
+    });
   } catch (error) {
+    if (blocklisted) {
+      return {
+        reader: null,
+        kindle: buildKindleState(KINDLE_STATUS.UNSUPPORTED, attemptedAt, blocklisted.reason, {
+          errorCode: 'kindle_unsupported_domain',
+          retryable: false
+        }),
+        cover: null
+      };
+    }
+
     if (log) {
       log('error', 'reader_fetch_failed', {
         stage: 'reader_fetch',
@@ -250,6 +266,17 @@ async function syncKindleForItem(item, env, options = {}) {
   }
 
   if (!reader || !shouldCacheKindleReader(reader)) {
+    if (blocklisted) {
+      return {
+        reader,
+        kindle: buildKindleState(KINDLE_STATUS.UNSUPPORTED, attemptedAt, blocklisted.reason, {
+          errorCode: 'kindle_unsupported_domain',
+          retryable: false
+        }),
+        cover: null
+      };
+    }
+
     if (log) {
       log('warn', 'reader_unavailable', {
         stage: 'reader_fetch',
@@ -291,6 +318,17 @@ async function syncKindleForItem(item, env, options = {}) {
       }
       cover = null;
     }
+  }
+
+  if (blocklisted) {
+    return {
+      reader,
+      kindle: buildKindleState(KINDLE_STATUS.UNSUPPORTED, attemptedAt, blocklisted.reason, {
+        errorCode: 'kindle_unsupported_domain',
+        retryable: false
+      }),
+      cover
+    };
   }
 
   try {

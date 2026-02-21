@@ -6,6 +6,8 @@ const COVER_PREFIX = 'cover:';
 const MAX_SNIPPET_WORDS = 1000;
 const MIN_SNIPPET_WORDS = 40;
 const OPENAI_TIMEOUT_MS = 150000;
+const COVER_FETCH_TIMEOUT_MS = 15000;
+const MAX_COVER_FETCH_BYTES = 8 * 1024 * 1024;
 const OPENAI_ENDPOINT = 'https://api.openai.com/v1/responses';
 
 function getCoverKey(id) {
@@ -298,6 +300,27 @@ async function ensureCoverImage({ item, reader, env, kv, onPartial, log }) {
   const existing = await getCoverImage(kv, item.id);
   if (existing) return existing;
 
+  const externalCoverUrl = resolveExternalCoverUrl(reader);
+  if (externalCoverUrl) {
+    try {
+      const externalCover = await fetchExternalCoverImage(externalCoverUrl);
+      if (externalCover?.base64) {
+        return saveCoverImage(kv, item.id, externalCover);
+      }
+    } catch (error) {
+      if (log) {
+        log('warn', 'cover_external_fetch_failed', {
+          stage: 'cover_generation',
+          itemId: item?.id || null,
+          url: item?.url || null,
+          title: item?.title || null,
+          coverUrl: externalCoverUrl,
+          ...formatError(error)
+        });
+      }
+    }
+  }
+
   const snippetInfo = extractSnippetFromHtml(reader.contentHtml);
   if (!snippetInfo) {
     if (log) {
@@ -359,6 +382,62 @@ async function ensureCoverImage({ item, reader, env, kv, onPartial, log }) {
     }
     throw error;
   }
+}
+
+function resolveExternalCoverUrl(reader) {
+  const url = typeof reader?.coverImageUrl === 'string' ? reader.coverImageUrl.trim() : '';
+  if (!url) return null;
+
+  try {
+    const parsed = new URL(url);
+    if (!['http:', 'https:'].includes(parsed.protocol)) return null;
+    return parsed.toString();
+  } catch {
+    return null;
+  }
+}
+
+async function fetchExternalCoverImage(url) {
+  const response = await fetchWithTimeout(url, {
+    headers: {
+      Accept: 'image/*'
+    }
+  }, COVER_FETCH_TIMEOUT_MS);
+
+  if (!response.ok) {
+    throw new Error(`External cover fetch failed with ${response.status}`);
+  }
+
+  const contentType = (response.headers.get('content-type') || '').split(';')[0].trim().toLowerCase();
+  if (!contentType.startsWith('image/')) {
+    throw new Error(`External cover returned unsupported content type: ${contentType || 'unknown'}`);
+  }
+
+  const bytes = new Uint8Array(await response.arrayBuffer());
+  if (!bytes.length) {
+    throw new Error('External cover response was empty');
+  }
+  if (bytes.length > MAX_COVER_FETCH_BYTES) {
+    throw new Error(`External cover too large (${bytes.length} bytes)`);
+  }
+
+  return {
+    base64: encodeBase64(bytes),
+    contentType,
+    createdAt: new Date().toISOString()
+  };
+}
+
+function encodeBase64(bytes) {
+  if (typeof Buffer !== 'undefined') {
+    return Buffer.from(bytes).toString('base64');
+  }
+
+  let binary = '';
+  bytes.forEach((byte) => {
+    binary += String.fromCharCode(byte);
+  });
+  return btoa(binary);
 }
 
 async function consumeEventStream(response, onEvent) {
