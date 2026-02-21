@@ -1,5 +1,5 @@
 import { preferReaderTitle } from './reader-utils.js';
-import { buildReaderContent } from './reader.js';
+import { buildReaderContent, fetchAndCacheReader } from './reader.js';
 import { ensureCoverImage } from './covers.js';
 import { formatError } from '../lib/logger.js';
 
@@ -415,11 +415,23 @@ async function processCoverSyncMessage(message, env, log) {
 
   let reader = null;
   try {
-    reader = await buildReaderContent(item.url, item.title, env?.BROWSER, {
-      log,
-      itemId,
-      xBearerToken: env?.X_API_BEARER_TOKEN
+    reader = await fetchAndCacheReader({
+      kv,
+      id: itemId,
+      url: item.url,
+      title: item.title,
+      browser: env?.BROWSER,
+      xBearerToken: env?.X_API_BEARER_TOKEN,
+      forceRefresh: false,
+      log
     });
+    if (!reader?.contentHtml) {
+      reader = await buildReaderContent(item.url, item.title, env?.BROWSER, {
+        log,
+        itemId,
+        xBearerToken: env?.X_API_BEARER_TOKEN
+      });
+    }
   } catch (error) {
     const classified = classifyCoverError(error);
     await markCoverSyncFailure({
