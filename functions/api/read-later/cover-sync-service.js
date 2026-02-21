@@ -10,6 +10,7 @@ const COVER_MESSAGE_TYPE = 'cover-sync';
 const DEFAULT_MAX_ATTEMPTS = 2;
 const MAX_MAX_ATTEMPTS = 4;
 const RETRY_DELAYS_SECONDS = [20, 60, 150];
+const STALE_ACTIVE_SYNC_MS = 5 * 60 * 1000;
 
 const COVER_SYNC_STATUS = {
   PENDING: 'pending',
@@ -59,6 +60,13 @@ function isCoverSyncActive(item) {
     status === COVER_SYNC_STATUS.PROCESSING ||
     status === COVER_SYNC_STATUS.RETRYING
   );
+}
+
+function isStaleActiveCoverSync(item, nowMs = Date.now()) {
+  if (!isCoverSyncActive(item)) return false;
+  const updatedAt = Date.parse(item?.coverSync?.updatedAt || item?.coverSync?.queuedAt || '');
+  if (!Number.isFinite(updatedAt)) return false;
+  return nowMs - updatedAt > STALE_ACTIVE_SYNC_MS;
 }
 
 function isCurrentCoverJob(item, jobId) {
@@ -209,7 +217,19 @@ async function enqueueCoverGeneration({
   }
 
   if (isCoverSyncActive(item)) {
-    return { queued: false, inProgress: true, item };
+    if (!isStaleActiveCoverSync(item)) {
+      return { queued: false, inProgress: true, item };
+    }
+    if (log) {
+      log('warn', 'cover_sync_stale_active_requeue', {
+        stage: 'queue',
+        itemId: item.id,
+        url: item.url,
+        title: item.title,
+        currentStatus: item?.coverSync?.status || null,
+        updatedAt: item?.coverSync?.updatedAt || null
+      });
+    }
   }
 
   if (item?.cover?.updatedAt && !force) {

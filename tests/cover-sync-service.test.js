@@ -106,6 +106,38 @@ test('enqueueCoverGeneration does not enqueue while a job is already active', as
   assert.equal(kv.store.size, 0);
 });
 
+test('enqueueCoverGeneration requeues stale active jobs', async () => {
+  const kv = createMockKv();
+  let sendCount = 0;
+  const env = {
+    READ_LATER_SYNC_QUEUE: {
+      async send() {
+        sendCount += 1;
+      }
+    }
+  };
+
+  const staleUpdatedAt = new Date(Date.now() - (6 * 60 * 1000)).toISOString();
+  const item = {
+    id: 'cover-item-stale',
+    url: 'https://example.com/article',
+    title: 'Stale active job',
+    coverSync: {
+      status: 'pending',
+      jobId: 'job-stale',
+      updatedAt: staleUpdatedAt
+    }
+  };
+
+  const result = await enqueueCoverGeneration({ item, kv, env });
+  assert.equal(result.queued, true);
+  assert.equal(sendCount, 1);
+
+  const stored = await kv.get('item:cover-item-stale', { type: 'json' });
+  assert.equal(stored.coverSync.status, 'pending');
+  assert.notEqual(stored.coverSync.jobId, 'job-stale');
+});
+
 test('enqueueCoverGeneration requeues when cover metadata exists but image payload is missing', async () => {
   const kv = createMockKv();
   const sent = [];
