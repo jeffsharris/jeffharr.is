@@ -4,6 +4,7 @@
  */
 
 import { deriveTitleFromUrl, preferReaderTitle } from './read-later/reader-utils.js';
+import { createInitialPushChannels } from './read-later/article-push-service.js';
 import { enqueueKindleSync } from './read-later/sync-service.js';
 import { createLogger, formatError } from './lib/logger.js';
 
@@ -350,8 +351,10 @@ function createItem({
   savedAt = new Date().toISOString(),
   read = false,
   readAt = null,
-  progress = null
+  progress = null,
+  pushChannels = null
 }) {
+  const now = new Date().toISOString();
   return {
     id,
     url,
@@ -359,7 +362,8 @@ function createItem({
     savedAt,
     read,
     readAt: read ? readAt || new Date().toISOString() : null,
-    progress
+    progress,
+    pushChannels: pushChannels || createInitialPushChannels(now)
   };
 }
 

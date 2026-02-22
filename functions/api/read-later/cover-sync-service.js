@@ -1,4 +1,8 @@
 import { preferReaderTitle } from './reader-utils.js';
+import {
+  maybeQueueIosPush,
+  updateArticlePushReadiness
+} from './article-push-service.js';
 import { buildReaderContent, fetchAndCacheReader } from './reader.js';
 import { getCoverImage, ensureCoverImage } from './covers.js';
 import { isXStatusUrl } from './x-adapter.js';
@@ -566,6 +570,17 @@ async function processCoverSyncMessage(message, env, log) {
       maxAttempts,
       jobId,
       coverCreatedAt: cover.createdAt
+    });
+  }
+
+  const readiness = await updateArticlePushReadiness(itemId, kv, log);
+  if (readiness?.ready && readiness?.item) {
+    await maybeQueueIosPush({
+      item: readiness.item,
+      env,
+      kv,
+      log,
+      source: 'cover-sync-complete'
     });
   }
 }

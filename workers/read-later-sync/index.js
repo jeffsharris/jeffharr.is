@@ -1,4 +1,8 @@
 import { createLogger } from '../../functions/api/lib/logger.js';
+import {
+  IOS_PUSH_MESSAGE_TYPE,
+  processIosPushBatch
+} from '../../functions/api/read-later/ios-push-service.js';
 import { processKindleSyncBatch } from '../../functions/api/read-later/sync-service.js';
 import {
   COVER_MESSAGE_TYPE,
@@ -32,11 +36,16 @@ export default {
     const logger = createLogger({ source: 'read-later-sync-worker' });
     const kindleMessages = [];
     const coverMessages = [];
+    const iosPushMessages = [];
 
     for (const message of batch.messages || []) {
       const payload = parseQueueMessageBody(message);
       if (payload?.type === COVER_MESSAGE_TYPE) {
         coverMessages.push(message);
+        continue;
+      }
+      if (payload?.type === IOS_PUSH_MESSAGE_TYPE) {
+        iosPushMessages.push(message);
         continue;
       }
       kindleMessages.push(message);
@@ -48,6 +57,10 @@ export default {
 
     if (coverMessages.length > 0) {
       await processCoverSyncBatch({ messages: coverMessages }, env, logger.log);
+    }
+
+    if (iosPushMessages.length > 0) {
+      await processIosPushBatch({ messages: iosPushMessages }, env, logger.log);
     }
   }
 };
