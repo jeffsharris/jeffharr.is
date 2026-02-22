@@ -294,19 +294,20 @@ function getApnsTopic(env, device) {
 }
 
 function buildApnsPayload(payload) {
-  const title = payload?.title || 'Saved article';
-  const subtitle = payload?.domain || 'Read Later';
+  const alertTitle = payload?.alertTitle || 'Saved to Read Later';
+  const alertSubtitle = payload?.alertSubtitle || payload?.domain || 'Read Later';
+  const alertBody = payload?.alertBody || payload?.title || 'Saved article';
 
   return {
     aps: {
       alert: {
-        title: 'Saved to Read Later',
-        subtitle,
-        body: title
+        title: alertTitle,
+        subtitle: alertSubtitle,
+        body: alertBody
       },
       sound: 'default'
     },
-    type: IOS_PUSH_MESSAGE_TYPE,
+    type: payload?.type || IOS_PUSH_MESSAGE_TYPE,
     itemId: payload?.itemId || null,
     savedAt: payload?.savedAt || null,
     eventId: payload?.eventId || null,
@@ -369,6 +370,146 @@ async function updateIosChannel(kv, item, { status, eventId, lastError }) {
     lastError: lastError || null
   };
   await saveItem(kv, item);
+}
+
+async function deliverIosPush({
+  env,
+  kv,
+  ownerId,
+  payload,
+  log,
+  stage = 'push',
+  itemId = null,
+  eventId = null,
+  targetDeviceId = null
+}) {
+  const targetDevice = typeof targetDeviceId === 'string' ? targetDeviceId.trim() : '';
+  const devices = await listPushDevicesForOwner(kv, ownerId);
+  const validDevices = devices.filter((device) => {
+    if (device?.platform !== 'ios') return false;
+    if (typeof device?.token !== 'string' || !device.token) return false;
+    if (targetDevice && device.deviceId !== targetDevice) return false;
+    return true;
+  });
+
+  if (!validDevices.length) {
+    return {
+      ok: false,
+      reason: 'no_devices',
+      successCount: 0,
+      failedCount: 0,
+      prunedCount: 0,
+      attemptedCount: 0
+    };
+  }
+
+  let authToken;
+  try {
+    authToken = await getApnsAuthToken(env);
+  } catch (error) {
+    return {
+      ok: false,
+      reason: 'auth_failed',
+      successCount: 0,
+      failedCount: 0,
+      prunedCount: 0,
+      attemptedCount: validDevices.length,
+      error
+    };
+  }
+
+  let successCount = 0;
+  let failedCount = 0;
+  let prunedCount = 0;
+
+  for (const device of validDevices) {
+    try {
+      const result = await sendApnsNotification({
+        env,
+        authToken,
+        device,
+        payload
+      });
+
+      if (result.ok) {
+        successCount += 1;
+        continue;
+      }
+
+      failedCount += 1;
+      if (TERMINAL_TOKEN_REASONS.has(result.reason)) {
+        const prune = await removePushDeviceByRecord(kv, device);
+        if (prune.removed) {
+          prunedCount += 1;
+        }
+      }
+
+      if (log) {
+        log('warn', 'ios_push_device_failed', {
+          stage,
+          itemId,
+          ownerId,
+          eventId,
+          status: result.status,
+          reason: result.reason || null,
+          deviceId: device.deviceId || null
+        });
+      }
+    } catch (error) {
+      failedCount += 1;
+      if (log) {
+        log('error', 'ios_push_device_request_failed', {
+          stage,
+          itemId,
+          ownerId,
+          eventId,
+          deviceId: device.deviceId || null,
+          ...formatError(error)
+        });
+      }
+    }
+  }
+
+  if (successCount > 0) {
+    return {
+      ok: true,
+      reason: 'sent',
+      successCount,
+      failedCount,
+      prunedCount,
+      attemptedCount: validDevices.length
+    };
+  }
+
+  return {
+    ok: false,
+    reason: prunedCount > 0 && failedCount === prunedCount ? 'no_valid_devices' : 'delivery_failed',
+    successCount,
+    failedCount,
+    prunedCount,
+    attemptedCount: validDevices.length
+  };
+}
+
+async function sendIosTestPush({
+  env,
+  kv,
+  ownerId,
+  payload,
+  log,
+  targetDeviceId = null
+}) {
+  return deliverIosPush({
+    env,
+    kv,
+    ownerId,
+    payload,
+    log,
+    stage: 'test_push',
+    itemId: payload?.itemId || null,
+    eventId: payload?.eventId || null,
+    targetDeviceId
+  });
 }
 
 async function processIosPushMessage(message, env, log) {
@@ -442,8 +583,18 @@ async function processIosPushMessage(message, env, log) {
     return;
   }
 
-  const devices = await listPushDevicesForOwner(kv, ownerId);
-  if (!devices.length) {
+  const delivery = await deliverIosPush({
+    env,
+    kv,
+    ownerId,
+    payload,
+    log,
+    stage: 'push',
+    itemId,
+    eventId
+  });
+
+  if (delivery.reason === 'no_devices') {
     await updateIosChannel(kv, item, {
       status: 'skipped',
       eventId,
@@ -461,10 +612,7 @@ async function processIosPushMessage(message, env, log) {
     return;
   }
 
-  let authToken;
-  try {
-    authToken = await getApnsAuthToken(env);
-  } catch (error) {
+  if (delivery.reason === 'auth_failed') {
     await updateIosChannel(kv, item, {
       status: 'failed',
       eventId,
@@ -477,66 +625,13 @@ async function processIosPushMessage(message, env, log) {
         itemId,
         ownerId,
         eventId,
-        ...formatError(error)
+        ...formatError(delivery.error)
       });
     }
     return;
   }
 
-  const validDevices = devices.filter((device) => device?.platform === 'ios' && typeof device?.token === 'string' && device.token);
-  let successCount = 0;
-  let failedCount = 0;
-  let prunedCount = 0;
-
-  for (const device of validDevices) {
-    try {
-      const result = await sendApnsNotification({
-        env,
-        authToken,
-        device,
-        payload
-      });
-
-      if (result.ok) {
-        successCount += 1;
-        continue;
-      }
-
-      failedCount += 1;
-      if (TERMINAL_TOKEN_REASONS.has(result.reason)) {
-        const prune = await removePushDeviceByRecord(kv, device);
-        if (prune.removed) {
-          prunedCount += 1;
-        }
-      }
-
-      if (log) {
-        log('warn', 'ios_push_device_failed', {
-          stage: 'push',
-          itemId,
-          ownerId,
-          eventId,
-          status: result.status,
-          reason: result.reason || null,
-          deviceId: device.deviceId || null
-        });
-      }
-    } catch (error) {
-      failedCount += 1;
-      if (log) {
-        log('error', 'ios_push_device_request_failed', {
-          stage: 'push',
-          itemId,
-          ownerId,
-          eventId,
-          deviceId: device.deviceId || null,
-          ...formatError(error)
-        });
-      }
-    }
-  }
-
-  if (successCount > 0) {
+  if (delivery.ok) {
     await updateIosChannel(kv, item, {
       status: 'sent',
       eventId,
@@ -549,15 +644,15 @@ async function processIosPushMessage(message, env, log) {
         itemId,
         ownerId,
         eventId,
-        successCount,
-        failedCount,
-        prunedCount
+        successCount: delivery.successCount,
+        failedCount: delivery.failedCount,
+        prunedCount: delivery.prunedCount
       });
     }
     return;
   }
 
-  const status = prunedCount > 0 && failedCount === prunedCount
+  const status = delivery.reason === 'no_valid_devices'
     ? 'skipped'
     : 'failed';
   const errorMessage = status === 'skipped'
@@ -576,9 +671,9 @@ async function processIosPushMessage(message, env, log) {
       itemId,
       ownerId,
       eventId,
-      successCount,
-      failedCount,
-      prunedCount,
+      successCount: delivery.successCount,
+      failedCount: delivery.failedCount,
+      prunedCount: delivery.prunedCount,
       status
     });
   }
@@ -602,5 +697,6 @@ async function processIosPushBatch(batch, env, log) {
 
 export {
   IOS_PUSH_MESSAGE_TYPE,
-  processIosPushBatch
+  processIosPushBatch,
+  sendIosTestPush
 };
