@@ -17,6 +17,7 @@
 ## Queue worker gotchas
 - Queue consumer code path: `workers/read-later-sync/index.js`.
 - Push queue consumer code path: `workers/push-delivery/index.js`.
+- Push testing runbook: `notes/push-test-runbook.md`.
 - Worker secrets/vars are independent from Pages env vars. Keep both in sync when required (for example `OPENAI_API_KEY`, `X_API_BEARER_TOKEN`, `RESEND_API_KEY`, Kindle emails).
 - If items stay `pending`/`retrying`, verify:
 - consumer is deployed (`cd workers/read-later-sync && npx wrangler deploy`)
@@ -26,6 +27,7 @@
 - consumer is deployed (`cd workers/push-delivery && npx wrangler deploy`)
 - queue delivery is not paused (`npx wrangler queues resume-delivery push-delivery`)
 - consumer binding exists on queue (`npx wrangler queues info push-delivery`)
+- test send flow uses `POST /api/push/test` and helper script `node scripts/send-test-push.js --item-id <ITEM_ID>`
 
 ## Cloudflare Pages build notes
 - When adding dependencies used by Pages Functions, update both `package.json` (root) and `functions/package.json` so Pages can resolve them during the root install (missing entries cause build failures).

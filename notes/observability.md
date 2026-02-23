@@ -2,6 +2,8 @@
 
 This repo uses structured JSON logs from Cloudflare Pages Functions. Every log line is a single JSON object with consistent fields so an agent can filter by source/event/stage and quickly isolate failures.
 
+Push-specific operational steps are in `notes/push-test-runbook.md`.
+
 ## Runtime boundaries (critical)
 - `functions/api/*` runs on Cloudflare Pages Functions.
 - `workers/read-later-sync/*` is a separate Worker that consumes the `read-later-sync` queue.
@@ -140,6 +142,12 @@ npx wrangler queues resume-delivery push-delivery
 - `ios_push_item_missing`
 - `ios_push_invalid_message`
 - `ios_push_stale_message`
+- `ios_test_push_sent`
+- `ios_test_push_not_delivered`
+
+### push-test-api (Pages test enqueue endpoint)
+- `ios_test_push_queued`
+- `ios_test_push_queue_failed`
 
 ### read-later-cover (regenerate cover)
 - `storage_unavailable`

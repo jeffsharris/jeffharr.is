@@ -7,6 +7,7 @@ Push delivery is an app-level platform capability. `read-later` is one producer 
 - Device registration: `POST /api/push/devices`
 - Device unregister: `DELETE /api/push/devices`
 - Manual test push: `POST /api/push/test`
+- Operator runbook: `notes/push-test-runbook.md`
 
 ## Runtime Config
 - Pages Functions (`/api/push/*`):
