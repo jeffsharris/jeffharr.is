@@ -20,6 +20,11 @@ Use this runbook when you need to send a manual iOS push notification and verify
   - `APNS_TOPIC`
   - KV binding `READ_LATER`
 
+## Secret access rule (important)
+- `PUSH_TEST_API_KEY` is a Cloudflare secret and is write-only.
+- Agents can check whether it exists, but cannot read the current value back from Cloudflare.
+- If the value is unknown locally, use the direct queue path below or rotate/set a new key in Pages.
+
 ## Quick test flow
 1. Find a target item id:
 ```sh
@@ -49,6 +54,27 @@ node scripts/send-test-push.js \
 - Success: `ios_test_push_sent`
 - Non-delivery: `ios_test_push_not_delivered`
 
+## Fallback: send test push without `PUSH_TEST_API_KEY`
+Use this when an agent cannot call `/api/push/test` because the key value is unknown.
+
+```sh
+export CLOUDFLARE_ACCOUNT_ID='<account id>'
+export CLOUDFLARE_API_TOKEN='<api token with queues write>'
+
+QUEUE_ID=$(curl -sS -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
+  "https://api.cloudflare.com/client/v4/accounts/$CLOUDFLARE_ACCOUNT_ID/queues" \
+  | jq -r '.result[] | select(.queue_name=="push-delivery") | .queue_id')
+
+EVENT_ID="test_$(date +%s)"
+NOW="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+
+curl -sS -X POST \
+  -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
+  -H "Content-Type: application/json" \
+  "https://api.cloudflare.com/client/v4/accounts/$CLOUDFLARE_ACCOUNT_ID/queues/$QUEUE_ID/messages" \
+  --data "{\"body\":{\"type\":\"push.notification.test\",\"source\":\"manual-cli\",\"ownerId\":\"default\",\"itemId\":\"<ITEM_ID>\",\"eventId\":\"$EVENT_ID\",\"savedAt\":\"$NOW\",\"alertTitle\":\"Saved to Read Later\",\"alertSubtitle\":\"example.com\",\"alertBody\":\"Manual test push\"}}"
+```
+
 ## Optional: target one device
 - Include `--device-id <DEVICE_ID>` in `send-test-push.js`.
 - Device ids are from iOS registration payloads stored in KV keys:
@@ -67,6 +93,7 @@ node scripts/send-test-push.js \
   - Missing `PUSH_DELIVERY_QUEUE` producer binding on Pages.
 - `Unauthorized` from `/api/push/test`:
   - Wrong or missing `PUSH_TEST_API_KEY`.
+  - If key value is unknown, use the direct queue fallback above.
 - `ios_test_push_not_delivered` with `reason: "no_devices"`:
   - No registered iOS device tokens for the owner id.
 - `ios_test_push_not_delivered` with `reason: "auth_failed"`:

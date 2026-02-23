@@ -28,6 +28,7 @@
 - queue delivery is not paused (`npx wrangler queues resume-delivery push-delivery`)
 - consumer binding exists on queue (`npx wrangler queues info push-delivery`)
 - test send flow uses `POST /api/push/test` and helper script `node scripts/send-test-push.js --item-id <ITEM_ID>`
+- if `PUSH_TEST_API_KEY` value is unknown locally, use the direct queue fallback in `notes/push-test-runbook.md`
 
 ## Cloudflare Pages build notes
 - When adding dependencies used by Pages Functions, update both `package.json` (root) and `functions/package.json` so Pages can resolve them during the root install (missing entries cause build failures).
