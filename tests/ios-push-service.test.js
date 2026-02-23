@@ -2,8 +2,8 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { generateKeyPairSync } from 'node:crypto';
 import { createInitialPushChannels } from '../functions/api/read-later/article-push-service.js';
-import { processIosPushBatch } from '../functions/api/read-later/ios-push-service.js';
-import { upsertPushDevice } from '../functions/api/read-later/push-device-store.js';
+import { processIosPushBatch } from '../functions/api/push/ios-push-service.js';
+import { upsertPushDevice } from '../functions/api/push/device-store.js';
 
 function createMockKv(initial = {}) {
   const store = new Map(Object.entries(initial));
@@ -74,7 +74,8 @@ function buildReadyItem(id, eventId) {
 function buildMessage(item, ownerId, eventId) {
   return {
     body: JSON.stringify({
-      type: 'ios-article-push',
+      type: 'push.notification.requested',
+      source: 'read-later',
       ownerId,
       itemId: item.id,
       eventId,
@@ -121,7 +122,7 @@ test('ios push prunes invalid APNs token and marks item as skipped', async (t) =
 
   const env = {
     READ_LATER: kv,
-    READ_LATER_DEFAULT_OWNER_ID: ownerId,
+    PUSH_DEFAULT_OWNER_ID: ownerId,
     APNS_TEAM_ID: 'TEAM123456',
     APNS_KEY_ID: 'ABC123DEFG',
     APNS_PRIVATE_KEY_P8: createApnsPrivateKeyPem(),
@@ -178,7 +179,7 @@ test('ios push worker drops stale event messages without sending', async (t) => 
     { messages: [buildMessage(item, ownerId, 'event-old')] },
     {
       READ_LATER: kv,
-      READ_LATER_DEFAULT_OWNER_ID: ownerId,
+      PUSH_DEFAULT_OWNER_ID: ownerId,
       APNS_TEAM_ID: 'TEAM123456',
       APNS_KEY_ID: 'ABC123DEFG',
       APNS_PRIVATE_KEY_P8: createApnsPrivateKeyPem(),

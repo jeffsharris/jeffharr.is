@@ -5,7 +5,7 @@ import {
   normalizeToken,
   upsertPushDevice,
   removePushDevice
-} from './push-device-store.js';
+} from './device-store.js';
 
 function jsonResponse(payload, { status = 200, cache = 'no-store' } = {}) {
   return new Response(JSON.stringify(payload), {
@@ -34,7 +34,7 @@ function tokenSuffix(tokenHash) {
 export async function onRequest(context) {
   const { request, env } = context;
   const kv = env.READ_LATER;
-  const logger = createLogger({ request, source: 'read-later-push-device' });
+  const logger = createLogger({ request, source: 'push-devices-api' });
   const log = logger.log;
 
   if (!kv) {

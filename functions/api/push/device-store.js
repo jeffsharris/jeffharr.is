@@ -7,8 +7,8 @@ function getNowIso() {
 }
 
 function getOwnerId(env) {
-  const configured = typeof env?.READ_LATER_DEFAULT_OWNER_ID === 'string'
-    ? env.READ_LATER_DEFAULT_OWNER_ID.trim()
+  const configured = typeof env?.PUSH_DEFAULT_OWNER_ID === 'string'
+    ? env.PUSH_DEFAULT_OWNER_ID.trim()
     : '';
   return configured || DEFAULT_OWNER_ID;
 }

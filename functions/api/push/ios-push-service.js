@@ -1,6 +1,6 @@
 import { formatError } from '../lib/logger.js';
-import { IOS_PUSH_MESSAGE_TYPE, ensurePushChannels } from './article-push-service.js';
-import { getOwnerId, listPushDevicesForOwner, removePushDeviceByRecord } from './push-device-store.js';
+import { PUSH_NOTIFICATION_MESSAGE_TYPE, ensurePushChannels } from '../read-later/article-push-service.js';
+import { getOwnerId, listPushDevicesForOwner, removePushDeviceByRecord } from './device-store.js';
 
 const KV_ITEM_PREFIX = 'item:';
 const APNS_PRODUCTION_HOST = 'api.push.apple.com';
@@ -307,7 +307,8 @@ function buildApnsPayload(payload) {
       },
       sound: 'default'
     },
-    type: payload?.type || IOS_PUSH_MESSAGE_TYPE,
+    type: payload?.type || PUSH_NOTIFICATION_MESSAGE_TYPE,
+    source: payload?.source || 'read-later',
     itemId: payload?.itemId || null,
     savedAt: payload?.savedAt || null,
     eventId: payload?.eventId || null,
@@ -696,7 +697,7 @@ async function processIosPushBatch(batch, env, log) {
 }
 
 export {
-  IOS_PUSH_MESSAGE_TYPE,
+  PUSH_NOTIFICATION_MESSAGE_TYPE,
   processIosPushBatch,
   sendIosTestPush
 };

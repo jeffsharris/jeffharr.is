@@ -1,9 +1,9 @@
 import { createLogger, formatError } from '../lib/logger.js';
-import { getOwnerId, normalizeDeviceId, normalizeMetadataValue } from './push-device-store.js';
+import { getOwnerId, normalizeDeviceId, normalizeMetadataValue } from './device-store.js';
 import { sendIosTestPush } from './ios-push-service.js';
 
 const DEFAULT_ALERT_TITLE = 'Sukha Test Push';
-const DEFAULT_ALERT_SUBTITLE = 'Read Later';
+const DEFAULT_ALERT_SUBTITLE = 'Sukha';
 
 function jsonResponse(payload, { status = 200 } = {}) {
   return new Response(JSON.stringify(payload), {
@@ -61,7 +61,7 @@ async function parseJson(request) {
 
 export async function onRequest(context) {
   const { request, env } = context;
-  const logger = createLogger({ request, source: 'read-later-push-test' });
+  const logger = createLogger({ request, source: 'push-test-api' });
   const log = logger.log;
 
   if (request.method === 'OPTIONS') {
@@ -116,7 +116,8 @@ export async function onRequest(context) {
       kv,
       ownerId,
       payload: {
-        type: 'ios-test-push',
+        type: 'push.notification.test',
+        source: 'push-test',
         itemId,
         savedAt: now,
         eventId,

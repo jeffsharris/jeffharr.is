@@ -88,7 +88,7 @@ test('article push readiness stays pending until both reader and cover are ready
 test('maybeQueueIosPush enqueues exactly once after readiness is ready', async () => {
   const sent = [];
   const env = {
-    READ_LATER_DEFAULT_OWNER_ID: 'owner-1',
+    PUSH_DEFAULT_OWNER_ID: 'owner-1',
     READ_LATER_SYNC_QUEUE: {
       async send(body) {
         sent.push(JSON.parse(body));
@@ -129,7 +129,8 @@ test('maybeQueueIosPush enqueues exactly once after readiness is ready', async (
   const first = await maybeQueueIosPush({ item, env, kv, log: null, source: 'test' });
   assert.equal(first.queued, true);
   assert.equal(sent.length, 1);
-  assert.equal(sent[0].type, 'ios-article-push');
+  assert.equal(sent[0].type, 'push.notification.requested');
+  assert.equal(sent[0].source, 'read-later');
   assert.equal(sent[0].itemId, 'item-2');
 
   const second = await maybeQueueIosPush({ item: first.item, env, kv, log: null, source: 'test' });

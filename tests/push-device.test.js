@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { onRequest } from '../functions/api/read-later/push-device.js';
+import { onRequest } from '../functions/api/push/devices.js';
 
 function createMockKv(initial = {}) {
   const store = new Map(Object.entries(initial));
@@ -44,7 +44,7 @@ async function decodeJson(response) {
 test('push-device register and unregister flow', async () => {
   const kv = createMockKv();
 
-  const registerRequest = new Request('https://example.com/api/read-later/push-device', {
+  const registerRequest = new Request('https://example.com/api/push/devices', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -62,7 +62,7 @@ test('push-device register and unregister flow', async () => {
     request: registerRequest,
     env: {
       READ_LATER: kv,
-      READ_LATER_DEFAULT_OWNER_ID: 'owner-1'
+      PUSH_DEFAULT_OWNER_ID: 'owner-1'
     }
   });
 
@@ -76,7 +76,7 @@ test('push-device register and unregister flow', async () => {
   assert.equal(deviceEntries.length, 1);
   assert.equal(tokenEntries.length, 1);
 
-  const unregisterRequest = new Request('https://example.com/api/read-later/push-device', {
+  const unregisterRequest = new Request('https://example.com/api/push/devices', {
     method: 'DELETE',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ deviceId: 'device-1' })
@@ -86,7 +86,7 @@ test('push-device register and unregister flow', async () => {
     request: unregisterRequest,
     env: {
       READ_LATER: kv,
-      READ_LATER_DEFAULT_OWNER_ID: 'owner-1'
+      PUSH_DEFAULT_OWNER_ID: 'owner-1'
     }
   });
 
@@ -102,7 +102,7 @@ test('push-device register and unregister flow', async () => {
 test('push-device rebind moves token between device ids', async () => {
   const kv = createMockKv();
 
-  const firstRegister = new Request('https://example.com/api/read-later/push-device', {
+  const firstRegister = new Request('https://example.com/api/push/devices', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -115,7 +115,7 @@ test('push-device rebind moves token between device ids', async () => {
 
   await onRequest({ request: firstRegister, env: { READ_LATER: kv } });
 
-  const secondRegister = new Request('https://example.com/api/read-later/push-device', {
+  const secondRegister = new Request('https://example.com/api/push/devices', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({

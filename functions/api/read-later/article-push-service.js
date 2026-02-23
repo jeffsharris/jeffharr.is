@@ -1,11 +1,11 @@
 import { deriveTitleFromUrl, shouldCacheReader } from './reader-utils.js';
 import { formatError } from '../lib/logger.js';
-import { getOwnerId } from './push-device-store.js';
+import { getOwnerId } from '../push/device-store.js';
 
 const KV_ITEM_PREFIX = 'item:';
 const KV_READER_PREFIX = 'reader:';
 const SYNC_QUEUE_BINDING = 'READ_LATER_SYNC_QUEUE';
-const IOS_PUSH_MESSAGE_TYPE = 'ios-article-push';
+const PUSH_NOTIFICATION_MESSAGE_TYPE = 'push.notification.requested';
 const DEFAULT_PUBLIC_ORIGIN = 'https://jeffharr.is';
 
 function getNowIso() {
@@ -215,7 +215,8 @@ function buildIosPayload(item, env, eventId) {
   }
 
   return {
-    type: IOS_PUSH_MESSAGE_TYPE,
+    type: PUSH_NOTIFICATION_MESSAGE_TYPE,
+    source: 'read-later',
     ownerId: getOwnerId(env),
     itemId: item.id,
     eventId,
@@ -314,7 +315,7 @@ async function maybeQueueIosPush({ item, env, kv, log, source = 'unknown' }) {
 }
 
 export {
-  IOS_PUSH_MESSAGE_TYPE,
+  PUSH_NOTIFICATION_MESSAGE_TYPE,
   createInitialPushChannels,
   ensurePushChannels,
   recordKindleChannelState,

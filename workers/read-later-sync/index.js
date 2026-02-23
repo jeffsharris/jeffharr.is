@@ -1,8 +1,8 @@
 import { createLogger } from '../../functions/api/lib/logger.js';
 import {
-  IOS_PUSH_MESSAGE_TYPE,
+  PUSH_NOTIFICATION_MESSAGE_TYPE,
   processIosPushBatch
-} from '../../functions/api/read-later/ios-push-service.js';
+} from '../../functions/api/push/ios-push-service.js';
 import { processKindleSyncBatch } from '../../functions/api/read-later/sync-service.js';
 import {
   COVER_MESSAGE_TYPE,
@@ -44,7 +44,7 @@ export default {
         coverMessages.push(message);
         continue;
       }
-      if (payload?.type === IOS_PUSH_MESSAGE_TYPE) {
+      if (payload?.type === PUSH_NOTIFICATION_MESSAGE_TYPE) {
         iosPushMessages.push(message);
         continue;
       }

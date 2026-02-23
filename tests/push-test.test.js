@@ -1,8 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { generateKeyPairSync } from 'node:crypto';
-import { onRequest } from '../functions/api/read-later/push-test.js';
-import { upsertPushDevice } from '../functions/api/read-later/push-device-store.js';
+import { onRequest } from '../functions/api/push/test.js';
+import { upsertPushDevice } from '../functions/api/push/device-store.js';
 
 function createMockKv(initial = {}) {
   const store = new Map(Object.entries(initial));
@@ -50,7 +50,7 @@ async function decodeJson(response) {
 
 test('push-test endpoint requires API key', async () => {
   const kv = createMockKv();
-  const request = new Request('https://example.com/api/read-later/push-test', {
+  const request = new Request('https://example.com/api/push/test', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({})
@@ -95,7 +95,7 @@ test('push-test endpoint sends APNS push for registered device', async (t) => {
     return new Response(null, { status: 200 });
   };
 
-  const request = new Request('https://example.com/api/read-later/push-test', {
+  const request = new Request('https://example.com/api/push/test', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -114,7 +114,7 @@ test('push-test endpoint sends APNS push for registered device', async (t) => {
     env: {
       READ_LATER: kv,
       PUSH_TEST_API_KEY: 'secret-key',
-      READ_LATER_DEFAULT_OWNER_ID: 'default',
+      PUSH_DEFAULT_OWNER_ID: 'default',
       APNS_TEAM_ID: 'TEAM123456',
       APNS_KEY_ID: 'ABC123DEFG',
       APNS_PRIVATE_KEY_P8: createApnsPrivateKeyPem(),
