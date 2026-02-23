@@ -429,7 +429,6 @@ function buildApnsPayload(payload) {
       mutableContent,
       media
     },
-    media,
     data
   };
 }

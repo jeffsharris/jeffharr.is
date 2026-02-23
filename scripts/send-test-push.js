@@ -7,7 +7,7 @@
  * - PUSH_TEST_API_KEY
  *
  * Example:
- * node scripts/send-test-push.js --item-id 123 --title "Saved to Read Later" --subtitle "example.com" --body "Article title"
+ * node scripts/send-test-push.js --item-id 123 --title "Saved to Read Later" --subtitle "example.com" --body "Article title" --cover-url "https://example.com/cover.jpg" --data-json '{"channel":"read-later","itemId":"123"}'
  */
 
 function usage() {

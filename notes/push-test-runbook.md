@@ -7,6 +7,49 @@ Use this runbook when you need to send a manual iOS push notification and verify
 - APNs delivery runs only in `workers/push-delivery`.
 - Do not debug APNs delivery from Pages logs; use `push-delivery` worker logs.
 
+## Push payload contract (current)
+Push messages should use a single, generic contract:
+
+```json
+{
+  "type": "push.notification.test",
+  "source": "read-later",
+  "ownerId": "default",
+  "itemId": "uuid-or-id",
+  "eventId": "event-id",
+  "savedAt": "2026-02-23T00:00:00Z",
+  "notification": {
+    "alert": {
+      "title": "Saved to Read Later",
+      "subtitle": "example.com",
+      "body": "Article title"
+    },
+    "threadId": "read-later",
+    "category": "read-later",
+    "targetContentId": "optional",
+    "interruptionLevel": "time-sensitive",
+    "relevanceScore": 0.9,
+    "mutableContent": true,
+    "media": [
+      {
+        "type": "image",
+        "url": "https://jeffharr.is/api/read-later/cover?id=<ITEM_ID>&v=<COVER_UPDATED_AT>"
+      }
+    ]
+  },
+  "data": {
+    "channel": "read-later",
+    "itemId": "<ITEM_ID>",
+    "url": "https://example.com/article"
+  }
+}
+```
+
+Notes:
+- Rich media depends on `notification.media` (no legacy top-level media fields).
+- iOS app expects `notification.media` for image attachment in the notification service extension.
+- `itemId` remains top-level for open-routing and can also be duplicated in `data`.
+
 ## Required configuration
 - Pages project `jeffharr-is`:
   - `PUSH_TEST_API_KEY`
@@ -39,7 +82,7 @@ cd /Users/jeffharris/code/jeffharr.is/workers/push-delivery
 npx wrangler tail --format json --search ios_test_push
 ```
 
-3. Send the test push:
+3. Send the test push with multimedia fields:
 ```sh
 cd /Users/jeffharris/code/jeffharr.is
 export PUSH_TEST_API_KEY='<value from Cloudflare Pages>'
@@ -47,7 +90,14 @@ node scripts/send-test-push.js \
   --item-id <ITEM_ID> \
   --title "Saved to Read Later" \
   --subtitle "example.com" \
-  --body "Manual test push"
+  --body "Manual test push" \
+  --cover-url "https://jeffharr.is/api/read-later/cover?id=<ITEM_ID>&v=<COVER_UPDATED_AT>" \
+  --thread-id "read-later" \
+  --category "read-later" \
+  --interruption-level "time-sensitive" \
+  --relevance-score 0.9 \
+  --mutable-content true \
+  --data-json '{"channel":"read-later","itemId":"<ITEM_ID>"}'
 ```
 
 4. Confirm logs show one of:
@@ -72,7 +122,7 @@ curl -sS -X POST \
   -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
   -H "Content-Type: application/json" \
   "https://api.cloudflare.com/client/v4/accounts/$CLOUDFLARE_ACCOUNT_ID/queues/$QUEUE_ID/messages" \
-  --data "{\"body\":{\"type\":\"push.notification.test\",\"source\":\"manual-cli\",\"ownerId\":\"default\",\"itemId\":\"<ITEM_ID>\",\"eventId\":\"$EVENT_ID\",\"savedAt\":\"$NOW\",\"alertTitle\":\"Saved to Read Later\",\"alertSubtitle\":\"example.com\",\"alertBody\":\"Manual test push\"}}"
+  --data "{\"body\":{\"type\":\"push.notification.test\",\"source\":\"manual-cli\",\"ownerId\":\"default\",\"itemId\":\"<ITEM_ID>\",\"eventId\":\"$EVENT_ID\",\"savedAt\":\"$NOW\",\"notification\":{\"alert\":{\"title\":\"Saved to Read Later\",\"subtitle\":\"example.com\",\"body\":\"Manual test push\"},\"threadId\":\"read-later\",\"category\":\"read-later\",\"interruptionLevel\":\"time-sensitive\",\"relevanceScore\":0.9,\"mutableContent\":true,\"media\":[{\"type\":\"image\",\"url\":\"https://jeffharr.is/api/read-later/cover?id=<ITEM_ID>&v=<COVER_UPDATED_AT>\"}]},\"data\":{\"channel\":\"read-later\",\"itemId\":\"<ITEM_ID>\"}}}"
 ```
 
 ## Optional: target one device

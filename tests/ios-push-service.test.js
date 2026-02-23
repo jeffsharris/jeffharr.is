@@ -264,7 +264,8 @@ test('ios push worker processes queued test push message without item lookup', a
 
   assert.equal(fetchCallCount, 1);
   assert.equal(apnsBody.aps['mutable-content'], 1);
-  assert.equal(Array.isArray(apnsBody.media), true);
-  assert.equal(apnsBody.media[0].url, 'https://example.com/cover.jpg');
+  assert.equal(Array.isArray(apnsBody.notification.media), true);
+  assert.equal(apnsBody.notification.media[0].url, 'https://example.com/cover.jpg');
+  assert.equal(apnsBody.media, undefined);
   assert.equal(apnsBody.data.route, 'read-later');
 });
