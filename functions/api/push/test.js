@@ -1,6 +1,5 @@
 import { createLogger, formatError } from '../lib/logger.js';
 import { getOwnerId, normalizeDeviceId, normalizeMetadataValue } from './device-store.js';
-import { sendIosTestPush } from './ios-push-service.js';
 
 const DEFAULT_ALERT_TITLE = 'Sukha Test Push';
 const DEFAULT_ALERT_SUBTITLE = 'Sukha';
@@ -104,6 +103,14 @@ export async function onRequest(context) {
   const deviceId = normalizeDeviceId(payload?.deviceId);
   const now = new Date().toISOString();
   const eventId = generateEventId();
+  const queue = env?.PUSH_DELIVERY_QUEUE || null;
+
+  if (!queue) {
+    return jsonResponse(
+      { ok: false, error: 'Push queue unavailable' },
+      { status: 500 }
+    );
+  }
 
   const alertTitle = normalizeText(payload?.title, 120) || DEFAULT_ALERT_TITLE;
   const alertSubtitle = normalizeText(payload?.subtitle, 120) || DEFAULT_ALERT_SUBTITLE;
@@ -111,61 +118,38 @@ export async function onRequest(context) {
   const itemId = normalizeText(payload?.itemId, 200) || `test-item-${Date.now()}`;
 
   try {
-    const result = await sendIosTestPush({
-      env,
-      kv,
+    await queue.send(JSON.stringify({
       ownerId,
-      payload: {
-        type: 'push.notification.test',
-        source: 'push-test',
-        itemId,
-        savedAt: now,
-        eventId,
-        coverURL: normalizeOptionalUrl(payload?.coverURL),
-        alertTitle,
-        alertSubtitle,
-        alertBody
-      },
-      log,
+      type: 'push.notification.test',
+      source: 'push-test',
+      itemId,
+      savedAt: now,
+      eventId,
+      coverURL: normalizeOptionalUrl(payload?.coverURL),
+      alertTitle,
+      alertSubtitle,
+      alertBody,
+      targetDeviceId: deviceId || null
+    }));
+
+    log('info', 'ios_test_push_queued', {
+      stage: 'test_push',
+      ownerId,
+      eventId,
+      itemId,
       targetDeviceId: deviceId || null
     });
 
-    if (result.ok) {
-      log('info', 'ios_test_push_sent', {
-        stage: 'test_push',
-        ownerId,
-        eventId,
-        targetDeviceId: deviceId || null,
-        successCount: result.successCount,
-        failedCount: result.failedCount,
-        prunedCount: result.prunedCount
-      });
-    } else {
-      log('warn', 'ios_test_push_not_delivered', {
-        stage: 'test_push',
-        ownerId,
-        eventId,
-        targetDeviceId: deviceId || null,
-        reason: result.reason || null,
-        successCount: result.successCount,
-        failedCount: result.failedCount,
-        prunedCount: result.prunedCount
-      });
-    }
-
     return jsonResponse({
-      ok: result.ok,
+      ok: true,
+      queued: true,
       ownerId,
+      itemId,
       targetDeviceId: deviceId || null,
-      eventId,
-      reason: result.reason,
-      successCount: result.successCount,
-      failedCount: result.failedCount,
-      prunedCount: result.prunedCount,
-      attemptedCount: result.attemptedCount
+      eventId
     });
   } catch (error) {
-    log('error', 'ios_test_push_failed', {
+    log('error', 'ios_test_push_queue_failed', {
       stage: 'test_push',
       ownerId,
       eventId,
@@ -173,7 +157,7 @@ export async function onRequest(context) {
       ...formatError(error)
     });
     return jsonResponse(
-      { ok: false, error: 'Failed to send test push' },
+      { ok: false, error: 'Failed to queue test push' },
       { status: 500 }
     );
   }

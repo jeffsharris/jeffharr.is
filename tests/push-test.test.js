@@ -1,8 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { generateKeyPairSync } from 'node:crypto';
 import { onRequest } from '../functions/api/push/test.js';
-import { upsertPushDevice } from '../functions/api/push/device-store.js';
 
 function createMockKv(initial = {}) {
   const store = new Map(Object.entries(initial));
@@ -39,11 +37,6 @@ function createMockKv(initial = {}) {
   };
 }
 
-function createApnsPrivateKeyPem() {
-  const { privateKey } = generateKeyPairSync('ec', { namedCurve: 'prime256v1' });
-  return privateKey.export({ type: 'pkcs8', format: 'pem' });
-}
-
 async function decodeJson(response) {
   return JSON.parse(await response.text());
 }
@@ -69,30 +62,13 @@ test('push-test endpoint requires API key', async () => {
   assert.equal(payload.ok, false);
 });
 
-test('push-test endpoint sends APNS push for registered device', async (t) => {
+test('push-test endpoint enqueues test push', async () => {
   const kv = createMockKv();
-  await upsertPushDevice({
-    kv,
-    ownerId: 'default',
-    deviceId: 'device-1',
-    token: 'token-1',
-    platform: 'ios',
-    environment: 'development',
-    bundleId: 'com.jeffharris.sukha',
-    appVersion: '1.0',
-    buildNumber: '100'
-  });
-
-  let fetchCount = 0;
-  const originalFetch = globalThis.fetch;
-  t.after(() => {
-    globalThis.fetch = originalFetch;
-  });
-
-  globalThis.fetch = async (url) => {
-    fetchCount += 1;
-    assert.match(String(url), /api\.sandbox\.push\.apple\.com/);
-    return new Response(null, { status: 200 });
+  let queuedPayload = null;
+  const queue = {
+    async send(body) {
+      queuedPayload = JSON.parse(body);
+    }
   };
 
   const request = new Request('https://example.com/api/push/test', {
@@ -115,16 +91,39 @@ test('push-test endpoint sends APNS push for registered device', async (t) => {
       READ_LATER: kv,
       PUSH_TEST_API_KEY: 'secret-key',
       PUSH_DEFAULT_OWNER_ID: 'default',
-      APNS_TEAM_ID: 'TEAM123456',
-      APNS_KEY_ID: 'ABC123DEFG',
-      APNS_PRIVATE_KEY_P8: createApnsPrivateKeyPem(),
-      APNS_TOPIC: 'com.jeffharris.sukha'
+      PUSH_DELIVERY_QUEUE: queue
     }
   });
 
   assert.equal(response.status, 200);
   const payload = await decodeJson(response);
   assert.equal(payload.ok, true);
-  assert.equal(payload.reason, 'sent');
-  assert.equal(fetchCount, 1);
+  assert.equal(payload.queued, true);
+  assert.equal(queuedPayload.type, 'push.notification.test');
+  assert.equal(queuedPayload.targetDeviceId, 'device-1');
+});
+
+test('push-test endpoint fails when queue binding is missing', async () => {
+  const kv = createMockKv();
+  const request = new Request('https://example.com/api/push/test', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-push-test-key': 'secret-key'
+    },
+    body: JSON.stringify({})
+  });
+
+  const response = await onRequest({
+    request,
+    env: {
+      READ_LATER: kv,
+      PUSH_TEST_API_KEY: 'secret-key'
+    }
+  });
+
+  assert.equal(response.status, 500);
+  const payload = await decodeJson(response);
+  assert.equal(payload.ok, false);
+  assert.equal(payload.error, 'Push queue unavailable');
 });

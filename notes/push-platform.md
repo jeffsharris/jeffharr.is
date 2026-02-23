@@ -9,12 +9,16 @@ Push delivery is an app-level platform capability. `read-later` is one producer 
 - Manual test push: `POST /api/push/test`
 
 ## Runtime Config
-- `PUSH_DEFAULT_OWNER_ID` (default `default`)
-- `PUSH_TEST_API_KEY`
-- `APNS_TEAM_ID`
-- `APNS_KEY_ID`
-- `APNS_PRIVATE_KEY_P8`
-- `APNS_TOPIC`
+- Pages Functions (`/api/push/*`):
+  - `PUSH_DEFAULT_OWNER_ID` (default `default`)
+  - `PUSH_TEST_API_KEY`
+  - Queue producer binding: `PUSH_DELIVERY_QUEUE`
+- Push delivery worker (`workers/push-delivery`):
+  - `PUSH_DEFAULT_OWNER_ID` (default `default`)
+  - `APNS_TEAM_ID`
+  - `APNS_KEY_ID`
+  - `APNS_PRIVATE_KEY_P8`
+  - `APNS_TOPIC`
 
 ## Current Producer Model
 - Read Later computes `article-push-ready` on item state (`pushChannels.readiness`).
@@ -27,3 +31,4 @@ Push delivery is an app-level platform capability. `read-later` is one producer 
 - Queue producer binding for push events: `PUSH_DELIVERY_QUEUE`.
 - Push queue consumer worker: `workers/push-delivery`.
 - Read Later queue worker (`workers/read-later-sync`) no longer delivers APNs events.
+- `POST /api/push/test` enqueues `push.notification.test` messages; APNs delivery always happens in `workers/push-delivery`.

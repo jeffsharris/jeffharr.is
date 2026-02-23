@@ -513,8 +513,75 @@ async function sendIosTestPush({
   });
 }
 
+async function processIosTestPushMessage(payload, env, log) {
+  const kv = env?.READ_LATER;
+  if (!kv) {
+    if (log) {
+      log('error', 'storage_unavailable', {
+        stage: 'test_push'
+      });
+    }
+    return;
+  }
+
+  const ownerId = typeof payload?.ownerId === 'string' && payload.ownerId.trim()
+    ? payload.ownerId.trim()
+    : getOwnerId(env);
+  const itemId = typeof payload?.itemId === 'string' ? payload.itemId.trim() : null;
+  const eventId = typeof payload?.eventId === 'string' ? payload.eventId.trim() : null;
+  const targetDeviceId = typeof payload?.targetDeviceId === 'string'
+    ? payload.targetDeviceId.trim()
+    : null;
+
+  const delivery = await sendIosTestPush({
+    env,
+    kv,
+    ownerId,
+    payload,
+    log,
+    targetDeviceId
+  });
+
+  if (delivery.ok) {
+    if (log) {
+      log('info', 'ios_test_push_sent', {
+        stage: 'test_push',
+        itemId,
+        ownerId,
+        eventId,
+        targetDeviceId: targetDeviceId || null,
+        successCount: delivery.successCount,
+        failedCount: delivery.failedCount,
+        prunedCount: delivery.prunedCount
+      });
+    }
+    return;
+  }
+
+  const level = delivery.reason === 'auth_failed' ? 'error' : 'warn';
+  if (log) {
+    log(level, 'ios_test_push_not_delivered', {
+      stage: 'test_push',
+      itemId,
+      ownerId,
+      eventId,
+      targetDeviceId: targetDeviceId || null,
+      reason: delivery.reason || null,
+      successCount: delivery.successCount,
+      failedCount: delivery.failedCount,
+      prunedCount: delivery.prunedCount,
+      ...(delivery.error ? formatError(delivery.error) : {})
+    });
+  }
+}
+
 async function processIosPushMessage(message, env, log) {
   const payload = parseQueueMessageBody(message);
+  if (payload?.type === 'push.notification.test') {
+    await processIosTestPushMessage(payload, env, log);
+    return;
+  }
+
   const itemId = typeof payload?.itemId === 'string' ? payload.itemId.trim() : '';
   const eventId = typeof payload?.eventId === 'string' ? payload.eventId.trim() : '';
   const ownerId = typeof payload?.ownerId === 'string' && payload.ownerId.trim()

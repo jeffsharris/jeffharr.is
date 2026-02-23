@@ -193,3 +193,61 @@ test('ios push worker drops stale event messages without sending', async (t) => 
   assert.equal(storedItem.pushChannels.ios.eventId, 'event-current');
   assert.equal(storedItem.pushChannels.ios.status, 'queued');
 });
+
+test('ios push worker processes queued test push message without item lookup', async (t) => {
+  const kv = createMockKv();
+  const ownerId = 'owner-1';
+
+  await upsertPushDevice({
+    kv,
+    ownerId,
+    deviceId: 'device-3',
+    token: 'token-3',
+    platform: 'ios',
+    environment: 'development',
+    bundleId: 'com.jeffharris.sukha',
+    appVersion: '1.0',
+    buildNumber: '100'
+  });
+
+  let fetchCallCount = 0;
+  const originalFetch = globalThis.fetch;
+  t.after(() => {
+    globalThis.fetch = originalFetch;
+  });
+
+  globalThis.fetch = async () => {
+    fetchCallCount += 1;
+    return new Response(null, { status: 200 });
+  };
+
+  await processIosPushBatch(
+    {
+      messages: [
+        {
+          body: JSON.stringify({
+            type: 'push.notification.test',
+            source: 'push-test',
+            ownerId,
+            itemId: 'does-not-exist',
+            eventId: 'test-event-1',
+            alertTitle: 'Test',
+            alertSubtitle: 'Sukha',
+            alertBody: 'Hello'
+          })
+        }
+      ]
+    },
+    {
+      READ_LATER: kv,
+      PUSH_DEFAULT_OWNER_ID: ownerId,
+      APNS_TEAM_ID: 'TEAM123456',
+      APNS_KEY_ID: 'ABC123DEFG',
+      APNS_PRIVATE_KEY_P8: createApnsPrivateKeyPem(),
+      APNS_TOPIC: 'com.jeffharris.sukha'
+    },
+    null
+  );
+
+  assert.equal(fetchCallCount, 1);
+});
