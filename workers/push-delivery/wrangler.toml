@@ -1,0 +1,15 @@
+name = "push-delivery"
+main = "index.js"
+compatibility_date = "2026-01-11"
+compatibility_flags = ["nodejs_compat"]
+
+[[kv_namespaces]]
+binding = "READ_LATER"
+id = "1ab7a301e16e47f7a17651e89f7442b6"
+
+[[queues.consumers]]
+queue = "push-delivery"
+max_batch_size = 5
+max_batch_timeout = 5
+max_retries = 5
+dead_letter_queue = "push-delivery-dlq"

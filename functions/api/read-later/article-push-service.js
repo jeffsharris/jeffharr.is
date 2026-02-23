@@ -4,7 +4,7 @@ import { getOwnerId } from '../push/device-store.js';
 
 const KV_ITEM_PREFIX = 'item:';
 const KV_READER_PREFIX = 'reader:';
-const SYNC_QUEUE_BINDING = 'READ_LATER_SYNC_QUEUE';
+const PUSH_QUEUE_BINDING = 'PUSH_DELIVERY_QUEUE';
 const PUSH_NOTIFICATION_MESSAGE_TYPE = 'push.notification.requested';
 const DEFAULT_PUBLIC_ORIGIN = 'https://jeffharr.is';
 
@@ -244,7 +244,7 @@ async function maybeQueueIosPush({ item, env, kv, log, source = 'unknown' }) {
     return { queued: false, item, reason: 'already_queued_or_sent' };
   }
 
-  const queue = env?.[SYNC_QUEUE_BINDING] || null;
+  const queue = env?.[PUSH_QUEUE_BINDING] || null;
   if (!queue) {
     item.pushChannels.ios = {
       ...item.pushChannels.ios,

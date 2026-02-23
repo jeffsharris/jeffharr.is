@@ -23,5 +23,5 @@ npx wrangler queues resume-delivery read-later-sync
 ```
 
 ## Required bindings and secrets
-- Defined in `workers/read-later-sync/wrangler.toml`: `READ_LATER`, `READ_LATER_SYNC_QUEUE`, `BROWSER`.
+- Defined in `workers/read-later-sync/wrangler.toml`: `READ_LATER`, `READ_LATER_SYNC_QUEUE`, `PUSH_DELIVERY_QUEUE`, `BROWSER`.
 - Secrets/vars are managed on this worker separately from Pages.

@@ -24,7 +24,6 @@ Push delivery is an app-level platform capability. `read-later` is one producer 
   - `itemId`, `eventId`, and alert metadata.
 
 ## Worker Topology (Current)
-- Queue routing still runs in `workers/read-later-sync`.
-- That worker now dispatches push messages to `functions/api/push/ios-push-service.js`.
-
-This is intentionally a staging point before splitting push delivery into its own worker.
+- Queue producer binding for push events: `PUSH_DELIVERY_QUEUE`.
+- Push queue consumer worker: `workers/push-delivery`.
+- Read Later queue worker (`workers/read-later-sync`) no longer delivers APNs events.

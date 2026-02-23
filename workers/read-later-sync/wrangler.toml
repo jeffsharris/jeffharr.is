@@ -18,3 +18,7 @@ max_batch_timeout = 5
 [[queues.producers]]
 binding = "READ_LATER_SYNC_QUEUE"
 queue = "read-later-sync"
+
+[[queues.producers]]
+binding = "PUSH_DELIVERY_QUEUE"
+queue = "push-delivery"

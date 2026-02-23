@@ -1,8 +1,5 @@
 import { createLogger } from '../../functions/api/lib/logger.js';
-import {
-  PUSH_NOTIFICATION_MESSAGE_TYPE,
-  processIosPushBatch
-} from '../../functions/api/push/ios-push-service.js';
+import { PUSH_NOTIFICATION_MESSAGE_TYPE } from '../../functions/api/read-later/article-push-service.js';
 import { processKindleSyncBatch } from '../../functions/api/read-later/sync-service.js';
 import {
   COVER_MESSAGE_TYPE,
@@ -36,7 +33,6 @@ export default {
     const logger = createLogger({ source: 'read-later-sync-worker' });
     const kindleMessages = [];
     const coverMessages = [];
-    const iosPushMessages = [];
 
     for (const message of batch.messages || []) {
       const payload = parseQueueMessageBody(message);
@@ -45,7 +41,10 @@ export default {
         continue;
       }
       if (payload?.type === PUSH_NOTIFICATION_MESSAGE_TYPE) {
-        iosPushMessages.push(message);
+        logger.log('warn', 'push_message_received_on_read_later_queue', {
+          stage: 'queue',
+          type: payload?.type || null
+        });
         continue;
       }
       kindleMessages.push(message);
@@ -57,10 +56,6 @@ export default {
 
     if (coverMessages.length > 0) {
       await processCoverSyncBatch({ messages: coverMessages }, env, logger.log);
-    }
-
-    if (iosPushMessages.length > 0) {
-      await processIosPushBatch({ messages: iosPushMessages }, env, logger.log);
     }
   }
 };

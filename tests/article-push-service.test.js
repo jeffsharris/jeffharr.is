@@ -89,7 +89,7 @@ test('maybeQueueIosPush enqueues exactly once after readiness is ready', async (
   const sent = [];
   const env = {
     PUSH_DEFAULT_OWNER_ID: 'owner-1',
-    READ_LATER_SYNC_QUEUE: {
+    PUSH_DELIVERY_QUEUE: {
       async send(body) {
         sent.push(JSON.parse(body));
       }

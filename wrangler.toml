@@ -13,3 +13,7 @@ binding = "BROWSER"
 [[queues.producers]]
 binding = "READ_LATER_SYNC_QUEUE"
 queue = "read-later-sync"
+
+[[queues.producers]]
+binding = "PUSH_DELIVERY_QUEUE"
+queue = "push-delivery"

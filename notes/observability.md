@@ -5,6 +5,7 @@ This repo uses structured JSON logs from Cloudflare Pages Functions. Every log l
 ## Runtime boundaries (critical)
 - `functions/api/*` runs on Cloudflare Pages Functions.
 - `workers/read-later-sync/*` is a separate Worker that consumes the `read-later-sync` queue.
+- `workers/push-delivery/*` is a separate Worker that consumes the `push-delivery` queue.
 - Pages logs and Worker logs are different streams.
 - Deploying Pages does not deploy the queue worker.
 
@@ -73,6 +74,14 @@ npx wrangler queues info read-later-sync
 npx wrangler queues resume-delivery read-later-sync
 ```
 
+Push delivery worker logs (run from `workers/push-delivery`):
+
+```sh
+npx wrangler tail --format json
+npx wrangler queues info push-delivery
+npx wrangler queues resume-delivery push-delivery
+```
+
 ## Event catalog
 ### read-later (save/list/update/delete)
 - `storage_unavailable` (init)
@@ -121,6 +130,16 @@ npx wrangler queues resume-delivery read-later-sync
 - `kindle_sync_retry_queue_missing`
 - `kindle_sync_retry_enqueue_failed`
 - `kindle_sync_worker_failed`
+
+### push-delivery-worker (queue consumer)
+- `ios_push_sent`
+- `ios_push_not_delivered`
+- `ios_push_device_failed`
+- `ios_push_device_request_failed`
+- `ios_push_auth_failed`
+- `ios_push_item_missing`
+- `ios_push_invalid_message`
+- `ios_push_stale_message`
 
 ### read-later-cover (regenerate cover)
 - `storage_unavailable`
