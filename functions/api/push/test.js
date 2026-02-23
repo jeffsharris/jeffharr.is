@@ -40,6 +40,36 @@ function normalizeOptionalUrl(value) {
   }
 }
 
+function normalizeRelevanceScore(value) {
+  const numeric = typeof value === 'number' ? value : Number(value);
+  if (!Number.isFinite(numeric)) return null;
+  if (numeric < 0 || numeric > 1) return null;
+  return Number(numeric.toFixed(3));
+}
+
+function normalizeInterruptionLevel(value) {
+  if (typeof value !== 'string') return null;
+  const normalized = value.trim().toLowerCase();
+  if (!normalized) return null;
+  const allowed = new Set(['passive', 'active', 'time-sensitive', 'critical']);
+  return allowed.has(normalized) ? normalized : null;
+}
+
+function normalizeBoolean(value) {
+  if (typeof value === 'boolean') return value;
+  if (typeof value === 'number') {
+    if (value === 1) return true;
+    if (value === 0) return false;
+    return null;
+  }
+  if (typeof value === 'string') {
+    const normalized = value.trim().toLowerCase();
+    if (normalized === 'true' || normalized === '1') return true;
+    if (normalized === 'false' || normalized === '0') return false;
+  }
+  return null;
+}
+
 function readApiKey(request) {
   const direct = request.headers.get('x-push-test-key');
   if (direct && direct.trim()) return direct.trim();
@@ -116,6 +146,13 @@ export async function onRequest(context) {
   const alertSubtitle = normalizeText(payload?.subtitle, 120) || DEFAULT_ALERT_SUBTITLE;
   const alertBody = normalizeText(payload?.body, 240) || `Triggered at ${now}`;
   const itemId = normalizeText(payload?.itemId, 200) || `test-item-${Date.now()}`;
+  const coverURL = normalizeOptionalUrl(payload?.coverURL) || normalizeOptionalUrl(payload?.imageURL);
+  const threadId = normalizeText(payload?.threadId, 120);
+  const category = normalizeText(payload?.category, 120);
+  const targetContentId = normalizeText(payload?.targetContentId, 120);
+  const interruptionLevel = normalizeInterruptionLevel(payload?.interruptionLevel);
+  const relevanceScore = normalizeRelevanceScore(payload?.relevanceScore);
+  const mutableContent = normalizeBoolean(payload?.mutableContent);
 
   try {
     await queue.send(JSON.stringify({
@@ -125,10 +162,16 @@ export async function onRequest(context) {
       itemId,
       savedAt: now,
       eventId,
-      coverURL: normalizeOptionalUrl(payload?.coverURL),
+      coverURL,
       alertTitle,
       alertSubtitle,
       alertBody,
+      threadId,
+      category,
+      targetContentId,
+      interruptionLevel,
+      relevanceScore,
+      mutableContent,
       targetDeviceId: deviceId || null
     }));
 

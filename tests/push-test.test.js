@@ -81,6 +81,11 @@ test('push-test endpoint enqueues test push', async () => {
       title: 'Test Title',
       subtitle: 'Test Subtitle',
       body: 'Test Body',
+      imageURL: 'https://example.com/cover.jpg',
+      threadId: 'read-later',
+      interruptionLevel: 'time-sensitive',
+      relevanceScore: 0.75,
+      mutableContent: true,
       deviceId: 'device-1'
     })
   });
@@ -101,6 +106,11 @@ test('push-test endpoint enqueues test push', async () => {
   assert.equal(payload.queued, true);
   assert.equal(queuedPayload.type, 'push.notification.test');
   assert.equal(queuedPayload.targetDeviceId, 'device-1');
+  assert.equal(queuedPayload.coverURL, 'https://example.com/cover.jpg');
+  assert.equal(queuedPayload.threadId, 'read-later');
+  assert.equal(queuedPayload.interruptionLevel, 'time-sensitive');
+  assert.equal(queuedPayload.relevanceScore, 0.75);
+  assert.equal(queuedPayload.mutableContent, true);
 });
 
 test('push-test endpoint fails when queue binding is missing', async () => {

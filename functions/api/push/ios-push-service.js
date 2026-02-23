@@ -293,10 +293,56 @@ function getApnsTopic(env, device) {
   return 'com.jeffharris.sukha';
 }
 
+function normalizeApsString(value, maxLength = 120) {
+  if (typeof value !== 'string') return null;
+  const trimmed = value.trim();
+  if (!trimmed) return null;
+  return trimmed.slice(0, maxLength);
+}
+
+function normalizeApsInterruptionLevel(value) {
+  if (typeof value !== 'string') return null;
+  const normalized = value.trim().toLowerCase();
+  if (!normalized) return null;
+  const allowed = new Set(['passive', 'active', 'time-sensitive', 'critical']);
+  return allowed.has(normalized) ? normalized : null;
+}
+
+function normalizeApsRelevanceScore(value) {
+  if (typeof value !== 'number' || !Number.isFinite(value)) return null;
+  if (value < 0 || value > 1) return null;
+  return Number(value.toFixed(3));
+}
+
+function normalizeMutableContent(value) {
+  if (typeof value === 'boolean') return value;
+  if (typeof value === 'number') {
+    if (value === 1) return true;
+    if (value === 0) return false;
+    return null;
+  }
+  if (typeof value === 'string') {
+    const normalized = value.trim().toLowerCase();
+    if (normalized === 'true' || normalized === '1') return true;
+    if (normalized === 'false' || normalized === '0') return false;
+  }
+  return null;
+}
+
 function buildApnsPayload(payload) {
   const alertTitle = payload?.alertTitle || 'Saved to Read Later';
   const alertSubtitle = payload?.alertSubtitle || payload?.domain || 'Read Later';
   const alertBody = payload?.alertBody || payload?.title || 'Saved article';
+  const coverURL = payload?.coverURL || null;
+  const threadId = normalizeApsString(payload?.threadId, 120);
+  const category = normalizeApsString(payload?.category, 120);
+  const targetContentId = normalizeApsString(payload?.targetContentId, 120);
+  const interruptionLevel = normalizeApsInterruptionLevel(payload?.interruptionLevel);
+  const relevanceScore = normalizeApsRelevanceScore(payload?.relevanceScore);
+  const mutableContentOverride = normalizeMutableContent(payload?.mutableContent);
+  const mutableContent = mutableContentOverride === null
+    ? Boolean(coverURL)
+    : mutableContentOverride;
 
   return {
     aps: {
@@ -305,14 +351,21 @@ function buildApnsPayload(payload) {
         subtitle: alertSubtitle,
         body: alertBody
       },
-      sound: 'default'
+      sound: 'default',
+      'thread-id': threadId || undefined,
+      category: category || undefined,
+      'target-content-id': targetContentId || undefined,
+      'interruption-level': interruptionLevel || undefined,
+      'relevance-score': relevanceScore ?? undefined,
+      'mutable-content': mutableContent ? 1 : undefined
     },
     type: payload?.type || PUSH_NOTIFICATION_MESSAGE_TYPE,
     source: payload?.source || 'read-later',
     itemId: payload?.itemId || null,
     savedAt: payload?.savedAt || null,
     eventId: payload?.eventId || null,
-    coverURL: payload?.coverURL || null
+    coverURL,
+    imageURL: coverURL
   };
 }
 
