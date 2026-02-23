@@ -3,6 +3,8 @@ import { getOwnerId, normalizeDeviceId, normalizeMetadataValue } from './device-
 
 const DEFAULT_ALERT_TITLE = 'Sukha Test Push';
 const DEFAULT_ALERT_SUBTITLE = 'Sukha';
+const ALLOWED_INTERRUPTION_LEVELS = new Set(['passive', 'active', 'time-sensitive', 'critical']);
+const ALLOWED_MEDIA_TYPES = new Set(['image', 'gif', 'video', 'audio', 'file']);
 
 function jsonResponse(payload, { status = 200 } = {}) {
   return new Response(JSON.stringify(payload), {
@@ -51,8 +53,7 @@ function normalizeInterruptionLevel(value) {
   if (typeof value !== 'string') return null;
   const normalized = value.trim().toLowerCase();
   if (!normalized) return null;
-  const allowed = new Set(['passive', 'active', 'time-sensitive', 'critical']);
-  return allowed.has(normalized) ? normalized : null;
+  return ALLOWED_INTERRUPTION_LEVELS.has(normalized) ? normalized : null;
 }
 
 function normalizeBoolean(value) {
@@ -68,6 +69,43 @@ function normalizeBoolean(value) {
     if (normalized === 'false' || normalized === '0') return false;
   }
   return null;
+}
+
+function normalizeObject(value) {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return null;
+  return value;
+}
+
+function normalizeMediaList(value) {
+  if (!Array.isArray(value)) return [];
+
+  const normalized = [];
+  for (const entry of value) {
+    if (!entry || typeof entry !== 'object' || Array.isArray(entry)) continue;
+    const url = normalizeOptionalUrl(entry.url || entry.href);
+    if (!url) continue;
+    const typeRaw = normalizeText(entry.type, 32);
+    const type = typeRaw ? typeRaw.toLowerCase() : 'image';
+    normalized.push({
+      type: ALLOWED_MEDIA_TYPES.has(type) ? type : 'image',
+      url,
+      mimeType: normalizeText(entry.mimeType, 120) || null,
+      filename: normalizeText(entry.filename, 120) || null
+    });
+    if (normalized.length >= 3) break;
+  }
+
+  return normalized;
+}
+
+function normalizeDataPayload(value) {
+  const obj = normalizeObject(value);
+  if (!obj) return null;
+  try {
+    return JSON.parse(JSON.stringify(obj));
+  } catch {
+    return null;
+  }
 }
 
 function readApiKey(request) {
@@ -142,17 +180,22 @@ export async function onRequest(context) {
     );
   }
 
-  const alertTitle = normalizeText(payload?.title, 120) || DEFAULT_ALERT_TITLE;
-  const alertSubtitle = normalizeText(payload?.subtitle, 120) || DEFAULT_ALERT_SUBTITLE;
-  const alertBody = normalizeText(payload?.body, 240) || `Triggered at ${now}`;
   const itemId = normalizeText(payload?.itemId, 200) || `test-item-${Date.now()}`;
-  const coverURL = normalizeOptionalUrl(payload?.coverURL) || normalizeOptionalUrl(payload?.imageURL);
-  const threadId = normalizeText(payload?.threadId, 120);
-  const category = normalizeText(payload?.category, 120);
-  const targetContentId = normalizeText(payload?.targetContentId, 120);
-  const interruptionLevel = normalizeInterruptionLevel(payload?.interruptionLevel);
-  const relevanceScore = normalizeRelevanceScore(payload?.relevanceScore);
-  const mutableContent = normalizeBoolean(payload?.mutableContent);
+  const notification = normalizeObject(payload?.notification) || {};
+  const notificationAlert = normalizeObject(notification?.alert);
+  const notificationMedia = normalizeMediaList(notification?.media);
+  const data = normalizeDataPayload(payload?.data);
+
+  const resolvedAlertTitle = normalizeText(notificationAlert?.title, 120) || DEFAULT_ALERT_TITLE;
+  const resolvedAlertSubtitle = normalizeText(notificationAlert?.subtitle, 120) || DEFAULT_ALERT_SUBTITLE;
+  const resolvedAlertBody = normalizeText(notificationAlert?.body, 240) || `Triggered at ${now}`;
+  const resolvedThreadId = normalizeText(notification?.threadId, 120);
+  const resolvedCategory = normalizeText(notification?.category, 120);
+  const resolvedTargetContentId = normalizeText(notification?.targetContentId, 120);
+  const resolvedInterruptionLevel = normalizeInterruptionLevel(notification?.interruptionLevel);
+  const resolvedRelevanceScore = normalizeRelevanceScore(notification?.relevanceScore);
+  const resolvedMutableContent = normalizeBoolean(notification?.mutableContent);
+  const resolvedMedia = notificationMedia;
 
   try {
     await queue.send(JSON.stringify({
@@ -162,16 +205,21 @@ export async function onRequest(context) {
       itemId,
       savedAt: now,
       eventId,
-      coverURL,
-      alertTitle,
-      alertSubtitle,
-      alertBody,
-      threadId,
-      category,
-      targetContentId,
-      interruptionLevel,
-      relevanceScore,
-      mutableContent,
+      notification: {
+        alert: {
+          title: resolvedAlertTitle,
+          subtitle: resolvedAlertSubtitle,
+          body: resolvedAlertBody
+        },
+        threadId: resolvedThreadId,
+        category: resolvedCategory,
+        targetContentId: resolvedTargetContentId,
+        interruptionLevel: resolvedInterruptionLevel,
+        relevanceScore: resolvedRelevanceScore,
+        mutableContent: resolvedMutableContent,
+        media: resolvedMedia
+      },
+      data,
       targetDeviceId: deviceId || null
     }));
 

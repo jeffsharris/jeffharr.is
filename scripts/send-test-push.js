@@ -18,14 +18,17 @@ Options:
   --title <text>        Push alert title
   --subtitle <text>     Push alert subtitle
   --body <text>         Push alert body
-  --cover-url <url>    Cover image URL for payload (rich media candidate)
-  --image-url <url>    Alias for --cover-url
-  --thread-id <id>     APNs thread-id for notification grouping
-  --category <id>      APNs category identifier
+  --cover-url <url>     Cover image URL for payload (rich media candidate)
+  --image-url <url>     Alias for --cover-url
+  --media-url <url>     Generic media URL (first attachment)
+  --media-type <type>   Generic media type (default: image)
+  --thread-id <id>      APNs thread-id for notification grouping
+  --category <id>       APNs category identifier
   --target-content-id <id> APNs target-content-id for updates
   --interruption-level <level> APNs level (passive|active|time-sensitive|critical)
   --relevance-score <0-1> APNs relevance score
   --mutable-content <bool> Force APS mutable-content (true/false/1/0)
+  --data-json <json>    Custom data object payload (e.g. '{"route":"read-later"}')
   --device-id <id>      Target one registered device id
   --owner-id <id>       Owner id override
   --base-url <url>      API origin (default: https://jeffharr.is)
@@ -69,6 +72,22 @@ function requireEnv(name) {
   return value.trim();
 }
 
+function parseJsonObject(value, flagName) {
+  if (!value) return null;
+  let parsed;
+  try {
+    parsed = JSON.parse(value);
+  } catch {
+    throw new Error(`Invalid JSON for ${flagName}`);
+  }
+
+  if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) {
+    throw new Error(`${flagName} must be a JSON object`);
+  }
+
+  return parsed;
+}
+
 async function main() {
   const args = parseArgs(process.argv.slice(2));
 
@@ -90,19 +109,39 @@ async function main() {
     itemId: args.itemId
   };
 
-  if (args.title) payload.title = args.title;
-  if (args.subtitle) payload.subtitle = args.subtitle;
-  if (args.body) payload.body = args.body;
-  if (args.coverUrl) payload.coverURL = args.coverUrl;
-  if (args.imageUrl) payload.imageURL = args.imageUrl;
-  if (args.threadId) payload.threadId = args.threadId;
-  if (args.category) payload.category = args.category;
-  if (args.targetContentId) payload.targetContentId = args.targetContentId;
-  if (args.interruptionLevel) payload.interruptionLevel = args.interruptionLevel;
-  if (args.relevanceScore) payload.relevanceScore = args.relevanceScore;
-  if (args.mutableContent) payload.mutableContent = args.mutableContent;
+  if (args.dataJson) payload.data = parseJsonObject(args.dataJson, '--data-json');
   if (args.deviceId) payload.deviceId = args.deviceId;
   if (args.ownerId) payload.ownerId = args.ownerId;
+
+  const mediaURL = args.mediaUrl || args.coverUrl || args.imageUrl;
+  const mediaType = args.mediaType || 'image';
+  const notification = {};
+  if (args.title || args.subtitle || args.body) {
+    notification.alert = {};
+    if (args.title) notification.alert.title = args.title;
+    if (args.subtitle) notification.alert.subtitle = args.subtitle;
+    if (args.body) notification.alert.body = args.body;
+  }
+  if (args.threadId) notification.threadId = args.threadId;
+  if (args.category) notification.category = args.category;
+  if (args.targetContentId) notification.targetContentId = args.targetContentId;
+  if (args.interruptionLevel) notification.interruptionLevel = args.interruptionLevel;
+  if (args.relevanceScore) notification.relevanceScore = args.relevanceScore;
+  if (args.mutableContent) notification.mutableContent = args.mutableContent;
+  if (mediaURL) {
+    notification.media = [{ type: mediaType, url: mediaURL }];
+  }
+
+  payload.notification = Object.keys(notification).length > 0
+    ? notification
+    : {
+      alert: {
+        title: 'Sukha Test Push',
+        subtitle: 'Sukha',
+        body: `Triggered at ${new Date().toISOString()}`
+      },
+      media: []
+    };
 
   const response = await fetch(endpoint, {
     method: 'POST',

@@ -132,6 +132,17 @@ test('maybeQueueIosPush enqueues exactly once after readiness is ready', async (
   assert.equal(sent[0].type, 'push.notification.requested');
   assert.equal(sent[0].source, 'read-later');
   assert.equal(sent[0].itemId, 'item-2');
+  assert.equal(sent[0].notification.alert.title, 'Saved to Read Later');
+  assert.equal(sent[0].notification.alert.subtitle, 'example.com');
+  assert.equal(sent[0].notification.alert.body, 'Example B');
+  assert.equal(sent[0].notification.threadId, 'read-later');
+  assert.equal(sent[0].notification.category, 'read-later');
+  assert.equal(Array.isArray(sent[0].notification.media), true);
+  assert.equal(sent[0].notification.media.length, 1);
+  assert.equal(sent[0].notification.media[0].type, 'image');
+  assert.equal(sent[0].notification.media[0].url.includes('/api/read-later/cover'), true);
+  assert.equal(sent[0].data.channel, 'read-later');
+  assert.equal(sent[0].data.itemId, 'item-2');
 
   const second = await maybeQueueIosPush({ item: first.item, env, kv, log: null, source: 'test' });
   assert.equal(second.queued, false);

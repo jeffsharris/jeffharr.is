@@ -78,14 +78,27 @@ test('push-test endpoint enqueues test push', async () => {
       'x-push-test-key': 'secret-key'
     },
     body: JSON.stringify({
-      title: 'Test Title',
-      subtitle: 'Test Subtitle',
-      body: 'Test Body',
-      imageURL: 'https://example.com/cover.jpg',
-      threadId: 'read-later',
-      interruptionLevel: 'time-sensitive',
-      relevanceScore: 0.75,
-      mutableContent: true,
+      notification: {
+        alert: {
+          title: 'Test Title',
+          subtitle: 'Test Subtitle',
+          body: 'Test Body'
+        },
+        media: [
+          {
+            type: 'image',
+            url: 'https://example.com/cover.jpg'
+          }
+        ],
+        threadId: 'read-later',
+        interruptionLevel: 'time-sensitive',
+        relevanceScore: 0.75,
+        mutableContent: true
+      },
+      data: {
+        route: 'read-later',
+        itemId: 'abc123'
+      },
       deviceId: 'device-1'
     })
   });
@@ -106,11 +119,13 @@ test('push-test endpoint enqueues test push', async () => {
   assert.equal(payload.queued, true);
   assert.equal(queuedPayload.type, 'push.notification.test');
   assert.equal(queuedPayload.targetDeviceId, 'device-1');
-  assert.equal(queuedPayload.coverURL, 'https://example.com/cover.jpg');
-  assert.equal(queuedPayload.threadId, 'read-later');
-  assert.equal(queuedPayload.interruptionLevel, 'time-sensitive');
-  assert.equal(queuedPayload.relevanceScore, 0.75);
-  assert.equal(queuedPayload.mutableContent, true);
+  assert.equal(queuedPayload.notification.alert.title, 'Test Title');
+  assert.equal(queuedPayload.notification.threadId, 'read-later');
+  assert.equal(queuedPayload.notification.interruptionLevel, 'time-sensitive');
+  assert.equal(queuedPayload.notification.relevanceScore, 0.75);
+  assert.equal(queuedPayload.notification.mutableContent, true);
+  assert.equal(queuedPayload.notification.media[0].url, 'https://example.com/cover.jpg');
+  assert.equal(queuedPayload.data.route, 'read-later');
 });
 
 test('push-test endpoint fails when queue binding is missing', async () => {

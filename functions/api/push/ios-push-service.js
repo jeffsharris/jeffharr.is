@@ -6,6 +6,8 @@ const KV_ITEM_PREFIX = 'item:';
 const APNS_PRODUCTION_HOST = 'api.push.apple.com';
 const APNS_SANDBOX_HOST = 'api.sandbox.push.apple.com';
 const APNS_TOKEN_TTL_SECONDS = 50 * 60;
+const ALLOWED_INTERRUPTION_LEVELS = new Set(['passive', 'active', 'time-sensitive', 'critical']);
+const ALLOWED_MEDIA_TYPES = new Set(['image', 'gif', 'video', 'audio', 'file']);
 const TERMINAL_TOKEN_REASONS = new Set([
   'BadDeviceToken',
   'Unregistered',
@@ -304,8 +306,7 @@ function normalizeApsInterruptionLevel(value) {
   if (typeof value !== 'string') return null;
   const normalized = value.trim().toLowerCase();
   if (!normalized) return null;
-  const allowed = new Set(['passive', 'active', 'time-sensitive', 'critical']);
-  return allowed.has(normalized) ? normalized : null;
+  return ALLOWED_INTERRUPTION_LEVELS.has(normalized) ? normalized : null;
 }
 
 function normalizeApsRelevanceScore(value) {
@@ -329,20 +330,70 @@ function normalizeMutableContent(value) {
   return null;
 }
 
+function normalizePayloadObject(value) {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return null;
+  return value;
+}
+
+function normalizeMediaList(value) {
+  if (!Array.isArray(value)) return [];
+
+  const output = [];
+  for (const entry of value) {
+    if (!entry || typeof entry !== 'object' || Array.isArray(entry)) continue;
+    const url = normalizeApsString(entry.url || entry.href, 2048);
+    if (!url) continue;
+    try {
+      const parsed = new URL(url);
+      if (!['http:', 'https:'].includes(parsed.protocol)) continue;
+      const type = normalizeApsString(entry.type, 32)?.toLowerCase() || 'image';
+      output.push({
+        type: ALLOWED_MEDIA_TYPES.has(type) ? type : 'image',
+        url: parsed.toString(),
+        mimeType: normalizeApsString(entry.mimeType, 120) || null,
+        filename: normalizeApsString(entry.filename, 120) || null
+      });
+    } catch {
+      continue;
+    }
+    if (output.length >= 3) break;
+  }
+
+  return output;
+}
+
+function normalizeDataPayload(value) {
+  const obj = normalizePayloadObject(value);
+  if (!obj) return null;
+  try {
+    return JSON.parse(JSON.stringify(obj));
+  } catch {
+    return null;
+  }
+}
+
 function buildApnsPayload(payload) {
-  const alertTitle = payload?.alertTitle || 'Saved to Read Later';
-  const alertSubtitle = payload?.alertSubtitle || payload?.domain || 'Read Later';
-  const alertBody = payload?.alertBody || payload?.title || 'Saved article';
-  const coverURL = payload?.coverURL || null;
-  const threadId = normalizeApsString(payload?.threadId, 120);
-  const category = normalizeApsString(payload?.category, 120);
-  const targetContentId = normalizeApsString(payload?.targetContentId, 120);
-  const interruptionLevel = normalizeApsInterruptionLevel(payload?.interruptionLevel);
-  const relevanceScore = normalizeApsRelevanceScore(payload?.relevanceScore);
-  const mutableContentOverride = normalizeMutableContent(payload?.mutableContent);
+  const notification = normalizePayloadObject(payload?.notification);
+  const alert = normalizePayloadObject(notification?.alert);
+  const alertTitle = normalizeApsString(alert?.title, 120)
+    || 'Sukha';
+  const alertSubtitle = normalizeApsString(alert?.subtitle, 120)
+    || 'Notification';
+  const alertBody = normalizeApsString(alert?.body, 240)
+    || 'Open Sukha';
+
+  const media = normalizeMediaList(notification?.media);
+
+  const threadId = normalizeApsString(notification?.threadId, 120);
+  const category = normalizeApsString(notification?.category, 120);
+  const targetContentId = normalizeApsString(notification?.targetContentId, 120);
+  const interruptionLevel = normalizeApsInterruptionLevel(notification?.interruptionLevel);
+  const relevanceScore = normalizeApsRelevanceScore(notification?.relevanceScore);
+  const mutableContentOverride = normalizeMutableContent(notification?.mutableContent);
   const mutableContent = mutableContentOverride === null
-    ? Boolean(coverURL)
+    ? media.length > 0
     : mutableContentOverride;
+  const data = normalizeDataPayload(payload?.data);
 
   return {
     aps: {
@@ -364,8 +415,22 @@ function buildApnsPayload(payload) {
     itemId: payload?.itemId || null,
     savedAt: payload?.savedAt || null,
     eventId: payload?.eventId || null,
-    coverURL,
-    imageURL: coverURL
+    notification: {
+      alert: {
+        title: alertTitle,
+        subtitle: alertSubtitle,
+        body: alertBody
+      },
+      threadId: threadId || null,
+      category: category || null,
+      targetContentId: targetContentId || null,
+      interruptionLevel: interruptionLevel || null,
+      relevanceScore: relevanceScore ?? null,
+      mutableContent,
+      media
+    },
+    media,
+    data
   };
 }
 

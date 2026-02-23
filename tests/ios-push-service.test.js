@@ -211,13 +211,15 @@ test('ios push worker processes queued test push message without item lookup', a
   });
 
   let fetchCallCount = 0;
+  let apnsBody = null;
   const originalFetch = globalThis.fetch;
   t.after(() => {
     globalThis.fetch = originalFetch;
   });
 
-  globalThis.fetch = async () => {
+  globalThis.fetch = async (_url, init) => {
     fetchCallCount += 1;
+    apnsBody = JSON.parse(init?.body || '{}');
     return new Response(null, { status: 200 });
   };
 
@@ -233,7 +235,18 @@ test('ios push worker processes queued test push message without item lookup', a
             eventId: 'test-event-1',
             alertTitle: 'Test',
             alertSubtitle: 'Sukha',
-            alertBody: 'Hello'
+            alertBody: 'Hello',
+            notification: {
+              media: [
+                {
+                  type: 'image',
+                  url: 'https://example.com/cover.jpg'
+                }
+              ]
+            },
+            data: {
+              route: 'read-later'
+            }
           })
         }
       ]
@@ -250,4 +263,8 @@ test('ios push worker processes queued test push message without item lookup', a
   );
 
   assert.equal(fetchCallCount, 1);
+  assert.equal(apnsBody.aps['mutable-content'], 1);
+  assert.equal(Array.isArray(apnsBody.media), true);
+  assert.equal(apnsBody.media[0].url, 'https://example.com/cover.jpg');
+  assert.equal(apnsBody.data.route, 'read-later');
 });

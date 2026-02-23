@@ -214,6 +214,12 @@ function buildIosPayload(item, env, eventId) {
     coverURL = url.toString();
   }
 
+  const title = item.title || deriveTitleFromUrl(item.url || '');
+  const domain = parseDomain(item.url) || null;
+  const media = coverURL
+    ? [{ type: 'image', url: coverURL, purpose: 'cover' }]
+    : [];
+
   return {
     type: PUSH_NOTIFICATION_MESSAGE_TYPE,
     source: 'read-later',
@@ -221,9 +227,21 @@ function buildIosPayload(item, env, eventId) {
     itemId: item.id,
     eventId,
     savedAt: item.savedAt || getNowIso(),
-    title: item.title || deriveTitleFromUrl(item.url || ''),
-    domain: parseDomain(item.url) || null,
-    coverURL
+    notification: {
+      alert: {
+        title: 'Saved to Read Later',
+        subtitle: domain || 'Read Later',
+        body: title
+      },
+      threadId: 'read-later',
+      category: 'read-later',
+      media
+    },
+    data: {
+      channel: 'read-later',
+      itemId: item.id,
+      url: item.url || null
+    }
   };
 }
 
