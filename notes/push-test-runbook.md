@@ -160,3 +160,10 @@ npx wrangler pages deploy . --project-name jeffharr-is
 cd /Users/jeffharris/code/jeffharr.is/workers/push-delivery
 npx wrangler deploy
 ```
+- Read Later producer/queue code changed (for example `functions/api/read-later/*` push payload shape):
+```sh
+cd /Users/jeffharris/code/jeffharr.is/workers/read-later-sync
+npx wrangler deploy
+```
+
+If `push-delivery` expects a newer payload contract than `read-later-sync` emits, notifications can still deliver but with fallback text only (e.g. `Sukha / Notification / Open Sukha`).
