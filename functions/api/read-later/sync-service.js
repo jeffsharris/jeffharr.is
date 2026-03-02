@@ -7,6 +7,7 @@ import {
 import { enqueueCoverGeneration } from './cover-sync-service.js';
 import { cacheReader } from './reader.js';
 import { syncKindleForItem, shouldCacheKindleReader, KINDLE_STATUS } from './kindle.js';
+import { getYouTubeInfo } from './media-utils.js';
 import { formatError } from '../lib/logger.js';
 
 const KV_PREFIX = 'item:';
@@ -53,7 +54,7 @@ function shouldSkipQueue(item, force = false) {
   if (force) return false;
 
   const status = item?.kindle?.status || null;
-  if (status === KINDLE_STATUS.UNSUPPORTED) {
+  if (status === KINDLE_STATUS.UNSUPPORTED && getYouTubeInfo(item?.url || '')) {
     return true;
   }
 

@@ -330,10 +330,10 @@
     const status = getKindleStatus(item);
     const isSending = kindleRequests.has(item.id);
     const isQueued = isKindleQueued(status);
-    const label = getKindleLinkLabel(status, isSending);
+    const label = getKindleLinkLabel(status, isSending, item);
 
     linkEl.textContent = label;
-    linkEl.title = getKindleStatusTitle(status, item?.kindle || null);
+    linkEl.title = getKindleStatusTitle(status, item?.kindle || null, item);
     linkEl.disabled = isSending || isQueued;
     linkEl.classList.toggle('is-synced', status === 'synced');
     linkEl.classList.toggle('is-failed', status === 'failed');
@@ -414,7 +414,7 @@
     return status === 'pending' || status === 'retrying';
   }
 
-  function getKindleLinkLabel(status, isSending) {
+  function getKindleLinkLabel(status, isSending, item) {
     if (isSending) {
       return 'Syncing...';
     }
@@ -429,13 +429,13 @@
       case 'retrying':
         return 'Kindle syncing...';
       case 'unsupported':
-        return 'Not for Kindle';
+        return getYouTubeInfoFromItem(item) ? 'Not for Kindle' : 'Retry Kindle';
       default:
         return 'Send to Kindle';
     }
   }
 
-  function getKindleStatusTitle(status, kindleState) {
+  function getKindleStatusTitle(status, kindleState, item) {
     const errorMessage = kindleState?.lastError || '';
     const attempt = Number(kindleState?.attempt || 0);
     const maxAttempts = Number(kindleState?.maxAttempts || 0);
@@ -454,7 +454,9 @@
       return errorMessage ? `Last error: ${errorMessage}` : 'Click to retry';
     }
     if (status === 'unsupported') {
-      return 'This link is not sent to Kindle';
+      return getYouTubeInfoFromItem(item)
+        ? 'This link is not sent to Kindle'
+        : 'Previously marked unsupported; click to retry';
     }
     if (status === 'needs-content') {
       return 'Reader content missing; click to try again';
