@@ -99,3 +99,28 @@ test('enqueueKindleSync skips already-synced items that have covers', async () =
   assert.equal(sendCount, 0);
   assert.equal(kv.store.size, 0);
 });
+
+
+test('enqueueKindleSync does not skip non-YouTube unsupported items', async () => {
+  const kv = createMockKv();
+  let sendCount = 0;
+  const env = {
+    READ_LATER_SYNC_QUEUE: {
+      async send() {
+        sendCount += 1;
+      }
+    }
+  };
+  const item = {
+    id: 'item-4',
+    url: 'https://x.com/user/status/123',
+    title: 'X post',
+    kindle: {
+      status: 'unsupported'
+    }
+  };
+
+  const result = await enqueueKindleSync({ item, kv, env });
+  assert.equal(result.queued, true);
+  assert.equal(sendCount, 1);
+});
