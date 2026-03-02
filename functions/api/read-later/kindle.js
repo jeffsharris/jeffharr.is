@@ -7,9 +7,6 @@ import { formatError, truncateString } from '../lib/logger.js';
 
 const RESEND_ENDPOINT = 'https://api.resend.com/emails';
 const RESEND_TIMEOUT_MS = 10000;
-const KINDLE_DOMAIN_BLOCKLIST = [
-  { domain: 'x.com', reason: 'Links from x.com are not sent to Kindle' }
-];
 const KINDLE_STATUS = {
   SYNCED: 'synced',
   FAILED: 'failed',
@@ -199,19 +196,6 @@ async function syncKindleForItem(item, env, options = {}) {
     };
   }
 
-  const blocklisted = getKindleBlocklistEntry(item.url);
-  const shouldExtractUnsupportedContent = blocklisted?.domain === 'x.com';
-  if (blocklisted && !shouldExtractUnsupportedContent) {
-    return {
-      reader: null,
-      kindle: buildKindleState(KINDLE_STATUS.UNSUPPORTED, attemptedAt, blocklisted.reason, {
-        errorCode: 'kindle_unsupported_domain',
-        retryable: false
-      }),
-      cover: null
-    };
-  }
-
   if (getYouTubeInfo(item.url)) {
     if (log) {
       log('info', 'kindle_unsupported_youtube', {
@@ -237,17 +221,6 @@ async function syncKindleForItem(item, env, options = {}) {
       xBearerToken: env?.X_API_BEARER_TOKEN
     });
   } catch (error) {
-    if (blocklisted) {
-      return {
-        reader: null,
-        kindle: buildKindleState(KINDLE_STATUS.UNSUPPORTED, attemptedAt, blocklisted.reason, {
-          errorCode: 'kindle_unsupported_domain',
-          retryable: false
-        }),
-        cover: null
-      };
-    }
-
     if (log) {
       log('error', 'reader_fetch_failed', {
         stage: 'reader_fetch',
@@ -266,17 +239,6 @@ async function syncKindleForItem(item, env, options = {}) {
   }
 
   if (!reader || !shouldCacheKindleReader(reader)) {
-    if (blocklisted) {
-      return {
-        reader,
-        kindle: buildKindleState(KINDLE_STATUS.UNSUPPORTED, attemptedAt, blocklisted.reason, {
-          errorCode: 'kindle_unsupported_domain',
-          retryable: false
-        }),
-        cover: null
-      };
-    }
-
     if (log) {
       log('warn', 'reader_unavailable', {
         stage: 'reader_fetch',
@@ -318,17 +280,6 @@ async function syncKindleForItem(item, env, options = {}) {
       }
       cover = null;
     }
-  }
-
-  if (blocklisted) {
-    return {
-      reader,
-      kindle: buildKindleState(KINDLE_STATUS.UNSUPPORTED, attemptedAt, blocklisted.reason, {
-        errorCode: 'kindle_unsupported_domain',
-        retryable: false
-      }),
-      cover
-    };
   }
 
   try {
@@ -376,22 +327,6 @@ async function syncKindleForItem(item, env, options = {}) {
 
 function resolveTitle(item, reader) {
   return reader?.title || item?.title || deriveTitleFromUrl(item?.url || '');
-}
-
-function getKindleBlocklistEntry(url) {
-  if (typeof url !== 'string') return null;
-  let parsed;
-  try {
-    parsed = new URL(url);
-  } catch {
-    return null;
-  }
-
-  const hostname = parsed.hostname.toLowerCase().replace(/^www\./, '');
-  return (
-    KINDLE_DOMAIN_BLOCKLIST.find(({ domain }) => hostname === domain || hostname.endsWith(`.${domain}`)) ||
-    null
-  );
 }
 
 function formatFilename(title) {
