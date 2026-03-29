@@ -360,6 +360,8 @@
       border-radius: 16px;
       box-shadow: var(--shadow-lg);
       overflow: hidden;
+      display: flex;
+      flex-direction: column;
       transform: scale(0.95) translateY(20px);
       transition: transform 0.3s ease;
     }
@@ -371,6 +373,9 @@
     .modal__header {
       padding: calc(32px + env(safe-area-inset-top, 0px)) 32px 0;
       text-align: center;
+      flex-shrink: 0;
+      border-bottom: 1px solid transparent;
+      transition: padding 0.3s ease, border-color 0.3s ease;
     }
 
     .modal__title {
@@ -379,12 +384,16 @@
       font-weight: 500;
       line-height: 1.25;
       margin: 0 0 12px 0;
+      transition: font-size 0.3s ease, line-height 0.3s ease, margin 0.3s ease;
     }
 
     .modal__author {
       font-size: 15px;
       color: var(--text-muted);
       font-style: italic;
+      max-height: 50px;
+      overflow: hidden;
+      transition: opacity 0.2s ease, max-height 0.3s ease, margin 0.3s ease;
     }
 
     .modal__author-link {
@@ -426,6 +435,9 @@
       flex-wrap: wrap;
       margin-top: 14px;
       text-align: left;
+      max-height: 100px;
+      overflow: hidden;
+      transition: opacity 0.2s ease, max-height 0.3s ease, margin 0.3s ease;
     }
 
     .modal__actions {
@@ -507,8 +519,8 @@
       padding: 32px;
       padding-bottom: calc(32px + env(safe-area-inset-bottom, 0px));
       overflow-y: auto;
-      max-height: calc(90vh - 160px);
-      max-height: calc(90dvh - 160px);
+      flex: 1;
+      min-height: 0;
     }
 
     .modal__poem {
@@ -561,6 +573,36 @@
     .modal__body::-webkit-scrollbar-thumb {
       background: var(--border);
       border-radius: 3px;
+    }
+
+    /* Collapsed header on scroll */
+    .modal__content.is-scrolled .modal__header {
+      padding-top: calc(16px + env(safe-area-inset-top, 0px));
+      padding-bottom: 16px;
+      padding-right: 72px;
+      text-align: left;
+      border-bottom-color: var(--border);
+    }
+
+    .modal__content.is-scrolled .modal__title {
+      font-size: 0.95rem;
+      line-height: 40px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-bottom: 0;
+    }
+
+    .modal__content.is-scrolled .modal__author {
+      opacity: 0;
+      max-height: 0;
+      margin: 0;
+    }
+
+    .modal__content.is-scrolled .modal__meta {
+      opacity: 0;
+      max-height: 0;
+      margin: 0;
     }
 
     /* Responsive */
@@ -650,8 +692,6 @@
       .modal__body {
         padding: 24px;
         padding-bottom: calc(24px + env(safe-area-inset-bottom, 0px));
-        max-height: calc(95vh - 140px);
-        max-height: calc(95dvh - 140px);
       }
 
       .modal__poem {
@@ -663,6 +703,14 @@
         right: 12px;
         width: 36px;
         height: 36px;
+      }
+
+      .modal__content.is-scrolled .modal__header {
+        padding: 12px 60px 12px 24px;
+      }
+
+      .modal__content.is-scrolled .modal__title {
+        line-height: 36px;
       }
     }
 
@@ -800,6 +848,8 @@
     const copyButton = document.getElementById('copy-poem');
     const shareButton = document.getElementById('share-poem');
     const actionFeedback = document.getElementById('action-feedback');
+    const modalContent = modal.querySelector('.modal__content');
+    const modalBody = modal.querySelector('.modal__body');
 
     let allPoems = [];
     let memorizedSet = new Set();
@@ -811,6 +861,11 @@
     if (navigator.share) {
       shareButton.classList.add('is-supported');
     }
+
+    // Collapse header on scroll
+    modalBody.addEventListener('scroll', () => {
+      modalContent.classList.toggle('is-scrolled', modalBody.scrollTop > 20);
+    });
 
     async function writeToClipboard(text) {
       if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -966,6 +1021,8 @@
       currentSlug = poem.slug || '';
       setPoemUrl(currentSlug, { method: historyMethod });
       resetFeedback();
+      modalBody.scrollTop = 0;
+      modalContent.classList.remove('is-scrolled');
       modal.classList.add('is-open');
       document.body.style.overflow = 'hidden';
     }

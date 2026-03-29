@@ -1,3 +1,6 @@
 .DS_Store
 .playwright-mcp/
 tmp/
+.wrangler/
+node_modules/.cache/
+node_modules/.mf/
