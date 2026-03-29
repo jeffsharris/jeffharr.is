@@ -3,71 +3,16 @@ title: The Blue House
 author: Tomas Transtromer
 ---
 
-There is, all around us,
-this country
-of original fire.
-You know what I mean.
-The sky, after all, stops at nothing, so something
-has to be holding
-our bodies
-in its rich and timeless stables or else
-we would fly away.
- 
-Off Stellwagen
-off the Cape,
-the humpbacks rise. Carrying their tonnage
-of barnacles and joy
-they leap through the water, they nuzzle back under it
-like children
-at play.
- 
-They sing, too.
-And not for any reason
-you can’t imagine.
- 
-Three of them
-rise to the surface near the bow of the boat,
-then dive
-deeply, their huge scarred flukes
-tipped to the air.
-We wait, not knowing
-just where it will happen; suddenly
-they smash through the surface, someone begins
-shouting for joy and you realize
-it is yourself as they surge
-upward and you see for the first time
-how huge they are, as they breach,
-and dive, and breach again
-through the shining blue flowers
-of the split water and you see them
-for some unbelievable
-part of a moment against the sky–
-like nothing you’ve ever imagined–
-like the myth of the fifth morning galloping
-out of darkness, pouring
-heavenward, spinning; then
- 
-they crash back under those black silks
-and we all fall back
-together into that wet fire, you
-know what I mean.
- 
-I know a captain who has seen them
-playing with seaweed, swimming
-through the green islands, tossing
-the slippery branches into the air.
-I know a whale that will come to the boat whenever
-she can, and nudge it gently along the bow
-with her long flipper.
-I know several lives worth living.
- 
-Listen, whatever it is you try
-to do with your life, nothing will ever dazzle you
-like the dreams of your body,
-its spirit
-longing to fly while the dead-weight bones
-toss their dark mane and hurry
-back into the fields of glittering fire
-where everything,
-even the great whale,
-throbs with song.
+It is night with glaring sunshine. I stand in the woods and look towards my house with its misty blue walls. As though I were recently dead and saw the house from a new angle.
+
+It has stood for more than eighty summers. Its timber has been impregnated, four times with joy and three times with sorrow. When someone who has lived in the house dies it is repainted. The dead person paints it himself, without a brush, from the inside.
+
+On the other side is open terrain. Formerly a garden, now wilderness. A still surf of weed, pagodas of weed, an unfurling body of text, Upanishades of weed, a Viking fleet of weed, dragon heads, lances, an empire of weed.
+
+Above the overgrown garden flutters the shadow of a boomerang, thrown again and again. It is related to someone who lived in the house long before my time. Almost a child. An impulse issues from him, a thought, a thought of will: “create. . .draw. ..” In order to escape his destiny in time.
+
+The house resembles a child’s drawing. A deputizing childishness which grew forth because someone prematurely renounced the charge of being a child. Open the doors, enter! Inside unrest dwells in the ceiling and peace in the walls. Above the bed there hangs an amateur painting representing a ship with seventeen sails, rough sea and a wind which the gilded frame cannot subdue.
+
+It is always so early in here, it is before the crossroads, before the irrevocable choices. I am grateful for this life! And yet I miss the alternatives. All sketches wish to be real.
+
+A motor far out on the water extends the horizon of the summer night. Both joy and sorrow swell in the magnifying glass of the dew. We do not actually know it, but we sense it: our life has a sister vessel which plies an entirely different route. While the sun burns behind the islands.
