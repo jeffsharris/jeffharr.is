@@ -384,16 +384,20 @@
       font-weight: 500;
       line-height: 1.25;
       margin: 0 0 12px 0;
-      transition: font-size 0.3s ease, line-height 0.3s ease, margin 0.3s ease;
+      max-height: 200px;
+      overflow: hidden;
+      transition: font-size 0.3s ease, line-height 0.3s ease, margin 0.3s ease, max-height 0.3s ease;
     }
 
     .modal__author {
       font-size: 15px;
       color: var(--text-muted);
       font-style: italic;
+      text-align: center;
       max-height: 50px;
       overflow: hidden;
-      transition: opacity 0.2s ease, max-height 0.3s ease, margin 0.3s ease;
+      opacity: calc(1 - var(--sp, 0) * 3);
+      transition: opacity 0.15s ease, max-height 0.25s ease, margin 0.25s ease;
     }
 
     .modal__author-link {
@@ -437,7 +441,8 @@
       text-align: left;
       max-height: 100px;
       overflow: hidden;
-      transition: opacity 0.2s ease, max-height 0.3s ease, margin 0.3s ease;
+      opacity: calc(1 - var(--sp, 0) * 2);
+      transition: opacity 0.15s ease, max-height 0.25s ease, margin 0.25s ease;
     }
 
     .modal__actions {
@@ -587,20 +592,21 @@
     .modal__content.is-scrolled .modal__title {
       font-size: 0.95rem;
       line-height: 40px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      max-height: 40px;
       margin-bottom: 0;
     }
 
+    .modal__title.is-truncated {
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
     .modal__content.is-scrolled .modal__author {
-      opacity: 0;
       max-height: 0;
       margin: 0;
     }
 
     .modal__content.is-scrolled .modal__meta {
-      opacity: 0;
       max-height: 0;
       margin: 0;
     }
@@ -711,6 +717,7 @@
 
       .modal__content.is-scrolled .modal__title {
         line-height: 36px;
+        max-height: 36px;
       }
     }
 
@@ -856,15 +863,33 @@
     let currentFilter = 'all';
     let currentSlug = '';
     let feedbackTimeout;
+    let truncateTimeout;
 
     // Show share button only if Web Share API is available
     if (navigator.share) {
       shareButton.classList.add('is-supported');
     }
 
-    // Collapse header on scroll
+    // Collapse header on scroll — scroll-progress driven fades + class toggle for layout
     modalBody.addEventListener('scroll', () => {
-      modalContent.classList.toggle('is-scrolled', modalBody.scrollTop > 20);
+      const scrollY = modalBody.scrollTop;
+      const progress = Math.min(1, Math.max(0, scrollY / 60));
+      modalContent.style.setProperty('--sp', progress);
+
+      const shouldCollapse = scrollY > 30;
+      const isCollapsed = modalContent.classList.contains('is-scrolled');
+
+      if (shouldCollapse !== isCollapsed) {
+        modalContent.classList.toggle('is-scrolled', shouldCollapse);
+        clearTimeout(truncateTimeout);
+        if (shouldCollapse) {
+          truncateTimeout = setTimeout(() => {
+            modalTitle.classList.add('is-truncated');
+          }, 300);
+        } else {
+          modalTitle.classList.remove('is-truncated');
+        }
+      }
     });
 
     async function writeToClipboard(text) {
@@ -1023,6 +1048,9 @@
       resetFeedback();
       modalBody.scrollTop = 0;
       modalContent.classList.remove('is-scrolled');
+      modalContent.style.setProperty('--sp', '0');
+      modalTitle.classList.remove('is-truncated');
+      clearTimeout(truncateTimeout);
       modal.classList.add('is-open');
       document.body.style.overflow = 'hidden';
     }
