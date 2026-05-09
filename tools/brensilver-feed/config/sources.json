@@ -1,0 +1,30 @@
+{
+  "site": {
+    "title": "Matthew Brensilver Dharma Talks",
+    "base_url": "https://jeffharr.is/brensilver/",
+    "feed_url": "https://jeffharr.is/brensilver/feed.xml",
+    "author": "Matthew Brensilver",
+    "description": "A merged podcast feed of Matthew Brensilver Dharma talks from AudioDharma and Dharma Seed.",
+    "language": "en",
+    "image_url": "https://media.dharmaseed.org/uploads/photos/teacher_496_125_0.png",
+    "category": "Religion & Spirituality",
+    "subcategory": "Buddhism"
+  },
+  "sources": [
+    {
+      "type": "dharmaseed",
+      "name": "Dharma Seed",
+      "teacher_id": "496",
+      "feed_url": "https://dharmaseed.org/feeds/teacher/496/?max-entries=all"
+    },
+    {
+      "type": "audiodharma",
+      "name": "AudioDharma",
+      "speaker_id": "231",
+      "listing_url": "https://www.audiodharma.org/speakers/231"
+    }
+  ],
+  "feed": {
+    "max_items": 1000
+  }
+}
