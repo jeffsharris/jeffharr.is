@@ -40,7 +40,8 @@ def merge_talks(talks: Iterable[Talk]) -> List[Talk]:
 
 
 def build_rss(talks: Iterable[Talk], site: Dict[str, str]) -> str:
-    now = datetime.now(timezone.utc)
+    talk_list = list(talks)
+    last_build = max((talk.published_at for talk in talk_list), default=datetime.now(timezone.utc))
     rss = ET.Element("rss", {"version": "2.0"})
     channel = ET.SubElement(rss, "channel")
 
@@ -48,7 +49,7 @@ def build_rss(talks: Iterable[Talk], site: Dict[str, str]) -> str:
     _text(channel, "link", site["base_url"])
     _text(channel, "description", site["description"])
     _text(channel, "language", site.get("language", "en"))
-    _text(channel, "lastBuildDate", format_datetime(now))
+    _text(channel, "lastBuildDate", format_datetime(last_build))
     ET.SubElement(
         channel,
         f"{{{ATOM_NS}}}link",
@@ -75,7 +76,7 @@ def build_rss(talks: Iterable[Talk], site: Dict[str, str]) -> str:
         if subcategory:
             ET.SubElement(category_node, f"{{{ITUNES_NS}}}category", {"text": subcategory})
 
-    for talk in talks:
+    for talk in talk_list:
         item = ET.SubElement(channel, "item")
         _text(item, "title", talk.title)
         _text(item, "link", talk.link)
