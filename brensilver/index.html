@@ -12,8 +12,13 @@
       --ink: #1f2933;
       --muted: #52616b;
       --line: #d8d2c4;
-      --accent: #2f6f73;
+      --accent: #226f63;
+      --accent-strong: #174f47;
+      --rust: #a15c38;
+      --gold: #b28a31;
+      --blue: #3d6c93;
       --panel: #ffffff;
+      --shadow: rgba(31, 41, 51, 0.12);
     }
     @media (prefers-color-scheme: dark) {
       :root {
@@ -22,7 +27,12 @@
         --muted: #b2beb6;
         --line: #39443f;
         --accent: #79b7aa;
+        --accent-strong: #9fd7cc;
+        --rust: #d38a67;
+        --gold: #dfbd64;
+        --blue: #8ab5da;
         --panel: #18211e;
+        --shadow: rgba(0, 0, 0, 0.32);
       }
     }
     body {
@@ -32,16 +42,34 @@
       color: var(--ink);
       line-height: 1.5;
     }
+    .page-shell {
+      min-height: 100vh;
+    }
     main {
-      max-width: 760px;
+      max-width: 1120px;
       margin: 0 auto;
-      padding: 56px 22px;
+      padding: 52px 22px 72px;
+    }
+    .eyebrow {
+      color: var(--rust);
+      font-size: 0.82rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      margin: 0 0 12px;
+      text-transform: uppercase;
     }
     h1 {
       margin: 0 0 14px;
-      font-size: clamp(2rem, 8vw, 4.5rem);
+      font-size: clamp(2.35rem, 7vw, 5.75rem);
       line-height: 0.95;
       letter-spacing: 0;
+      max-width: 840px;
+    }
+    h2 {
+      font-size: clamp(1.45rem, 3vw, 2.15rem);
+      line-height: 1.1;
+      letter-spacing: 0;
+      margin: 0 0 16px;
     }
     p {
       color: var(--muted);
@@ -51,55 +79,204 @@
       color: var(--accent);
       font-weight: 700;
     }
-    .actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 14px;
-      margin: 30px 0;
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(220px, 360px);
+      gap: 42px;
+      align-items: end;
+      padding-bottom: 36px;
     }
-    .button {
-      display: inline-flex;
-      align-items: center;
-      min-height: 44px;
-      padding: 0 16px;
-      border: 1px solid var(--accent);
-      border-radius: 6px;
+    .lede {
+      max-width: 700px;
+      font-size: clamp(1.08rem, 2vw, 1.34rem);
+    }
+    .cover-link {
+      display: block;
+      align-self: center;
+      justify-self: end;
+      max-width: 360px;
+      width: 100%;
       text-decoration: none;
     }
-    section {
-      border-top: 1px solid var(--line);
-      margin-top: 34px;
-      padding-top: 24px;
+    .cover {
+      display: block;
+      width: 100%;
+      aspect-ratio: 1;
+      object-fit: cover;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      box-shadow: 0 18px 48px var(--shadow);
     }
-    ul {
-      padding-left: 20px;
+    .subscribe-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(150px, 1fr));
+      gap: 12px;
+      margin: 24px 0 12px;
+    }
+    .player-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-height: 52px;
+      padding: 0 14px;
+      border: 0;
+      border-radius: 6px;
+      background: var(--accent-strong);
+      color: #ffffff;
+      cursor: pointer;
+      font: inherit;
+      font-size: 0.96rem;
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .player-button img {
+      width: 22px;
+      height: 22px;
+      flex: 0 0 auto;
+    }
+    .player-button.apple { background: #872ec4; }
+    .player-button.pocket { background: #c1435b; }
+    .player-button.rss { background: var(--rust); }
+    .copy-status {
+      min-height: 1.4em;
+      margin: 8px 0 0;
+      color: var(--accent);
+      font-size: 0.95rem;
+      font-weight: 700;
+    }
+    .feed-url {
+      display: block;
+      max-width: 100%;
+      padding: 12px 14px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: color-mix(in srgb, var(--panel) 82%, var(--bg));
+      overflow-wrap: anywhere;
+    }
+    section:not(.hero) {
+      border-top: 1px solid var(--line);
+      margin-top: 36px;
+      padding-top: 30px;
+    }
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(130px, 1fr));
+      gap: 12px;
+      margin-top: 20px;
+    }
+    .stat {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 16px;
+      background: color-mix(in srgb, var(--panel) 88%, var(--bg));
+    }
+    .stat span {
+      display: block;
+      color: var(--muted);
+      font-size: 0.88rem;
+      margin-bottom: 6px;
+    }
+    .stat strong {
+      display: block;
+      color: var(--ink);
+      font-size: 1.55rem;
+      line-height: 1;
+    }
+    .latest {
+      margin-top: 18px;
     }
     code {
       overflow-wrap: anywhere;
     }
+    @media (max-width: 880px) {
+      .hero { grid-template-columns: 1fr; gap: 24px; }
+      .cover-link { justify-self: start; max-width: 260px; }
+      .subscribe-grid { grid-template-columns: repeat(2, minmax(140px, 1fr)); }
+      .stats { grid-template-columns: repeat(2, minmax(140px, 1fr)); }
+    }
+    @media (max-width: 520px) {
+      main { padding: 34px 18px 56px; }
+      .subscribe-grid { grid-template-columns: 1fr; }
+      .stats { grid-template-columns: 1fr; }
+    }
   </style>
 </head>
 <body>
+  <div class="page-shell">
   <main>
-    <h1>Matthew Brensilver Dharma Talks</h1>
-    <p>A merged podcast feed of Matthew Brensilver Dharma talks from AudioDharma and Dharma Seed.</p>
-    <div class="actions">
-      <a class="button" href="feed.xml">Podcast RSS</a>
-      <a class="button" href="talks.json">Talk data</a>
-    </div>
+    <section class="hero" aria-labelledby="page-title">
+      <div>
+        <p class="eyebrow">Merged podcast feed</p>
+        <h1 id="page-title">Matthew Brensilver Dharma Talks</h1>
+        <p class="lede">A merged podcast feed of Matthew Brensilver Dharma talks from AudioDharma and Dharma Seed. New transcript-derived descriptions, chapters, and episode artwork are added as the local corpus pipeline finishes each batch.</p>
+      </div>
+      <a class="cover-link" href="https://jeffharr.is/brensilver/talks/audiodharma-25380/" aria-label="Open featured talk">
+          <img class="cover" src="/brensilver/artwork/audiodharma-25380.jpg" alt="">
+        </a>
+    </section>
+    <section aria-labelledby="subscribe-heading">
+      <h2 id="subscribe-heading">Subscribe</h2>
+      <p>Overcast can add the feed directly. For Apple Podcasts, Pocket Casts, and other players, copy the RSS URL and add it as a custom feed.</p>
+      <div class="subscribe-grid">
+        <a class="player-button overcast" href="overcast://x-callback-url/add?url=https%3A%2F%2Fjeffharr.is%2Fbrensilver%2Ffeed.xml">
+          <img src="https://cdn.simpleicons.org/overcast/FFFFFF?viewbox=auto" alt="">
+          <span>Add to Overcast</span>
+        </a>
+        <button class="player-button apple" type="button" data-copy="feed">
+          <img src="https://cdn.simpleicons.org/applepodcasts/FFFFFF?viewbox=auto" alt="">
+          <span>Copy for Apple</span>
+        </button>
+        <button class="player-button pocket" type="button" data-copy="feed">
+          <img src="https://cdn.simpleicons.org/pocketcasts/FFFFFF?viewbox=auto" alt="">
+          <span>Copy for Pocket</span>
+        </button>
+        <a class="player-button rss" href="feed.xml">
+          <img src="https://cdn.simpleicons.org/rss/FFFFFF?viewbox=auto" alt="">
+          <span>RSS Feed</span>
+        </a>
+      </div>
+      <p id="copy-status" class="copy-status" aria-live="polite"></p>
+      <code class="feed-url">https://jeffharr.is/brensilver/feed.xml</code>
+    </section>
     <section>
       <h2>Feed Status</h2>
-      <p>Latest item date: <strong>2026-04-29</strong>. Feed items: <strong>647</strong>. Indexed talks: <strong>647</strong>.</p>
-      <ul>
-        <li><strong>AudioDharma</strong>: 504 talks</li>
-<li><strong>Dharma Seed</strong>: 143 talks</li>
-      </ul>
+      <p class="latest">Latest item date: <strong>2026-04-29</strong>. Featured talk: <a href="https://jeffharr.is/brensilver/talks/audiodharma-25380/">Guided Meditation: Difficult for the Self to Understand what it can't do</a>.</p>
+      <div class="stats">
+        <div class="stat"><span>Feed items</span><strong>647</strong></div>
+        <div class="stat"><span>Indexed talks</span><strong>647</strong></div>
+        <div class="stat"><span>Enriched talks</span><strong>40</strong></div>
+        <div class="stat"><span>Artwork</span><strong>40</strong></div>
+        <div class="stat">
+          <span>AudioDharma</span>
+          <strong>504</strong>
+        </div>
+<div class="stat">
+          <span>Dharma Seed</span>
+          <strong>143</strong>
+        </div>
+      </div>
     </section>
     <section>
-      <h2>Subscribe</h2>
-      <p>Use this URL in a podcast player such as Overcast:</p>
-      <p><code>https://jeffharr.is/brensilver/feed.xml</code></p>
+      <h2>Data</h2>
+      <p><a href="talks.json">Talk data</a> includes source metadata plus transcript-enriched episode descriptions, chapter links, and artwork URLs as each talk is processed.</p>
     </section>
   </main>
+  </div>
+  <script>
+    const feedUrl = "https://jeffharr.is/brensilver/feed.xml";
+    const status = document.getElementById('copy-status');
+    async function copyFeedUrl() {
+      try {
+        await navigator.clipboard.writeText(feedUrl);
+        status.textContent = 'RSS URL copied.';
+      } catch (error) {
+        status.textContent = feedUrl;
+      }
+    }
+    document.querySelectorAll('[data-copy]').forEach(button => {
+      button.addEventListener('click', copyFeedUrl);
+    });
+  </script>
 </body>
 </html>

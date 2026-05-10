@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Guided Practice: Compassion and Equanimity (Retreat at Spirit Rock) - Matthew Brensilver Dharma Talks</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --bg: #fbfaf4;
+      --ink: #20231f;
+      --muted: #5d665e;
+      --line: #d9d4c7;
+      --accent: #285f52;
+      --panel: #ffffff;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #111816;
+        --ink: #eef2ed;
+        --muted: #b2beb6;
+        --line: #39443f;
+        --accent: #8ec7ba;
+        --panel: #18211e;
+      }
+    }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font: 17px/1.55 ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    main {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 34px 20px 64px;
+    }
+    a { color: var(--accent); font-weight: 750; }
+    .back { display: inline-block; margin-bottom: 28px; }
+    h1 { margin: 0; font-size: clamp(2rem, 7vw, 4.2rem); line-height: 1; letter-spacing: 0; }
+    h2 { margin-top: 34px; }
+    .meta {
+      margin: 10px 0 22px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      color: var(--muted);
+    }
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(180px, 280px);
+      gap: 24px;
+      align-items: start;
+    }
+    .art {
+      width: 100%;
+      aspect-ratio: 1;
+      object-fit: cover;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+    }
+    audio { width: 100%; margin: 22px 0; }
+    section { border-top: 1px solid var(--line); margin-top: 26px; padding-top: 8px; }
+    .chapters { padding-left: 24px; }
+    .chapters li { margin: 12px 0; }
+    .description { max-width: 680px; }
+    @media (max-width: 760px) {
+      .hero { grid-template-columns: 1fr; }
+      .art { max-width: 260px; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <a class="back" href="../../">Matthew Brensilver Dharma Talks</a>
+    <div class="hero">
+      <div>
+        <h1>Guided Practice: Compassion and Equanimity (Retreat at Spirit Rock)</h1>
+        <div class="meta">
+          <span>Dharma Seed</span>
+          <span>23:01</span>
+          <span>2026-01-21</span>
+        </div>
+        <p class="description">Matthew Brensilver offers a guided practice and reflection on compassion and equanimity as two qualities that need to be held in conversation, not treated as a fixed formula. He names compassion as love in the face of suffering and equanimity as love in the face of helplessness, then moves into a brief guided settling, a prayer-like aspiration, and a longer contemplation on grief, mortality, and the limits of what love can change. The talk closes by returning to compassion, with an emphasis on resting without collapse and meeting suffering skillfully.</p>
+      </div>
+      <img class="art" src="/brensilver/artwork/dharmaseed-94977.jpg" alt="">
+    </div>
+    <audio id="audio" controls preload="metadata" src="https://dharmaseed.org/talks/94977/20260121-Matthew_Brensilver-SR-guided_practice_compassion_and_equanimity_retreat_at_spirit_rock-94977.mp3?rss="></audio>
+    <section>
+      <h2>Chapters</h2>
+      <ol class="chapters">
+        <li><a href="?t=0" data-start="0.0">00:00</a> <strong>Middle path, living balance</strong> - He opens by framing the Dharma as a dynamic balance between wholesome forces rather than a single rule to follow.</li>
+<li><a href="?t=105" data-start="105.16">01:45</a> <strong>Compassion and equanimity</strong> - Matthew defines the two qualities and explores how love must respond both to suffering and to helplessness.</li>
+<li><a href="?t=364" data-start="364.44">06:04</a> <strong>Settling into practice</strong> - He briefly adjusts the room, then guides a short period of relaxation and a prayerful aspiration for lessening suffering.</li>
+<li><a href="?t=722" data-start="721.88">12:02</a> <strong>The trembling heart</strong> - The talk turns to the heart’s trembling and the way stillness can support the development of love.</li>
+<li><a href="?t=834" data-start="833.88">13:54</a> <strong>Love and mortality</strong> - He reflects on death, the limits of control, and the possibility that love remains one answer when other consolations fall away.</li>
+<li><a href="?t=1263" data-start="1263.29">21:03</a> <strong>Return to compassion</strong> - After resting in equanimity, he doubles back to compassion and closes with a wish to meet suffering skillfully and bring more safety and joy.</li>
+      </ol>
+    </section>
+    <section>
+      <h2>Source</h2>
+      <p><a href="https://dharmaseed.org/talks/94977/">Original talk page</a></p>
+    </section>
+  </main>
+  <script>
+    const audio = document.getElementById('audio');
+    function seekFromLocation() {
+      const value = new URLSearchParams(location.search).get('t');
+      const seconds = Number(value || 0);
+      if (Number.isFinite(seconds) && seconds > 0) {
+        audio.currentTime = seconds;
+      }
+    }
+    document.querySelectorAll('[data-start]').forEach(link => {
+      link.addEventListener('click', event => {
+        event.preventDefault();
+        const seconds = Number(link.dataset.start || 0);
+        history.replaceState(null, '', '?t=' + Math.round(seconds));
+        audio.currentTime = seconds;
+        audio.play().catch(() => {});
+      });
+    });
+    audio.addEventListener('loadedmetadata', seekFromLocation, { once: true });
+  </script>
+</body>
+</html>

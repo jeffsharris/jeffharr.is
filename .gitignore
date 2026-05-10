@@ -1,6 +1,10 @@
 .DS_Store
+.env
+.env.local
 .playwright-mcp/
 tmp/
 .wrangler/
+.pycache-check/
 node_modules/.cache/
 node_modules/.mf/
+.local-corpus/

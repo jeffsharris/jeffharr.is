@@ -1,0 +1,47 @@
+{
+  "dharma_terms": [
+    "anicca",
+    "anatta",
+    "dukkha",
+    "metta",
+    "mudita",
+    "upekkha",
+    "karuna",
+    "samadhi",
+    "sila",
+    "panna",
+    "sankhara",
+    "vipassana",
+    "samvega",
+    "tanha",
+    "bhava tanha",
+    "nibbana",
+    "Brahma-viharas",
+    "Satipatthana",
+    "sangha",
+    "Dharma"
+  ],
+  "people_and_places": [
+    "Matthew Brensilver",
+    "Ajahn Chah",
+    "Ajahn Sucitto",
+    "Shinzen Young",
+    "Sylvia Boorstein",
+    "Spirit Rock",
+    "AudioDharma",
+    "Dharma Seed",
+    "Buddha"
+  ],
+  "normalizations": {
+    "dukkah": "dukkha",
+    "dukha": "dukkha",
+    "duka": "dukkha",
+    "meta": "metta when the context is loving-kindness; otherwise leave as meta",
+    "Shinzen": "Shinzen Young",
+    "Ajahn Cha": "Ajahn Chah",
+    "darma": "Dharma",
+    "Mother Nature, that's last": "Mother Nature bats last",
+    "There are no one Dharma drum": "There's no one Dharma drum",
+    "Today's, when": "Today, when"
+  }
+}

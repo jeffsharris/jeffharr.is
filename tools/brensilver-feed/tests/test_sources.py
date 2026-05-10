@@ -1,6 +1,13 @@
 import json
+import tempfile
 import unittest
+from datetime import datetime, timezone
+from pathlib import Path
+from xml.etree import ElementTree as ET
 
+from brensilver.metadata import enrich_talks, write_episode_media
+from brensilver.models import Talk
+from brensilver.rss import build_rss
 from brensilver.rss import merge_talks
 from brensilver.sources.audiodharma import parse_audiodharma_listing
 from brensilver.sources.dharmaseed import parse_dharmaseed_feed
@@ -132,6 +139,112 @@ class MergeTests(unittest.TestCase):
         merged = merge_talks([audio, seed])
         self.assertEqual(len(merged), 1)
         self.assertEqual(merged[0].source, "Dharma Seed")
+
+
+class PodcastMetadataTests(unittest.TestCase):
+    def test_metadata_enrichment_writes_chapters_and_episode_artwork(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            corpus = root / "corpus"
+            (corpus / "episode-metadata").mkdir(parents=True)
+            (corpus / "artwork" / "images").mkdir(parents=True)
+            (corpus / "episode-metadata" / "audiodharma-1.json").write_text(
+                json.dumps(
+                    {
+                        "description": "A talk about practice.",
+                        "short_summary": "Practice talk.",
+                        "chapters": [
+                            {
+                                "start": 12.4,
+                                "title": "Settling",
+                                "description": "The opening movement.",
+                            }
+                        ],
+                    }
+                ),
+                encoding="utf-8",
+            )
+            (corpus / "artwork" / "images" / "audiodharma-1.jpg").write_bytes(b"jpg")
+            talk = Talk(
+                id="audiodharma:1",
+                source="AudioDharma",
+                source_id="1",
+                title="Practice",
+                speaker="Matthew Brensilver",
+                published_at=datetime(2026, 1, 1, tzinfo=timezone.utc),
+                link="https://example.test/source",
+                audio_url="https://example.test/audio.mp3",
+            )
+
+            enriched = enrich_talks(
+                [talk],
+                corpus_dir=corpus,
+                media_base_url="https://media.example/brensilver",
+                site_base_url="https://jeffharr.is/brensilver/",
+            )[0]
+            self.assertEqual(enriched.podcast_description, "A talk about practice.")
+            self.assertEqual(
+                enriched.episode_image_url,
+                "https://media.example/brensilver/artwork/audiodharma-1.jpg",
+            )
+            self.assertEqual(
+                enriched.chapters_url,
+                "https://media.example/brensilver/chapters/audiodharma-1.json",
+            )
+            self.assertEqual(
+                enriched.chapters[0].url,
+                "https://jeffharr.is/brensilver/talks/audiodharma-1/?t=12",
+            )
+
+            out_dir = root / "out"
+            counts = write_episode_media([enriched], out_dir, corpus, copy_artwork=True)
+            self.assertEqual(counts, {"chapters": 1, "artwork": 1})
+            chapters = json.loads((out_dir / "chapters" / "audiodharma-1.json").read_text())
+            self.assertEqual(chapters["chapters"][0]["startTime"], 12.4)
+            self.assertEqual(chapters["chapters"][0]["title"], "Settling")
+            self.assertTrue((out_dir / "artwork" / "audiodharma-1.jpg").exists())
+
+    def test_rss_includes_episode_metadata_tags(self):
+        talk = Talk(
+            id="audiodharma:1",
+            source="AudioDharma",
+            source_id="1",
+            title="Practice",
+            speaker="Matthew Brensilver",
+            published_at=datetime(2026, 1, 1, tzinfo=timezone.utc),
+            link="https://example.test/source",
+            audio_url="https://example.test/audio.mp3",
+            canonical_url="https://jeffharr.is/brensilver/talks/audiodharma-1/",
+            podcast_description="A talk about practice.",
+            episode_image_url="https://media.example/brensilver/artwork/audiodharma-1.jpg",
+            chapters_url="https://media.example/brensilver/chapters/audiodharma-1.json",
+        )
+        xml = build_rss(
+            [talk],
+            {
+                "title": "Feed",
+                "base_url": "https://jeffharr.is/brensilver/",
+                "feed_url": "https://jeffharr.is/brensilver/feed.xml",
+                "description": "Merged talks.",
+            },
+        )
+        root = ET.fromstring(xml)
+        namespaces = {
+            "itunes": "http://www.itunes.com/dtds/podcast-1.0.dtd",
+            "podcast": "https://podcastindex.org/namespace/1.0",
+        }
+        item = root.find("./channel/item")
+        self.assertIsNotNone(item)
+        self.assertEqual(item.findtext("link"), "https://jeffharr.is/brensilver/talks/audiodharma-1/")
+        self.assertIn("A talk about practice.", item.findtext("description"))
+        self.assertEqual(
+            item.find("itunes:image", namespaces).attrib["href"],
+            "https://media.example/brensilver/artwork/audiodharma-1.jpg",
+        )
+        self.assertEqual(
+            item.find("podcast:chapters", namespaces).attrib["type"],
+            "application/json+chapters",
+        )
 
 
 if __name__ == "__main__":

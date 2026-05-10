@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Guided Meditation - Grief and Compassion (Retreat at Spirit Rock) - Matthew Brensilver Dharma Talks</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --bg: #fbfaf4;
+      --ink: #20231f;
+      --muted: #5d665e;
+      --line: #d9d4c7;
+      --accent: #285f52;
+      --panel: #ffffff;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #111816;
+        --ink: #eef2ed;
+        --muted: #b2beb6;
+        --line: #39443f;
+        --accent: #8ec7ba;
+        --panel: #18211e;
+      }
+    }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font: 17px/1.55 ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    main {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 34px 20px 64px;
+    }
+    a { color: var(--accent); font-weight: 750; }
+    .back { display: inline-block; margin-bottom: 28px; }
+    h1 { margin: 0; font-size: clamp(2rem, 7vw, 4.2rem); line-height: 1; letter-spacing: 0; }
+    h2 { margin-top: 34px; }
+    .meta {
+      margin: 10px 0 22px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      color: var(--muted);
+    }
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(180px, 280px);
+      gap: 24px;
+      align-items: start;
+    }
+    .art {
+      width: 100%;
+      aspect-ratio: 1;
+      object-fit: cover;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+    }
+    audio { width: 100%; margin: 22px 0; }
+    section { border-top: 1px solid var(--line); margin-top: 26px; padding-top: 8px; }
+    .chapters { padding-left: 24px; }
+    .chapters li { margin: 12px 0; }
+    .description { max-width: 680px; }
+    @media (max-width: 760px) {
+      .hero { grid-template-columns: 1fr; }
+      .art { max-width: 260px; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <a class="back" href="../../">Matthew Brensilver Dharma Talks</a>
+    <div class="hero">
+      <div>
+        <h1>Guided Meditation - Grief and Compassion (Retreat at Spirit Rock)</h1>
+        <div class="meta">
+          <span>Dharma Seed</span>
+          <span>30:49</span>
+          <span>2022-05-18</span>
+        </div>
+        <p class="description">Matthew Brensilver offers a guided meditation on grief that treats sorrow as a natural part of loving in an impermanent world. The practice moves from settling the body into phrases of tenderness, mercy, and reverence, with brief references to Leonard Cohen, anicca, and Stephen Levine to steady the listener in uncertainty. The tone stays intimate and practical, emphasizing that compassion is not an extra but a necessity when loss keeps arriving.</p>
+      </div>
+      <img class="art" src="/brensilver/artwork/dharmaseed-70749.jpg" alt="">
+    </div>
+    <audio id="audio" controls preload="metadata" src="https://dharmaseed.org/talks/70749/20220518-Matthew_Brensilver-SR-guided_meditation_grief_and_compassion_retreat_at_spirit_rock-70749.mp3?rss="></audio>
+    <section>
+      <h2>Chapters</h2>
+      <ol class="chapters">
+        <li><a href="?t=20" data-start="20.0">00:20</a> <strong>Settling In</strong> - The meditation begins by arriving and settling the body into the practice.</li>
+<li><a href="?t=87" data-start="87.0">01:27</a> <strong>Welcoming the Body</strong> - Attention opens to bodily experience as a place to receive the practice gently.</li>
+<li><a href="?t=157" data-start="157.0">02:37</a> <strong>Love and Grief</strong> - Brensilver names grief as woven into loving in a changing world and frames compassion as a necessity.</li>
+<li><a href="?t=340" data-start="340.0">05:40</a> <strong>Impermanence and Tenderness</strong> - He invokes anicca to explain why change is startling and encourages mercy and love toward the heart.</li>
+<li><a href="?t=670" data-start="670.0">11:10</a> <strong>Traveling in Fog</strong> - A Stephen Levine image of grief as traveling at night in fog supports patience with limited clarity.</li>
+<li><a href="?t=931" data-start="931.0">15:31</a> <strong>Holding Sorrow</strong> - The practice shifts into explicit wishing and a steadier acceptance of what is here.</li>
+<li><a href="?t=1150" data-start="1150.0">19:10</a> <strong>Love Deepened</strong> - He reflects that love without grief can be naive, and that loss can enrich love.</li>
+<li><a href="?t=1204" data-start="1204.222">20:04</a> <strong>Tender Phrases</strong> - The meditation closes with repeated phrases of tenderness and reverence for the grieving world, ending in a quiet close.</li>
+      </ol>
+    </section>
+    <section>
+      <h2>Source</h2>
+      <p><a href="https://dharmaseed.org/talks/70749/">Original talk page</a></p>
+    </section>
+  </main>
+  <script>
+    const audio = document.getElementById('audio');
+    function seekFromLocation() {
+      const value = new URLSearchParams(location.search).get('t');
+      const seconds = Number(value || 0);
+      if (Number.isFinite(seconds) && seconds > 0) {
+        audio.currentTime = seconds;
+      }
+    }
+    document.querySelectorAll('[data-start]').forEach(link => {
+      link.addEventListener('click', event => {
+        event.preventDefault();
+        const seconds = Number(link.dataset.start || 0);
+        history.replaceState(null, '', '?t=' + Math.round(seconds));
+        audio.currentTime = seconds;
+        audio.play().catch(() => {});
+      });
+    });
+    audio.addEventListener('loadedmetadata', seekFromLocation, { once: true });
+  </script>
+</body>
+</html>

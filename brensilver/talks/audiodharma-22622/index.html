@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Evening Reflections - A Poem - Matthew Brensilver Dharma Talks</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --bg: #fbfaf4;
+      --ink: #20231f;
+      --muted: #5d665e;
+      --line: #d9d4c7;
+      --accent: #285f52;
+      --panel: #ffffff;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #111816;
+        --ink: #eef2ed;
+        --muted: #b2beb6;
+        --line: #39443f;
+        --accent: #8ec7ba;
+        --panel: #18211e;
+      }
+    }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font: 17px/1.55 ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    main {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 34px 20px 64px;
+    }
+    a { color: var(--accent); font-weight: 750; }
+    .back { display: inline-block; margin-bottom: 28px; }
+    h1 { margin: 0; font-size: clamp(2rem, 7vw, 4.2rem); line-height: 1; letter-spacing: 0; }
+    h2 { margin-top: 34px; }
+    .meta {
+      margin: 10px 0 22px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      color: var(--muted);
+    }
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(180px, 280px);
+      gap: 24px;
+      align-items: start;
+    }
+    .art {
+      width: 100%;
+      aspect-ratio: 1;
+      object-fit: cover;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+    }
+    audio { width: 100%; margin: 22px 0; }
+    section { border-top: 1px solid var(--line); margin-top: 26px; padding-top: 8px; }
+    .chapters { padding-left: 24px; }
+    .chapters li { margin: 12px 0; }
+    .description { max-width: 680px; }
+    @media (max-width: 760px) {
+      .hero { grid-template-columns: 1fr; }
+      .art { max-width: 260px; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <a class="back" href="../../">Matthew Brensilver Dharma Talks</a>
+    <div class="hero">
+      <div>
+        <h1>Evening Reflections - A Poem</h1>
+        <div class="meta">
+          <span>AudioDharma</span>
+          <span>04:08</span>
+          <span>2025-03-20</span>
+        </div>
+        <p class="description">Matthew Brensilver reads and reflects on a poem about impermanence, using a mountain retreat in New Mexico as the setting for a quiet confrontation with time, fragility, and change. The talk moves from the feel of austere landscape to a direct meditation on mortality, then toward a more spacious relationship to fear and grief. It ends with a simple emphasis on remembering, letting go, and allowing the warmth that can come with loss.</p>
+      </div>
+      <img class="art" src="/brensilver/artwork/audiodharma-22622.jpg" alt="">
+    </div>
+    <audio id="audio" controls preload="metadata" src="https://audiodharma.us-east-1.linodeobjects.com/talks/22622/20250319-Matthew_Brensilver-IRC-evening_reflections_-_a_poem.mp3"></audio>
+    <section>
+      <h2>Chapters</h2>
+      <ol class="chapters">
+        <li><a href="?t=0" data-start="0.0">00:00</a> <strong>Mountain Austerity</strong> - He opens with the feel of a retreat landscape and the way beauty and severity sharpen attention.</li>
+<li><a href="?t=50" data-start="49.64">00:50</a> <strong>A Poem Appears</strong> - Matthew names and introduces the poem that will shape the rest of the reflection.</li>
+<li><a href="?t=94" data-start="93.64">01:34</a> <strong>Stability Crumbles</strong> - The poem's lines on instability and non-existence are read as a direct challenge to ordinary assumptions of permanence.</li>
+<li><a href="?t=140" data-start="140.08">02:20</a> <strong>Fear Wakes Up</strong> - He turns to the bodily force of impermanence, linking it to a childhood memory of dusk and to ancestral fear.</li>
+<li><a href="?t=179" data-start="179.12">02:59</a> <strong>Aliveness Opens</strong> - What first felt like fear becomes a larger sense of aliveness as change is seen more clearly.</li>
+<li><a href="?t=216" data-start="216.16">03:36</a> <strong>Remembering and Letting Go</strong> - The talk closes with a simple invitation to remember impermanence, release clinging, and allow grief to be felt.</li>
+      </ol>
+    </section>
+    <section>
+      <h2>Source</h2>
+      <p><a href="https://www.audiodharma.org/talks/22622">Original talk page</a></p>
+    </section>
+  </main>
+  <script>
+    const audio = document.getElementById('audio');
+    function seekFromLocation() {
+      const value = new URLSearchParams(location.search).get('t');
+      const seconds = Number(value || 0);
+      if (Number.isFinite(seconds) && seconds > 0) {
+        audio.currentTime = seconds;
+      }
+    }
+    document.querySelectorAll('[data-start]').forEach(link => {
+      link.addEventListener('click', event => {
+        event.preventDefault();
+        const seconds = Number(link.dataset.start || 0);
+        history.replaceState(null, '', '?t=' + Math.round(seconds));
+        audio.currentTime = seconds;
+        audio.play().catch(() => {});
+      });
+    });
+    audio.addEventListener('loadedmetadata', seekFromLocation, { once: true });
+  </script>
+</body>
+</html>

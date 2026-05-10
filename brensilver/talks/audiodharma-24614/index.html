@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Orienting and ruling out the alternatives to love - Matthew Brensilver Dharma Talks</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --bg: #fbfaf4;
+      --ink: #20231f;
+      --muted: #5d665e;
+      --line: #d9d4c7;
+      --accent: #285f52;
+      --panel: #ffffff;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #111816;
+        --ink: #eef2ed;
+        --muted: #b2beb6;
+        --line: #39443f;
+        --accent: #8ec7ba;
+        --panel: #18211e;
+      }
+    }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font: 17px/1.55 ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    main {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 34px 20px 64px;
+    }
+    a { color: var(--accent); font-weight: 750; }
+    .back { display: inline-block; margin-bottom: 28px; }
+    h1 { margin: 0; font-size: clamp(2rem, 7vw, 4.2rem); line-height: 1; letter-spacing: 0; }
+    h2 { margin-top: 34px; }
+    .meta {
+      margin: 10px 0 22px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      color: var(--muted);
+    }
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(180px, 280px);
+      gap: 24px;
+      align-items: start;
+    }
+    .art {
+      width: 100%;
+      aspect-ratio: 1;
+      object-fit: cover;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+    }
+    audio { width: 100%; margin: 22px 0; }
+    section { border-top: 1px solid var(--line); margin-top: 26px; padding-top: 8px; }
+    .chapters { padding-left: 24px; }
+    .chapters li { margin: 12px 0; }
+    .description { max-width: 680px; }
+    @media (max-width: 760px) {
+      .hero { grid-template-columns: 1fr; }
+      .art { max-width: 260px; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <a class="back" href="../../">Matthew Brensilver Dharma Talks</a>
+    <div class="hero">
+      <div>
+        <h1>Orienting and ruling out the alternatives to love</h1>
+        <div class="meta">
+          <span>AudioDharma</span>
+          <span>52:56</span>
+          <span>2026-01-17</span>
+        </div>
+        <p class="description">Matthew Brensilver opens by orienting the retreat and making a case for wholehearted participation, including the value—and limits—of online practice. From there he turns to loving-kindness as a way of ruling out hate and apathy, then explores why those alternatives can feel psychologically useful before showing how compassion, rest, and equanimity can make love sustainable. The talk moves into a guided settling period where he invites listeners to sense what kind of love is needed in the moment, and to rest without slipping into detachment.</p>
+      </div>
+      <img class="art" src="/brensilver/artwork/audiodharma-24614.jpg" alt="">
+    </div>
+    <audio id="audio" controls preload="metadata" src="https://audiodharma.us-east-1.linodeobjects.com/talks/24614/20260117-Matthew_Brensilver-IRC-introduction.mp3"></audio>
+    <section>
+      <h2>Chapters</h2>
+      <ol class="chapters">
+        <li><a href="?t=0" data-start="0.32">00:00</a> <strong>Opening the retreat</strong> - Matthew welcomes the group, checks in about the room, and orients everyone to the day of practice.</li>
+<li><a href="?t=56" data-start="56.32">00:56</a> <strong>Engagement and presence</strong> - He uses research on online learning to argue that real engagement matters and that practice asks for bodily and emotional investment.</li>
+<li><a href="?t=285" data-start="284.88">04:45</a> <strong>Why the day matters</strong> - A story about an online retreat in bed with snacks leads into a gentle reminder to honor the power of Sangha and the shared field of practice.</li>
+<li><a href="?t=486" data-start="486.16">08:06</a> <strong>Entering the Dharma field</strong> - He reflects on ritualizing the moment of practice and noticing how sitting down changes the inner landscape and deepens sensitivity.</li>
+<li><a href="?t=751" data-start="750.8">12:31</a> <strong>Love and its alternatives</strong> - Matthew names loving-kindness as the theme of the day and begins to examine the alternatives of ill will and apathy.</li>
+<li><a href="?t=900" data-start="900.0">15:00</a> <strong>Understanding hate and apathy</strong> - He argues for a non-moralistic understanding of hatred and apathy, suggesting they are trying to do psychological work that love can do better.</li>
+<li><a href="?t=1250" data-start="1250.216">20:50</a> <strong>Rest without apathy</strong> - The talk turns to compassion, nervous-system cost, and the need for rest and equanimity so care can remain sustainable.</li>
+<li><a href="?t=1501" data-start="1501.016">25:01</a> <strong>Guided settling practice</strong> - Matthew guides a quiet practice of sensing the shape of love, noticing what the heart needs, and resting into a workable level of arousal.</li>
+      </ol>
+    </section>
+    <section>
+      <h2>Source</h2>
+      <p><a href="https://www.audiodharma.org/talks/24614">Original talk page</a></p>
+    </section>
+  </main>
+  <script>
+    const audio = document.getElementById('audio');
+    function seekFromLocation() {
+      const value = new URLSearchParams(location.search).get('t');
+      const seconds = Number(value || 0);
+      if (Number.isFinite(seconds) && seconds > 0) {
+        audio.currentTime = seconds;
+      }
+    }
+    document.querySelectorAll('[data-start]').forEach(link => {
+      link.addEventListener('click', event => {
+        event.preventDefault();
+        const seconds = Number(link.dataset.start || 0);
+        history.replaceState(null, '', '?t=' + Math.round(seconds));
+        audio.currentTime = seconds;
+        audio.play().catch(() => {});
+      });
+    });
+    audio.addEventListener('loadedmetadata', seekFromLocation, { once: true });
+  </script>
+</body>
+</html>

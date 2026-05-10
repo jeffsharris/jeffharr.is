@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Guided Metta Meditation - Metta for All Beings (Retreat at Spirit Rock) - Matthew Brensilver Dharma Talks</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --bg: #fbfaf4;
+      --ink: #20231f;
+      --muted: #5d665e;
+      --line: #d9d4c7;
+      --accent: #285f52;
+      --panel: #ffffff;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #111816;
+        --ink: #eef2ed;
+        --muted: #b2beb6;
+        --line: #39443f;
+        --accent: #8ec7ba;
+        --panel: #18211e;
+      }
+    }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font: 17px/1.55 ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    main {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 34px 20px 64px;
+    }
+    a { color: var(--accent); font-weight: 750; }
+    .back { display: inline-block; margin-bottom: 28px; }
+    h1 { margin: 0; font-size: clamp(2rem, 7vw, 4.2rem); line-height: 1; letter-spacing: 0; }
+    h2 { margin-top: 34px; }
+    .meta {
+      margin: 10px 0 22px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      color: var(--muted);
+    }
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(180px, 280px);
+      gap: 24px;
+      align-items: start;
+    }
+    .art {
+      width: 100%;
+      aspect-ratio: 1;
+      object-fit: cover;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+    }
+    audio { width: 100%; margin: 22px 0; }
+    section { border-top: 1px solid var(--line); margin-top: 26px; padding-top: 8px; }
+    .chapters { padding-left: 24px; }
+    .chapters li { margin: 12px 0; }
+    .description { max-width: 680px; }
+    @media (max-width: 760px) {
+      .hero { grid-template-columns: 1fr; }
+      .art { max-width: 260px; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <a class="back" href="../../">Matthew Brensilver Dharma Talks</a>
+    <div class="hero">
+      <div>
+        <h1>Guided Metta Meditation - Metta for All Beings (Retreat at Spirit Rock)</h1>
+        <div class="meta">
+          <span>Dharma Seed</span>
+          <span>39:34</span>
+          <span>2025-05-11</span>
+        </div>
+        <p class="description">Matthew Brensilver frames metta as one of the Brahma-viharas, or “four species of love,” then shows how loving-kindness can function as cultivation, concentration, and purification. The talk moves from the way metta loosens self-view to a guided practice that begins with the body and phrases, then opens outward to all beings. It ends by holding the sincerity of the wish alongside the fact that suffering is vast and unresolved.</p>
+      </div>
+      <img class="art" src="/brensilver/artwork/dharmaseed-90257.jpg" alt="">
+    </div>
+    <audio id="audio" controls preload="metadata" src="https://dharmaseed.org/talks/90257/20250511-Matthew_Brensilver-SR-guided_metta_meditation_metta_for_all_beings_retreat_at_spirit_rock-90257.mp3?rss="></audio>
+    <section>
+      <h2>Chapters</h2>
+      <ol class="chapters">
+        <li><a href="?t=0" data-start="0.0">00:00</a> <strong>Four kinds of love</strong> - Matthew opens by framing the Brahma-viharas as different ways love meets goodness, suffering, success, and helplessness.</li>
+<li><a href="?t=117" data-start="116.52">01:57</a> <strong>Love changes self-view</strong> - He uses a retreat story to show how even a brief moment of metta can reorganize the relationship to self and loosen the self-as-project mode.</li>
+<li><a href="?t=308" data-start="307.72">05:08</a> <strong>Measureless and quiet</strong> - The talk turns to the immeasurables and the reminder that loving-kindness may be subtle, quiet, and not defined by intensity.</li>
+<li><a href="?t=383" data-start="382.6">06:23</a> <strong>Cultivation and purification</strong> - Matthew explains metta as cultivation, concentration, and purification, including the way practice can bring buried grief or rage to the surface.</li>
+<li><a href="?t=708" data-start="708.04">11:48</a> <strong>Settling into practice</strong> - The guided section begins with body, posture, and relaxation, then points to worthiness beyond self-judgment and the habit of proving oneself.</li>
+<li><a href="?t=1364" data-start="1364.142">22:44</a> <strong>Phrases in the present</strong> - He introduces the idea of a mind made vast by love and uses simple phrases as a present-moment way to access the heart.</li>
+<li><a href="?t=1606" data-start="1606.142">26:46</a> <strong>Resting in kindness</strong> - The practice widens through the recognition that whatever is arising can be held, whether by quiet rest or by bringing care to what has not yet been loved.</li>
+<li><a href="?t=1873" data-start="1873.142">31:13</a> <strong>Love in hard places</strong> - Matthew names this as non-self-indulgent love and notes how tight spots can reveal the necessity of love that makes hatred less tenable.</li>
+<li><a href="?t=1995" data-start="1995.142">33:15</a> <strong>All beings at ease</strong> - The meditation culminates in the wish for all beings to be safe, protected, and at peace, even while acknowledging that suffering does not end.</li>
+      </ol>
+    </section>
+    <section>
+      <h2>Source</h2>
+      <p><a href="https://dharmaseed.org/talks/90257/">Original talk page</a></p>
+    </section>
+  </main>
+  <script>
+    const audio = document.getElementById('audio');
+    function seekFromLocation() {
+      const value = new URLSearchParams(location.search).get('t');
+      const seconds = Number(value || 0);
+      if (Number.isFinite(seconds) && seconds > 0) {
+        audio.currentTime = seconds;
+      }
+    }
+    document.querySelectorAll('[data-start]').forEach(link => {
+      link.addEventListener('click', event => {
+        event.preventDefault();
+        const seconds = Number(link.dataset.start || 0);
+        history.replaceState(null, '', '?t=' + Math.round(seconds));
+        audio.currentTime = seconds;
+        audio.play().catch(() => {});
+      });
+    });
+    audio.addEventListener('loadedmetadata', seekFromLocation, { once: true });
+  </script>
+</body>
+</html>

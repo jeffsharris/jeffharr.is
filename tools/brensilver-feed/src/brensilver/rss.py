@@ -10,9 +10,11 @@ from brensilver.models import Talk
 
 ATOM_NS = "http://www.w3.org/2005/Atom"
 ITUNES_NS = "http://www.itunes.com/dtds/podcast-1.0.dtd"
+PODCAST_NS = "https://podcastindex.org/namespace/1.0"
 
 ET.register_namespace("atom", ATOM_NS)
 ET.register_namespace("itunes", ITUNES_NS)
+ET.register_namespace("podcast", PODCAST_NS)
 
 
 def merge_talks(talks: Iterable[Talk]) -> List[Talk]:
@@ -79,7 +81,7 @@ def build_rss(talks: Iterable[Talk], site: Dict[str, str]) -> str:
     for talk in talk_list:
         item = ET.SubElement(channel, "item")
         _text(item, "title", talk.title)
-        _text(item, "link", talk.link)
+        _text(item, "link", talk.canonical_url or talk.link)
         _text(item, "pubDate", format_datetime(talk.published_at))
         ET.SubElement(item, "guid", {"isPermaLink": "false"}).text = talk.id
         _text(item, "description", _description(talk))
@@ -97,8 +99,15 @@ def build_rss(talks: Iterable[Talk], site: Dict[str, str]) -> str:
         if talk.duration:
             _text(item, f"{{{ITUNES_NS}}}duration", talk.duration)
         _text(item, f"{{{ITUNES_NS}}}summary", _summary(talk))
-        if talk.image_url:
-            ET.SubElement(item, f"{{{ITUNES_NS}}}image", {"href": talk.image_url})
+        image_url = talk.episode_image_url or talk.image_url
+        if image_url:
+            ET.SubElement(item, f"{{{ITUNES_NS}}}image", {"href": image_url})
+        if talk.chapters_url:
+            ET.SubElement(
+                item,
+                f"{{{PODCAST_NS}}}chapters",
+                {"url": talk.chapters_url, "type": "application/json+chapters"},
+            )
 
     xml = ET.tostring(rss, encoding="utf-8", xml_declaration=True)
     return xml.decode("utf-8")
@@ -111,6 +120,8 @@ def _text(parent: ET.Element, name: str, value: Optional[str]) -> None:
 
 
 def _description(talk: Talk) -> str:
+    if talk.podcast_description:
+        return _podcast_description(talk)
     parts = []
     if talk.description:
         parts.append(talk.description)
@@ -120,9 +131,36 @@ def _description(talk: Talk) -> str:
 
 
 def _summary(talk: Talk) -> str:
+    if talk.podcast_description:
+        return _podcast_description(talk)
     if talk.description:
         return f"{talk.description} Source: {talk.source}."
     return f"Matthew Brensilver Dharma talk from {talk.source}."
+
+
+def _podcast_description(talk: Talk) -> str:
+    parts = [talk.podcast_description or ""]
+    if talk.chapters:
+        parts.append(
+            "Chapters:\n"
+            + "\n".join(
+                f"{_format_timestamp(chapter.start)} {chapter.title}"
+                + (f" - {chapter.url}" if chapter.url else "")
+                for chapter in talk.chapters
+            )
+        )
+    parts.append(f"Source: {talk.source}")
+    parts.append(f"Original page: {talk.link}")
+    return "\n\n".join(part for part in parts if part)
+
+
+def _format_timestamp(seconds: float) -> str:
+    total = int(round(max(0, seconds)))
+    hours, remainder = divmod(total, 3600)
+    minutes, secs = divmod(remainder, 60)
+    if hours:
+        return f"{hours:02d}:{minutes:02d}:{secs:02d}"
+    return f"{minutes:02d}:{secs:02d}"
 
 
 def _dedupe_key(talk: Talk) -> str:

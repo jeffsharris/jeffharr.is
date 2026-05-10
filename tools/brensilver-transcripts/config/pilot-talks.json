@@ -1,0 +1,24 @@
+{
+  "talks": [
+    {
+      "id": "audiodharma:22622",
+      "reason": "Very short AudioDharma reflection with poem-oriented title; good smoke test."
+    },
+    {
+      "id": "audiodharma:25235",
+      "reason": "Short quote/reference-heavy dharmette mentioning Ajahn Chah and death."
+    },
+    {
+      "id": "audiodharma:25131",
+      "reason": "Short contemporary talk on self-hatred; tests sensitive psychological language."
+    },
+    {
+      "id": "dharmaseed:94977",
+      "reason": "Recent Dharma Seed guided practice; tests second source and compassion/equanimity tags."
+    },
+    {
+      "id": "dharmaseed:91355",
+      "reason": "Longer Dharma Seed talk with explicit dukkha title; exercises chunking and Pali cleanup."
+    }
+  ]
+}
