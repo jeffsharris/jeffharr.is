@@ -5,6 +5,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from xml.etree import ElementTree as ET
 
+from brensilver.build import apply_site_image
 from brensilver.metadata import enrich_talks, write_episode_media
 from brensilver.models import Talk
 from brensilver.rss import build_rss
@@ -142,6 +143,34 @@ class MergeTests(unittest.TestCase):
 
 
 class PodcastMetadataTests(unittest.TestCase):
+    def test_site_image_becomes_talk_fallback_image(self):
+        talk = Talk(
+            id="audiodharma:1",
+            source="AudioDharma",
+            source_id="1",
+            title="Practice",
+            speaker="Matthew Brensilver",
+            published_at=datetime(2026, 1, 1, tzinfo=timezone.utc),
+            link="https://example.test/source",
+            audio_url="https://example.test/audio.mp3",
+            image_url="https://example.test/source-speaker.jpg",
+            episode_image_url="https://media.example/brensilver/artwork/audiodharma-1.jpg",
+        )
+
+        [normalized] = apply_site_image(
+            [talk],
+            "https://jeffharr.is/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+        )
+
+        self.assertEqual(
+            normalized.image_url,
+            "https://jeffharr.is/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+        )
+        self.assertEqual(
+            normalized.episode_image_url,
+            "https://media.example/brensilver/artwork/audiodharma-1.jpg",
+        )
+
     def test_metadata_enrichment_writes_chapters_and_episode_artwork(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)

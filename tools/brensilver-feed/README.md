@@ -8,6 +8,8 @@ Builds the static podcast artifacts served from `/brensilver/`:
 - `/brensilver/talks/{safe_id}/index.html`
 - `/brensilver/chapters/{safe_id}.json` when local episode metadata exists
 - `/brensilver/artwork/{safe_id}.jpg` in same-site preview mode
+- `/brensilver/artwork/matthew-brensilver-podcast-cover.jpg` as the canonical
+  feed and fallback talk image
 
 Run from the repo root:
 
@@ -54,7 +56,8 @@ Each enriched RSS item includes:
 
 - `<description>` and `<itunes:summary>` with the generated talk description and
   timestamp lines.
-- `<itunes:image>` pointing to episode artwork when available.
+- `<itunes:image>` pointing to episode artwork when available, otherwise the
+  generated teacher portrait stored in each talk's `image_url` field.
 - `<podcast:chapters>` pointing to Podcasting 2.0 chapter JSON.
 - A canonical `/brensilver/talks/{safe_id}/` link whose `?t=seconds` parameter
   seeks the web audio player.

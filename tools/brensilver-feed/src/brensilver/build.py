@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 import json
 import urllib.parse
+from dataclasses import replace
 from datetime import datetime
 from pathlib import Path
 from typing import Dict, Iterable, List
@@ -32,6 +33,7 @@ def main(argv: Iterable[str] | None = None) -> int:
         else collect_talks(config, probe_lengths=args.probe_lengths)
     )
     talks = merge_talks(talks)
+    talks = apply_site_image(talks, config["site"].get("image_url"))
     corpus_dir = Path(args.corpus_dir)
     media_base_url = (
         args.media_base_url
@@ -82,6 +84,12 @@ def collect_talks(config: Dict, probe_lengths: bool = False) -> List[Talk]:
         else:
             raise ValueError(f"Unknown source type: {source['type']}")
     return talks
+
+
+def apply_site_image(talks: List[Talk], image_url: str | None) -> List[Talk]:
+    if not image_url:
+        return talks
+    return [replace(talk, image_url=image_url) for talk in talks]
 
 
 def load_talks_json(path: Path) -> List[Talk]:
@@ -404,7 +412,7 @@ def render_index(config: Dict, all_talks: List[Talk], feed_talks: List[Talk]) ->
     </section>
     <section>
       <h2>Feed Status</h2>
-      <p class="latest">Latest item date: <strong>{latest_date}</strong>. Featured talk: <a href="{_escape(featured_url)}">{_escape(featured_title)}</a>. Custom episode artwork is filled newest-to-oldest as batches finish; source images are used until generated artwork exists.</p>
+      <p class="latest">Latest item date: <strong>{latest_date}</strong>. Featured talk: <a href="{_escape(featured_url)}">{_escape(featured_title)}</a>. Custom episode artwork is filled newest-to-oldest as batches finish; the generated teacher portrait is used as the fallback cover.</p>
       <div class="stats">
         <div class="stat"><span>Feed items</span><strong>{len(feed_talks)}</strong></div>
         <div class="stat"><span>Indexed talks</span><strong>{len(all_talks)}</strong></div>
