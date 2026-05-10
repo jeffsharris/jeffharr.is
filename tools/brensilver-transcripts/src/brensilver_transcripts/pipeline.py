@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import base64
+import contextlib
 import json
 import os
 import re
@@ -35,6 +36,7 @@ OPENAI_BASE_URL = "https://api.openai.com/v1"
 MAX_UPLOAD_BYTES = 24 * 1024 * 1024
 CHUNK_SECONDS = 20 * 60
 CHUNK_OVERLAP_SECONDS = 3
+RUN_CORPUS_LOCK_STALE_SECONDS = 12 * 60 * 60
 TEXT_NORMALIZATIONS = {
     "Mother Nature, that's last": "Mother Nature bats last",
     "There are no one Dharma drum": "There's no one Dharma drum",
@@ -1971,6 +1973,130 @@ def rebuild_public_feed(talks_json: Path, media_base_url: str, copy_artwork: boo
     subprocess.run(command, cwd=SITE_ROOT, check=True)
 
 
+def clear_lock_dir(lock_dir: Path) -> None:
+    if lock_dir.exists():
+        shutil.rmtree(lock_dir)
+
+
+@contextlib.contextmanager
+def corpus_run_lock(paths: CorpusPaths) -> Iterable[None]:
+    lock_dir = paths.root / "state" / "run-corpus.lock"
+    lock_dir.parent.mkdir(parents=True, exist_ok=True)
+    try:
+        lock_dir.mkdir()
+    except FileExistsError:
+        age = time.time() - lock_dir.stat().st_mtime
+        if age > RUN_CORPUS_LOCK_STALE_SECONDS:
+            clear_lock_dir(lock_dir)
+            lock_dir.mkdir()
+        else:
+            raise SystemExit(
+                "Another run-corpus job appears to be running. "
+                f"Lock: {lock_dir}. Age: {int(age)} seconds."
+            )
+    write_json(lock_dir / "owner.json", {"pid": os.getpid(), "created_at": now_iso()})
+    try:
+        yield
+    finally:
+        clear_lock_dir(lock_dir)
+
+
+def run_corpus_command(
+    args: argparse.Namespace,
+    talks: dict[str, Talk],
+    paths: CorpusPaths,
+    glossary: dict[str, Any],
+) -> int:
+    require_executable("ffmpeg")
+    require_executable("ffprobe")
+    if args.update_qmd:
+        require_executable("qmd")
+    api_key = require_openai_key()
+    state = PipelineState(paths.state_path)
+    selected = select_enrichment_talks(
+        talks,
+        paths,
+        args.limit,
+        args.force,
+        skip_artwork=args.skip_artwork,
+    )
+    if not selected:
+        print("No pending talks need enrichment.")
+        rebuild_public_feed(
+            args.talks_json,
+            args.media_base_url,
+            args.copy_artwork and not args.skip_artwork,
+        )
+        return 0
+
+    feed_every = max(1, int(args.feed_every or 20))
+    processed_since_feed = 0
+    processed: list[Talk] = []
+    failures: list[dict[str, str]] = []
+    print(
+        f"Selected {len(selected)} talks for enrichment "
+        f"(feed rebuild every {feed_every})."
+    )
+    for index, talk in enumerate(selected, start=1):
+        print(f"[{index}/{len(selected)}] enrich {talk.id} {talk.title}")
+        try:
+            process_enriched_talk(
+                talk,
+                paths,
+                state,
+                api_key,
+                glossary,
+                args.correction_model,
+                args.reference_model,
+                args.metadata_model,
+                args.image_model,
+                args.image_size,
+                args.image_quality,
+                force=args.force,
+                skip_artwork=args.skip_artwork,
+            )
+            processed.append(talk)
+            processed_since_feed += 1
+        except Exception as error:
+            state.mark(
+                talk,
+                status="failed",
+                error=str(error),
+                failed_at=now_iso(),
+            )
+            failures.append({"talk_id": talk.id, "error": str(error)})
+            print(f"failed {talk.id}: {error}", file=sys.stderr)
+            if args.stop_on_error:
+                raise
+            continue
+
+        if processed_since_feed >= feed_every:
+            if args.update_qmd:
+                run_qmd(paths)
+            rebuild_public_feed(
+                args.talks_json,
+                args.media_base_url,
+                args.copy_artwork and not args.skip_artwork,
+            )
+            processed_since_feed = 0
+
+    if processed_since_feed:
+        if args.update_qmd:
+            run_qmd(paths)
+        rebuild_public_feed(
+            args.talks_json,
+            args.media_base_url,
+            args.copy_artwork and not args.skip_artwork,
+        )
+    if args.build_feedback_viewer and processed:
+        print(write_feedback_viewer(processed, paths))
+
+    print(f"Processed {len(processed)} talks. Failures: {len(failures)}.")
+    for failure in failures:
+        print(f"FAILED {failure['talk_id']}: {failure['error']}", file=sys.stderr)
+    return 1 if failures and not processed else 0
+
+
 def clean_existing_transcript(talk: Talk, paths: CorpusPaths) -> dict[str, Any]:
     corrected = load_json(paths.corrected(talk), {})
     if not corrected.get("segments"):
@@ -3764,94 +3890,8 @@ def main(argv: list[str] | None = None) -> int:
         return 0
 
     if args.command == "run-corpus":
-        require_executable("ffmpeg")
-        require_executable("ffprobe")
-        if args.update_qmd:
-            require_executable("qmd")
-        api_key = require_openai_key()
-        state = PipelineState(paths.state_path)
-        selected = select_enrichment_talks(
-            talks,
-            paths,
-            args.limit,
-            args.force,
-            skip_artwork=args.skip_artwork,
-        )
-        if not selected:
-            print("No pending talks need enrichment.")
-            rebuild_public_feed(
-                args.talks_json,
-                args.media_base_url,
-                args.copy_artwork and not args.skip_artwork,
-            )
-            return 0
-
-        feed_every = max(1, int(args.feed_every or 20))
-        processed_since_feed = 0
-        processed: list[Talk] = []
-        failures: list[dict[str, str]] = []
-        print(
-            f"Selected {len(selected)} talks for enrichment "
-            f"(feed rebuild every {feed_every})."
-        )
-        for index, talk in enumerate(selected, start=1):
-            print(f"[{index}/{len(selected)}] enrich {talk.id} {talk.title}")
-            try:
-                process_enriched_talk(
-                    talk,
-                    paths,
-                    state,
-                    api_key,
-                    glossary,
-                    args.correction_model,
-                    args.reference_model,
-                    args.metadata_model,
-                    args.image_model,
-                    args.image_size,
-                    args.image_quality,
-                    force=args.force,
-                    skip_artwork=args.skip_artwork,
-                )
-                processed.append(talk)
-                processed_since_feed += 1
-            except Exception as error:
-                state.mark(
-                    talk,
-                    status="failed",
-                    error=str(error),
-                    failed_at=now_iso(),
-                )
-                failures.append({"talk_id": talk.id, "error": str(error)})
-                print(f"failed {talk.id}: {error}", file=sys.stderr)
-                if args.stop_on_error:
-                    raise
-                continue
-
-            if processed_since_feed >= feed_every:
-                if args.update_qmd:
-                    run_qmd(paths)
-                rebuild_public_feed(
-                    args.talks_json,
-                    args.media_base_url,
-                    args.copy_artwork and not args.skip_artwork,
-                )
-                processed_since_feed = 0
-
-        if processed_since_feed:
-            if args.update_qmd:
-                run_qmd(paths)
-            rebuild_public_feed(
-                args.talks_json,
-                args.media_base_url,
-                args.copy_artwork and not args.skip_artwork,
-            )
-        if args.build_feedback_viewer and processed:
-            print(write_feedback_viewer(processed, paths))
-
-        print(f"Processed {len(processed)} talks. Failures: {len(failures)}.")
-        for failure in failures:
-            print(f"FAILED {failure['talk_id']}: {failure['error']}", file=sys.stderr)
-        return 1 if failures and not processed else 0
+        with corpus_run_lock(paths):
+            return run_corpus_command(args, talks, paths, glossary)
 
     if args.command not in {"correct", "extract-references", "metadata", "generate-artwork"}:
         require_executable("ffmpeg")
