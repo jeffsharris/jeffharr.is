@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import urllib.parse
 from dataclasses import replace
 from datetime import datetime
@@ -12,6 +13,25 @@ from brensilver.metadata import enrich_talks, safe_id, write_episode_media
 from brensilver.models import Talk
 from brensilver.rss import build_rss, merge_talks
 from brensilver.sources import fetch_audiodharma_talks, fetch_dharmaseed_talks
+
+GUIDED_FEED_TITLE_PATTERNS = [
+    re.compile(pattern, re.IGNORECASE)
+    for pattern in [
+        r"\bguided\b",
+        r"\bguded\s+meditation\b",
+        r"^walking meditation\b",
+        r"^metta practice\b",
+        r"^morning (instructions|sit with instruction)\b",
+        r"^(monday|wednesday|friday) morning instructions\b",
+        r"^day \d+:? (morning )?instructions and sitting\b",
+        r"^day \d+: sitting with instructions\b",
+        r"\bsit with (instructions|guidance)\b",
+        r"\bsitting with instructions\b",
+        r"\bpractice session\b",
+        r"^formal opening part 1 \(sit\)$",
+        r"^tuesday sit with instructions\b",
+    ]
+]
 
 
 def main(argv: Iterable[str] | None = None) -> int:
@@ -48,14 +68,31 @@ def main(argv: Iterable[str] | None = None) -> int:
             site_base_url=config["site"]["base_url"],
         )
     max_items = int(config.get("feed", {}).get("max_items", len(talks)))
-    feed_talks = talks[:max_items]
+    dharma_talks, guided_talks = split_talks_for_feeds(talks)
+    feed_talks = dharma_talks[:max_items]
+    guided_feed_talks = guided_talks[:max_items]
+    guided_site = build_guided_site(config["site"])
 
     out_dir = Path(args.out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
 
     (out_dir / "feed.xml").write_text(build_rss(feed_talks, config["site"]), encoding="utf-8")
+    (out_dir / "guided-feed.xml").write_text(
+        build_rss(guided_feed_talks, guided_site),
+        encoding="utf-8",
+    )
     (out_dir / "talks.json").write_text(
         json.dumps([talk.to_json_dict() for talk in talks], indent=2, ensure_ascii=False) + "\n",
+        encoding="utf-8",
+    )
+    (out_dir / "dharma-talks.json").write_text(
+        json.dumps([talk.to_json_dict() for talk in dharma_talks], indent=2, ensure_ascii=False)
+        + "\n",
+        encoding="utf-8",
+    )
+    (out_dir / "guided-talks.json").write_text(
+        json.dumps([talk.to_json_dict() for talk in guided_talks], indent=2, ensure_ascii=False)
+        + "\n",
         encoding="utf-8",
     )
     media_counts = write_episode_media(
@@ -65,10 +102,14 @@ def main(argv: Iterable[str] | None = None) -> int:
         copy_artwork=args.copy_artwork,
     )
     write_talk_pages(out_dir, config, talks)
-    (out_dir / "index.html").write_text(render_index(config, talks, feed_talks), encoding="utf-8")
+    (out_dir / "index.html").write_text(
+        render_index(config, talks, feed_talks, guided_feed_talks, guided_site),
+        encoding="utf-8",
+    )
 
     print(
-        f"Wrote {len(feed_talks)} feed items from {len(talks)} total talks to {out_dir} "
+        f"Wrote {len(feed_talks)} Dharma feed items and {len(guided_feed_talks)} guided feed items "
+        f"from {len(talks)} total talks to {out_dir} "
         f"({media_counts['chapters']} chapter files, {media_counts['artwork']} artwork files)"
     )
     return 0
@@ -90,6 +131,33 @@ def apply_site_image(talks: List[Talk], image_url: str | None) -> List[Talk]:
     if not image_url:
         return talks
     return [replace(talk, image_url=image_url) for talk in talks]
+
+
+def build_guided_site(site: Dict) -> Dict:
+    guided = dict(site)
+    guided["title"] = site.get("guided_title", "Matthew Brensilver Guided Meditations")
+    guided["description"] = site.get(
+        "guided_description",
+        "A companion feed of Matthew Brensilver guided meditations and practice instructions.",
+    )
+    guided["feed_url"] = site.get("guided_feed_url", site["base_url"] + "guided-feed.xml")
+    return guided
+
+
+def split_talks_for_feeds(talks: List[Talk]) -> tuple[List[Talk], List[Talk]]:
+    dharma_talks: List[Talk] = []
+    guided_talks: List[Talk] = []
+    for talk in talks:
+        if is_guided_practice(talk):
+            guided_talks.append(talk)
+        else:
+            dharma_talks.append(talk)
+    return dharma_talks, guided_talks
+
+
+def is_guided_practice(talk: Talk) -> bool:
+    title = " ".join(talk.title.split())
+    return any(pattern.search(title) for pattern in GUIDED_FEED_TITLE_PATTERNS)
 
 
 def load_talks_json(path: Path) -> List[Talk]:
@@ -121,7 +189,13 @@ def load_talks_json(path: Path) -> List[Talk]:
     return talks
 
 
-def render_index(config: Dict, all_talks: List[Talk], feed_talks: List[Talk]) -> str:
+def render_index(
+    config: Dict,
+    all_talks: List[Talk],
+    feed_talks: List[Talk],
+    guided_feed_talks: List[Talk],
+    guided_site: Dict,
+) -> str:
     site = config["site"]
     latest = feed_talks[0] if feed_talks else None
     featured = next((talk for talk in feed_talks if talk.episode_image_url), latest)
@@ -163,7 +237,16 @@ def render_index(config: Dict, all_talks: List[Talk], feed_talks: List[Talk]) ->
         "overcast://x-callback-url/add?url="
         + urllib.parse.quote(str(site["feed_url"]), safe="")
     )
-    feed_json = json.dumps(site["feed_url"])
+    guided_overcast_url = (
+        "overcast://x-callback-url/add?url="
+        + urllib.parse.quote(str(guided_site["feed_url"]), safe="")
+    )
+    feed_urls_json = json.dumps(
+        {
+            "dharma": site["feed_url"],
+            "guided": guided_site["feed_url"],
+        }
+    )
     featured_image_html = (
         f"""<a class="cover-link" href="{_escape(featured_url)}" aria-label="Open featured talk">
           <img class="cover" src="{_escape(featured_image_src)}" alt="">
@@ -178,6 +261,7 @@ def render_index(config: Dict, all_talks: List[Talk], feed_talks: List[Talk]) ->
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{_escape(site["title"])}</title>
   <link rel="alternate" type="application/rss+xml" title="{_escape(site["title"])}" href="feed.xml">
+  <link rel="alternate" type="application/rss+xml" title="{_escape(guided_site["title"])}" href="guided-feed.xml">
   <style>
     :root {{
       color-scheme: light dark;
@@ -286,6 +370,17 @@ def render_index(config: Dict, all_talks: List[Talk], feed_talks: List[Talk]) ->
       gap: 12px;
       margin: 24px 0 12px;
     }}
+    .feed-block + .feed-block {{
+      margin-top: 28px;
+    }}
+    .feed-block h3 {{
+      margin: 0 0 6px;
+      font-size: 1.12rem;
+      line-height: 1.2;
+    }}
+    .feed-block p {{
+      margin: 0;
+    }}
     .player-button {{
       display: inline-flex;
       align-items: center;
@@ -388,33 +483,61 @@ def render_index(config: Dict, all_talks: List[Talk], feed_talks: List[Talk]) ->
     </section>
     <section aria-labelledby="subscribe-heading">
       <h2 id="subscribe-heading">Subscribe</h2>
-      <p>Overcast can add the feed directly. For Apple Podcasts, Pocket Casts, and other players, copy the RSS URL and add it as a custom feed.</p>
-      <div class="subscribe-grid">
-        <a class="player-button overcast" href="{_escape(overcast_url)}">
-          <img src="https://cdn.simpleicons.org/overcast/FFFFFF?viewbox=auto" alt="">
-          <span>Add to Overcast</span>
-        </a>
-        <button class="player-button apple" type="button" data-copy="feed">
-          <img src="https://cdn.simpleicons.org/applepodcasts/FFFFFF?viewbox=auto" alt="">
-          <span>Copy for Apple</span>
-        </button>
-        <button class="player-button pocket" type="button" data-copy="feed">
-          <img src="https://cdn.simpleicons.org/pocketcasts/FFFFFF?viewbox=auto" alt="">
-          <span>Copy for Pocket</span>
-        </button>
-        <a class="player-button rss" href="feed.xml">
-          <img src="https://cdn.simpleicons.org/rss/FFFFFF?viewbox=auto" alt="">
-          <span>RSS Feed</span>
-        </a>
+      <p>Overcast can add a feed directly. For Apple Podcasts, Pocket Casts, and other players, copy the RSS URL and add it as a custom feed.</p>
+      <div class="feed-block">
+        <h3>Dharma talks</h3>
+        <p>The main feed excludes guided meditations, guided practice sessions, and retreat sitting instructions.</p>
+        <div class="subscribe-grid">
+          <a class="player-button overcast" href="{_escape(overcast_url)}">
+            <img src="https://cdn.simpleicons.org/overcast/FFFFFF?viewbox=auto" alt="">
+            <span>Add to Overcast</span>
+          </a>
+          <button class="player-button apple" type="button" data-copy-feed="dharma">
+            <img src="https://cdn.simpleicons.org/applepodcasts/FFFFFF?viewbox=auto" alt="">
+            <span>Copy for Apple</span>
+          </button>
+          <button class="player-button pocket" type="button" data-copy-feed="dharma">
+            <img src="https://cdn.simpleicons.org/pocketcasts/FFFFFF?viewbox=auto" alt="">
+            <span>Copy for Pocket</span>
+          </button>
+          <a class="player-button rss" href="feed.xml">
+            <img src="https://cdn.simpleicons.org/rss/FFFFFF?viewbox=auto" alt="">
+            <span>RSS Feed</span>
+          </a>
+        </div>
+        <code class="feed-url">{_escape(site["feed_url"])}</code>
+      </div>
+      <div class="feed-block">
+        <h3>Guided meditations</h3>
+        <p>A companion feed for guided meditations, guided metta, practice sessions, and sitting instructions.</p>
+        <div class="subscribe-grid">
+          <a class="player-button overcast" href="{_escape(guided_overcast_url)}">
+            <img src="https://cdn.simpleicons.org/overcast/FFFFFF?viewbox=auto" alt="">
+            <span>Add to Overcast</span>
+          </a>
+          <button class="player-button apple" type="button" data-copy-feed="guided">
+            <img src="https://cdn.simpleicons.org/applepodcasts/FFFFFF?viewbox=auto" alt="">
+            <span>Copy for Apple</span>
+          </button>
+          <button class="player-button pocket" type="button" data-copy-feed="guided">
+            <img src="https://cdn.simpleicons.org/pocketcasts/FFFFFF?viewbox=auto" alt="">
+            <span>Copy for Pocket</span>
+          </button>
+          <a class="player-button rss" href="guided-feed.xml">
+            <img src="https://cdn.simpleicons.org/rss/FFFFFF?viewbox=auto" alt="">
+            <span>RSS Feed</span>
+          </a>
+        </div>
+        <code class="feed-url">{_escape(guided_site["feed_url"])}</code>
       </div>
       <p id="copy-status" class="copy-status" aria-live="polite"></p>
-      <code class="feed-url">{_escape(site["feed_url"])}</code>
     </section>
     <section>
       <h2>Feed Status</h2>
       <p class="latest">Latest item date: <strong>{latest_date}</strong>. Featured talk: <a href="{_escape(featured_url)}">{_escape(featured_title)}</a>. Custom episode artwork is filled newest-to-oldest as batches finish; the generated teacher portrait is used as the fallback cover.</p>
       <div class="stats">
-        <div class="stat"><span>Feed items</span><strong>{len(feed_talks)}</strong></div>
+        <div class="stat"><span>Dharma feed</span><strong>{len(feed_talks)}</strong></div>
+        <div class="stat"><span>Guided feed</span><strong>{len(guided_feed_talks)}</strong></div>
         <div class="stat"><span>Indexed talks</span><strong>{len(all_talks)}</strong></div>
         <div class="stat"><span>Enriched talks</span><strong>{enriched_count}</strong></div>
         <div class="stat"><span>Custom artwork</span><strong>{artwork_count}</strong></div>
@@ -424,14 +547,15 @@ def render_index(config: Dict, all_talks: List[Talk], feed_talks: List[Talk]) ->
     </section>
     <section>
       <h2>Data</h2>
-      <p><a href="talks.json">Talk data</a> includes source metadata plus transcript-enriched episode descriptions, chapter links, and artwork URLs as each talk is processed.</p>
+      <p><a href="talks.json">Talk data</a> includes the full corpus. <a href="dharma-talks.json">Dharma talk data</a> and <a href="guided-talks.json">guided meditation data</a> expose the current feed split for review.</p>
     </section>
   </main>
   </div>
   <script>
-    const feedUrl = {feed_json};
+    const feedUrls = {feed_urls_json};
     const status = document.getElementById('copy-status');
-    async function copyFeedUrl() {{
+    async function copyFeedUrl(key) {{
+      const feedUrl = feedUrls[key] || feedUrls.dharma;
       try {{
         await navigator.clipboard.writeText(feedUrl);
         status.textContent = 'RSS URL copied.';
@@ -439,8 +563,8 @@ def render_index(config: Dict, all_talks: List[Talk], feed_talks: List[Talk]) ->
         status.textContent = feedUrl;
       }}
     }}
-    document.querySelectorAll('[data-copy]').forEach(button => {{
-      button.addEventListener('click', copyFeedUrl);
+    document.querySelectorAll('[data-copy-feed]').forEach(button => {{
+      button.addEventListener('click', () => copyFeedUrl(button.dataset.copyFeed));
     }});
   </script>
 </body>

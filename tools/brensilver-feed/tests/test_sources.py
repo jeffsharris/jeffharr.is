@@ -5,7 +5,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from xml.etree import ElementTree as ET
 
-from brensilver.build import apply_site_image
+from brensilver.build import apply_site_image, is_guided_practice, split_talks_for_feeds
 from brensilver.metadata import enrich_talks, write_episode_media
 from brensilver.models import Talk
 from brensilver.rss import build_rss
@@ -170,6 +170,59 @@ class PodcastMetadataTests(unittest.TestCase):
             normalized.episode_image_url,
             "https://media.example/brensilver/artwork/audiodharma-1.jpg",
         )
+
+    def test_guided_practice_feed_classifier(self):
+        base = {
+            "id": "audiodharma:1",
+            "source": "AudioDharma",
+            "source_id": "1",
+            "speaker": "Matthew Brensilver",
+            "published_at": datetime(2026, 1, 1, tzinfo=timezone.utc),
+            "link": "https://example.test/source",
+            "audio_url": "https://example.test/audio.mp3",
+        }
+        guided_titles = [
+            "Guided Meditation: Breath",
+            "Lightly Guided Meditation",
+            "Guded Meditation (Day 2): Breath",
+            "Day 1: Instructions and Guided Meditation",
+            "Thursday Guided Meditation",
+            "Morning Instructions",
+            "Sitting with Instructions",
+            "Matthew Brensilver: Day 2: Morning Practice Session",
+            "Walking Meditation",
+            "Metta Practice",
+        ]
+        dharma_titles = [
+            "Dharmette: Meditation is so many things",
+            "Monday Night Meditation Talk",
+            "Dharma Practice and the Cultivation of Power",
+            "Practice Questions",
+        ]
+
+        for title in guided_titles:
+            self.assertTrue(is_guided_practice(Talk(title=title, **base)), title)
+        for title in dharma_titles:
+            self.assertFalse(is_guided_practice(Talk(title=title, **base)), title)
+
+    def test_split_talks_for_feeds(self):
+        base = {
+            "source": "AudioDharma",
+            "source_id": "1",
+            "speaker": "Matthew Brensilver",
+            "published_at": datetime(2026, 1, 1, tzinfo=timezone.utc),
+            "link": "https://example.test/source",
+            "audio_url": "https://example.test/audio.mp3",
+        }
+        talks = [
+            Talk(id="talk", title="The Dharma of Practice", **base),
+            Talk(id="guided", title="Guided Meditation: Breath", **base),
+        ]
+
+        dharma, guided = split_talks_for_feeds(talks)
+
+        self.assertEqual([talk.id for talk in dharma], ["talk"])
+        self.assertEqual([talk.id for talk in guided], ["guided"])
 
     def test_metadata_enrichment_writes_chapters_and_episode_artwork(self):
         with tempfile.TemporaryDirectory() as tmp:

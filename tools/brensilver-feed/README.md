@@ -3,7 +3,10 @@
 Builds the static podcast artifacts served from `/brensilver/`:
 
 - `/brensilver/feed.xml`
+- `/brensilver/guided-feed.xml`
 - `/brensilver/talks.json`
+- `/brensilver/dharma-talks.json`
+- `/brensilver/guided-talks.json`
 - `/brensilver/index.html`
 - `/brensilver/talks/{safe_id}/index.html`
 - `/brensilver/chapters/{safe_id}.json` when local episode metadata exists
@@ -61,6 +64,12 @@ Each enriched RSS item includes:
 - `<podcast:chapters>` pointing to Podcasting 2.0 chapter JSON.
 - A canonical `/brensilver/talks/{safe_id}/` link whose `?t=seconds` parameter
   seeks the web audio player.
+
+The main `feed.xml` is the Dharma-talk feed. `guided-feed.xml` is the companion
+feed for guided meditations, guided metta/heart practices, retreat sitting
+instructions, practice sessions, and similar practice-first recordings. The
+builder writes `dharma-talks.json` and `guided-talks.json` so the split can be
+audited without parsing RSS.
 
 For incremental local corpus processing, prefer the transcript tool's
 `run-corpus` command. It processes pending talks and calls this feed builder

@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Matthew Brensilver Dharma Talks</title>
   <link rel="alternate" type="application/rss+xml" title="Matthew Brensilver Dharma Talks" href="feed.xml">
+  <link rel="alternate" type="application/rss+xml" title="Matthew Brensilver Guided Meditations" href="guided-feed.xml">
   <style>
     :root {
       color-scheme: light dark;
@@ -113,6 +114,17 @@
       gap: 12px;
       margin: 24px 0 12px;
     }
+    .feed-block + .feed-block {
+      margin-top: 28px;
+    }
+    .feed-block h3 {
+      margin: 0 0 6px;
+      font-size: 1.12rem;
+      line-height: 1.2;
+    }
+    .feed-block p {
+      margin: 0;
+    }
     .player-button {
       display: inline-flex;
       align-items: center;
@@ -211,43 +223,71 @@
         <h1 id="page-title">Matthew Brensilver Dharma Talks</h1>
         <p class="lede">A merged podcast feed of Matthew Brensilver Dharma talks from AudioDharma and Dharma Seed. New transcript-derived descriptions, chapters, and episode artwork are added as the local corpus pipeline finishes each batch.</p>
       </div>
-      <a class="cover-link" href="https://jeffharr.is/brensilver/talks/audiodharma-25380/" aria-label="Open featured talk">
-          <img class="cover" src="/brensilver/artwork/audiodharma-25380.jpg" alt="">
+      <a class="cover-link" href="https://jeffharr.is/brensilver/talks/audiodharma-25381/" aria-label="Open featured talk">
+          <img class="cover" src="/brensilver/artwork/audiodharma-25381.jpg" alt="">
         </a>
     </section>
     <section aria-labelledby="subscribe-heading">
       <h2 id="subscribe-heading">Subscribe</h2>
-      <p>Overcast can add the feed directly. For Apple Podcasts, Pocket Casts, and other players, copy the RSS URL and add it as a custom feed.</p>
-      <div class="subscribe-grid">
-        <a class="player-button overcast" href="overcast://x-callback-url/add?url=https%3A%2F%2Fjeffharr.is%2Fbrensilver%2Ffeed.xml">
-          <img src="https://cdn.simpleicons.org/overcast/FFFFFF?viewbox=auto" alt="">
-          <span>Add to Overcast</span>
-        </a>
-        <button class="player-button apple" type="button" data-copy="feed">
-          <img src="https://cdn.simpleicons.org/applepodcasts/FFFFFF?viewbox=auto" alt="">
-          <span>Copy for Apple</span>
-        </button>
-        <button class="player-button pocket" type="button" data-copy="feed">
-          <img src="https://cdn.simpleicons.org/pocketcasts/FFFFFF?viewbox=auto" alt="">
-          <span>Copy for Pocket</span>
-        </button>
-        <a class="player-button rss" href="feed.xml">
-          <img src="https://cdn.simpleicons.org/rss/FFFFFF?viewbox=auto" alt="">
-          <span>RSS Feed</span>
-        </a>
+      <p>Overcast can add a feed directly. For Apple Podcasts, Pocket Casts, and other players, copy the RSS URL and add it as a custom feed.</p>
+      <div class="feed-block">
+        <h3>Dharma talks</h3>
+        <p>The main feed excludes guided meditations, guided practice sessions, and retreat sitting instructions.</p>
+        <div class="subscribe-grid">
+          <a class="player-button overcast" href="overcast://x-callback-url/add?url=https%3A%2F%2Fjeffharr.is%2Fbrensilver%2Ffeed.xml">
+            <img src="https://cdn.simpleicons.org/overcast/FFFFFF?viewbox=auto" alt="">
+            <span>Add to Overcast</span>
+          </a>
+          <button class="player-button apple" type="button" data-copy-feed="dharma">
+            <img src="https://cdn.simpleicons.org/applepodcasts/FFFFFF?viewbox=auto" alt="">
+            <span>Copy for Apple</span>
+          </button>
+          <button class="player-button pocket" type="button" data-copy-feed="dharma">
+            <img src="https://cdn.simpleicons.org/pocketcasts/FFFFFF?viewbox=auto" alt="">
+            <span>Copy for Pocket</span>
+          </button>
+          <a class="player-button rss" href="feed.xml">
+            <img src="https://cdn.simpleicons.org/rss/FFFFFF?viewbox=auto" alt="">
+            <span>RSS Feed</span>
+          </a>
+        </div>
+        <code class="feed-url">https://jeffharr.is/brensilver/feed.xml</code>
+      </div>
+      <div class="feed-block">
+        <h3>Guided meditations</h3>
+        <p>A companion feed for guided meditations, guided metta, practice sessions, and sitting instructions.</p>
+        <div class="subscribe-grid">
+          <a class="player-button overcast" href="overcast://x-callback-url/add?url=https%3A%2F%2Fjeffharr.is%2Fbrensilver%2Fguided-feed.xml">
+            <img src="https://cdn.simpleicons.org/overcast/FFFFFF?viewbox=auto" alt="">
+            <span>Add to Overcast</span>
+          </a>
+          <button class="player-button apple" type="button" data-copy-feed="guided">
+            <img src="https://cdn.simpleicons.org/applepodcasts/FFFFFF?viewbox=auto" alt="">
+            <span>Copy for Apple</span>
+          </button>
+          <button class="player-button pocket" type="button" data-copy-feed="guided">
+            <img src="https://cdn.simpleicons.org/pocketcasts/FFFFFF?viewbox=auto" alt="">
+            <span>Copy for Pocket</span>
+          </button>
+          <a class="player-button rss" href="guided-feed.xml">
+            <img src="https://cdn.simpleicons.org/rss/FFFFFF?viewbox=auto" alt="">
+            <span>RSS Feed</span>
+          </a>
+        </div>
+        <code class="feed-url">https://jeffharr.is/brensilver/guided-feed.xml</code>
       </div>
       <p id="copy-status" class="copy-status" aria-live="polite"></p>
-      <code class="feed-url">https://jeffharr.is/brensilver/feed.xml</code>
     </section>
     <section>
       <h2>Feed Status</h2>
-      <p class="latest">Latest item date: <strong>2026-04-29</strong>. Featured talk: <a href="https://jeffharr.is/brensilver/talks/audiodharma-25380/">Guided Meditation: Difficult for the Self to Understand what it can't do</a>. Custom episode artwork is filled newest-to-oldest as batches finish; the generated teacher portrait is used as the fallback cover.</p>
+      <p class="latest">Latest item date: <strong>2026-04-29</strong>. Featured talk: <a href="https://jeffharr.is/brensilver/talks/audiodharma-25381/">Dharmette: Insight &amp; Love</a>. Custom episode artwork is filled newest-to-oldest as batches finish; the generated teacher portrait is used as the fallback cover.</p>
       <div class="stats">
-        <div class="stat"><span>Feed items</span><strong>647</strong></div>
+        <div class="stat"><span>Dharma feed</span><strong>392</strong></div>
+        <div class="stat"><span>Guided feed</span><strong>255</strong></div>
         <div class="stat"><span>Indexed talks</span><strong>647</strong></div>
         <div class="stat"><span>Enriched talks</span><strong>120</strong></div>
         <div class="stat"><span>Custom artwork</span><strong>120</strong></div>
-        <div class="stat"><span>Newest with art</span><strong>106</strong></div>
+        <div class="stat"><span>Newest with art</span><strong>59</strong></div>
         <div class="stat">
           <span>AudioDharma</span>
           <strong>504</strong>
@@ -260,14 +300,15 @@
     </section>
     <section>
       <h2>Data</h2>
-      <p><a href="talks.json">Talk data</a> includes source metadata plus transcript-enriched episode descriptions, chapter links, and artwork URLs as each talk is processed.</p>
+      <p><a href="talks.json">Talk data</a> includes the full corpus. <a href="dharma-talks.json">Dharma talk data</a> and <a href="guided-talks.json">guided meditation data</a> expose the current feed split for review.</p>
     </section>
   </main>
   </div>
   <script>
-    const feedUrl = "https://jeffharr.is/brensilver/feed.xml";
+    const feedUrls = {"dharma": "https://jeffharr.is/brensilver/feed.xml", "guided": "https://jeffharr.is/brensilver/guided-feed.xml"};
     const status = document.getElementById('copy-status');
-    async function copyFeedUrl() {
+    async function copyFeedUrl(key) {
+      const feedUrl = feedUrls[key] || feedUrls.dharma;
       try {
         await navigator.clipboard.writeText(feedUrl);
         status.textContent = 'RSS URL copied.';
@@ -275,8 +316,8 @@
         status.textContent = feedUrl;
       }
     }
-    document.querySelectorAll('[data-copy]').forEach(button => {
-      button.addEventListener('click', copyFeedUrl);
+    document.querySelectorAll('[data-copy-feed]').forEach(button => {
+      button.addEventListener('click', () => copyFeedUrl(button.dataset.copyFeed));
     });
   </script>
 </body>
