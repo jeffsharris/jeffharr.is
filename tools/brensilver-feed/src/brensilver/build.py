@@ -135,6 +135,11 @@ def render_index(config: Dict, all_talks: List[Talk], feed_talks: List[Talk]) ->
         1 for talk in all_talks if talk.podcast_description or talk.chapters or talk.episode_image_url
     )
     artwork_count = sum(1 for talk in all_talks if talk.episode_image_url)
+    newest_artwork_count = 0
+    for talk in feed_talks:
+        if not talk.episode_image_url:
+            break
+        newest_artwork_count += 1
     source_counts = {}
     for talk in all_talks:
         source_counts[talk.source] = source_counts.get(talk.source, 0) + 1
@@ -399,12 +404,13 @@ def render_index(config: Dict, all_talks: List[Talk], feed_talks: List[Talk]) ->
     </section>
     <section>
       <h2>Feed Status</h2>
-      <p class="latest">Latest item date: <strong>{latest_date}</strong>. Featured talk: <a href="{_escape(featured_url)}">{_escape(featured_title)}</a>.</p>
+      <p class="latest">Latest item date: <strong>{latest_date}</strong>. Featured talk: <a href="{_escape(featured_url)}">{_escape(featured_title)}</a>. Custom episode artwork is filled newest-to-oldest as batches finish; source images are used until generated artwork exists.</p>
       <div class="stats">
         <div class="stat"><span>Feed items</span><strong>{len(feed_talks)}</strong></div>
         <div class="stat"><span>Indexed talks</span><strong>{len(all_talks)}</strong></div>
         <div class="stat"><span>Enriched talks</span><strong>{enriched_count}</strong></div>
-        <div class="stat"><span>Artwork</span><strong>{artwork_count}</strong></div>
+        <div class="stat"><span>Custom artwork</span><strong>{artwork_count}</strong></div>
+        <div class="stat"><span>Newest with art</span><strong>{newest_artwork_count}</strong></div>
         {source_rows}
       </div>
     </section>
