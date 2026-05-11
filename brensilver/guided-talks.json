@@ -23088,6 +23088,68 @@
     "description": "AudioDharma talk by Matthew Brensilver.",
     "image_url": "https://jeffharr.is/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
     "canonical_url": "https://jeffharr.is/brensilver/talks/audiodharma-6630/",
+    "podcast_description": "This guided meditation moves from poems about sorrow and emptiness into a quiet practice of carrying what is heavy without closing the heart. Matthew Brensilver returns several times to refrains about surrender, softness, and the redemption of pain through love and understanding. The later part settles into long stretches of silence and ends with Rumi’s urging toward wholehearted devotion.",
+    "short_summary": "A poetry-led guided meditation on carrying suffering, opening the heart, and practicing with wholeheartedness.",
+    "episode_image_url": "https://jeffharr.is/brensilver/artwork/audiodharma-6630.jpg",
+    "chapters_url": "https://jeffharr.is/brensilver/chapters/audiodharma-6630.json",
+    "chapters": [
+      {
+        "start": 120.0,
+        "title": "Sorrow and Emptiness",
+        "description": "Leonard Cohen’s lines about burden and emptiness introduce the talk’s central tension: emptiness may lighten suffering, but it does not erase heaviness.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-6630/?t=120",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 302.02,
+        "title": "Open the Heart",
+        "description": "Matthew reflects on how to meet what is heavy, emphasizing that the task is not to deny pain but to open to it.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-6630/?t=302",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 524.26,
+        "title": "Lord of Song Refrain",
+        "description": "A repeated devotional line about standing before the Lord of Song with nothing on the heart becomes a practice of simplicity and release.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-6630/?t=524",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1098.18,
+        "title": "Softening the Heart",
+        "description": "He names the way life can harden or soften the heart and lets the meditation deepen into extended silence.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-6630/?t=1098",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1524.251,
+        "title": "Pain Redeemed",
+        "description": "The talk turns explicit about practice: pain is to be folded into love and understanding rather than resisted or left outside awareness.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-6630/?t=1524",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 2069.251,
+        "title": "Rumi's Invitation",
+        "description": "Rumi’s lines about gambling everything for love intensify the teaching into wholehearted commitment and letting go of hesitation.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-6630/?t=2069",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 2144.251,
+        "title": "Closing Silence",
+        "description": "The meditation settles into long, spacious silence, allowing the earlier words to resonate without further instruction.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-6630/?t=2144",
+        "img": null,
+        "toc": true
+      }
+    ],
     "venue": null,
     "series": null,
     "tags": [],
@@ -23112,6 +23174,84 @@
     "description": "AudioDharma talk by Matthew Brensilver.",
     "image_url": "https://jeffharr.is/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
     "canonical_url": "https://jeffharr.is/brensilver/talks/audiodharma-6625/",
+    "podcast_description": "Matthew Brensilver offers a guided meditation on meeting emotion in the body with steadiness and kindness. He begins by inviting the listener to stop looking for life elsewhere and to honor what is present right now, then turns toward the physical signatures of emotion—especially in the face, throat, chest, and belly. The practice settles into mindful noting, relaxed alertness, and a spacious awareness that can hold pleasant, unpleasant, and neutral experience without needing to obey every inner command.",
+    "short_summary": "A guided meditation on sensing emotion in the body, relaxing unnecessary effort, and resting in equanimous awareness.",
+    "episode_image_url": "https://jeffharr.is/brensilver/artwork/audiodharma-6625.jpg",
+    "chapters_url": "https://jeffharr.is/brensilver/chapters/audiodharma-6625.json",
+    "chapters": [
+      {
+        "start": 0.76,
+        "title": "Settling Into Life",
+        "description": "The meditation opens by inviting a direct appreciation of immediate experience rather than chasing life in another time or place.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-6625/?t=1",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 129.0,
+        "title": "Opening the Heart",
+        "description": "He encourages a gentle opening to what is here now, letting each moment become the whole of practice.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-6625/?t=129",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 468.0,
+        "title": "Suffering and Presence",
+        "description": "A brief citation of Shinzen Young frames the human condition, then the talk returns to honoring this life exactly as it is.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-6625/?t=468",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 880.0,
+        "title": "Emotion in the Body",
+        "description": "Emotion is described as a protective mechanism shaped by threat and opportunity, with both mental and bodily components.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-6625/?t=880",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1115.0,
+        "title": "Finding the Sensation",
+        "description": "Attention is guided to the bodily fingerprints of anger, fear, and sadness, especially along the front axis of the body.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-6625/?t=1115",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1334.21,
+        "title": "Resting With Change",
+        "description": "The listener is invited to stay with the changing constellation of sensations and notice their moment-to-moment movement.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-6625/?t=1334",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1484.21,
+        "title": "Relaxing Effort",
+        "description": "Matthew points to unnecessary layers of effort that can be softened as one opens to emotional life.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-6625/?t=1484",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1732.21,
+        "title": "Gentle Noting",
+        "description": "He suggests simple noting when helpful, including naming emotion, intensity, or a vague sense of activity.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-6625/?t=1732",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1838.21,
+        "title": "Equanimity and Sky",
+        "description": "The practice settles into relaxed, alert awareness as the river of feeling passes through without needing to be obeyed, ending with the image of mind like sky.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-6625/?t=1838",
+        "img": null,
+        "toc": true
+      }
+    ],
     "venue": null,
     "series": null,
     "tags": [],
@@ -23136,6 +23276,76 @@
     "description": "AudioDharma talk by Matthew Brensilver.",
     "image_url": "https://jeffharr.is/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
     "canonical_url": "https://jeffharr.is/brensilver/talks/audiodharma-6623/",
+    "podcast_description": "This guided meditation starts with a gentle invitation to settle into the breath and notice what the mind brings to stillness. Matthew then moves through simple instructions for receiving the breath, using a light mental note, and softening the habit of trying to improve experience. The talk opens into a quiet reflection on imperfection, kindness, and the freedom that comes from letting the breath stay in the foreground while the rest of experience can remain in the background.",
+    "short_summary": "A quiet guided meditation on receiving the breath, easing striving, and meeting experience with kindness.",
+    "episode_image_url": "https://jeffharr.is/brensilver/artwork/audiodharma-6623.jpg",
+    "chapters_url": "https://jeffharr.is/brensilver/chapters/audiodharma-6623.json",
+    "chapters": [
+      {
+        "start": 0.0,
+        "title": "Settling In",
+        "description": "The meditation begins by inviting a few comfortable breaths and noticing the mind’s associations with stillness and silence.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-6623/?t=0",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 296.16,
+        "title": "Breath as Receiving",
+        "description": "Instruction shifts to letting the breath come naturally and using a gentle mental note to support equanimity.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-6623/?t=296",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 675.16,
+        "title": "The Cost of Striving",
+        "description": "Matthew reflects on the human tendency to keep fixing and improving, and how that can fatigue the heart.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-6623/?t=675",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 810.16,
+        "title": "Meeting Imperfection",
+        "description": "He encourages breathing with this moment as it is, and asks whether experience can be met in a way that softens the heart.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-6623/?t=810",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1555.687,
+        "title": "Foreground and Background",
+        "description": "The teaching clarifies that attention to breath does not erase sound, emotion, or thought, but gives breathing the foreground.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-6623/?t=1556",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1920.687,
+        "title": "Freedom from Urgency",
+        "description": "He explores how thoughts and feelings can seem urgent, yet be allowed to come and go without being acted on immediately.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-6623/?t=1921",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 2516.081,
+        "title": "After the Practice",
+        "description": "The closing instructions scan for bracing, then turn to the body after the bell and the way silence changes the feel of ordinary life.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-6623/?t=2516",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 2773.081,
+        "title": "Returning in Daily Life",
+        "description": "Matthew ends by pointing to the sacredness of brief silence, the simplification that comes from less choice, and the practical details for practice discussions.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-6623/?t=2773",
+        "img": null,
+        "toc": true
+      }
+    ],
     "venue": null,
     "series": null,
     "tags": [],
@@ -23160,6 +23370,84 @@
     "description": "AudioDharma talk by Matthew Brensilver.",
     "image_url": "https://jeffharr.is/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
     "canonical_url": "https://jeffharr.is/brensilver/talks/audiodharma-6348/",
+    "podcast_description": "Matthew Brensilver offers a morning Dharma instruction centered on relaxing the habit of trying to get somewhere in practice. He repeatedly returns to the simple move of letting experience be known without trying to extract progress from it, then opens into how courage, care, and intimacy with life emerge when identification softens. The talk ends with a short exchange on the phrase “being known,” the use of language in practice, and a quiet closing encouragement for the retreat day.",
+    "short_summary": "A morning talk on relaxing striving and resting in awareness, with a brief discussion of “being known” and how language can support direct practice.",
+    "episode_image_url": "https://jeffharr.is/brensilver/artwork/audiodharma-6348.jpg",
+    "chapters_url": "https://jeffharr.is/brensilver/chapters/audiodharma-6348.json",
+    "chapters": [
+      {
+        "start": 0.0,
+        "title": "The Striving Mind",
+        "description": "He begins by describing the deep habit of trying to get somewhere and the pressure to squeeze something from the present moment.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-6348/?t=0",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 118.0,
+        "title": "Relaxing Into Practice",
+        "description": "The instruction shifts toward releasing ideas of progress, insight, and concentration, and toward offering the heart to whatever is present.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-6348/?t=118",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 345.0,
+        "title": "No Strings Attached",
+        "description": "He emphasizes a steady instruction to let awareness meet whatever is arising without using attention as a means to an end.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-6348/?t=345",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 840.0,
+        "title": "Courage and Heart",
+        "description": "The teaching turns toward the courage needed to open to challenge and the often underestimated capacity of the heart.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-6348/?t=840",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1239.551,
+        "title": "Simple, Relaxed, Wise",
+        "description": "After a long stretch of silence, he returns with a reminder that forgetfulness is not personal failure and awareness is not a personal achievement.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-6348/?t=1240",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1877.551,
+        "title": "Questions on Study",
+        "description": "A brief discussion follows about the role of reading and study, and how practice eventually asks for quiet rather than more teachings.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-6348/?t=1878",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 2240.551,
+        "title": "Being Known",
+        "description": "A question about the phrase ‘being known’ opens a clearer explanation of how experience can be related to as something known rather than something possessed.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-6348/?t=2241",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 2342.551,
+        "title": "Language and Right View",
+        "description": "The exchange deepens into how careful language, right view, and direct experience can loosen identification and support freedom.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-6348/?t=2343",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 2646.379,
+        "title": "Closing the Retreat Day",
+        "description": "He ends with practical retreat announcements and a gentle note of encouragement to stay sincere and see what unfolds.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-6348/?t=2646",
+        "img": null,
+        "toc": true
+      }
+    ],
     "venue": null,
     "series": null,
     "tags": [],
@@ -23184,6 +23472,68 @@
     "description": "AudioDharma talk by Matthew Brensilver.",
     "image_url": "https://jeffharr.is/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
     "canonical_url": "https://jeffharr.is/brensilver/talks/audiodharma-6346/",
+    "podcast_description": "This guided meditation begins with a brief framing of practice as awareness of mind and body, then turns toward Buddhism’s concern with suffering and release from it. Matthew Brensilver describes suffering as a kind of claustrophobia and invites a simple but radical gesture: let thoughts, sensations, sounds, and emotions be known. The meditation settles into repeated return to the breath and body, emphasizing that what is known does not have to be fought, and that awareness can feel like refuge.",
+    "short_summary": "A guided meditation on meeting suffering with awareness, relaxation, and repeated return to the breath, body, and sound.",
+    "episode_image_url": "https://jeffharr.is/brensilver/artwork/audiodharma-6346.jpg",
+    "chapters_url": "https://jeffharr.is/brensilver/chapters/audiodharma-6346.json",
+    "chapters": [
+      {
+        "start": 1.0,
+        "title": "Practice Framing",
+        "description": "The talk opens by naming meditation as awareness of mind and body and setting the basic direction of practice.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-6346/?t=1",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 63.0,
+        "title": "Suffering and Release",
+        "description": "Brensilver describes Buddhism’s central concern with suffering and frames it as a felt sense of being cornered.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-6346/?t=63",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 160.0,
+        "title": "More Than the Corner",
+        "description": "He points out that mindfulness does not erase pain, but reveals that the corner is fabricated and not the whole truth.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-6346/?t=160",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 240.0,
+        "title": "Knowing What Arises",
+        "description": "The instruction becomes a quiet act of knowing thoughts, sensations, emotion, and sound without adding harm.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-6346/?t=240",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 315.0,
+        "title": "Settling Into Refuge",
+        "description": "After a long stretch of silence, the meditation returns to the sense that being awake can feel like coming home.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-6346/?t=315",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 643.0,
+        "title": "Returning Again",
+        "description": "He reassures listeners that it is okay to stop manipulating experience and keep coming back to breath, body, sound, and emotion.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-6346/?t=643",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1504.336,
+        "title": "Trailing Audio",
+        "description": "The recording ends with repeated trailing words whose wording and role are unclear.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-6346/?t=1504",
+        "img": null,
+        "toc": true
+      }
+    ],
     "venue": null,
     "series": null,
     "tags": [],
