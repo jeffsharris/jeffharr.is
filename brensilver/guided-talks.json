@@ -23558,6 +23558,84 @@
     "description": "AudioDharma talk by Matthew Brensilver.",
     "image_url": "https://jeffharr.is/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
     "canonical_url": "https://jeffharr.is/brensilver/talks/audiodharma-5728/",
+    "podcast_description": "Matthew Brensilver offers a guided meditation on mindfulness of mind, moving from familiar self-descriptions toward direct noticing of images, words, and thought. He repeatedly invites the listener to see that it is safe not to know, and to rest in the awareness that receives experience rather than in the stream of narration. The practice leans gently into silence, showing how stepping off the ground of thought can soften urgency and change the felt shape of experience.",
+    "short_summary": "A guided meditation on noticing thought as thought and resting in the awareness that receives it.",
+    "episode_image_url": "https://jeffharr.is/brensilver/artwork/audiodharma-5728.jpg",
+    "chapters_url": "https://jeffharr.is/brensilver/chapters/audiodharma-5728.json",
+    "chapters": [
+      {
+        "start": 0.0,
+        "title": "Settling In",
+        "description": "The meditation begins with a quiet image of resting and a gradual turn toward the question of what it is like to be human.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-5728/?t=0",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 145.0,
+        "title": "Fresh Seeing",
+        "description": "He encourages a new way of looking, loosening old labels and meditative habits so experience can be met more freshly.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-5728/?t=145",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 470.0,
+        "title": "Breath Body Emotion",
+        "description": "Attention widens to breath, body, and emotion moving through experience, with silence supporting a repeated return to the present.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-5728/?t=470",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 603.0,
+        "title": "Trusting Not Knowing",
+        "description": "The practice emphasizes safety in not understanding or controlling, allowing the listener to jump off the ledge of certainty.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-5728/?t=603",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 796.0,
+        "title": "The Mind's Security",
+        "description": "Brensilver describes how thought tries to manufacture security by narrating, orienting, and keeping us between past and future.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-5728/?t=796",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1169.0,
+        "title": "Images And Words",
+        "description": "He points out the arising and passing of images and words, inviting awareness of the spaciousness that receives them.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-5728/?t=1169",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1502.182,
+        "title": "Silence As Ground",
+        "description": "Extended silences are used to show how the center of narrative gravity is an illusion and how awareness is still present underneath thought.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-5728/?t=1502",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1882.182,
+        "title": "Stepping Off",
+        "description": "The teaching returns to the central move of stepping off the ground of thought, not to solve problems but to soften urgency and open to mortality.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-5728/?t=1882",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 2352.942,
+        "title": "Closing Silence",
+        "description": "The final stretch remains mostly quiet, with a brief spoken close that leaves the practice in an open, unhurried ending.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-5728/?t=2353",
+        "img": null,
+        "toc": true
+      }
+    ],
     "venue": null,
     "series": null,
     "tags": [],
