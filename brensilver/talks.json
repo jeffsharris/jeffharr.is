@@ -16098,6 +16098,60 @@
     "description": "AudioDharma talk by Matthew Brensilver.",
     "image_url": "https://jeffharr.is/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
     "canonical_url": "https://jeffharr.is/brensilver/talks/audiodharma-21888/",
+    "podcast_description": "This guided meditation begins with a brief welcome and then settles into a mostly quiet sit, with only occasional instruction. Matthew emphasizes sensing where attention feels appropriate, letting the Dharma become personal rather than merely borrowed from tradition. The sit moves through softening, support from sangha, and a spacious acceptance of present conditions, ending with a quieter closing bell sequence.",
+    "short_summary": "A mostly quiet guided sit that moves from settling and softening into communal support and a deep acceptance of present conditions.",
+    "episode_image_url": "https://jeffharr.is/brensilver/artwork/audiodharma-21888.jpg",
+    "chapters_url": "https://jeffharr.is/brensilver/chapters/audiodharma-21888.json",
+    "chapters": [
+      {
+        "start": 84.0,
+        "title": "Settling In",
+        "description": "After the welcome, the practice turns toward sitting and sensing where attention feels appropriate.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21888/?t=84",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 214.0,
+        "title": "Personalizing Practice",
+        "description": "Matthew frames the Dharma as something we learn from the Buddha and lineage, but also have to discover in our own life.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21888/?t=214",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 579.0,
+        "title": "Letting Go",
+        "description": "The guidance softens into a quiet release, with an image of the Buddha whispering to let go and not fear silence.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21888/?t=579",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 968.0,
+        "title": "Sangha Support",
+        "description": "The silent presence of the sangha is invited as a field of goodwill that can soothe the heart and make letting go feel safer.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21888/?t=968",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1303.721,
+        "title": "Radical Permission",
+        "description": "The meditation opens into a deeper acceptance of present conditions, alongside a reminder that wisdom later determines the balance between receptivity and action.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21888/?t=1304",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1636.721,
+        "title": "Closing Bells",
+        "description": "The sit ends with a short sequence of bells and quiet closing space.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21888/?t=1637",
+        "img": null,
+        "toc": true
+      }
+    ],
     "venue": null,
     "series": null,
     "tags": [],
@@ -16122,6 +16176,76 @@
     "description": "AudioDharma talk by Matthew Brensilver.",
     "image_url": "https://jeffharr.is/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
     "canonical_url": "https://jeffharr.is/brensilver/talks/audiodharma-21889/",
+    "podcast_description": "Matthew Brensilver closes his Divine Abodes series with a talk on equanimity as a form of rest: not numbness, but a way of caring that can actually continue. He moves through the tension between compassion and helplessness, drawing on Ajahn Buddhadasa, Ajahn Sucitto, and T. S. Eliot to show how equanimity can purify care without hardening the heart. The talk is quiet and practical, with a steady emphasis on balance, sustainability, and the middle path between over-involvement and apathy.",
+    "short_summary": "A grounded talk on equanimity as sustainable care, true rest, and the middle path between compassion and helplessness.",
+    "episode_image_url": "https://jeffharr.is/brensilver/artwork/audiodharma-21889.jpg",
+    "chapters_url": "https://jeffharr.is/brensilver/chapters/audiodharma-21889.json",
+    "chapters": [
+      {
+        "start": 12.0,
+        "title": "Opening gratitude",
+        "description": "Matthew begins with a warm greeting and thanks the many people whose support makes the gathering possible.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21889/?t=12",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 117.0,
+        "title": "Ease and release",
+        "description": "He introduces equanimity through Ajahn Buddhadasa and reflects on the wish for beings to find ease as suffering keeps displacing suffering.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21889/?t=117",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 218.0,
+        "title": "Still, not rigid",
+        "description": "Using Ajahn Sucitto's phrasing, he describes equanimity as quiet, loving, and respectful, then sets it alongside the costly reality of compassion.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21889/?t=218",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 305.0,
+        "title": "The cost of caring",
+        "description": "A research study on compassion is used to explore why caring can feel taxing and why equanimity matters for making love sustainable.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21889/?t=305",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 447.0,
+        "title": "Heart at rest",
+        "description": "Matthew compares equanimity to sleep for the heart, warning against chasing stimulation and suggesting that rest does not require collapse.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21889/?t=447",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 580.0,
+        "title": "Caring and not caring",
+        "description": "With T. S. Eliot and a discussion of the Buddha's concern about nihilism, he frames the practice as a middle way between emptiness and over-significance.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21889/?t=580",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 691.0,
+        "title": "Purifying compassion",
+        "description": "He describes equanimity as a cross-check that refines compassion, reducing compulsive or self-righteous forms of care.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21889/?t=691",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 843.0,
+        "title": "Helplessness and goodwill",
+        "description": "The talk closes by naming helplessness directly and returning to a practical posture of resting without apathy, then ending with well-wishes and announcements.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21889/?t=843",
+        "img": null,
+        "toc": true
+      }
+    ],
     "venue": null,
     "series": null,
     "tags": [],
@@ -16146,6 +16270,68 @@
     "description": "AudioDharma talk by Matthew Brensilver.",
     "image_url": "https://jeffharr.is/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
     "canonical_url": "https://jeffharr.is/brensilver/talks/audiodharma-21873/",
+    "podcast_description": "Matthew Brensilver offers a guided meditation on self-acceptance that moves from settling the body into a broad, compassionate view of conditioning, history, and the forces that shape a life. He invites a radical yes to experience—not as a way to become better, but as the ground from which change can actually happen. The practice ends in a simple self-directed loving-kindness sequence: may I be happy, safe, protected, and at peace.",
+    "short_summary": "A guided meditation that gently turns toward the body, conditioning, and a radical acceptance that opens into loving-kindness.",
+    "episode_image_url": "https://jeffharr.is/brensilver/artwork/audiodharma-21873.jpg",
+    "chapters_url": "https://jeffharr.is/brensilver/chapters/audiodharma-21873.json",
+    "chapters": [
+      {
+        "start": 112.0,
+        "title": "Settling In",
+        "description": "The meditation begins by inviting stillness and an attentive arrival into practice.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21873/?t=112",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 244.0,
+        "title": "Body and Awareness",
+        "description": "Attention is poured into the body and the body is encouraged to feel bright and vivid with awareness.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21873/?t=244",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 383.0,
+        "title": "Kindness for Conditioning",
+        "description": "The teaching widens into compassion for the forces, seen and unseen, that have shaped this moment and this life.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21873/?t=383",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 552.0,
+        "title": "Accepting My Life",
+        "description": "He frames acceptance as a way of being with the whole of one's life, including suffering, good fortune, and helplessness.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21873/?t=552",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 922.0,
+        "title": "A Radical Yes",
+        "description": "The talk turns to the habit of sorting ourselves into acceptable and unacceptable parts and asks for a complete stop to that pattern.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21873/?t=922",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1079.0,
+        "title": "End the Inner Game",
+        "description": "Brensilver encourages dropping self-criticism, shame, and the constant behavioral correction project, and simply opening to the totality of what one is.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21873/?t=1079",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1583.382,
+        "title": "Loving-Kindness Closing",
+        "description": "The practice closes with repeated phrases of goodwill: may I be happy, safe, protected, and at peace.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21873/?t=1583",
+        "img": null,
+        "toc": true
+      }
+    ],
     "venue": null,
     "series": null,
     "tags": [],
@@ -16170,6 +16356,76 @@
     "description": "AudioDharma talk by Matthew Brensilver.",
     "image_url": "https://jeffharr.is/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
     "canonical_url": "https://jeffharr.is/brensilver/talks/audiodharma-21874/",
+    "podcast_description": "Matthew Brensilver focuses on mudita, or sympathetic joy, as a practice that cannot be forced but can be cultivated by loosening the body and softening the grip of self-view. He contrasts genuine delight in others with forced happiness, then works through the inner obstacles of envy, possessiveness, and comparison. The talk closes by framing another person's happiness as something the heart can simply partake in, without threat or loss.",
+    "short_summary": "A grounded reflection on sympathetic joy as an antidote to resentment, envy, and egoic comparison.",
+    "episode_image_url": "https://jeffharr.is/brensilver/artwork/audiodharma-21874.jpg",
+    "chapters_url": "https://jeffharr.is/brensilver/chapters/audiodharma-21874.json",
+    "chapters": [
+      {
+        "start": 12.0,
+        "title": "Arriving at Mudita",
+        "description": "Brensilver introduces sympathetic joy and notes that the morning practice had already moved through other territory before settling here.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21874/?t=12",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 57.46,
+        "title": "Joy Cannot Be Forced",
+        "description": "He defines mudita, distinguishes it from forced smiling, and emphasizes taking time with the physiology rather than pretending.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21874/?t=57",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 203.5,
+        "title": "Resentment and the Sutta",
+        "description": "He turns to the Anguttara Nikaya and a personal example to show mudita as an antidote to resentment.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21874/?t=204",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 340.78,
+        "title": "Joy Beyond Scarcity",
+        "description": "Brensilver contrasts worldly happiness with the deeper availability of joy through others' happiness and shared laughter.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21874/?t=341",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 479.9,
+        "title": "Letting Down the Burden",
+        "description": "He explores how joy can feel irresponsible or disloyal to grief, and argues for an emotional life that can hold several states without strain.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21874/?t=480",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 626.22,
+        "title": "What Blocks Joy",
+        "description": "The talk shifts to the obstacles to mudita—ownership, possessiveness, comparison, and envy—and how ego tries to absorb all goodness.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21874/?t=626",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 778.3,
+        "title": "Jealousy and Envy",
+        "description": "He distinguishes jealousy from envy, briefly cites evolutionary psychology, and then uses Matthieu Ricard to frame envy as wounded self-importance.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21874/?t=778",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 873.58,
+        "title": "Sufficient and Unthreatened",
+        "description": "He closes by describing the freedom that comes with sufficiency: other people's success no longer threatens the self and becomes a source of delight.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21874/?t=874",
+        "img": null,
+        "toc": true
+      }
+    ],
     "venue": null,
     "series": null,
     "tags": [],
@@ -16194,6 +16450,76 @@
     "description": "AudioDharma talk by Matthew Brensilver.",
     "image_url": "https://jeffharr.is/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
     "canonical_url": "https://jeffharr.is/brensilver/talks/audiodharma-21869/",
+    "podcast_description": "Matthew Brensilver leads a guided meditation on meeting affect directly rather than using thought to manage discomfort. He contrasts a gentle settling into practice with the more decisive attitude of “starting on a dime,” then repeatedly returns to renunciation as a willingness to feel what is present. The meditation emphasizes body-based attention, equanimity with emotional activation, and a quiet release of urgency and self-concern.",
+    "short_summary": "A guided meditation on feeling emotional activation directly and loosening the habit of using thought for refuge.",
+    "episode_image_url": "https://jeffharr.is/brensilver/artwork/audiodharma-21869.jpg",
+    "chapters_url": "https://jeffharr.is/brensilver/chapters/audiodharma-21869.json",
+    "chapters": [
+      {
+        "start": 12.0,
+        "title": "Settling into practice",
+        "description": "He begins by describing a gentle way of entering meditation and how the act of getting in can matter as much as where one arrives.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21869/?t=12",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 40.0,
+        "title": "Start on a dime",
+        "description": "Using Shinzen Young’s advice, he contrasts soft settling with a more immediate, decisive turn away from distraction.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21869/?t=40",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 103.0,
+        "title": "Putting thoughts down",
+        "description": "He names the sense of incompletion that can make thoughts feel urgent, and invites the listener to set them aside anyway.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21869/?t=103",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 270.0,
+        "title": "Renunciation as feeling",
+        "description": "Renunciation is framed not as suppression but as the willingness to feel the egoic wound, uncertainty, and ambiguity without using thought as a pacifier.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21869/?t=270",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 396.0,
+        "title": "Body and emotion",
+        "description": "The guidance shifts toward breathing, bodily awareness, and tending carefully to emotional circuits that insist thinking is necessary.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21869/?t=396",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 951.0,
+        "title": "Equanimity and urgency",
+        "description": "He explains how meeting emotional activation with equanimity can make everything feel less urgent.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21869/?t=951",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1074.0,
+        "title": "This is your life",
+        "description": "The talk turns toward presence in ordinary life, emphasizing that practice is not postponed until later and that this moment is already the whole field.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21869/?t=1074",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1415.626,
+        "title": "Release of self",
+        "description": "He closes by pointing to a deepening intimacy with experience that requires loosening self-clinging and resting in what he calls the wondrous dark.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21869/?t=1416",
+        "img": null,
+        "toc": true
+      }
+    ],
     "venue": null,
     "series": null,
     "tags": [],
@@ -16218,6 +16544,84 @@
     "description": "AudioDharma talk by Matthew Brensilver.",
     "image_url": "https://jeffharr.is/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
     "canonical_url": "https://jeffharr.is/brensilver/talks/audiodharma-21866/",
+    "podcast_description": "Matthew Brensilver leads a quiet guided meditation that begins with settling the body, moving attention through chest, belly, breath, and earthiness. The practice gradually opens into a reflection on how attention reveals love and care, then turns toward the difficulty of hatred and the choice to meet it with breathing and affection. The close is sparse and intimate, with repeated pointers to simply feel love and allow it to be known.",
+    "short_summary": "A guided meditation on grounding attention in the body and letting it reveal love, care, and a wiser response to hatred.",
+    "episode_image_url": "https://jeffharr.is/brensilver/artwork/audiodharma-21866.jpg",
+    "chapters_url": "https://jeffharr.is/brensilver/chapters/audiodharma-21866.json",
+    "chapters": [
+      {
+        "start": 0.0,
+        "title": "Opening and Settling",
+        "description": "After a brief welcome, the talk moves into silence and the first instructions for settling into practice.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21866/?t=0",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 138.0,
+        "title": "Arriving in the Body",
+        "description": "Attention is invited to settle as if for the first time, preparing for a more embodied practice.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21866/?t=138",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 241.0,
+        "title": "Chest, Breath, Belly",
+        "description": "The meditation moves through the heart center, the lungs, and then down into the belly as a place of groundedness.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21866/?t=241",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 504.0,
+        "title": "Earth and Rootedness",
+        "description": "Breath is used to connect more deeply with the earth element and the steadiness of being rooted.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21866/?t=504",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 704.0,
+        "title": "Attention Reveals Love",
+        "description": "The teaching shifts from body awareness to the idea that careful attention helps reveal what we love and care about.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21866/?t=704",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 909.0,
+        "title": "Patience with Longing",
+        "description": "Rather than forcing answers, the practice emphasizes patience and letting the poignancy of being born arise on its own.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21866/?t=909",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1043.0,
+        "title": "Heart Energy in the Body",
+        "description": "From groundedness, the heart energy is invited to fill the body, with emphasis on tenderness, flexibility, and wishing ourselves well.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21866/?t=1043",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1302.728,
+        "title": "Care and the Wider Field",
+        "description": "The reflection broadens into ways attention can express care for one’s life, with the meditation holding space for what arises.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21866/?t=1303",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1619.068,
+        "title": "Love over Hatred",
+        "description": "A poetic sequence reframes hatred as something brittle and unnecessary, ending with the invitation to breathe and feel love directly.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21866/?t=1619",
+        "img": null,
+        "toc": true
+      }
+    ],
     "venue": null,
     "series": null,
     "tags": [],
@@ -16242,6 +16646,76 @@
     "description": "AudioDharma talk by Matthew Brensilver.",
     "image_url": "https://jeffharr.is/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
     "canonical_url": "https://jeffharr.is/brensilver/talks/audiodharma-21867/",
+    "podcast_description": "Matthew Brensilver explores compassion as love in the face of dukkha, moving from the shock of suffering to a more nuanced understanding of its causes. He brings in the Buddha, Hala Alyan, and Katherine Schultz to show how grief, impermanence, and dependent arising can open into a steadier, wiser care. The talk stays close to the question of how to love without collapsing into enmeshment, despair, or advice-giving.",
+    "short_summary": "A grounded reflection on compassion as wise, steady love that can meet suffering without being overwhelmed by it.",
+    "episode_image_url": "https://jeffharr.is/brensilver/artwork/audiodharma-21867.jpg",
+    "chapters_url": "https://jeffharr.is/brensilver/chapters/audiodharma-21867.json",
+    "chapters": [
+      {
+        "start": 16.0,
+        "title": "Suffering Is Everywhere",
+        "description": "He opens by naming dukkha as both obvious and strangely hard to fully see.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21867/?t=16",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 52.0,
+        "title": "Deep and Hard to See",
+        "description": "A Buddha quotation frames suffering as something that becomes clearer the closer we look.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21867/?t=52",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 108.0,
+        "title": "The Question of Love",
+        "description": "A grief poem and reflection on how to respond turn the talk toward love as an unresolved, living question.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21867/?t=108",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 237.0,
+        "title": "What Compassion Is",
+        "description": "Compassion is defined as love in the face of suffering, informed by wisdom and a more careful diagnosis of causes.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21867/?t=237",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 386.0,
+        "title": "Loss Reveals Impermanence",
+        "description": "Katherine Schultz’s reflections on her father’s death deepen the contemplation of anicca and the pervasive reach of loss.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21867/?t=386",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 562.0,
+        "title": "Not Enmeshment",
+        "description": "He distinguishes compassion from emotional contagion, insistence, and the wish to control another’s suffering.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21867/?t=562",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 682.0,
+        "title": "Grief Held by Love",
+        "description": "Compassion is presented as intimate, non-demanding, and willing to grieve without making grief the final word.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21867/?t=682",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 861.0,
+        "title": "Wise and Steady Love",
+        "description": "A Thich Nhat Hanh line serves as a checkpoint for the role of wisdom, equanimity, and inner freedom in making compassion sustainable.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21867/?t=861",
+        "img": null,
+        "toc": true
+      }
+    ],
     "venue": null,
     "series": null,
     "tags": [],
@@ -16266,6 +16740,84 @@
     "description": "AudioDharma talk by Matthew Brensilver.",
     "image_url": "https://jeffharr.is/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
     "canonical_url": "https://jeffharr.is/brensilver/talks/audiodharma-21865/",
+    "podcast_description": "Matthew Brensilver explores a common Dharma tension: whether practice is about accepting ourselves or changing ourselves. Using short teaching stories and quotes from Niels Bohr, Suzuki Roshi, Marsha Linehan, Kobun Chino Roshi, and William James, he argues that real mindfulness holds both truths together without turning acceptance into a strategy. The talk moves through shame, self-view, and the craving to become someone else, then settles into a quiet case for non-shame as the basis for honest transformation.",
+    "short_summary": "A short Dharma talk on how mindfulness can hold both self-acceptance and real change without shame.",
+    "episode_image_url": "https://jeffharr.is/brensilver/artwork/audiodharma-21865.jpg",
+    "chapters_url": "https://jeffharr.is/brensilver/chapters/audiodharma-21865.json",
+    "chapters": [
+      {
+        "start": 12.0,
+        "title": "The central question",
+        "description": "Matthew opens by naming the tension between teachings of inherent goodness and teachings that emphasize effort and transformation.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21865/?t=12",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 55.0,
+        "title": "A pointed teaching story",
+        "description": "He tells a Larry Rosenberg story that sharpens the issue by showing how spiritual sincerity can still be entangled with greed and self-deception.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21865/?t=55",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 126.0,
+        "title": "Two profound truths",
+        "description": "Bohr and Suzuki Roshi are used to frame acceptance and change as companions rather than opposites.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21865/?t=126",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 188.0,
+        "title": "Acceptance without bargaining",
+        "description": "Matthew draws on Marsha Linehan to say that acceptance stops being acceptance when it is used as a means to a result.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21865/?t=188",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 299.0,
+        "title": "Shame and self-view",
+        "description": "He turns to the depth of shame in self-experience and explains why even ordinary conditioning can feel devastating from the perspective of self-view.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21865/?t=299",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 381.0,
+        "title": "Sitting with reality",
+        "description": "Kobun Chino Roshi’s words lead into a description of practice as returning to who and where we are, even when that is painful.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21865/?t=381",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 465.0,
+        "title": "The craving to become",
+        "description": "Matthew describes bhava tanha, the urge for the next version of ourselves, and warns that practice can become egoic adornment.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21865/?t=465",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 545.0,
+        "title": "Freedom from shame",
+        "description": "William James widens the horizon as Matthew says that when shame loosens, the heart can meet the Dharma reverently and without self-deprecation.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21865/?t=545",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 635.0,
+        "title": "Change from acceptance",
+        "description": "He closes by saying that change grows from a platform of acceptance, not from a desire to arrive at a fixed identity.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21865/?t=635",
+        "img": null,
+        "toc": true
+      }
+    ],
     "venue": null,
     "series": null,
     "tags": [],
@@ -16290,6 +16842,60 @@
     "description": "AudioDharma talk by Matthew Brensilver.",
     "image_url": "https://jeffharr.is/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
     "canonical_url": "https://jeffharr.is/brensilver/talks/audiodharma-21870/",
+    "podcast_description": "Matthew Brensilver explores emptiness as the progressive dereification of the self-model: the way thoughts, preferences, and ownership stop feeling like reality and become seen as passing phenomena. He begins with a childhood thought experiment about everything falling away, then moves into a more technical explanation of how identification, craving, and selfing are built. The talk closes by linking equanimity, quiet, and a greater comfort with not knowing.",
+    "short_summary": "A quiet, technical dharma talk on how mindfulness reveals and loosens the self-model through dereification, equanimity, and not knowing.",
+    "episode_image_url": "https://jeffharr.is/brensilver/artwork/audiodharma-21870.jpg",
+    "chapters_url": "https://jeffharr.is/brensilver/chapters/audiodharma-21870.json",
+    "chapters": [
+      {
+        "start": 18.0,
+        "title": "A Childhood Thought Experiment",
+        "description": "Matthew opens with an early memory of imagining family, history, and the universe dissolving into nothingness, using it to introduce emptiness through lived experience.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21870/?t=18",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 258.0,
+        "title": "What Dereification Means",
+        "description": "He defines dereification as thoughts becoming mere thoughts rather than reality, and explains mindfulness as seeing phenomena as phenomena.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21870/?t=258",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 434.0,
+        "title": "Thoughts Become Objects",
+        "description": "Using Thomas Metzinger’s language, he describes how a thought like lunch can be recognized as an object of attention instead of being automatically absorbed into the self-model.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21870/?t=434",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 573.0,
+        "title": "Layers of Selfing",
+        "description": "The talk broadens from single thoughts to the ongoing song of self, showing how autobiography, body, and unnoticed preferences keep reinforcing identity.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21870/?t=573",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 737.0,
+        "title": "Ownership and Self",
+        "description": "He cites the Majjhima Nikaya to point toward ownership as a key mechanism of selfing, then links equanimity to loosening craving, aversion, and the sense of 'mine'.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21870/?t=737",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 851.0,
+        "title": "Quiet and Not Knowing",
+        "description": "Matthew closes with Ram Dass and Nisargadatta, emphasizing quiet, comfort with uncertainty, and the openness that comes when reference points soften.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21870/?t=851",
+        "img": null,
+        "toc": true
+      }
+    ],
     "venue": null,
     "series": null,
     "tags": [],
@@ -16314,6 +16920,84 @@
     "description": "AudioDharma talk by Matthew Brensilver.",
     "image_url": "https://jeffharr.is/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
     "canonical_url": "https://jeffharr.is/brensilver/talks/audiodharma-21856/",
+    "podcast_description": "Matthew Brensilver explores loving-kindness as something different from ordinary wanting: not a stronger preference, but a letting go of clinging, fear, and motivational desperation. He moves from Buddhist teaching to the felt realities of attachment in family and romantic love, then toward a more honest, less possessive way of caring that can include grief and dukkha without becoming overwhelmed by them. The talk closes by linking metta to moral elevation, rest, and a heart made less available to hatred.",
+    "short_summary": "A guided reflection on metta as release from clinging, with honest attention to attachment, dukkha, and the quiet force of goodness.",
+    "episode_image_url": "https://jeffharr.is/brensilver/artwork/audiodharma-21856.jpg",
+    "chapters_url": "https://jeffharr.is/brensilver/chapters/audiodharma-21856.json",
+    "chapters": [
+      {
+        "start": 16.0,
+        "title": "Opening into metta",
+        "description": "He begins by naming the week’s theme and setting up the central contrast between ordinary liking and love.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21856/?t=16",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 35.0,
+        "title": "Love beyond wanting",
+        "description": "Matthew argues that love is not just another form of wanting, but something that stands outside hedonic preference.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21856/?t=35",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 109.0,
+        "title": "Wanting and fear",
+        "description": "He uses the Buddha’s teaching on clinging to show how wanting and fear share a common motivational pressure that contracts the mind.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21856/?t=109",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 209.0,
+        "title": "Metta as release",
+        "description": "Loving-kindness is presented as a vast, receptive stance that appears when desperation and grasping fade.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21856/?t=209",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 266.0,
+        "title": "Approaching what hurts",
+        "description": "He describes love and mindfulness as forms of moving toward avoided experience so pain can unwind and lose its charge.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21856/?t=266",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 368.0,
+        "title": "Kindness, not niceness",
+        "description": "Matthew clarifies the kind of love he means by distinguishing kindness from mere social niceness and by naming the difference between generosity and possessiveness.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21856/?t=368",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 512.0,
+        "title": "Attachment with grace",
+        "description": "Using examples from parenting and romantic longing, he acknowledges that some attachment is irreducible and asks whether we can consent to its dukkha without utopian expectations.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21856/?t=512",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 620.0,
+        "title": "Love without control",
+        "description": "He turns toward a love that seeks no control, with metta arising through recognition of goodness, honesty, and moral beauty.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21856/?t=620",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 742.0,
+        "title": "Abiding in goodness",
+        "description": "The talk closes by linking loving-kindness to inner uplift, rest, and a heart that becomes less and less willing to live inside hatred and separation.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21856/?t=742",
+        "img": null,
+        "toc": true
+      }
+    ],
     "venue": null,
     "series": null,
     "tags": [],
@@ -16338,6 +17022,76 @@
     "description": "AudioDharma talk by Matthew Brensilver.",
     "image_url": "https://jeffharr.is/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
     "canonical_url": "https://jeffharr.is/brensilver/talks/audiodharma-21857/",
+    "podcast_description": "Matthew Brensilver explores metta as something distinct from liking or wanting: not another form of preference, but a different stance of the heart. He traces how fear and craving contract the mind, then shows how loving-kindness can become an approach to pain, a purification practice, and a way of abiding with less control and more openness. The talk closes by linking metta to moral elevation, the recognition of goodness, and the possibility of resting in a warm, spacious heart.",
+    "short_summary": "A clear reflection on metta as a non-possessive love that softens fear, approaches pain, and rests in goodness.",
+    "episode_image_url": "https://jeffharr.is/brensilver/artwork/audiodharma-21857.jpg",
+    "chapters_url": "https://jeffharr.is/brensilver/chapters/audiodharma-21857.json",
+    "chapters": [
+      {
+        "start": 35.0,
+        "title": "Love beyond liking",
+        "description": "He opens by separating metta from ordinary liking and desire, arguing that love is not just another point on a spectrum of preference.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21857/?t=35",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 109.0,
+        "title": "Wanting and fear",
+        "description": "He connects wanting and fear as forms of clinging that contract the mind and turn experience into a transaction.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21857/?t=109",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 216.0,
+        "title": "Metta as approach",
+        "description": "Loving-kindness is presented as a move toward what is avoided, easing anxiety and helping pain loosen its grip.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21857/?t=216",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 338.0,
+        "title": "What love is not",
+        "description": "He clarifies that metta is not niceness, but an open and receptive love that lets go of control.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21857/?t=338",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 419.0,
+        "title": "Attachment and family",
+        "description": "Using a mentor’s distinction and a few literary references, he acknowledges that some love remains bound up with attachment and hurt.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21857/?t=419",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 619.0,
+        "title": "Goodness as source",
+        "description": "He turns toward a love that seeks no control and arises from seeing goodness and honesty clearly.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21857/?t=619",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 699.0,
+        "title": "Moral elevation",
+        "description": "He brings in the psychology of moral elevation to describe how witnessing goodness can move us into greater devotion to it.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21857/?t=699",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 803.0,
+        "title": "Abiding in love",
+        "description": "The talk closes by describing metta as an abode of rest and warmth that makes hatred less and less tenable.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21857/?t=803",
+        "img": null,
+        "toc": true
+      }
+    ],
     "venue": null,
     "series": null,
     "tags": [],
@@ -16362,6 +17116,76 @@
     "description": "AudioDharma talk by Matthew Brensilver.",
     "image_url": "https://jeffharr.is/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
     "canonical_url": "https://jeffharr.is/brensilver/talks/audiodharma-21862/",
+    "podcast_description": "This guided meditation invites a gentle settling into posture, breath, and a quieter relationship to vigilance. Matthew Brensilver repeatedly returns to the sense that worry, defensiveness, and the “project called my life” can be set down for a moment, making room for tranquility and not knowing. The practice gradually opens into the felt relief of letting go and the capacities that arise with a calmer nervous system: love, kindness, compassion, forgiveness, care, and peace.",
+    "short_summary": "A guided meditation on settling, softening vigilance, and briefly setting down the burden of life as a project.",
+    "episode_image_url": "https://jeffharr.is/brensilver/artwork/audiodharma-21862.jpg",
+    "chapters_url": "https://jeffharr.is/brensilver/chapters/audiodharma-21862.json",
+    "chapters": [
+      {
+        "start": 12.0,
+        "title": "Arriving and settling",
+        "description": "After the opening welcome, the meditation begins with settling the body and allowing time before trying to assume any inner posture.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21862/?t=12",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 165.0,
+        "title": "Relaxed, alert posture",
+        "description": "He orients the body toward a balance of openness and alertness, encouraging patience with the settling process.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21862/?t=165",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 313.0,
+        "title": "Patience with worry",
+        "description": "The instruction turns toward the mind's wayward longings and the habit of worrying before trust has fully arrived.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21862/?t=313",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 485.0,
+        "title": "Breath over vigilance",
+        "description": "Breath is used as a way to signal safety to the body and loosen defensiveness, with worry contrasted against tranquility.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21862/?t=485",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 694.0,
+        "title": "Tranquility and not knowing",
+        "description": "He emphasizes surrendering to breathing, silence, and uncertainty, letting the mind rest outside hyper-arousal.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21862/?t=694",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 926.0,
+        "title": "Putting down the project",
+        "description": "A central teaching frames the project of one's life as a burden and invites a temporary release of that self-management.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21862/?t=926",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1038.4,
+        "title": "Returning without carrying",
+        "description": "The meditation stays with the simplicity of the moment, acknowledging that the project will be picked up again without needing to be held constantly.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21862/?t=1038",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1455.085,
+        "title": "Wholesome qualities emerge",
+        "description": "In the quiet that follows, he links settling with the Dharma and names the relief of letting go alongside love, kindness, compassion, forgiveness, care, and peace.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21862/?t=1455",
+        "img": null,
+        "toc": true
+      }
+    ],
     "venue": null,
     "series": null,
     "tags": [],
@@ -16386,6 +17210,76 @@
     "description": "AudioDharma talk by Matthew Brensilver.",
     "image_url": "https://jeffharr.is/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
     "canonical_url": "https://jeffharr.is/brensilver/talks/audiodharma-21863/",
+    "podcast_description": "Matthew Brensilver offers a quiet, practical reflection on the Divine Abodes as a way of orienting the heart toward love rather than hate. He begins with the felt difference love makes when life is imperfect, then moves through non-hatred, ethical conduct, and the four Brahma-viharas as trainable resting places for the mind. The talk closes by inviting listeners to notice where aversion appears and to meet it with flexibility, improvisation, and a steadier return to love.",
+    "short_summary": "A grounded exploration of the Brahma-viharas as a practical home base for the mind, especially when aversion is available.",
+    "episode_image_url": "https://jeffharr.is/brensilver/artwork/audiodharma-21863.jpg",
+    "chapters_url": "https://jeffharr.is/brensilver/chapters/audiodharma-21863.json",
+    "chapters": [
+      {
+        "start": 50.0,
+        "title": "Choosing Love First",
+        "description": "Matthew frames love as a commitment that changes how experience lands, especially when life does not go well.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21863/?t=50",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 180.0,
+        "title": "Why Hatred Arises",
+        "description": "He reflects on samsara, the inevitability of things to object to, and how pain often seeks a target.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21863/?t=180",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 288.0,
+        "title": "Non-hatred and Letting Go",
+        "description": "The talk turns to non-hatred, renunciation, and the way quiet attention reveals the burden that aversion places on the heart.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21863/?t=288",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 433.0,
+        "title": "Four Species of Love",
+        "description": "Matthew introduces the Brahma-viharas and interprets metta, compassion, mudita, and equanimity in vivid, practical terms.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21863/?t=433",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 633.0,
+        "title": "Where the Mind Rests",
+        "description": "He emphasizes that these qualities are not ideals to admire but places where the mind can increasingly come home.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21863/?t=633",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 714.0,
+        "title": "Training Good Habits",
+        "description": "The teaching shifts to discipline and repetition, suggesting that practice makes love more available and hate more effortful.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21863/?t=714",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 840.0,
+        "title": "Depth and Breadth",
+        "description": "Matthew broadens the teaching to show love as something that can pervade the mind deeply and extend outward across situations.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21863/?t=840",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 929.0,
+        "title": "Closing Invitation",
+        "description": "He ends with an invitation to watch aversion and stay flexible, with the promise of continuing the theme in later talks.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21863/?t=929",
+        "img": null,
+        "toc": true
+      }
+    ],
     "venue": null,
     "series": null,
     "tags": [],
@@ -16410,6 +17304,68 @@
     "description": "AudioDharma talk by Matthew Brensilver.",
     "image_url": "https://jeffharr.is/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
     "canonical_url": "https://jeffharr.is/brensilver/talks/audiodharma-21824/",
+    "podcast_description": "Matthew Brensilver offers a quiet guided meditation centered on gathering the goodness of practice and meeting the present moment without violence. The talk moves from recollecting years of practice and the pain and wisdom that have led here, into a gentler way of relating to breath, body, and mind. He then turns toward refuge, showing how to rest in what is already here rather than trying to outthink uncertainty.",
+    "short_summary": "A guided meditation on recollecting practice, softening into the present, and finding a deeper refuge in ordinary experience.",
+    "episode_image_url": "https://jeffharr.is/brensilver/artwork/audiodharma-21824.jpg",
+    "chapters_url": "https://jeffharr.is/brensilver/chapters/audiodharma-21824.json",
+    "chapters": [
+      {
+        "start": 12.0,
+        "title": "Settling In",
+        "description": "He welcomes listeners and invites them to settle, alert but comfortable, for meditation.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21824/?t=12",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 67.0,
+        "title": "Recollecting Practice",
+        "description": "The meditation begins by recalling moments of willingness, retreat, practice, and friendship with the Dharma.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21824/?t=67",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 248.0,
+        "title": "All Come To This",
+        "description": "He gathers the whole arc of practice and life—pain, greed, hate, wisdom, and love—into the present moment.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21824/?t=248",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 338.0,
+        "title": "Gently Tending Life",
+        "description": "A long stretch of repeated phrases emphasizes tenderness, acceptance, and non-violence toward experience.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21824/?t=338",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 838.0,
+        "title": "Ordinary Strategies",
+        "description": "He names the ways we try to manage uncertainty through pleasure, planning, and rehashing the past.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21824/?t=838",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1006.0,
+        "title": "Deeper Refuge",
+        "description": "The meditation shifts toward refuge, resting in breath, body, and the present life as it is.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21824/?t=1006",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1446.302,
+        "title": "Winds Of Change",
+        "description": "He closes by inviting trust in impermanence, letting change move through without harm.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21824/?t=1446",
+        "img": null,
+        "toc": true
+      }
+    ],
     "venue": null,
     "series": null,
     "tags": [],
@@ -16434,6 +17390,60 @@
     "description": "AudioDharma talk by Matthew Brensilver.",
     "image_url": "https://jeffharr.is/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
     "canonical_url": "https://jeffharr.is/brensilver/talks/audiodharma-21823/",
+    "podcast_description": "Matthew Brensilver begins with a line from Rachel Kushner and uses it to explore why people imagine that special people exist. From there, he turns toward idealization, childhood dependence, ambivalence, and the difference between revering goodness and deifying a person. The talk ends by linking this to sympathetic joy and to practicing for the right reasons rather than for applause.",
+    "short_summary": "A reflection on idealization, childhood longing, and learning to honor goodness without turning it into specialness.",
+    "episode_image_url": "https://jeffharr.is/brensilver/artwork/audiodharma-21823.jpg",
+    "chapters_url": "https://jeffharr.is/brensilver/chapters/audiodharma-21823.json",
+    "chapters": [
+      {
+        "start": 17.0,
+        "title": "The question of specialness",
+        "description": "Brensilver opens with Rachel Kushner’s line about charisma and uses it to ask why the mind wants to believe in special people.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21823/?t=17",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 150.0,
+        "title": "Projection and childhood",
+        "description": "He looks at the pleasures and costs of idealization, then connects the pull toward special people to early dependence on powerful caretakers.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21823/?t=150",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 286.0,
+        "title": "Growing up unresolved",
+        "description": "He notes that adulthood does not simply resolve childhood, and suggests that the work is to notice our movement toward pedestal-making without needing to disparage anyone.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21823/?t=286",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 417.0,
+        "title": "Reverence without ownership",
+        "description": "The talk shifts toward maturity, ambivalence, and a form of reverence aimed at goodness itself rather than at specialness in a person.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21823/?t=417",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 589.0,
+        "title": "Sympathetic joy",
+        "description": "Brensilver uses mudita as a way of recognizing goodness without comparison, possession, or self-doubt.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21823/?t=589",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 666.0,
+        "title": "Practice without applause",
+        "description": "He closes with Norman Fischer on practicing because it is right and necessary, and reframes applause as praise for life and goodness more than for any individual.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21823/?t=666",
+        "img": null,
+        "toc": true
+      }
+    ],
     "venue": null,
     "series": null,
     "tags": [],
@@ -16458,6 +17468,68 @@
     "description": "AudioDharma talk by Matthew Brensilver.",
     "image_url": "https://jeffharr.is/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
     "canonical_url": "https://jeffharr.is/brensilver/talks/audiodharma-21803/",
+    "podcast_description": "This guided meditation invites a gentle, receptive relationship with practice rather than an effort to force it. Matthew Brensilver emphasizes settling into the body, meeting agitation with patience and quiet love, and tending tenderly to any sense of distance from the Dharma. The talk later turns to recollecting Buddha, Dharma, and Sangha as a way of re-entering sensitivity, urgency, and trust, before ending in a simple offering of the heart with no strings attached.",
+    "short_summary": "A guided meditation on settling into the body, softening resistance, and letting recollection and care bring the Dharma closer.",
+    "episode_image_url": "https://jeffharr.is/brensilver/artwork/audiodharma-21803.jpg",
+    "chapters_url": "https://jeffharr.is/brensilver/chapters/audiodharma-21803.json",
+    "chapters": [
+      {
+        "start": 136.0,
+        "title": "Settling In",
+        "description": "The meditation opens by finding some sweetness in sangha, technology, and lineage, then asks for a gradual settling of attention.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21803/?t=136",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 318.0,
+        "title": "Body and Earth",
+        "description": "Attention moves into the body on the earth, with repeated emphasis on gravity as a kind of embrace.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21803/?t=318",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 410.0,
+        "title": "Meeting Unsettledness",
+        "description": "Agitation, tension, and numbness are met with patience, tolerance, awareness, and quiet love.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21803/?t=410",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 536.0,
+        "title": "When Dharma Feels Distant",
+        "description": "Matthew names the felt remoteness of practice and invites listeners not to force connection, but to tend the sense of separation gently.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21803/?t=536",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 843.0,
+        "title": "Recalling the Triple Gem",
+        "description": "Recollecting Buddha, Dharma, and Sangha is presented as a way to remember, soften, and enter greater sensitivity and care.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21803/?t=843",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 983.0,
+        "title": "Courage To Keep Looking",
+        "description": "The meditation deepens into the courage of meeting this moment as it is, staying open to surprise rather than assuming we already know it.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21803/?t=983",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1436.705,
+        "title": "Offering Without Strings",
+        "description": "The close releases expectation and simply offers the heart to the Dharma, without insisting on any result.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21803/?t=1437",
+        "img": null,
+        "toc": true
+      }
+    ],
     "venue": null,
     "series": null,
     "tags": [],
@@ -16482,6 +17554,76 @@
     "description": "AudioDharma talk by Matthew Brensilver.",
     "image_url": "https://jeffharr.is/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
     "canonical_url": "https://jeffharr.is/brensilver/talks/audiodharma-21804/",
+    "podcast_description": "Matthew Brensilver explores fear as a useful survival system that can also overlearn danger and narrow the heart. Using the story of Joao, a man who became radically generous after a stroke, he asks how fear constrains love, generosity, and our sense of what matters. The talk closes by returning to Thich Nhat Hanh on meeting fear directly, suggesting that courage and honest awareness can soften worry and open a more radical love.",
+    "short_summary": "A reflection on fear’s protective role and how less fear may open generosity, love, and courage.",
+    "episode_image_url": "https://jeffharr.is/brensilver/artwork/audiodharma-21804.jpg",
+    "chapters_url": "https://jeffharr.is/brensilver/chapters/audiodharma-21804.json",
+    "chapters": [
+      {
+        "start": 9.0,
+        "title": "Fear Keeps Us Safe",
+        "description": "Matthew begins by describing fear as a powerful survival mechanism that helps animals like us detect danger and stay protected.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21804/?t=9",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 164.0,
+        "title": "Fear Of Suffering",
+        "description": "He turns to the difference between sensitivity to suffering and fear of suffering, especially fear of others’ pain.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21804/?t=164",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 218.0,
+        "title": "Joao’s Sudden Generosity",
+        "description": "A story about Joao, who becomes unusually generous after a stroke, serves as the central example for the talk.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21804/?t=218",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 354.0,
+        "title": "Brains And Freedom",
+        "description": "Matthew reflects on the role of brain injury, survival design, and the limits fear places on spontaneous giving.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21804/?t=354",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 475.0,
+        "title": "What Love Might Be",
+        "description": "He asks what love would look like if it were less constrained by fear and by a world read mainly as threat.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21804/?t=475",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 577.0,
+        "title": "Social Rules And Self-Consciousness",
+        "description": "He considers how custom, entitlement, and self-consciousness can narrow generosity, while imagining small acts of freer giving.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21804/?t=577",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 715.0,
+        "title": "Meeting Fear Directly",
+        "description": "Matthew brings in Thich Nhat Hanh’s teaching that fear is eased by acknowledging it and looking into its source.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21804/?t=715",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 804.0,
+        "title": "Courage And Radical Love",
+        "description": "He ends with the idea that opening to finitude and mortality can melt worry and make love more radical.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21804/?t=804",
+        "img": null,
+        "toc": true
+      }
+    ],
     "venue": null,
     "series": null,
     "tags": [],
@@ -16506,6 +17648,76 @@
     "description": "AudioDharma talk by Matthew Brensilver.",
     "image_url": "https://jeffharr.is/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
     "canonical_url": "https://jeffharr.is/brensilver/talks/audiodharma-21763/",
+    "podcast_description": "Matthew Brensilver offers a guided meditation on how the in-breath and out-breath can be felt as different but complementary ways of practicing: vitality on the in-breath, release on the out-breath. He encourages a steady, simple attention that learns to welcome both alertness and surrender, and then extends that felt sense into the claim that this moment is not a dress rehearsal but the place where life is actually lived. The talk stays close to breath, posture, and the emotional textures of grasping, fear, brightness, and letting go.",
+    "short_summary": "A guided meditation on balancing enlivening in-breaths with releasing out-breaths, and recognizing this moment as the place where life is lived.",
+    "episode_image_url": "https://jeffharr.is/brensilver/artwork/audiodharma-21763.jpg",
+    "chapters_url": "https://jeffharr.is/brensilver/chapters/audiodharma-21763.json",
+    "chapters": [
+      {
+        "start": 14.0,
+        "title": "Arriving and orienting",
+        "description": "The meditation opens with a warm welcome and a check-in with the heart, then names the basic theme of learning the rhythms of practice.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21763/?t=14",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 109.0,
+        "title": "Vitality and surrender",
+        "description": "Brensilver introduces the idea that some practitioners lean toward the in-breath while others prefer the out-breath, framing maturity as learning to love both.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21763/?t=109",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 186.0,
+        "title": "Settling the body",
+        "description": "He invites a comfortable posture and a bright, steady presence as the body breathes in and out.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21763/?t=186",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 290.0,
+        "title": "The in-breath's vividness",
+        "description": "Attention turns to the rush, brightness, and poignancy of inhalation, including the way it can disrupt monotony and remind us not to miss our lives.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21763/?t=290",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 430.0,
+        "title": "Releasing the out-breath",
+        "description": "The out-breath is explored as a letting go of tension, vigilance, fear, and subtle ownership, with repeated encouragement to breathe out.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21763/?t=430",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 741.0,
+        "title": "Breath and clarity",
+        "description": "The talk deepens into the breath cycle as a moment-by-moment expression of clarity, release, brightness, and darkness.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21763/?t=741",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1051.0,
+        "title": "Letting go of becoming",
+        "description": "Brensilver links the out-breath with softening the impulse to become someone slightly better, and the in-breath with shaking off the idea that this moment is only rehearsal.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21763/?t=1051",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1449.636,
+        "title": "This is our life",
+        "description": "The closing section widens the frame: meditation is not separate from life, because life is found in breath, thought, feeling, seeing, and hearing here and now.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21763/?t=1450",
+        "img": null,
+        "toc": true
+      }
+    ],
     "venue": null,
     "series": null,
     "tags": [],
@@ -16530,6 +17742,76 @@
     "description": "AudioDharma talk by Matthew Brensilver.",
     "image_url": "https://jeffharr.is/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
     "canonical_url": "https://jeffharr.is/brensilver/talks/audiodharma-21764/",
+    "podcast_description": "Matthew Brensilver uses the image of an aperture to explore how attention can narrow or widen in meditation and in daily life. He traces when a smaller field is stabilizing, when a wider one is called for by compassion or service, and why the skill lies less in ideology than in timing. The talk stays practical and reflective, with a quiet emphasis on noticing what is wise now rather than forcing one mode of practice.",
+    "short_summary": "A practical talk on when to narrow or widen attention in meditation, suffering, compassion, and daily life.",
+    "episode_image_url": "https://jeffharr.is/brensilver/artwork/audiodharma-21764.jpg",
+    "chapters_url": "https://jeffharr.is/brensilver/chapters/audiodharma-21764.json",
+    "chapters": [
+      {
+        "start": 19.0,
+        "title": "Aperture of Attention",
+        "description": "He introduces attention as a spotlight whose width can vary, using the breath and the six sense gates as examples.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21764/?t=19",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 93.0,
+        "title": "Settling In",
+        "description": "He explains why practice often begins with a narrower field, especially when experience feels too intense or uncertain.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21764/?t=93",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 177.0,
+        "title": "Opening With Stability",
+        "description": "He describes how attention can widen after some settling, and why practice is not a simple beginner-versus-advanced hierarchy.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21764/?t=177",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 240.0,
+        "title": "Life Beyond Meditation",
+        "description": "He extends the same pattern to daily life, asking what the right scope of concern is in a given moment or day.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21764/?t=240",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 351.0,
+        "title": "Contraction and Compassion",
+        "description": "He challenges the assumption that contraction is always bad and expansion always good, emphasizing skillfulness over moral ranking.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21764/?t=351",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 490.0,
+        "title": "When Narrowing Helps",
+        "description": "He gives examples of overwhelm, helplessness, and painful political absorption where narrowing attention can be protective and practical.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21764/?t=490",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 645.0,
+        "title": "When Wide Attention Heals",
+        "description": "He offers the counterexample that distress or depletion can sometimes call for a much wider field, including service and giving.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21764/?t=645",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 709.0,
+        "title": "Wise Attention Now",
+        "description": "He closes by distinguishing care from resignation and returning to the central question of what attention is appropriate now.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21764/?t=709",
+        "img": null,
+        "toc": true
+      }
+    ],
     "venue": null,
     "series": null,
     "tags": [],
@@ -16554,6 +17836,76 @@
     "description": "AudioDharma talk by Matthew Brensilver.",
     "image_url": "https://jeffharr.is/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
     "canonical_url": "https://jeffharr.is/brensilver/talks/audiodharma-21718/",
+    "podcast_description": "Matthew Brensilver leads a quiet guided meditation on vulnerability as a source of steadiness rather than weakness. The practice moves from settling the body and refreshing curiosity, into reflections on being undefended, allowing experience to pass through without hardening. He closes by linking courage to a balanced middle way and to a heart that can remain open without losing its center.",
+    "short_summary": "A guided meditation on meeting experience with vulnerability, openness, and courage.",
+    "episode_image_url": "https://jeffharr.is/brensilver/artwork/audiodharma-21718.jpg",
+    "chapters_url": "https://jeffharr.is/brensilver/chapters/audiodharma-21718.json",
+    "chapters": [
+      {
+        "start": 12.0,
+        "title": "Settling In",
+        "description": "He invites listeners to get cozy, but not too cozy, and to bring relaxed, energetic openness to body and mind.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21718/?t=12",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 106.0,
+        "title": "Fresh Curiosity",
+        "description": "The practice turns toward sincerity as a willingness to be surprised, with attention resting evenly in the present moment.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21718/?t=106",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 172.0,
+        "title": "Breathing and Waking",
+        "description": "A brief settling period emphasizes breathing, relaxing, and waking up to experience as it is.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21718/?t=172",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 362.0,
+        "title": "Vulnerability as Strength",
+        "description": "He reframes tenderness and vulnerability as the basis of real power, not brittle self-protection.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21718/?t=362",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 503.0,
+        "title": "Undefended Heart",
+        "description": "The talk deepens into the idea of being undefended without losing center, allowing softness, clarity, and love to coexist.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21718/?t=503",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 750.96,
+        "title": "Attuning to Courage",
+        "description": "Listeners are guided to sense their own power and to meet the moment with an open chest and a readiness to let feeling move through.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21718/?t=751",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1004.52,
+        "title": "Middle Way of Courage",
+        "description": "He brings in Aristotle’s image of courage between recklessness and cowardice, using it to point toward balanced, grounded openness.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21718/?t=1005",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1394.914,
+        "title": "Nothing to Defend",
+        "description": "The meditation closes by suggesting that when there is no territory to protect, defensiveness softens and confidence remains.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-21718/?t=1395",
+        "img": null,
+        "toc": true
+      }
+    ],
     "venue": null,
     "series": null,
     "tags": [],
