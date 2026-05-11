@@ -23660,6 +23660,76 @@
     "description": "AudioDharma talk by Matthew Brensilver.",
     "image_url": "https://jeffharr.is/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
     "canonical_url": "https://jeffharr.is/brensilver/talks/audiodharma-4495/",
+    "podcast_description": "Matthew Brensilver offers a short, practical introduction to walking meditation, treating it as an extension of sitting practice rather than a break from it. He emphasizes staying with the sensations of the feet, noticing boredom and the mind’s search for stimulation, and being aware of how visual impressions affect attention. The talk ends with a light reminder, attributed to Suzuki Roshi, that practice can be very important without becoming heavy or self-serious.",
+    "short_summary": "A brief introduction to walking meditation as a way of noticing sensation, stimulation, and the mind’s habits with lightness.",
+    "episode_image_url": "https://jeffharr.is/brensilver/artwork/audiodharma-4495.jpg",
+    "chapters_url": "https://jeffharr.is/brensilver/chapters/audiodharma-4495.json",
+    "chapters": [
+      {
+        "start": 9.0,
+        "title": "Welcome and sign-up",
+        "description": "Matthew introduces himself, mentions practice discussions, and orients listeners to the short walking period that follows.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-4495/?t=9",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 55.0,
+        "title": "What walking practice is",
+        "description": "He explains walking meditation as following the sensations of the feet in the same way sitting practice follows the breath.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-4495/?t=55",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 116.0,
+        "title": "Going nowhere",
+        "description": "He points out how walking back and forth can reveal the mind’s hunger for stimulation and its discomfort with boredom or scatteredness.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-4495/?t=116",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 163.0,
+        "title": "Reaching down",
+        "description": "Rather than reaching outward, the practice invites a deeper interest in the simple sensations of walking and breathing.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-4495/?t=163",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 185.0,
+        "title": "Seeing and association",
+        "description": "Matthew notes how visually rich the walking environment can be and how even small sights can pull on memory and association.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-4495/?t=185",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 238.0,
+        "title": "Feet and toe",
+        "description": "He offers a few concrete ways to steady attention in walking, including the lifting, swinging, and placing of the feet or narrowing attention to a toe.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-4495/?t=238",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 270.0,
+        "title": "Practice without strain",
+        "description": "He closes the instruction with a Suzuki Roshi quote, encouraging listeners to take the practice seriously without becoming rigid or heavy.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-4495/?t=270",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 288.0,
+        "title": "Bell and closing",
+        "description": "The talk ends with logistical instructions for the next periods of sitting and cleanup, followed by a brief send-off.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-4495/?t=288",
+        "img": null,
+        "toc": true
+      }
+    ],
     "venue": null,
     "series": null,
     "tags": [],
