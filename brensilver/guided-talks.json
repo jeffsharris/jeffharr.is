@@ -23754,6 +23754,76 @@
     "description": "AudioDharma talk by Matthew Brensilver.",
     "image_url": "https://jeffharr.is/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
     "canonical_url": "https://jeffharr.is/brensilver/talks/audiodharma-4040/",
+    "podcast_description": "Matthew Brensilver offers a guided meditation and teaching on working with anger by breaking experience into three strands: body sensation, mental images, and internal talk. He explains why that distinction matters, then leads a practice that moves through settling the body, noticing emotional sensation, listening to thought, and observing images. The talk stays practical and grounded, with a quiet emphasis on curiosity, steadiness, and not being swept into reactivity.",
+    "short_summary": "A guided meditation and teaching on untangling anger by noticing body sensation, inner talk, and mental images.",
+    "episode_image_url": "https://jeffharr.is/brensilver/artwork/audiodharma-4040.jpg",
+    "chapters_url": "https://jeffharr.is/brensilver/chapters/audiodharma-4040.json",
+    "chapters": [
+      {
+        "start": 12.0,
+        "title": "Welcome and purpose",
+        "description": "Matthew welcomes the group and introduces the practice as a way to unpack what anger is made of.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-4040/?t=12",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 81.0,
+        "title": "Breaking experience apart",
+        "description": "He draws on the Buddha’s maps of experience and Shinzen Young’s three-part lens to separate body feeling, mental images, and internal talk.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-4040/?t=81",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 211.0,
+        "title": "How anger tangles",
+        "description": "He describes how the three strands of anger reinforce one another and how that tangle leads to harsh conclusions and actions.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-4040/?t=211",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 405.0,
+        "title": "More manageability",
+        "description": "Matthew contrasts overwhelm with the added manageability that comes from noticing each component on its own.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-4040/?t=405",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 503.0,
+        "title": "Settling into practice",
+        "description": "The guided meditation begins with posture, balance, and a gentle settling into the body.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-4040/?t=503",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 867.0,
+        "title": "Feeling in the body",
+        "description": "Attention moves to emotional sensation in the body, including how emotion shows up physically and how to stay with it without acting out.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-4040/?t=867",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1404.973,
+        "title": "Listening to thought",
+        "description": "He shifts attention to the felt location of inner speech and invites listening to thinking as sound-like activity rather than identification.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-4040/?t=1405",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1757.133,
+        "title": "Images and integration",
+        "description": "The practice turns to mental images, then returns to the full picture of feeling, talk, and image as strands to meet with mindfulness, wisdom, and love.",
+        "url": "https://jeffharr.is/brensilver/talks/audiodharma-4040/?t=1757",
+        "img": null,
+        "toc": true
+      }
+    ],
     "venue": null,
     "series": null,
     "tags": [],
