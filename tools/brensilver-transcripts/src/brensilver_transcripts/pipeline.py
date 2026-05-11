@@ -1513,53 +1513,83 @@ def generate_artwork(
     if not prompt:
         raise RuntimeError(f"No image prompt found for {talk.id}; run metadata first")
 
+    prompt_options = [("metadata", prompt)]
+    fallback_prompt = safe_artwork_fallback_prompt()
+    if fallback_prompt.strip() != prompt.strip():
+        prompt_options.append(("safe_fallback", fallback_prompt))
+
     candidates = [image_model]
     for fallback in IMAGE_MODEL_FALLBACKS:
         if fallback not in candidates:
             candidates.append(fallback)
 
     errors: list[str] = []
-    for model in candidates:
-        payloads = [
-            {
-                "model": model,
-                "prompt": prompt,
-                "size": image_size,
-                "quality": image_quality,
-                "output_format": "jpeg",
-            },
-            {
-                "model": model,
-                "prompt": prompt,
-                "size": image_size,
-                "quality": image_quality,
-            },
-        ]
-        for payload in payloads:
-            try:
-                response = openai_binary_image_request(api_key, payload)
-                image_bytes = extract_image_bytes(response)
-                image_path.parent.mkdir(parents=True, exist_ok=True)
-                image_path.write_bytes(image_bytes)
-                manifest = {
-                    "talk": talk.__dict__,
-                    "created_at": now_iso(),
-                    "image_model": model,
-                    "requested_image_model": image_model,
+    for prompt_source, prompt_text in prompt_options:
+        prompt_rejected_for_safety = False
+        for model in candidates:
+            payloads = [
+                {
+                    "model": model,
+                    "prompt": prompt_text,
                     "size": image_size,
                     "quality": image_quality,
-                    "image_path": str(image_path),
-                    "relative_image_src": f"../artwork/images/{image_path.name}",
-                    "prompt": prompt,
-                }
-                write_json(manifest_path, manifest)
-                return manifest
-            except RuntimeError as error:
-                message = str(error)
-                errors.append(f"{model}: {message[:300]}")
-                if "invalid_request_error" not in message and "unknown_parameter" not in message:
-                    break
+                    "output_format": "jpeg",
+                },
+                {
+                    "model": model,
+                    "prompt": prompt_text,
+                    "size": image_size,
+                    "quality": image_quality,
+                },
+            ]
+            for payload in payloads:
+                try:
+                    response = openai_binary_image_request(api_key, payload)
+                    image_bytes = extract_image_bytes(response)
+                    image_path.parent.mkdir(parents=True, exist_ok=True)
+                    image_path.write_bytes(image_bytes)
+                    manifest = {
+                        "talk": talk.__dict__,
+                        "created_at": now_iso(),
+                        "image_model": model,
+                        "requested_image_model": image_model,
+                        "size": image_size,
+                        "quality": image_quality,
+                        "image_path": str(image_path),
+                        "relative_image_src": f"../artwork/images/{image_path.name}",
+                        "prompt": prompt_text,
+                        "prompt_source": prompt_source,
+                    }
+                    write_json(manifest_path, manifest)
+                    return manifest
+                except RuntimeError as error:
+                    message = str(error)
+                    errors.append(f"{prompt_source}/{model}: {message[:300]}")
+                    if is_image_safety_error(message):
+                        prompt_rejected_for_safety = True
+                        break
+                    if "invalid_request_error" not in message and "unknown_parameter" not in message:
+                        break
+            if prompt_rejected_for_safety:
+                break
     raise RuntimeError("Image generation failed: " + " | ".join(errors))
+
+
+def safe_artwork_fallback_prompt() -> str:
+    return (
+        "Square editorial illustration for a contemplative Dharma podcast. "
+        "A quiet open gate at the edge of a meadow at dawn, with a simple winding path, "
+        "scattered leaves, and a clear spacious sky. The image should evoke trust, release, "
+        "and calm awareness through natural forms only. Soft paper texture, restrained "
+        "palette of moss green, warm ochre, charcoal, muted blue, and bone white. "
+        "No text, no logos, no portrait, no ornate religious iconography. "
+        "Clear at small podcast thumbnail size."
+    )
+
+
+def is_image_safety_error(message: str) -> bool:
+    lowered = message.lower()
+    return "safety" in lowered or "rejected" in lowered
 
 
 def extract_image_bytes(response: dict[str, Any]) -> bytes:
@@ -2235,7 +2265,7 @@ def run_qmd(paths: CorpusPaths) -> None:
         result = subprocess.run(command, capture_output=True, text=True)
         if result.returncode != 0:
             combined = result.stdout + result.stderr
-            if "already exists" in combined and "collection" in command:
+            if "already exists" in combined:
                 print(combined.strip())
                 continue
             raise subprocess.CalledProcessError(
