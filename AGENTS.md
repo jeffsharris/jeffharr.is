@@ -9,6 +9,7 @@
 - Public feed merge lives in `tools/brensilver-feed/` and publishes static files under `brensilver/`.
 - Feed-specific agent orientation lives in `tools/brensilver-feed/AGENTS.md`; read it before changing sources or generated feed artifacts.
 - Local transcription/search tooling lives in `tools/brensilver-transcripts/`.
+- Future-agent runbook for adding Matthew sources, using QMD, private Dharma Seed keys, automation, and adding other Dharma teachers lives at `tools/brensilver-transcripts/docs/dharma-content-agent-runbook.md`.
 - Transcript artifacts are intentionally written to `.local-corpus/brensilver/`, which is gitignored and should not be deployed unless Jeff explicitly asks.
 - The transcript workflow is split deliberately: `whisper-1` raw segments, GPT-5.4 mini transcript correction, then a separate external reference extraction pass.
 - Corrected transcripts also pass through local silence-hallucination cleanup; removed rows are preserved as `suppressed_segments` in corrected JSON.

@@ -4,6 +4,10 @@ This directory is the implementation for the public Matthew Brensilver podcast
 feeds. The deployed/generated artifacts live outside this tool at
 `/brensilver/`.
 
+For the whole content system, including local ingestion, QMD, recurring
+automation, private Dharma Seed keys, and adding another teacher, read
+`../brensilver-transcripts/docs/dharma-content-agent-runbook.md`.
+
 ## Edit Here, Generate There
 
 - Hand-edit source code, tests, and config in `tools/brensilver-feed/`.

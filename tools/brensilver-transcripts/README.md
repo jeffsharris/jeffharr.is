@@ -331,6 +331,8 @@ Install it only after `.env.local` exists and the pilot has been reviewed.
 
 ## Notes For Future Agents
 
+- Start with `docs/dharma-content-agent-runbook.md` when adding a source, using
+  QMD, touching automation, or extending this pattern to another teacher.
 - Public podcast feed generation still lives in `tools/brensilver-feed/`.
 - `run-corpus` consumes `brensilver/talks.json` and calls the feed builder after
   each batch; it does not fetch new source listings by itself.

@@ -23,6 +23,21 @@ fi
 : "${BRENSILVER_MEDIA_BASE_URL:=https://jeffharr.is/brensilver/}"
 : "${BRENSILVER_AUTO_PUBLISH:=0}"
 
+if [[ "$BRENSILVER_AUTO_PUBLISH" == "1" ]]; then
+  if [[ -n "$(git status --porcelain)" ]]; then
+    echo "Working tree is not clean; refusing unattended auto-publish." >&2
+    git status --short >&2
+    exit 1
+  fi
+
+  branch="$(git branch --show-current)"
+  if [[ -z "$branch" ]]; then
+    echo "Cannot auto-publish from a detached HEAD." >&2
+    exit 1
+  fi
+  git pull --ff-only origin "$branch"
+fi
+
 echo "[$(date -Is)] Refreshing Brensilver source feeds"
 python3 scripts/build-brensilver-feed.py --copy-artwork
 
@@ -43,7 +58,7 @@ if [[ "$BRENSILVER_AUTO_PUBLISH" == "1" ]]; then
     echo "No Brensilver generated artifact changes to publish."
   else
     git commit -m "Update Brensilver generated feed artifacts"
-    git push origin "$(git branch --show-current)"
+    git push origin "$branch"
   fi
 fi
 
