@@ -7,7 +7,7 @@ from xml.etree import ElementTree as ET
 
 from brensilver.build import apply_site_image, is_guided_practice, split_talks_for_feeds
 from brensilver.metadata import enrich_talks, write_episode_media
-from brensilver.models import Talk
+from brensilver.models import PodcastChapter, Talk
 from brensilver.rss import build_rss
 from brensilver.rss import merge_talks
 from brensilver.sources.audiodharma import parse_audiodharma_listing
@@ -300,6 +300,13 @@ class PodcastMetadataTests(unittest.TestCase):
             podcast_description="A talk about practice.",
             episode_image_url="https://media.example/brensilver/artwork/audiodharma-1.jpg",
             chapters_url="https://media.example/brensilver/chapters/audiodharma-1.json",
+            chapters=[
+                PodcastChapter(
+                    start=121,
+                    title="Wisdom from ordinariness",
+                    url="https://jeffharr.is/brensilver/talks/audiodharma-1/?t=121",
+                )
+            ],
         )
         xml = build_rss(
             [talk],
@@ -317,8 +324,14 @@ class PodcastMetadataTests(unittest.TestCase):
         }
         item = root.find("./channel/item")
         self.assertIsNotNone(item)
+        description = item.findtext("description")
+        summary = item.findtext("itunes:summary", namespaces=namespaces)
         self.assertEqual(item.findtext("link"), "https://jeffharr.is/brensilver/talks/audiodharma-1/")
-        self.assertIn("A talk about practice.", item.findtext("description"))
+        self.assertIn("A talk about practice.", description)
+        self.assertIn("02:01 Wisdom from ordinariness", description)
+        self.assertNotIn("https://jeffharr.is/brensilver/talks/audiodharma-1/?t=121", description)
+        self.assertIn("02:01 Wisdom from ordinariness", summary)
+        self.assertNotIn("https://jeffharr.is/brensilver/talks/audiodharma-1/?t=121", summary)
         self.assertEqual(
             item.find("itunes:image", namespaces).attrib["href"],
             "https://media.example/brensilver/artwork/audiodharma-1.jpg",

@@ -145,7 +145,6 @@ def _podcast_description(talk: Talk) -> str:
             "Chapters:\n"
             + "\n".join(
                 f"{_format_timestamp(chapter.start)} {chapter.title}"
-                + (f" - {chapter.url}" if chapter.url else "")
                 for chapter in talk.chapters
             )
         )
