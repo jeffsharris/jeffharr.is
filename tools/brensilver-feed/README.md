@@ -36,12 +36,20 @@ Feed sources are configured in `config/sources.json`. The current source types
 are:
 
 - `dharmaseed`: RSS feeds from Dharma Seed teacher or retreat URLs.
+- `dharmaseed_player`: a single private Dharma Seed player page, used when a
+  recording is playable with an access key but not listed in the retreat RSS.
 - `audiodharma`: Matthew's AudioDharma speaker listing.
 
 Dharma Seed retreat feeds can contain multiple teachers. Add
 `"include_speakers": ["Matthew Brensilver"]` to a retreat source to keep only
 Matthew's talks. The parser filters by `<itunes:author>` after normalizing case
 and punctuation.
+
+For private Dharma Seed RSS feeds or player items, put the key in an
+environment variable with `access_key_env`; do not commit the key into
+`config/sources.json`. The generated RSS enclosure URLs still contain the key
+because podcast clients need direct authenticated MP3 URLs. If the same talk is
+seen from a public and private source, the merge prefers the access-key URL.
 
 To add another Dharma Seed stream:
 

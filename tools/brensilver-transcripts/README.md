@@ -297,23 +297,34 @@ pipeline can be rerun safely.
 
 ## Ongoing Operation
 
-The intended recurring job on the Mac Mini is:
+The intended recurring job on the Mac Mini is the repo-root ingestion runner:
 
 ```sh
 cd /Users/embergpt/code/flipper/brensilver/site
-PYTHONPATH=tools/brensilver-transcripts/src \
-  python3 -m brensilver_transcripts.pipeline run-corpus \
-  --limit 20 \
-  --feed-every 20 \
-  --media-base-url https://jeffharr.is/brensilver/ \
-  --copy-artwork \
-  --update-qmd \
-  --build-feedback-viewer
+scripts/run-brensilver-ingestion.sh
+```
+
+That script first runs `scripts/build-brensilver-feed.py --copy-artwork` to
+refresh all configured source feeds into `brensilver/talks.json`, then runs
+`run-corpus` so any pending talks get transcripts, correction, reference
+extraction, episode metadata, artwork, markdown, QMD indexing, and rebuilt
+feeds. This order matters: `run-corpus` consumes `brensilver/talks.json`; it
+does not discover new upstream source items by itself.
+
+Useful environment variables:
+
+```sh
+BRENSILVER_INGEST_LIMIT=20
+BRENSILVER_FEED_EVERY=20
+BRENSILVER_MEDIA_BASE_URL=https://jeffharr.is/brensilver/
+BRENSILVER_AUTO_PUBLISH=1
 ```
 
 Use `launchd` or a Codex automation for the actual schedule on macOS. A limit of
 20 gives the feed a useful new batch while keeping a transient API or network
-issue from turning one run into a large failure surface.
+issue from turning one run into a large failure surface. Set
+`BRENSILVER_AUTO_PUBLISH=1` only for the unattended job that should commit and
+push generated `brensilver/` artifacts after a successful run.
 
 A launchd template lives at `launchd/com.jeffharris.brensilver-transcripts.plist.example`.
 Install it only after `.env.local` exists and the pilot has been reviewed.
@@ -323,6 +334,9 @@ Install it only after `.env.local` exists and the pilot has been reviewed.
 - Public podcast feed generation still lives in `tools/brensilver-feed/`.
 - `run-corpus` consumes `brensilver/talks.json` and calls the feed builder after
   each batch; it does not fetch new source listings by itself.
+- If an agent adds a new Dharma Seed or AudioDharma source, they must run
+  `scripts/run-brensilver-ingestion.sh` before publishing so new talks are not
+  left with only feed entries and no transcript/artwork/index artifacts.
 - Full transcripts are local until Jeff explicitly decides what should be
   published.
 - QMD isolation depends on always passing `--index dharma`.

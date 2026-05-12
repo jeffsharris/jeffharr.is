@@ -6,14 +6,194 @@
     "title": "Daily Life Practice, Love, and the World (Retreat at Spirit Rock)",
     "speaker": "Matthew Brensilver",
     "published_at": "2026-05-07T19:19:00+00:00",
-    "link": "https://dharmaseed.org/talks/97003/",
-    "audio_url": "https://dharmaseed.org/talks/97003/20260507-Matthew_Brensilver-SR-daily_life_practice_love_and_the_world_retreat_at_spirit_rock-97003.mp3?rss=",
+    "link": "https://dharmaseed.org/talks/97003/?access_key=RMLI47PRFc",
+    "audio_url": "https://dharmaseed.org/talks/97003/20260507-Matthew_Brensilver-SR-daily_life_practice_love_and_the_world_retreat_at_spirit_rock-97003.mp3?rss=&access_key=RMLI47PRFc",
     "audio_type": "audio/mpeg",
     "audio_length": 22381306,
     "duration": "46:34",
     "description": "(Spirit Rock Meditation Center)",
     "image_url": "https://jeffharr.is/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
     "canonical_url": "https://jeffharr.is/brensilver/talks/dharmaseed-97003/",
+    "podcast_description": "Matthew Brensilver explores how daily life practice becomes a matter of love, not just mindfulness. He opens with Dipa Ma’s instruction to \"sit in the back and bless everyone,\" then develops a long reflection on how blessing, friendship, and ethical conduct soften the frozen self. The talk moves through Joko Beck’s ice-and-puddle image, the cost of clinging to views, the role of spiritual friendship, and ends with a wide, quiet meditation on love across deep time and what it means for love to illuminate even when it cannot \"land.\"",
+    "short_summary": "A reflection on love as daily practice, traced through blessing, softening, spiritual friendship, and love that reaches beyond one life.",
+    "episode_image_url": "https://jeffharr.is/brensilver/artwork/dharmaseed-97003.jpg",
+    "chapters_url": "https://jeffharr.is/brensilver/chapters/dharmaseed-97003.json",
+    "chapters": [
+      {
+        "start": 0.0,
+        "title": "Opening Blessing",
+        "description": "Matthew begins with Dipa Ma’s simple instruction to bless everyone and uses it to frame practice as a form of love.",
+        "url": "https://jeffharr.is/brensilver/talks/dharmaseed-97003/?t=0",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 105.44,
+        "title": "Mindfulness and Love",
+        "description": "He contrasts ordinary ideas of mindfulness with the steadier habit of love, and introduces the Brahma Viharas as practical allies.",
+        "url": "https://jeffharr.is/brensilver/talks/dharmaseed-97003/?t=105",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 346.24,
+        "title": "The Frozen Self",
+        "description": "Using Charlotte Joko Beck’s ice-cube image, he describes how practice melts hardness, thirst, and self-protection.",
+        "url": "https://jeffharr.is/brensilver/talks/dharmaseed-97003/?t=346",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 558.16,
+        "title": "Views and Letting Go",
+        "description": "He turns to frozenness in the architecture of self, the danger of clinging to views, and the kind of investigation that softens rather than confirms identity.",
+        "url": "https://jeffharr.is/brensilver/talks/dharmaseed-97003/?t=558",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 865.04,
+        "title": "Moral Force",
+        "description": "With Martin Luther King and other examples, he argues that persuasive moral life comes from deep letting go, not rigid niceness or rule-following.",
+        "url": "https://jeffharr.is/brensilver/talks/dharmaseed-97003/?t=865",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1116.72,
+        "title": "Warm Hand to Warm Hand",
+        "description": "Drawing on Bhikkhu Bodhi and his own practice history, he emphasizes that minds are shaped by friendship and that good company can melt egoic pressure.",
+        "url": "https://jeffharr.is/brensilver/talks/dharmaseed-97003/?t=1117",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1416.768,
+        "title": "Love and Sila",
+        "description": "He develops love as an ethical path, showing how retreat and daily life reveal the heart’s capacity for care, grief, and a widening sense of what matters.",
+        "url": "https://jeffharr.is/brensilver/talks/dharmaseed-97003/?t=1417",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1833.768,
+        "title": "World, Loss, and Solidarity",
+        "description": "The talk widens into concern for the species, the limits of consolation, and the grief that belongs to love and moral solidarity.",
+        "url": "https://jeffharr.is/brensilver/talks/dharmaseed-97003/?t=1834",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 2206.768,
+        "title": "Light That Does Not Land",
+        "description": "He closes with the Buddha’s simile of a ray of light that finds no surface, then uses Catherine Rundell’s writing and the Greenland shark to evoke endurance, deep time, and love beyond the horizon of one life.",
+        "url": "https://jeffharr.is/brensilver/talks/dharmaseed-97003/?t=2207",
+        "img": null,
+        "toc": true
+      }
+    ],
+    "venue": "Spirit Rock Meditation Center",
+    "series": "Retreat at Spirit Rock",
+    "tags": [],
+    "transcript": {
+      "status": "pending",
+      "url": null,
+      "text_path": null
+    }
+  },
+  {
+    "id": "dharmaseed:96948",
+    "source": "Dharma Seed",
+    "source_id": "96948",
+    "title": "Dharma Talk (Retreat at Spirit Rock)",
+    "speaker": "Matthew Brensilver",
+    "published_at": "2026-05-04T12:00:00+00:00",
+    "link": "https://dharmaseed.org/talks/player/96948.html?access_key=RMLI47PRFc",
+    "audio_url": "https://dharmaseed.org/talks/96948/20260504-Matthew_Brensilver-SR-dharma_talk_retreat_at_spirit_rock-96948.mp3?access_key=RMLI47PRFc",
+    "audio_type": "audio/mpeg",
+    "audio_length": 22767829,
+    "duration": "47:22",
+    "description": "(Spirit Rock Meditation Center)",
+    "image_url": "https://jeffharr.is/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+    "canonical_url": "https://jeffharr.is/brensilver/talks/dharmaseed-96948/",
+    "podcast_description": "Matthew Brensilver gives a quiet, wide-ranging talk on silence as both a refuge and a revealing condition of practice. He starts with the everyday noise of conversation and broadens into samsara, craving, and the felt relief of silence, then turns to attention as the main way experience is shaped. Along the way he uses canonical lines, Ajahn Chah, Suzuki Roshi, and a passage from Jorie Graham to show how practice can soften reactivity and let insight emerge.",
+    "short_summary": "A Dharma talk on silence, attention, and how letting experience settle can reveal a clearer way of living.",
+    "episode_image_url": "https://jeffharr.is/brensilver/artwork/dharmaseed-96948.jpg",
+    "chapters_url": "https://jeffharr.is/brensilver/chapters/dharmaseed-96948.json",
+    "chapters": [
+      {
+        "start": 1.0,
+        "title": "Opening with conversation",
+        "description": "He begins with a social psychology study about when conversations end, using it as an entry into the talk's theme of silence and social coordination.",
+        "url": "https://jeffharr.is/brensilver/talks/dharmaseed-96948/?t=1",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 167.28,
+        "title": "Noise and samsara",
+        "description": "Silence is contrasted with the noise of craving, aversion, and the restless push of samsara, with the felt sense that the quieter we get, the more noise we can notice.",
+        "url": "https://jeffharr.is/brensilver/talks/dharmaseed-96948/?t=167",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 333.36,
+        "title": "Silence as refuge",
+        "description": "He quotes the Samyutta Nikaya's fire imagery, describes the heart's wish to be unstimulated, and emphasizes that practice is not against sound but toward a different relationship with it.",
+        "url": "https://jeffharr.is/brensilver/talks/dharmaseed-96948/?t=333",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 684.12,
+        "title": "Not bothering the sound",
+        "description": "An Ajahn Chah story and Shinzen Young's phrase 'love it to death' frame radical non-resistance: sound is met directly, without the extra layer of aversion.",
+        "url": "https://jeffharr.is/brensilver/talks/dharmaseed-96948/?t=684",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 825.16,
+        "title": "What samadhi means",
+        "description": "Samadhi is described as unification, attentional satiety, and a non-split heart, while also being protected from egoic capture and the fantasy that it is only something we do.",
+        "url": "https://jeffharr.is/brensilver/talks/dharmaseed-96948/?t=825",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1225.931,
+        "title": "Attention shapes world",
+        "description": "William James and the Buddha are invoked to show that volition and phenomena are rooted in attention, and that expanding attentional sensitivity expands the lived world.",
+        "url": "https://jeffharr.is/brensilver/talks/dharmaseed-96948/?t=1226",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1603.171,
+        "title": "Aiming and sustaining",
+        "description": "He explains the two phases of attention—aiming and sustaining—using Ajahn Sucitto's image of pointing and opening the hand, then connects this to mindfulness practice and its shifts in stability.",
+        "url": "https://jeffharr.is/brensilver/talks/dharmaseed-96948/?t=1603",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1902.211,
+        "title": "Fear and meaning-making",
+        "description": "The talk turns to how fear drives conceptualization, prediction, and salience, and how retreat can signal safety enough for the mind to relax its vigilance.",
+        "url": "https://jeffharr.is/brensilver/talks/dharmaseed-96948/?t=1902",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 2374.611,
+        "title": "Hearing silence",
+        "description": "He closes with perceptual research, then Jorie Graham's reflections on silence, grief, and time, ending by pointing toward insight and a clearer sense of how to live.",
+        "url": "https://jeffharr.is/brensilver/talks/dharmaseed-96948/?t=2375",
+        "img": null,
+        "toc": true
+      }
+    ],
     "venue": "Spirit Rock Meditation Center",
     "series": "Retreat at Spirit Rock",
     "tags": [],
@@ -30,14 +210,84 @@
     "title": "The Why of Practice: Three Possible Answers (Retreat at Spirit Rock)",
     "speaker": "Matthew Brensilver",
     "published_at": "2026-05-01T19:19:01+00:00",
-    "link": "https://dharmaseed.org/talks/96938/",
-    "audio_url": "https://dharmaseed.org/talks/96938/20260501-Matthew_Brensilver-SR-the_why_of_practice_three_possible_answers_retreat_at_spirit_rock-96938.mp3?rss=",
+    "link": "https://dharmaseed.org/talks/96938/?access_key=RMLI47PRFc",
+    "audio_url": "https://dharmaseed.org/talks/96938/20260501-Matthew_Brensilver-SR-the_why_of_practice_three_possible_answers_retreat_at_spirit_rock-96938.mp3?rss=&access_key=RMLI47PRFc",
     "audio_type": "audio/mpeg",
     "audio_length": 20409919,
     "duration": "42:27",
     "description": "(Spirit Rock Meditation Center)",
     "image_url": "https://jeffharr.is/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
     "canonical_url": "https://jeffharr.is/brensilver/talks/dharmaseed-96938/",
+    "podcast_description": "Matthew Brensilver opens with a skeptical look at meditation research and uses it to suggest that discomfort on retreat is not a sign that something has gone wrong. From there, he turns to a central question: not just how to practice, but why, and offers three possible answers—appreciation, improvement, and transcendence. The talk moves between personal reflection, Buddhist teaching, and a few literary and philosophical references, gradually narrowing toward trust, relinquishment, and the quiet sense that practice is about meeting the human condition directly.",
+    "short_summary": "A reflective talk on the three reasons for practice: appreciation, improvement, and transcendence.",
+    "episode_image_url": "https://jeffharr.is/brensilver/artwork/dharmaseed-96938.jpg",
+    "chapters_url": "https://jeffharr.is/brensilver/chapters/dharmaseed-96938.json",
+    "chapters": [
+      {
+        "start": 0.0,
+        "title": "Research and retreat discomfort",
+        "description": "Matthew uses a meditation study and the reality of unpleasant retreat experiences to set a grounded tone about what practice is and is not for.",
+        "url": "https://jeffharr.is/brensilver/talks/dharmaseed-96938/?t=0",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 125.8,
+        "title": "Why we practice",
+        "description": "He shifts from the question of how to the deeper question of why, then uses Nicole Krauss and a film reference to describe Dharma as a wordless recognition and a kind of homecoming.",
+        "url": "https://jeffharr.is/brensilver/talks/dharmaseed-96938/?t=126",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 414.64,
+        "title": "Dukkha and no escape",
+        "description": "The talk broadens into impermanence, finitude, and the fact that suffering cannot be sidestepped, making courage and patience central to the path.",
+        "url": "https://jeffharr.is/brensilver/talks/dharmaseed-96938/?t=415",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 725.72,
+        "title": "Three possible whys",
+        "description": "Matthew names Shinzen Young's threefold frame—appreciation, improvement, and transcendence—and begins unpacking appreciation through pleasure, gratitude, and attentive contact with the world.",
+        "url": "https://jeffharr.is/brensilver/talks/dharmaseed-96938/?t=726",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1203.619,
+        "title": "Acceptance and growth",
+        "description": "He quotes Kōun Chino Roshi and Suzuki Roshi to hold self-acceptance together with the wish to change, then turns to inherited patterns and the work of transforming 'ghosts into ancestors.'",
+        "url": "https://jeffharr.is/brensilver/talks/dharmaseed-96938/?t=1204",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1561.859,
+        "title": "Care in the world",
+        "description": "The middle of the talk describes how mindfulness reveals clinging, softens greed and hatred, and makes even small gestures part of a wider web of care.",
+        "url": "https://jeffharr.is/brensilver/talks/dharmaseed-96938/?t=1562",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1894.179,
+        "title": "Letting the world go",
+        "description": "Matthew develops the third why—transcendence—through Ajahn Chah, the Buddha, and the Bhagavad Gita, pointing toward relinquishment, trust, and a more intimate view of consciousness.",
+        "url": "https://jeffharr.is/brensilver/talks/dharmaseed-96938/?t=1894",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 2362.019,
+        "title": "Closing reflections",
+        "description": "He closes by returning to the three whys as a living cycle and leaves listeners with an invitation to keep whatever is worthy of investigation and let the rest go.",
+        "url": "https://jeffharr.is/brensilver/talks/dharmaseed-96938/?t=2362",
+        "img": null,
+        "toc": true
+      }
+    ],
     "venue": "Spirit Rock Meditation Center",
     "series": "Retreat at Spirit Rock",
     "tags": [],

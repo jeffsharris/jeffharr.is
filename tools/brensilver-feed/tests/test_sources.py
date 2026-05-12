@@ -17,7 +17,7 @@ from brensilver.models import PodcastChapter, Talk
 from brensilver.rss import build_rss
 from brensilver.rss import merge_talks
 from brensilver.sources.audiodharma import parse_audiodharma_listing
-from brensilver.sources.dharmaseed import parse_dharmaseed_feed
+from brensilver.sources.dharmaseed import parse_dharmaseed_feed, parse_dharmaseed_player
 
 
 class SourceParsingTests(unittest.TestCase):
@@ -90,6 +90,7 @@ class SourceParsingTests(unittest.TestCase):
                 {
                     "name": "Dharma Seed",
                     "feed_url": "https://dharmaseed.org/feeds/teacher/496/?max-entries=all",
+                    "access_key": "private-key",
                     "include_speakers": ["Matthew Brensilver"],
                 },
             )
@@ -98,7 +99,50 @@ class SourceParsingTests(unittest.TestCase):
         self.assertEqual(talks[0].id, "dharmaseed:94445")
         self.assertEqual(talks[0].title, "Wise Intention")
         self.assertEqual(talks[0].audio_length, 58189947)
+        self.assertEqual(talks[0].image_url, "https://example.test/image.png")
         self.assertEqual(talks[0].venue, "Spirit Rock Meditation Center")
+        self.assertIn("access_key=private-key", talks[0].link)
+        self.assertIn("access_key=private-key", talks[0].audio_url)
+
+    def test_dharmaseed_private_player_parser_extracts_access_key_audio(self):
+        html = """
+        <html>
+          <head><title>Matthew Brensilver : Dharma Talk (Retreat at Spirit Rock)</title></head>
+          <body>
+            <script>
+              var playlist = [{
+                mp3: '/talks/96948/20260504-Matthew_Brensilver-SR-dharma_talk_retreat_at_spirit_rock-96948.mp3?access_key=private-key',
+                title: '47:22 Dharma Talk (Retreat at Spirit Rock)',
+                time: '47:22',
+                date: '2026-05-04',
+                artist: 'Matthew Brensilver',
+                venue: 'Spirit Rock Meditation Center',
+                retreat: ': Spring Insight Retreat 2026',
+                thumb: 'https://media.dharmaseed.org/uploads/photos/teacher_496_125_0.png'
+              }];
+            </script>
+          </body>
+        </html>
+        """
+
+        talk = parse_dharmaseed_player(
+            html,
+            {"name": "Dharma Seed", "audio_length": 12345},
+            "https://dharmaseed.org/talks/player/96948.html?access_key=private-key",
+        )
+
+        self.assertIsNotNone(talk)
+        assert talk is not None
+        self.assertEqual(talk.id, "dharmaseed:96948")
+        self.assertEqual(talk.title, "Dharma Talk (Retreat at Spirit Rock)")
+        self.assertEqual(talk.duration, "47:22")
+        self.assertEqual(talk.published_at.date().isoformat(), "2026-05-04")
+        self.assertEqual(
+            talk.image_url,
+            "https://media.dharmaseed.org/uploads/photos/teacher_496_125_0.png",
+        )
+        self.assertEqual(talk.venue, "Spirit Rock Meditation Center")
+        self.assertIn("access_key=private-key", talk.audio_url)
 
     def test_json_shape_contains_transcript_placeholder(self):
         html = """
@@ -195,6 +239,33 @@ class MergeTests(unittest.TestCase):
         self.assertEqual(merged.episode_image_url, "https://media.example/artwork/dharmaseed-1.jpg")
         self.assertEqual(merged.chapters[0].title, "Opening")
         self.assertEqual(merged.venue, "Spirit Rock Meditation Center")
+
+    def test_merge_prefers_access_key_audio_url_for_same_id(self):
+        public = Talk(
+            id="dharmaseed:1",
+            source="Dharma Seed",
+            source_id="1",
+            title="Practice",
+            speaker="Matthew Brensilver",
+            published_at=datetime(2026, 1, 1, tzinfo=timezone.utc),
+            link="https://dharmaseed.org/talks/1/",
+            audio_url="https://dharmaseed.org/talks/1/practice.mp3?rss=",
+        )
+        private = Talk(
+            id="dharmaseed:1",
+            source="Dharma Seed",
+            source_id="1",
+            title="Practice",
+            speaker="Matthew Brensilver",
+            published_at=datetime(2026, 1, 1, tzinfo=timezone.utc),
+            link="https://dharmaseed.org/talks/1/?access_key=private-key",
+            audio_url="https://dharmaseed.org/talks/1/practice.mp3?rss=&access_key=private-key",
+        )
+
+        [merged] = merge_talks([public, private])
+
+        self.assertIn("access_key=private-key", merged.link)
+        self.assertIn("access_key=private-key", merged.audio_url)
 
 
 class PodcastMetadataTests(unittest.TestCase):

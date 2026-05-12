@@ -25,6 +25,15 @@
       "name": "Dharma Seed",
       "retreat_id": "6753",
       "feed_url": "https://dharmaseed.org/feeds/retreat/6753/",
+      "access_key_env": "DHARMASEED_RETREAT_6753_ACCESS_KEY",
+      "include_speakers": ["Matthew Brensilver"]
+    },
+    {
+      "type": "dharmaseed_player",
+      "name": "Dharma Seed",
+      "talk_id": "96948",
+      "player_url": "https://dharmaseed.org/talks/player/96948.html",
+      "access_key_env": "DHARMASEED_RETREAT_6753_ACCESS_KEY",
       "include_speakers": ["Matthew Brensilver"]
     },
     {

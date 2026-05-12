@@ -12,7 +12,11 @@ from typing import Dict, Iterable, List
 from brensilver.metadata import enrich_talks, safe_id, write_episode_media
 from brensilver.models import PodcastChapter, Talk, TranscriptRef
 from brensilver.rss import build_rss, merge_talks
-from brensilver.sources import fetch_audiodharma_talks, fetch_dharmaseed_talks
+from brensilver.sources import (
+    fetch_audiodharma_talks,
+    fetch_dharmaseed_player_talks,
+    fetch_dharmaseed_talks,
+)
 
 GUIDED_FEED_TITLE_PATTERNS = [
     re.compile(pattern, re.IGNORECASE)
@@ -124,6 +128,8 @@ def collect_talks(config: Dict, probe_lengths: bool = False) -> List[Talk]:
     for source in config["sources"]:
         if source["type"] == "dharmaseed":
             talks.extend(fetch_dharmaseed_talks(source))
+        elif source["type"] == "dharmaseed_player":
+            talks.extend(fetch_dharmaseed_player_talks(source))
         elif source["type"] == "audiodharma":
             talks.extend(fetch_audiodharma_talks(source, probe_lengths=probe_lengths))
         else:

@@ -11,16 +11,18 @@
 
   <key>ProgramArguments</key>
   <array>
-    <string>/usr/bin/env</string>
-    <string>PYTHONPATH=tools/brensilver-transcripts/src</string>
-    <string>python3</string>
-    <string>-m</string>
-    <string>brensilver_transcripts.pipeline</string>
-    <string>sync</string>
-    <string>--limit</string>
-    <string>3</string>
-    <string>--update-qmd</string>
+    <string>/Users/embergpt/code/flipper/brensilver/site/scripts/run-brensilver-ingestion.sh</string>
   </array>
+
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>BRENSILVER_INGEST_LIMIT</key>
+    <string>20</string>
+    <key>BRENSILVER_FEED_EVERY</key>
+    <string>20</string>
+    <key>BRENSILVER_AUTO_PUBLISH</key>
+    <string>1</string>
+  </dict>
 
   <key>StartCalendarInterval</key>
   <dict>

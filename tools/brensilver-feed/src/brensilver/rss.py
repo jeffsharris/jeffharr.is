@@ -229,6 +229,8 @@ def _fill_missing_metadata(primary: Talk, fallback: Talk) -> Talk:
         duration=primary.duration or fallback.duration,
         description=primary.description or fallback.description,
         image_url=primary.image_url or fallback.image_url,
+        link=_prefer_access_key_url(primary.link, fallback.link),
+        audio_url=_prefer_access_key_url(primary.audio_url, fallback.audio_url),
         canonical_url=primary.canonical_url or fallback.canonical_url,
         podcast_description=primary.podcast_description or fallback.podcast_description,
         short_summary=primary.short_summary or fallback.short_summary,
@@ -255,3 +257,9 @@ def _transcript_has_data(transcript: object) -> bool:
             getattr(transcript, "text_path", None),
         ]
     )
+
+
+def _prefer_access_key_url(primary: str, fallback: str) -> str:
+    if "access_key=" in fallback and "access_key=" not in primary:
+        return fallback
+    return primary
