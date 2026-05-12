@@ -21,6 +21,13 @@
       "feed_url": "https://dharmaseed.org/feeds/teacher/496/?max-entries=all"
     },
     {
+      "type": "dharmaseed",
+      "name": "Dharma Seed",
+      "retreat_id": "6753",
+      "feed_url": "https://dharmaseed.org/feeds/retreat/6753/",
+      "include_speakers": ["Matthew Brensilver"]
+    },
+    {
       "type": "audiodharma",
       "name": "AudioDharma",
       "speaker_id": "231",

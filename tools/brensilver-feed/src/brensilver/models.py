@@ -58,6 +58,7 @@ class Talk:
     chapters: List[PodcastChapter] = field(default_factory=list)
     venue: Optional[str] = None
     series: Optional[str] = None
+    co_teachers: List[str] = field(default_factory=list)
     tags: List[str] = field(default_factory=list)
     transcript: TranscriptRef = field(default_factory=TranscriptRef)
 
@@ -75,4 +76,6 @@ class Talk:
                 data.pop(key, None)
         if not data.get("chapters"):
             data.pop("chapters", None)
+        if not data.get("co_teachers"):
+            data.pop("co_teachers", None)
         return data

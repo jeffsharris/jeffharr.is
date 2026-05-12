@@ -5,7 +5,13 @@ from datetime import datetime, timezone
 from pathlib import Path
 from xml.etree import ElementTree as ET
 
-from brensilver.build import apply_site_image, is_guided_practice, split_talks_for_feeds
+from brensilver.build import (
+    apply_site_image,
+    apply_source_metadata,
+    is_guided_practice,
+    load_talks_json,
+    split_talks_for_feeds,
+)
 from brensilver.metadata import enrich_talks, write_episode_media
 from brensilver.models import PodcastChapter, Talk
 from brensilver.rss import build_rss
@@ -65,6 +71,16 @@ class SourceParsingTests(unittest.TestCase):
               <itunes:author>Matthew Brensilver</itunes:author>
               <itunes:duration>1:36:52</itunes:duration>
             </item>
+            <item>
+              <title>Other Teacher: Retreat Instructions</title>
+              <link>https://dharmaseed.org/talks/94446/</link>
+              <description>(Spirit Rock Meditation Center)</description>
+              <pubDate>Mon, 22 Dec 2025 07:30:00 +0000</pubDate>
+              <guid isPermaLink="false">other.mp3</guid>
+              <enclosure length="1234" type="audio/mpeg" url="https://example.test/other.mp3" />
+              <itunes:author>Other Teacher</itunes:author>
+              <itunes:duration>10:00</itunes:duration>
+            </item>
           </channel>
         </rss>
         """
@@ -74,6 +90,7 @@ class SourceParsingTests(unittest.TestCase):
                 {
                     "name": "Dharma Seed",
                     "feed_url": "https://dharmaseed.org/feeds/teacher/496/?max-entries=all",
+                    "include_speakers": ["Matthew Brensilver"],
                 },
             )
         )
@@ -81,6 +98,7 @@ class SourceParsingTests(unittest.TestCase):
         self.assertEqual(talks[0].id, "dharmaseed:94445")
         self.assertEqual(talks[0].title, "Wise Intention")
         self.assertEqual(talks[0].audio_length, 58189947)
+        self.assertEqual(talks[0].venue, "Spirit Rock Meditation Center")
 
     def test_json_shape_contains_transcript_placeholder(self):
         html = """
@@ -141,6 +159,43 @@ class MergeTests(unittest.TestCase):
         self.assertEqual(len(merged), 1)
         self.assertEqual(merged[0].source, "Dharma Seed")
 
+    def test_merge_preserves_seed_metadata_for_live_duplicate_id(self):
+        live = Talk(
+            id="dharmaseed:1",
+            source="Dharma Seed",
+            source_id="1",
+            title="Updated Practice",
+            speaker="Matthew Brensilver",
+            published_at=datetime(2026, 1, 1, tzinfo=timezone.utc),
+            link="https://dharmaseed.org/talks/1/",
+            audio_url="https://example.test/live.mp3",
+        )
+        seed = Talk(
+            id="dharmaseed:1",
+            source="Dharma Seed",
+            source_id="1",
+            title="Practice",
+            speaker="Matthew Brensilver",
+            published_at=datetime(2026, 1, 1, tzinfo=timezone.utc),
+            link="https://dharmaseed.org/talks/1/",
+            audio_url="https://example.test/seed.mp3",
+            canonical_url="https://jeffharr.is/brensilver/talks/dharmaseed-1/",
+            podcast_description="A preserved generated description.",
+            episode_image_url="https://media.example/artwork/dharmaseed-1.jpg",
+            chapters_url="https://media.example/chapters/dharmaseed-1.json",
+            chapters=[PodcastChapter(start=10, title="Opening")],
+            venue="Spirit Rock Meditation Center",
+        )
+
+        [merged] = merge_talks([live, seed])
+
+        self.assertEqual(merged.title, "Updated Practice")
+        self.assertEqual(merged.audio_url, "https://example.test/live.mp3")
+        self.assertEqual(merged.podcast_description, "A preserved generated description.")
+        self.assertEqual(merged.episode_image_url, "https://media.example/artwork/dharmaseed-1.jpg")
+        self.assertEqual(merged.chapters[0].title, "Opening")
+        self.assertEqual(merged.venue, "Spirit Rock Meditation Center")
+
 
 class PodcastMetadataTests(unittest.TestCase):
     def test_site_image_becomes_talk_fallback_image(self):
@@ -170,6 +225,78 @@ class PodcastMetadataTests(unittest.TestCase):
             normalized.episode_image_url,
             "https://media.example/brensilver/artwork/audiodharma-1.jpg",
         )
+
+    def test_source_metadata_derives_venue_from_description(self):
+        talk = Talk(
+            id="dharmaseed:1",
+            source="Dharma Seed",
+            source_id="1",
+            title="Brian Lesage, Matthew Brensilver: Practice (Retreat at Spirit Rock)",
+            speaker="Matthew Brensilver",
+            published_at=datetime(2026, 1, 1, tzinfo=timezone.utc),
+            link="https://example.test/source",
+            audio_url="https://example.test/audio.mp3",
+            description="(Spirit Rock Meditation Center)",
+        )
+
+        [normalized] = apply_source_metadata([talk])
+
+        self.assertEqual(normalized.venue, "Spirit Rock Meditation Center")
+        self.assertEqual(normalized.series, "Retreat at Spirit Rock")
+        self.assertEqual(normalized.co_teachers, ["Brian Lesage"])
+
+    def test_seed_talk_json_preserves_enriched_fields(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "talks.json"
+            path.write_text(
+                json.dumps(
+                    [
+                        {
+                            "id": "dharmaseed:1",
+                            "source": "Dharma Seed",
+                            "source_id": "1",
+                            "title": "Practice",
+                            "speaker": "Matthew Brensilver",
+                            "published_at": "2026-01-01T00:00:00+00:00",
+                            "link": "https://example.test/source",
+                            "audio_url": "https://example.test/audio.mp3",
+                            "canonical_url": "https://jeffharr.is/brensilver/talks/dharmaseed-1/",
+                            "podcast_description": "A preserved description.",
+                            "short_summary": "Preserved.",
+                            "episode_image_url": "https://media.example/artwork/dharmaseed-1.jpg",
+                            "chapters_url": "https://media.example/chapters/dharmaseed-1.json",
+                            "chapters": [
+                                {
+                                    "start": 12.5,
+                                    "title": "Opening",
+                                    "description": "Settling in.",
+                                    "url": "https://example.test?t=12",
+                                }
+                            ],
+                            "venue": "Spirit Rock Meditation Center",
+                            "series": "Retreat at Spirit Rock",
+                            "co_teachers": ["Sylvia Boorstein"],
+                            "transcript": {
+                                "status": "ready",
+                                "url": "https://example.test/transcript.json",
+                                "text_path": "transcripts/dharmaseed-1.md",
+                            },
+                        }
+                    ]
+                ),
+                encoding="utf-8",
+            )
+
+            [talk] = load_talks_json(path)
+
+            self.assertEqual(talk.podcast_description, "A preserved description.")
+            self.assertEqual(talk.episode_image_url, "https://media.example/artwork/dharmaseed-1.jpg")
+            self.assertEqual(talk.chapters[0].start, 12.5)
+            self.assertEqual(talk.chapters[0].title, "Opening")
+            self.assertEqual(talk.venue, "Spirit Rock Meditation Center")
+            self.assertEqual(talk.series, "Retreat at Spirit Rock")
+            self.assertEqual(talk.co_teachers, ["Sylvia Boorstein"])
+            self.assertEqual(talk.transcript.status, "ready")
 
     def test_guided_practice_feed_classifier(self):
         base = {
@@ -298,6 +425,9 @@ class PodcastMetadataTests(unittest.TestCase):
             audio_url="https://example.test/audio.mp3",
             canonical_url="https://jeffharr.is/brensilver/talks/audiodharma-1/",
             podcast_description="A talk about practice.",
+            venue="Spirit Rock Meditation Center",
+            series="Retreat at Spirit Rock",
+            co_teachers=["Sylvia Boorstein"],
             episode_image_url="https://media.example/brensilver/artwork/audiodharma-1.jpg",
             chapters_url="https://media.example/brensilver/chapters/audiodharma-1.json",
             chapters=[
@@ -328,6 +458,12 @@ class PodcastMetadataTests(unittest.TestCase):
         summary = item.findtext("itunes:summary", namespaces=namespaces)
         self.assertEqual(item.findtext("link"), "https://jeffharr.is/brensilver/talks/audiodharma-1/")
         self.assertIn("A talk about practice.", description)
+        self.assertIn("Location: Spirit Rock Meditation Center", description)
+        self.assertIn("Additional teachers: Sylvia Boorstein", description)
+        self.assertNotIn("Location: Spirit Rock Meditation Center (Retreat at Spirit Rock)", description)
+        self.assertIn("Location: Spirit Rock Meditation Center", summary)
+        self.assertIn("Additional teachers: Sylvia Boorstein", summary)
+        self.assertNotIn("Location: Spirit Rock Meditation Center (Retreat at Spirit Rock)", summary)
         self.assertIn("02:01 Wisdom from ordinariness", description)
         self.assertNotIn("https://jeffharr.is/brensilver/talks/audiodharma-1/?t=121", description)
         self.assertIn("02:01 Wisdom from ordinariness", summary)
@@ -339,6 +475,42 @@ class PodcastMetadataTests(unittest.TestCase):
         self.assertEqual(
             item.find("podcast:chapters", namespaces).attrib["type"],
             "application/json+chapters",
+        )
+
+    def test_rss_summary_normalizes_source_venue_without_episode_metadata(self):
+        talk = Talk(
+            id="dharmaseed:1",
+            source="Dharma Seed",
+            source_id="1",
+            title="Practice",
+            speaker="Matthew Brensilver",
+            published_at=datetime(2026, 1, 1, tzinfo=timezone.utc),
+            link="https://example.test/source",
+            audio_url="https://example.test/audio.mp3",
+            description="(Spirit Rock Meditation Center)",
+            venue="Spirit Rock Meditation Center",
+            series="Retreat at Spirit Rock",
+        )
+        xml = build_rss(
+            [talk],
+            {
+                "title": "Feed",
+                "base_url": "https://jeffharr.is/brensilver/",
+                "feed_url": "https://jeffharr.is/brensilver/feed.xml",
+                "description": "Merged talks.",
+            },
+        )
+        root = ET.fromstring(xml)
+        namespaces = {"itunes": "http://www.itunes.com/dtds/podcast-1.0.dtd"}
+        item = root.find("./channel/item")
+
+        self.assertIn(
+            "Location: Spirit Rock Meditation Center",
+            item.findtext("description"),
+        )
+        self.assertEqual(
+            item.findtext("itunes:summary", namespaces=namespaces),
+            "Location: Spirit Rock Meditation Center. Source: Dharma Seed.",
         )
 
 

@@ -1,5 +1,125 @@
 [
   {
+    "id": "dharmaseed:97005",
+    "source": "Dharma Seed",
+    "source_id": "97005",
+    "title": "Guided Meditation: Effort of Effortlessness (Retreat at Spirit Rock)",
+    "speaker": "Matthew Brensilver",
+    "published_at": "2026-05-08T08:34:14+00:00",
+    "link": "https://dharmaseed.org/talks/97005/",
+    "audio_url": "https://dharmaseed.org/talks/97005/20260508-Matthew_Brensilver-SR-guided_meditation_effort_of_effortlessness_retreat_at_spirit_rock-97005.mp3?rss=",
+    "audio_type": "audio/mpeg",
+    "audio_length": 21530548,
+    "duration": "44:47",
+    "description": "(Spirit Rock Meditation Center)",
+    "image_url": "https://jeffharr.is/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+    "canonical_url": "https://jeffharr.is/brensilver/talks/dharmaseed-97005/",
+    "venue": "Spirit Rock Meditation Center",
+    "series": "Retreat at Spirit Rock",
+    "tags": [],
+    "transcript": {
+      "status": "pending",
+      "url": null,
+      "text_path": null
+    }
+  },
+  {
+    "id": "dharmaseed:96946",
+    "source": "Dharma Seed",
+    "source_id": "96946",
+    "title": "Guided Meditation: Equanimity as Love in the Face of Helplessness (Retreat at Spirit Rock)",
+    "speaker": "Matthew Brensilver",
+    "published_at": "2026-05-06T16:19:34+00:00",
+    "link": "https://dharmaseed.org/talks/96946/",
+    "audio_url": "https://dharmaseed.org/talks/96946/20260506-Matthew_Brensilver-SR-guided_meditation_equanimity_as_love_in_the_face_of_helplessness_retreat_at_spirit_rock-96946.mp3?rss=",
+    "audio_type": "audio/mpeg",
+    "audio_length": 18797961,
+    "duration": "39:06",
+    "description": "(Spirit Rock Meditation Center)",
+    "image_url": "https://jeffharr.is/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+    "canonical_url": "https://jeffharr.is/brensilver/talks/dharmaseed-96946/",
+    "venue": "Spirit Rock Meditation Center",
+    "series": "Retreat at Spirit Rock",
+    "tags": [],
+    "transcript": {
+      "status": "pending",
+      "url": null,
+      "text_path": null
+    }
+  },
+  {
+    "id": "dharmaseed:96947",
+    "source": "Dharma Seed",
+    "source_id": "96947",
+    "title": "Guided Meditation: The Urgency of Feeling and Proliferation (Retreat at Spirit Rock)",
+    "speaker": "Matthew Brensilver",
+    "published_at": "2026-05-05T08:33:20+00:00",
+    "link": "https://dharmaseed.org/talks/96947/",
+    "audio_url": "https://dharmaseed.org/talks/96947/20260505-Matthew_Brensilver-SR-guided_meditation_the_urgency_of_feeling_and_proliferation_retreat_at_spirit_rock-96947.mp3?rss=",
+    "audio_type": "audio/mpeg",
+    "audio_length": 22123011,
+    "duration": "46:01",
+    "description": "(Spirit Rock Meditation Center)",
+    "image_url": "https://jeffharr.is/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+    "canonical_url": "https://jeffharr.is/brensilver/talks/dharmaseed-96947/",
+    "venue": "Spirit Rock Meditation Center",
+    "series": "Retreat at Spirit Rock",
+    "tags": [],
+    "transcript": {
+      "status": "pending",
+      "url": null,
+      "text_path": null
+    }
+  },
+  {
+    "id": "dharmaseed:96943",
+    "source": "Dharma Seed",
+    "source_id": "96943",
+    "title": "Guided Meditation: Love in the Face of Suffering (Retreat at Spirit Rock)",
+    "speaker": "Matthew Brensilver",
+    "published_at": "2026-05-03T16:19:01+00:00",
+    "link": "https://dharmaseed.org/talks/96943/",
+    "audio_url": "https://dharmaseed.org/talks/96943/20260503-Matthew_Brensilver-SR-guided_meditation_love_in_the_face_of_suffering_retreat_at_spirit_rock-96943.mp3?rss=",
+    "audio_type": "audio/mpeg",
+    "audio_length": 18630785,
+    "duration": "38:45",
+    "description": "(Spirit Rock Meditation Center)",
+    "image_url": "https://jeffharr.is/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+    "canonical_url": "https://jeffharr.is/brensilver/talks/dharmaseed-96943/",
+    "venue": "Spirit Rock Meditation Center",
+    "series": "Retreat at Spirit Rock",
+    "tags": [],
+    "transcript": {
+      "status": "pending",
+      "url": null,
+      "text_path": null
+    }
+  },
+  {
+    "id": "dharmaseed:96939",
+    "source": "Dharma Seed",
+    "source_id": "96939",
+    "title": "Guided Meditation: Letting Go into the Breath (Retreat at Spirit Rock)",
+    "speaker": "Matthew Brensilver",
+    "published_at": "2026-05-02T08:31:30+00:00",
+    "link": "https://dharmaseed.org/talks/96939/",
+    "audio_url": "https://dharmaseed.org/talks/96939/20260502-Matthew_Brensilver-SR-guided_meditation_letting_go_into_the_breath_retreat_at_spirit_rock-96939.mp3?rss=",
+    "audio_type": "audio/mpeg",
+    "audio_length": 26402562,
+    "duration": "54:56",
+    "description": "(Spirit Rock Meditation Center)",
+    "image_url": "https://jeffharr.is/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+    "canonical_url": "https://jeffharr.is/brensilver/talks/dharmaseed-96939/",
+    "venue": "Spirit Rock Meditation Center",
+    "series": "Retreat at Spirit Rock",
+    "tags": [],
+    "transcript": {
+      "status": "pending",
+      "url": null,
+      "text_path": null
+    }
+  },
+  {
     "id": "audiodharma:25380",
     "source": "AudioDharma",
     "source_id": "25380",
@@ -968,8 +1088,8 @@
         "toc": true
       }
     ],
-    "venue": null,
-    "series": null,
+    "venue": "Spirit Rock Meditation Center",
+    "series": "Retreat at Spirit Rock",
     "tags": [],
     "transcript": {
       "status": "pending",
@@ -1062,8 +1182,8 @@
         "toc": true
       }
     ],
-    "venue": null,
-    "series": null,
+    "venue": "Spirit Rock Meditation Center",
+    "series": "Retreat at Spirit Rock",
     "tags": [],
     "transcript": {
       "status": "pending",
@@ -1900,8 +2020,8 @@
         "toc": true
       }
     ],
-    "venue": null,
-    "series": null,
+    "venue": "Spirit Rock Meditation Center",
+    "series": "Retreat at Spirit Rock",
     "tags": [],
     "transcript": {
       "status": "pending",
@@ -2002,8 +2122,8 @@
         "toc": true
       }
     ],
-    "venue": null,
-    "series": null,
+    "venue": "Spirit Rock Meditation Center",
+    "series": "Retreat at Spirit Rock",
     "tags": [],
     "transcript": {
       "status": "pending",
@@ -2292,7 +2412,7 @@
         "toc": true
       }
     ],
-    "venue": null,
+    "venue": "Big Bear Retreat Center",
     "series": null,
     "tags": [],
     "transcript": {
@@ -2386,7 +2506,7 @@
         "toc": true
       }
     ],
-    "venue": null,
+    "venue": "Big Bear Retreat Center",
     "series": null,
     "tags": [],
     "transcript": {
@@ -2472,7 +2592,7 @@
         "toc": true
       }
     ],
-    "venue": null,
+    "venue": "Big Bear Retreat Center",
     "series": null,
     "tags": [],
     "transcript": {
@@ -2574,7 +2694,7 @@
         "toc": true
       }
     ],
-    "venue": null,
+    "venue": "Big Bear Retreat Center",
     "series": null,
     "tags": [],
     "transcript": {
@@ -4352,8 +4472,8 @@
         "toc": true
       }
     ],
-    "venue": null,
-    "series": null,
+    "venue": "Spirit Rock Meditation Center",
+    "series": "Retreat at Spirit Rock",
     "tags": [],
     "transcript": {
       "status": "pending",
@@ -4454,8 +4574,8 @@
         "toc": true
       }
     ],
-    "venue": null,
-    "series": null,
+    "venue": "Spirit Rock Meditation Center",
+    "series": "Retreat at Spirit Rock",
     "tags": [],
     "transcript": {
       "status": "pending",
@@ -4830,7 +4950,7 @@
         "toc": true
       }
     ],
-    "venue": null,
+    "venue": "Big Bear Retreat Center",
     "series": null,
     "tags": [],
     "transcript": {
@@ -4932,7 +5052,7 @@
         "toc": true
       }
     ],
-    "venue": null,
+    "venue": "Big Bear Retreat Center",
     "series": null,
     "tags": [],
     "transcript": {
@@ -8158,8 +8278,8 @@
         "toc": true
       }
     ],
-    "venue": null,
-    "series": null,
+    "venue": "Spirit Rock Meditation Center",
+    "series": "Retreat at Spirit Rock",
     "tags": [],
     "transcript": {
       "status": "pending",
@@ -9864,7 +9984,7 @@
         "toc": true
       }
     ],
-    "venue": null,
+    "venue": "Big Bear Retreat Center",
     "series": null,
     "tags": [],
     "transcript": {
@@ -10530,7 +10650,7 @@
         "toc": true
       }
     ],
-    "venue": null,
+    "venue": "Spirit Rock Meditation Center",
     "series": null,
     "tags": [],
     "transcript": {
@@ -10616,8 +10736,8 @@
         "toc": true
       }
     ],
-    "venue": null,
-    "series": null,
+    "venue": "Spirit Rock Meditation Center",
+    "series": "Retreat at Spirit Rock",
     "tags": [],
     "transcript": {
       "status": "pending",
@@ -12950,7 +13070,7 @@
         "toc": true
       }
     ],
-    "venue": null,
+    "venue": "Spirit Rock Meditation Center",
     "series": null,
     "tags": [],
     "transcript": {
@@ -13044,7 +13164,7 @@
         "toc": true
       }
     ],
-    "venue": null,
+    "venue": "Spirit Rock Meditation Center",
     "series": null,
     "tags": [],
     "transcript": {
@@ -13146,7 +13266,7 @@
         "toc": true
       }
     ],
-    "venue": null,
+    "venue": "Spirit Rock Meditation Center",
     "series": null,
     "tags": [],
     "transcript": {
@@ -13702,7 +13822,7 @@
         "toc": true
       }
     ],
-    "venue": null,
+    "venue": "Spirit Rock Meditation Center",
     "series": null,
     "tags": [],
     "transcript": {
@@ -13796,8 +13916,8 @@
         "toc": true
       }
     ],
-    "venue": null,
-    "series": null,
+    "venue": "Spirit Rock Meditation Center",
+    "series": "Retreat at Spirit Rock",
     "tags": [],
     "transcript": {
       "status": "pending",
@@ -16138,8 +16258,8 @@
         "toc": true
       }
     ],
-    "venue": null,
-    "series": null,
+    "venue": "Spirit Rock Meditation Center",
+    "series": "Retreat at Spirit Rock",
     "tags": [],
     "transcript": {
       "status": "pending",
@@ -16412,8 +16532,8 @@
         "toc": true
       }
     ],
-    "venue": null,
-    "series": null,
+    "venue": "Spirit Rock Meditation Center",
+    "series": "Retreat at Spirit Rock",
     "tags": [],
     "transcript": {
       "status": "pending",
@@ -16514,8 +16634,8 @@
         "toc": true
       }
     ],
-    "venue": null,
-    "series": null,
+    "venue": "Spirit Rock Meditation Center",
+    "series": "Retreat at Spirit Rock",
     "tags": [],
     "transcript": {
       "status": "pending",
@@ -17642,7 +17762,7 @@
         "toc": true
       }
     ],
-    "venue": null,
+    "venue": "Insight Meditation Society - Retreat Center",
     "series": null,
     "tags": [],
     "transcript": {
@@ -17744,7 +17864,7 @@
         "toc": true
       }
     ],
-    "venue": null,
+    "venue": "Insight Meditation Society - Retreat Center",
     "series": null,
     "tags": [],
     "transcript": {
@@ -17846,7 +17966,7 @@
         "toc": true
       }
     ],
-    "venue": null,
+    "venue": "Insight Meditation Society - Retreat Center",
     "series": null,
     "tags": [],
     "transcript": {
@@ -18910,7 +19030,7 @@
         "toc": true
       }
     ],
-    "venue": null,
+    "venue": "Spirit Rock Meditation Center",
     "series": null,
     "tags": [],
     "transcript": {
@@ -19012,7 +19132,7 @@
         "toc": true
       }
     ],
-    "venue": null,
+    "venue": "Spirit Rock Meditation Center",
     "series": null,
     "tags": [],
     "transcript": {
@@ -19106,7 +19226,7 @@
         "toc": true
       }
     ],
-    "venue": null,
+    "venue": "Spirit Rock Meditation Center",
     "series": null,
     "tags": [],
     "transcript": {
@@ -19670,7 +19790,7 @@
         "toc": true
       }
     ],
-    "venue": null,
+    "venue": "Spirit Rock Meditation Center",
     "series": null,
     "tags": [],
     "transcript": {
@@ -19764,7 +19884,7 @@
         "toc": true
       }
     ],
-    "venue": null,
+    "venue": "Spirit Rock Meditation Center",
     "series": null,
     "tags": [],
     "transcript": {
@@ -19866,7 +19986,7 @@
         "toc": true
       }
     ],
-    "venue": null,
+    "venue": "Spirit Rock Meditation Center",
     "series": null,
     "tags": [],
     "transcript": {
@@ -19968,8 +20088,8 @@
         "toc": true
       }
     ],
-    "venue": null,
-    "series": null,
+    "venue": "Spirit Rock Meditation Center",
+    "series": "Retreat at Spirit Rock",
     "tags": [],
     "transcript": {
       "status": "pending",
@@ -20062,8 +20182,8 @@
         "toc": true
       }
     ],
-    "venue": null,
-    "series": null,
+    "venue": "Spirit Rock Meditation Center",
+    "series": "Retreat at Spirit Rock",
     "tags": [],
     "transcript": {
       "status": "pending",
@@ -20234,8 +20354,8 @@
         "toc": true
       }
     ],
-    "venue": null,
-    "series": null,
+    "venue": "Spirit Rock Meditation Center",
+    "series": "Retreat at Spirit Rock",
     "tags": [],
     "transcript": {
       "status": "pending",
@@ -20336,7 +20456,7 @@
         "toc": true
       }
     ],
-    "venue": null,
+    "venue": "Vallecitos Mountain Retreat Center",
     "series": null,
     "tags": [],
     "transcript": {
@@ -20438,7 +20558,7 @@
         "toc": true
       }
     ],
-    "venue": null,
+    "venue": "Vallecitos Mountain Retreat Center",
     "series": null,
     "tags": [],
     "transcript": {
@@ -20830,7 +20950,7 @@
         "toc": true
       }
     ],
-    "venue": null,
+    "venue": "New York Insight Meditation Center",
     "series": null,
     "tags": [],
     "transcript": {
@@ -20924,8 +21044,8 @@
         "toc": true
       }
     ],
-    "venue": null,
-    "series": null,
+    "venue": "Spirit Rock Meditation Center",
+    "series": "Retreat at Spirit Rock",
     "tags": [],
     "transcript": {
       "status": "pending",
@@ -21018,8 +21138,8 @@
         "toc": true
       }
     ],
-    "venue": null,
-    "series": null,
+    "venue": "Spirit Rock Meditation Center",
+    "series": "Retreat at Spirit Rock",
     "tags": [],
     "transcript": {
       "status": "pending",
@@ -21104,8 +21224,8 @@
         "toc": true
       }
     ],
-    "venue": null,
-    "series": null,
+    "venue": "Spirit Rock Meditation Center",
+    "series": "Retreat at Spirit Rock",
     "tags": [],
     "transcript": {
       "status": "pending",
@@ -21198,8 +21318,8 @@
         "toc": true
       }
     ],
-    "venue": null,
-    "series": null,
+    "venue": "Spirit Rock Meditation Center",
+    "series": "Retreat at Spirit Rock",
     "tags": [],
     "transcript": {
       "status": "pending",
@@ -21684,8 +21804,11 @@
         "toc": true
       }
     ],
-    "venue": null,
-    "series": null,
+    "venue": "Spirit Rock Meditation Center",
+    "series": "Retreat at Spirit Rock",
+    "co_teachers": [
+      "Sylvia Boorstein"
+    ],
     "tags": [],
     "transcript": {
       "status": "pending",
@@ -21786,8 +21909,11 @@
         "toc": true
       }
     ],
-    "venue": null,
-    "series": null,
+    "venue": "Spirit Rock Meditation Center",
+    "series": "Retreat at Spirit Rock",
+    "co_teachers": [
+      "Sylvia Boorstein"
+    ],
     "tags": [],
     "transcript": {
       "status": "pending",
@@ -21888,8 +22014,11 @@
         "toc": true
       }
     ],
-    "venue": null,
+    "venue": "Spirit Rock Meditation Center",
     "series": null,
+    "co_teachers": [
+      "Sylvia Boorstein"
+    ],
     "tags": [],
     "transcript": {
       "status": "pending",
@@ -21990,8 +22119,11 @@
         "toc": true
       }
     ],
-    "venue": null,
-    "series": null,
+    "venue": "Spirit Rock Meditation Center",
+    "series": "Retreat at Spirit Rock",
+    "co_teachers": [
+      "Sylvia Boorstein"
+    ],
     "tags": [],
     "transcript": {
       "status": "pending",
@@ -22092,8 +22224,11 @@
         "toc": true
       }
     ],
-    "venue": null,
-    "series": null,
+    "venue": "Spirit Rock Meditation Center",
+    "series": "Retreat at Spirit Rock",
+    "co_teachers": [
+      "Sylvia Boorstein"
+    ],
     "tags": [],
     "transcript": {
       "status": "pending",
@@ -22194,8 +22329,11 @@
         "toc": true
       }
     ],
-    "venue": null,
-    "series": null,
+    "venue": "Spirit Rock Meditation Center",
+    "series": "Retreat at Spirit Rock",
+    "co_teachers": [
+      "Sylvia Boorstein"
+    ],
     "tags": [],
     "transcript": {
       "status": "pending",
@@ -22288,8 +22426,11 @@
         "toc": true
       }
     ],
-    "venue": null,
-    "series": null,
+    "venue": "Spirit Rock Meditation Center",
+    "series": "Retreat at Spirit Rock",
+    "co_teachers": [
+      "Sylvia Boorstein"
+    ],
     "tags": [],
     "transcript": {
       "status": "pending",
@@ -22390,8 +22531,11 @@
         "toc": true
       }
     ],
-    "venue": null,
-    "series": null,
+    "venue": "Spirit Rock Meditation Center",
+    "series": "Retreat at Spirit Rock",
+    "co_teachers": [
+      "Sylvia Boorstein"
+    ],
     "tags": [],
     "transcript": {
       "status": "pending",
@@ -22570,7 +22714,7 @@
         "toc": true
       }
     ],
-    "venue": null,
+    "venue": "Spirit Rock Meditation Center",
     "series": null,
     "tags": [],
     "transcript": {
@@ -22672,8 +22816,8 @@
         "toc": true
       }
     ],
-    "venue": null,
-    "series": null,
+    "venue": "Spirit Rock Meditation Center",
+    "series": "Retreat at Spirit Rock",
     "tags": [],
     "transcript": {
       "status": "pending",
@@ -22774,8 +22918,8 @@
         "toc": true
       }
     ],
-    "venue": null,
-    "series": null,
+    "venue": "Spirit Rock Meditation Center",
+    "series": "Retreat at Spirit Rock",
     "tags": [],
     "transcript": {
       "status": "pending",
@@ -22876,8 +23020,8 @@
         "toc": true
       }
     ],
-    "venue": null,
-    "series": null,
+    "venue": "Spirit Rock Meditation Center",
+    "series": "Retreat at Spirit Rock",
     "tags": [],
     "transcript": {
       "status": "pending",

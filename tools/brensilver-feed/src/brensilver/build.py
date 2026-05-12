@@ -10,7 +10,7 @@ from pathlib import Path
 from typing import Dict, Iterable, List
 
 from brensilver.metadata import enrich_talks, safe_id, write_episode_media
-from brensilver.models import Talk
+from brensilver.models import PodcastChapter, Talk, TranscriptRef
 from brensilver.rss import build_rss, merge_talks
 from brensilver.sources import fetch_audiodharma_talks, fetch_dharmaseed_talks
 
@@ -39,6 +39,7 @@ def main(argv: Iterable[str] | None = None) -> int:
     parser.add_argument("--config", default="config/sources.json")
     parser.add_argument("--out-dir", default="public/brensilver")
     parser.add_argument("--talks-json")
+    parser.add_argument("--seed-talks-json", action="append", default=[])
     parser.add_argument("--corpus-dir", default=".local-corpus/brensilver")
     parser.add_argument("--media-base-url")
     parser.add_argument("--copy-artwork", action="store_true")
@@ -52,7 +53,10 @@ def main(argv: Iterable[str] | None = None) -> int:
         if args.talks_json
         else collect_talks(config, probe_lengths=args.probe_lengths)
     )
+    if not args.talks_json:
+        talks.extend(load_seed_talks(args.seed_talks_json))
     talks = merge_talks(talks)
+    talks = apply_source_metadata(talks)
     talks = apply_site_image(talks, config["site"].get("image_url"))
     corpus_dir = Path(args.corpus_dir)
     media_base_url = (
@@ -127,10 +131,66 @@ def collect_talks(config: Dict, probe_lengths: bool = False) -> List[Talk]:
     return talks
 
 
+def load_seed_talks(paths: Iterable[str]) -> List[Talk]:
+    talks: List[Talk] = []
+    loaded_paths = set()
+    for raw_path in paths:
+        path = Path(raw_path)
+        if path in loaded_paths or not path.exists():
+            continue
+        loaded_paths.add(path)
+        talks.extend(load_talks_json(path))
+    return talks
+
+
 def apply_site_image(talks: List[Talk], image_url: str | None) -> List[Talk]:
     if not image_url:
         return talks
     return [replace(talk, image_url=image_url) for talk in talks]
+
+
+def apply_source_metadata(talks: List[Talk]) -> List[Talk]:
+    return [
+        replace(
+            talk,
+            venue=talk.venue or venue_from_description(talk.description),
+            series=talk.series or series_from_title(talk.title),
+            co_teachers=talk.co_teachers or co_teachers_from_title(talk.title),
+        )
+        for talk in talks
+    ]
+
+
+def venue_from_description(description: str | None) -> str | None:
+    if not description:
+        return None
+    match = re.match(r"^\(([^)]+)\)", description.strip())
+    if not match:
+        return None
+    venue = " ".join(match.group(1).split())
+    return venue or None
+
+
+def series_from_title(title: str) -> str | None:
+    for value in re.findall(r"\(([^)]+)\)", title):
+        context = " ".join(value.split())
+        if re.search(r"\b(retreat|daylong|drop-in)\b", context, re.IGNORECASE):
+            return context
+    return None
+
+
+def co_teachers_from_title(title: str) -> List[str]:
+    prefix = title.split(":", 1)[0]
+    if "," not in prefix or not re.search(r"\bBrensilver\b", prefix, re.IGNORECASE):
+        return []
+
+    names = []
+    for raw_name in prefix.split(","):
+        name = " ".join(raw_name.split())
+        if not name or re.search(r"\bMatthew\s+Brensilver\b", name, re.IGNORECASE):
+            continue
+        names.append(name)
+    return names
 
 
 def build_guided_site(site: Dict) -> Dict:
@@ -181,12 +241,57 @@ def load_talks_json(path: Path) -> List[Talk]:
                 duration=item.get("duration"),
                 description=item.get("description"),
                 image_url=item.get("image_url"),
+                canonical_url=item.get("canonical_url"),
+                podcast_description=item.get("podcast_description"),
+                short_summary=item.get("short_summary"),
+                episode_image_url=item.get("episode_image_url"),
+                chapters_url=item.get("chapters_url"),
+                chapters=load_chapters(item.get("chapters")),
                 venue=item.get("venue"),
                 series=item.get("series"),
+                co_teachers=item.get("co_teachers") or [],
                 tags=item.get("tags") or [],
+                transcript=load_transcript(item.get("transcript")),
             )
         )
     return talks
+
+
+def load_chapters(raw: object) -> List[PodcastChapter]:
+    if not isinstance(raw, list):
+        return []
+    chapters: List[PodcastChapter] = []
+    for item in raw:
+        if not isinstance(item, dict):
+            continue
+        chapters.append(
+            PodcastChapter(
+                start=coerce_float(item.get("start", item.get("startTime"))),
+                title=str(item.get("title") or "Section"),
+                description=item.get("description"),
+                url=item.get("url"),
+                img=item.get("img"),
+                toc=bool(item.get("toc", True)),
+            )
+        )
+    return chapters
+
+
+def load_transcript(raw: object) -> TranscriptRef:
+    if not isinstance(raw, dict):
+        return TranscriptRef()
+    return TranscriptRef(
+        status=str(raw.get("status") or "pending"),
+        url=raw.get("url"),
+        text_path=raw.get("text_path"),
+    )
+
+
+def coerce_float(value: object) -> float:
+    try:
+        return max(0.0, float(value))
+    except (TypeError, ValueError):
+        return 0.0
 
 
 def render_index(

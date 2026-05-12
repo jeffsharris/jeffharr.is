@@ -12,14 +12,14 @@ from brensilver.build import main
 
 
 if __name__ == "__main__":
-    raise SystemExit(
-        main(
-            [
-                "--config",
-                str(TOOL_ROOT / "config" / "sources.json"),
-                "--out-dir",
-                str(ROOT / "brensilver"),
-            ]
-            + sys.argv[1:]
-        )
-    )
+    args = [
+        "--config",
+        str(TOOL_ROOT / "config" / "sources.json"),
+        "--out-dir",
+        str(ROOT / "brensilver"),
+    ]
+    existing_talks = ROOT / "brensilver" / "talks.json"
+    if existing_talks.exists():
+        args.extend(["--seed-talks-json", str(existing_talks)])
+
+    raise SystemExit(main(args + sys.argv[1:]))

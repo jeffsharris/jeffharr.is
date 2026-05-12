@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import re
 import xml.etree.ElementTree as ET
+from dataclasses import replace
 from datetime import datetime, timezone
 from email.utils import format_datetime
 from typing import Dict, Iterable, List, Optional
@@ -23,6 +24,10 @@ def merge_talks(talks: Iterable[Talk]) -> List[Talk]:
 
     for talk in talks:
         if talk.id in by_id:
+            existing = by_id[talk.id]
+            combined = _fill_missing_metadata(existing, talk)
+            by_id[talk.id] = combined
+            by_key[_dedupe_key(existing)] = combined
             continue
 
         key = _dedupe_key(talk)
@@ -33,6 +38,8 @@ def merge_talks(talks: Iterable[Talk]) -> List[Talk]:
             continue
 
         preferred = _prefer(existing, talk)
+        fallback = talk if preferred is existing else existing
+        preferred = _fill_missing_metadata(preferred, fallback)
         by_key[key] = preferred
         by_id.pop(existing.id, None)
         by_id.pop(talk.id, None)
@@ -123,8 +130,10 @@ def _description(talk: Talk) -> str:
     if talk.podcast_description:
         return _podcast_description(talk)
     parts = []
-    if talk.description:
-        parts.append(talk.description)
+    source_description = _source_description(talk)
+    if source_description:
+        parts.append(source_description)
+    parts.extend(_source_metadata_lines(talk))
     parts.append(f"Source: {talk.source}")
     parts.append(f"Original page: {talk.link}")
     return "\n\n".join(parts)
@@ -133,13 +142,19 @@ def _description(talk: Talk) -> str:
 def _summary(talk: Talk) -> str:
     if talk.podcast_description:
         return _podcast_description(talk)
-    if talk.description:
-        return f"{talk.description} Source: {talk.source}."
+    details = []
+    source_description = _source_description(talk)
+    if source_description:
+        details.append(source_description)
+    details.extend(_source_metadata_lines(talk))
+    if details:
+        return f"{' '.join(_as_sentence(detail) for detail in details)} Source: {talk.source}."
     return f"Matthew Brensilver Dharma talk from {talk.source}."
 
 
 def _podcast_description(talk: Talk) -> str:
     parts = [talk.podcast_description or ""]
+    parts.extend(_source_metadata_lines(talk))
     if talk.chapters:
         parts.append(
             "Chapters:\n"
@@ -151,6 +166,30 @@ def _podcast_description(talk: Talk) -> str:
     parts.append(f"Source: {talk.source}")
     parts.append(f"Original page: {talk.link}")
     return "\n\n".join(part for part in parts if part)
+
+
+def _source_metadata_lines(talk: Talk) -> List[str]:
+    lines: List[str] = []
+    if talk.venue:
+        lines.append(f"Location: {talk.venue}")
+    if talk.co_teachers:
+        lines.append(f"Additional teachers: {', '.join(talk.co_teachers)}")
+    return lines
+
+
+def _source_description(talk: Talk) -> Optional[str]:
+    if not talk.description:
+        return None
+    if talk.venue and talk.description.strip() == f"({talk.venue})":
+        return None
+    return talk.description
+
+
+def _as_sentence(value: str) -> str:
+    text = value.strip()
+    if re.search(r"[.!?]$", text):
+        return text
+    return f"{text}."
 
 
 def _format_timestamp(seconds: float) -> str:
@@ -181,3 +220,38 @@ def _prefer(left: Talk, right: Talk) -> Talk:
     if right_score > left_score:
         return right
     return left
+
+
+def _fill_missing_metadata(primary: Talk, fallback: Talk) -> Talk:
+    return replace(
+        primary,
+        audio_length=primary.audio_length if primary.audio_length is not None else fallback.audio_length,
+        duration=primary.duration or fallback.duration,
+        description=primary.description or fallback.description,
+        image_url=primary.image_url or fallback.image_url,
+        canonical_url=primary.canonical_url or fallback.canonical_url,
+        podcast_description=primary.podcast_description or fallback.podcast_description,
+        short_summary=primary.short_summary or fallback.short_summary,
+        episode_image_url=primary.episode_image_url or fallback.episode_image_url,
+        chapters_url=primary.chapters_url or fallback.chapters_url,
+        chapters=primary.chapters or fallback.chapters,
+        venue=primary.venue or fallback.venue,
+        series=primary.series or fallback.series,
+        co_teachers=primary.co_teachers or fallback.co_teachers,
+        tags=primary.tags or fallback.tags,
+        transcript=(
+            primary.transcript
+            if _transcript_has_data(primary.transcript)
+            else fallback.transcript
+        ),
+    )
+
+
+def _transcript_has_data(transcript: object) -> bool:
+    return any(
+        [
+            getattr(transcript, "status", "pending") != "pending",
+            getattr(transcript, "url", None),
+            getattr(transcript, "text_path", None),
+        ]
+    )
