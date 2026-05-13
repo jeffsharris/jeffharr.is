@@ -8,9 +8,9 @@
   "theme_color": "#B87925",
   "icons": [
     {
-      "src": "/favicon.ico",
-      "sizes": "48x48",
-      "type": "image/x-icon"
+      "src": "/share-assets/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
     }
   ],
   "share_target": {

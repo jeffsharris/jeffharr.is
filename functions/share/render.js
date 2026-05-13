@@ -169,7 +169,7 @@ function htmlDocument({ title, description, imageUrl, url, body, noindex }) {
   <meta name="twitter:description" content="${escapeAttribute(description)}">
   <meta name="twitter:image" content="${escapeAttribute(imageUrl)}">
   <link rel="canonical" href="${escapeAttribute(url)}">
-  <link rel="icon" href="/favicon.ico">
+  <link rel="icon" href="/share-assets/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
