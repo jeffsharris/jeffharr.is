@@ -8,8 +8,10 @@ from xml.etree import ElementTree as ET
 from brensilver.build import (
     apply_site_image,
     apply_source_metadata,
+    archive_browser_js,
     is_guided_practice,
     load_talks_json,
+    render_index,
     render_talk_page,
     split_talks_for_feeds,
 )
@@ -310,6 +312,46 @@ class MergeTests(unittest.TestCase):
 
 
 class PodcastMetadataTests(unittest.TestCase):
+    def test_landing_page_includes_archive_search(self):
+        talk = Talk(
+            id="audiodharma:1",
+            source="AudioDharma",
+            source_id="1",
+            title="Practice",
+            speaker="Matthew Brensilver",
+            published_at=datetime(2026, 1, 1, tzinfo=timezone.utc),
+            link="https://example.test/source",
+            audio_url="https://example.test/audio.mp3",
+        )
+
+        html = render_index(
+            {
+                "site": {
+                    "title": "Matthew Brensilver Dharma Talks",
+                    "base_url": "https://jeffharr.is/dharma/brensilver/",
+                    "feed_url": "https://jeffharr.is/dharma/brensilver/feed.xml",
+                    "description": "Merged talks.",
+                    "image_url": "https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+                }
+            },
+            [talk],
+            [talk],
+            [],
+            None,
+        )
+
+        self.assertIn('id="archive-search"', html)
+        self.assertIn('type="search"', html)
+        self.assertIn("Search titles, descriptions, chapters", html)
+        self.assertIn('id="archive-search-status"', html)
+
+    def test_archive_browser_searches_chapter_text(self):
+        js = archive_browser_js()
+
+        self.assertIn("chapterSearchText", js)
+        self.assertIn("talk.chapters", js)
+        self.assertIn("No talks match this search.", js)
+
     def test_site_image_becomes_talk_fallback_image(self):
         talk = Talk(
             id="audiodharma:1",

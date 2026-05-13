@@ -666,6 +666,13 @@ def render_index(
       <p class="archive-kicker">Archive</p>
       <h2 id="archive-heading">Browse and listen</h2>
       <p id="archive-summary" class="archive-copy">Play talks here or download the audio.</p>
+      <div class="archive-tools">
+        <label class="archive-search" for="archive-search">
+          <span class="sr-only">Search talks</span>
+          <input id="archive-search" type="search" autocomplete="off" spellcheck="false" placeholder="Search titles, descriptions, chapters">
+        </label>
+        <p id="archive-search-status" class="archive-search-status" aria-live="polite"></p>
+      </div>
       <div id="talk-list" class="talk-list"></div>
       <div id="talk-loader" class="talk-loader" aria-live="polite">Loading talks...</div>
     </section>
@@ -776,6 +783,80 @@ def landing_archive_css() -> str:
       max-width: 620px;
       margin: 0 0 22px;
     }
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+    .archive-tools {
+      display: grid;
+      grid-template-columns: minmax(240px, 520px) minmax(0, 1fr);
+      gap: 14px;
+      align-items: center;
+      margin: 10px 0 4px;
+    }
+    .archive-search {
+      position: relative;
+      display: block;
+    }
+    .archive-search::before,
+    .archive-search::after {
+      position: absolute;
+      content: "";
+      pointer-events: none;
+    }
+    .archive-search::before {
+      top: 15px;
+      left: 17px;
+      width: 13px;
+      height: 13px;
+      border: 2px solid var(--accent);
+      border-radius: 50%;
+      opacity: 0.86;
+    }
+    .archive-search::after {
+      top: 29px;
+      left: 30px;
+      width: 9px;
+      height: 2px;
+      border-radius: 2px;
+      background: var(--accent);
+      transform: rotate(45deg);
+      transform-origin: left center;
+      opacity: 0.86;
+    }
+    .archive-search input {
+      width: 100%;
+      min-height: 48px;
+      box-sizing: border-box;
+      padding: 0 16px 0 47px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: color-mix(in srgb, var(--panel) 88%, var(--bg));
+      color: var(--ink);
+      font: inherit;
+      outline: none;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45);
+    }
+    .archive-search input::placeholder {
+      color: color-mix(in srgb, var(--muted) 78%, transparent);
+    }
+    .archive-search input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent);
+    }
+    .archive-search-status {
+      justify-self: end;
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
     .talk-list {
       display: grid;
       gap: 14px;
@@ -859,6 +940,8 @@ def landing_archive_css() -> str:
       font-size: 0.95rem;
     }
     @media (max-width: 760px) {
+      .archive-tools { grid-template-columns: 1fr; }
+      .archive-search-status { justify-self: start; min-height: 1.3em; }
       .talk-card-player { grid-template-columns: 1fr; }
     }
     @media (max-width: 560px) {
@@ -969,11 +1052,14 @@ def archive_browser_js() -> str:
   const talkList = document.getElementById('talk-list');
   const talkLoader = document.getElementById('talk-loader');
   const archiveSummary = document.getElementById('archive-summary');
+  const archiveSearch = document.getElementById('archive-search');
+  const archiveSearchStatus = document.getElementById('archive-search-status');
   const siteBaseUrl = config.siteBaseUrl || '';
   const feedKeys = Object.keys(feeds);
   const stateByFeed = new Map();
   const talkBatchSize = 12;
   let currentFeed = config.defaultFeed || feedKeys[0] || '';
+  let searchQuery = '';
   let observer = null;
 
   function mediaUrl(url) {
@@ -1010,6 +1096,31 @@ def archive_browser_js() -> str:
     return value.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
   }
 
+  function normalizeSearch(value) {
+    return String(value || '')
+      .normalize('NFKD')
+      .replace(/[\\u0300-\\u036f]/g, '')
+      .toLowerCase();
+  }
+
+  function chapterSearchText(talk) {
+    const chapters = Array.isArray(talk.chapters) ? talk.chapters : [];
+    return chapters
+      .map(chapter => [chapter.title, chapter.description].filter(Boolean).join(' '))
+      .join(' ');
+  }
+
+  function talkSearchText(talk) {
+    if (!talk.__archiveSearchText) {
+      talk.__archiveSearchText = normalizeSearch([
+        talk.title,
+        talkDescription(talk),
+        chapterSearchText(talk),
+      ].filter(Boolean).join(' '));
+    }
+    return talk.__archiveSearchText;
+  }
+
   function addText(parent, tagName, className, text) {
     const el = document.createElement(tagName);
     if (className) el.className = className;
@@ -1022,11 +1133,43 @@ def archive_browser_js() -> str:
     if (!stateByFeed.has(key)) {
       stateByFeed.set(key, {
         talks: null,
+        filteredTalks: null,
         nextIndex: 0,
         loading: false,
       });
     }
     return stateByFeed.get(key);
+  }
+
+  function activeTalks(state) {
+    return state.filteredTalks || state.talks || [];
+  }
+
+  function applySearch(state) {
+    if (!state.talks) {
+      state.filteredTalks = null;
+      state.nextIndex = 0;
+      return;
+    }
+    const query = normalizeSearch(searchQuery);
+    state.filteredTalks = query
+      ? state.talks.filter(talk => talkSearchText(talk).includes(query))
+      : state.talks;
+    state.nextIndex = 0;
+  }
+
+  function updateSearchStatus(key) {
+    if (!archiveSearchStatus) return;
+    const state = stateFor(key);
+    const query = searchQuery.trim();
+    if (!query || !state.talks) {
+      archiveSearchStatus.textContent = '';
+      return;
+    }
+    const matches = activeTalks(state).length;
+    const total = state.talks.length;
+    const noun = matches === 1 ? 'match' : 'matches';
+    archiveSearchStatus.textContent = `${matches} of ${total} ${noun}`;
   }
 
   function updateSummary(key) {
@@ -1037,15 +1180,22 @@ def archive_browser_js() -> str:
     archiveSummary.textContent = count
       ? `${count} ${noun}. Play talks here or download the audio.`
       : 'Play talks here or download the audio.';
+    updateSearchStatus(key);
   }
 
   function renderTalkBatch(key = currentFeed) {
     const state = stateFor(key);
     if (!state.talks || !talkList || !talkLoader || key !== currentFeed) return;
     const fragment = document.createDocumentFragment();
-    const end = Math.min(state.nextIndex + talkBatchSize, state.talks.length);
+    const talks = activeTalks(state);
+    if (!talks.length) {
+      talkLoader.textContent = searchQuery.trim() ? 'No talks match this search.' : 'No talks are available yet.';
+      updateSearchStatus(key);
+      return;
+    }
+    const end = Math.min(state.nextIndex + talkBatchSize, talks.length);
     for (let index = state.nextIndex; index < end; index += 1) {
-      const talk = state.talks[index];
+      const talk = talks[index];
       const card = document.createElement('article');
       card.className = 'talk-card';
 
@@ -1097,7 +1247,10 @@ def archive_browser_js() -> str:
     }
     state.nextIndex = end;
     talkList.appendChild(fragment);
-    talkLoader.textContent = state.nextIndex >= state.talks.length ? 'End of archive' : 'Loading more talks...';
+    talkLoader.textContent = state.nextIndex >= talks.length
+      ? (searchQuery.trim() ? 'End of matches' : 'End of archive')
+      : 'Loading more talks...';
+    updateSearchStatus(key);
   }
 
   async function loadTalkArchive(key = currentFeed) {
@@ -1121,6 +1274,7 @@ def archive_browser_js() -> str:
           .sort((a, b) => String(b.published_at || '').localeCompare(String(a.published_at || '')));
       }
       state.loading = false;
+      applySearch(state);
       renderTalkBatch(key);
       if (!observer) {
         observer = new IntersectionObserver(entries => {
@@ -1137,6 +1291,22 @@ def archive_browser_js() -> str:
       }
     }
   }
+
+  archiveSearch?.addEventListener('input', () => {
+    searchQuery = archiveSearch.value || '';
+    const state = stateFor(currentFeed);
+    talkList?.replaceChildren();
+    if (state.talks) {
+      applySearch(state);
+      updateSummary(currentFeed);
+      renderTalkBatch(currentFeed);
+    } else {
+      updateSearchStatus(currentFeed);
+      if (currentFeed && !state.loading) {
+        loadTalkArchive(currentFeed);
+      }
+    }
+  });
 
   window.talkArchiveBrowser = {
     selectFeed(key) {

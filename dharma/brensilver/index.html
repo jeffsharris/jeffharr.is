@@ -223,6 +223,80 @@
       max-width: 620px;
       margin: 0 0 22px;
     }
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+    .archive-tools {
+      display: grid;
+      grid-template-columns: minmax(240px, 520px) minmax(0, 1fr);
+      gap: 14px;
+      align-items: center;
+      margin: 10px 0 4px;
+    }
+    .archive-search {
+      position: relative;
+      display: block;
+    }
+    .archive-search::before,
+    .archive-search::after {
+      position: absolute;
+      content: "";
+      pointer-events: none;
+    }
+    .archive-search::before {
+      top: 15px;
+      left: 17px;
+      width: 13px;
+      height: 13px;
+      border: 2px solid var(--accent);
+      border-radius: 50%;
+      opacity: 0.86;
+    }
+    .archive-search::after {
+      top: 29px;
+      left: 30px;
+      width: 9px;
+      height: 2px;
+      border-radius: 2px;
+      background: var(--accent);
+      transform: rotate(45deg);
+      transform-origin: left center;
+      opacity: 0.86;
+    }
+    .archive-search input {
+      width: 100%;
+      min-height: 48px;
+      box-sizing: border-box;
+      padding: 0 16px 0 47px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: color-mix(in srgb, var(--panel) 88%, var(--bg));
+      color: var(--ink);
+      font: inherit;
+      outline: none;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45);
+    }
+    .archive-search input::placeholder {
+      color: color-mix(in srgb, var(--muted) 78%, transparent);
+    }
+    .archive-search input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent);
+    }
+    .archive-search-status {
+      justify-self: end;
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
     .talk-list {
       display: grid;
       gap: 14px;
@@ -306,6 +380,8 @@
       font-size: 0.95rem;
     }
     @media (max-width: 760px) {
+      .archive-tools { grid-template-columns: 1fr; }
+      .archive-search-status { justify-self: start; min-height: 1.3em; }
       .talk-card-player { grid-template-columns: 1fr; }
     }
     @media (max-width: 560px) {
@@ -405,6 +481,13 @@
       <p class="archive-kicker">Archive</p>
       <h2 id="archive-heading">Browse and listen</h2>
       <p id="archive-summary" class="archive-copy">Play talks here or download the audio.</p>
+      <div class="archive-tools">
+        <label class="archive-search" for="archive-search">
+          <span class="sr-only">Search talks</span>
+          <input id="archive-search" type="search" autocomplete="off" spellcheck="false" placeholder="Search titles, descriptions, chapters">
+        </label>
+        <p id="archive-search-status" class="archive-search-status" aria-live="polite"></p>
+      </div>
       <div id="talk-list" class="talk-list"></div>
       <div id="talk-loader" class="talk-loader" aria-live="polite">Loading talks...</div>
     </section>
