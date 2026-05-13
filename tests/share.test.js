@@ -31,6 +31,7 @@ test('classifyUrl recognizes supported podcast platforms', () => {
   });
   assert.equal(classifyUrl('https://overcast.fm/itunes1516093381').appleId, '1516093381');
   assert.equal(classifyUrl('https://overcast.fm/+AA8CzMTP1Rc').overcastId, 'AA8CzMTP1Rc');
+  assert.equal(classifyUrl('https://itunes.apple.com/us/app/overcast-podcast-player/id888422857?mt=8').platform, 'unknown');
   assert.equal(classifyUrl('https://open.spotify.com/show/abc').spotifyType, 'show');
   assert.equal(classifyUrl('https://youtu.be/abc123').videoId, 'abc123');
 });
@@ -131,6 +132,66 @@ test('resolveShareUrl resolves an Overcast short episode URL through the feed', 
   assert.equal(item.platforms.overcast.url, 'https://overcast.fm/+AA8CzMTP1Rc');
   assert.equal(item.platforms.rss.url, 'https://example.com/feed.xml');
   assert.equal(item.platforms.apple.url, 'https://podcasts.apple.com/us/podcast/example/id123');
+});
+
+test('resolveShareUrl enriches Overcast episode links from page app links', async () => {
+  const overcastHtml = `<!doctype html>
+    <html>
+      <head>
+        <title>Episode One &mdash; Example Podcast &mdash; Overcast</title>
+        <link rel="canonical" href="https://example.com/episode-one">
+        <meta name="og:title" content="Episode One &mdash; Example Podcast">
+        <meta name="og:description" content="Shared from Overcast">
+        <meta name="og:image" content="https://example.com/episode.jpg">
+      </head>
+      <body>
+        <a href="https://podcasts.apple.com/podcast/id123">Apple Podcasts</a>
+        <a href="https://itunes.apple.com/us/app/overcast-podcast-player/id888422857?mt=8">Overcast app</a>
+        <a href="https://feeds.example.com/example">Feed</a>
+      </body>
+    </html>`;
+
+  const pcstHtml = `<!doctype html>
+    <html>
+      <body>
+        <a href="https://open.spotify.com/show/spotify-show">Spotify</a>
+        <a href="https://pca.st/itunes/123">Pocket Casts</a>
+      </body>
+    </html>`;
+
+  const fetchImpl = async (url) => {
+    const urlString = String(url);
+    if (urlString === 'https://overcast.fm/+AA8CzMTP1Rc') {
+      return new Response(overcastHtml, {
+        headers: { 'content-type': 'text/html' }
+      });
+    }
+    if (urlString === 'https://feeds.example.com/example') {
+      return new Response(SAMPLE_FEED, {
+        headers: { 'content-type': 'application/rss+xml' }
+      });
+    }
+    if (urlString.startsWith('https://itunes.apple.com/search?')) {
+      return Response.json({ results: [] });
+    }
+    if (urlString === 'https://pc.st/123') {
+      return new Response(pcstHtml, {
+        headers: { 'content-type': 'text/html' }
+      });
+    }
+    return new Response('<html></html>', {
+      headers: { 'content-type': 'text/html' }
+    });
+  };
+
+  const item = await resolveShareUrl('https://overcast.fm/+AA8CzMTP1Rc', { fetchImpl });
+  assert.equal(item.type, 'podcast_episode');
+  assert.equal(item.title, 'Episode One');
+  assert.equal(item.platforms.apple.url, 'https://podcasts.apple.com/podcast/id123');
+  assert.equal(item.platforms.spotify.url, 'https://open.spotify.com/show/spotify-show');
+  assert.equal(item.platforms.pocketCasts.url, 'https://pca.st/itunes/123');
+  assert.equal(item.platforms.overcast.url, 'https://overcast.fm/+AA8CzMTP1Rc');
+  assert.equal(item.platforms.rss.url, 'https://feeds.example.com/example');
 });
 
 test('hashText is deterministic', async () => {

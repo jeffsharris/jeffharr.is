@@ -84,7 +84,7 @@ export function classifyUrl(urlString) {
   const host = url.hostname.toLowerCase().replace(/^www\./, '');
   const path = url.pathname;
 
-  if (host === 'podcasts.apple.com' || host === 'itunes.apple.com') {
+  if (host === 'podcasts.apple.com' || (host === 'itunes.apple.com' && /\/podcast\//.test(path))) {
     const appleId = path.match(/\/id(\d+)/)?.[1] || url.searchParams.get('id');
     const episodeId = url.searchParams.get('i') || null;
     return { platform: 'apple', appleId, episodeId };
@@ -299,7 +299,9 @@ async function resolveOvercast(inputUrl, classification, fetchImpl, env) {
     inputUrl
   );
   const canonical = canonicalUrl ? new URL(canonicalUrl) : null;
-  const feedUrl = canonical?.searchParams.get('uf') || '';
+  const pageLinks = extractPlatformLinksFromDocument(document, inputUrl);
+  const pageFeedUrl = findRssUrl(document, inputUrl);
+  const feedUrl = canonical?.searchParams.get('uf') || pageFeedUrl || '';
   const episodeGuid = canonical?.searchParams.get('ge') || '';
   const overcastLink = platformLink('Overcast', inputUrl, classification.overcastId ? 'episode' : 'show', 'exact');
   const pageTitle = cleanOvercastTitle(meta(document, 'og:title') || document.querySelector('title')?.textContent || '');
@@ -315,7 +317,11 @@ async function resolveOvercast(inputUrl, classification, fetchImpl, env) {
     try {
       appleCandidate = feed.title ? await findApplePodcastByFeed(feed.title, feed.url, fetchImpl) : null;
     } catch {}
-    const pcstLinks = appleCandidate?.collectionId ? await fetchPcstLinks(String(appleCandidate.collectionId), fetchImpl) : {};
+    const appleId = appleCandidate?.collectionId || classifyUrl(pageLinks.apple?.url || '').appleId || null;
+    let pcstLinks = {};
+    try {
+      pcstLinks = appleId ? await fetchPcstLinks(String(appleId), fetchImpl) : {};
+    } catch {}
     const websiteLinks = feed.link ? await fetchWebsitePlatformLinks(feed.link, fetchImpl) : {};
 
     return buildPodcastItem({
@@ -326,9 +332,10 @@ async function resolveOvercast(inputUrl, classification, fetchImpl, env) {
       platformLinks: normalizePlatformLinks({
         ...pcstLinks,
         ...websiteLinks,
-        apple: appleCandidate?.collectionViewUrl
+        ...pageLinks,
+        apple: pageLinks.apple || (appleCandidate?.collectionViewUrl
           ? platformLink('Apple Podcasts', appleCandidate.collectionViewUrl, 'show', 'verified')
-          : null,
+          : null),
         overcast: overcastLink,
         rss: platformLink('RSS Feed', feedUrl, 'rss', 'exact'),
         website: feed.link ? platformLink('Website', feed.link, 'website', 'verified') : null,
@@ -366,7 +373,7 @@ async function resolveOvercast(inputUrl, classification, fetchImpl, env) {
       audioUrl: '',
       links: [inputUrl]
     } : null,
-    platformLinks: normalizePlatformLinks({ overcast: overcastLink }),
+    platformLinks: normalizePlatformLinks({ ...pageLinks, overcast: overcastLink }),
     sourceMetadata: {
       title: pageTitle,
       description: pageDescription,
@@ -727,7 +734,15 @@ function findRssUrl(document, baseUrl) {
     const href = node.getAttribute('href');
     const textValue = (node.textContent || '').toLowerCase();
     if (!href) continue;
-    if (type.includes('rss') || type.includes('xml') || textValue.includes('rss')) {
+    const hrefValue = href.toLowerCase();
+    if (
+      type.includes('rss') ||
+      type.includes('xml') ||
+      textValue.includes('rss') ||
+      hrefValue.includes('rss') ||
+      hrefValue.includes('/feed') ||
+      hrefValue.includes('feeds.')
+    ) {
       return resolveUrl(href, baseUrl);
     }
   }
