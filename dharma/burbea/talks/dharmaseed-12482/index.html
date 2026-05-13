@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>From Feelings to Freedom (Exploring Vedana) - Rob Burbea Dharma Talks</title>
+  <link rel="canonical" href="https://jeffharr.is/dharma/burbea/talks/dharmaseed-12482/">
+  <meta name="description" content="(Gaia House)">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Rob Burbea Dharma Talks">
+  <meta property="og:title" content="From Feelings to Freedom (Exploring Vedana)">
+  <meta property="og:description" content="(Gaia House)">
+  <meta property="og:url" content="https://jeffharr.is/dharma/burbea/talks/dharmaseed-12482/">
+  <meta property="og:image" content="https://jeffharr.is/dharma/burbea/artwork/rob-burbea-podcast-cover.jpg">
+  <meta property="og:image:secure_url" content="https://jeffharr.is/dharma/burbea/artwork/rob-burbea-podcast-cover.jpg">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="1024">
+  <meta property="og:image:height" content="1024">
+  <meta name="twitter:image" content="https://jeffharr.is/dharma/burbea/artwork/rob-burbea-podcast-cover.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="From Feelings to Freedom (Exploring Vedana)">
+  <meta name="twitter:description" content="(Gaia House)">
+  <link rel="stylesheet" href="../../talk-page.css">
+</head>
+<body>
+  <main>
+    <a class="back" href="../../">Rob Burbea Dharma Talks</a>
+    <div class="hero">
+      <div>
+        <h1>From Feelings to Freedom (Exploring Vedana)</h1>
+        <div class="meta">
+          <span>Dharma Seed</span>
+          <span>51:55</span>
+          <span>2006-11-04</span>
+        </div>
+        <p class="description">(Gaia House)</p>
+      </div>
+      <img class="art" src="/dharma/burbea/artwork/rob-burbea-podcast-cover.jpg" alt="">
+    </div>
+    <div class="primary-player">
+      <audio id="audio" controls preload="none" src="https://dharmaseed.org/talks/12482/20061104-Rob_Burbea-GAIA-from_feelings_to_freedom_exploring_vedana-12482.mp3?rss="></audio>
+      <a class="download-link" href="https://dharmaseed.org/talks/12482/20061104-Rob_Burbea-GAIA-from_feelings_to_freedom_exploring_vedana-12482.mp3?rss=" download>Download MP3</a>
+    </div>
+    
+    <section>
+      <h2>Source</h2>
+      <p><a href="https://dharmaseed.org/talks/12482/">Original talk page</a></p>
+    </section>
+  </main>
+  <script>
+    const audio = document.getElementById('audio');
+    function seekFromLocation() {
+      if (!audio) return;
+      const value = new URLSearchParams(location.search).get('t');
+      const seconds = Number(value || 0);
+      if (Number.isFinite(seconds) && seconds > 0) {
+        audio.currentTime = seconds;
+      }
+    }
+    document.querySelectorAll('[data-start]').forEach(link => {
+      link.addEventListener('click', event => {
+        if (!audio) return;
+        event.preventDefault();
+        const seconds = Number(link.dataset.start || 0);
+        history.replaceState(null, '', '?t=' + Math.round(seconds));
+        audio.currentTime = seconds;
+        audio.play().catch(() => {});
+      });
+    });
+    audio?.addEventListener('loadedmetadata', seekFromLocation, { once: true });
+  </script>
+</body>
+</html>

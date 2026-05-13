@@ -183,3 +183,26 @@ Use this plan:
 
 If this project grows beyond two teachers, refactor the tooling around a
 teacher config file instead of cloning Brensilver-specific constants.
+
+## Rob Burbea Corpus
+
+- Source config: `tools/brensilver-feed/config/burbea.json`
+- Feed builder wrapper: `scripts/build-burbea-feed.py`
+- Local ingestion runner: `scripts/run-burbea-ingestion.sh`
+- Generated public artifacts: `dharma/burbea/`
+- Local private corpus: `.local-corpus/burbea/`
+- QMD collection: `burbea`
+- Main Dharma-talk feed: `dharma/burbea/feed.xml`
+- Guided/practice feed: `dharma/burbea/guided-feed.xml`
+
+Rob Burbea uses the Dharma Seed teacher archive feed only:
+
+```txt
+https://www.dharmaseed.org/feeds/teacher_all/210/
+```
+
+The guided/practice split intentionally uses the same title heuristics as the
+Brensilver feed. Episode artwork and teacher cover art should follow the
+Imaginal Night Garden direction: deep indigo, black-green, pearl, muted gold,
+dreamlike botanical/celestial forms, soft print texture, and subtle luminous
+symbols.

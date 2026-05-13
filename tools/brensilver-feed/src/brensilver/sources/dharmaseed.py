@@ -48,8 +48,8 @@ def parse_dharmaseed_feed(xml_text: str, source: Dict[str, Any]) -> Iterable[Tal
 
         link = _source_url_value(source, _text(item, "link"))
         source_id = _talk_id_from_link(link) or _text(item, "guid") or enclosure.get("url", "")
-        title = _clean_title(_text(item, "title"))
         speaker = _text(item, f"{{{ITUNES_NS}}}author")
+        title = _clean_title(_text(item, "title"), speaker=speaker)
         if not _speaker_allowed(source, speaker):
             continue
 
@@ -99,7 +99,10 @@ def parse_dharmaseed_player(
     if not _speaker_allowed(source, speaker):
         return None
 
-    title = _clean_player_title(_player_field(html_text, "title") or _title_from_html(html_text))
+    title = _clean_player_title(
+        _player_field(html_text, "title") or _title_from_html(html_text),
+        speaker=speaker,
+    )
     published_at = _player_date(_player_field(html_text, "date"))
     audio_url = _normalize_audio_url(urllib.parse.urljoin("https://dharmaseed.org/", audio_path))
     audio_length = _optional_int(source.get("audio_length"))
@@ -153,13 +156,16 @@ def _talk_id_from_link(link: str) -> Optional[str]:
     return None
 
 
-def _clean_title(title: str) -> str:
-    return re.sub(r"^Matthew Brensilver:\s*", "", title).strip()
+def _clean_title(title: str, speaker: str | None = None) -> str:
+    title = " ".join(title.split())
+    if speaker:
+        title = re.sub(rf"^{re.escape(speaker)}\s*:\s*", "", title, flags=re.IGNORECASE)
+    return re.sub(r"^Matthew Brensilver:\s*", "", title, flags=re.IGNORECASE).strip()
 
 
-def _clean_player_title(title: str) -> str:
+def _clean_player_title(title: str, speaker: str | None = None) -> str:
     title = re.sub(r"^\d{1,2}:\d{2}(?::\d{2})?\s+", "", title).strip()
-    return _clean_title(title)
+    return _clean_title(title, speaker=speaker)
 
 
 def _player_date(value: str) -> datetime:

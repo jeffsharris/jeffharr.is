@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Follow Your Heartbreak - Rob Burbea Dharma Talks</title>
+  <link rel="canonical" href="https://jeffharr.is/dharma/burbea/talks/dharmaseed-20497/">
+  <meta name="description" content="(Insight Meditation Community of Berkeley) Inspired by Andrew Harvey's book A Guide to Sacred Activism. The journey of transformation, both personal and global, includes our hearts opening to all the suffering we encounter and letting our heart be shattered and break open to new possibilities. This is a natural and essential component of true awakening. This process is explored on different levels: our own dharma practice, the classical Progress of Insight and what Harvey calls &quot;The Dark Night of the Species.&quot;">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Rob Burbea Dharma Talks">
+  <meta property="og:title" content="Follow Your Heartbreak">
+  <meta property="og:description" content="(Insight Meditation Community of Berkeley) Inspired by Andrew Harvey's book A Guide to Sacred Activism. The journey of transformation, both personal and global, includes our hearts opening to all the suffering we encounter and letting our heart be shattered and break open to new possibilities. This is a natural and essential component of true awakening. This process is explored on different levels: our own dharma practice, the classical Progress of Insight and what Harvey calls &quot;The Dark Night of the Species.&quot;">
+  <meta property="og:url" content="https://jeffharr.is/dharma/burbea/talks/dharmaseed-20497/">
+  <meta property="og:image" content="https://jeffharr.is/dharma/burbea/artwork/rob-burbea-podcast-cover.jpg">
+  <meta property="og:image:secure_url" content="https://jeffharr.is/dharma/burbea/artwork/rob-burbea-podcast-cover.jpg">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="1024">
+  <meta property="og:image:height" content="1024">
+  <meta name="twitter:image" content="https://jeffharr.is/dharma/burbea/artwork/rob-burbea-podcast-cover.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Follow Your Heartbreak">
+  <meta name="twitter:description" content="(Insight Meditation Community of Berkeley) Inspired by Andrew Harvey's book A Guide to Sacred Activism. The journey of transformation, both personal and global, includes our hearts opening to all the suffering we encounter and letting our heart be shattered and break open to new possibilities. This is a natural and essential component of true awakening. This process is explored on different levels: our own dharma practice, the classical Progress of Insight and what Harvey calls &quot;The Dark Night of the Species.&quot;">
+  <link rel="stylesheet" href="../../talk-page.css">
+</head>
+<body>
+  <main>
+    <a class="back" href="../../">Rob Burbea Dharma Talks</a>
+    <div class="hero">
+      <div>
+        <h1>Follow Your Heartbreak</h1>
+        <div class="meta">
+          <span>Dharma Seed</span>
+          <span>51:12</span>
+          <span>2013-08-22</span>
+        </div>
+        <p class="description">(Insight Meditation Community of Berkeley) Inspired by Andrew Harvey's book A Guide to Sacred Activism. The journey of transformation, both personal and global, includes our hearts opening to all the suffering we encounter and letting our heart be shattered and break open to new possibilities. This is a natural and essential component of true awakening. This process is explored on different levels: our own dharma practice, the classical Progress of Insight and what Harvey calls &quot;The Dark Night of the Species.&quot;</p>
+      </div>
+      <img class="art" src="/dharma/burbea/artwork/rob-burbea-podcast-cover.jpg" alt="">
+    </div>
+    <div class="primary-player">
+      <audio id="audio" controls preload="none" src="https://dharmaseed.org/talks/20497/20130822-James_Baraz-IMCB-follow_your_heartbreak-20497.mp3?rss="></audio>
+      <a class="download-link" href="https://dharmaseed.org/talks/20497/20130822-James_Baraz-IMCB-follow_your_heartbreak-20497.mp3?rss=" download>Download MP3</a>
+    </div>
+    
+    <section>
+      <h2>Source</h2>
+      <p><a href="https://dharmaseed.org/talks/20497/">Original talk page</a></p>
+    </section>
+  </main>
+  <script>
+    const audio = document.getElementById('audio');
+    function seekFromLocation() {
+      if (!audio) return;
+      const value = new URLSearchParams(location.search).get('t');
+      const seconds = Number(value || 0);
+      if (Number.isFinite(seconds) && seconds > 0) {
+        audio.currentTime = seconds;
+      }
+    }
+    document.querySelectorAll('[data-start]').forEach(link => {
+      link.addEventListener('click', event => {
+        if (!audio) return;
+        event.preventDefault();
+        const seconds = Number(link.dataset.start || 0);
+        history.replaceState(null, '', '?t=' + Math.round(seconds));
+        audio.currentTime = seconds;
+        audio.play().catch(() => {});
+      });
+    });
+    audio?.addEventListener('loadedmetadata', seekFromLocation, { once: true });
+  </script>
+</body>
+</html>

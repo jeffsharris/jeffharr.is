@@ -10,9 +10,10 @@
 - Feed-specific agent orientation lives in `tools/brensilver-feed/AGENTS.md`; read it before changing sources or generated feed artifacts.
 - Local transcription/search tooling lives in `tools/brensilver-transcripts/`.
 - Future-agent runbook for adding Matthew sources, using QMD, private Dharma Seed keys, automation, and adding other Dharma teachers lives at `tools/brensilver-transcripts/docs/dharma-content-agent-runbook.md`.
-- The transcript and feed tooling is now corpus-configurable. Matthew Brensilver uses `tools/brensilver-transcripts/config/brensilver-corpus.json`; Alan Watts uses `tools/brensilver-transcripts/config/watts-corpus.json`.
+- The transcript and feed tooling is now corpus-configurable. Matthew Brensilver uses `tools/brensilver-transcripts/config/brensilver-corpus.json`; Rob Burbea uses `tools/brensilver-transcripts/config/burbea-corpus.json`; Alan Watts uses `tools/brensilver-transcripts/config/watts-corpus.json`.
 - Transcript artifacts are intentionally written to `.local-corpus/brensilver/`, which is gitignored and should not be deployed unless Jeff explicitly asks.
 - Watts transcript artifacts are intentionally written to `.local-corpus/watts/`, also gitignored; public generated artifacts live under `dharma/watts/`.
+- Burbea transcript artifacts are intentionally written to `.local-corpus/burbea/`, also gitignored; public generated artifacts live under `dharma/burbea/`.
 - The transcript workflow is split deliberately: `whisper-1` raw segments, GPT-5.4 mini transcript correction, then a separate external reference extraction pass.
 - Corrected transcripts also pass through local silence-hallucination cleanup; removed rows are preserved as `suppressed_segments` in corrected JSON.
 - Reference extraction writes `references/{talk_id}.json`; references are holistic jumpable moments, not exact quote spans. Low-confidence or unsupported attributions should stay marked `needs_review` rather than being promoted into indexes.
@@ -42,6 +43,8 @@ PYTHONPATH=tools/brensilver-transcripts/src python3 -m brensilver_transcripts.pi
 python3 scripts/build-brensilver-feed.py --talks-json dharma/brensilver/talks.json --media-base-url https://media.jeffharr.is/brensilver/
 python3 scripts/build-watts-feed.py --copy-artwork
 PYTHONPATH=tools/brensilver-transcripts/src python3 -m brensilver_transcripts.pipeline --corpus-config tools/brensilver-transcripts/config/watts-corpus.json run-corpus --limit 50 --feed-every 10 --media-base-url https://jeffharr.is/dharma/watts/ --copy-artwork --update-qmd --build-feedback-viewer
+python3 scripts/build-burbea-feed.py --copy-artwork
+PYTHONPATH=tools/brensilver-transcripts/src python3 -m brensilver_transcripts.pipeline --corpus-config tools/brensilver-transcripts/config/burbea-corpus.json run-corpus --limit 1000 --feed-every 20 --media-base-url https://jeffharr.is/dharma/burbea/ --copy-artwork --update-qmd --build-feedback-viewer
 ```
 
 ## Read Later architecture (critical)

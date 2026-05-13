@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Climate Change, Capitalism, and Buddhadharma - Rob Burbea Dharma Talks</title>
+  <link rel="canonical" href="https://jeffharr.is/dharma/burbea/talks/dharmaseed-21552/">
+  <meta name="description" content="(Insight Meditation Community of Berkeley) An impassioned talk that includes a little known story from the suttas about the dangers of and suffering caused by the notion of private property. During the talk, winds of 45 mph buffeted the monastery, emergency sirens sounded in the distance, and three power outages occurred. Ends with a lively discussion with the sangha.">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Rob Burbea Dharma Talks">
+  <meta property="og:title" content="Climate Change, Capitalism, and Buddhadharma">
+  <meta property="og:description" content="(Insight Meditation Community of Berkeley) An impassioned talk that includes a little known story from the suttas about the dangers of and suffering caused by the notion of private property. During the talk, winds of 45 mph buffeted the monastery, emergency sirens sounded in the distance, and three power outages occurred. Ends with a lively discussion with the sangha.">
+  <meta property="og:url" content="https://jeffharr.is/dharma/burbea/talks/dharmaseed-21552/">
+  <meta property="og:image" content="https://jeffharr.is/dharma/burbea/artwork/rob-burbea-podcast-cover.jpg">
+  <meta property="og:image:secure_url" content="https://jeffharr.is/dharma/burbea/artwork/rob-burbea-podcast-cover.jpg">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="1024">
+  <meta property="og:image:height" content="1024">
+  <meta name="twitter:image" content="https://jeffharr.is/dharma/burbea/artwork/rob-burbea-podcast-cover.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Climate Change, Capitalism, and Buddhadharma">
+  <meta name="twitter:description" content="(Insight Meditation Community of Berkeley) An impassioned talk that includes a little known story from the suttas about the dangers of and suffering caused by the notion of private property. During the talk, winds of 45 mph buffeted the monastery, emergency sirens sounded in the distance, and three power outages occurred. Ends with a lively discussion with the sangha.">
+  <link rel="stylesheet" href="../../talk-page.css">
+</head>
+<body>
+  <main>
+    <a class="back" href="../../">Rob Burbea Dharma Talks</a>
+    <div class="hero">
+      <div>
+        <h1>Climate Change, Capitalism, and Buddhadharma</h1>
+        <div class="meta">
+          <span>Dharma Seed</span>
+          <span>57:26</span>
+          <span>2013-11-21</span>
+        </div>
+        <p class="description">(Insight Meditation Community of Berkeley) An impassioned talk that includes a little known story from the suttas about the dangers of and suffering caused by the notion of private property. During the talk, winds of 45 mph buffeted the monastery, emergency sirens sounded in the distance, and three power outages occurred. Ends with a lively discussion with the sangha.</p>
+      </div>
+      <img class="art" src="/dharma/burbea/artwork/rob-burbea-podcast-cover.jpg" alt="">
+    </div>
+    <div class="primary-player">
+      <audio id="audio" controls preload="none" src="https://dharmaseed.org/talks/21552/20131121-Joanna_Macy-IMCB-climate_change_capitalism_and_buddhadharma-21552.mp3?rss="></audio>
+      <a class="download-link" href="https://dharmaseed.org/talks/21552/20131121-Joanna_Macy-IMCB-climate_change_capitalism_and_buddhadharma-21552.mp3?rss=" download>Download MP3</a>
+    </div>
+    
+    <section>
+      <h2>Source</h2>
+      <p><a href="https://dharmaseed.org/talks/21552/">Original talk page</a></p>
+    </section>
+  </main>
+  <script>
+    const audio = document.getElementById('audio');
+    function seekFromLocation() {
+      if (!audio) return;
+      const value = new URLSearchParams(location.search).get('t');
+      const seconds = Number(value || 0);
+      if (Number.isFinite(seconds) && seconds > 0) {
+        audio.currentTime = seconds;
+      }
+    }
+    document.querySelectorAll('[data-start]').forEach(link => {
+      link.addEventListener('click', event => {
+        if (!audio) return;
+        event.preventDefault();
+        const seconds = Number(link.dataset.start || 0);
+        history.replaceState(null, '', '?t=' + Math.round(seconds));
+        audio.currentTime = seconds;
+        audio.play().catch(() => {});
+      });
+    });
+    audio?.addEventListener('loadedmetadata', seekFromLocation, { once: true });
+  </script>
+</body>
+</html>

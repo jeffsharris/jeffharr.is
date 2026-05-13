@@ -1,8 +1,8 @@
 # Brensilver Feed Agent Notes
 
 This directory is the implementation for configured public podcast feeds. The
-original Matthew Brensilver artifacts live at `/dharma/brensilver/`; Alan Watts
-artifacts live at `/dharma/watts/`.
+original Matthew Brensilver artifacts live at `/dharma/brensilver/`; Rob Burbea
+artifacts live at `/dharma/burbea/`; Alan Watts artifacts live at `/dharma/watts/`.
 
 For the whole content system, including local ingestion, QMD, recurring
 automation, private Dharma Seed keys, and adding another teacher, read
@@ -18,6 +18,8 @@ automation, private Dharma Seed keys, and adding another teacher, read
   tool's config and output path.
 - The Watts wrapper is `scripts/build-watts-feed.py`. It supplies
   `config/watts.json`, writes `/dharma/watts/`, and seeds from `/dharma/watts/talks.json`.
+- The Burbea wrapper is `scripts/build-burbea-feed.py`. It supplies
+  `config/burbea.json`, writes `/dharma/burbea/`, and seeds from `/dharma/burbea/talks.json`.
 - The wrapper also seeds from existing `/dharma/brensilver/talks.json` so old archived
   talks survive when an upstream feed stops listing them.
 

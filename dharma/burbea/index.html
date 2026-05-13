@@ -1,0 +1,532 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Rob Burbea</title>
+  <link rel="alternate" type="application/rss+xml" title="Rob Burbea Dharma Talks" href="feed.xml">
+  <link rel="alternate" type="application/rss+xml" title="Rob Burbea Guided Meditations" href="guided-feed.xml">
+  <style>
+    :root {
+      color-scheme: light dark;
+      --bg: #f8f7f3;
+      --ink: #1f2933;
+      --muted: #52616b;
+      --line: #d8d2c4;
+      --accent: #226f63;
+      --accent-strong: #174f47;
+      --rust: #a15c38;
+      --gold: #b28a31;
+      --blue: #3d6c93;
+      --panel: #ffffff;
+      --shadow: rgba(31, 41, 51, 0.12);
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #111816;
+        --ink: #eef2ed;
+        --muted: #b2beb6;
+        --line: #39443f;
+        --accent: #79b7aa;
+        --accent-strong: #9fd7cc;
+        --rust: #d38a67;
+        --gold: #dfbd64;
+        --blue: #8ab5da;
+        --panel: #18211e;
+        --shadow: rgba(0, 0, 0, 0.32);
+      }
+    }
+    body {
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.5;
+    }
+    .page-shell {
+      min-height: 100vh;
+    }
+    main {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 56px 22px 72px;
+    }
+    h1 {
+      margin: 0;
+      font-size: clamp(2.7rem, 8vw, 5.6rem);
+      line-height: 0.95;
+      letter-spacing: 0;
+    }
+    h2 {
+      font-size: clamp(1.55rem, 3vw, 2.25rem);
+      line-height: 1.1;
+      letter-spacing: 0;
+      margin: 0 0 8px;
+    }
+    p {
+      color: var(--muted);
+      font-size: 1.05rem;
+    }
+    a {
+      color: var(--accent);
+      font-weight: 700;
+    }
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(180px, 280px);
+      gap: 34px;
+      align-items: center;
+      padding-bottom: 42px;
+    }
+    .portrait {
+      justify-self: end;
+      width: 100%;
+      max-width: 280px;
+      aspect-ratio: 1;
+      object-fit: cover;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      box-shadow: 0 18px 48px var(--shadow);
+    }
+    .subscribe {
+      border-top: 1px solid var(--line);
+      padding-top: 30px;
+    }
+    .feed-switch {
+      display: inline-grid;
+      grid-template-columns: repeat(2, minmax(150px, 1fr));
+      gap: 6px;
+      padding: 6px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: color-mix(in srgb, var(--panel) 72%, var(--bg));
+      margin-bottom: 24px;
+    }
+    .feed-tab {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 10px;
+      min-height: 46px;
+      padding: 0 12px;
+      border: 0;
+      border-radius: 6px;
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      font: inherit;
+      font-weight: 800;
+      text-align: left;
+    }
+    .feed-tab strong {
+      color: inherit;
+      font-size: 0.95rem;
+    }
+    .feed-tab.is-active {
+      background: var(--accent-strong);
+      color: #ffffff;
+      box-shadow: 0 8px 22px var(--shadow);
+    }
+    .feed-panel[hidden] {
+      display: none;
+    }
+    .feed-panel {
+      max-width: 760px;
+    }
+    .feed-count {
+      margin: 0 0 18px;
+      color: var(--muted);
+      font-weight: 700;
+    }
+    .listen-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(140px, 1fr));
+      gap: 12px;
+      margin: 20px 0 14px;
+    }
+    .listen-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-height: 52px;
+      padding: 0 14px;
+      border: 0;
+      border-radius: 6px;
+      background: var(--accent-strong);
+      color: #ffffff;
+      cursor: pointer;
+      font: inherit;
+      font-size: 0.96rem;
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .listen-badge img {
+      width: 22px;
+      height: 22px;
+      flex: 0 0 auto;
+    }
+    .listen-badge.pocket { background: #d9443f; }
+    .listen-badge.apple { background: #872ec4; }
+    .listen-badge.youtube { background: #c4302b; }
+    .feed-copy {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 10px;
+      align-items: stretch;
+      max-width: 760px;
+    }
+    .copy-link {
+      min-height: 44px;
+      padding: 0 14px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: color-mix(in srgb, var(--panel) 70%, var(--bg));
+      color: var(--accent);
+      cursor: pointer;
+      font: inherit;
+      font-weight: 800;
+    }
+    .copy-status {
+      min-height: 1.4em;
+      margin: 8px 0 0;
+      color: var(--accent);
+      font-size: 0.95rem;
+      font-weight: 700;
+    }
+    .feed-url {
+      display: block;
+      max-width: 100%;
+      padding: 12px 14px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: color-mix(in srgb, var(--panel) 82%, var(--bg));
+      overflow-wrap: anywhere;
+    }
+    code {
+      overflow-wrap: anywhere;
+    }
+    .archive {
+      border-top: 1px solid var(--line);
+      margin-top: 34px;
+      padding-top: 34px;
+    }
+    .archive-kicker {
+      margin: 0 0 6px;
+      color: var(--accent);
+      font-size: 0.78rem;
+      font-weight: 850;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .archive-copy {
+      max-width: 620px;
+      margin: 0 0 22px;
+    }
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+    .archive-tools {
+      display: grid;
+      grid-template-columns: minmax(240px, 520px) minmax(0, 1fr);
+      gap: 14px;
+      align-items: center;
+      margin: 10px 0 4px;
+    }
+    .archive-search {
+      position: relative;
+      display: block;
+    }
+    .archive-search::before,
+    .archive-search::after {
+      position: absolute;
+      content: "";
+      pointer-events: none;
+    }
+    .archive-search::before {
+      top: 15px;
+      left: 17px;
+      width: 13px;
+      height: 13px;
+      border: 2px solid var(--accent);
+      border-radius: 50%;
+      opacity: 0.86;
+    }
+    .archive-search::after {
+      top: 29px;
+      left: 30px;
+      width: 9px;
+      height: 2px;
+      border-radius: 2px;
+      background: var(--accent);
+      transform: rotate(45deg);
+      transform-origin: left center;
+      opacity: 0.86;
+    }
+    .archive-search input {
+      width: 100%;
+      min-height: 48px;
+      box-sizing: border-box;
+      padding: 0 16px 0 47px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: color-mix(in srgb, var(--panel) 88%, var(--bg));
+      color: var(--ink);
+      font: inherit;
+      outline: none;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45);
+    }
+    .archive-search input::placeholder {
+      color: color-mix(in srgb, var(--muted) 78%, transparent);
+    }
+    .archive-search input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent);
+    }
+    .archive-search-status {
+      justify-self: end;
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+    .talk-list {
+      display: grid;
+      gap: 14px;
+      margin-top: 20px;
+    }
+    .talk-card {
+      display: grid;
+      grid-template-columns: 112px minmax(0, 1fr);
+      gap: 16px;
+      align-items: start;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: color-mix(in srgb, var(--panel) 86%, var(--bg));
+    }
+    .talk-card img {
+      width: 100%;
+      aspect-ratio: 1;
+      object-fit: cover;
+      border-radius: 6px;
+      border: 1px solid var(--line);
+      background: var(--panel);
+    }
+    .talk-card h3 {
+      margin: 0;
+      font-size: 1.14rem;
+      line-height: 1.18;
+      letter-spacing: 0;
+    }
+    .talk-card-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 7px 0 8px;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+    .talk-card-description {
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 3;
+      overflow: hidden;
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.98rem;
+    }
+    .talk-card-player {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 10px;
+      align-items: center;
+      margin-top: 12px;
+    }
+    .talk-card-player audio {
+      min-width: 0;
+    }
+    .talk-card-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .archive-link,
+    .download-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 0 14px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      color: var(--accent);
+      text-decoration: none;
+      white-space: nowrap;
+      background: color-mix(in srgb, var(--panel) 78%, var(--bg));
+    }
+    .talk-loader {
+      min-height: 56px;
+      display: grid;
+      place-items: center;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+    @media (max-width: 760px) {
+      .archive-tools { grid-template-columns: 1fr; }
+      .archive-search-status { justify-self: start; min-height: 1.3em; }
+      .talk-card-player { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 560px) {
+      .talk-card { grid-template-columns: 82px minmax(0, 1fr); gap: 12px; padding: 12px; }
+      .talk-card-description { -webkit-line-clamp: 4; }
+      .talk-card-actions { display: grid; grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 880px) {
+      .hero { grid-template-columns: 1fr; gap: 26px; }
+      .portrait { justify-self: start; max-width: 240px; }
+      .listen-grid { grid-template-columns: repeat(2, minmax(140px, 1fr)); }
+    }
+    @media (max-width: 520px) {
+      main { padding: 34px 18px 56px; }
+      .feed-switch { display: grid; grid-template-columns: 1fr; width: 100%; }
+      .listen-grid { grid-template-columns: 1fr; }
+      .feed-copy { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-shell">
+  <main>
+    <section class="hero" aria-labelledby="page-title">
+      <div>
+        <h1 id="page-title">Rob Burbea</h1>
+      </div>
+      <img class="portrait" src="/dharma/burbea/artwork/rob-burbea-podcast-cover.jpg" alt="Rob Burbea">
+    </section>
+    <section class="subscribe">
+      <div class="feed-switch" role="tablist" aria-label="Choose a podcast feed">
+        <button class="feed-tab is-active" type="button" role="tab" aria-selected="true" aria-controls="panel-dharma" data-feed-tab="dharma">
+          <span>Dharma talks</span>
+          <strong>452</strong>
+        </button>
+        <button class="feed-tab" type="button" role="tab" aria-selected="false" aria-controls="panel-guided" data-feed-tab="guided">
+          <span>Guided meditations</span>
+          <strong>46</strong>
+        </button>
+      </div>
+      <div class="feed-panel" id="panel-dharma" data-feed-panel="dharma">
+        <h2>Dharma talks</h2>
+        <p class="feed-count">452 episodes</p>
+        <div class="listen-grid">
+          <a class="listen-badge overcast" href="overcast://x-callback-url/add?url=https%3A%2F%2Fjeffharr.is%2Fdharma%2Fburbea%2Ffeed.xml">
+            <img src="https://cdn.simpleicons.org/overcast/FFFFFF?viewbox=auto" alt="">
+            <span>Overcast</span>
+          </a>
+          <a class="listen-badge pocket" href="pktc://subscribe/jeffharr.is/dharma/burbea/feed.xml">
+            <img src="https://cdn.simpleicons.org/pocketcasts/FFFFFF?viewbox=auto" alt="">
+            <span>Pocket Casts</span>
+          </a>
+          <button class="listen-badge apple" type="button" data-copy-feed="dharma" data-copy-message="RSS URL copied. In Apple Podcasts, choose Library, then Add a Show by URL.">
+            <img src="https://cdn.simpleicons.org/applepodcasts/FFFFFF?viewbox=auto" alt="">
+            <span>Apple Podcasts</span>
+          </button>
+          <button class="listen-badge youtube" type="button" data-copy-feed="dharma" data-copy-message="RSS URL copied. In YouTube Music, choose Library, Podcasts, then Add podcast by RSS feed.">
+            <img src="https://cdn.simpleicons.org/youtubemusic/FFFFFF?viewbox=auto" alt="">
+            <span>YouTube Music</span>
+          </button>
+        </div>
+        <div class="feed-copy">
+          <code class="feed-url">https://jeffharr.is/dharma/burbea/feed.xml</code>
+          <button class="copy-link" type="button" data-copy-feed="dharma">Copy RSS</button>
+        </div>
+      </div>
+      <div class="feed-panel" id="panel-guided" data-feed-panel="guided" hidden>
+        <h2>Guided meditations</h2>
+        <p class="feed-count">46 episodes</p>
+        <div class="listen-grid">
+          <a class="listen-badge overcast" href="overcast://x-callback-url/add?url=https%3A%2F%2Fjeffharr.is%2Fdharma%2Fburbea%2Fguided-feed.xml">
+            <img src="https://cdn.simpleicons.org/overcast/FFFFFF?viewbox=auto" alt="">
+            <span>Overcast</span>
+          </a>
+          <a class="listen-badge pocket" href="pktc://subscribe/jeffharr.is/dharma/burbea/guided-feed.xml">
+            <img src="https://cdn.simpleicons.org/pocketcasts/FFFFFF?viewbox=auto" alt="">
+            <span>Pocket Casts</span>
+          </a>
+          <button class="listen-badge apple" type="button" data-copy-feed="guided" data-copy-message="RSS URL copied. In Apple Podcasts, choose Library, then Add a Show by URL.">
+            <img src="https://cdn.simpleicons.org/applepodcasts/FFFFFF?viewbox=auto" alt="">
+            <span>Apple Podcasts</span>
+          </button>
+          <button class="listen-badge youtube" type="button" data-copy-feed="guided" data-copy-message="RSS URL copied. In YouTube Music, choose Library, Podcasts, then Add podcast by RSS feed.">
+            <img src="https://cdn.simpleicons.org/youtubemusic/FFFFFF?viewbox=auto" alt="">
+            <span>YouTube Music</span>
+          </button>
+        </div>
+        <div class="feed-copy">
+          <code class="feed-url">https://jeffharr.is/dharma/burbea/guided-feed.xml</code>
+          <button class="copy-link" type="button" data-copy-feed="guided">Copy RSS</button>
+        </div>
+      </div>
+      <p id="copy-status" class="copy-status" aria-live="polite"></p>
+    </section>
+    <section class="archive" aria-labelledby="archive-heading">
+      <p class="archive-kicker">Archive</p>
+      <h2 id="archive-heading">Browse and listen</h2>
+      <p id="archive-summary" class="archive-copy">Play talks here or download the audio.</p>
+      <div class="archive-tools">
+        <label class="archive-search" for="archive-search">
+          <span class="sr-only">Search talks</span>
+          <input id="archive-search" type="search" autocomplete="off" spellcheck="false" placeholder="Search titles, descriptions, chapters">
+        </label>
+        <p id="archive-search-status" class="archive-search-status" aria-live="polite"></p>
+      </div>
+      <div id="talk-list" class="talk-list"></div>
+      <div id="talk-loader" class="talk-loader" aria-live="polite">Loading talks...</div>
+    </section>
+  </main>
+  </div>
+  <script>
+    window.TALK_ARCHIVE_CONFIG = {"defaultFeed": "dharma", "siteBaseUrl": "https://jeffharr.is/dharma/burbea/", "talkPathPrefix": "talks/", "feeds": {"dharma": {"title": "Dharma talks", "url": "dharma-talks.json", "count": 452}, "guided": {"title": "Guided meditations", "url": "guided-talks.json", "count": 46}}};
+  </script>
+  <script>
+    const feedUrls = {"dharma": "https://jeffharr.is/dharma/burbea/feed.xml", "guided": "https://jeffharr.is/dharma/burbea/guided-feed.xml"};
+    const status = document.getElementById('copy-status');
+    function selectFeed(key) {
+      document.querySelectorAll('[data-feed-panel]').forEach(panel => {
+        panel.hidden = panel.dataset.feedPanel !== key;
+      });
+      document.querySelectorAll('[data-feed-tab]').forEach(tab => {
+        const selected = tab.dataset.feedTab === key;
+        tab.classList.toggle('is-active', selected);
+        tab.setAttribute('aria-selected', String(selected));
+      });
+      window.talkArchiveBrowser?.selectFeed(key);
+      status.textContent = '';
+    }
+    async function copyFeedUrl(key) {
+      const feedUrl = feedUrls[key] || feedUrls.dharma || feedUrls.main;
+      try {
+        await navigator.clipboard.writeText(feedUrl);
+        status.textContent = this?.dataset?.copyMessage || 'RSS URL copied.';
+      } catch (error) {
+        status.textContent = feedUrl;
+      }
+    }
+    document.querySelectorAll('[data-copy-feed]').forEach(button => {
+      button.addEventListener('click', () => copyFeedUrl.call(button, button.dataset.copyFeed));
+    });
+    document.querySelectorAll('[data-feed-tab]').forEach(button => {
+      button.addEventListener('click', () => selectFeed(button.dataset.feedTab));
+    });
+  </script>
+  <script src="archive-browser.js"></script>
+</body>
+</html>

@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Perfection and Christ's Blessing - Rob Burbea Dharma Talks</title>
+  <link rel="canonical" href="https://jeffharr.is/dharma/burbea/talks/dharmaseed-62457/">
+  <meta name="description" content="In this short reflection, Rob Burbea rethinks perfection as something present within being itself, rather than as achievement or completion. Using the small act of washing hands while weakened and ill, he points toward a beauty or grace that can be sensed in ordinary contact, loss, and even dukkha. He then turns to Christ’s blessing as a contemplative lens for this same kind of seeing, before briefly naming the problem of theodicy and returning to the heart’s quieter knowing.">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Rob Burbea Dharma Talks">
+  <meta property="og:title" content="Perfection and Christ's Blessing">
+  <meta property="og:description" content="In this short reflection, Rob Burbea rethinks perfection as something present within being itself, rather than as achievement or completion. Using the small act of washing hands while weakened and ill, he points toward a beauty or grace that can be sensed in ordinary contact, loss, and even dukkha. He then turns to Christ’s blessing as a contemplative lens for this same kind of seeing, before briefly naming the problem of theodicy and returning to the heart’s quieter knowing.">
+  <meta property="og:url" content="https://jeffharr.is/dharma/burbea/talks/dharmaseed-62457/">
+  <meta property="og:image" content="https://jeffharr.is/dharma/burbea/artwork/dharmaseed-62457.jpg">
+  <meta property="og:image:secure_url" content="https://jeffharr.is/dharma/burbea/artwork/dharmaseed-62457.jpg">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="1024">
+  <meta property="og:image:height" content="1024">
+  <meta name="twitter:image" content="https://jeffharr.is/dharma/burbea/artwork/dharmaseed-62457.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Perfection and Christ's Blessing">
+  <meta name="twitter:description" content="In this short reflection, Rob Burbea rethinks perfection as something present within being itself, rather than as achievement or completion. Using the small act of washing hands while weakened and ill, he points toward a beauty or grace that can be sensed in ordinary contact, loss, and even dukkha. He then turns to Christ’s blessing as a contemplative lens for this same kind of seeing, before briefly naming the problem of theodicy and returning to the heart’s quieter knowing.">
+  <link rel="stylesheet" href="../../talk-page.css">
+</head>
+<body>
+  <main>
+    <a class="back" href="../../">Rob Burbea Dharma Talks</a>
+    <div class="hero">
+      <div>
+        <h1>Perfection and Christ's Blessing</h1>
+        <div class="meta">
+          <span>Dharma Seed</span>
+          <span>4:30</span>
+          <span>2020-03-06</span>
+        </div>
+        <p class="description">In this short reflection, Rob Burbea rethinks perfection as something present within being itself, rather than as achievement or completion. Using the small act of washing hands while weakened and ill, he points toward a beauty or grace that can be sensed in ordinary contact, loss, and even dukkha. He then turns to Christ’s blessing as a contemplative lens for this same kind of seeing, before briefly naming the problem of theodicy and returning to the heart’s quieter knowing.</p>
+      </div>
+      <img class="art" src="/dharma/burbea/artwork/dharmaseed-62457.jpg" alt="">
+    </div>
+    <div class="primary-player">
+      <audio id="audio" controls preload="none" src="https://dharmaseed.org/talks/62457/20200306-Rob_Burbea-GAIA-perfection_and_christs_blessing-62457.mp3?rss="></audio>
+      <a class="download-link" href="https://dharmaseed.org/talks/62457/20200306-Rob_Burbea-GAIA-perfection_and_christs_blessing-62457.mp3?rss=" download>Download MP3</a>
+    </div>
+    <section>
+      <h2>Chapters</h2>
+      <ol class="chapters">
+        <li><a href="?t=1" data-start="1.0">00:01</a> <strong>A different perfection</strong> - Rob opens by contrasting ordinary ideas of perfection with a deeper perfection that runs through existence.</li>
+<li><a href="?t=18" data-start="18.0">00:18</a> <strong>Hands, weakness, grace</strong> - He uses the image of washing his hands while physically diminished to point to a perfection and beauty present in simple touch.</li>
+<li><a href="?t=72" data-start="72.0">01:12</a> <strong>Seeing, not achieving</strong> - Perfection is framed as a way of seeing that is at once universal and personal, woven with love and being known.</li>
+<li><a href="?t=141" data-start="141.0">02:21</a> <strong>Christ’s blessing</strong> - Rob introduces Christ’s blessing as something that seems to rest on everything, especially in the experience of loss, weakness, and incapacity.</li>
+<li><a href="?t=190" data-start="190.0">03:10</a> <strong>Beyond theodicy</strong> - He briefly names theodicy, then moves away from explanation toward the soul’s capacity to sense and taste something direct.</li>
+<li><a href="?t=238" data-start="238.0">03:58</a> <strong>Blessing in dukkha</strong> - The talk closes by returning to the claim that Christ’s blessing is on everything, including the palpable dukkha itself.</li>
+      </ol>
+    </section>
+    <section>
+      <h2>Source</h2>
+      <p><a href="https://dharmaseed.org/talks/62457/">Original talk page</a></p>
+    </section>
+  </main>
+  <script>
+    const audio = document.getElementById('audio');
+    function seekFromLocation() {
+      if (!audio) return;
+      const value = new URLSearchParams(location.search).get('t');
+      const seconds = Number(value || 0);
+      if (Number.isFinite(seconds) && seconds > 0) {
+        audio.currentTime = seconds;
+      }
+    }
+    document.querySelectorAll('[data-start]').forEach(link => {
+      link.addEventListener('click', event => {
+        if (!audio) return;
+        event.preventDefault();
+        const seconds = Number(link.dataset.start || 0);
+        history.replaceState(null, '', '?t=' + Math.round(seconds));
+        audio.currentTime = seconds;
+        audio.play().catch(() => {});
+      });
+    });
+    audio?.addEventListener('loadedmetadata', seekFromLocation, { once: true });
+  </script>
+</body>
+</html>

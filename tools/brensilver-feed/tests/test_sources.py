@@ -109,6 +109,36 @@ class SourceParsingTests(unittest.TestCase):
         self.assertIn("access_key=private-key", talks[0].link)
         self.assertIn("access_key=private-key", talks[0].audio_url)
 
+    def test_dharmaseed_feed_parser_strips_current_speaker_prefix(self):
+        xml = """<?xml version="1.0" encoding="utf-8"?>
+        <rss version="2.0" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd">
+          <channel>
+            <item>
+              <title>Rob Burbea: True to Your Deepest Desires</title>
+              <link>https://dharmaseed.org/talks/12345/</link>
+              <description>(Gaia House)</description>
+              <pubDate>Mon, 01 Jan 2024 06:30:00 +0000</pubDate>
+              <enclosure length="12345" type="audio/mpeg" url="https://dharmaseed.org/talks/12345/talk.mp3?rss=" />
+              <itunes:author>Rob Burbea</itunes:author>
+              <itunes:duration>1:00:00</itunes:duration>
+            </item>
+          </channel>
+        </rss>
+        """
+        talks = list(
+            parse_dharmaseed_feed(
+                xml,
+                {
+                    "name": "Dharma Seed",
+                    "feed_url": "https://www.dharmaseed.org/feeds/teacher_all/210/",
+                },
+            )
+        )
+
+        self.assertEqual(len(talks), 1)
+        self.assertEqual(talks[0].speaker, "Rob Burbea")
+        self.assertEqual(talks[0].title, "True to Your Deepest Desires")
+
     def test_dharmaseed_private_player_parser_extracts_access_key_audio(self):
         html = """
         <html>

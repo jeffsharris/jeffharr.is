@@ -156,7 +156,7 @@ def _summary(talk: Talk) -> str:
     details.extend(_source_metadata_lines(talk))
     if details:
         return f"{' '.join(_as_sentence(detail) for detail in details)} Source: {talk.source}."
-    return f"Matthew Brensilver Dharma talk from {talk.source}."
+    return f"{talk.speaker} Dharma talk from {talk.source}."
 
 
 def _podcast_description(talk: Talk) -> str:
@@ -215,6 +215,7 @@ def _dedupe_key(talk: Talk) -> str:
 
 def _normalize_title(title: str) -> str:
     title = re.sub(r"^matthew brensilver:\s*", "", title, flags=re.IGNORECASE)
+    title = re.sub(r"^rob burbea:\s*", "", title, flags=re.IGNORECASE)
     title = re.sub(r"\s*\((?:retreat at|online retreat at)[^)]+\)\s*", " ", title, flags=re.I)
     title = re.sub(r"[^a-z0-9]+", " ", title.lower())
     return " ".join(title.split())

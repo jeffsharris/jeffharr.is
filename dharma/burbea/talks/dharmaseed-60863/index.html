@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Counting Within the Breath (Guided Meditation) - Rob Burbea Dharma Talks</title>
+  <link rel="canonical" href="https://jeffharr.is/dharma/burbea/talks/dharmaseed-60863/">
+  <meta name="description" content="Rob Burbea offers a guided meditation built around counting within the breath, moving through a longer count, then a shorter one, while keeping whole-body awareness open. After the practice, he explains why this method can steady attention, counter inertia, and support the conditions for jhana. He also gives practical retreat guidance on posture, movement, interviews, and how to work with comfort and energy.">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Rob Burbea Dharma Talks">
+  <meta property="og:title" content="Counting Within the Breath (Guided Meditation)">
+  <meta property="og:description" content="Rob Burbea offers a guided meditation built around counting within the breath, moving through a longer count, then a shorter one, while keeping whole-body awareness open. After the practice, he explains why this method can steady attention, counter inertia, and support the conditions for jhana. He also gives practical retreat guidance on posture, movement, interviews, and how to work with comfort and energy.">
+  <meta property="og:url" content="https://jeffharr.is/dharma/burbea/talks/dharmaseed-60863/">
+  <meta property="og:image" content="https://jeffharr.is/dharma/burbea/artwork/dharmaseed-60863.jpg">
+  <meta property="og:image:secure_url" content="https://jeffharr.is/dharma/burbea/artwork/dharmaseed-60863.jpg">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="1024">
+  <meta property="og:image:height" content="1024">
+  <meta name="twitter:image" content="https://jeffharr.is/dharma/burbea/artwork/dharmaseed-60863.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Counting Within the Breath (Guided Meditation)">
+  <meta name="twitter:description" content="Rob Burbea offers a guided meditation built around counting within the breath, moving through a longer count, then a shorter one, while keeping whole-body awareness open. After the practice, he explains why this method can steady attention, counter inertia, and support the conditions for jhana. He also gives practical retreat guidance on posture, movement, interviews, and how to work with comfort and energy.">
+  <link rel="stylesheet" href="../../talk-page.css">
+</head>
+<body>
+  <main>
+    <a class="back" href="../../">Rob Burbea Dharma Talks</a>
+    <div class="hero">
+      <div>
+        <h1>Counting Within the Breath (Guided Meditation)</h1>
+        <div class="meta">
+          <span>Dharma Seed</span>
+          <span>48:15</span>
+          <span>2019-12-17</span>
+        </div>
+        <p class="description">Rob Burbea offers a guided meditation built around counting within the breath, moving through a longer count, then a shorter one, while keeping whole-body awareness open. After the practice, he explains why this method can steady attention, counter inertia, and support the conditions for jhana. He also gives practical retreat guidance on posture, movement, interviews, and how to work with comfort and energy.</p>
+      </div>
+      <img class="art" src="/dharma/burbea/artwork/dharmaseed-60863.jpg" alt="">
+    </div>
+    <div class="primary-player">
+      <audio id="audio" controls preload="none" src="https://dharmaseed.org/talks/60863/20191217-Rob_Burbea-GAIA-counting_within_the_breath_guided_meditation-60863.mp3?rss="></audio>
+      <a class="download-link" href="https://dharmaseed.org/talks/60863/20191217-Rob_Burbea-GAIA-counting_within_the_breath_guided_meditation-60863.mp3?rss=" download>Download MP3</a>
+    </div>
+    <section>
+      <h2>Chapters</h2>
+      <ol class="chapters">
+        <li><a href="?t=105" data-start="105.12">01:45</a> <strong>Counting Within Breath</strong> - Rob introduces the uncommon method of counting inside each breath and guides the group through the practice with whole-body awareness.</li>
+<li><a href="?t=1767" data-start="1767.278">29:27</a> <strong>Settling After Practice</strong> - He checks in on how the exercise felt and notes that it may be awkward or helpful in different ways for different people.</li>
+<li><a href="?t=1831" data-start="1831.278">30:31</a> <strong>Why It Helps</strong> - Rob explains that the practice can counter low energy and provide more support for attention, especially at the start of retreat.</li>
+<li><a href="?t=1917" data-start="1917.278">31:57</a> <strong>Attention and Jhana</strong> - He describes how the practice can be developed and says it may bring the mind close to first jhana if it is carefully cultivated.</li>
+<li><a href="?t=2028" data-start="2028.278">33:48</a> <strong>Posture and Comfort</strong> - Rob emphasizes that an upright, comfortable posture matters and points people to a posture session for further help.</li>
+<li><a href="?t=2148" data-start="2148.278">35:48</a> <strong>Movement and Energy</strong> - He recommends balancing sitting with walking, standing, gentle movement, and time outside to support the body and the retreat energy.</li>
+<li><a href="?t=2241" data-start="2241.278">37:21</a> <strong>Interviews and Practice Focus</strong> - Rob explains how interviews will work and asks participants to bring questions mainly about their meditation practice and jhana work.</li>
+<li><a href="?t=2410" data-start="2410.34">40:10</a> <strong>Practical Questions</strong> - He closes with guidance on pace, room use, water, chairs, standing meditation, and other retreat logistics before ending for the evening.</li>
+      </ol>
+    </section>
+    <section>
+      <h2>Source</h2>
+      <p><a href="https://dharmaseed.org/talks/60863/">Original talk page</a></p>
+    </section>
+  </main>
+  <script>
+    const audio = document.getElementById('audio');
+    function seekFromLocation() {
+      if (!audio) return;
+      const value = new URLSearchParams(location.search).get('t');
+      const seconds = Number(value || 0);
+      if (Number.isFinite(seconds) && seconds > 0) {
+        audio.currentTime = seconds;
+      }
+    }
+    document.querySelectorAll('[data-start]').forEach(link => {
+      link.addEventListener('click', event => {
+        if (!audio) return;
+        event.preventDefault();
+        const seconds = Number(link.dataset.start || 0);
+        history.replaceState(null, '', '?t=' + Math.round(seconds));
+        audio.currentTime = seconds;
+        audio.play().catch(() => {});
+      });
+    });
+    audio?.addEventListener('loadedmetadata', seekFromLocation, { once: true });
+  </script>
+</body>
+</html>

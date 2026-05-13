@@ -1,0 +1,26 @@
+{
+  "slug": "burbea",
+  "title": "Rob Burbea Dharma Talks",
+  "teacher": "Rob Burbea",
+  "public_base_url": "https://jeffharr.is/dharma/burbea/",
+  "talks_json": "dharma/burbea/talks.json",
+  "corpus_dir": ".local-corpus/burbea",
+  "feed_media_base_url": "https://jeffharr.is/dharma/burbea/",
+  "feed_build_script": "scripts/build-burbea-feed.py",
+  "glossary": "tools/brensilver-transcripts/config/burbea-glossary.json",
+  "env_file": ".env.local",
+  "prompts": {
+    "correct": "tools/brensilver-transcripts/prompts/correct_transcript.md",
+    "references": "tools/brensilver-transcripts/prompts/extract_references.md",
+    "episode_metadata": "tools/brensilver-transcripts/prompts/episode_metadata.md"
+  },
+  "qmd": {
+    "index": "dharma",
+    "collection": "burbea",
+    "context": "Timestamped Rob Burbea Dharma talk transcripts, including Soulmaking Dharma, emptiness, jhana, imaginal practice, and ways of looking."
+  },
+  "image_style": "Square editorial illustration for a Rob Burbea Dharma podcast episode in an Imaginal Night Garden style. Deep indigo, black-green, pearl, and muted gold. Dreamlike botanical and celestial forms, soft print texture, subtle luminous symbols, nocturnal spaciousness, and a sense of soulmaking or imaginal practice. Use symbolic imagery drawn from the episode topic. No text, no logos, no literal teacher portrait, no ornate religious iconography. Clear at small podcast thumbnail size.",
+  "fallback_artwork_prompt": "Square editorial illustration for a Rob Burbea Dharma podcast episode in an Imaginal Night Garden style. A luminous path winding through a dark indigo garden beneath pearl stars, black-green leaves, muted gold seed-lights, and subtle celestial geometry. The image should feel contemplative, mysterious, spacious, and tender. No text, no logos, no portrait, no ornate religious iconography. Clear at small podcast thumbnail size.",
+  "whisper_prompt": "{teacher} Dharma talk: {title}. Use Buddhist, imaginal, jhana, and Soulmaking Dharma terms accurately. Terms: {terms}. Names: {people}.",
+  "user_agent": "burbea-transcripts/0.1 (+https://jeffharr.is/dharma/burbea/)"
+}

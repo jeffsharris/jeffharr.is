@@ -1,0 +1,27 @@
+{
+  "site": {
+    "title": "Rob Burbea Dharma Talks",
+    "base_url": "https://jeffharr.is/dharma/burbea/",
+    "feed_url": "https://jeffharr.is/dharma/burbea/feed.xml",
+    "author": "Rob Burbea",
+    "description": "A podcast archive of Rob Burbea Dharma talks from Dharma Seed, enriched with transcript-derived summaries, chapters, and episode artwork.",
+    "language": "en",
+    "image_url": "https://jeffharr.is/dharma/burbea/artwork/rob-burbea-podcast-cover.jpg",
+    "guided_title": "Rob Burbea Guided Meditations",
+    "guided_description": "A companion feed of Rob Burbea guided meditations, guided practice sessions, and retreat instructions from Dharma Seed.",
+    "guided_feed_url": "https://jeffharr.is/dharma/burbea/guided-feed.xml",
+    "category": "Religion & Spirituality",
+    "subcategory": "Buddhism"
+  },
+  "sources": [
+    {
+      "type": "dharmaseed",
+      "name": "Dharma Seed",
+      "teacher_id": "210",
+      "feed_url": "https://www.dharmaseed.org/feeds/teacher_all/210/"
+    }
+  ],
+  "feed": {
+    "max_items": 1000
+  }
+}
