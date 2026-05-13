@@ -1,0 +1,25 @@
+{
+  "name": "Jeff Harris Share",
+  "short_name": "Jeff Share",
+  "start_url": "/share",
+  "scope": "/share/",
+  "display": "standalone",
+  "background_color": "#F6F3EF",
+  "theme_color": "#B87925",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "48x48",
+      "type": "image/x-icon"
+    }
+  ],
+  "share_target": {
+    "action": "/share/new",
+    "method": "GET",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url"
+    }
+  }
+}
