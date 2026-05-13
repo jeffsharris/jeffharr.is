@@ -1,7 +1,8 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { classifyUrl, parsePodcastFeed, resolveShareUrl } from '../functions/api/share/podcast-resolver.js';
+import { classifyUrl, normalizeInputUrl, parsePodcastFeed, resolveShareUrl } from '../functions/api/share/podcast-resolver.js';
 import { hashText, saveShareItem } from '../functions/api/share/store.js';
+import { getQueryParamPreservingPlus } from '../functions/share/new.js';
 
 const SAMPLE_FEED = `<?xml version="1.0"?>
 <rss version="2.0" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" xmlns:content="http://purl.org/rss/1.0/modules/content/">
@@ -29,8 +30,15 @@ test('classifyUrl recognizes supported podcast platforms', () => {
     episodeId: '123'
   });
   assert.equal(classifyUrl('https://overcast.fm/itunes1516093381').appleId, '1516093381');
+  assert.equal(classifyUrl('https://overcast.fm/+AA8CzMTP1Rc').overcastId, 'AA8CzMTP1Rc');
   assert.equal(classifyUrl('https://open.spotify.com/show/abc').spotifyType, 'show');
   assert.equal(classifyUrl('https://youtu.be/abc123').videoId, 'abc123');
+});
+
+test('share new URL parsing preserves Overcast plus links', () => {
+  const url = new URL('https://jeffharr.is/share/new?url=https://overcast.fm/+AA8CzMTP1Rc');
+  assert.equal(getQueryParamPreservingPlus(url, 'url'), 'https://overcast.fm/+AA8CzMTP1Rc');
+  assert.equal(normalizeInputUrl('https://overcast.fm/ AA8CzMTP1Rc'), 'https://overcast.fm/+AA8CzMTP1Rc');
 });
 
 test('parsePodcastFeed extracts show and episode metadata', () => {
@@ -74,6 +82,55 @@ test('resolveShareUrl resolves a raw RSS feed URL', async () => {
   assert.equal(item.type, 'podcast_show');
   assert.equal(item.title, 'Example Podcast');
   assert.equal(item.platforms.rss.url, 'https://example.com/feed.xml');
+});
+
+test('resolveShareUrl resolves an Overcast short episode URL through the feed', async () => {
+  const overcastHtml = `<!doctype html>
+    <html>
+      <head>
+        <title>Episode One &mdash; Example Podcast &mdash; Overcast</title>
+        <link rel="canonical" href="https://play.prx.org/listen?ge=episode-1&amp;uf=https%3A%2F%2Fexample.com%2Ffeed.xml">
+        <meta name="og:title" content="Episode One &mdash; Example Podcast">
+        <meta name="og:description" content="Shared from Overcast">
+        <meta name="og:image" content="https://example.com/episode.jpg">
+      </head>
+      <body></body>
+    </html>`;
+
+  const fetchImpl = async (url) => {
+    const urlString = String(url);
+    if (urlString === 'https://overcast.fm/+AA8CzMTP1Rc') {
+      return new Response(overcastHtml, {
+        headers: { 'content-type': 'text/html' }
+      });
+    }
+    if (urlString === 'https://example.com/feed.xml') {
+      return new Response(SAMPLE_FEED, {
+        headers: { 'content-type': 'application/rss+xml' }
+      });
+    }
+    if (urlString.startsWith('https://itunes.apple.com/search?')) {
+      return Response.json({
+        results: [{
+          collectionId: 123,
+          collectionName: 'Example Podcast',
+          collectionViewUrl: 'https://podcasts.apple.com/us/podcast/example/id123',
+          feedUrl: 'https://example.com/feed.xml'
+        }]
+      });
+    }
+    return new Response('<html></html>', {
+      headers: { 'content-type': 'text/html' }
+    });
+  };
+
+  const item = await resolveShareUrl('https://overcast.fm/+AA8CzMTP1Rc', { fetchImpl });
+  assert.equal(item.type, 'podcast_episode');
+  assert.equal(item.title, 'Episode One');
+  assert.equal(item.media.episodeGuid, 'episode-1');
+  assert.equal(item.platforms.overcast.url, 'https://overcast.fm/+AA8CzMTP1Rc');
+  assert.equal(item.platforms.rss.url, 'https://example.com/feed.xml');
+  assert.equal(item.platforms.apple.url, 'https://podcasts.apple.com/us/podcast/example/id123');
 });
 
 test('hashText is deterministic', async () => {

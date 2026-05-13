@@ -5,7 +5,10 @@ import { renderRedirectPage } from './render.js';
 export async function onRequest(context) {
   const { request, env } = context;
   const url = new URL(request.url);
-  const rawInput = url.searchParams.get('url') || url.searchParams.get('text') || url.searchParams.get('title') || '';
+  const rawInput = getQueryParamPreservingPlus(url, 'url') ||
+    url.searchParams.get('text') ||
+    url.searchParams.get('title') ||
+    '';
   const kv = getShareKv(env);
 
   if (!kv || !rawInput) {
@@ -34,4 +37,15 @@ export async function onRequest(context) {
     redirectUrl.searchParams.set('error', message);
     return Response.redirect(redirectUrl, 303);
   }
+}
+
+export function getQueryParamPreservingPlus(url, name) {
+  const query = url.search.startsWith('?') ? url.search.slice(1) : url.search;
+  for (const part of query.split('&')) {
+    if (!part) continue;
+    const [rawKey, ...rawValueParts] = part.split('=');
+    if (decodeURIComponent(rawKey || '') !== name) continue;
+    return decodeURIComponent(rawValueParts.join('=') || '');
+  }
+  return '';
 }

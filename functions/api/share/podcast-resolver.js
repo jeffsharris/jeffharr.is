@@ -29,6 +29,10 @@ export async function resolveShareUrl(rawInput, options = {}) {
     return resolveApple(inputUrl, { platform: 'apple', appleId: classification.appleId }, fetchImpl, env);
   }
 
+  if (classification.platform === 'overcast') {
+    return resolveOvercast(inputUrl, classification, fetchImpl, env);
+  }
+
   if (classification.platform === 'spotify') {
     return resolveSpotify(inputUrl, classification, fetchImpl, env);
   }
@@ -61,7 +65,10 @@ export async function resolveShareUrl(rawInput, options = {}) {
 
 export function normalizeInputUrl(input) {
   if (typeof input !== 'string') return '';
-  const trimmed = input.trim();
+  const trimmed = input.trim().replace(
+    /(https?:\/\/(?:www\.)?overcast\.fm\/)\s+([A-Za-z0-9_-]+)/i,
+    '$1+$2'
+  );
   const match = trimmed.match(/https?:\/\/[^\s<>"']+/i);
   return cleanupUrl(match ? match[0] : trimmed);
 }
@@ -85,7 +92,8 @@ export function classifyUrl(urlString) {
 
   if (host === 'overcast.fm') {
     const appleId = path.match(/\/itunes(\d+)/)?.[1] || null;
-    return { platform: 'overcast', appleId };
+    const overcastId = path.match(/^\/\+([^/?#]+)/)?.[1] || null;
+    return { platform: 'overcast', appleId, overcastId };
   }
 
   if (host === 'open.spotify.com') {
@@ -280,6 +288,96 @@ async function resolveSpotify(inputUrl, classification, fetchImpl, env) {
     identityFallback: `podcast_${classification.spotifyType || 'show'}:spotify:${classification.spotifyId || inputUrl}`,
     resolutionSources: ['spotify-oembed'],
     warnings: ['Spotify did not expose a reliable RSS feed for this URL.']
+  });
+}
+
+async function resolveOvercast(inputUrl, classification, fetchImpl, env) {
+  const response = await fetchText(inputUrl, fetchImpl, { maxBytes: MAX_HTML_BYTES });
+  const { document } = parseHTML(response.text);
+  const canonicalUrl = resolveUrl(
+    decodeEntities(document.querySelector('link[rel="canonical"]')?.getAttribute('href') || ''),
+    inputUrl
+  );
+  const canonical = canonicalUrl ? new URL(canonicalUrl) : null;
+  const feedUrl = canonical?.searchParams.get('uf') || '';
+  const episodeGuid = canonical?.searchParams.get('ge') || '';
+  const overcastLink = platformLink('Overcast', inputUrl, classification.overcastId ? 'episode' : 'show', 'exact');
+  const pageTitle = cleanOvercastTitle(meta(document, 'og:title') || document.querySelector('title')?.textContent || '');
+  const pageDescription = meta(document, 'og:description') || meta(document, 'description') || '';
+  const pageImageUrl = resolveUrl(meta(document, 'og:image'), inputUrl);
+
+  if (feedUrl) {
+    const feed = await fetchPodcastFeed(feedUrl, fetchImpl);
+    const episode = episodeGuid
+      ? feed.episodes.find((candidate) => candidate.guid === episodeGuid) || null
+      : matchEpisode(feed.episodes, { title: pageTitle });
+    let appleCandidate = null;
+    try {
+      appleCandidate = feed.title ? await findApplePodcastByFeed(feed.title, feed.url, fetchImpl) : null;
+    } catch {}
+    const pcstLinks = appleCandidate?.collectionId ? await fetchPcstLinks(String(appleCandidate.collectionId), fetchImpl) : {};
+    const websiteLinks = feed.link ? await fetchWebsitePlatformLinks(feed.link, fetchImpl) : {};
+
+    return buildPodcastItem({
+      sourceUrl: inputUrl,
+      sourcePlatform: 'overcast',
+      feed,
+      episode,
+      platformLinks: normalizePlatformLinks({
+        ...pcstLinks,
+        ...websiteLinks,
+        apple: appleCandidate?.collectionViewUrl
+          ? platformLink('Apple Podcasts', appleCandidate.collectionViewUrl, 'show', 'verified')
+          : null,
+        overcast: overcastLink,
+        rss: platformLink('RSS Feed', feedUrl, 'rss', 'exact'),
+        website: feed.link ? platformLink('Website', feed.link, 'website', 'verified') : null,
+        ...(episode ? extractEpisodePlatformLinks(episode) : {})
+      }),
+      sourceMetadata: {
+        title: pageTitle,
+        description: pageDescription,
+        imageUrl: pageImageUrl,
+        canonicalUrl: canonicalUrl || inputUrl
+      },
+      identityFallback: classification.overcastId
+        ? `podcast_episode:overcast:${classification.overcastId}`
+        : `podcast_show:overcast:${inputUrl}`,
+      resolutionSources: [
+        'overcast',
+        'rss-feed',
+        ...(appleCandidate ? ['apple-search'] : []),
+        ...(Object.keys(pcstLinks).length ? ['pc.st'] : []),
+        ...(Object.keys(websiteLinks).length ? ['website'] : [])
+      ]
+    });
+  }
+
+  return buildPodcastItem({
+    sourceUrl: inputUrl,
+    sourcePlatform: 'overcast',
+    feed: null,
+    episode: classification.overcastId ? {
+      title: pageTitle,
+      description: pageDescription,
+      imageUrl: pageImageUrl,
+      publishedAt: '',
+      duration: '',
+      audioUrl: '',
+      links: [inputUrl]
+    } : null,
+    platformLinks: normalizePlatformLinks({ overcast: overcastLink }),
+    sourceMetadata: {
+      title: pageTitle,
+      description: pageDescription,
+      imageUrl: pageImageUrl,
+      canonicalUrl: canonicalUrl || inputUrl
+    },
+    identityFallback: classification.overcastId
+      ? `podcast_episode:overcast:${classification.overcastId}`
+      : `podcast_show:overcast:${inputUrl}`,
+    resolutionSources: ['overcast'],
+    warnings: ['Overcast did not expose a reliable RSS feed for this URL.']
   });
 }
 
@@ -531,6 +629,18 @@ async function searchApplePodcast(term, fetchImpl) {
   const results = response?.results || [];
   const normalizedTerm = normalizeTitle(term);
   return results.find((result) => normalizeTitle(result.collectionName) === normalizedTerm) || results[0] || null;
+}
+
+async function findApplePodcastByFeed(term, feedUrl, fetchImpl) {
+  const url = `https://itunes.apple.com/search?media=podcast&entity=podcast&limit=10&country=US&term=${encodeURIComponent(term)}`;
+  const response = await fetchJson(url, fetchImpl);
+  const results = response?.results || [];
+  const normalizedFeedUrl = normalizeFeedUrl(feedUrl);
+  const normalizedTerm = normalizeTitle(term);
+  return results.find((result) => normalizeFeedUrl(result.feedUrl) === normalizedFeedUrl) ||
+    results.find((result) => normalizeTitle(result.collectionName) === normalizedTerm) ||
+    results[0] ||
+    null;
 }
 
 async function fetchSpotifyApi(inputUrl, classification, fetchImpl, env) {
@@ -822,6 +932,12 @@ function cleanYouTubeTitle(value) {
   return cleanText(value).replace(/\s*-\s*YouTube\s*$/i, '');
 }
 
+function cleanOvercastTitle(value) {
+  return cleanText(value)
+    .replace(/\s+—\s+Overcast\s*$/i, '')
+    .replace(/\s+-\s+Overcast\s*$/i, '');
+}
+
 function decodeEntities(value) {
   return String(value || '')
     .replace(/&amp;/g, '&')
@@ -850,6 +966,20 @@ function normalizeCanonicalUrl(value) {
     const url = new URL(value);
     url.hash = '';
     if (url.hostname.startsWith('www.')) url.hostname = url.hostname.slice(4);
+    return url.href.replace(/\/$/, '');
+  } catch {
+    return value || '';
+  }
+}
+
+function normalizeFeedUrl(value) {
+  try {
+    const url = new URL(value);
+    url.hash = '';
+    if (url.hostname.startsWith('www.')) url.hostname = url.hostname.slice(4);
+    if ((url.protocol === 'http:' || url.protocol === 'https:') && url.pathname) {
+      url.protocol = 'https:';
+    }
     return url.href.replace(/\/$/, '');
   } catch {
     return value || '';
