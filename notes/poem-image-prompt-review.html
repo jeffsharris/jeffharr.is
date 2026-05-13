@@ -419,6 +419,7 @@
     }
 
     .moment-box,
+    .candidate-box,
     .prompt-box,
     .feedback-box {
       border: 1px solid var(--line);
@@ -444,6 +445,21 @@
       margin: 0;
       font-family: var(--font-serif);
       font-size: 19px;
+      line-height: 1.5;
+    }
+
+    .selected-lines {
+      margin: 0;
+      white-space: pre-wrap;
+      font-family: var(--font-serif);
+      font-size: 17px;
+      line-height: 1.45;
+    }
+
+    .context-text {
+      margin: 14px 0 0;
+      color: var(--muted);
+      font-size: 13px;
       line-height: 1.5;
     }
 
@@ -474,6 +490,79 @@
     .prompt-column {
       display: grid;
       gap: 12px;
+    }
+
+    .candidate-box {
+      padding: 12px;
+    }
+
+    .candidate-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+    }
+
+    .candidate-card {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel-strong);
+    }
+
+    .candidate-image {
+      display: block;
+      width: 100%;
+      aspect-ratio: 1;
+      object-fit: cover;
+      background: var(--bg);
+    }
+
+    .candidate-controls {
+      display: grid;
+      gap: 8px;
+      padding: 10px;
+    }
+
+    .candidate-statuses {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 6px;
+    }
+
+    .candidate-status {
+      min-height: 30px;
+      padding: 0 8px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: white;
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .candidate-status.is-active[data-candidate-status="keep"] {
+      border-color: transparent;
+      background: var(--green-soft);
+      color: var(--green);
+    }
+
+    .candidate-status.is-active[data-candidate-status="maybe"] {
+      border-color: transparent;
+      background: var(--yellow-soft);
+      color: var(--yellow);
+    }
+
+    .candidate-status.is-active[data-candidate-status="reject"] {
+      border-color: transparent;
+      background: var(--red-soft);
+      color: var(--red);
+    }
+
+    .candidate-note {
+      min-height: 62px;
+      font-size: 12px;
+      line-height: 1.4;
     }
 
     .prompt-box,
@@ -730,8 +819,9 @@
   <input class="hidden" id="import-input" type="file" accept="application/json,.json">
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
+  <script src="./poem-image-review-data.js"></script>
   <script>
-    const STORAGE_KEY = 'jeffharr-poem-image-prompt-review-v2';
+    const STORAGE_KEY = 'jeffharr-poem-image-prompt-review-v3';
     const PROMPTS_URL = './poem-image-prompts.md';
     const MANIFEST_URL = '../poems/manifest.json';
     const CONTENT_BASE = '../poems/content/';
@@ -790,13 +880,17 @@
 
     async function boot() {
       try {
-        const [markdown, poemIndex] = await Promise.all([
-          fetchText(PROMPTS_URL),
-          loadPoemIndex()
-        ]);
+        if (window.POEM_IMAGE_REVIEW_DATA?.prompts?.length) {
+          app.prompts = window.POEM_IMAGE_REVIEW_DATA.prompts.map(normalizeReviewItem);
+        } else {
+          const [markdown, poemIndex] = await Promise.all([
+            fetchText(PROMPTS_URL),
+            loadPoemIndex()
+          ]);
 
-        app.poemIndex = poemIndex;
-        app.prompts = parsePromptMarkdown(markdown).map((prompt) => attachPoemMetadata(prompt, poemIndex));
+          app.poemIndex = poemIndex;
+          app.prompts = parsePromptMarkdown(markdown).map((prompt) => attachPoemMetadata(prompt, poemIndex));
+        }
 
         bindEvents();
         render();
@@ -804,6 +898,21 @@
       } catch (error) {
         renderError(error);
       }
+    }
+
+    function normalizeReviewItem(item) {
+      return {
+        ...item,
+        id: item.slug || item.id || slugify(item.title),
+        slug: item.slug || item.id || slugify(item.title),
+        collection: item.collection || 'unmatched',
+        selectedLines: item.selectedLines || '',
+        context: item.context || item.moment || '',
+        moment: item.moment || item.context || '',
+        style: item.style || extractStyle(item.prompt || ''),
+        guardrails: item.guardrails || item.avoid || extractGuardrails(item.prompt || ''),
+        candidates: Array.isArray(item.candidates) ? item.candidates : []
+      };
     }
 
     async function fetchText(url) {
@@ -880,7 +989,11 @@
           const title = (lines.shift() || '').trim();
           const block = lines.join('\n');
           const author = (block.match(/(?:^|\n)Author:\s*(.+)/) || [])[1] || '';
-          const moment = (block.match(/(?:^|\n)Poem moment:\s*([\s\S]*?)\n\nPrompt:/) || [])[1] || '';
+          const slug = (block.match(/(?:^|\n)Slug:\s*(.+)/) || [])[1] || '';
+          const selectedLines = (block.match(/(?:^|\n)Selected lines:\s*\n\n```([\s\S]*?)```/) || [])[1] || '';
+          const context = (block.match(/(?:^|\n)Context:\s*([\s\S]*?)\n\nStyle guidance:/) || [])[1] || '';
+          const styleGuidance = (block.match(/(?:^|\n)Style guidance:\s*([\s\S]*?)\n\nPrompt:/) || [])[1] || '';
+          const moment = (block.match(/(?:^|\n)Poem moment:\s*([\s\S]*?)\n\nPrompt:/) || [])[1] || context;
           const promptBlock = (block.match(/(?:^|\n)Prompt:\s*\n\n([\s\S]*)$/) || [])[1] || '';
           const prompt = promptBlock
             .split(/\r?\n/)
@@ -891,11 +1004,14 @@
 
           return {
             order: index + 1,
+            slug: slug.trim(),
             title: title.trim(),
             author: author.trim(),
             moment: moment.trim(),
+            context: context.trim(),
+            selectedLines: selectedLines.trim(),
             prompt,
-            style: extractStyle(prompt),
+            style: styleGuidance.trim() || extractStyle(prompt),
             guardrails: extractGuardrails(prompt)
           };
         })
@@ -911,10 +1027,11 @@
       const id = matched?.slug || slugify(prompt.title);
       return {
         ...prompt,
-        id,
-        slug: matched?.slug || id,
+        id: prompt.slug || id,
+        slug: prompt.slug || matched?.slug || id,
         sourceTitle: matched?.title || prompt.title,
-        collection: matched?.collection || 'unmatched'
+        collection: matched?.collection || 'unmatched',
+        candidates: []
       };
     }
 
@@ -1029,6 +1146,7 @@
       const state = getItemState(item);
       const promptText = getPromptText(item);
       const isModified = Boolean(state.prompt && state.prompt !== item.prompt);
+      const candidateMarkup = renderCandidates(item);
       card.className = `prompt-card${isModified ? ' is-modified' : ''}`;
       card.dataset.status = status;
       card.dataset.id = item.id;
@@ -1055,8 +1173,9 @@
         </div>
         <div class="card-body">
           <div class="moment-box">
-            <span class="box-label">Poem moment</span>
-            <p class="moment-text">${escapeHtml(item.moment)}</p>
+            <span class="box-label">Selected lines</span>
+            <p class="selected-lines">${escapeHtml(item.selectedLines || item.moment)}</p>
+            ${item.context ? `<p class="context-text">${escapeHtml(item.context)}</p>` : ''}
             <div class="style-block">
               ${item.style ? `<span class="style-chip"><strong>Style:</strong> ${escapeHtml(item.style)}</span>` : ''}
               ${item.guardrails ? `<span class="guardrail-chip"><strong>Guardrails:</strong> ${escapeHtml(item.guardrails)}</span>` : ''}
@@ -1067,6 +1186,7 @@
               <span class="box-label">Prompt</span>
               <textarea class="prompt-textarea" data-field="prompt">${escapeHtml(promptText)}</textarea>
             </label>
+            ${candidateMarkup}
             <label class="feedback-box">
               <span class="box-label">Feedback</span>
               <textarea class="feedback-textarea" data-field="feedback" placeholder="Notes for this poem">${escapeHtml(state.feedback || '')}</textarea>
@@ -1100,6 +1220,12 @@
           render();
           showToast(`Reset prompt for ${item.title}.`);
         }
+        if (action === 'candidate-status') {
+          updateCandidateState(button.dataset.candidateId, {
+            status: button.dataset.candidateStatus || 'review'
+          });
+          render();
+        }
       });
 
       card.addEventListener('input', (event) => {
@@ -1112,10 +1238,49 @@
         if (field === 'feedback') {
           updateItemState(item, { feedback: event.target.value });
         }
+        if (field === 'candidate-note') {
+          updateCandidateState(event.target.dataset.candidateId, {
+            note: event.target.value
+          });
+        }
         renderStats();
       });
 
       return card;
+    }
+
+    function renderCandidates(item) {
+      if (!item.candidates || item.candidates.length === 0) return '';
+      const cards = item.candidates.map((candidate) => {
+        const state = getCandidateState(candidate.id);
+        const statuses = [
+          ['keep', 'Keep'],
+          ['maybe', 'Maybe'],
+          ['reject', 'Reject']
+        ].map(([id, label]) => `
+          <button class="candidate-status${state.status === id ? ' is-active' : ''}" type="button" data-action="candidate-status" data-candidate-id="${escapeHtml(candidate.id)}" data-candidate-status="${id}">
+            ${label}
+          </button>
+        `).join('');
+
+        return `
+          <div class="candidate-card">
+            <img class="candidate-image" src="${escapeHtml(candidate.src)}" alt="${escapeHtml(item.title)} ${escapeHtml(candidate.label || 'candidate')}">
+            <div class="candidate-controls">
+              <span class="box-label">${escapeHtml(candidate.label || 'Candidate')}</span>
+              <div class="candidate-statuses">${statuses}</div>
+              <textarea class="candidate-note" data-field="candidate-note" data-candidate-id="${escapeHtml(candidate.id)}" placeholder="Image notes">${escapeHtml(state.note || '')}</textarea>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      return `
+        <div class="candidate-box">
+          <span class="box-label">Generated candidates</span>
+          <div class="candidate-grid">${cards}</div>
+        </div>
+      `;
     }
 
     function getVisiblePrompts() {
@@ -1131,6 +1296,8 @@
           item.slug,
           item.collection,
           item.moment,
+          item.selectedLines || '',
+          item.context || '',
           getPromptText(item),
           state.feedback || ''
         ].join(' ').toLowerCase();
@@ -1181,6 +1348,26 @@
       saveState();
     }
 
+    function getCandidateState(candidateId) {
+      if (!candidateId) return {};
+      return app.state.candidates?.[candidateId] || {};
+    }
+
+    function updateCandidateState(candidateId, patch) {
+      if (!candidateId) return;
+      if (!app.state.candidates) app.state.candidates = {};
+      const next = {
+        ...getCandidateState(candidateId),
+        ...patch,
+        updatedAt: new Date().toISOString()
+      };
+      if (!next.note) delete next.note;
+      if (!next.status || next.status === 'review') delete next.status;
+      app.state.candidates[candidateId] = next;
+      app.state.updatedAt = new Date().toISOString();
+      saveState();
+    }
+
     function pruneEmptyState(state) {
       const next = { ...state };
       if (!next.feedback) delete next.feedback;
@@ -1192,15 +1379,16 @@
     function loadState() {
       try {
         const stored = localStorage.getItem(STORAGE_KEY);
-        if (!stored) return { version: 1, items: {} };
+        if (!stored) return { version: 3, items: {}, candidates: {} };
         const parsed = JSON.parse(stored);
         return {
-          version: parsed.version || 1,
+          version: parsed.version || 3,
           updatedAt: parsed.updatedAt,
-          items: parsed.items || {}
+          items: parsed.items || {},
+          candidates: parsed.candidates || {}
         };
       } catch {
-        return { version: 1, items: {} };
+        return { version: 3, items: {}, candidates: {} };
       }
     }
 
@@ -1211,7 +1399,7 @@
     function buildFeedbackPayload() {
       const counts = computeStatusCounts();
       return {
-        version: 1,
+        version: 3,
         exportedAt: new Date().toISOString(),
         source: {
           prompts: 'notes/poem-image-prompts.md',
@@ -1227,10 +1415,15 @@
             collection: item.collection,
             status: getItemStatus(item),
             feedback: state.feedback || '',
-            poemMoment: item.moment,
+            selectedLines: item.selectedLines || '',
+            context: item.context || item.moment || '',
             prompt: getPromptText(item),
             originalPrompt: item.prompt,
             promptEdited: getPromptText(item) !== item.prompt,
+            candidates: (item.candidates || []).map((candidate) => ({
+              ...candidate,
+              feedback: getCandidateState(candidate.id)
+            })),
             updatedAt: state.updatedAt || ''
           };
         })
@@ -1302,6 +1495,12 @@
             updateItemState(item, patch);
             imported += 1;
           }
+          if (Array.isArray(incoming.candidates)) {
+            for (const candidate of incoming.candidates) {
+              if (!candidate.id || !candidate.feedback) continue;
+              updateCandidateState(candidate.id, candidate.feedback);
+            }
+          }
         }
 
         render();
@@ -1325,7 +1524,7 @@
 
     function clearLocalFeedback() {
       if (!window.confirm('Clear all local prompt feedback in this browser?')) return;
-      app.state = { version: 1, items: {}, updatedAt: new Date().toISOString() };
+      app.state = { version: 3, items: {}, candidates: {}, updatedAt: new Date().toISOString() };
       saveState();
       render();
       showToast('Cleared local feedback.');

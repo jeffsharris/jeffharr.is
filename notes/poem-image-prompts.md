@@ -2,561 +2,3142 @@
 
 Draft prompt catalog for generating poem companion images with `gpt-image-2`.
 
-Shared intent for every image:
+These prompts intentionally give the image model poem context and exact selected lines, then only light stylistic guidance. The goal is to trust the model aesthetic judgment while supplying enough literary context to make a good image.
 
-- Create a beautiful companion image for a quiet literary web archive, not a poster or book cover.
-- The image should capture one concrete visual moment or concept from the poem while leaving room for mystery.
-- Prefer refined, emotionally intelligent aesthetics over literal illustration.
-- No visible text, handwriting, captions, signatures, logos, brands, frames, watermarks, or UI.
-- Make the composition work as a square image that can also tolerate a tight card crop.
-- Avoid imitating any living artist. Use visual media, era, mood, and materials instead.
+Shared constraints for every image: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI. Create square companion images for a quiet literary archive, not posters or literal book covers.
 
 ## A Finger, Two Dots, Then Me
 
+Slug: a-finger-two-dots-then-me
+
 Author: Derrick Brown
 
-Poem moment: The speaker gives cosmic directions to find him after death: a finger, two stars, the moon, a cobalt fire trail, and ordinary life revealed as holy.
+Selected lines:
+
+```
+So love, you should know what to look for
+and exactly where to go…
+Take your time and don't worry about getting lost.
+You'll find me.
+Up there, a finger and two dots away.
+If you're wondering if I'll still be able to hold you
+…I honestly don't know
+But I do know that I could still fall for
+a swish of light that comes barreling
+and cascading towards me.
+It will resemble your sweet definite hands.
+The universe will bend.
+The planets will bow.
+And I will say “Oh, there you are. I been waitin’ for ya. Now we can go.”
+```
+
+Context: The image should understand this as a cosmic love poem about reunion after death: specific directions through space, uncertainty about bodies, and recognition by light.
+
+Style guidance: luminous, emotionally warm cosmic surrealism; let the composition breathe.
 
 Prompt:
 
-> Create a square companion image for a poem in a quiet literary web archive. The image should evoke a love letter sent through deep space: a small cobalt-white comet of human-shaped light arcs past a pale moon and two bright stars, leaving a fine gasoline-blue fire trail. Far away, planets glow softly like silent cinema screens showing tiny, indistinct fragments of ordinary life, but do not include readable images or text. The emotional aim is cosmic romance with humor and tenderness, not sci-fi spectacle. Visual style: luminous surreal gouache and soft airbrush, deep indigo space, white-blue flame, subtle grain, elegant negative space. No words, no deity figure, no cartoon planets, no logos.
+>
+> Create one square companion image for the poem "A Finger, Two Dots, Then Me" by Derrick Brown.
+>
+> Use these exact selected lines as the source passage:
+> """
+> So love, you should know what to look for
+> and exactly where to go…
+> Take your time and don't worry about getting lost.
+> You'll find me.
+> Up there, a finger and two dots away.
+> If you're wondering if I'll still be able to hold you
+> …I honestly don't know
+> But I do know that I could still fall for
+> a swish of light that comes barreling
+> and cascading towards me.
+> It will resemble your sweet definite hands.
+> The universe will bend.
+> The planets will bow.
+> And I will say “Oh, there you are. I been waitin’ for ya. Now we can go.”
+> """
+>
+> Context: The image should understand this as a cosmic love poem about reunion after death: specific directions through space, uncertainty about bodies, and recognition by light.
+>
+> Goal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.
+>
+> Light style guidance: luminous, emotionally warm cosmic surrealism; let the composition breathe.
+>
+> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid cartoon space art, literal gods, and visual text.
 
 ## A Great Wagon
 
+Slug: a-great-wagon
+
 Author: Rumi
 
-Poem moment: The beloved's presence makes stones spin, music move like a great wagon, and a dawn doorway open between worlds.
+Selected lines:
+
+```
+You breathe; new shapes appear,
+and the music of a desire as widespread
+as Spring begins to move
+like a great wagon.
+Drive slowly.
+Some of us walking alongside
+are lame!
+```
+
+Context: The selected passage turns desire into motion, music, spring, and a great wagon that must move slowly enough for human frailty.
+
+Style guidance: painterly watercolor with gentle mystical warmth and subtle Persian miniature influence.
 
 Prompt:
 
-> Create a square companion image for a poem in a quiet literary web archive. Show a slow wooden wagon moving through a spring field at dawn, surrounded by floating dust motes, pomegranate blossoms, and faint circles of spinning stones. The wagon should feel like music made visible, with a few small walkers alongside it and a round open doorway of light in the distance. The image should communicate spiritual longing made bodily and tender. Visual style: Persian miniature influence blended with modern watercolor and mineral pigments, warm ivory ground, sage green, pomegranate red, restrained gold highlights. No text, no ornate clutter, no exotic costume stereotypes.
+>
+> Create one square companion image for the poem "A Great Wagon" by Rumi.
+>
+> Use these exact selected lines as the source passage:
+> """
+> You breathe; new shapes appear,
+> and the music of a desire as widespread
+> as Spring begins to move
+> like a great wagon.
+> Drive slowly.
+> Some of us walking alongside
+> are lame!
+> """
+>
+> Context: The selected passage turns desire into motion, music, spring, and a great wagon that must move slowly enough for human frailty.
+>
+> Goal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.
+>
+> Light style guidance: painterly watercolor with gentle mystical warmth and subtle Persian miniature influence.
+>
+> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid exoticized costume, decorative clutter, or literal religious iconography.
 
 ## After the Fire
 
-Author: Ada Limon
+Slug: after-the-fire
 
-Poem moment: Grief shakes the body like wind through a storm tree, yet holds on as something bright and flame-like.
+Author: Ada Limón
+
+Selected lines:
+
+```
+You ever think you could cry so hard
+that there’d be nothing left in you, like
+how the wind shakes a tree in a storm
+until every part of it is run through with
+wind? I live in the low parts now, most
+days a little hazy with fever and waiting
+for the water to stop shivering out of the
+body. Funny thing about grief, its hold
+is so bright and determined like a flame,
+like something almost worth living for.
+```
+
+Context: This is grief as a physical weather system and as a bright, determined flame inside exhaustion.
+
+Style guidance: spare cinematic watercolor, ash and rain tones with one living warmth.
 
 Prompt:
 
-> Create a square companion image for a poem in a quiet literary web archive. Show a lone tree in low wet ground after a storm, bent by wind but still standing. At its hollow or roots, a small bright flame burns steadily, reflected in shallow water that still trembles. The image should make grief feel exhausted, feverish, and strangely alive. Visual style: quiet cinematic watercolor with charcoal underdrawing, ash gray, rain blue, low mist, one determined ember-orange light. No people, no wildfire scene, no melodrama.
+>
+> Create one square companion image for the poem "After the Fire" by Ada Limón.
+>
+> Use these exact selected lines as the source passage:
+> """
+> You ever think you could cry so hard
+> that there’d be nothing left in you, like
+> how the wind shakes a tree in a storm
+> until every part of it is run through with
+> wind? I live in the low parts now, most
+> days a little hazy with fever and waiting
+> for the water to stop shivering out of the
+> body. Funny thing about grief, its hold
+> is so bright and determined like a flame,
+> like something almost worth living for.
+> """
+>
+> Context: This is grief as a physical weather system and as a bright, determined flame inside exhaustion.
+>
+> Goal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.
+>
+> Light style guidance: spare cinematic watercolor, ash and rain tones with one living warmth.
+>
+> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid melodrama, house-fire literalism, or a disaster scene.
 
 ## Against Still Life
 
+Slug: against-still-life
+
 Author: Margaret Atwood
 
-Poem moment: An orange on a table becomes more than an orange: egg, sun, moon, skull, and the hidden inner landscape of another person.
+Selected lines:
+
+```
+But quietly:
+if I take the orange
+with care enough and hold it
+gently
+I may find
+an egg
+a sun
+an orange moon
+perhaps a skull; center
+of all energy
+resting in my hand
+[other lines omitted]
+(there are mountains
+inside your skull
+garden and chaos, ocean
+and hurricane; certain
+corners of rooms, portraits
+of great-grandmothers, curtains
+of a particular shade;
+your deserts; your private
+dinosaurs; the first
+woman)
+```
+
+Context: The poem asks a still object and a silent lover to reveal the interior worlds hidden beneath ordinary surfaces.
+
+Style guidance: surreal still life with refined painterly restraint.
 
 Prompt:
 
-> Create a square companion image for a poem in a quiet literary web archive. Show a single orange resting on a simple sunlit table, but its peel is opening like a private universe. Inside are tiny mountains, ocean, a small moon, a garden, and a skull-like suggestion formed only by shadow and rind. Across the table, imply another person's presence only through folded hands blurred in warm light. The aim is intimacy, curiosity, and the pressure of wanting another person to reveal their whole interior life. Visual style: surreal still life in oil paint, quiet editorial composition, warm afternoon light, terracotta, cream, citrus orange, deep shadow. No gore, no cracked human head, no readable text.
+>
+> Create one square companion image for the poem "Against Still Life" by Margaret Atwood.
+>
+> Use these exact selected lines as the source passage:
+> """
+> But quietly:
+> if I take the orange
+> with care enough and hold it
+> gently
+> I may find
+> an egg
+> a sun
+> an orange moon
+> perhaps a skull; center
+> of all energy
+> resting in my hand
+> [other lines omitted]
+> (there are mountains
+> inside your skull
+> garden and chaos, ocean
+> and hurricane; certain
+> corners of rooms, portraits
+> of great-grandmothers, curtains
+> of a particular shade;
+> your deserts; your private
+> dinosaurs; the first
+> woman)
+> """
+>
+> Context: The poem asks a still object and a silent lover to reveal the interior worlds hidden beneath ordinary surfaces.
+>
+> Goal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.
+>
+> Light style guidance: surreal still life with refined painterly restraint.
+>
+> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid gore, cracked human heads, and over-explaining every symbol.
 
 ## As Bad as a Mile
 
+Slug: as-bad-as-a-mile
+
 Author: Philip Larkin
 
-Poem moment: An apple core misses the basket, and a tiny failure spreads backward through the body.
+Selected lines:
+
+```
+Watching the shied core
+Striking the basket, skidding across the floor
+Shows less and less of luck, and more and more
+Of failure spreading back up the arm
+Earlier, and earlier, the unraised hand calm
+The apple unbitten in the palm
+```
+
+Context: The tiny miss of an apple core becomes an anatomy of failure moving backward through intention.
+
+Style guidance: minimal observational realism, dry humor, quiet mid-century light.
 
 Prompt:
 
-> Create a square companion image for a poem in a quiet literary web archive. Show an apple core skidding across a bare wooden floor just beyond a small wastebasket, caught in the exact instant after the miss. The room should be spare and still, with the shadow of a forearm entering from one side as if failure has traveled back up the body. The image should feel dry, minimal, and devastating in miniature. Visual style: restrained photographic realism with muted mid-century tones, soft window light, precise composition, shallow depth of field. No slapstick, no dramatic mess, no text.
+>
+> Create one square companion image for the poem "As Bad as a Mile" by Philip Larkin.
+>
+> Use these exact selected lines as the source passage:
+> """
+> Watching the shied core
+> Striking the basket, skidding across the floor
+> Shows less and less of luck, and more and more
+> Of failure spreading back up the arm
+> Earlier, and earlier, the unraised hand calm
+> The apple unbitten in the palm
+> """
+>
+> Context: The tiny miss of an apple core becomes an anatomy of failure moving backward through intention.
+>
+> Goal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.
+>
+> Light style guidance: minimal observational realism, dry humor, quiet mid-century light.
+>
+> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid slapstick and dramatic mess.
 
-## Do Not Go Gentle Into That Good Night
+## Do not go gentle into that good night
+
+Slug: do-not-go-gentle-into-that-good-night
 
 Author: Dylan Thomas
 
-Poem moment: Old age burns and raves against the dying light.
+Selected lines:
+
+```
+And you, my father, there on the sad height,
+Curse, bless, me now with your fierce tears, I pray.
+Do not go gentle into that good night.
+Rage, rage against the dying of the light.
+```
+
+Context: The passage is intimate and defiant: a father on the sad height, fierceness and blessing at the edge of night.
+
+Style guidance: mythic landscape painting with restrained twilight drama.
 
 Prompt:
 
-> Create a square companion image for a poem in a quiet literary web archive. Show an elderly figure from behind on a high ridge at twilight, coat pulled by wind, facing a fierce last band of gold light on the horizon. The surrounding landscape is almost dark, but the figure is rim-lit as if answering the sunset with stubborn fire. The image should communicate defiance, love, and mortality without showing a deathbed. Visual style: mythic landscape oil painting, high contrast chiaroscuro, storm blue and molten gold, brushy sky, solemn scale. No flames on the person, no text, no melodramatic angel imagery.
+>
+> Create one square companion image for the poem "Do not go gentle into that good night" by Dylan Thomas.
+>
+> Use these exact selected lines as the source passage:
+> """
+> And you, my father, there on the sad height,
+> Curse, bless, me now with your fierce tears, I pray.
+> Do not go gentle into that good night.
+> Rage, rage against the dying of the light.
+> """
+>
+> Context: The passage is intimate and defiant: a father on the sad height, fierceness and blessing at the edge of night.
+>
+> Goal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.
+>
+> Light style guidance: mythic landscape painting with restrained twilight drama.
+>
+> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid deathbed imagery, angels, or literal flames on a body.
 
 ## Fire and Ice
 
+Slug: fire-and-ice
+
 Author: Robert Frost
 
-Poem moment: Desire and hate become two possible endings of the world: fire and ice.
+Selected lines:
+
+```
+Some say the world will end in fire,
+Some say in ice.
+From what I’ve tasted of desire
+I hold with those who favor fire.
+But if it had to perish twice,
+I think I know enough of hate
+To say that for destruction ice
+Is also great
+And would suffice.
+```
+
+Context: The poem compresses desire and hate into two elemental ways a world can end.
+
+Style guidance: stark symbolic gouache with elegant simplicity.
 
 Prompt:
 
-> Create a square companion image for a poem in a quiet literary web archive. Show a single horizon split into two destructive climates: on one side, a low red world of ember and heat haze; on the other, a blue-white wall of ice and frozen silence. At the center, a small dark silhouette stands where the two forces meet, making the image psychological rather than apocalyptic spectacle. Visual style: stark symbolic gouache, simplified shapes, restrained poster-like geometry, matte texture, limited palette of ember red, bone white, glacier blue, charcoal. No explosions, no city destruction, no text.
+>
+> Create one square companion image for the poem "Fire and Ice" by Robert Frost.
+>
+> Use these exact selected lines as the source passage:
+> """
+> Some say the world will end in fire,
+> Some say in ice.
+> From what I’ve tasted of desire
+> I hold with those who favor fire.
+> But if it had to perish twice,
+> I think I know enough of hate
+> To say that for destruction ice
+> Is also great
+> And would suffice.
+> """
+>
+> Context: The poem compresses desire and hate into two elemental ways a world can end.
+>
+> Goal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.
+>
+> Light style guidance: stark symbolic gouache with elegant simplicity.
+>
+> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid disaster-movie destruction or cheesy apocalypse imagery.
 
 ## Good Bones
 
+Slug: good-bones
+
 Author: Maggie Smith
 
-Poem moment: The world is terrible and yet might be sold to children as a ruined house with good bones.
+Selected lines:
+
+```
+though I keep this from my children. I am trying
+to sell them the world. Any decent realtor,
+walking you through a real shithole, chirps on
+about good bones: This place could be beautiful,
+right? You could make this place beautiful.
+```
+
+Context: A parent tries to sell a damaged world to children by seeing the possibility inside its structure.
+
+Style guidance: contemporary editorial illustration, humane and unsentimental.
 
 Prompt:
 
-> Create a square companion image for a poem in a quiet literary web archive. Show the interior of a worn, damaged house with peeling walls and exposed beams, but the beams glow warmly as if the structure still has beauty inside it. Through an open doorway, two children are visible only as small soft silhouettes in daylight, not in danger. The image should hold dread and hope at the same time: a parent trying to make the world seem livable. Visual style: contemporary editorial illustration with soft gouache textures, muted plaster, dusty rose, warm wood, pale morning light. No harmed children, no gore, no real estate signage, no text.
+>
+> Create one square companion image for the poem "Good Bones" by Maggie Smith.
+>
+> Use these exact selected lines as the source passage:
+> """
+> though I keep this from my children. I am trying
+> to sell them the world. Any decent realtor,
+> walking you through a real shithole, chirps on
+> about good bones: This place could be beautiful,
+> right? You could make this place beautiful.
+> """
+>
+> Context: A parent tries to sell a damaged world to children by seeing the possibility inside its structure.
+>
+> Goal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.
+>
+> Light style guidance: contemporary editorial illustration, humane and unsentimental.
+>
+> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid harmed children, gore, or a real estate advertisement look.
 
 ## Grandfather's Hands
 
+Slug: grandfathers-hands
+
 Author: Warsan Shire
 
-Poem moment: A grandfather's brown hands become an island, shared history, family memory, and inherited geography.
+Selected lines:
+
+```
+Your grandfather's hands were brown.
+Your grandmother kissed each knuckle,
+circled an island into his palm
+and told him which parts they would share,
+which part they would leave alone.
+She wet a finger to draw where the ocean would be
+on his wrist, kissed him there,
+named the ocean after herself.
+```
+
+Context: Hands become geography, intimacy, family memory, and a private origin map.
+
+Style guidance: intimate watercolor and colored pencil, warm chiaroscuro.
 
 Prompt:
 
-> Create a square companion image for a poem in a quiet literary web archive. Show a close, respectful portrait of older brown hands resting open in warm window light. Across the palms, subtle natural patterns resemble islands, coastlines, moonlit water, and fields, as if family history has been mapped into skin. The image should feel intimate, ancestral, and tender. Visual style: chiaroscuro watercolor and colored pencil, warm umber skin tones, indigo shadows, fine map-like texture. No nudity, no stereotypes, no literal labels or map text.
+>
+> Create one square companion image for the poem "Grandfather's Hands" by Warsan Shire.
+>
+> Use these exact selected lines as the source passage:
+> """
+> Your grandfather's hands were brown.
+> Your grandmother kissed each knuckle,
+> circled an island into his palm
+> and told him which parts they would share,
+> which part they would leave alone.
+> She wet a finger to draw where the ocean would be
+> on his wrist, kissed him there,
+> named the ocean after herself.
+> """
+>
+> Context: Hands become geography, intimacy, family memory, and a private origin map.
+>
+> Goal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.
+>
+> Light style guidance: intimate watercolor and colored pencil, warm chiaroscuro.
+>
+> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid explicit nudity, stereotypes, and literal map labels.
 
 ## Having a Coke with You
 
+Slug: having-a-coke-with-you
+
 Author: Frank O'Hara
 
-Poem moment: Being with the beloved is more alive than travel, museums, saints, paintings, and all the official culture around them.
+Selected lines:
+
+```
+partly because in your orange shirt you look like a better happier St. Sebastian
+partly because of my love for you, partly because of your love for yoghurt
+partly because of the fluorescent orange tulips around the birches
+partly because of the secrecy our smiles take on before people and statuary
+it is hard to believe when I’m with you that there can be anything as still
+as solemn as unpleasantly definitive as statuary when right in front of it
+[other lines omitted]
+and what good does all the research of the Impressionists do them
+when they never got the right person to stand near the tree when the sun sank
+or for that matter Marino Marini when he didn’t pick the rider as carefully
+as the horse
+        it seems they were all cheated of some marvelous experience
+which is not going to go wasted on me which is why I’m telling you about it
+```
+
+Context: The beloved standing in ordinary light matters more than famous travel, museums, and finished art.
+
+Style guidance: warm city realism with a 1960s color-film feeling.
 
 Prompt:
 
-> Create a square companion image for a poem in a quiet literary web archive. Show two lovers in warm city afternoon light near a museum courtyard, holding simple unlabeled glass soda bottles. Around them, birches, tulips, and pale museum sculptures blur into the background, while the beloved in an orange shirt is the only sharply alive presence. The image should make ordinary companionship feel more vivid than art tourism. Visual style: 1960s color film photography translated into painterly realism, warm grain, coral orange, leafy green, limestone white. No soda branding, no copied artworks, no readable museum labels, no text.
+>
+> Create one square companion image for the poem "Having a Coke with You" by Frank O'Hara.
+>
+> Use these exact selected lines as the source passage:
+> """
+> partly because in your orange shirt you look like a better happier St. Sebastian
+> partly because of my love for you, partly because of your love for yoghurt
+> partly because of the fluorescent orange tulips around the birches
+> partly because of the secrecy our smiles take on before people and statuary
+> it is hard to believe when I’m with you that there can be anything as still
+> as solemn as unpleasantly definitive as statuary when right in front of it
+> [other lines omitted]
+> and what good does all the research of the Impressionists do them
+> when they never got the right person to stand near the tree when the sun sank
+> or for that matter Marino Marini when he didn’t pick the rider as carefully
+> as the horse
+>         it seems they were all cheated of some marvelous experience
+> which is not going to go wasted on me which is why I’m telling you about it
+> """
+>
+> Context: The beloved standing in ordinary light matters more than famous travel, museums, and finished art.
+>
+> Goal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.
+>
+> Light style guidance: warm city realism with a 1960s color-film feeling.
+>
+> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid soda branding, copied artworks, readable labels, and museum-postcard stiffness.
 
 ## Having "Having a Coke with You" with You
 
+Slug: having-having-a-coke-with-you-with-you
+
 Author: Mark Leidner
 
-Poem moment: A walk through the city turns into astonishment at someone reciting a poem from memory, then into the realization of love.
+Selected lines:
+
+```
+You asked me if I knew the poem “Having a Coke with You”
+I said I vaguely remembered it but didn’t really
+so you recited it in its entirety. We were walking
+from somewhere up by City Hall down toward South Street
+[other lines omitted]
+and I was as struck by the question as I was stunned
+that you could so casually recite such a long good poem
+and that you hadn't even recited it primarily to solicit
+appreciation for your recitation so much as to ask
+what I thought about what you had thought about it
+then, versus how you thought about it now, and this was
+when I knew I wanted to be with you forever.
+```
+
+Context: A walk and a recitation turn into astonishment, attention, and the quiet certainty of wanting a life with someone.
+
+Style guidance: contemporary narrative watercolor, soft city light.
 
 Prompt:
 
-> Create a square companion image for a poem in a quiet literary web archive. Show two people walking downtown from civic stone buildings toward a river street at late afternoon. One person is speaking with relaxed focus; the other is half-turned, slowly becoming fully present. A faint ribbon of warm light trails between them like speech, without forming letters. The image should capture attention becoming love. Visual style: contemporary narrative watercolor, soft city geometry, peach-gray sidewalks, warm skin tones, gentle motion blur. No visible text, no brand marks, no literal speech bubbles.
+>
+> Create one square companion image for the poem "Having "Having a Coke with You" with You" by Mark Leidner.
+>
+> Use these exact selected lines as the source passage:
+> """
+> You asked me if I knew the poem “Having a Coke with You”
+> I said I vaguely remembered it but didn’t really
+> so you recited it in its entirety. We were walking
+> from somewhere up by City Hall down toward South Street
+> [other lines omitted]
+> and I was as struck by the question as I was stunned
+> that you could so casually recite such a long good poem
+> and that you hadn't even recited it primarily to solicit
+> appreciation for your recitation so much as to ask
+> what I thought about what you had thought about it
+> then, versus how you thought about it now, and this was
+> when I knew I wanted to be with you forever.
+> """
+>
+> Context: A walk and a recitation turn into astonishment, attention, and the quiet certainty of wanting a life with someone.
+>
+> Goal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.
+>
+> Light style guidance: contemporary narrative watercolor, soft city light.
+>
+> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid speech bubbles, visible poem text, and brand marks.
 
 ## High Windows
 
+Slug: high-windows
+
 Author: Philip Larkin
 
-Poem moment: A provocative vision of freedom gives way to high windows and endless, wordless blue air.
+Selected lines:
+
+```
+Rather than words comes the thought of high windows:
+The sun-comprehending glass,
+And beyond it, the deep blue air, that shows
+Nothing, and is nowhere, and is endless.
+```
+
+Context: The poem ends by leaving social provocation behind for a blank, impersonal, endless blue beyond glass.
+
+Style guidance: sparse mid-century surreal realism, cool light and negative space.
 
 Prompt:
 
-> Create a square companion image for a poem in a quiet literary web archive. Show a tall, austere window high in an otherwise plain room, opening onto immense blue air and white light. The lower room should feel dated and constrained, with faint domestic shapes falling away into shadow, while the window overwhelms everything. The image should move from social discomfort toward impersonal vastness. Visual style: sparse mid-century surreal realism, cool daylight, washed plaster, pale wood, enormous sky blue. No explicit sexuality, no people, no text.
+>
+> Create one square companion image for the poem "High Windows" by Philip Larkin.
+>
+> Use these exact selected lines as the source passage:
+> """
+> Rather than words comes the thought of high windows:
+> The sun-comprehending glass,
+> And beyond it, the deep blue air, that shows
+> Nothing, and is nowhere, and is endless.
+> """
+>
+> Context: The poem ends by leaving social provocation behind for a blank, impersonal, endless blue beyond glass.
+>
+> Goal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.
+>
+> Light style guidance: sparse mid-century surreal realism, cool light and negative space.
+>
+> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid explicit sexuality and literal people.
 
 ## Home
 
+Slug: home
+
 Author: Warsan Shire
 
-Poem moment: No one leaves home unless home becomes more dangerous than the sea.
+Selected lines:
+
+```
+no one leaves home unless
+home is the mouth of a shark
+you only run for the border
+when you see the whole city running as well
+[other lines omitted]
+no one leaves home until home is a sweaty voice in your ear
+sayingleave,
+run away from me now
+i dont know what i’ve become
+but i know that anywhere
+is safer than here
+```
+
+Context: The passage is about forced departure: home itself becoming the danger that drives a person toward any possible safety.
+
+Style guidance: restrained humanitarian symbolism with documentary gravity.
 
 Prompt:
 
-> Create a square companion image for a poem in a quiet literary web archive. Show a single figure at a shoreline at night, carrying a small bag, standing between a distant burning city silhouette behind them and a dark, dangerous sea ahead. The land behind should subtly form the suggestion of a shark mouth, but keep it symbolic and restrained. The image should honor displacement and survival without turning suffering into spectacle. Visual style: spare humanitarian realism with symbolic surrealism, ink wash and muted digital painting, black-blue sea, ember horizon, small human scale. No gore, no slurs, no sexual violence, no exploitative refugee imagery, no text.
+>
+> Create one square companion image for the poem "Home" by Warsan Shire.
+>
+> Use these exact selected lines as the source passage:
+> """
+> no one leaves home unless
+> home is the mouth of a shark
+> you only run for the border
+> when you see the whole city running as well
+> [other lines omitted]
+> no one leaves home until home is a sweaty voice in your ear
+> sayingleave,
+> run away from me now
+> i dont know what i’ve become
+> but i know that anywhere
+> is safer than here
+> """
+>
+> Context: The passage is about forced departure: home itself becoming the danger that drives a person toward any possible safety.
+>
+> Goal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.
+>
+> Light style guidance: restrained humanitarian symbolism with documentary gravity.
+>
+> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid gore, slurs, sexual violence, and exploitative refugee imagery.
 
 ## Humpbacks
 
+Slug: humpbacks
+
 Author: Mary Oliver
 
-Poem moment: Humpbacks breach through shining water like huge living joy, making the body remember its longing to fly.
+Selected lines:
+
+```
+We wait, not knowing
+just where it will happen; suddenly
+they smash through the surface, someone begins
+shouting for joy and you realize
+it is yourself as they surge
+upward and you see for the first time
+how huge they are, as they breach,
+and dive, and breach again
+through the shining blue flowers
+of the split water and you see them
+for some unbelievable
+part of a moment against the sky–
+like nothing you’ve ever imagined–
+like the myth of the fifth morning galloping
+out of darkness, pouring
+heavenward, spinning; then
+they crash back under those black silks
+and we all fall back
+together into that wet fire, you
+know what I mean.
+```
+
+Context: The image should feel the shock of immense animal joy breaking upward through water and briefly changing the scale of life.
+
+Style guidance: naturalist marine watercolor with ecstatic scale.
 
 Prompt:
 
-> Create a square companion image for a poem in a quiet literary web archive. Show a humpback whale breaching beside a small boat, huge and scarred and joyful, with the split water blooming into blue flower-like spray. The sky should feel vast enough to hold the impossible size of the animal. The emotional goal is awe: the body's dream of flight breaking through water. Visual style: cinematic marine watercolor with naturalist accuracy, deep black-blue water, white spray, silver sky, luminous wet texture. No theme-park look, no exaggerated whale anatomy, no text.
+>
+> Create one square companion image for the poem "Humpbacks" by Mary Oliver.
+>
+> Use these exact selected lines as the source passage:
+> """
+> We wait, not knowing
+> just where it will happen; suddenly
+> they smash through the surface, someone begins
+> shouting for joy and you realize
+> it is yourself as they surge
+> upward and you see for the first time
+> how huge they are, as they breach,
+> and dive, and breach again
+> through the shining blue flowers
+> of the split water and you see them
+> for some unbelievable
+> part of a moment against the sky–
+> like nothing you’ve ever imagined–
+> like the myth of the fifth morning galloping
+> out of darkness, pouring
+> heavenward, spinning; then
+> they crash back under those black silks
+> and we all fall back
+> together into that wet fire, you
+> know what I mean.
+> """
+>
+> Context: The image should feel the shock of immense animal joy breaking upward through water and briefly changing the scale of life.
+>
+> Goal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.
+>
+> Light style guidance: naturalist marine watercolor with ecstatic scale.
+>
+> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid theme-park spectacle or inaccurate whale anatomy.
 
-## I Carry Your Heart With Me
+## [i carry your heart with me(i carry it in]
+
+Slug: i-carry-your-heart-within-me
 
 Author: E.E. Cummings
 
-Poem moment: One heart carried inside another, love as root, sky, moon, sun, and secret.
+Selected lines:
+
+```
+i carry your heart with me(i carry it in
+my heart)i am never without it(anywhere
+i go you go,my dear;and whatever is done
+by only me is your doing,my darling)
+[other lines omitted]
+here is the deepest secret nobody knows
+(here is the root of the root and the bud of the bud
+and the sky of the sky of a tree called life;which grows
+higher than soul can hope or mind can hide)
+and this is the wonder that's keeping the stars apart
+i carry your heart(i carry it in my heart)
+```
+
+Context: Love is carried inside the self and also becomes root, bud, sky, stars, and the hidden architecture of a shared life.
+
+Style guidance: tender symbolic watercolor and ink.
 
 Prompt:
 
-> Create a square companion image for a poem in a quiet literary web archive. Show two small figures walking under a night sky while one shared warm light glows at their chest level, illuminating them both. Above them, a moon and sun appear faintly together, and below them fine roots spread into the earth, suggesting that love is both cosmic and hidden. The image should be tender, simple, and intimate without using heart icons. Visual style: soft symbolic watercolor and ink, deep blue night, warm amber light, delicate root lines, spacious composition. No anatomical hearts, no greeting-card symbols, no text.
+>
+> Create one square companion image for the poem "[i carry your heart with me(i carry it in]" by E.E. Cummings.
+>
+> Use these exact selected lines as the source passage:
+> """
+> i carry your heart with me(i carry it in
+> my heart)i am never without it(anywhere
+> i go you go,my dear;and whatever is done
+> by only me is your doing,my darling)
+> [other lines omitted]
+> here is the deepest secret nobody knows
+> (here is the root of the root and the bud of the bud
+> and the sky of the sky of a tree called life;which grows
+> higher than soul can hope or mind can hide)
+> and this is the wonder that's keeping the stars apart
+> i carry your heart(i carry it in my heart)
+> """
+>
+> Context: Love is carried inside the self and also becomes root, bud, sky, stars, and the hidden architecture of a shared life.
+>
+> Goal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.
+>
+> Light style guidance: tender symbolic watercolor and ink.
+>
+> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid heart icons, anatomical hearts, and greeting-card sentimentality.
 
 ## I Like My Body When It Is With Your
 
+Slug: i-like-my-body-when-it-is-with-your
+
 Author: E.E. Cummings
 
-Poem moment: Erotic closeness makes the body feel new, charged, and more alive.
+Selected lines:
+
+```
+Muscles better and nerves more.
+```
+
+Context: Use this as an abstract image of embodied aliveness: closeness making perception feel newly tuned, energetic, and awake.
+
+Style guidance: non-figurative modernist abstraction with tactile warmth and subtle electric energy.
 
 Prompt:
 
-> Create a square companion image for a poem in a quiet literary web archive. Make an abstract sensual image of two bodies suggested only by overlapping warm contour lines, soft shadows, and electric points of light where touch might happen. Keep it non-explicit: no identifiable faces, no nudity, no literal sex. The image should feel bodily, playful, intimate, and newly alive. Visual style: modernist abstract pastel and ink, warm terracotta, cream, muted rose, small sparks of blue-white energy, tactile paper grain. No explicit anatomy, no voyeurism, no text.
+>
+> Create one square companion image for the poem "I Like My Body When It Is With Your" by E.E. Cummings.
+>
+> Use these exact selected lines as the source passage:
+> """
+> Muscles better and nerves more.
+> """
+>
+> Context: Use this as an abstract image of embodied aliveness: closeness making perception feel newly tuned, energetic, and awake.
+>
+> Goal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.
+>
+> Light style guidance: non-figurative modernist abstraction with tactile warmth and subtle electric energy.
+>
+> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid bodies, nudity, sex, identifiable faces, and voyeurism.
 
 ## If
 
+Slug: if
+
 Author: Rudyard Kipling
 
-Poem moment: Keeping composure, rebuilding what breaks, and meeting triumph and disaster without worshiping either.
+Selected lines:
+
+```
+If you can keep your head when all about you
+    Are losing theirs and blaming it on you,
+If you can trust yourself when all men doubt you,
+    But make allowance for their doubting too;
+If you can wait and not be tired by waiting,
+    Or being lied about, don’t deal in lies,
+Or being hated, don’t give way to hating,
+    And yet don’t look too good, nor talk too wise:
+[other lines omitted]
+If you can fill the unforgiving minute
+    With sixty seconds’ worth of distance run,
+Yours is the Earth and everything that’s in it,
+    And—which is more—you’ll be a Man, my son!
+```
+
+Context: The poem imagines steadiness under pressure and a life measured by discipline, patience, and composure.
+
+Style guidance: stoic allegorical realism with warm workshop light.
 
 Prompt:
 
-> Create a square companion image for a poem in a quiet literary web archive. Show a solitary figure at a workbench calmly rebuilding a broken wooden mechanism with worn tools. On the wall behind, two theatrical masks, one triumphant and one ruined, hang equally in shadow, with no words. The image should emphasize steadiness, discipline, and moral balance rather than conquest. Visual style: stoic allegorical realism with vintage workshop light, sepia, slate, brass, worn wood, careful brushwork. No colonial imagery, no military heroics, no readable text.
+>
+> Create one square companion image for the poem "If" by Rudyard Kipling.
+>
+> Use these exact selected lines as the source passage:
+> """
+> If you can keep your head when all about you
+>     Are losing theirs and blaming it on you,
+> If you can trust yourself when all men doubt you,
+>     But make allowance for their doubting too;
+> If you can wait and not be tired by waiting,
+>     Or being lied about, don’t deal in lies,
+> Or being hated, don’t give way to hating,
+>     And yet don’t look too good, nor talk too wise:
+> [other lines omitted]
+> If you can fill the unforgiving minute
+>     With sixty seconds’ worth of distance run,
+> Yours is the Earth and everything that’s in it,
+>     And—which is more—you’ll be a Man, my son!
+> """
+>
+> Context: The poem imagines steadiness under pressure and a life measured by discipline, patience, and composure.
+>
+> Goal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.
+>
+> Light style guidance: stoic allegorical realism with warm workshop light.
+>
+> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid colonial nostalgia, military heroics, and triumphalist poster art.
 
 ## In Blackwater Woods
 
+Slug: in-blackwater-woods
+
 Author: Mary Oliver
 
-Poem moment: Autumn trees turn themselves into pillars, and the poem arrives at loving, holding, and letting go.
+Selected lines:
+
+```
+Look, the trees
+are turning
+their own bodies
+into pillars
+of light,
+are giving off the rich
+fragrance of cinnamon
+and fulfillment,
+[other lines omitted]
+to love what is mortal;
+to hold it
+against your bones knowing
+your own life depends on it;
+and, when the time comes to let it go,
+to let it go.
+```
+
+Context: Attention to autumn beauty becomes instruction in loving what is mortal and letting it go.
+
+Style guidance: luminous naturalist watercolor, reflective and quiet.
 
 Prompt:
 
-> Create a square companion image for a poem in a quiet literary web archive. Show autumn trees beside dark blackwater ponds, their trunks transformed by golden light into glowing pillars. A single leaf, luminous and fragile, floats above the water as if being released. The image should be about attention, loss, and the discipline of letting go. Visual style: luminous naturalist watercolor, wet-on-wet reflections, amber leaves, black water, soft cattails, quiet sky. No people, no sentimental symbolism, no text.
+>
+> Create one square companion image for the poem "In Blackwater Woods" by Mary Oliver.
+>
+> Use these exact selected lines as the source passage:
+> """
+> Look, the trees
+> are turning
+> their own bodies
+> into pillars
+> of light,
+> are giving off the rich
+> fragrance of cinnamon
+> and fulfillment,
+> [other lines omitted]
+> to love what is mortal;
+> to hold it
+> against your bones knowing
+> your own life depends on it;
+> and, when the time comes to let it go,
+> to let it go.
+> """
+>
+> Context: Attention to autumn beauty becomes instruction in loving what is mortal and letting it go.
+>
+> Goal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.
+>
+> Light style guidance: luminous naturalist watercolor, reflective and quiet.
+>
+> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid sentimental symbols or visible words.
 
 ## In the Trance
 
+Slug: in-the-trance
+
 Author: Brenda Hillman
 
-Poem moment: A great love is made by what happened; a small boat stays unwrecked where bee, albatross, glacier, future, and present meet.
+Selected lines:
+
+```
+A pretty anarchist said to me
+It’s not that a great love happens
+What happened became your great love
+her echo had an ancient glow & so
+proved buoyant for my little craft
+I left the world & felt a world
+The bee loading its gloves with powder
+The albatross wanting one thing from the sea
+Nothing can wreck our boat said she
+& when the water felt the glacier
+The future held a present tense
+The present held a future without cease.
+```
+
+Context: The poem makes love feel like a made thing, a trance, a small craft held between bee, albatross, glacier, and time.
+
+Style guidance: airy surreal maritime watercolor.
 
 Prompt:
 
-> Create a square companion image for a poem in a quiet literary web archive. Show a small simple boat floating on pale glacier water, steady and unwrecked. A bee with pollen-bright legs hovers near the boat; far above, an albatross cuts across the sky. The ice and water should seem to fold future and present together. The image should feel buoyant, strange, and quietly ecstatic. Visual style: airy surreal maritime watercolor, translucent blues, pollen gold, white glacier light, delicate linework. No political caricature, no visible text.
+>
+> Create one square companion image for the poem "In the Trance" by Brenda Hillman.
+>
+> Use these exact selected lines as the source passage:
+> """
+> A pretty anarchist said to me
+> It’s not that a great love happens
+> What happened became your great love
+> her echo had an ancient glow & so
+> proved buoyant for my little craft
+> I left the world & felt a world
+> The bee loading its gloves with powder
+> The albatross wanting one thing from the sea
+> Nothing can wreck our boat said she
+> & when the water felt the glacier
+> The future held a present tense
+> The present held a future without cease.
+> """
+>
+> Context: The poem makes love feel like a made thing, a trance, a small craft held between bee, albatross, glacier, and time.
+>
+> Goal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.
+>
+> Light style guidance: airy surreal maritime watercolor.
+>
+> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid political caricature or overly literal illustration.
 
 ## Jabberwocky
 
+Slug: jabberwocky
+
 Author: Lewis Carroll
 
-Poem moment: A hero enters a nonsense-forest where strange creatures and the Jabberwock wait.
+Selected lines:
+
+```
+’Twas brillig, and the slithy toves
+      Did gyre and gimble in the wabe:
+All mimsy were the borogoves,
+      And the mome raths outgrabe.
+“Beware the Jabberwock, my son!
+      The jaws that bite, the claws that catch!
+Beware the Jubjub bird, and shun
+      The frumious Bandersnatch!”
+[other lines omitted]
+And, as in uffish thought he stood,
+      The Jabberwock, with eyes of flame,
+Came whiffling through the tulgey wood,
+      And burbled as it came!
+```
+
+Context: This is a nonsense quest: playful danger, invented creatures, and a charged pause before action.
+
+Style guidance: storybook engraving with hand-tinted watercolor.
 
 Prompt:
 
-> Create a square companion image for a poem in a quiet literary web archive. Show a twisted twilight wood filled with invented motion: slithering shapes, corkscrew grasses, and odd birdlike silhouettes. In the middle distance, a flame-eyed creature emerges between trees while a small traveler pauses, sword lowered, before the encounter. The image should be dangerous but playful, honoring nonsense without becoming childish. Visual style: storybook engraving with hand-tinted watercolor, moss green, plum shadow, ember eyes, fine crosshatching. No severed head, no gore, no readable words.
+>
+> Create one square companion image for the poem "Jabberwocky" by Lewis Carroll.
+>
+> Use these exact selected lines as the source passage:
+> """
+> ’Twas brillig, and the slithy toves
+>       Did gyre and gimble in the wabe:
+> All mimsy were the borogoves,
+>       And the mome raths outgrabe.
+> “Beware the Jabberwock, my son!
+>       The jaws that bite, the claws that catch!
+> Beware the Jubjub bird, and shun
+>       The frumious Bandersnatch!”
+> [other lines omitted]
+> And, as in uffish thought he stood,
+>       The Jabberwock, with eyes of flame,
+> Came whiffling through the tulgey wood,
+>       And burbled as it came!
+> """
+>
+> Context: This is a nonsense quest: playful danger, invented creatures, and a charged pause before action.
+>
+> Goal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.
+>
+> Light style guidance: storybook engraving with hand-tinted watercolor.
+>
+> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid gore, severed heads, and childish cartooning.
 
 ## Kindness
 
+Slug: kindness
+
 Author: Naomi Shihab Nye
 
-Poem moment: Kindness becomes knowable only after loss, sorrow, travel, and the cloth of shared grief.
+Selected lines:
+
+```
+Before you know what kindness really is
+you must lose things,
+feel the future dissolve in a moment
+like salt in a weakened broth.
+What you held in your hand,
+what you counted and carefully saved,
+all this must go so you know
+how desolate the landscape can be
+between the regions of kindness.
+How you ride and ride
+thinking the bus will never stop,
+the passengers eating maize and chicken
+will stare out the window forever.
+[other lines omitted]
+Before you know kindness as the deepest thing inside,
+you must know sorrow as the other deepest thing.
+You must wake up with sorrow.
+You must speak to it till your voice
+catches the thread of all sorrows
+and you see the size of the cloth.
+Then it is only kindness that makes sense anymore,
+only kindness that ties your shoes
+and sends you out into the day to gaze at bread,
+only kindness that raises its head
+from the crowd of the world to say
+It is I you have been looking for,
+and then goes with you everywhere
+like a shadow or a friend.
+```
+
+Context: Kindness is understood only after loss and sorrow; it becomes practical, bodily, and companionable.
+
+Style guidance: spare humanist watercolor and graphite.
 
 Prompt:
 
-> Create a square companion image for a poem in a quiet literary web archive. Show a night bus crossing a wide desolate landscape toward a pale dawn. Inside, passengers sit quietly with food parcels and bags, their faces turned toward the window, while outside the road opens into emptiness. Let a subtle thread-like pattern in the sky suggest many sorrows woven into one cloth. The image should feel human, spare, and compassionate. Visual style: muted earth-tone watercolor and graphite, dusty road, weak broth colors, first dawn light. Avoid literal roadside death, stereotypes, sentimentality, and text.
+>
+> Create one square companion image for the poem "Kindness" by Naomi Shihab Nye.
+>
+> Use these exact selected lines as the source passage:
+> """
+> Before you know what kindness really is
+> you must lose things,
+> feel the future dissolve in a moment
+> like salt in a weakened broth.
+> What you held in your hand,
+> what you counted and carefully saved,
+> all this must go so you know
+> how desolate the landscape can be
+> between the regions of kindness.
+> How you ride and ride
+> thinking the bus will never stop,
+> the passengers eating maize and chicken
+> will stare out the window forever.
+> [other lines omitted]
+> Before you know kindness as the deepest thing inside,
+> you must know sorrow as the other deepest thing.
+> You must wake up with sorrow.
+> You must speak to it till your voice
+> catches the thread of all sorrows
+> and you see the size of the cloth.
+> Then it is only kindness that makes sense anymore,
+> only kindness that ties your shoes
+> and sends you out into the day to gaze at bread,
+> only kindness that raises its head
+> from the crowd of the world to say
+> It is I you have been looking for,
+> and then goes with you everywhere
+> like a shadow or a friend.
+> """
+>
+> Context: Kindness is understood only after loss and sorrow; it becomes practical, bodily, and companionable.
+>
+> Goal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.
+>
+> Light style guidance: spare humanist watercolor and graphite.
+>
+> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid literal roadside death, stereotypes, and sentimentality.
 
 ## Kubla Kahn
 
+Slug: kubla-kahn
+
 Author: Samuel Taylor Coleridge
 
-Poem moment: Xanadu's pleasure dome, sacred river, caverns, gardens, and ice caves form a visionary landscape.
+Selected lines:
+
+```
+In Xanadu did Kubla Khan
+A stately pleasure-dome decree:
+Where Alph, the sacred river, ran
+Through caverns measureless to man
+   Down to a sunless sea.
+So twice five miles of fertile ground
+With walls and towers were girdled round;
+And there were gardens bright with sinuous rills,
+Where blossomed many an incense-bearing tree;
+And here were forests ancient as the hills,
+Enfolding sunny spots of greenery.
+```
+
+Context: The selected lines are a visionary landscape of dome, sacred river, caverns, gardens, and impossible scale.
+
+Style guidance: Romantic sublime watercolor, dreamlike but not crowded.
 
 Prompt:
 
-> Create a square companion image for a poem in a quiet literary web archive. Show a stately pleasure dome in a lush, impossible landscape: a sacred river runs from sunlit gardens into measureless dark caverns, while distant ice caves gleam beneath the same sky. The scene should feel like a fragment of a dream remembered with awe. Visual style: Romantic sublime matte painting with watercolor atmosphere, jade garden, alabaster dome, deep cavern blue, icy white highlights. No orientalist costume stereotypes, no crowded fantasy palace, no text.
+>
+> Create one square companion image for the poem "Kubla Kahn" by Samuel Taylor Coleridge.
+>
+> Use these exact selected lines as the source passage:
+> """
+> In Xanadu did Kubla Khan
+> A stately pleasure-dome decree:
+> Where Alph, the sacred river, ran
+> Through caverns measureless to man
+>    Down to a sunless sea.
+> So twice five miles of fertile ground
+> With walls and towers were girdled round;
+> And there were gardens bright with sinuous rills,
+> Where blossomed many an incense-bearing tree;
+> And here were forests ancient as the hills,
+> Enfolding sunny spots of greenery.
+> """
+>
+> Context: The selected lines are a visionary landscape of dome, sacred river, caverns, gardens, and impossible scale.
+>
+> Goal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.
+>
+> Light style guidance: Romantic sublime watercolor, dreamlike but not crowded.
+>
+> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid orientalist stereotypes and generic fantasy-palace imagery.
 
 ## Leda and the Swan
 
+Slug: leda-and-the-swan
+
 Author: William Butler Yeats
 
-Poem moment: A violent mythic encounter is linked to the fall of towers and history's catastrophe.
+Selected lines:
+
+```
+A sudden blow: the great wings beating still
+[other lines omitted]
+A shudder in the loins engenders there
+The broken wall, the burning roof and tower
+And Agamemnon dead.
+                                  Being so caught up,
+So mastered by the brute blood of the air,
+Did she put on his knowledge with his power
+Before the indifferent beak could let her drop?
+```
+
+Context: The poem links mythic violence to historical catastrophe; the image should face the terror without eroticizing it.
+
+Style guidance: classical-symbolist chiaroscuro, severe and morally uneasy.
 
 Prompt:
 
-> Create a square companion image for a poem in a quiet literary web archive. Avoid depicting the assault literally. Instead, show a huge white swan wing dominating the frame, its feathers caught in storm light, casting a dark shadow over broken water. In the far distance, a tower and roof burn as small abstract shapes, connecting myth to history. The image should feel terrifying, classical, and morally uneasy without eroticizing violence. Visual style: classical-symbolist chiaroscuro, oil and charcoal texture, ivory feathers, black water, distant ember red. No nudity, no explicit assault, no erotic pose, no gore, no text.
+>
+> Create one square companion image for the poem "Leda and the Swan" by William Butler Yeats.
+>
+> Use these exact selected lines as the source passage:
+> """
+> A sudden blow: the great wings beating still
+> [other lines omitted]
+> A shudder in the loins engenders there
+> The broken wall, the burning roof and tower
+> And Agamemnon dead.
+>                                   Being so caught up,
+> So mastered by the brute blood of the air,
+> Did she put on his knowledge with his power
+> Before the indifferent beak could let her drop?
+> """
+>
+> Context: The poem links mythic violence to historical catastrophe; the image should face the terror without eroticizing it.
+>
+> Goal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.
+>
+> Light style guidance: classical-symbolist chiaroscuro, severe and morally uneasy.
+>
+> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid nudity, explicit assault, erotic posing, and gore.
 
 ## Let's Not Begin
 
+Slug: lets-not-begin
+
 Author: Maggie Smith
 
-Poem moment: The speaker tries to begin with bees, hum, honey, and a sleeping child instead of fear and grief.
+Selected lines:
+
+```
+I’m trying to love the world,
+I am, but is it too much
+to ask for two parts bees
+vibrating their cups of pollen,
+humming a perfect A note,
+[other lines omitted]
+to keep my heart on, to keep
+the dirt off. Let’s begin
+with bees, and the hum,
+and the honey singing
+on my tongue, and the child
+sleeping at last, and, and, and—
+```
+
+Context: The speaker tries to choose bees, honey, and a sleeping child as a disciplined beginning against fear.
+
+Style guidance: tender editorial gouache, honeyed morning restraint.
 
 Prompt:
 
-> Create a square companion image for a poem in a quiet literary web archive. Show a quiet bedroom at dawn where a child sleeps peacefully under soft blankets. Near the open window, bees hover around small cups of pollen and a spoon of honey catches the morning light. The whole scene should feel like a parent choosing the world's sweetness as a form of effort. Visual style: tender editorial gouache, honey gold, pale blue morning, soft cream bedding, delicate bee detail. No visible text, no anxious child, no threatening insects.
+>
+> Create one square companion image for the poem "Let's Not Begin" by Maggie Smith.
+>
+> Use these exact selected lines as the source passage:
+> """
+> I’m trying to love the world,
+> I am, but is it too much
+> to ask for two parts bees
+> vibrating their cups of pollen,
+> humming a perfect A note,
+> [other lines omitted]
+> to keep my heart on, to keep
+> the dirt off. Let’s begin
+> with bees, and the hum,
+> and the honey singing
+> on my tongue, and the child
+> sleeping at last, and, and, and—
+> """
+>
+> Context: The speaker tries to choose bees, honey, and a sleeping child as a disciplined beginning against fear.
+>
+> Goal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.
+>
+> Light style guidance: tender editorial gouache, honeyed morning restraint.
+>
+> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid threatening insects or bleak child imagery.
 
 ## London
 
+Slug: london
+
 Author: William Blake
 
-Poem moment: A walk through chartered streets reveals marks of weakness, woe, and invisible manacles.
+Selected lines:
+
+```
+I wander thro' each charter'd street,
+Near where the charter'd Thames does flow.
+And mark in every face I meet
+Marks of weakness, marks of woe.
+In every cry of every Man,
+In every Infants cry of fear,
+In every voice: in every ban,
+The mind-forg'd manacles I hear
+[other lines omitted]
+But most thro' midnight streets I hear
+How the youthful Harlots curse
+Blasts the new-born Infants tear
+And blights with plagues the Marriage hearse
+```
+
+Context: A city walk becomes a vision of social suffering and invisible bondage.
+
+Style guidance: engraving-influenced watercolor, soot, fog, and moral pressure.
 
 Prompt:
 
-> Create a square companion image for a poem in a quiet literary web archive. Show a foggy old Thames street at night, with a dark church, dim windows, and anonymous faces moving through soot-colored air. Overlay the scene with faint chain-like shadows that look psychological rather than literal. The image should feel socially haunted and morally compressed. Visual style: Blake-era engraving influence with noir watercolor washes, soot black, river gray, candle yellow, rough paper texture. Keep suffering symbolic; no graphic poverty, no explicit sex work, no readable signs.
+>
+> Create one square companion image for the poem "London" by William Blake.
+>
+> Use these exact selected lines as the source passage:
+> """
+> I wander thro' each charter'd street,
+> Near where the charter'd Thames does flow.
+> And mark in every face I meet
+> Marks of weakness, marks of woe.
+> In every cry of every Man,
+> In every Infants cry of fear,
+> In every voice: in every ban,
+> The mind-forg'd manacles I hear
+> [other lines omitted]
+> But most thro' midnight streets I hear
+> How the youthful Harlots curse
+> Blasts the new-born Infants tear
+> And blights with plagues the Marriage hearse
+> """
+>
+> Context: A city walk becomes a vision of social suffering and invisible bondage.
+>
+> Goal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.
+>
+> Light style guidance: engraving-influenced watercolor, soot, fog, and moral pressure.
+>
+> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid graphic poverty, explicit sex work, and readable signs.
 
 ## Nothing Gold Can Stay
 
+Slug: nothing-gold-can-stay
+
 Author: Robert Frost
 
-Poem moment: Nature's first green is gold, but the first, hardest hue passes quickly.
+Selected lines:
+
+```
+Nature’s first green is gold,
+Her hardest hue to hold.
+Her early leaf’s a flower;
+But only so an hour.
+Then leaf subsides to leaf.
+So Eden sank to grief,
+So dawn goes down to day.
+Nothing gold can stay.
+```
+
+Context: The image should hold the fragile instant when first beauty is already passing away.
+
+Style guidance: restrained macro watercolor realism.
 
 Prompt:
 
-> Create a square companion image for a poem in a quiet literary web archive. Show a close view of a new spring leaf at dawn, its first green glowing gold at the edge, already fading into ordinary green farther down the branch. The whole world behind it should be softly out of focus, as if the moment will vanish as soon as we notice it. Visual style: restrained macro watercolor realism, pale gold, young green, cool morning air, soft paper grain. No added symbols, no text.
+>
+> Create one square companion image for the poem "Nothing Gold Can Stay" by Robert Frost.
+>
+> Use these exact selected lines as the source passage:
+> """
+> Nature’s first green is gold,
+> Her hardest hue to hold.
+> Her early leaf’s a flower;
+> But only so an hour.
+> Then leaf subsides to leaf.
+> So Eden sank to grief,
+> So dawn goes down to day.
+> Nothing gold can stay.
+> """
+>
+> Context: The image should hold the fragile instant when first beauty is already passing away.
+>
+> Goal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.
+>
+> Light style guidance: restrained macro watercolor realism.
+>
+> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid added symbols or inspirational-poster mood.
 
 ## On This the 100th Anniversary of the Sinking of the Titanic, We Reconsider the Buoyancy of the Human Heart
 
+Slug: on-this-the-100th-anniversary-of-the-sinking-of-the-titanic
+
 Author: Laura Lamb Brown-Lavolie
 
-Poem moment: The speaker converses with Titanic on the ocean floor among open suitcases, rust strands, and emotional wreckage.
+Selected lines:
+
+```
+The trouble with you humans is that you are so concerned with staying afloat. Go ahead, be gouged open by love. Gulp that saltwater, sink beneath the waves. You’re not a boat, you can go under and come up again, with those big old lungs of yours, those hard kicking legs.
+And your heart, she said, that gargantuan ark, that floating hotel. Call it Unsinkable, though it is sinkable. Embark, embark.
+There are enough ballrooms in you to dance with everyone you’ll ever love.
+That’s what the Titanic told me this morning, me, lying next to her on the ocean floor.
+There are enough ballrooms in you.
+```
+
+Context: Titanic becomes a wise, wounded interlocutor teaching that the heart can sink and return, full of rooms for love.
+
+Style guidance: cinematic underwater surrealism with intimacy and warmth.
 
 Prompt:
 
-> Create a square companion image for a poem in a quiet literary web archive. Show a surreal underwater scene on the ocean floor: a fractured ship interior like a ballroom or sitting room, rust strands hanging like red-brown icicles, open suitcases drifting slightly, and one living figure seated as if listening to the wreck speak. Warm light should glow from within the wreck against the blue abyss. The image should make heartbreak and buoyancy coexist, intimate rather than disaster-spectacle. Visual style: cinematic underwater surrealism, blue-black depth, rust red, dim amber interior light, soft particulate water. No skeletons, no gore, no film-Titanic likeness, no readable text.
+>
+> Create one square companion image for the poem "On This the 100th Anniversary of the Sinking of the Titanic, We Reconsider the Buoyancy of the Human Heart" by Laura Lamb Brown-Lavolie.
+>
+> Use these exact selected lines as the source passage:
+> """
+> The trouble with you humans is that you are so concerned with staying afloat. Go ahead, be gouged open by love. Gulp that saltwater, sink beneath the waves. You’re not a boat, you can go under and come up again, with those big old lungs of yours, those hard kicking legs.
+> And your heart, she said, that gargantuan ark, that floating hotel. Call it Unsinkable, though it is sinkable. Embark, embark.
+> There are enough ballrooms in you to dance with everyone you’ll ever love.
+> That’s what the Titanic told me this morning, me, lying next to her on the ocean floor.
+> There are enough ballrooms in you.
+> """
+>
+> Context: Titanic becomes a wise, wounded interlocutor teaching that the heart can sink and return, full of rooms for love.
+>
+> Goal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.
+>
+> Light style guidance: cinematic underwater surrealism with intimacy and warmth.
+>
+> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid skeletons, gore, disaster spectacle, and film still references.
 
 ## Ozymandias
 
+Slug: ozymandias
+
 Author: Percy Bysshe Shelley
 
-Poem moment: Two vast stone legs and a shattered face remain in the empty desert where power has collapsed.
+Selected lines:
+
+```
+I met a traveller from an antique land,
+Who said—"Two vast and trunkless legs of stone
+Stand in the desert. . . . Near them, on the sand,
+Half sunk a shattered visage lies, whose frown,
+And wrinkled lip, and sneer of cold command,
+Tell that its sculptor well those passions read
+Which yet survive, stamped on these lifeless things,
+The hand that mocked them, and the heart that fed;
+[other lines omitted]
+Nothing beside remains. Round the decay
+Of that colossal Wreck, boundless and bare
+The lone and level sands stretch far away.
+```
+
+Context: Imperial power survives only as broken stone and an empty desert around it.
+
+Style guidance: monumental archaeological watercolor realism.
 
 Prompt:
 
-> Create a square companion image for a poem in a quiet literary web archive. Show colossal broken stone legs and a half-buried shattered face in an empty desert, with a tiny traveler silhouette far off for scale. The ruined monument should feel arrogant even in fragments, while the surrounding sand and sky are calm and indifferent. Visual style: monumental archaeological realism with watercolor dust, sun-bleached stone, ochre sand, pale blue-white sky, austere composition. No readable inscription, no fantasy ruins, no text.
+>
+> Create one square companion image for the poem "Ozymandias" by Percy Bysshe Shelley.
+>
+> Use these exact selected lines as the source passage:
+> """
+> I met a traveller from an antique land,
+> Who said—"Two vast and trunkless legs of stone
+> Stand in the desert. . . . Near them, on the sand,
+> Half sunk a shattered visage lies, whose frown,
+> And wrinkled lip, and sneer of cold command,
+> Tell that its sculptor well those passions read
+> Which yet survive, stamped on these lifeless things,
+> The hand that mocked them, and the heart that fed;
+> [other lines omitted]
+> Nothing beside remains. Round the decay
+> Of that colossal Wreck, boundless and bare
+> The lone and level sands stretch far away.
+> """
+>
+> Context: Imperial power survives only as broken stone and an empty desert around it.
+>
+> Goal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.
+>
+> Light style guidance: monumental archaeological watercolor realism.
+>
+> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid readable inscriptions and fantasy ruin excess.
 
 ## Pyramid Scheme
 
+Slug: pyramid-scheme
+
 Author: Hera Lindsay Bird
 
-Poem moment: Love becomes a comic, extravagant pyramid of money, domestic life, pizza at dawn, and punching the sun.
+Selected lines:
+
+```
+it has been a great honor and privilege to love you
+it has been a great honor and privilege to eat cold pizza on your steps at dawn
+love is so stupid: it’s like punching the sun
+and having a million gold coins rain down on you
+which you don’t even have to pay tax on
+because sun money is free money
+and i’m pretty sure there are no laws about that
+but i would pay tax
+because i believe that hospitals and education
+and the arts should be publicly funded
+even this poem
+when i look at you, my eyes are two identical neighborhood houses on fire
+when i look at you my eyes bulge out of my skull like a dog in a cartoon
+when i am with you
+an enormous silence descends upon me
+and i feel like i am sinking into the deepest part of my life
+we walk down the street, with the grass blowing back and forth
+i have never been so happy
+```
+
+Context: The poem turns love into a comic economy of sarcophagi, cold pizza, sun money, fire, and impossible happiness.
+
+Style guidance: playful surreal editorial gouache.
 
 Prompt:
 
-> Create a square companion image for a poem in a quiet literary web archive. Show a surreal domestic dawn scene on front steps: a pizza box, two drinks, windblown grass, and a distant pyramid shadow. Above, a cartoon-impossible sun has been punched into releasing a rain of gold coins, but the figures below are calm and happy rather than greedy. The image should be funny, romantic, and emotionally excessive. Visual style: playful editorial gouache with surreal accents, dawn lavender, grass green, coin gold, warm apartment light. No MLM infographic, no brand logos, no readable text.
+>
+> Create one square companion image for the poem "Pyramid Scheme" by Hera Lindsay Bird.
+>
+> Use these exact selected lines as the source passage:
+> """
+> it has been a great honor and privilege to love you
+> it has been a great honor and privilege to eat cold pizza on your steps at dawn
+> love is so stupid: it’s like punching the sun
+> and having a million gold coins rain down on you
+> which you don’t even have to pay tax on
+> because sun money is free money
+> and i’m pretty sure there are no laws about that
+> but i would pay tax
+> because i believe that hospitals and education
+> and the arts should be publicly funded
+> even this poem
+> when i look at you, my eyes are two identical neighborhood houses on fire
+> when i look at you my eyes bulge out of my skull like a dog in a cartoon
+> when i am with you
+> an enormous silence descends upon me
+> and i feel like i am sinking into the deepest part of my life
+> we walk down the street, with the grass blowing back and forth
+> i have never been so happy
+> """
+>
+> Context: The poem turns love into a comic economy of sarcophagi, cold pizza, sun money, fire, and impossible happiness.
+>
+> Goal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.
+>
+> Light style guidance: playful surreal editorial gouache.
+>
+> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid MLM infographics, brand logos, and making the joke too literal.
 
 ## Sailing to Byzantium
 
+Slug: sailing-to-byzantium
+
 Author: William Butler Yeats
 
-Poem moment: An old speaker leaves the natural world for Byzantium, holy fire, gold mosaic, and an artificial bird of eternity.
+Selected lines:
+
+```
+Into the artifice of eternity.
+IV
+Once out of nature I shall never take
+My bodily form from any natural thing,
+But such a form as Grecian goldsmiths make
+Of hammered gold and gold enamelling
+To keep a drowsy Emperor awake;
+Or set upon a golden bough to sing
+To lords and ladies of Byzantium
+Of what is past, or passing, or to come.
+```
+
+Context: The speaker wants to leave mortal nature and enter a crafted, golden, singing form of eternity.
+
+Style guidance: Byzantine mosaic influence with symbolist watercolor.
 
 Prompt:
 
-> Create a square companion image for a poem in a quiet literary web archive. Show an aged sailor arriving by dark water at a city of gold mosaic light. In the distance, sages appear as small figures within holy fire, and a mechanical golden bird perches on a branch above the harbor. The image should feel like a soul moving from mortal nature into crafted eternity. Visual style: Byzantine mosaic blended with symbolist watercolor, gold leaf texture, lapis blue, dark sea, tessellated light. No generic fantasy palace, no readable religious text.
+>
+> Create one square companion image for the poem "Sailing to Byzantium" by William Butler Yeats.
+>
+> Use these exact selected lines as the source passage:
+> """
+> Into the artifice of eternity.
+> IV
+> Once out of nature I shall never take
+> My bodily form from any natural thing,
+> But such a form as Grecian goldsmiths make
+> Of hammered gold and gold enamelling
+> To keep a drowsy Emperor awake;
+> Or set upon a golden bough to sing
+> To lords and ladies of Byzantium
+> Of what is past, or passing, or to come.
+> """
+>
+> Context: The speaker wants to leave mortal nature and enter a crafted, golden, singing form of eternity.
+>
+> Goal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.
+>
+> Light style guidance: Byzantine mosaic influence with symbolist watercolor.
+>
+> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid generic fantasy cities or readable religious text.
 
 ## Sonnet 116
 
+Slug: sonnet-116
+
 Author: William Shakespeare
 
-Poem moment: Love is a fixed mark, a star to every wandering boat, not shaken by tempests or Time.
+Selected lines:
+
+```
+Let me not to the marriage of true minds
+Admit impediments; love is not love
+Which alters when it alteration finds,
+Or bends with the remover to remove.
+O no, it is an ever-fixèd mark
+That looks on tempests and is never shaken;
+It is the star to every wand'ring bark
+Whose worth's unknown, although his height be taken.
+```
+
+Context: Love is imagined as a fixed mark and guiding star, steady through alteration and storm.
+
+Style guidance: romantic maritime chiaroscuro, elegant and unsentimental.
 
 Prompt:
 
-> Create a square companion image for a poem in a quiet literary web archive. Show a lighthouse-like sea mark standing firm in a black storm, with a small boat guided by one steady star. Waves and wind should bend around the mark without moving it. The image should convey constancy without using hearts or wedding imagery. Visual style: romantic maritime chiaroscuro, oil paint texture, storm green, lamp gold, star white, deep navy. No greeting-card symbols, no text.
+>
+> Create one square companion image for the poem "Sonnet 116" by William Shakespeare.
+>
+> Use these exact selected lines as the source passage:
+> """
+> Let me not to the marriage of true minds
+> Admit impediments; love is not love
+> Which alters when it alteration finds,
+> Or bends with the remover to remove.
+> O no, it is an ever-fixèd mark
+> That looks on tempests and is never shaken;
+> It is the star to every wand'ring bark
+> Whose worth's unknown, although his height be taken.
+> """
+>
+> Context: Love is imagined as a fixed mark and guiding star, steady through alteration and storm.
+>
+> Goal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.
+>
+> Light style guidance: romantic maritime chiaroscuro, elegant and unsentimental.
+>
+> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid wedding imagery and heart symbols.
 
 ## Sonnet 73
 
+Slug: sonnet-73
+
 Author: William Shakespeare
 
-Poem moment: Late autumn branches, ruined choirs, twilight, and fading fire become images of aging love.
+Selected lines:
+
+```
+That time of year thou mayst in me behold
+When yellow leaves, or none, or few, do hang
+Upon those boughs which shake against the cold,
+Bare ruin'd choirs, where late the sweet birds sang.
+In me thou see'st the twilight of such day
+As after sunset fadeth in the west,
+Which by and by black night doth take away,
+Death's second self, that seals up all in rest.
+```
+
+Context: Aging love is seen through autumn branches, ruined choirs, twilight, and the approach of night.
+
+Style guidance: muted late-autumn oil and watercolor.
 
 Prompt:
 
-> Create a square companion image for a poem in a quiet literary web archive. Show bare late-autumn boughs shaped like the arches of a ruined chapel, with a few yellow leaves clinging in cold wind. Below them, a small ember glows in gray ash as twilight darkens. The image should be mortal, tender, and quiet. Visual style: muted late-autumn oil painting, smoke gray, leaf gold, cold violet dusk, soft brushwork. No horror, no skulls, no text.
+>
+> Create one square companion image for the poem "Sonnet 73" by William Shakespeare.
+>
+> Use these exact selected lines as the source passage:
+> """
+> That time of year thou mayst in me behold
+> When yellow leaves, or none, or few, do hang
+> Upon those boughs which shake against the cold,
+> Bare ruin'd choirs, where late the sweet birds sang.
+> In me thou see'st the twilight of such day
+> As after sunset fadeth in the west,
+> Which by and by black night doth take away,
+> Death's second self, that seals up all in rest.
+> """
+>
+> Context: Aging love is seen through autumn branches, ruined choirs, twilight, and the approach of night.
+>
+> Goal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.
+>
+> Light style guidance: muted late-autumn oil and watercolor.
+>
+> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid horror imagery and skulls.
 
 ## Stolen Moments
 
+Slug: stolen-moments
+
 Author: Kim Addonizio
 
-Poem moment: A remembered kitchen encounter condenses into orange slices, purple flowers, and charged bodily memory.
+Selected lines:
+
+```
+What happened, happened once. So now it’s best
+in memory – an orange he sliced: the skin
+unbroken, then the knife, the chilled wedge
+lifted to my mouth, his mouth, the thin
+membrane between us, the exquisite orange,
+tongue, orange, my nakedness and his,
+the way he pushed me up against the fridge –
+Now I get to feel his hands again, the kiss
+that didn’t last, but sent some neural twin
+flashing wildly through the cortex. Love’s
+merciless, the way it travels in
+and keeps emitting light. Beside the stove
+we ate an orange. And there were purple flowers
+on the table. And we still had hours.
+```
+
+Context: A single erotic memory condenses into orange, kitchen light, purple flowers, and neural afterglow.
+
+Style guidance: sensual cinematic still life, adult but indirect.
 
 Prompt:
 
-> Create a square companion image for a poem in a quiet literary web archive. Show an intimate kitchen still life after a brief encounter: orange slices on a counter near a stove, purple flowers on the table, a refrigerator edge catching bright light. A faint thread of electric light arcs through the orange peel as if memory is still firing. The image should feel sensual and adult while staying indirect. Visual style: cinematic realist oil and pastel, warm kitchen light, citrus orange, violet flowers, cream enamel, shallow depth. No nudity, no explicit bodies, no voyeuristic scene, no text.
+>
+> Create one square companion image for the poem "Stolen Moments" by Kim Addonizio.
+>
+> Use these exact selected lines as the source passage:
+> """
+> What happened, happened once. So now it’s best
+> in memory – an orange he sliced: the skin
+> unbroken, then the knife, the chilled wedge
+> lifted to my mouth, his mouth, the thin
+> membrane between us, the exquisite orange,
+> tongue, orange, my nakedness and his,
+> the way he pushed me up against the fridge –
+> Now I get to feel his hands again, the kiss
+> that didn’t last, but sent some neural twin
+> flashing wildly through the cortex. Love’s
+> merciless, the way it travels in
+> and keeps emitting light. Beside the stove
+> we ate an orange. And there were purple flowers
+> on the table. And we still had hours.
+> """
+>
+> Context: A single erotic memory condenses into orange, kitchen light, purple flowers, and neural afterglow.
+>
+> Goal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.
+>
+> Light style guidance: sensual cinematic still life, adult but indirect.
+>
+> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid explicit bodies, nudity, or voyeurism.
 
 ## Stopping by Woods on a Snowy Evening
 
+Slug: stopping-by-woods-on-a-snowy-evening
+
 Author: Robert Frost
 
-Poem moment: A traveler pauses with a horse between dark woods, a frozen lake, falling snow, and obligations still ahead.
+Selected lines:
+
+```
+My little horse must think it queer
+To stop without a farmhouse near
+Between the woods and frozen lake
+The darkest evening of the year.
+He gives his harness bells a shake
+To ask if there is some mistake.
+The only other sound’s the sweep
+Of easy wind and downy flake.
+[other lines omitted]
+The woods are lovely, dark and deep,
+But I have promises to keep,
+And miles to go before I sleep,
+And miles to go before I sleep.
+```
+
+Context: The image should hold the hush and temptation of stopping between dark woods, frozen lake, snow, and obligations.
+
+Style guidance: quiet winter nocturne watercolor.
 
 Prompt:
 
-> Create a square companion image for a poem in a quiet literary web archive. Show a small horse and sleigh paused beside dark woods on a snowy evening, with a frozen lake suggested by a pale horizontal sheen. Snow falls silently. Far away, there may be one faint village light, but the woods should remain the emotional center. The image should feel beautiful, hushed, and slightly dangerous, not cozy. Visual style: quiet winter nocturne watercolor, indigo woods, blue-white snow, soft graphite line, minimal composition. No Christmas-card warmth, no text.
+>
+> Create one square companion image for the poem "Stopping by Woods on a Snowy Evening" by Robert Frost.
+>
+> Use these exact selected lines as the source passage:
+> """
+> My little horse must think it queer
+> To stop without a farmhouse near
+> Between the woods and frozen lake
+> The darkest evening of the year.
+> He gives his harness bells a shake
+> To ask if there is some mistake.
+> The only other sound’s the sweep
+> Of easy wind and downy flake.
+> [other lines omitted]
+> The woods are lovely, dark and deep,
+> But I have promises to keep,
+> And miles to go before I sleep,
+> And miles to go before I sleep.
+> """
+>
+> Context: The image should hold the hush and temptation of stopping between dark woods, frozen lake, snow, and obligations.
+>
+> Goal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.
+>
+> Light style guidance: quiet winter nocturne watercolor.
+>
+> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid cozy holiday-card warmth.
 
 ## Telemachus
 
+Slug: telemachus
+
 Author: Ocean Vuong
 
-Poem moment: A son pulls his father from the sea while a ruined city and cathedral become memory, inheritance, and drowning.
+Selected lines:
+
+```
+Like any good son, I pull my father out
+of the water, drag him by his hair
+through white sand, his knuckles carving a trail
+the waves rush in to erase. Because the city
+beyond the shore is no longer
+where we left it. Because the bombed
+cathedral is now a cathedral
+of trees. I kneel beside him to show how far
+[other lines omitted]
+in his sea-black eyes. The face
+not mine — but one I will wear
+to kiss all my lovers good-night:
+the way I seal my father’s lips
+with my own & begin
+the faithful work of drowning.
+```
+
+Context: The son, father, shore, erased tracks, and cathedral of trees make a grief image of inheritance and war.
+
+Style guidance: lyrical watercolor realism with restrained surreal memory.
 
 Prompt:
 
-> Create a square companion image for a poem in a quiet literary web archive. Show a young man on white sand pulling an older figure from the surf, seen from a respectful distance so injury is implied rather than graphic. Beyond the shore, the outline of a bombed cathedral has transformed into trees. The waves are already erasing tracks in the sand. The image should feel elegiac, filial, and haunted by war. Visual style: lyrical watercolor realism with surreal architectural memory, white sand, sea green, smoke gray, soft black ink. No visible wound, no gore, no sensational violence, no text.
+>
+> Create one square companion image for the poem "Telemachus" by Ocean Vuong.
+>
+> Use these exact selected lines as the source passage:
+> """
+> Like any good son, I pull my father out
+> of the water, drag him by his hair
+> through white sand, his knuckles carving a trail
+> the waves rush in to erase. Because the city
+> beyond the shore is no longer
+> where we left it. Because the bombed
+> cathedral is now a cathedral
+> of trees. I kneel beside him to show how far
+> [other lines omitted]
+> in his sea-black eyes. The face
+> not mine — but one I will wear
+> to kiss all my lovers good-night:
+> the way I seal my father’s lips
+> with my own & begin
+> the faithful work of drowning.
+> """
+>
+> Context: The son, father, shore, erased tracks, and cathedral of trees make a grief image of inheritance and war.
+>
+> Goal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.
+>
+> Light style guidance: lyrical watercolor realism with restrained surreal memory.
+>
+> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid visible wounds, gore, and sensational violence.
 
-## Tell All the Truth but Tell It Slant
+## Tell all the truth but tell it slant
+
+Slug: tell-all-the-truth-but-tell-it-slant
 
 Author: Emily Dickinson
 
-Poem moment: Truth is too bright directly, so it must arrive slant, like lightning explained gently.
+Selected lines:
+
+```
+Tell all the truth but tell it slant —
+Success in Circuit lies
+Too bright for our infirm Delight
+The Truth's superb surprise
+As Lightning to the Children eased
+With explanation kind
+The Truth must dazzle gradually
+Or every man be blind —
+```
+
+Context: Truth is too bright directly; it must be angled, softened, and allowed to dazzle gradually.
+
+Style guidance: minimal luminous watercolor and ink.
 
 Prompt:
 
-> Create a square companion image for a poem in a quiet literary web archive. Show a brilliant beam of light bending through a tilted glass prism or circuit-like path before reaching a dark room. The light should be powerful but softened by its slant, illuminating dust and edges rather than blasting the viewer. The image should be an elegant abstraction of revelation made bearable. Visual style: minimal luminous watercolor and ink, cream paper, pale yellow light, cool gray shadow, precise geometric calm. No words, no literal lightning bolt, no text.
+>
+> Create one square companion image for the poem "Tell all the truth but tell it slant" by Emily Dickinson.
+>
+> Use these exact selected lines as the source passage:
+> """
+> Tell all the truth but tell it slant —
+> Success in Circuit lies
+> Too bright for our infirm Delight
+> The Truth's superb surprise
+> As Lightning to the Children eased
+> With explanation kind
+> The Truth must dazzle gradually
+> Or every man be blind —
+> """
+>
+> Context: Truth is too bright directly; it must be angled, softened, and allowed to dazzle gradually.
+>
+> Goal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.
+>
+> Light style guidance: minimal luminous watercolor and ink.
+>
+> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid literal typography, slogans, and harsh lightning cliches.
 
 ## The Blue House
 
+Slug: the-blue-house
+
 Author: Tomas Transtromer
 
-Poem moment: A misty blue house is seen from the woods as if from beyond life, with overgrown garden, inherited memory, and a sister vessel on another route.
+Selected lines:
+
+```
+It is night with glaring sunshine. I stand in the woods and look towards my house with its misty blue walls. As though I were recently dead and saw the house from a new angle.
+It has stood for more than eighty summers. Its timber has been impregnated, four times with joy and three times with sorrow. When someone who has lived in the house dies it is repainted. The dead person paints it himself, without a brush, from the inside.
+On the other side is open terrain. Formerly a garden, now wilderness. A still surf of weed, pagodas of weed, an unfurling body of text, Upanishades of weed, a Viking fleet of weed, dragon heads, lances, an empire of weed.
+[other lines omitted]
+It is always so early in here, it is before the crossroads, before the irrevocable choices. I am grateful for this life! And yet I miss the alternatives. All sketches wish to be real.
+A motor far out on the water extends the horizon of the summer night. Both joy and sorrow swell in the magnifying glass of the dew. We do not actually know it, but we sense it: our life has a sister vessel which plies an entirely different route. While the sun burns behind the islands.
+```
+
+Context: The house is seen from a strange afterlife angle, full of joy, sorrow, wilderness, alternatives, and a sister vessel.
+
+Style guidance: Nordic magical realism in watercolor and gouache.
 
 Prompt:
 
-> Create a square companion image for a poem in a quiet literary web archive. Show a misty blue wooden house seen from the edge of dark woods in the impossible light of a summer night. The garden has become a wild sea of weeds, with weed shapes subtly resembling ships, lances, and dragon heads. Far behind the islands, the sun burns low. The image should feel grateful, eerie, and full of unlived alternatives. Visual style: Nordic magical realism in watercolor and gouache, misty blue walls, weed green, pale night sun, quiet melancholy. No haunted-house cliches, no clutter, no text.
+>
+> Create one square companion image for the poem "The Blue House" by Tomas Transtromer.
+>
+> Use these exact selected lines as the source passage:
+> """
+> It is night with glaring sunshine. I stand in the woods and look towards my house with its misty blue walls. As though I were recently dead and saw the house from a new angle.
+> It has stood for more than eighty summers. Its timber has been impregnated, four times with joy and three times with sorrow. When someone who has lived in the house dies it is repainted. The dead person paints it himself, without a brush, from the inside.
+> On the other side is open terrain. Formerly a garden, now wilderness. A still surf of weed, pagodas of weed, an unfurling body of text, Upanishades of weed, a Viking fleet of weed, dragon heads, lances, an empire of weed.
+> [other lines omitted]
+> It is always so early in here, it is before the crossroads, before the irrevocable choices. I am grateful for this life! And yet I miss the alternatives. All sketches wish to be real.
+> A motor far out on the water extends the horizon of the summer night. Both joy and sorrow swell in the magnifying glass of the dew. We do not actually know it, but we sense it: our life has a sister vessel which plies an entirely different route. While the sun burns behind the islands.
+> """
+>
+> Context: The house is seen from a strange afterlife angle, full of joy, sorrow, wilderness, alternatives, and a sister vessel.
+>
+> Goal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.
+>
+> Light style guidance: Nordic magical realism in watercolor and gouache.
+>
+> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid haunted-house cliches and over-clutter.
 
 ## The Broken Buddha
 
+Slug: the-broken-buddha
+
 Author: Johnny Cordova
 
-Poem moment: A cracked marble Buddha, head glued back on, becomes a teacher in brokenness.
+Selected lines:
+
+```
+I bought him because the art collectors
+could not see the passage of so many lives
+carved into the white marble of his eyes.
+They took one look at the crooked
+cracked line around his neck
+and did not want him.
+[other lines omitted]
+I bought him because once one is broken
+one stays broken
+even when they are able to glue
+your head back on.
+I bought him because for a long time
+he has been sitting in brokenness
+without needing to be claimed
+without needing wholeness.
+I bought him because I want him to teach me.
+I bought him because he was broken.
+```
+
+Context: A repaired Buddha becomes a teacher because brokenness is not the opposite of dignity.
+
+Style guidance: quiet devotional still life, respectful and simple.
 
 Prompt:
 
-> Create a square companion image for a poem in a quiet literary web archive. Show a seated white marble Buddha statue in warm bazaar light, with a visible but carefully repaired crack around the neck. The statue should be still, dignified, and unclaimed, surrounded by soft shadow rather than decorative excess. The image should make brokenness feel contemplative, not defective. Visual style: quiet devotional still life, watercolor and soft oil glaze, warm umber light, white marble, muted market shadows. Treat Buddhist imagery respectfully; no exotic spectacle, no mockery, no text.
+>
+> Create one square companion image for the poem "The Broken Buddha" by Johnny Cordova.
+>
+> Use these exact selected lines as the source passage:
+> """
+> I bought him because the art collectors
+> could not see the passage of so many lives
+> carved into the white marble of his eyes.
+> They took one look at the crooked
+> cracked line around his neck
+> and did not want him.
+> [other lines omitted]
+> I bought him because once one is broken
+> one stays broken
+> even when they are able to glue
+> your head back on.
+> I bought him because for a long time
+> he has been sitting in brokenness
+> without needing to be claimed
+> without needing wholeness.
+> I bought him because I want him to teach me.
+> I bought him because he was broken.
+> """
+>
+> Context: A repaired Buddha becomes a teacher because brokenness is not the opposite of dignity.
+>
+> Goal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.
+>
+> Light style guidance: quiet devotional still life, respectful and simple.
+>
+> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid exotic spectacle, mockery, and decorative excess.
 
 ## The Eagle
 
+Slug: the-eagle
+
 Author: Alfred Tennyson
 
-Poem moment: An eagle grips a high crag near the sun, above a crawling wrinkled sea, before falling like a thunderbolt.
+Selected lines:
+
+```
+He clasps the crag with crooked hands;
+Close to the sun in lonely lands,
+Ring'd with the azure world, he stands.
+The wrinkled sea beneath him crawls;
+He watches from his mountain walls,
+And like a thunderbolt he falls.
+```
+
+Context: The poem compresses height, solitude, predatory stillness, and sudden descent.
+
+Style guidance: crisp naturalist watercolor and gouache.
 
 Prompt:
 
-> Create a square companion image for a poem in a quiet literary web archive. Show an eagle gripping a sunlit crag with sharp talons, ringed by immense blue air. Far below, the sea appears wrinkled and slow. The image should hold the instant before the dive, full of height and compression. Visual style: high-contrast naturalist watercolor and gouache, azure sky, stone gray, sunlit feather detail, crisp composition. No superhero lightning, no cartoon bird, no text.
+>
+> Create one square companion image for the poem "The Eagle" by Alfred Tennyson.
+>
+> Use these exact selected lines as the source passage:
+> """
+> He clasps the crag with crooked hands;
+> Close to the sun in lonely lands,
+> Ring'd with the azure world, he stands.
+> The wrinkled sea beneath him crawls;
+> He watches from his mountain walls,
+> And like a thunderbolt he falls.
+> """
+>
+> Context: The poem compresses height, solitude, predatory stillness, and sudden descent.
+>
+> Goal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.
+>
+> Light style guidance: crisp naturalist watercolor and gouache.
+>
+> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid superhero lightning or cartoon bird drama.
 
 ## The Journey
 
+Slug: the-journey
+
 Author: Mary Oliver
 
-Poem moment: The speaker leaves the shouting voices behind and begins the road into a life that is her own.
+Selected lines:
+
+```
+One day you finally knew
+what you had to do, and began,
+though the voices around you
+kept shouting
+their bad advice—
+though the whole house
+began to tremble
+and you felt the old tug
+at your ankles.
+"Mend my life!"
+each voice cried.
+But you didn't stop.
+[other lines omitted]
+as you strode deeper and deeper
+into the world,
+determined to do
+the only thing you could do—
+determined to save
+the only life you could save.
+```
+
+Context: The poem is about leaving bad advice and saving the only life one can save.
+
+Style guidance: cinematic symbolic watercolor, restrained but moving.
 
 Prompt:
 
-> Create a square companion image for a poem in a quiet literary web archive. Show a lone figure walking away from a storm-shaken house at dusk, following a road that opens through dark trees toward a clear patch of stars. Around the house, pale wind-shapes suggest voices without becoming faces or words. The image should communicate hard-won self-rescue and forward motion. Visual style: cinematic symbolic landscape in watercolor and ink, storm gray, road brown, small star-white openings, restrained drama. No visible written words, no melodramatic screaming faces, no text.
+>
+> Create one square companion image for the poem "The Journey" by Mary Oliver.
+>
+> Use these exact selected lines as the source passage:
+> """
+> One day you finally knew
+> what you had to do, and began,
+> though the voices around you
+> kept shouting
+> their bad advice—
+> though the whole house
+> began to tremble
+> and you felt the old tug
+> at your ankles.
+> "Mend my life!"
+> each voice cried.
+> But you didn't stop.
+> [other lines omitted]
+> as you strode deeper and deeper
+> into the world,
+> determined to do
+> the only thing you could do—
+> determined to save
+> the only life you could save.
+> """
+>
+> Context: The poem is about leaving bad advice and saving the only life one can save.
+>
+> Goal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.
+>
+> Light style guidance: cinematic symbolic watercolor, restrained but moving.
+>
+> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid screaming faces and visible written words.
 
 ## The Kingfisher
 
+Slug: the-kingfisher
+
 Author: Mary Oliver
 
-Poem moment: A kingfisher rises from a black wave like a blue flower with a silver leaf in its beak.
+Selected lines:
+
+```
+The kingfisher rises out of the black wave
+like a blue flower, in his beak
+he carries a silver leaf. I think this is
+the prettiest world--so long as you don't mind
+a little dying, how could there be a day in your
+whole life
+that doesn't have its splash of happiness?
+[other lines omitted]
+with its broken red river, and with a rough and
+easy cry
+I couldn't rouse out of my thoughtful body
+if my life depended on it, he swings back
+over the bright sea to do the same thing, to do it
+(as I long to do something, anything) perfectly.
+```
+
+Context: The kingfisher is beauty and predation at once: a perfect flash of blue, silver, black water, and happiness.
+
+Style guidance: vivid naturalist watercolor freeze-frame.
 
 Prompt:
 
-> Create a square companion image for a poem in a quiet literary web archive. Show a blue kingfisher bursting upward from a black wave, droplets suspended around it, a small silver fish in its beak like a shining leaf. The bird should look precise and alive, while the wave reads almost floral. The image should celebrate beauty without hiding the world's predatory edge. Visual style: vivid naturalist watercolor freeze-frame, saturated blue bird, black-green water, silver highlight, white spray. No blood, no cartoon bird, no text.
+>
+> Create one square companion image for the poem "The Kingfisher" by Mary Oliver.
+>
+> Use these exact selected lines as the source passage:
+> """
+> The kingfisher rises out of the black wave
+> like a blue flower, in his beak
+> he carries a silver leaf. I think this is
+> the prettiest world--so long as you don't mind
+> a little dying, how could there be a day in your
+> whole life
+> that doesn't have its splash of happiness?
+> [other lines omitted]
+> with its broken red river, and with a rough and
+> easy cry
+> I couldn't rouse out of my thoughtful body
+> if my life depended on it, he swings back
+> over the bright sea to do the same thing, to do it
+> (as I long to do something, anything) perfectly.
+> """
+>
+> Context: The kingfisher is beauty and predation at once: a perfect flash of blue, silver, black water, and happiness.
+>
+> Goal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.
+>
+> Light style guidance: vivid naturalist watercolor freeze-frame.
+>
+> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid blood and cartoon prettiness.
 
 ## The Light Wraps You
 
+Slug: the-light-wraps-you
+
 Author: Pablo Neruda
 
-Poem moment: Light wraps the beloved in mortal flame, while black and gold twilight turns and roots of night emerge.
+Selected lines:
+
+```
+The light wraps you in its mortal flame.
+Abstracted pale mourner, standing that way
+against the old propellers of the twighlight
+that revolves around you.
+Speechless, my friend,
+alone in the loneliness of this hour of the dead
+and filled with the lives of fire,
+pure heir of the ruined day.
+A bough of fruit falls from the sun on your dark garment.
+The great roots of night
+grow suddenly from your soul,
+and the things that hide in you come out again
+so that a blue and palled people
+your newly born, takes nourishment.
+[other lines omitted]
+Oh magnificent and fecund and magnetic slave
+of the circle that moves in turn through black and gold:
+rise, lead and possess a creation
+so rich in life that its flowers perish
+and it is full of sadness.
+```
+
+Context: Light, mourning, fire, night roots, creation, fertility, and sadness move around one solitary figure.
+
+Style guidance: surreal portrait in watercolor and oil pastel.
 
 Prompt:
 
-> Create a square companion image for a poem in a quiet literary web archive. Show a solitary mourner-like figure in a dark garment, wrapped not by fabric but by bands of twilight light, black and gold circling gently around them. From below, root-like shadows of night rise, while a sun-heavy bough of fruit lowers toward the shoulder. The image should be magnetic, fecund, sad, and luminous. Visual style: surreal portrait in oil pastel and watercolor glaze, black, antique gold, dusk violet, warm flame light, soft edges. No bondage imagery, no oversexualization, no text.
+>
+> Create one square companion image for the poem "The Light Wraps You" by Pablo Neruda.
+>
+> Use these exact selected lines as the source passage:
+> """
+> The light wraps you in its mortal flame.
+> Abstracted pale mourner, standing that way
+> against the old propellers of the twighlight
+> that revolves around you.
+> Speechless, my friend,
+> alone in the loneliness of this hour of the dead
+> and filled with the lives of fire,
+> pure heir of the ruined day.
+> A bough of fruit falls from the sun on your dark garment.
+> The great roots of night
+> grow suddenly from your soul,
+> and the things that hide in you come out again
+> so that a blue and palled people
+> your newly born, takes nourishment.
+> [other lines omitted]
+> Oh magnificent and fecund and magnetic slave
+> of the circle that moves in turn through black and gold:
+> rise, lead and possess a creation
+> so rich in life that its flowers perish
+> and it is full of sadness.
+> """
+>
+> Context: Light, mourning, fire, night roots, creation, fertility, and sadness move around one solitary figure.
+>
+> Goal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.
+>
+> Light style guidance: surreal portrait in watercolor and oil pastel.
+>
+> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid bondage imagery and oversexualization.
 
 ## The Moment
 
+Slug: the-moment
+
 Author: Margaret Atwood
 
-Poem moment: The instant of saying "I own this" is answered by trees, birds, cliffs, and air withdrawing.
+Selected lines:
+
+```
+The moment when, after many years
+of hard work and a long voyage
+you stand in the centre of your room,
+house, half-acre, square mile, island, country,
+knowing at last how you got there,
+and say, I own this,
+is the same moment when the trees unloose
+their soft arms from around you,
+the birds take back their language,
+the cliffs fissure and collapse,
+the air moves back from you like a wave
+and you can’t breathe.
+[other lines omitted]
+No, they whisper. You own nothing.
+You were a visitor, time after time
+climbing the hill, planting the flag, proclaiming.
+We never belonged to you.
+You never found us.
+It was always the other way round.
+```
+
+Context: The instant of claiming ownership becomes the instant the living world withdraws and corrects the claim.
+
+Style guidance: ecological surreal editorial watercolor.
 
 Prompt:
 
-> Create a square companion image for a poem in a quiet literary web archive. Show a person standing in the center of a simple room that opens impossibly into land: trees unlace their branches from the walls, birds lift away with their language, cliffs crack in the distance, and air pulls back like a wave. The person is small, realizing ownership has failed. The image should feel ecological, humbling, and exact. Visual style: surreal editorial watercolor, muted earth tones, pale room interior, retreating green and stone, quiet tension. Do not make the figure triumphant; no flags, no text.
+>
+> Create one square companion image for the poem "The Moment" by Margaret Atwood.
+>
+> Use these exact selected lines as the source passage:
+> """
+> The moment when, after many years
+> of hard work and a long voyage
+> you stand in the centre of your room,
+> house, half-acre, square mile, island, country,
+> knowing at last how you got there,
+> and say, I own this,
+> is the same moment when the trees unloose
+> their soft arms from around you,
+> the birds take back their language,
+> the cliffs fissure and collapse,
+> the air moves back from you like a wave
+> and you can’t breathe.
+> [other lines omitted]
+> No, they whisper. You own nothing.
+> You were a visitor, time after time
+> climbing the hill, planting the flag, proclaiming.
+> We never belonged to you.
+> You never found us.
+> It was always the other way round.
+> """
+>
+> Context: The instant of claiming ownership becomes the instant the living world withdraws and corrects the claim.
+>
+> Goal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.
+>
+> Light style guidance: ecological surreal editorial watercolor.
+>
+> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid triumphant ownership, flags, or slogans.
 
 ## The Red Wheelbarrow
 
+Slug: the-red-wheelbarrow
+
 Author: William Carlos Williams
 
-Poem moment: A rain-glazed red wheelbarrow beside white chickens carries the entire poem's attention.
+Selected lines:
+
+```
+so much depends
+upon
+a red wheel
+barrow
+glazed with rain
+water
+beside the white
+chickens
+```
+
+Context: The poem asks for radical attention to a few ordinary things after rain.
+
+Style guidance: minimal rural watercolor still life.
 
 Prompt:
 
-> Create a square companion image for a poem in a quiet literary web archive. Show a red wheelbarrow glazed with rainwater beside a few white chickens, in a spare farmyard after rain. Keep the scene extremely simple and attentive, with the red surface and water droplets doing most of the work. The image should feel like perception has slowed down. Visual style: minimal rural still life, watercolor realism with wet paper texture, clean red, white feathers, gray rain light, soft ground. No added symbolism, no text.
+>
+> Create one square companion image for the poem "The Red Wheelbarrow" by William Carlos Williams.
+>
+> Use these exact selected lines as the source passage:
+> """
+> so much depends
+> upon
+> a red wheel
+> barrow
+> glazed with rain
+> water
+> beside the white
+> chickens
+> """
+>
+> Context: The poem asks for radical attention to a few ordinary things after rain.
+>
+> Goal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.
+>
+> Light style guidance: minimal rural watercolor still life.
+>
+> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid extra symbolism or decorative complexity.
 
 ## The Road Not Taken
 
+Slug: the-road-not-taken
+
 Author: Robert Frost
 
-Poem moment: Two roads diverge in a yellow wood, and both are nearly equally worn.
+Selected lines:
+
+```
+Two roads diverged in a yellow wood,
+And sorry I could not travel both
+And be one traveler, long I stood
+And looked down one as far as I could
+To where it bent in the undergrowth;
+[other lines omitted]
+Then took the other, as just as fair,
+And having perhaps the better claim,
+Because it was grassy and wanted wear;
+Though as for that the passing there
+Had worn them really about the same,
+```
+
+Context: The two roads should feel genuinely close in possibility; the image should preserve ambiguity rather than celebrate a heroic choice.
+
+Style guidance: soft naturalist watercolor landscape.
 
 Prompt:
 
-> Create a square companion image for a poem in a quiet literary web archive. Show a lone traveler from behind standing at a fork in a yellow autumn wood. Make both paths look plausible and similarly worn, with one only slightly bending out of sight. The image should preserve ambiguity and later self-mythologizing rather than celebrate a heroic choice. Visual style: soft naturalist watercolor, yellow leaves, brown path, overcast light, calm composition. No dramatic spotlight on one path, no signs, no text.
+>
+> Create one square companion image for the poem "The Road Not Taken" by Robert Frost.
+>
+> Use these exact selected lines as the source passage:
+> """
+> Two roads diverged in a yellow wood,
+> And sorry I could not travel both
+> And be one traveler, long I stood
+> And looked down one as far as I could
+> To where it bent in the undergrowth;
+> [other lines omitted]
+> Then took the other, as just as fair,
+> And having perhaps the better claim,
+> Because it was grassy and wanted wear;
+> Though as for that the passing there
+> Had worn them really about the same,
+> """
+>
+> Context: The two roads should feel genuinely close in possibility; the image should preserve ambiguity rather than celebrate a heroic choice.
+>
+> Goal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.
+>
+> Light style guidance: soft naturalist watercolor landscape.
+>
+> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid signs, arrows, and spotlighting one path as correct.
 
 ## The Second Coming
 
+Slug: the-second-coming
+
 Author: William Butler Yeats
 
-Poem moment: The widening gyre, the falcon losing the falconer, and a rough beast moving in the desert.
+Selected lines:
+
+```
+Turning and turning in the widening gyre
+The falcon cannot hear the falconer;
+Things fall apart; the centre cannot hold;
+Mere anarchy is loosed upon the world,
+The blood-dimmed tide is loosed, and everywhere
+The ceremony of innocence is drowned;
+The best lack all conviction, while the worst
+Are full of passionate intensity.
+[other lines omitted]
+A shape with lion body and the head of a man,
+A gaze blank and pitiless as the sun,
+Is moving its slow thighs, while all about it
+Reel shadows of the indignant desert birds.
+The darkness drops again; but now I know
+That twenty centuries of stony sleep
+Were vexed to nightmare by a rocking cradle,
+And what rough beast, its hour come round at last,
+Slouches towards Bethlehem to be born?
+```
+
+Context: The gyre, falcon, desert vision, and rough beast should feel like a civilization losing center.
+
+Style guidance: apocalyptic surrealism with sand-textured painterly restraint.
 
 Prompt:
 
-> Create a square companion image for a poem in a quiet literary web archive. Show a vast desert at dusk with a falcon spiraling high in a widening circular pattern. Below, half-buried in sand and dust, a sphinx-like shape begins to emerge but remains indistinct and unsettling. The world should feel off-center, as if order has loosened. Visual style: apocalyptic surrealism in oil and sand-textured gouache, ochre desert, bruised violet sky, harsh low sun, cinematic scale. No gore, no explicit religious horror, no text.
+>
+> Create one square companion image for the poem "The Second Coming" by William Butler Yeats.
+>
+> Use these exact selected lines as the source passage:
+> """
+> Turning and turning in the widening gyre
+> The falcon cannot hear the falconer;
+> Things fall apart; the centre cannot hold;
+> Mere anarchy is loosed upon the world,
+> The blood-dimmed tide is loosed, and everywhere
+> The ceremony of innocence is drowned;
+> The best lack all conviction, while the worst
+> Are full of passionate intensity.
+> [other lines omitted]
+> A shape with lion body and the head of a man,
+> A gaze blank and pitiless as the sun,
+> Is moving its slow thighs, while all about it
+> Reel shadows of the indignant desert birds.
+> The darkness drops again; but now I know
+> That twenty centuries of stony sleep
+> Were vexed to nightmare by a rocking cradle,
+> And what rough beast, its hour come round at last,
+> Slouches towards Bethlehem to be born?
+> """
+>
+> Context: The gyre, falcon, desert vision, and rough beast should feel like a civilization losing center.
+>
+> Goal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.
+>
+> Light style guidance: apocalyptic surrealism with sand-textured painterly restraint.
+>
+> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid gore, explicit religious horror, and monster-movie treatment.
 
 ## The Summer Day
 
+Slug: the-summer-day
+
 Author: Mary Oliver
 
-Poem moment: A grasshopper eats sugar from the speaker's hand, washes her face, opens her wings, and attention becomes prayer.
+Selected lines:
+
+```
+Who made the grasshopper?
+This grasshopper, I mean—
+the one who has flung herself out of the grass,
+the one who is eating sugar out of my hand,
+who is moving her jaws back and forth instead of up and down—
+who is gazing around with her enormous and complicated eyes.
+Now she lifts her pale forearms and thoroughly washes her face.
+Now she snaps her wings open, and floats away.
+I don't know exactly what a prayer is.
+I do know how to pay attention, how to fall down
+into the grass, how to kneel down in the grass,
+how to be idle and blessed, how to stroll through the fields,
+[other lines omitted]
+Tell me, what else should I have done?
+Doesn't everything die at last, and too soon?
+Tell me, what is it you plan to do
+with your one wild and precious life?
+```
+
+Context: Attention to a grasshopper becomes a kind of prayer and a question about how to spend a life.
+
+Style guidance: luminous naturalist macro watercolor.
 
 Prompt:
 
-> Create a square companion image for a poem in a quiet literary web archive. Show a close macro view of a grasshopper perched on an open human hand in sunlit grass, tiny grains of sugar near its mouth. The grasshopper should be rendered with loving precision, its forearms lifted as if washing its face, while the meadow behind dissolves into gold-green light. The image should make attention feel like prayer. Visual style: luminous naturalist macro watercolor with fine ink detail, summer greens, warm skin tones, pale sugar crystals, shallow depth. No sentimentality, no oversized insect horror, no text.
+>
+> Create one square companion image for the poem "The Summer Day" by Mary Oliver.
+>
+> Use these exact selected lines as the source passage:
+> """
+> Who made the grasshopper?
+> This grasshopper, I mean—
+> the one who has flung herself out of the grass,
+> the one who is eating sugar out of my hand,
+> who is moving her jaws back and forth instead of up and down—
+> who is gazing around with her enormous and complicated eyes.
+> Now she lifts her pale forearms and thoroughly washes her face.
+> Now she snaps her wings open, and floats away.
+> I don't know exactly what a prayer is.
+> I do know how to pay attention, how to fall down
+> into the grass, how to kneel down in the grass,
+> how to be idle and blessed, how to stroll through the fields,
+> [other lines omitted]
+> Tell me, what else should I have done?
+> Doesn't everything die at last, and too soon?
+> Tell me, what is it you plan to do
+> with your one wild and precious life?
+> """
+>
+> Context: Attention to a grasshopper becomes a kind of prayer and a question about how to spend a life.
+>
+> Goal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.
+>
+> Light style guidance: luminous naturalist macro watercolor.
+>
+> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid sentimentality and insect-horror scale.
 
 ## The Tyger
 
+Slug: the-tyger
+
 Author: William Blake
 
-Poem moment: The tiger burns bright in the forests of night, as if forged by an immortal maker.
+Selected lines:
+
+```
+Tyger Tyger, burning bright,
+In the forests of the night;
+What immortal hand or eye,
+Could frame thy fearful symmetry?
+In what distant deeps or skies.
+Burnt the fire of thine eyes?
+On what wings dare he aspire?
+What the hand, dare seize the fire?
+[other lines omitted]
+Tyger Tyger burning bright,
+In the forests of the night:
+What immortal hand or eye,
+Dare frame thy fearful symmetry?
+```
+
+Context: The tiger is a creature of fire, symmetry, fear, making, and sacred mystery.
+
+Style guidance: hand-tinted engraving with firelit gouache.
 
 Prompt:
 
-> Create a square companion image for a poem in a quiet literary web archive. Show a tiger in a dark forest, its stripes and eyes glowing as if lit from a furnace within. Behind it, faint sparks and hammer-like shapes suggest a cosmic forge without showing a literal blacksmith. The image should feel fearful, symmetrical, and sacred. Visual style: hand-tinted engraving with firelit gouache, black forest, molten orange, deep umber, crisp linework. No cartoon tiger, no visible text, no decorative typography.
+>
+> Create one square companion image for the poem "The Tyger" by William Blake.
+>
+> Use these exact selected lines as the source passage:
+> """
+> Tyger Tyger, burning bright,
+> In the forests of the night;
+> What immortal hand or eye,
+> Could frame thy fearful symmetry?
+> In what distant deeps or skies.
+> Burnt the fire of thine eyes?
+> On what wings dare he aspire?
+> What the hand, dare seize the fire?
+> [other lines omitted]
+> Tyger Tyger burning bright,
+> In the forests of the night:
+> What immortal hand or eye,
+> Dare frame thy fearful symmetry?
+> """
+>
+> Context: The tiger is a creature of fire, symmetry, fear, making, and sacred mystery.
+>
+> Goal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.
+>
+> Light style guidance: hand-tinted engraving with firelit gouache.
+>
+> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid cartoon tiger and decorative typography.
 
 ## The Waking
 
+Slug: the-waking
+
 Author: Theodore Roethke
 
-Poem moment: Waking, sleeping, learning by going, and moving through what cannot be fully known.
+Selected lines:
+
+```
+I wake to sleep, and take my waking slow.
+I feel my fate in what I cannot fear.
+I learn by going where I have to go.
+We think by feeling. What is there to know?
+I hear my being dance from ear to ear.
+I wake to sleep, and take my waking slow.
+Of those so close beside me, which are you?
+God bless the Ground!   I shall walk softly there,
+[other lines omitted]
+This shaking keeps me steady. I should know.
+What falls away is always. And is near.
+I wake to sleep, and take my waking slow.
+I learn by going where I have to go.
+```
+
+Context: The poem moves by paradox: waking into sleep, learning by going, and being steadied by shaking.
+
+Style guidance: quiet dream realism in watercolor and graphite.
 
 Prompt:
 
-> Create a square companion image for a poem in a quiet literary web archive. Show a dawn path winding through roots and low leaves, with a small stair-like form disappearing into the earth and reappearing in light. A barely visible walker moves slowly along it, neither fully asleep nor awake. The image should feel cyclical, intuitive, and calm. Visual style: quiet dream realism in watercolor and graphite, early morning green, soft brown roots, pale gold light, mist. Avoid a literal sleeping person; no text.
+>
+> Create one square companion image for the poem "The Waking" by Theodore Roethke.
+>
+> Use these exact selected lines as the source passage:
+> """
+> I wake to sleep, and take my waking slow.
+> I feel my fate in what I cannot fear.
+> I learn by going where I have to go.
+> We think by feeling. What is there to know?
+> I hear my being dance from ear to ear.
+> I wake to sleep, and take my waking slow.
+> Of those so close beside me, which are you?
+> God bless the Ground!   I shall walk softly there,
+> [other lines omitted]
+> This shaking keeps me steady. I should know.
+> What falls away is always. And is near.
+> I wake to sleep, and take my waking slow.
+> I learn by going where I have to go.
+> """
+>
+> Context: The poem moves by paradox: waking into sleep, learning by going, and being steadied by shaking.
+>
+> Goal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.
+>
+> Light style guidance: quiet dream realism in watercolor and graphite.
+>
+> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid literal sleeping-person imagery.
 
 ## To My Favorite 17-Year-Old High School Girl
 
+Slug: to-my-favorite-17-year-old-high-school-girl
+
 Author: Billy Collins
 
-Poem moment: The poem gently mocks achievement comparisons by placing grand historical accomplishments beside an ordinary teenage room.
+Selected lines:
+
+```
+Do you realize that if you had started
+building the Parthenon on the day you were born,
+you would be all done in only one more year?
+Of course, you couldn’t have done it alone,
+so never mind, you’re fine just as you are.
+You’re loved for just being yourself.
+[other lines omitted]
+We think you are special just being you,
+playing with your food and staring into space.
+By the way, I lied about Schubert doing the dishes,
+but that doesn’t mean he never helped out around the house.
+```
+
+Context: The poem affectionately rejects achievement comparisons in favor of ordinary teenage being.
+
+Style guidance: warm domestic editorial illustration, gently funny.
 
 Prompt:
 
-> Create a square companion image for a poem in a quiet literary web archive. Show a suburban teenage bedroom in daylight: socks on the floor, schoolbooks, a half-finished snack, and playful wall images of grand history such as a tiny Parthenon model or a calculator sketch. The room should feel affectionate, funny, and ordinary, not critical. The image should say that being oneself is enough. Visual style: warm domestic editorial illustration, soft gouache, clean lines, muted suburb colors, gentle humor. Do not sexualize the minor, no celebrity likenesses, no readable posters or text.
+>
+> Create one square companion image for the poem "To My Favorite 17-Year-Old High School Girl" by Billy Collins.
+>
+> Use these exact selected lines as the source passage:
+> """
+> Do you realize that if you had started
+> building the Parthenon on the day you were born,
+> you would be all done in only one more year?
+> Of course, you couldn’t have done it alone,
+> so never mind, you’re fine just as you are.
+> You’re loved for just being yourself.
+> [other lines omitted]
+> We think you are special just being you,
+> playing with your food and staring into space.
+> By the way, I lied about Schubert doing the dishes,
+> but that doesn’t mean he never helped out around the house.
+> """
+>
+> Context: The poem affectionately rejects achievement comparisons in favor of ordinary teenage being.
+>
+> Goal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.
+>
+> Light style guidance: warm domestic editorial illustration, gently funny.
+>
+> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid sexualizing the minor, celebrity likenesses, and readable posters.
 
 ## Toad
 
+Slug: toad
+
 Author: Mary Oliver
 
-Poem moment: The speaker crouches beside a still toad in morning heat and talks about summer, time, happiness, and language.
+Selected lines:
+
+```
+I was walking by. He was sitting there.
+It was full morning, so the heat was heavy on his sand-colored head and his webbed feet. I squatted beside him, at the edge of the path. He didn't move.
+I began to talk. I talked about summer, and about time. The pleasures of eating, the terrors of the night. About this cup we call a life. About happiness. And how good it feels, the heat of the sun between the shoulder blades.
+He looked neither up nor down, which didn't necessarily mean he was either afraid or asleep. I felt his energy, stored under his tongue perhaps, and behind his bulging eyes.
+I talked about how the world seems to me, five feet tall, the blue sky all around my head. I said, I wondered how it seemed to him, down there, intimate with the dust.
+He might have been Buddha—did not move, blink, or frown, not a tear fell from those gold-rimmed eyes as the refined anguish of language passed over him.
+```
+
+Context: The speaker talks philosophy to a motionless toad in heat and dust; the toad remains the calm center.
+
+Style guidance: ground-level naturalist watercolor, meditative and dryly humorous.
 
 Prompt:
 
-> Create a square companion image for a poem in a quiet literary web archive. Show a ground-level portrait of a sand-colored toad sitting at the edge of a dusty path in heavy morning sunlight. A human shadow or knee at the edge of frame can imply someone crouched nearby, but the toad should remain the calm center. The image should feel meditative, humorous, and intimate with the dust. Visual style: naturalist watercolor close-up, warm sand, gold-rimmed eyes, blue sky reflected faintly, dry paper texture. No caricature, no Buddhist costume or props, no text.
+>
+> Create one square companion image for the poem "Toad" by Mary Oliver.
+>
+> Use these exact selected lines as the source passage:
+> """
+> I was walking by. He was sitting there.
+> It was full morning, so the heat was heavy on his sand-colored head and his webbed feet. I squatted beside him, at the edge of the path. He didn't move.
+> I began to talk. I talked about summer, and about time. The pleasures of eating, the terrors of the night. About this cup we call a life. About happiness. And how good it feels, the heat of the sun between the shoulder blades.
+> He looked neither up nor down, which didn't necessarily mean he was either afraid or asleep. I felt his energy, stored under his tongue perhaps, and behind his bulging eyes.
+> I talked about how the world seems to me, five feet tall, the blue sky all around my head. I said, I wondered how it seemed to him, down there, intimate with the dust.
+> He might have been Buddha—did not move, blink, or frown, not a tear fell from those gold-rimmed eyes as the refined anguish of language passed over him.
+> """
+>
+> Context: The speaker talks philosophy to a motionless toad in heat and dust; the toad remains the calm center.
+>
+> Goal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.
+>
+> Light style guidance: ground-level naturalist watercolor, meditative and dryly humorous.
+>
+> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid caricature and religious props.
 
 ## Variation on the Word Sleep
 
+Slug: variation-on-the-word-sleep
+
 Author: Margaret Atwood
 
-Poem moment: Entering another person's sleep: a blue-green forest, three moons, a cave, a silver branch, a white flower, and a boat with a cupped flame.
+Selected lines:
+
+```
+and walk with you through that lucent
+wavering forest of bluegreen leaves
+with its watery sun & three moons
+towards the cave where you must descend,
+towards your worst fear
+I would like to give you the silver
+branch, the small white flower, the one
+word that will protect you
+from the grief at the center
+of your dream, from the grief
+at the center. I would like to follow
+you up the long stairway
+again & become
+the boat that would row you back
+carefully, a flame
+in two cupped hands
+to where your body lies
+beside me, and you enter
+it as easily as breathing in
+```
+
+Context: The speaker wants to enter another person's dream and accompany them through fear with protective objects and a small returning flame.
+
+Style guidance: nocturne watercolor and ink, protective and dreamlike.
 
 Prompt:
 
-> Create a square companion image for a poem in a quiet literary web archive. Show a lucent blue-green dream forest under three small moons, with a path leading toward a dark cave. In the foreground, a silver branch and a small white flower glow beside a tiny boat carrying a flame protected in two cupped hands. The image should feel protective, intimate, and dreamlike, about accompanying someone through fear. Visual style: nocturne watercolor and ink, transparent blue-green washes, moonlit silver, soft white flower, one warm flame. No voyeuristic sleeping body, no horror cave, no text.
+>
+> Create one square companion image for the poem "Variation on the Word Sleep" by Margaret Atwood.
+>
+> Use these exact selected lines as the source passage:
+> """
+> and walk with you through that lucent
+> wavering forest of bluegreen leaves
+> with its watery sun & three moons
+> towards the cave where you must descend,
+> towards your worst fear
+> I would like to give you the silver
+> branch, the small white flower, the one
+> word that will protect you
+> from the grief at the center
+> of your dream, from the grief
+> at the center. I would like to follow
+> you up the long stairway
+> again & become
+> the boat that would row you back
+> carefully, a flame
+> in two cupped hands
+> to where your body lies
+> beside me, and you enter
+> it as easily as breathing in
+> """
+>
+> Context: The speaker wants to enter another person's dream and accompany them through fear with protective objects and a small returning flame.
+>
+> Goal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.
+>
+> Light style guidance: nocturne watercolor and ink, protective and dreamlike.
+>
+> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid voyeuristic sleeping-body imagery and horror.
 
 ## What I Didn't Know Before
 
-Author: Ada Limon
+Slug: what-i-didnt-know-before
 
-Poem moment: A newborn horse arrives fully formed and ready to run, like a love that begins complete.
+Author: Ada Limón
+
+Selected lines:
+
+```
+was how horses simply give birth to other
+horses. Not a baby by any means, not
+a creature of liminal spaces, but already
+a four-legged beast hellbent on walking,
+scrambling after the mother. A horse gives way
+to another horse and then suddenly there are
+two horses, just like that. That’s how I loved you.
+You, off the long train from Red Bank carrying
+a coffee as big as your arm, a bag with two
+computers swinging in it unwieldily at your
+side. I remember we broke into laughter
+when we saw each other. What was between
+us wasn’t a fragile thing to be coddled, cooed
+over. It came out fully formed, ready to run.
+```
+
+Context: A love is compared to a foal arriving already itself, ungentle, embodied, and ready to run.
+
+Style guidance: clean contemporary realism with watercolor softness.
 
 Prompt:
 
-> Create a square companion image for a poem in a quiet literary web archive. Show a mare and newborn foal in first morning light, the foal already standing with awkward strength and forward energy. In the far background, make only the faint suggestion of a train platform and two laughing figures, linking animal birth to human arrival without crowding the image. The image should feel sudden, embodied, and ready to run. Visual style: clean contemporary realism with watercolor softness, hay gold, chestnut brown, pale station gray, bright morning air. Keep birth non-graphic; no text.
+>
+> Create one square companion image for the poem "What I Didn't Know Before" by Ada Limón.
+>
+> Use these exact selected lines as the source passage:
+> """
+> was how horses simply give birth to other
+> horses. Not a baby by any means, not
+> a creature of liminal spaces, but already
+> a four-legged beast hellbent on walking,
+> scrambling after the mother. A horse gives way
+> to another horse and then suddenly there are
+> two horses, just like that. That’s how I loved you.
+> You, off the long train from Red Bank carrying
+> a coffee as big as your arm, a bag with two
+> computers swinging in it unwieldily at your
+> side. I remember we broke into laughter
+> when we saw each other. What was between
+> us wasn’t a fragile thing to be coddled, cooed
+> over. It came out fully formed, ready to run.
+> """
+>
+> Context: A love is compared to a foal arriving already itself, ungentle, embodied, and ready to run.
+>
+> Goal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.
+>
+> Light style guidance: clean contemporary realism with watercolor softness.
+>
+> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid graphic birth imagery.
 
 ## White Owl Flies Into And Out Of The Field
 
+Slug: white-owl-flies-into-and-out-of-the-field
+
 Author: Mary Oliver
 
-Poem moment: A white owl strikes the snow, leaves a wing imprint, rises, and turns death into overwhelming light.
+Selected lines:
+
+```
+Coming down
+out of the freezing sky
+with its depths of light,
+like an angel,
+or a buddha with wings,
+it was beautiful
+and accurate,
+striking the snow and whatever was there
+with a force that left the imprint
+of the tips of its wings —
+five feet apart — and the grabbing
+thrust of its feet,
+and the indentation of what had been running
+through the white valleys
+of the snow —
+and then it rose, gracefully,
+and flew back to the frozen marshes,
+to lurk there,
+like a little lighthouse,
+in the blue shadows —
+[other lines omitted]
+so I thought:
+maybe death
+isn't darkness, after all,
+but so much light
+wrapping itself around us —
+as soft as feathers —
+that we are instantly weary
+of looking, and looking, and shut our eyes,
+not without amazement,
+and let ourselves be carried,
+as through the translucence of mica,
+to the river
+that is without the least dapple or shadow —
+that is nothing but light — scalding, aortal light —
+in which we are washed and washed
+out of our bones.
+```
+
+Context: The owl strike and rise transform death from darkness into overwhelming light.
+
+Style guidance: high-key winter watercolor realism, pale and spiritual without sentimentality.
 
 Prompt:
 
-> Create a square companion image for a poem in a quiet literary web archive. Show a white owl rising from a snowy field, wings wide, with a precise imprint of wing tips and feet left in the snow below. The frozen marsh behind falls into blue shadow, and the owl should glow like a soft lighthouse of cold light. The image should make death feel like too much light rather than darkness. Visual style: high-key winter watercolor realism, white-on-white snow, pale blue shadows, feather softness, mica-like translucence. No graphic prey, no blood, no text.
+>
+> Create one square companion image for the poem "White Owl Flies Into And Out Of The Field" by Mary Oliver.
+>
+> Use these exact selected lines as the source passage:
+> """
+> Coming down
+> out of the freezing sky
+> with its depths of light,
+> like an angel,
+> or a buddha with wings,
+> it was beautiful
+> and accurate,
+> striking the snow and whatever was there
+> with a force that left the imprint
+> of the tips of its wings —
+> five feet apart — and the grabbing
+> thrust of its feet,
+> and the indentation of what had been running
+> through the white valleys
+> of the snow —
+> and then it rose, gracefully,
+> and flew back to the frozen marshes,
+> to lurk there,
+> like a little lighthouse,
+> in the blue shadows —
+> [other lines omitted]
+> so I thought:
+> maybe death
+> isn't darkness, after all,
+> but so much light
+> wrapping itself around us —
+> as soft as feathers —
+> that we are instantly weary
+> of looking, and looking, and shut our eyes,
+> not without amazement,
+> and let ourselves be carried,
+> as through the translucence of mica,
+> to the river
+> that is without the least dapple or shadow —
+> that is nothing but light — scalding, aortal light —
+> in which we are washed and washed
+> out of our bones.
+> """
+>
+> Context: The owl strike and rise transform death from darkness into overwhelming light.
+>
+> Goal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.
+>
+> Light style guidance: high-key winter watercolor realism, pale and spiritual without sentimentality.
+>
+> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid blood, prey, and macabre death imagery.
 
 ## Wild Geese
 
+Slug: wild-geese
+
 Author: Mary Oliver
 
-Poem moment: The world calls to the soft animal of the body through sun, rain, prairie, deep trees, mountains, rivers, and wild geese.
+Selected lines:
+
+```
+You do not have to be good.
+You do not have to walk on your knees
+for a hundred miles through the desert repenting.
+You only have to let the soft animal of your body
+    love what it loves.
+Tell me about despair, yours, and I will tell you mine.
+Meanwhile the world goes on.
+Meanwhile the sun and the clear pebbles of the rain
+are moving across the landscapes,
+over the prairies and the deep trees,
+the mountains and the rivers.
+Meanwhile the wild geese, high in the clean blue air,
+are heading home again.
+Whoever you are, no matter how lonely,
+the world offers itself to your imagination,
+calls to you like the wild geese, harsh and exciting—
+over and over announcing your place
+in the family of things.
+```
+
+Context: The poem moves from permission and bodily tenderness into a wide landscape that calls the lonely person back into belonging.
+
+Style guidance: expansive pastoral watercolor, clear air and restraint.
 
 Prompt:
 
-> Create a square companion image for a poem in a quiet literary web archive. Show wild geese crossing a clean blue sky above an open landscape of prairie, dark trees, river, and distant mountains after rain. Below, a small solitary figure looks up, not heroic or posed, simply included in the family of things. The image should feel spacious, forgiving, and unsentimental. Visual style: expansive pastoral watercolor, blue sky, rain-bright greens, soft gray river, fine bird silhouettes. Avoid motivational poster mood, no text.
+>
+> Create one square companion image for the poem "Wild Geese" by Mary Oliver.
+>
+> Use these exact selected lines as the source passage:
+> """
+> You do not have to be good.
+> You do not have to walk on your knees
+> for a hundred miles through the desert repenting.
+> You only have to let the soft animal of your body
+>     love what it loves.
+> Tell me about despair, yours, and I will tell you mine.
+> Meanwhile the world goes on.
+> Meanwhile the sun and the clear pebbles of the rain
+> are moving across the landscapes,
+> over the prairies and the deep trees,
+> the mountains and the rivers.
+> Meanwhile the wild geese, high in the clean blue air,
+> are heading home again.
+> Whoever you are, no matter how lonely,
+> the world offers itself to your imagination,
+> calls to you like the wild geese, harsh and exciting—
+> over and over announcing your place
+> in the family of things.
+> """
+>
+> Context: The poem moves from permission and bodily tenderness into a wide landscape that calls the lonely person back into belonging.
+>
+> Goal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.
+>
+> Light style guidance: expansive pastoral watercolor, clear air and restraint.
+>
+> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid motivational-poster sentimentality.
