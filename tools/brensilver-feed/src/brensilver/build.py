@@ -127,6 +127,7 @@ def main(argv: Iterable[str] | None = None) -> int:
         corpus_dir=corpus_dir,
         copy_artwork=args.copy_artwork,
     )
+    write_talk_page_assets(out_dir)
     write_talk_pages(out_dir, config, talks)
     (out_dir / "index.html").write_text(
         render_index(config, talks, feed_talks, guided_feed_talks, guided_site),
@@ -543,13 +544,13 @@ def render_index(
       color: var(--muted);
       font-weight: 700;
     }}
-    .subscribe-grid {{
+    .listen-grid {{
       display: grid;
-      grid-template-columns: repeat(3, minmax(150px, 1fr));
+      grid-template-columns: repeat(4, minmax(140px, 1fr));
       gap: 12px;
       margin: 20px 0 14px;
     }}
-    .player-button {{
+    .listen-badge {{
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -566,13 +567,32 @@ def render_index(
       font-weight: 800;
       text-decoration: none;
     }}
-    .player-button img {{
+    .listen-badge img {{
       width: 22px;
       height: 22px;
       flex: 0 0 auto;
     }}
-    .player-button.copy {{ background: var(--blue); }}
-    .player-button.rss {{ background: var(--rust); }}
+    .listen-badge.pocket {{ background: #d9443f; }}
+    .listen-badge.apple {{ background: #872ec4; }}
+    .listen-badge.youtube {{ background: #c4302b; }}
+    .feed-copy {{
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 10px;
+      align-items: stretch;
+      max-width: 760px;
+    }}
+    .copy-link {{
+      min-height: 44px;
+      padding: 0 14px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: color-mix(in srgb, var(--panel) 70%, var(--bg));
+      color: var(--accent);
+      cursor: pointer;
+      font: inherit;
+      font-weight: 800;
+    }}
     .copy-status {{
       min-height: 1.4em;
       margin: 8px 0 0;
@@ -595,12 +615,13 @@ def render_index(
     @media (max-width: 880px) {{
       .hero {{ grid-template-columns: 1fr; gap: 26px; }}
       .portrait {{ justify-self: start; max-width: 240px; }}
-      .subscribe-grid {{ grid-template-columns: repeat(2, minmax(140px, 1fr)); }}
+      .listen-grid {{ grid-template-columns: repeat(2, minmax(140px, 1fr)); }}
     }}
     @media (max-width: 520px) {{
       main {{ padding: 34px 18px 56px; }}
       .feed-switch {{ display: grid; grid-template-columns: 1fr; width: 100%; }}
-      .subscribe-grid {{ grid-template-columns: 1fr; }}
+      .listen-grid {{ grid-template-columns: 1fr; }}
+      .feed-copy {{ grid-template-columns: 1fr; }}
     }}
   </style>
 </head>
@@ -639,13 +660,13 @@ def render_index(
       const feedUrl = feedUrls[key] || feedUrls.dharma || feedUrls.main;
       try {{
         await navigator.clipboard.writeText(feedUrl);
-        status.textContent = 'RSS URL copied.';
+        status.textContent = this?.dataset?.copyMessage || 'RSS URL copied.';
       }} catch (error) {{
         status.textContent = feedUrl;
       }}
     }}
     document.querySelectorAll('[data-copy-feed]').forEach(button => {{
-      button.addEventListener('click', () => copyFeedUrl(button.dataset.copyFeed));
+      button.addEventListener('click', () => copyFeedUrl.call(button, button.dataset.copyFeed));
     }});
     document.querySelectorAll('[data-feed-tab]').forEach(button => {{
       button.addEventListener('click', () => selectFeed(button.dataset.feedTab));
@@ -667,24 +688,385 @@ def render_subscribe_panel(
 ) -> str:
     hidden = "" if active else " hidden"
     noun = "episode" if count == 1 else "episodes"
+    pocket_feed_path = re.sub(r"^https?://", "", feed_url)
+    pocket_casts_url = "pktc://subscribe/" + pocket_feed_path
+    apple_message = (
+        "RSS URL copied. In Apple Podcasts, choose Library, then Add a Show by URL."
+    )
+    youtube_message = (
+        "RSS URL copied. In YouTube Music, choose Library, Podcasts, then Add podcast by RSS feed."
+    )
     return f"""      <div class="feed-panel" id="panel-{_escape(key)}" data-feed-panel="{_escape(key)}"{hidden}>
         <h2>{_escape(title)}</h2>
         <p class="feed-count">{count} {noun}</p>
-        <div class="subscribe-grid">
-          <a class="player-button overcast" href="{_escape(overcast_url)}">
+        <div class="listen-grid">
+          <a class="listen-badge overcast" href="{_escape(overcast_url)}">
             <img src="https://cdn.simpleicons.org/overcast/FFFFFF?viewbox=auto" alt="">
-            <span>Add to Overcast</span>
+            <span>Overcast</span>
           </a>
-          <button class="player-button copy" type="button" data-copy-feed="{_escape(key)}">
-            <span>Copy RSS URL</span>
+          <a class="listen-badge pocket" href="{_escape(pocket_casts_url)}">
+            <img src="https://cdn.simpleicons.org/pocketcasts/FFFFFF?viewbox=auto" alt="">
+            <span>Pocket Casts</span>
+          </a>
+          <button class="listen-badge apple" type="button" data-copy-feed="{_escape(key)}" data-copy-message="{_escape(apple_message)}">
+            <img src="https://cdn.simpleicons.org/applepodcasts/FFFFFF?viewbox=auto" alt="">
+            <span>Apple Podcasts</span>
           </button>
-          <a class="player-button rss" href="{_escape(feed_href)}">
-            <img src="https://cdn.simpleicons.org/rss/FFFFFF?viewbox=auto" alt="">
-            <span>Open RSS</span>
-          </a>
+          <button class="listen-badge youtube" type="button" data-copy-feed="{_escape(key)}" data-copy-message="{_escape(youtube_message)}">
+            <img src="https://cdn.simpleicons.org/youtubemusic/FFFFFF?viewbox=auto" alt="">
+            <span>YouTube Music</span>
+          </button>
         </div>
-        <code class="feed-url">{_escape(feed_url)}</code>
+        <div class="feed-copy">
+          <code class="feed-url">{_escape(feed_url)}</code>
+          <button class="copy-link" type="button" data-copy-feed="{_escape(key)}">Copy RSS</button>
+        </div>
       </div>"""
+
+
+def write_talk_page_assets(out_dir: Path) -> None:
+    (out_dir / "talk-page.css").write_text(talk_page_css(), encoding="utf-8")
+    (out_dir / "talk-browser.js").write_text(talk_browser_js(), encoding="utf-8")
+
+
+def talk_page_css() -> str:
+    return """    :root {
+      color-scheme: light dark;
+      --bg: #fbfaf4;
+      --ink: #20231f;
+      --muted: #5d665e;
+      --line: #d9d4c7;
+      --accent: #285f52;
+      --panel: #ffffff;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #111816;
+        --ink: #eef2ed;
+        --muted: #b2beb6;
+        --line: #39443f;
+        --accent: #8ec7ba;
+        --panel: #18211e;
+      }
+    }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font: 17px/1.55 ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    main {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 34px 20px 64px;
+    }
+    a { color: var(--accent); font-weight: 750; }
+    .back { display: inline-block; margin-bottom: 28px; }
+    h1 { margin: 0; font-size: clamp(2rem, 7vw, 4.2rem); line-height: 1; letter-spacing: 0; }
+    h2 { margin-top: 34px; }
+    .meta {
+      margin: 10px 0 22px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      color: var(--muted);
+    }
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(180px, 280px);
+      gap: 24px;
+      align-items: start;
+    }
+    .art {
+      width: 100%;
+      aspect-ratio: 1;
+      object-fit: cover;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+    }
+    audio { width: 100%; }
+    .primary-player {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 12px;
+      align-items: center;
+      margin: 22px 0;
+    }
+    .download-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 0 14px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      color: var(--accent);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    section { border-top: 1px solid var(--line); margin-top: 26px; padding-top: 8px; }
+    .chapters { padding-left: 24px; }
+    .chapters li { margin: 12px 0; }
+    .description { max-width: 680px; }
+    .more-talks {
+      margin-top: 42px;
+      padding-top: 28px;
+    }
+    .more-kicker {
+      margin: 0 0 6px;
+      color: var(--accent);
+      font-size: 0.78rem;
+      font-weight: 850;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .more-heading {
+      margin: 0;
+      font-size: clamp(1.75rem, 4vw, 3rem);
+      line-height: 1.05;
+      letter-spacing: 0;
+    }
+    .more-copy {
+      max-width: 640px;
+      margin: 10px 0 0;
+      color: var(--muted);
+    }
+    .talk-list {
+      display: grid;
+      gap: 14px;
+      margin-top: 22px;
+    }
+    .talk-card {
+      display: grid;
+      grid-template-columns: 108px minmax(0, 1fr);
+      gap: 16px;
+      align-items: start;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: color-mix(in srgb, var(--panel) 86%, var(--bg));
+    }
+    .talk-card img {
+      width: 100%;
+      aspect-ratio: 1;
+      object-fit: cover;
+      border-radius: 6px;
+      border: 1px solid var(--line);
+      background: var(--panel);
+    }
+    .talk-card h3 {
+      margin: 0;
+      font-size: 1.12rem;
+      line-height: 1.18;
+      letter-spacing: 0;
+    }
+    .talk-card-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 7px 0 8px;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+    .talk-card-description {
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 3;
+      overflow: hidden;
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.98rem;
+    }
+    .talk-card-player {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 10px;
+      align-items: center;
+      margin-top: 12px;
+    }
+    .talk-card-player audio {
+      min-width: 0;
+    }
+    .talk-loader {
+      min-height: 48px;
+      display: grid;
+      place-items: center;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+    @media (max-width: 760px) {
+      .hero { grid-template-columns: 1fr; }
+      .art { max-width: 260px; }
+      .primary-player,
+      .talk-card-player { grid-template-columns: 1fr; }
+      .download-link { width: auto; }
+    }
+    @media (max-width: 560px) {
+      .talk-card { grid-template-columns: 82px minmax(0, 1fr); gap: 12px; padding: 12px; }
+      .talk-card-description { -webkit-line-clamp: 4; }
+    }
+"""
+
+
+def talk_browser_js() -> str:
+    return """(() => {
+  const config = window.TALK_PAGE || {};
+  const audio = document.getElementById('audio');
+  const talkList = document.getElementById('talk-list');
+  const talkLoader = document.getElementById('talk-loader');
+  const currentTalkId = config.currentTalkId;
+  const siteBaseUrl = config.siteBaseUrl || '';
+  let talkArchive = [];
+  let nextTalkIndex = 0;
+  const talkBatchSize = 12;
+
+  function seekFromLocation() {
+    if (!audio) return;
+    const value = new URLSearchParams(location.search).get('t');
+    const seconds = Number(value || 0);
+    if (Number.isFinite(seconds) && seconds > 0) {
+      audio.currentTime = seconds;
+    }
+  }
+
+  document.querySelectorAll('[data-start]').forEach(link => {
+    link.addEventListener('click', event => {
+      if (!audio) return;
+      event.preventDefault();
+      const seconds = Number(link.dataset.start || 0);
+      history.replaceState(null, '', '?t=' + Math.round(seconds));
+      audio.currentTime = seconds;
+      audio.play().catch(() => {});
+    });
+  });
+  audio?.addEventListener('loadedmetadata', seekFromLocation, { once: true });
+
+  function mediaUrl(url) {
+    if (!url) return '';
+    if (siteBaseUrl && url.startsWith(siteBaseUrl)) {
+      try {
+        return new URL(url).pathname;
+      } catch (error) {
+        return url;
+      }
+    }
+    return url;
+  }
+
+  function talkHref(talk) {
+    const url = talk.canonical_url || '';
+    if (siteBaseUrl && url.startsWith(siteBaseUrl)) {
+      try {
+        return new URL(url).pathname;
+      } catch (error) {
+        return url;
+      }
+    }
+    return url || '../../talks/' + String(talk.id || '').replace(/[^a-z0-9]+/gi, '-').toLowerCase() + '/';
+  }
+
+  function talkDescription(talk) {
+    return talk.podcast_description || talk.short_summary || talk.description || '';
+  }
+
+  function talkDate(talk) {
+    const value = talk.published_at ? new Date(talk.published_at) : null;
+    if (!value || Number.isNaN(value.getTime())) return '';
+    return value.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
+  }
+
+  function addText(parent, tagName, className, text) {
+    const el = document.createElement(tagName);
+    if (className) el.className = className;
+    el.textContent = text || '';
+    parent.appendChild(el);
+    return el;
+  }
+
+  function renderTalkBatch() {
+    if (!talkArchive.length || !talkList || !talkLoader) return;
+    const fragment = document.createDocumentFragment();
+    const end = Math.min(nextTalkIndex + talkBatchSize, talkArchive.length);
+    for (let index = nextTalkIndex; index < end; index += 1) {
+      const talk = talkArchive[index];
+      const card = document.createElement('article');
+      card.className = 'talk-card';
+
+      const img = document.createElement('img');
+      img.alt = '';
+      img.loading = 'lazy';
+      img.src = mediaUrl(talk.episode_image_url || talk.image_url);
+      card.appendChild(img);
+
+      const body = document.createElement('div');
+      const title = addText(body, 'h3', '', '');
+      const titleLink = document.createElement('a');
+      titleLink.href = talkHref(talk);
+      titleLink.textContent = talk.title || 'Untitled talk';
+      title.appendChild(titleLink);
+
+      const meta = document.createElement('div');
+      meta.className = 'talk-card-meta';
+      [talkDate(talk), talk.duration, talk.source].filter(Boolean).forEach(value => {
+        addText(meta, 'span', '', value);
+      });
+      body.appendChild(meta);
+      addText(body, 'p', 'talk-card-description', talkDescription(talk));
+
+      const player = document.createElement('div');
+      player.className = 'talk-card-player';
+      const itemAudio = document.createElement('audio');
+      itemAudio.controls = true;
+      itemAudio.preload = 'none';
+      itemAudio.src = talk.audio_url || '';
+      player.appendChild(itemAudio);
+      const download = document.createElement('a');
+      download.className = 'download-link';
+      download.href = talk.audio_url || '#';
+      download.download = '';
+      download.textContent = 'Download';
+      player.appendChild(download);
+      body.appendChild(player);
+      card.appendChild(body);
+      fragment.appendChild(card);
+    }
+    nextTalkIndex = end;
+    talkList.appendChild(fragment);
+    talkLoader.textContent = nextTalkIndex >= talkArchive.length ? 'End of archive' : 'Loading more talks...';
+  }
+
+  async function loadTalkArchive() {
+    if (!talkList || !talkLoader) return;
+    try {
+      const response = await fetch('../../talks.json');
+      if (!response.ok) throw new Error('Could not load talks.json');
+      const talks = await response.json();
+      talkArchive = talks
+        .filter(talk => talk && talk.id !== currentTalkId)
+        .sort((a, b) => String(b.published_at || '').localeCompare(String(a.published_at || '')));
+      renderTalkBatch();
+      const observer = new IntersectionObserver(entries => {
+        if (entries.some(entry => entry.isIntersecting)) {
+          renderTalkBatch();
+        }
+      }, { rootMargin: '700px 0px' });
+      observer.observe(talkLoader);
+    } catch (error) {
+      talkLoader.textContent = 'More talks could not be loaded right now.';
+    }
+  }
+
+  document.addEventListener('play', event => {
+    if (event.target instanceof HTMLAudioElement) {
+      document.querySelectorAll('audio').forEach(player => {
+        if (player !== event.target) player.pause();
+      });
+    }
+  }, true);
+
+  loadTalkArchive();
+})();
+"""
 
 
 def write_talk_pages(out_dir: Path, config: Dict, talks: List[Talk]) -> None:
@@ -735,6 +1117,7 @@ def render_talk_page(config: Dict, talk: Talk) -> str:
         if image_src
         else ""
     )
+    site_author = site.get("author") or site["title"]
     return f"""<!doctype html>
 <html lang="en">
 <head>
@@ -752,71 +1135,7 @@ def render_talk_page(config: Dict, talk: Talk) -> str:
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="{_escape(talk.title)}">
   <meta name="twitter:description" content="{_escape(social_description)}">
-  <style>
-    :root {{
-      color-scheme: light dark;
-      --bg: #fbfaf4;
-      --ink: #20231f;
-      --muted: #5d665e;
-      --line: #d9d4c7;
-      --accent: #285f52;
-      --panel: #ffffff;
-    }}
-    @media (prefers-color-scheme: dark) {{
-      :root {{
-        --bg: #111816;
-        --ink: #eef2ed;
-        --muted: #b2beb6;
-        --line: #39443f;
-        --accent: #8ec7ba;
-        --panel: #18211e;
-      }}
-    }}
-    body {{
-      margin: 0;
-      background: var(--bg);
-      color: var(--ink);
-      font: 17px/1.55 ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    }}
-    main {{
-      max-width: 860px;
-      margin: 0 auto;
-      padding: 34px 20px 64px;
-    }}
-    a {{ color: var(--accent); font-weight: 750; }}
-    .back {{ display: inline-block; margin-bottom: 28px; }}
-    h1 {{ margin: 0; font-size: clamp(2rem, 7vw, 4.2rem); line-height: 1; letter-spacing: 0; }}
-    h2 {{ margin-top: 34px; }}
-    .meta {{
-      margin: 10px 0 22px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      color: var(--muted);
-    }}
-    .hero {{
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) minmax(180px, 280px);
-      gap: 24px;
-      align-items: start;
-    }}
-    .art {{
-      width: 100%;
-      aspect-ratio: 1;
-      object-fit: cover;
-      border-radius: 8px;
-      border: 1px solid var(--line);
-    }}
-    audio {{ width: 100%; margin: 22px 0; }}
-    section {{ border-top: 1px solid var(--line); margin-top: 26px; padding-top: 8px; }}
-    .chapters {{ padding-left: 24px; }}
-    .chapters li {{ margin: 12px 0; }}
-    .description {{ max-width: 680px; }}
-    @media (max-width: 760px) {{
-      .hero {{ grid-template-columns: 1fr; }}
-      .art {{ max-width: 260px; }}
-    }}
-  </style>
+  <link rel="stylesheet" href="../../talk-page.css">
 </head>
 <body>
   <main>
@@ -833,33 +1152,30 @@ def render_talk_page(config: Dict, talk: Talk) -> str:
       </div>
       {image}
     </div>
-    <audio id="audio" controls preload="metadata" src="{_escape(talk.audio_url)}"></audio>
+    <div class="primary-player">
+      <audio id="audio" controls preload="none" src="{_escape(talk.audio_url)}"></audio>
+      <a class="download-link" href="{_escape(talk.audio_url)}" download>Download MP3</a>
+    </div>
     {chapters_section}
     <section>
       <h2>Source</h2>
       <p><a href="{_escape(talk.link)}">Original talk page</a></p>
     </section>
+    <section class="more-talks" aria-labelledby="more-talks-heading">
+      <p class="more-kicker">Keep listening</p>
+      <h2 id="more-talks-heading" class="more-heading">More from {_escape(site_author)}</h2>
+      <p class="more-copy">Browse the archive, play a talk here, or download the audio file.</p>
+      <div id="talk-list" class="talk-list"></div>
+      <div id="talk-loader" class="talk-loader" aria-live="polite">Loading more talks...</div>
+    </section>
   </main>
   <script>
-    const audio = document.getElementById('audio');
-    function seekFromLocation() {{
-      const value = new URLSearchParams(location.search).get('t');
-      const seconds = Number(value || 0);
-      if (Number.isFinite(seconds) && seconds > 0) {{
-        audio.currentTime = seconds;
-      }}
-    }}
-    document.querySelectorAll('[data-start]').forEach(link => {{
-      link.addEventListener('click', event => {{
-        event.preventDefault();
-        const seconds = Number(link.dataset.start || 0);
-        history.replaceState(null, '', '?t=' + Math.round(seconds));
-        audio.currentTime = seconds;
-        audio.play().catch(() => {{}});
-      }});
-    }});
-    audio.addEventListener('loadedmetadata', seekFromLocation, {{ once: true }});
+    window.TALK_PAGE = {{
+      currentTalkId: {json.dumps(talk.id)},
+      siteBaseUrl: {json.dumps(str(site.get("base_url") or ""))}
+    }};
   </script>
+  <script src="../../talk-browser.js"></script>
 </body>
 </html>
 """

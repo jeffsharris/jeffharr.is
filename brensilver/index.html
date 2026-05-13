@@ -138,13 +138,13 @@
       color: var(--muted);
       font-weight: 700;
     }
-    .subscribe-grid {
+    .listen-grid {
       display: grid;
-      grid-template-columns: repeat(3, minmax(150px, 1fr));
+      grid-template-columns: repeat(4, minmax(140px, 1fr));
       gap: 12px;
       margin: 20px 0 14px;
     }
-    .player-button {
+    .listen-badge {
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -161,13 +161,32 @@
       font-weight: 800;
       text-decoration: none;
     }
-    .player-button img {
+    .listen-badge img {
       width: 22px;
       height: 22px;
       flex: 0 0 auto;
     }
-    .player-button.copy { background: var(--blue); }
-    .player-button.rss { background: var(--rust); }
+    .listen-badge.pocket { background: #d9443f; }
+    .listen-badge.apple { background: #872ec4; }
+    .listen-badge.youtube { background: #c4302b; }
+    .feed-copy {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 10px;
+      align-items: stretch;
+      max-width: 760px;
+    }
+    .copy-link {
+      min-height: 44px;
+      padding: 0 14px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: color-mix(in srgb, var(--panel) 70%, var(--bg));
+      color: var(--accent);
+      cursor: pointer;
+      font: inherit;
+      font-weight: 800;
+    }
     .copy-status {
       min-height: 1.4em;
       margin: 8px 0 0;
@@ -190,12 +209,13 @@
     @media (max-width: 880px) {
       .hero { grid-template-columns: 1fr; gap: 26px; }
       .portrait { justify-self: start; max-width: 240px; }
-      .subscribe-grid { grid-template-columns: repeat(2, minmax(140px, 1fr)); }
+      .listen-grid { grid-template-columns: repeat(2, minmax(140px, 1fr)); }
     }
     @media (max-width: 520px) {
       main { padding: 34px 18px 56px; }
       .feed-switch { display: grid; grid-template-columns: 1fr; width: 100%; }
-      .subscribe-grid { grid-template-columns: 1fr; }
+      .listen-grid { grid-template-columns: 1fr; }
+      .feed-copy { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -222,38 +242,54 @@
       <div class="feed-panel" id="panel-dharma" data-feed-panel="dharma">
         <h2>Dharma talks</h2>
         <p class="feed-count">395 episodes</p>
-        <div class="subscribe-grid">
-          <a class="player-button overcast" href="overcast://x-callback-url/add?url=https%3A%2F%2Fjeffharr.is%2Fbrensilver%2Ffeed.xml">
+        <div class="listen-grid">
+          <a class="listen-badge overcast" href="overcast://x-callback-url/add?url=https%3A%2F%2Fjeffharr.is%2Fbrensilver%2Ffeed.xml">
             <img src="https://cdn.simpleicons.org/overcast/FFFFFF?viewbox=auto" alt="">
-            <span>Add to Overcast</span>
+            <span>Overcast</span>
           </a>
-          <button class="player-button copy" type="button" data-copy-feed="dharma">
-            <span>Copy RSS URL</span>
+          <a class="listen-badge pocket" href="pktc://subscribe/jeffharr.is/brensilver/feed.xml">
+            <img src="https://cdn.simpleicons.org/pocketcasts/FFFFFF?viewbox=auto" alt="">
+            <span>Pocket Casts</span>
+          </a>
+          <button class="listen-badge apple" type="button" data-copy-feed="dharma" data-copy-message="RSS URL copied. In Apple Podcasts, choose Library, then Add a Show by URL.">
+            <img src="https://cdn.simpleicons.org/applepodcasts/FFFFFF?viewbox=auto" alt="">
+            <span>Apple Podcasts</span>
           </button>
-          <a class="player-button rss" href="feed.xml">
-            <img src="https://cdn.simpleicons.org/rss/FFFFFF?viewbox=auto" alt="">
-            <span>Open RSS</span>
-          </a>
+          <button class="listen-badge youtube" type="button" data-copy-feed="dharma" data-copy-message="RSS URL copied. In YouTube Music, choose Library, Podcasts, then Add podcast by RSS feed.">
+            <img src="https://cdn.simpleicons.org/youtubemusic/FFFFFF?viewbox=auto" alt="">
+            <span>YouTube Music</span>
+          </button>
         </div>
-        <code class="feed-url">https://jeffharr.is/brensilver/feed.xml</code>
+        <div class="feed-copy">
+          <code class="feed-url">https://jeffharr.is/brensilver/feed.xml</code>
+          <button class="copy-link" type="button" data-copy-feed="dharma">Copy RSS</button>
+        </div>
       </div>
       <div class="feed-panel" id="panel-guided" data-feed-panel="guided" hidden>
         <h2>Guided meditations</h2>
         <p class="feed-count">260 episodes</p>
-        <div class="subscribe-grid">
-          <a class="player-button overcast" href="overcast://x-callback-url/add?url=https%3A%2F%2Fjeffharr.is%2Fbrensilver%2Fguided-feed.xml">
+        <div class="listen-grid">
+          <a class="listen-badge overcast" href="overcast://x-callback-url/add?url=https%3A%2F%2Fjeffharr.is%2Fbrensilver%2Fguided-feed.xml">
             <img src="https://cdn.simpleicons.org/overcast/FFFFFF?viewbox=auto" alt="">
-            <span>Add to Overcast</span>
+            <span>Overcast</span>
           </a>
-          <button class="player-button copy" type="button" data-copy-feed="guided">
-            <span>Copy RSS URL</span>
+          <a class="listen-badge pocket" href="pktc://subscribe/jeffharr.is/brensilver/guided-feed.xml">
+            <img src="https://cdn.simpleicons.org/pocketcasts/FFFFFF?viewbox=auto" alt="">
+            <span>Pocket Casts</span>
+          </a>
+          <button class="listen-badge apple" type="button" data-copy-feed="guided" data-copy-message="RSS URL copied. In Apple Podcasts, choose Library, then Add a Show by URL.">
+            <img src="https://cdn.simpleicons.org/applepodcasts/FFFFFF?viewbox=auto" alt="">
+            <span>Apple Podcasts</span>
           </button>
-          <a class="player-button rss" href="guided-feed.xml">
-            <img src="https://cdn.simpleicons.org/rss/FFFFFF?viewbox=auto" alt="">
-            <span>Open RSS</span>
-          </a>
+          <button class="listen-badge youtube" type="button" data-copy-feed="guided" data-copy-message="RSS URL copied. In YouTube Music, choose Library, Podcasts, then Add podcast by RSS feed.">
+            <img src="https://cdn.simpleicons.org/youtubemusic/FFFFFF?viewbox=auto" alt="">
+            <span>YouTube Music</span>
+          </button>
         </div>
-        <code class="feed-url">https://jeffharr.is/brensilver/guided-feed.xml</code>
+        <div class="feed-copy">
+          <code class="feed-url">https://jeffharr.is/brensilver/guided-feed.xml</code>
+          <button class="copy-link" type="button" data-copy-feed="guided">Copy RSS</button>
+        </div>
       </div>
       <p id="copy-status" class="copy-status" aria-live="polite"></p>
     </section>
@@ -277,13 +313,13 @@
       const feedUrl = feedUrls[key] || feedUrls.dharma || feedUrls.main;
       try {
         await navigator.clipboard.writeText(feedUrl);
-        status.textContent = 'RSS URL copied.';
+        status.textContent = this?.dataset?.copyMessage || 'RSS URL copied.';
       } catch (error) {
         status.textContent = feedUrl;
       }
     }
     document.querySelectorAll('[data-copy-feed]').forEach(button => {
-      button.addEventListener('click', () => copyFeedUrl(button.dataset.copyFeed));
+      button.addEventListener('click', () => copyFeedUrl.call(button, button.dataset.copyFeed));
     });
     document.querySelectorAll('[data-feed-tab]').forEach(button => {
       button.addEventListener('click', () => selectFeed(button.dataset.feedTab));
