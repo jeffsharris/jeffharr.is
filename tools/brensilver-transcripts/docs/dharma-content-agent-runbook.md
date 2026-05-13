@@ -55,6 +55,16 @@ BRENSILVER_MEDIA_BASE_URL=https://jeffharr.is/brensilver/
 The runner refuses to auto-publish from a dirty worktree. That is intentional:
 scheduled jobs should not accidentally commit an agent's unrelated edits.
 
+Cloudflare Pages deploys the site from GitHub pushes to `main`. Normal
+Brensilver publishing should therefore commit generated `brensilver/` artifacts
+and push, not run an ad hoc Pages deployment. Before any push that should
+publish the site, fetch the remote and fast-forward or rebase onto
+`origin/main`; if that cannot be done cleanly, stop and resolve the branch state
+first. The unattended runner pulls before ingestion starts and rebases its
+generated commit onto the latest remote immediately before pushing, which avoids
+publishing stale local files if another project changes the site during a long
+ingestion run.
+
 ## Adding More Matthew Brensilver Sources
 
 1. Add the source to `tools/brensilver-feed/config/sources.json`.
@@ -88,7 +98,8 @@ scheduled jobs should not accidentally commit an agent's unrelated edits.
    .local-corpus/brensilver/transcripts/markdown/{safe_id}.md
    ```
 
-6. Commit source changes plus generated public artifacts. Do not commit
+6. Fetch the latest remote, rebase or fast-forward onto `origin/main`, then
+   commit source changes plus generated public artifacts. Do not commit
    `.local-corpus/` unless Jeff explicitly asks.
 
 ## Private Dharma Seed Sources

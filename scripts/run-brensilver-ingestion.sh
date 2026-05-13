@@ -56,8 +56,11 @@ if [[ "$BRENSILVER_AUTO_PUBLISH" == "1" ]]; then
   git add brensilver
   if git diff --cached --quiet -- brensilver; then
     echo "No Brensilver generated artifact changes to publish."
+    git pull --ff-only origin "$branch"
   else
     git commit -m "Update Brensilver generated feed artifacts"
+    git fetch origin "$branch"
+    git rebase "origin/$branch"
     git push origin "$branch"
   fi
 fi

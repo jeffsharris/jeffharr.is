@@ -68,6 +68,9 @@ python3 scripts/build-brensilver-feed.py --talks-json brensilver/talks.json --me
 ## Cloudflare Pages build notes
 - When adding dependencies used by Pages Functions, update both `package.json` (root) and `functions/package.json` so Pages can resolve them during the root install (missing entries cause build failures).
 - If functions use Node built-ins (ex: puppeteer), keep `wrangler.toml` valid with `pages_build_output_dir = "."` and `compatibility_flags = ["nodejs_compat"]` so Pages applies the config (otherwise deploy fails with `node:*` module errors).
+- Cloudflare Pages is connected to GitHub and deploys pushes to `main`; do not use an ad hoc Wrangler Pages deploy for normal publishing.
+- Before any commit/push that should trigger a Pages deploy, run `git fetch origin` and fast-forward or rebase onto `origin/main`. If the local branch cannot be cleanly brought current, stop instead of pushing or deploying stale artifacts.
+- For generated Brensilver artifacts, prefer `scripts/run-brensilver-ingestion.sh` with `BRENSILVER_AUTO_PUBLISH=1`; it pulls before work starts and rebases its generated commit onto the latest remote immediately before push.
 
 ## Tests
 - Run `npm test` (uses `node --test tests`).

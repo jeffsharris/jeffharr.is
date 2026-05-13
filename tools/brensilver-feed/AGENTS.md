@@ -65,6 +65,13 @@ pending talks in `brensilver/talks.json`. For unattended scheduling, set
 `BRENSILVER_AUTO_PUBLISH=1` in the environment so the generated `brensilver/`
 artifacts are committed and pushed after a successful run.
 
+Publishing should go through Git, not a direct Pages upload. Cloudflare Pages is
+connected to GitHub and deploys `main` automatically. Before pushing generated
+feed artifacts, fetch the remote and fast-forward or rebase onto `origin/main`.
+The unattended runner does this at startup and rebases its generated commit
+again immediately before push, so a long ingestion run cannot overwrite newer
+remote site changes.
+
 After a rebuild, audit:
 
 - New IDs appear in `brensilver/talks.json`.
