@@ -11,10 +11,12 @@ from brensilver.models import Talk
 
 ATOM_NS = "http://www.w3.org/2005/Atom"
 ITUNES_NS = "http://www.itunes.com/dtds/podcast-1.0.dtd"
+MEDIA_NS = "http://search.yahoo.com/mrss/"
 PODCAST_NS = "https://podcastindex.org/namespace/1.0"
 
 ET.register_namespace("atom", ATOM_NS)
 ET.register_namespace("itunes", ITUNES_NS)
+ET.register_namespace("media", MEDIA_NS)
 ET.register_namespace("podcast", PODCAST_NS)
 
 
@@ -109,6 +111,11 @@ def build_rss(talks: Iterable[Talk], site: Dict[str, str]) -> str:
         image_url = talk.episode_image_url or talk.image_url
         if image_url:
             ET.SubElement(item, f"{{{ITUNES_NS}}}image", {"href": image_url})
+            ET.SubElement(
+                item,
+                f"{{{MEDIA_NS}}}thumbnail",
+                {"url": image_url, "width": "1024", "height": "1024"},
+            )
         if talk.chapters_url:
             ET.SubElement(
                 item,

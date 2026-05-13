@@ -696,6 +696,22 @@ def render_talk_page(config: Dict, talk: Talk) -> str:
     image_url = talk.episode_image_url or talk.image_url
     image_src = html_media_url(site, image_url)
     description = talk.podcast_description or talk.description or site["description"]
+    canonical_url = talk.canonical_url or urllib.parse.urljoin(
+        str(site["base_url"]), f"talks/{safe_id(talk.id)}/"
+    )
+    page_title = f"{talk.title} - {site['title']}"
+    social_description = " ".join(str(description).split())
+    social_image_url = absolute_media_url(site, image_url)
+    social_image_meta = (
+        f"""  <meta property="og:image" content="{_escape(social_image_url)}">
+  <meta property="og:image:secure_url" content="{_escape(social_image_url)}">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="1024">
+  <meta property="og:image:height" content="1024">
+  <meta name="twitter:image" content="{_escape(social_image_url)}">"""
+        if social_image_url
+        else ""
+    )
     chapters = "\n".join(
         f"""<li><a href="?t={int(round(chapter.start))}" data-start="{chapter.start}">{_escape(format_timestamp(chapter.start))}</a> <strong>{_escape(chapter.title)}</strong>{chapter_description(chapter.description)}</li>"""
         for chapter in talk.chapters
@@ -720,7 +736,18 @@ def render_talk_page(config: Dict, talk: Talk) -> str:
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{_escape(talk.title)} - {_escape(site["title"])}</title>
+  <title>{_escape(page_title)}</title>
+  <link rel="canonical" href="{_escape(canonical_url)}">
+  <meta name="description" content="{_escape(social_description)}">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="{_escape(site["title"])}">
+  <meta property="og:title" content="{_escape(talk.title)}">
+  <meta property="og:description" content="{_escape(social_description)}">
+  <meta property="og:url" content="{_escape(canonical_url)}">
+{social_image_meta}
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{_escape(talk.title)}">
+  <meta name="twitter:description" content="{_escape(social_description)}">
   <style>
     :root {{
       color-scheme: light dark;
@@ -858,6 +885,15 @@ def html_media_url(site: Dict, url: str | None) -> str | None:
         if parsed.path:
             return parsed.path
     return url
+
+
+def absolute_media_url(site: Dict, url: str | None) -> str | None:
+    if not url:
+        return None
+    parsed = urllib.parse.urlparse(url)
+    if parsed.scheme and parsed.netloc:
+        return url
+    return urllib.parse.urljoin(str(site.get("base_url") or ""), url)
 
 
 def _escape(value: object) -> str:

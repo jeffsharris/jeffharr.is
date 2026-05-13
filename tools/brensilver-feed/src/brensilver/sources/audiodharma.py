@@ -10,7 +10,6 @@ from brensilver.fetch import fetch_text, probe_content_length
 from brensilver.models import Talk
 
 BASE_URL = "https://www.audiodharma.org"
-SPEAKER_IMAGE = "https://audiodharma.us-east-1.linodeobjects.com/speakers/231/MatthewBrensilver_small.jpg"
 DATE_RE = re.compile(r"^\d{4}\.\d{2}\.\d{2}$")
 DURATION_RE = re.compile(r"^\d{1,2}:\d{2}(?::\d{2})?$")
 PAGE_RE = re.compile(r"[?&]page=(\d+)")
@@ -136,7 +135,7 @@ def _talks_from_entries(
                 audio_length=audio_length,
                 duration=entry.get("duration") or None,
                 description="AudioDharma talk by Matthew Brensilver.",
-                image_url=SPEAKER_IMAGE,
+                image_url=None,
             )
         )
     return talks

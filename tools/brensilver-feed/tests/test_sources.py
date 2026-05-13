@@ -10,6 +10,7 @@ from brensilver.build import (
     apply_source_metadata,
     is_guided_practice,
     load_talks_json,
+    render_talk_page,
     split_talks_for_feeds,
 )
 from brensilver.metadata import enrich_talks, write_episode_media
@@ -55,6 +56,7 @@ class SourceParsingTests(unittest.TestCase):
         self.assertEqual(talks[0].id, "audiodharma:24555")
         self.assertEqual(talks[0].duration, "16:01")
         self.assertEqual(talks[0].audio_type, "audio/mpeg")
+        self.assertIsNone(talks[0].image_url)
 
     def test_dharmaseed_feed_parser_extracts_items(self):
         xml = """<?xml version="1.0" encoding="utf-8"?>
@@ -521,6 +523,7 @@ class PodcastMetadataTests(unittest.TestCase):
         root = ET.fromstring(xml)
         namespaces = {
             "itunes": "http://www.itunes.com/dtds/podcast-1.0.dtd",
+            "media": "http://search.yahoo.com/mrss/",
             "podcast": "https://podcastindex.org/namespace/1.0",
         }
         item = root.find("./channel/item")
@@ -544,9 +547,55 @@ class PodcastMetadataTests(unittest.TestCase):
             "https://media.example/brensilver/artwork/audiodharma-1.jpg",
         )
         self.assertEqual(
+            item.find("media:thumbnail", namespaces).attrib["url"],
+            "https://media.example/brensilver/artwork/audiodharma-1.jpg",
+        )
+        self.assertEqual(
             item.find("podcast:chapters", namespaces).attrib["type"],
             "application/json+chapters",
         )
+
+    def test_talk_page_social_preview_uses_episode_artwork(self):
+        talk = Talk(
+            id="audiodharma:1",
+            source="AudioDharma",
+            source_id="1",
+            title="Practice & Release",
+            speaker="Matthew Brensilver",
+            published_at=datetime(2026, 1, 1, tzinfo=timezone.utc),
+            link="https://example.test/source",
+            audio_url="https://example.test/audio.mp3",
+            canonical_url="https://jeffharr.is/brensilver/talks/audiodharma-1/",
+            podcast_description="A talk about practice, release, and attention.",
+            image_url="https://jeffharr.is/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+            episode_image_url="https://jeffharr.is/brensilver/artwork/audiodharma-1.jpg",
+        )
+
+        html = render_talk_page(
+            {
+                "site": {
+                    "title": "Matthew Brensilver Dharma Talks",
+                    "base_url": "https://jeffharr.is/brensilver/",
+                    "description": "Merged talks.",
+                }
+            },
+            talk,
+        )
+
+        self.assertIn(
+            '<link rel="canonical" href="https://jeffharr.is/brensilver/talks/audiodharma-1/">',
+            html,
+        )
+        self.assertIn(
+            '<meta property="og:image" content="https://jeffharr.is/brensilver/artwork/audiodharma-1.jpg">',
+            html,
+        )
+        self.assertIn(
+            '<meta name="twitter:image" content="https://jeffharr.is/brensilver/artwork/audiodharma-1.jpg">',
+            html,
+        )
+        self.assertIn('<img class="art" src="/brensilver/artwork/audiodharma-1.jpg"', html)
+        self.assertNotIn("MatthewBrensilver_small", html)
 
     def test_rss_summary_normalizes_source_venue_without_episode_metadata(self):
         talk = Talk(
