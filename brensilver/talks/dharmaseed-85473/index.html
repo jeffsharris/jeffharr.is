@@ -59,20 +59,28 @@
       <h2>Source</h2>
       <p><a href="https://dharmaseed.org/talks/85473/">Original talk page</a></p>
     </section>
-    <section class="more-talks" aria-labelledby="more-talks-heading">
-      <p class="more-kicker">Keep listening</p>
-      <h2 id="more-talks-heading" class="more-heading">More from Matthew Brensilver</h2>
-      <p class="more-copy">Browse the archive, play a talk here, or download the audio file.</p>
-      <div id="talk-list" class="talk-list"></div>
-      <div id="talk-loader" class="talk-loader" aria-live="polite">Loading more talks...</div>
-    </section>
   </main>
   <script>
-    window.TALK_PAGE = {
-      currentTalkId: "dharmaseed:85473",
-      siteBaseUrl: "https://jeffharr.is/brensilver/"
-    };
+    const audio = document.getElementById('audio');
+    function seekFromLocation() {
+      if (!audio) return;
+      const value = new URLSearchParams(location.search).get('t');
+      const seconds = Number(value || 0);
+      if (Number.isFinite(seconds) && seconds > 0) {
+        audio.currentTime = seconds;
+      }
+    }
+    document.querySelectorAll('[data-start]').forEach(link => {
+      link.addEventListener('click', event => {
+        if (!audio) return;
+        event.preventDefault();
+        const seconds = Number(link.dataset.start || 0);
+        history.replaceState(null, '', '?t=' + Math.round(seconds));
+        audio.currentTime = seconds;
+        audio.play().catch(() => {});
+      });
+    });
+    audio?.addEventListener('loadedmetadata', seekFromLocation, { once: true });
   </script>
-  <script src="../../talk-browser.js"></script>
 </body>
 </html>

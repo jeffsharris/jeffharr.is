@@ -127,7 +127,7 @@ def main(argv: Iterable[str] | None = None) -> int:
         corpus_dir=corpus_dir,
         copy_artwork=args.copy_artwork,
     )
-    write_talk_page_assets(out_dir)
+    write_site_assets(out_dir)
     write_talk_pages(out_dir, config, talks)
     (out_dir / "index.html").write_text(
         render_index(config, talks, feed_talks, guided_feed_talks, guided_site),
@@ -400,6 +400,27 @@ def render_index(
         </button>
       </div>"""
     feed_urls_json = json.dumps(feed_urls)
+    archive_feeds = {
+        feed_key: {
+            "title": main_feed_label,
+            "url": "dharma-talks.json" if has_guided_feed else "talks.json",
+            "count": len(feed_talks),
+        }
+    }
+    if guided_site:
+        archive_feeds["guided"] = {
+            "title": "Guided meditations",
+            "url": "guided-talks.json",
+            "count": len(guided_feed_talks),
+        }
+    archive_config_json = json.dumps(
+        {
+            "defaultFeed": feed_key,
+            "siteBaseUrl": str(site.get("base_url") or ""),
+            "talkPathPrefix": "talks/",
+            "feeds": archive_feeds,
+        }
+    )
     portrait_html = (
         f"""<img class="portrait" src="{_escape(portrait_src)}" alt="{_escape(page_title)}">"""
         if portrait_src
@@ -612,6 +633,7 @@ def render_index(
     code {{
       overflow-wrap: anywhere;
     }}
+{landing_archive_css()}
     @media (max-width: 880px) {{
       .hero {{ grid-template-columns: 1fr; gap: 26px; }}
       .portrait {{ justify-self: start; max-width: 240px; }}
@@ -640,8 +662,18 @@ def render_index(
 {guided_feed_panel}
       <p id="copy-status" class="copy-status" aria-live="polite"></p>
     </section>
+    <section class="archive" aria-labelledby="archive-heading">
+      <p class="archive-kicker">Archive</p>
+      <h2 id="archive-heading">Browse and listen</h2>
+      <p id="archive-summary" class="archive-copy">Play talks here or download the audio.</p>
+      <div id="talk-list" class="talk-list"></div>
+      <div id="talk-loader" class="talk-loader" aria-live="polite">Loading talks...</div>
+    </section>
   </main>
   </div>
+  <script>
+    window.TALK_ARCHIVE_CONFIG = {archive_config_json};
+  </script>
   <script>
     const feedUrls = {feed_urls_json};
     const status = document.getElementById('copy-status');
@@ -654,6 +686,7 @@ def render_index(
         tab.classList.toggle('is-active', selected);
         tab.setAttribute('aria-selected', String(selected));
       }});
+      window.talkArchiveBrowser?.selectFeed(key);
       status.textContent = '';
     }}
     async function copyFeedUrl(key) {{
@@ -672,6 +705,7 @@ def render_index(
       button.addEventListener('click', () => selectFeed(button.dataset.feedTab));
     }});
   </script>
+  <script src="archive-browser.js"></script>
 </body>
 </html>
 """
@@ -724,9 +758,120 @@ def render_subscribe_panel(
       </div>"""
 
 
-def write_talk_page_assets(out_dir: Path) -> None:
+def landing_archive_css() -> str:
+    return """    .archive {
+      border-top: 1px solid var(--line);
+      margin-top: 34px;
+      padding-top: 34px;
+    }
+    .archive-kicker {
+      margin: 0 0 6px;
+      color: var(--accent);
+      font-size: 0.78rem;
+      font-weight: 850;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .archive-copy {
+      max-width: 620px;
+      margin: 0 0 22px;
+    }
+    .talk-list {
+      display: grid;
+      gap: 14px;
+      margin-top: 20px;
+    }
+    .talk-card {
+      display: grid;
+      grid-template-columns: 112px minmax(0, 1fr);
+      gap: 16px;
+      align-items: start;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: color-mix(in srgb, var(--panel) 86%, var(--bg));
+    }
+    .talk-card img {
+      width: 100%;
+      aspect-ratio: 1;
+      object-fit: cover;
+      border-radius: 6px;
+      border: 1px solid var(--line);
+      background: var(--panel);
+    }
+    .talk-card h3 {
+      margin: 0;
+      font-size: 1.14rem;
+      line-height: 1.18;
+      letter-spacing: 0;
+    }
+    .talk-card-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 7px 0 8px;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+    .talk-card-description {
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 3;
+      overflow: hidden;
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.98rem;
+    }
+    .talk-card-player {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 10px;
+      align-items: center;
+      margin-top: 12px;
+    }
+    .talk-card-player audio {
+      min-width: 0;
+    }
+    .talk-card-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .archive-link,
+    .download-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 0 14px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      color: var(--accent);
+      text-decoration: none;
+      white-space: nowrap;
+      background: color-mix(in srgb, var(--panel) 78%, var(--bg));
+    }
+    .talk-loader {
+      min-height: 56px;
+      display: grid;
+      place-items: center;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+    @media (max-width: 760px) {
+      .talk-card-player { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 560px) {
+      .talk-card { grid-template-columns: 82px minmax(0, 1fr); gap: 12px; padding: 12px; }
+      .talk-card-description { -webkit-line-clamp: 4; }
+      .talk-card-actions { display: grid; grid-template-columns: 1fr; }
+    }
+"""
+
+
+def write_site_assets(out_dir: Path) -> None:
     (out_dir / "talk-page.css").write_text(talk_page_css(), encoding="utf-8")
-    (out_dir / "talk-browser.js").write_text(talk_browser_js(), encoding="utf-8")
+    (out_dir / "archive-browser.js").write_text(archive_browser_js(), encoding="utf-8")
 
 
 def talk_page_css() -> str:
@@ -808,138 +953,28 @@ def talk_page_css() -> str:
     .chapters { padding-left: 24px; }
     .chapters li { margin: 12px 0; }
     .description { max-width: 680px; }
-    .more-talks {
-      margin-top: 42px;
-      padding-top: 28px;
-    }
-    .more-kicker {
-      margin: 0 0 6px;
-      color: var(--accent);
-      font-size: 0.78rem;
-      font-weight: 850;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
-    .more-heading {
-      margin: 0;
-      font-size: clamp(1.75rem, 4vw, 3rem);
-      line-height: 1.05;
-      letter-spacing: 0;
-    }
-    .more-copy {
-      max-width: 640px;
-      margin: 10px 0 0;
-      color: var(--muted);
-    }
-    .talk-list {
-      display: grid;
-      gap: 14px;
-      margin-top: 22px;
-    }
-    .talk-card {
-      display: grid;
-      grid-template-columns: 108px minmax(0, 1fr);
-      gap: 16px;
-      align-items: start;
-      padding: 14px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: color-mix(in srgb, var(--panel) 86%, var(--bg));
-    }
-    .talk-card img {
-      width: 100%;
-      aspect-ratio: 1;
-      object-fit: cover;
-      border-radius: 6px;
-      border: 1px solid var(--line);
-      background: var(--panel);
-    }
-    .talk-card h3 {
-      margin: 0;
-      font-size: 1.12rem;
-      line-height: 1.18;
-      letter-spacing: 0;
-    }
-    .talk-card-meta {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin: 7px 0 8px;
-      color: var(--muted);
-      font-size: 0.92rem;
-    }
-    .talk-card-description {
-      display: -webkit-box;
-      -webkit-box-orient: vertical;
-      -webkit-line-clamp: 3;
-      overflow: hidden;
-      margin: 0;
-      color: var(--muted);
-      font-size: 0.98rem;
-    }
-    .talk-card-player {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) auto;
-      gap: 10px;
-      align-items: center;
-      margin-top: 12px;
-    }
-    .talk-card-player audio {
-      min-width: 0;
-    }
-    .talk-loader {
-      min-height: 48px;
-      display: grid;
-      place-items: center;
-      color: var(--muted);
-      font-size: 0.95rem;
-    }
     @media (max-width: 760px) {
       .hero { grid-template-columns: 1fr; }
       .art { max-width: 260px; }
-      .primary-player,
-      .talk-card-player { grid-template-columns: 1fr; }
+      .primary-player { grid-template-columns: 1fr; }
       .download-link { width: auto; }
-    }
-    @media (max-width: 560px) {
-      .talk-card { grid-template-columns: 82px minmax(0, 1fr); gap: 12px; padding: 12px; }
-      .talk-card-description { -webkit-line-clamp: 4; }
     }
 """
 
 
-def talk_browser_js() -> str:
+def archive_browser_js() -> str:
     return """(() => {
-  const config = window.TALK_PAGE || {};
-  const audio = document.getElementById('audio');
+  const config = window.TALK_ARCHIVE_CONFIG || {};
+  const feeds = config.feeds || {};
   const talkList = document.getElementById('talk-list');
   const talkLoader = document.getElementById('talk-loader');
-  const currentTalkId = config.currentTalkId;
+  const archiveSummary = document.getElementById('archive-summary');
   const siteBaseUrl = config.siteBaseUrl || '';
-  let talkArchive = [];
-  let nextTalkIndex = 0;
+  const feedKeys = Object.keys(feeds);
+  const stateByFeed = new Map();
   const talkBatchSize = 12;
-
-  function seekFromLocation() {
-    if (!audio) return;
-    const value = new URLSearchParams(location.search).get('t');
-    const seconds = Number(value || 0);
-    if (Number.isFinite(seconds) && seconds > 0) {
-      audio.currentTime = seconds;
-    }
-  }
-
-  document.querySelectorAll('[data-start]').forEach(link => {
-    link.addEventListener('click', event => {
-      if (!audio) return;
-      event.preventDefault();
-      const seconds = Number(link.dataset.start || 0);
-      history.replaceState(null, '', '?t=' + Math.round(seconds));
-      audio.currentTime = seconds;
-      audio.play().catch(() => {});
-    });
-  });
-  audio?.addEventListener('loadedmetadata', seekFromLocation, { once: true });
+  let currentFeed = config.defaultFeed || feedKeys[0] || '';
+  let observer = null;
 
   function mediaUrl(url) {
     if (!url) return '';
@@ -962,7 +997,7 @@ def talk_browser_js() -> str:
         return url;
       }
     }
-    return url || '../../talks/' + String(talk.id || '').replace(/[^a-z0-9]+/gi, '-').toLowerCase() + '/';
+    return url || (config.talkPathPrefix || 'talks/') + String(talk.id || '').replace(/[^a-z0-9]+/gi, '-').toLowerCase() + '/';
   }
 
   function talkDescription(talk) {
@@ -983,12 +1018,34 @@ def talk_browser_js() -> str:
     return el;
   }
 
-  function renderTalkBatch() {
-    if (!talkArchive.length || !talkList || !talkLoader) return;
+  function stateFor(key) {
+    if (!stateByFeed.has(key)) {
+      stateByFeed.set(key, {
+        talks: null,
+        nextIndex: 0,
+        loading: false,
+      });
+    }
+    return stateByFeed.get(key);
+  }
+
+  function updateSummary(key) {
+    if (!archiveSummary) return;
+    const feed = feeds[key] || {};
+    const count = Number(feed.count || 0);
+    const noun = count === 1 ? 'talk' : 'talks';
+    archiveSummary.textContent = count
+      ? `${count} ${noun}. Play talks here or download the audio.`
+      : 'Play talks here or download the audio.';
+  }
+
+  function renderTalkBatch(key = currentFeed) {
+    const state = stateFor(key);
+    if (!state.talks || !talkList || !talkLoader || key !== currentFeed) return;
     const fragment = document.createDocumentFragment();
-    const end = Math.min(nextTalkIndex + talkBatchSize, talkArchive.length);
-    for (let index = nextTalkIndex; index < end; index += 1) {
-      const talk = talkArchive[index];
+    const end = Math.min(state.nextIndex + talkBatchSize, state.talks.length);
+    for (let index = state.nextIndex; index < end; index += 1) {
+      const talk = state.talks[index];
       const card = document.createElement('article');
       card.className = 'talk-card';
 
@@ -1020,41 +1077,74 @@ def talk_browser_js() -> str:
       itemAudio.preload = 'none';
       itemAudio.src = talk.audio_url || '';
       player.appendChild(itemAudio);
+      const actions = document.createElement('div');
+      actions.className = 'talk-card-actions';
+      const details = document.createElement('a');
+      details.className = 'archive-link';
+      details.href = talkHref(talk);
+      details.textContent = 'Details';
+      actions.appendChild(details);
       const download = document.createElement('a');
       download.className = 'download-link';
       download.href = talk.audio_url || '#';
       download.download = '';
       download.textContent = 'Download';
-      player.appendChild(download);
+      actions.appendChild(download);
+      player.appendChild(actions);
       body.appendChild(player);
       card.appendChild(body);
       fragment.appendChild(card);
     }
-    nextTalkIndex = end;
+    state.nextIndex = end;
     talkList.appendChild(fragment);
-    talkLoader.textContent = nextTalkIndex >= talkArchive.length ? 'End of archive' : 'Loading more talks...';
+    talkLoader.textContent = state.nextIndex >= state.talks.length ? 'End of archive' : 'Loading more talks...';
   }
 
-  async function loadTalkArchive() {
+  async function loadTalkArchive(key = currentFeed) {
     if (!talkList || !talkLoader) return;
+    const feed = feeds[key];
+    if (!feed) return;
+    currentFeed = key;
+    updateSummary(key);
+    const state = stateFor(key);
+    talkList.replaceChildren();
+    state.nextIndex = 0;
+    talkLoader.textContent = state.loading ? 'Loading talks...' : 'Loading talks...';
     try {
-      const response = await fetch('../../talks.json');
-      if (!response.ok) throw new Error('Could not load talks.json');
-      const talks = await response.json();
-      talkArchive = talks
-        .filter(talk => talk && talk.id !== currentTalkId)
-        .sort((a, b) => String(b.published_at || '').localeCompare(String(a.published_at || '')));
-      renderTalkBatch();
-      const observer = new IntersectionObserver(entries => {
-        if (entries.some(entry => entry.isIntersecting)) {
-          renderTalkBatch();
-        }
-      }, { rootMargin: '700px 0px' });
-      observer.observe(talkLoader);
+      if (!state.talks) {
+        state.loading = true;
+        const response = await fetch(feed.url);
+        if (!response.ok) throw new Error('Could not load talk archive');
+        const talks = await response.json();
+        state.talks = talks
+          .filter(talk => talk && talk.audio_url)
+          .sort((a, b) => String(b.published_at || '').localeCompare(String(a.published_at || '')));
+      }
+      state.loading = false;
+      renderTalkBatch(key);
+      if (!observer) {
+        observer = new IntersectionObserver(entries => {
+          if (entries.some(entry => entry.isIntersecting)) {
+            renderTalkBatch();
+          }
+        }, { rootMargin: '800px 0px' });
+        observer.observe(talkLoader);
+      }
     } catch (error) {
-      talkLoader.textContent = 'More talks could not be loaded right now.';
+      state.loading = false;
+      if (key === currentFeed) {
+        talkLoader.textContent = 'Talks could not be loaded right now.';
+      }
     }
   }
+
+  window.talkArchiveBrowser = {
+    selectFeed(key) {
+      if (feeds[key]) {
+        loadTalkArchive(key);
+      }
+    },
+  };
 
   document.addEventListener('play', event => {
     if (event.target instanceof HTMLAudioElement) {
@@ -1064,9 +1154,38 @@ def talk_browser_js() -> str:
     }
   }, true);
 
-  loadTalkArchive();
+  if (currentFeed) {
+    loadTalkArchive(currentFeed);
+  } else if (talkLoader) {
+    talkLoader.textContent = 'No talks are available yet.';
+  }
 })();
 """
+
+
+def talk_seek_script() -> str:
+    return """  <script>
+    const audio = document.getElementById('audio');
+    function seekFromLocation() {
+      if (!audio) return;
+      const value = new URLSearchParams(location.search).get('t');
+      const seconds = Number(value || 0);
+      if (Number.isFinite(seconds) && seconds > 0) {
+        audio.currentTime = seconds;
+      }
+    }
+    document.querySelectorAll('[data-start]').forEach(link => {
+      link.addEventListener('click', event => {
+        if (!audio) return;
+        event.preventDefault();
+        const seconds = Number(link.dataset.start || 0);
+        history.replaceState(null, '', '?t=' + Math.round(seconds));
+        audio.currentTime = seconds;
+        audio.play().catch(() => {});
+      });
+    });
+    audio?.addEventListener('loadedmetadata', seekFromLocation, { once: true });
+  </script>"""
 
 
 def write_talk_pages(out_dir: Path, config: Dict, talks: List[Talk]) -> None:
@@ -1117,7 +1236,6 @@ def render_talk_page(config: Dict, talk: Talk) -> str:
         if image_src
         else ""
     )
-    site_author = site.get("author") or site["title"]
     return f"""<!doctype html>
 <html lang="en">
 <head>
@@ -1161,21 +1279,8 @@ def render_talk_page(config: Dict, talk: Talk) -> str:
       <h2>Source</h2>
       <p><a href="{_escape(talk.link)}">Original talk page</a></p>
     </section>
-    <section class="more-talks" aria-labelledby="more-talks-heading">
-      <p class="more-kicker">Keep listening</p>
-      <h2 id="more-talks-heading" class="more-heading">More from {_escape(site_author)}</h2>
-      <p class="more-copy">Browse the archive, play a talk here, or download the audio file.</p>
-      <div id="talk-list" class="talk-list"></div>
-      <div id="talk-loader" class="talk-loader" aria-live="polite">Loading more talks...</div>
-    </section>
   </main>
-  <script>
-    window.TALK_PAGE = {{
-      currentTalkId: {json.dumps(talk.id)},
-      siteBaseUrl: {json.dumps(str(site.get("base_url") or ""))}
-    }};
-  </script>
-  <script src="../../talk-browser.js"></script>
+{talk_seek_script()}
 </body>
 </html>
 """
