@@ -16,6 +16,7 @@ from brensilver.sources import (
     fetch_audiodharma_talks,
     fetch_dharmaseed_player_talks,
     fetch_dharmaseed_talks,
+    fetch_podcast_rss_talks,
 )
 
 GUIDED_FEED_TITLE_PATTERNS = [
@@ -76,33 +77,50 @@ def main(argv: Iterable[str] | None = None) -> int:
             site_base_url=config["site"]["base_url"],
         )
     max_items = int(config.get("feed", {}).get("max_items", len(talks)))
-    dharma_talks, guided_talks = split_talks_for_feeds(talks)
-    feed_talks = dharma_talks[:max_items]
-    guided_feed_talks = guided_talks[:max_items]
-    guided_site = build_guided_site(config["site"])
+    if guided_feed_enabled(config["site"]):
+        dharma_talks, guided_talks = split_talks_for_feeds(talks)
+        feed_talks = dharma_talks[:max_items]
+        guided_feed_talks = guided_talks[:max_items]
+        guided_site = build_guided_site(config["site"])
+    else:
+        dharma_talks = talks
+        guided_talks = []
+        feed_talks = talks[:max_items]
+        guided_feed_talks = []
+        guided_site = None
 
     out_dir = Path(args.out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
 
     (out_dir / "feed.xml").write_text(build_rss(feed_talks, config["site"]), encoding="utf-8")
-    (out_dir / "guided-feed.xml").write_text(
-        build_rss(guided_feed_talks, guided_site),
-        encoding="utf-8",
-    )
+    if guided_site:
+        (out_dir / "guided-feed.xml").write_text(
+            build_rss(guided_feed_talks, guided_site),
+            encoding="utf-8",
+        )
     (out_dir / "talks.json").write_text(
         json.dumps([talk.to_json_dict() for talk in talks], indent=2, ensure_ascii=False) + "\n",
         encoding="utf-8",
     )
-    (out_dir / "dharma-talks.json").write_text(
-        json.dumps([talk.to_json_dict() for talk in dharma_talks], indent=2, ensure_ascii=False)
-        + "\n",
-        encoding="utf-8",
-    )
-    (out_dir / "guided-talks.json").write_text(
-        json.dumps([talk.to_json_dict() for talk in guided_talks], indent=2, ensure_ascii=False)
-        + "\n",
-        encoding="utf-8",
-    )
+    if guided_site:
+        (out_dir / "dharma-talks.json").write_text(
+            json.dumps(
+                [talk.to_json_dict() for talk in dharma_talks],
+                indent=2,
+                ensure_ascii=False,
+            )
+            + "\n",
+            encoding="utf-8",
+        )
+        (out_dir / "guided-talks.json").write_text(
+            json.dumps(
+                [talk.to_json_dict() for talk in guided_talks],
+                indent=2,
+                ensure_ascii=False,
+            )
+            + "\n",
+            encoding="utf-8",
+        )
     media_counts = write_episode_media(
         talks,
         out_dir=out_dir,
@@ -115,11 +133,17 @@ def main(argv: Iterable[str] | None = None) -> int:
         encoding="utf-8",
     )
 
-    print(
-        f"Wrote {len(feed_talks)} Dharma feed items and {len(guided_feed_talks)} guided feed items "
-        f"from {len(talks)} total talks to {out_dir} "
-        f"({media_counts['chapters']} chapter files, {media_counts['artwork']} artwork files)"
-    )
+    if guided_site:
+        print(
+            f"Wrote {len(feed_talks)} Dharma feed items and {len(guided_feed_talks)} guided feed items "
+            f"from {len(talks)} total talks to {out_dir} "
+            f"({media_counts['chapters']} chapter files, {media_counts['artwork']} artwork files)"
+        )
+    else:
+        print(
+            f"Wrote {len(feed_talks)} feed items from {len(talks)} total talks to {out_dir} "
+            f"({media_counts['chapters']} chapter files, {media_counts['artwork']} artwork files)"
+        )
     return 0
 
 
@@ -132,6 +156,8 @@ def collect_talks(config: Dict, probe_lengths: bool = False) -> List[Talk]:
             talks.extend(fetch_dharmaseed_player_talks(source))
         elif source["type"] == "audiodharma":
             talks.extend(fetch_audiodharma_talks(source, probe_lengths=probe_lengths))
+        elif source["type"] == "podcast_rss":
+            talks.extend(fetch_podcast_rss_talks(source))
         else:
             raise ValueError(f"Unknown source type: {source['type']}")
     return talks
@@ -208,6 +234,14 @@ def build_guided_site(site: Dict) -> Dict:
     )
     guided["feed_url"] = site.get("guided_feed_url", site["base_url"] + "guided-feed.xml")
     return guided
+
+
+def guided_feed_enabled(site: Dict) -> bool:
+    return bool(
+        site.get("guided_feed_url")
+        or site.get("guided_title")
+        or site.get("guided_description")
+    )
 
 
 def split_talks_for_feeds(talks: List[Talk]) -> tuple[List[Talk], List[Talk]]:
@@ -786,7 +820,7 @@ def render_talk_page(config: Dict, talk: Talk) -> str:
 </head>
 <body>
   <main>
-    <a class="back" href="../../">Matthew Brensilver Dharma Talks</a>
+    <a class="back" href="../../">{_escape(site["title"])}</a>
     <div class="hero">
       <div>
         <h1>{_escape(talk.title)}</h1>

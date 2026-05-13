@@ -78,6 +78,72 @@ DEFAULT_IMAGE_STYLE = (
 IMAGE_MODEL_FALLBACKS = ["gpt-image-1.5", "gpt-image-1"]
 
 
+DEFAULT_FALLBACK_ARTWORK_PROMPT = (
+    "Square editorial illustration for a contemplative Dharma podcast. "
+    "A quiet open gate at the edge of a meadow at dawn, with a simple winding path, "
+    "scattered leaves, and a clear spacious sky. The image should evoke trust, release, "
+    "and calm awareness through natural forms only. Soft paper texture, restrained "
+    "palette of moss green, warm ochre, charcoal, muted blue, and bone white. "
+    "No text, no logos, no portrait, no ornate religious iconography. "
+    "Clear at small podcast thumbnail size."
+)
+
+
+@dataclass
+class CorpusConfig:
+    slug: str
+    title: str
+    teacher: str
+    public_base_url: str
+    talks_json: Path
+    corpus_dir: Path
+    feed_media_base_url: str
+    feed_build_script: Path
+    glossary: Path
+    env_file: Path
+    correct_prompt: Path
+    references_prompt: Path
+    episode_metadata_prompt: Path
+    qmd_index: str
+    qmd_collection: str
+    qmd_context: str
+    image_style: str
+    fallback_artwork_prompt: str
+    whisper_prompt: str
+    user_agent: str
+
+
+def default_corpus_config() -> CorpusConfig:
+    return CorpusConfig(
+        slug="brensilver",
+        title="Matthew Brensilver Dharma Talks",
+        teacher="Matthew Brensilver",
+        public_base_url="https://jeffharr.is/brensilver/",
+        talks_json=DEFAULT_TALKS_JSON,
+        corpus_dir=DEFAULT_CORPUS_DIR,
+        feed_media_base_url=DEFAULT_FEED_MEDIA_BASE_URL,
+        feed_build_script=SITE_ROOT / "scripts" / "build-brensilver-feed.py",
+        glossary=DEFAULT_GLOSSARY,
+        env_file=DEFAULT_ENV_FILE,
+        correct_prompt=DEFAULT_CORRECT_PROMPT,
+        references_prompt=DEFAULT_REFERENCES_PROMPT,
+        episode_metadata_prompt=DEFAULT_EPISODE_METADATA_PROMPT,
+        qmd_index="dharma",
+        qmd_collection="brensilver",
+        qmd_context="Timestamped Matthew Brensilver Dharma talk transcripts.",
+        image_style=DEFAULT_IMAGE_STYLE,
+        fallback_artwork_prompt=DEFAULT_FALLBACK_ARTWORK_PROMPT,
+        whisper_prompt=(
+            "{teacher} Dharma talk: {title}. Use Buddhist terms and names accurately. "
+            "Terms: {terms}. Names: {people}."
+        ),
+        user_agent="brensilver-transcripts/0.1 (+https://jeffharr.is/brensilver/)",
+    )
+
+
+CORPUS = default_corpus_config()
+
+
 @dataclass
 class Talk:
     id: str
@@ -281,6 +347,85 @@ def load_env_file(path: Path) -> None:
             os.environ[name] = value
 
 
+def load_corpus_config(path: Path | None) -> CorpusConfig:
+    if path is None:
+        return default_corpus_config()
+
+    raw = load_json(path, {})
+    if not isinstance(raw, dict):
+        raise SystemExit(f"Corpus config must be a JSON object: {path}")
+
+    prompts = raw.get("prompts") or {}
+    qmd = raw.get("qmd") or {}
+    defaults = default_corpus_config()
+    base_dir = path.parent
+
+    slug = str(raw.get("slug") or defaults.slug)
+    title = str(raw.get("title") or defaults.title)
+    teacher = str(raw.get("teacher") or raw.get("speaker") or defaults.teacher)
+    public_base_url = str(raw.get("public_base_url") or defaults.public_base_url)
+
+    return CorpusConfig(
+        slug=slug,
+        title=title,
+        teacher=teacher,
+        public_base_url=public_base_url,
+        talks_json=resolve_config_path(raw.get("talks_json"), base_dir, defaults.talks_json),
+        corpus_dir=resolve_config_path(raw.get("corpus_dir"), base_dir, defaults.corpus_dir),
+        feed_media_base_url=str(raw.get("feed_media_base_url") or public_base_url),
+        feed_build_script=resolve_config_path(
+            raw.get("feed_build_script"),
+            base_dir,
+            defaults.feed_build_script,
+        ),
+        glossary=resolve_config_path(raw.get("glossary"), base_dir, defaults.glossary),
+        env_file=resolve_config_path(raw.get("env_file"), base_dir, defaults.env_file),
+        correct_prompt=resolve_config_path(
+            prompts.get("correct"),
+            base_dir,
+            defaults.correct_prompt,
+        ),
+        references_prompt=resolve_config_path(
+            prompts.get("references"),
+            base_dir,
+            defaults.references_prompt,
+        ),
+        episode_metadata_prompt=resolve_config_path(
+            prompts.get("episode_metadata"),
+            base_dir,
+            defaults.episode_metadata_prompt,
+        ),
+        qmd_index=str(qmd.get("index") or defaults.qmd_index),
+        qmd_collection=str(qmd.get("collection") or slug),
+        qmd_context=str(
+            qmd.get("context") or f"Timestamped {teacher} talk transcripts."
+        ),
+        image_style=str(raw.get("image_style") or defaults.image_style),
+        fallback_artwork_prompt=str(
+            raw.get("fallback_artwork_prompt") or defaults.fallback_artwork_prompt
+        ),
+        whisper_prompt=str(raw.get("whisper_prompt") or defaults.whisper_prompt),
+        user_agent=str(raw.get("user_agent") or f"{slug}-transcripts/0.1 (+{public_base_url})"),
+    )
+
+
+def resolve_config_path(value: object, base_dir: Path, default: Path) -> Path:
+    if value is None:
+        return default
+    path = Path(str(value))
+    if path.is_absolute():
+        return path
+    base_candidate = (base_dir / path).resolve()
+    if base_candidate.exists():
+        return base_candidate
+    return (SITE_ROOT / path).resolve()
+
+
+def set_current_corpus(corpus: CorpusConfig) -> None:
+    global CORPUS
+    CORPUS = corpus
+
+
 def url_basename(url: str) -> str:
     path = urllib.parse.urlparse(url).path
     name = Path(path).name
@@ -295,9 +440,7 @@ def download_audio(talk: Talk, paths: CorpusPaths, force: bool = False) -> Path:
     temp = dest.with_suffix(".download")
     req = urllib.request.Request(
         talk.audio_url,
-        headers={
-            "User-Agent": "brensilver-transcripts/0.1 (+https://jeffharr.is/brensilver/)"
-        },
+        headers={"User-Agent": CORPUS.user_agent},
     )
     with urllib.request.urlopen(req, timeout=120) as response:
         with temp.open("wb") as handle:
@@ -453,7 +596,7 @@ def multipart_request(
     fields: list[tuple[str, str]],
     files: list[tuple[str, Path, str]],
 ) -> dict[str, Any]:
-    boundary = f"----brensilver-{uuid.uuid4().hex}"
+    boundary = f"----{CORPUS.slug}-{uuid.uuid4().hex}"
     body = bytearray()
     for name, value in fields:
         body.extend(f"--{boundary}\r\n".encode())
@@ -526,9 +669,12 @@ def openai_json(req: urllib.request.Request, retries: int = 4) -> dict[str, Any]
 def build_whisper_prompt(talk: Talk, glossary: dict[str, Any]) -> str:
     terms = ", ".join(glossary.get("dharma_terms", [])[:40])
     people = ", ".join(glossary.get("people_and_places", [])[:30])
-    return (
-        f"Matthew Brensilver Dharma talk: {talk.title}. "
-        f"Use Buddhist terms and names accurately. Terms: {terms}. Names: {people}."
+    return CORPUS.whisper_prompt.format(
+        teacher=CORPUS.teacher,
+        speaker=talk.speaker or CORPUS.teacher,
+        title=talk.title,
+        terms=terms,
+        people=people,
     )
 
 
@@ -813,7 +959,7 @@ def correct_segments(
     if not segments:
         raise RuntimeError(f"No transcript segments found for {talk.id}")
 
-    system_prompt = DEFAULT_CORRECT_PROMPT.read_text(encoding="utf-8")
+    system_prompt = CORPUS.correct_prompt.read_text(encoding="utf-8")
     windows = split_windows(segments)
     corrected_by_id: dict[int, str] = {}
     annotations: dict[str, list[dict[str, Any]]] = {
@@ -923,7 +1069,7 @@ def extract_references(
     if not segments:
         raise RuntimeError(f"No corrected transcript segments found for {talk.id}")
 
-    system_prompt = DEFAULT_REFERENCES_PROMPT.read_text(encoding="utf-8")
+    system_prompt = CORPUS.references_prompt.read_text(encoding="utf-8")
     windows = split_windows(segments, max_chars=32000)
     collected: dict[str, list[dict[str, Any]]] = {
         "references": [],
@@ -1304,10 +1450,10 @@ def generate_episode_metadata(
     if not segments:
         raise RuntimeError(f"No corrected transcript found for {talk.id}")
     references_doc = load_json(paths.references(talk), {})
-    prompt = DEFAULT_EPISODE_METADATA_PROMPT.read_text(encoding="utf-8")
+    prompt = CORPUS.episode_metadata_prompt.read_text(encoding="utf-8")
     payload = {
         "talk": talk.__dict__,
-        "shared_image_style": DEFAULT_IMAGE_STYLE,
+        "shared_image_style": CORPUS.image_style,
         "segments": compact_segments_for_model(segments),
         "references": compact_references_for_model(references_doc.get("references", [])),
         "uncertain_terms": corrected.get("uncertain_terms", [])[:25],
@@ -1345,7 +1491,7 @@ def generate_episode_metadata(
             "model": model,
             "image_brief": result.get("image_brief"),
             "image_prompt": result.get("image_prompt"),
-            "style": DEFAULT_IMAGE_STYLE,
+            "style": CORPUS.image_style,
         },
     )
     return result
@@ -1417,7 +1563,7 @@ def normalize_episode_metadata(
     image_brief = normalize_optional(raw.get("image_brief")) or short_summary
     image_prompt = normalize_optional(raw.get("image_prompt")) or image_brief
     if "no text" not in image_prompt.lower():
-        image_prompt = f"{image_prompt}\n\nShared style: {DEFAULT_IMAGE_STYLE}"
+        image_prompt = f"{image_prompt}\n\nShared style: {CORPUS.image_style}"
     source_caveats = [
         normalize_text(clean_space(str(item)))
         for item in raw.get("source_caveats", [])
@@ -1576,15 +1722,7 @@ def generate_artwork(
 
 
 def safe_artwork_fallback_prompt() -> str:
-    return (
-        "Square editorial illustration for a contemplative Dharma podcast. "
-        "A quiet open gate at the edge of a meadow at dawn, with a simple winding path, "
-        "scattered leaves, and a clear spacious sky. The image should evoke trust, release, "
-        "and calm awareness through natural forms only. Soft paper texture, restrained "
-        "palette of moss green, warm ochre, charcoal, muted blue, and bone white. "
-        "No text, no logos, no portrait, no ornate religious iconography. "
-        "Clear at small podcast thumbnail size."
-    )
+    return CORPUS.fallback_artwork_prompt
 
 
 def is_image_safety_error(message: str) -> bool:
@@ -1703,7 +1841,7 @@ def annotation_line(key: str, value: dict[str, Any]) -> str:
 
 
 def segment_link(talk: Talk, seconds: float) -> str:
-    return f"https://jeffharr.is/brensilver/talks/{talk.safe_id}/?t={int(seconds)}"
+    return f"{CORPUS.public_base_url.rstrip('/')}/talks/{talk.safe_id}/?t={int(seconds)}"
 
 
 def write_markdown(
@@ -1724,7 +1862,7 @@ def write_markdown(
         f"talk_id: {yaml_scalar(talk.id)}",
         f"source: {yaml_scalar(talk.source)}",
         f"source_id: {yaml_scalar(talk.source_id)}",
-        f"teacher: {yaml_scalar('Matthew Brensilver')}",
+        f"teacher: {yaml_scalar(CORPUS.teacher)}",
         f"speaker: {yaml_scalar(talk.speaker)}",
         f"title: {yaml_scalar(talk.title)}",
         f"published_at: {yaml_scalar(talk.published_at)}",
@@ -1980,6 +2118,8 @@ def select_enrichment_talks(
     force: bool,
     skip_artwork: bool = False,
 ) -> list[Talk]:
+    if limit is not None and limit <= 0:
+        return []
     selected: list[Talk] = []
     for talk in talks.values():
         if force or not talk_is_enriched(talk, paths, skip_artwork=skip_artwork):
@@ -1992,7 +2132,7 @@ def select_enrichment_talks(
 def rebuild_public_feed(talks_json: Path, media_base_url: str, copy_artwork: bool) -> None:
     command = [
         sys.executable,
-        str(SITE_ROOT / "scripts" / "build-brensilver-feed.py"),
+        str(CORPUS.feed_build_script),
         "--talks-json",
         str(talks_json),
         "--media-base-url",
@@ -2041,7 +2181,6 @@ def run_corpus_command(
     require_executable("ffprobe")
     if args.update_qmd:
         require_executable("qmd")
-    api_key = require_openai_key()
     state = PipelineState(paths.state_path)
     selected = select_enrichment_talks(
         talks,
@@ -2059,6 +2198,7 @@ def run_corpus_command(
         )
         return 0
 
+    api_key = require_openai_key()
     feed_every = max(1, int(args.feed_every or 20))
     processed_since_feed = 0
     processed: list[Talk] = []
@@ -2247,18 +2387,27 @@ def run_qmd(paths: CorpusPaths) -> None:
     markdown_dir = paths.markdown_dir
     markdown_dir.mkdir(parents=True, exist_ok=True)
     commands = [
-        ["qmd", "--index", "dharma", "collection", "add", str(markdown_dir), "--name", "brensilver"],
         [
             "qmd",
             "--index",
-            "dharma",
+            CORPUS.qmd_index,
+            "collection",
+            "add",
+            str(markdown_dir),
+            "--name",
+            CORPUS.qmd_collection,
+        ],
+        [
+            "qmd",
+            "--index",
+            CORPUS.qmd_index,
             "context",
             "add",
-            "qmd://brensilver",
-            "Timestamped Matthew Brensilver Dharma talk transcripts.",
+            f"qmd://{CORPUS.qmd_collection}",
+            CORPUS.qmd_context,
         ],
-        ["qmd", "--index", "dharma", "update"],
-        ["qmd", "--index", "dharma", "embed"],
+        ["qmd", "--index", CORPUS.qmd_index, "update"],
+        ["qmd", "--index", CORPUS.qmd_index, "embed"],
     ]
     for command in commands:
         print(" ".join(command))
@@ -3572,7 +3721,7 @@ def build_feedback_viewer_html(data: dict[str, Any]) -> str:
     const statusButtons = document.getElementById('statusButtons');
     const note = document.getElementById('note');
     const exportButton = document.getElementById('exportButton');
-    const feedbackKey = 'brensilver-review-feedback-v1';
+    const feedbackKey = '__FEEDBACK_KEY__';
     const feedback = JSON.parse(localStorage.getItem(feedbackKey) || '{}');
     const statuses = [
       ['ok', 'OK'],
@@ -3719,7 +3868,7 @@ def build_feedback_viewer_html(data: dict[str, Any]) -> str:
       const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
-      link.download = 'brensilver-feedback.json';
+      link.download = '__FEEDBACK_EXPORT__';
       link.click();
       URL.revokeObjectURL(url);
     });
@@ -3750,11 +3899,34 @@ def build_feedback_viewer_html(data: dict[str, Any]) -> str:
 </body>
 </html>
 """
-    return html.replace("__DATA__", data_json)
+    return (
+        html.replace("__DATA__", data_json)
+        .replace("__FEEDBACK_KEY__", f"{CORPUS.slug}-review-feedback-v1")
+        .replace("__FEEDBACK_EXPORT__", f"{CORPUS.slug}-feedback.json")
+    )
+
+
+def apply_corpus_defaults(args: argparse.Namespace, corpus: CorpusConfig) -> None:
+    if not args.corpus_config:
+        return
+    if args.talks_json == DEFAULT_TALKS_JSON:
+        args.talks_json = corpus.talks_json
+    if args.corpus_dir == DEFAULT_CORPUS_DIR:
+        args.corpus_dir = corpus.corpus_dir
+    if args.glossary == DEFAULT_GLOSSARY:
+        args.glossary = corpus.glossary
+    if args.env_file == DEFAULT_ENV_FILE:
+        args.env_file = corpus.env_file
+    if (
+        hasattr(args, "media_base_url")
+        and args.media_base_url == DEFAULT_FEED_MEDIA_BASE_URL
+    ):
+        args.media_base_url = corpus.feed_media_base_url
 
 
 def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(description="Brensilver local transcript pipeline")
+    parser = argparse.ArgumentParser(description="Local transcript pipeline for configured audio corpora")
+    parser.add_argument("--corpus-config", type=Path)
     parser.add_argument("--talks-json", type=Path, default=DEFAULT_TALKS_JSON)
     parser.add_argument("--corpus-dir", type=Path, default=DEFAULT_CORPUS_DIR)
     parser.add_argument("--glossary", type=Path, default=DEFAULT_GLOSSARY)
@@ -3848,7 +4020,7 @@ def build_parser() -> argparse.ArgumentParser:
     feedback_viewer = subparsers.add_parser("build-feedback-viewer", help="Build local feedback review viewer")
     feedback_viewer.add_argument("--config", type=Path)
 
-    subparsers.add_parser("setup-qmd", help="Configure and refresh QMD dharma/brensilver")
+    subparsers.add_parser("setup-qmd", help="Configure and refresh the configured QMD collection")
 
     review = subparsers.add_parser("review", help="Review pilot artifacts")
     review.add_argument("--config", type=Path, default=DEFAULT_PILOT_CONFIG)
@@ -3862,6 +4034,9 @@ def main(argv: list[str] | None = None) -> int:
     except AttributeError:
         pass
     args = build_parser().parse_args(argv)
+    corpus = load_corpus_config(args.corpus_config)
+    set_current_corpus(corpus)
+    apply_corpus_defaults(args, corpus)
     load_env_file(args.env_file)
     paths = CorpusPaths(args.corpus_dir.resolve())
     glossary = load_json(args.glossary, {})

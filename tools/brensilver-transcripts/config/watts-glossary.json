@@ -1,0 +1,50 @@
+{
+  "dharma_terms": [
+    "Zen",
+    "Tao",
+    "Dao",
+    "Taoism",
+    "Buddhism",
+    "Mahayana",
+    "Vedanta",
+    "Upanishads",
+    "Brahman",
+    "Atman",
+    "maya",
+    "nirvana",
+    "satori",
+    "koan",
+    "zazen",
+    "wu wei",
+    "Dharma",
+    "karma",
+    "yoga",
+    "meditation"
+  ],
+  "people_and_places": [
+    "Alan Watts",
+    "KPFA",
+    "San Francisco",
+    "Aldous Huxley",
+    "C. G. Jung",
+    "D. T. Suzuki",
+    "Lao Tzu",
+    "Chuang Tzu",
+    "Buddha",
+    "Sokei-an Sasaki",
+    "Chang Chung-yuan",
+    "Christianity",
+    "Eastern Orthodox Christianity",
+    "Beat Generation"
+  ],
+  "normalizations": {
+    "dow": "Tao when the context is Taoism; otherwise leave as dow",
+    "dao": "Tao unless the speaker clearly uses Dao",
+    "woo way": "wu wei",
+    "satori": "satori",
+    "D.T. Suzuki": "D. T. Suzuki",
+    "CG Jung": "C. G. Jung",
+    "Chang Chang-Yuan": "Chang Chung-yuan",
+    "Sokei Ah-Sasaki": "Sokei-an Sasaki"
+  }
+}

@@ -19,6 +19,7 @@ from brensilver.rss import build_rss
 from brensilver.rss import merge_talks
 from brensilver.sources.audiodharma import parse_audiodharma_listing
 from brensilver.sources.dharmaseed import parse_dharmaseed_feed, parse_dharmaseed_player
+from brensilver.sources.podcast_rss import parse_podcast_rss_feed
 
 
 class SourceParsingTests(unittest.TestCase):
@@ -168,6 +169,44 @@ class SourceParsingTests(unittest.TestCase):
         data = talk.to_json_dict()
         self.assertEqual(data["transcript"]["status"], "pending")
         json.dumps(data)
+
+    def test_podcast_rss_parser_extracts_and_cleans_archive_titles(self):
+        xml = """<?xml version="1.0" encoding="utf-8"?>
+        <rss version="2.0" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd">
+          <channel>
+            <itunes:image href="https://example.test/show.jpg" />
+            <item>
+              <title>BB0527_01 Intro to Way Beyond the West</title>
+              <link>https://drive.google.com/uc?export=download&amp;id=abc123</link>
+              <pubDate>Fri, 06 Nov 1959 00:00:00 GMT</pubDate>
+              <description>Intro to Way Beyond the West</description>
+              <enclosure url="https://drive.google.com/uc?export=download&amp;id=abc123" length="28495314" type="audio/mpeg" />
+              <guid>https://drive.google.com/uc?export=download&amp;id=abc123</guid>
+              <itunes:duration>29:40</itunes:duration>
+            </item>
+          </channel>
+        </rss>
+        """
+        [talk] = list(
+            parse_podcast_rss_feed(
+                xml,
+                {
+                    "name": "KPFA Archive",
+                    "id_prefix": "watts",
+                    "speaker": "Alan Watts",
+                    "archive_id_regex": r"^([A-Z]{2}\d{4}[A-Za-z]?(?:_\d+)?)\s+",
+                    "strip_title_prefix": True,
+                },
+            )
+        )
+
+        self.assertEqual(talk.id, "watts:bb0527-01")
+        self.assertEqual(talk.title, "Intro to Way Beyond the West")
+        self.assertEqual(talk.speaker, "Alan Watts")
+        self.assertEqual(talk.source, "KPFA Archive")
+        self.assertEqual(talk.duration, "29:40")
+        self.assertEqual(talk.published_at.date().isoformat(), "1959-11-06")
+        self.assertEqual(talk.image_url, "https://example.test/show.jpg")
 
 
 class MergeTests(unittest.TestCase):

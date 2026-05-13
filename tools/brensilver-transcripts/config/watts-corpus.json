@@ -1,0 +1,26 @@
+{
+  "slug": "watts",
+  "title": "Alan Watts",
+  "teacher": "Alan Watts",
+  "public_base_url": "https://jeffharr.is/watts/",
+  "talks_json": "watts/talks.json",
+  "corpus_dir": ".local-corpus/watts",
+  "feed_media_base_url": "https://jeffharr.is/watts/",
+  "feed_build_script": "scripts/build-watts-feed.py",
+  "glossary": "tools/brensilver-transcripts/config/watts-glossary.json",
+  "env_file": ".env.local",
+  "prompts": {
+    "correct": "tools/brensilver-transcripts/prompts/watts_correct_transcript.md",
+    "references": "tools/brensilver-transcripts/prompts/watts_extract_references.md",
+    "episode_metadata": "tools/brensilver-transcripts/prompts/watts_episode_metadata.md"
+  },
+  "qmd": {
+    "index": "dharma",
+    "collection": "watts",
+    "context": "Timestamped Alan Watts talk transcripts."
+  },
+  "image_style": "Square zen modernist editorial illustration for an Alan Watts podcast episode. Sparse ink-wash composition on warm off-white paper, disciplined geometry, open negative space, subtle mid-century book-cover sensibility, indigo black and a single vermilion accent with occasional muted jade. Use simple symbolic imagery drawn from the episode topic. No text, no logos, no literal portrait, no ornate religious iconography. Clear at small podcast thumbnail size.",
+  "fallback_artwork_prompt": "Square zen modernist editorial illustration for an Alan Watts podcast episode. A spare ink circle hovering above a calm waterline, one vermilion sun mark, and a few disciplined brush textures on warm off-white paper. The image should feel lucid, philosophical, and quiet. No text, no logos, no portrait, no ornate religious iconography. Clear at small podcast thumbnail size.",
+  "whisper_prompt": "{teacher} talk: {title}. Use philosophical, religious, and proper names accurately. Terms: {terms}. Names: {people}.",
+  "user_agent": "watts-transcripts/0.1 (+https://jeffharr.is/watts/)"
+}

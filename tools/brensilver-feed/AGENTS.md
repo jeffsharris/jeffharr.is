@@ -1,8 +1,8 @@
 # Brensilver Feed Agent Notes
 
-This directory is the implementation for the public Matthew Brensilver podcast
-feeds. The deployed/generated artifacts live outside this tool at
-`/brensilver/`.
+This directory is the implementation for configured public podcast feeds. The
+original Matthew Brensilver artifacts live at `/brensilver/`; Alan Watts
+artifacts live at `/watts/`.
 
 For the whole content system, including local ingestion, QMD, recurring
 automation, private Dharma Seed keys, and adding another teacher, read
@@ -16,6 +16,8 @@ automation, private Dharma Seed keys, and adding another teacher, read
   `/brensilver/talks/*/index.html`; regenerate them.
 - The repo-root wrapper is `scripts/build-brensilver-feed.py`. It supplies this
   tool's config and output path.
+- The Watts wrapper is `scripts/build-watts-feed.py`. It supplies
+  `config/watts.json`, writes `/watts/`, and seeds from `/watts/talks.json`.
 - The wrapper also seeds from existing `/brensilver/talks.json` so old archived
   talks survive when an upstream feed stops listing them.
 
@@ -30,6 +32,9 @@ automation, private Dharma Seed keys, and adding another teacher, read
   private access through `access_key_env`; never hard-code the key in source
   config. Generated RSS/audio URLs will contain the key for podcast clients.
 - `audiodharma` scrapes the speaker page and can optionally probe audio lengths.
+- `podcast_rss` parses a normal podcast RSS feed. It supports local `feed_path`
+  sources such as the legacy `watts.xml`, archive-prefix title stripping, and
+  exact title replacements for old-feed typo cleanup.
 - `merge_talks` dedupes by exact ID first, then by normalized date/title.
   Dharma Seed is preferred over AudioDharma when both sources expose the same
   recording.

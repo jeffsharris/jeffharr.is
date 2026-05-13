@@ -6,6 +6,10 @@ cd "$ROOT"
 
 mkdir -p .local-corpus/brensilver/logs
 
+timestamp() {
+  date -u +"%Y-%m-%dT%H:%M:%SZ"
+}
+
 if [[ -f "$HOME/.zshrc" ]]; then
   set +u
   source "$HOME/.zshrc"
@@ -38,12 +42,14 @@ if [[ "$BRENSILVER_AUTO_PUBLISH" == "1" ]]; then
   git pull --ff-only origin "$branch"
 fi
 
-echo "[$(date -Is)] Refreshing Brensilver source feeds"
+echo "[$(timestamp)] Refreshing Brensilver source feeds"
 python3 scripts/build-brensilver-feed.py --copy-artwork
 
-echo "[$(date -Is)] Running local transcript/artwork ingestion"
+echo "[$(timestamp)] Running local transcript/artwork ingestion"
 PYTHONPATH=tools/brensilver-transcripts/src \
-  python3 -m brensilver_transcripts.pipeline run-corpus \
+  python3 -m brensilver_transcripts.pipeline \
+  --corpus-config tools/brensilver-transcripts/config/brensilver-corpus.json \
+  run-corpus \
   --limit "$BRENSILVER_INGEST_LIMIT" \
   --feed-every "$BRENSILVER_FEED_EVERY" \
   --media-base-url "$BRENSILVER_MEDIA_BASE_URL" \
@@ -52,7 +58,7 @@ PYTHONPATH=tools/brensilver-transcripts/src \
   --build-feedback-viewer
 
 if [[ "$BRENSILVER_AUTO_PUBLISH" == "1" ]]; then
-  echo "[$(date -Is)] Publishing generated Brensilver artifacts"
+  echo "[$(timestamp)] Publishing generated Brensilver artifacts"
   git add brensilver
   if git diff --cached --quiet -- brensilver; then
     echo "No Brensilver generated artifact changes to publish."
@@ -65,4 +71,4 @@ if [[ "$BRENSILVER_AUTO_PUBLISH" == "1" ]]; then
   fi
 fi
 
-echo "[$(date -Is)] Brensilver ingestion complete"
+echo "[$(timestamp)] Brensilver ingestion complete"

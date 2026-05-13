@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Alan Watts</title>
+  <link rel="alternate" type="application/rss+xml" title="Alan Watts" href="feed.xml">
+  <style>
+    :root {
+      color-scheme: light dark;
+      --bg: #f8f7f3;
+      --ink: #1f2933;
+      --muted: #52616b;
+      --line: #d8d2c4;
+      --accent: #226f63;
+      --accent-strong: #174f47;
+      --rust: #a15c38;
+      --gold: #b28a31;
+      --blue: #3d6c93;
+      --panel: #ffffff;
+      --shadow: rgba(31, 41, 51, 0.12);
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #111816;
+        --ink: #eef2ed;
+        --muted: #b2beb6;
+        --line: #39443f;
+        --accent: #79b7aa;
+        --accent-strong: #9fd7cc;
+        --rust: #d38a67;
+        --gold: #dfbd64;
+        --blue: #8ab5da;
+        --panel: #18211e;
+        --shadow: rgba(0, 0, 0, 0.32);
+      }
+    }
+    body {
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.5;
+    }
+    .page-shell {
+      min-height: 100vh;
+    }
+    main {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 56px 22px 72px;
+    }
+    h1 {
+      margin: 0;
+      font-size: clamp(2.7rem, 8vw, 5.6rem);
+      line-height: 0.95;
+      letter-spacing: 0;
+    }
+    h2 {
+      font-size: clamp(1.55rem, 3vw, 2.25rem);
+      line-height: 1.1;
+      letter-spacing: 0;
+      margin: 0 0 8px;
+    }
+    p {
+      color: var(--muted);
+      font-size: 1.05rem;
+    }
+    a {
+      color: var(--accent);
+      font-weight: 700;
+    }
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(180px, 280px);
+      gap: 34px;
+      align-items: center;
+      padding-bottom: 42px;
+    }
+    .portrait {
+      justify-self: end;
+      width: 100%;
+      max-width: 280px;
+      aspect-ratio: 1;
+      object-fit: cover;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      box-shadow: 0 18px 48px var(--shadow);
+    }
+    .subscribe {
+      border-top: 1px solid var(--line);
+      padding-top: 30px;
+    }
+    .feed-switch {
+      display: inline-grid;
+      grid-template-columns: repeat(2, minmax(150px, 1fr));
+      gap: 6px;
+      padding: 6px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: color-mix(in srgb, var(--panel) 72%, var(--bg));
+      margin-bottom: 24px;
+    }
+    .feed-tab {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 10px;
+      min-height: 46px;
+      padding: 0 12px;
+      border: 0;
+      border-radius: 6px;
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      font: inherit;
+      font-weight: 800;
+      text-align: left;
+    }
+    .feed-tab strong {
+      color: inherit;
+      font-size: 0.95rem;
+    }
+    .feed-tab.is-active {
+      background: var(--accent-strong);
+      color: #ffffff;
+      box-shadow: 0 8px 22px var(--shadow);
+    }
+    .feed-panel[hidden] {
+      display: none;
+    }
+    .feed-panel {
+      max-width: 760px;
+    }
+    .feed-count {
+      margin: 0 0 18px;
+      color: var(--muted);
+      font-weight: 700;
+    }
+    .subscribe-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(150px, 1fr));
+      gap: 12px;
+      margin: 20px 0 14px;
+    }
+    .player-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-height: 52px;
+      padding: 0 14px;
+      border: 0;
+      border-radius: 6px;
+      background: var(--accent-strong);
+      color: #ffffff;
+      cursor: pointer;
+      font: inherit;
+      font-size: 0.96rem;
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .player-button img {
+      width: 22px;
+      height: 22px;
+      flex: 0 0 auto;
+    }
+    .player-button.copy { background: var(--blue); }
+    .player-button.rss { background: var(--rust); }
+    .copy-status {
+      min-height: 1.4em;
+      margin: 8px 0 0;
+      color: var(--accent);
+      font-size: 0.95rem;
+      font-weight: 700;
+    }
+    .feed-url {
+      display: block;
+      max-width: 100%;
+      padding: 12px 14px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: color-mix(in srgb, var(--panel) 82%, var(--bg));
+      overflow-wrap: anywhere;
+    }
+    code {
+      overflow-wrap: anywhere;
+    }
+    @media (max-width: 880px) {
+      .hero { grid-template-columns: 1fr; gap: 26px; }
+      .portrait { justify-self: start; max-width: 240px; }
+      .subscribe-grid { grid-template-columns: repeat(2, minmax(140px, 1fr)); }
+    }
+    @media (max-width: 520px) {
+      main { padding: 34px 18px 56px; }
+      .feed-switch { display: grid; grid-template-columns: 1fr; width: 100%; }
+      .subscribe-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-shell">
+  <main>
+    <section class="hero" aria-labelledby="page-title">
+      <div>
+        <h1 id="page-title">Alan Watts</h1>
+      </div>
+      <img class="portrait" src="/watts/artwork/alan-watts-podcast-cover.jpg" alt="Alan Watts">
+    </section>
+    <section class="subscribe">
+
+      <div class="feed-panel" id="panel-main" data-feed-panel="main">
+        <h2>Alan Watts talks</h2>
+        <p class="feed-count">50 episodes</p>
+        <div class="subscribe-grid">
+          <a class="player-button overcast" href="overcast://x-callback-url/add?url=https%3A%2F%2Fjeffharr.is%2Fwatts%2Ffeed.xml">
+            <img src="https://cdn.simpleicons.org/overcast/FFFFFF?viewbox=auto" alt="">
+            <span>Add to Overcast</span>
+          </a>
+          <button class="player-button copy" type="button" data-copy-feed="main">
+            <span>Copy RSS URL</span>
+          </button>
+          <a class="player-button rss" href="feed.xml">
+            <img src="https://cdn.simpleicons.org/rss/FFFFFF?viewbox=auto" alt="">
+            <span>Open RSS</span>
+          </a>
+        </div>
+        <code class="feed-url">https://jeffharr.is/watts/feed.xml</code>
+      </div>
+
+      <p id="copy-status" class="copy-status" aria-live="polite"></p>
+    </section>
+  </main>
+  </div>
+  <script>
+    const feedUrls = {"main": "https://jeffharr.is/watts/feed.xml"};
+    const status = document.getElementById('copy-status');
+    function selectFeed(key) {
+      document.querySelectorAll('[data-feed-panel]').forEach(panel => {
+        panel.hidden = panel.dataset.feedPanel !== key;
+      });
+      document.querySelectorAll('[data-feed-tab]').forEach(tab => {
+        const selected = tab.dataset.feedTab === key;
+        tab.classList.toggle('is-active', selected);
+        tab.setAttribute('aria-selected', String(selected));
+      });
+      status.textContent = '';
+    }
+    async function copyFeedUrl(key) {
+      const feedUrl = feedUrls[key] || feedUrls.dharma || feedUrls.main;
+      try {
+        await navigator.clipboard.writeText(feedUrl);
+        status.textContent = 'RSS URL copied.';
+      } catch (error) {
+        status.textContent = feedUrl;
+      }
+    }
+    document.querySelectorAll('[data-copy-feed]').forEach(button => {
+      button.addEventListener('click', () => copyFeedUrl(button.dataset.copyFeed));
+    });
+    document.querySelectorAll('[data-feed-tab]').forEach(button => {
+      button.addEventListener('click', () => selectFeed(button.dataset.feedTab));
+    });
+  </script>
+</body>
+</html>

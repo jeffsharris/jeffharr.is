@@ -1,0 +1,47 @@
+{
+  "site": {
+    "title": "Alan Watts",
+    "base_url": "https://jeffharr.is/watts/",
+    "feed_url": "https://jeffharr.is/watts/feed.xml",
+    "author": "Alan Watts",
+    "description": "A growing archive of Alan Watts talks, enriched with transcript-derived summaries, chapters, and episode artwork.",
+    "language": "en",
+    "image_url": "https://jeffharr.is/watts/artwork/alan-watts-podcast-cover.jpg",
+    "feed_label": "Alan Watts talks",
+    "feed_description": "The feed includes all currently indexed Alan Watts audio sources.",
+    "category": "Religion & Spirituality",
+    "subcategory": "Spirituality"
+  },
+  "sources": [
+    {
+      "type": "podcast_rss",
+      "name": "KPFA Archive",
+      "id_prefix": "watts",
+      "speaker": "Alan Watts",
+      "feed_path": "watts.xml",
+      "archive_id_regex": "^([A-Z]{2}\\d{4}[A-Za-z]?(?:_\\d+)?)\\s+",
+      "strip_title_prefix": true,
+      "title_replacements": {
+        "A Problem Of Strategy": "A Problem of Strategy",
+        "Eastern Orthodox Spirittuality": "Eastern Orthodox Spirituality",
+        "Fundamentals Of Eastern Philosophy": "Fundamentals of Eastern Philosophy",
+        "Interview with Dr Chang Chang-Yuan": "Interview with Dr. Chang Chung-yuan",
+        "Karma, Law Of Retribution": "Karma, Law of Retribution",
+        "Levels Of Magnification": "Levels of Magnification",
+        "Love Of Waters": "Love of Waters",
+        "Parallel Thoughts East and West": "Parallel Thoughts, East and West",
+        "Paul Tillich On The Eternal Now": "Paul Tillich on The Eternal Now",
+        "The Bhagavad-Gita, The Song of the Lord": "The Bhagavad Gita: The Song of the Lord",
+        "The Constitution Of Nature": "The Constitution of Nature",
+        "The Study Of Asia": "The Study of Asia",
+        "The Useless In Art": "The Useless in Art",
+        "The Work of Sokei Ah-Sasaki": "The Work of Sokei-an Sasaki",
+        "Tribute to C G Jung": "Tribute to C. G. Jung",
+        "Varities Of Order": "Varieties of Order"
+      }
+    }
+  ],
+  "feed": {
+    "max_items": 1000
+  }
+}
