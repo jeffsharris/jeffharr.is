@@ -1,0 +1,1391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Poem Image Prompt Review</title>
+  <style>
+    :root {
+      --bg: #f7f3ec;
+      --panel: #fffdf8;
+      --panel-strong: #ffffff;
+      --ink: #26231f;
+      --muted: #6f6961;
+      --faint: #958c81;
+      --line: rgba(54, 45, 35, 0.14);
+      --line-strong: rgba(54, 45, 35, 0.28);
+      --green: #516f5f;
+      --green-soft: #e8f0e8;
+      --copper: #a45f37;
+      --copper-soft: #f5e5da;
+      --blue: #3e6578;
+      --blue-soft: #e2ecf1;
+      --red: #9f4c46;
+      --red-soft: #f5dedb;
+      --yellow: #8c6d2d;
+      --yellow-soft: #f6edcf;
+      --shadow: 0 16px 44px rgba(50, 42, 32, 0.08);
+      --font-sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --font-serif: Georgia, "Times New Roman", serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      min-height: 100%;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--font-sans);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      min-height: 100%;
+      margin: 0;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0) 260px),
+        var(--bg);
+    }
+
+    button,
+    input,
+    textarea {
+      font: inherit;
+    }
+
+    button {
+      border: 0;
+    }
+
+    .shell {
+      width: min(1480px, calc(100% - 40px));
+      margin: 0 auto;
+      padding: 28px 0 56px;
+    }
+
+    .topbar {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 20px;
+      align-items: start;
+      margin-bottom: 22px;
+    }
+
+    .eyebrow {
+      margin: 0 0 8px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      font-family: var(--font-serif);
+      font-size: clamp(34px, 4vw, 58px);
+      font-weight: 500;
+      line-height: 1;
+      letter-spacing: 0;
+    }
+
+    .subhead {
+      max-width: 780px;
+      margin: 12px 0 0;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.55;
+    }
+
+    .top-actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    .button {
+      min-height: 38px;
+      padding: 0 14px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel-strong);
+      color: var(--ink);
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 700;
+      transition: border-color 0.18s ease, background 0.18s ease, color 0.18s ease, transform 0.18s ease;
+    }
+
+    .button:hover {
+      border-color: var(--line-strong);
+      background: #fdf8ef;
+      transform: translateY(-1px);
+    }
+
+    .button--primary {
+      border-color: transparent;
+      background: var(--ink);
+      color: white;
+    }
+
+    .button--primary:hover {
+      border-color: transparent;
+      background: #3c352f;
+    }
+
+    .button--danger {
+      color: var(--red);
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 304px minmax(0, 1fr);
+      gap: 22px;
+      align-items: start;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 16px;
+      display: grid;
+      gap: 14px;
+    }
+
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255, 253, 248, 0.82);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(16px);
+    }
+
+    .panel__section {
+      padding: 16px;
+      border-top: 1px solid var(--line);
+    }
+
+    .panel__section:first-child {
+      border-top: 0;
+    }
+
+    .section-title {
+      margin: 0 0 12px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .stat {
+      min-height: 76px;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel-strong);
+    }
+
+    .stat__number {
+      display: block;
+      font-family: var(--font-serif);
+      font-size: 30px;
+      line-height: 1;
+    }
+
+    .stat__label {
+      display: block;
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .filter-stack {
+      display: grid;
+      gap: 8px;
+    }
+
+    .status-filter,
+    .collection-filter {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      align-items: center;
+      min-height: 38px;
+      padding: 0 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel-strong);
+      color: var(--ink);
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 700;
+      text-align: left;
+      transition: border-color 0.18s ease, background 0.18s ease;
+    }
+
+    .status-filter:hover,
+    .collection-filter:hover,
+    .status-filter.is-active,
+    .collection-filter.is-active {
+      border-color: var(--line-strong);
+      background: #fdf8ef;
+    }
+
+    .count-pill {
+      min-width: 26px;
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: rgba(38, 35, 31, 0.08);
+      color: var(--muted);
+      font-size: 12px;
+      text-align: center;
+    }
+
+    .search-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto auto;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .search-input {
+      width: 100%;
+      min-height: 42px;
+      padding: 0 14px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel-strong);
+      color: var(--ink);
+      outline: none;
+      transition: border-color 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    .search-input:focus {
+      border-color: var(--green);
+      box-shadow: 0 0 0 4px rgba(81, 111, 95, 0.14);
+    }
+
+    .view-meta {
+      display: flex;
+      align-items: center;
+      min-height: 42px;
+      padding: 0 14px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255, 253, 248, 0.76);
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .prompt-list {
+      display: grid;
+      gap: 16px;
+    }
+
+    .prompt-card {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-left: 5px solid var(--line-strong);
+      border-radius: 8px;
+      background: var(--panel);
+      box-shadow: var(--shadow);
+    }
+
+    .prompt-card[data-status="good"] {
+      border-left-color: var(--green);
+    }
+
+    .prompt-card[data-status="generate"] {
+      border-left-color: var(--blue);
+    }
+
+    .prompt-card[data-status="revise"] {
+      border-left-color: var(--yellow);
+    }
+
+    .prompt-card[data-status="reject"] {
+      border-left-color: var(--red);
+    }
+
+    .card-head {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 16px;
+      padding: 18px 18px 14px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .card-title {
+      margin: 0;
+      font-family: var(--font-serif);
+      font-size: clamp(24px, 2.1vw, 34px);
+      font-weight: 500;
+      line-height: 1.12;
+    }
+
+    .card-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .meta-chip {
+      display: inline-flex;
+      align-items: center;
+      min-height: 24px;
+      padding: 0 8px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.56);
+      color: var(--muted);
+    }
+
+    .status-buttons {
+      display: grid;
+      grid-template-columns: repeat(5, auto);
+      gap: 6px;
+      align-content: start;
+    }
+
+    .status-button {
+      min-height: 34px;
+      padding: 0 10px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--panel-strong);
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 800;
+      transition: background 0.18s ease, border-color 0.18s ease, color 0.18s ease;
+    }
+
+    .status-button:hover {
+      border-color: var(--line-strong);
+      color: var(--ink);
+    }
+
+    .status-button.is-active[data-status="review"] {
+      background: rgba(38, 35, 31, 0.08);
+      color: var(--ink);
+    }
+
+    .status-button.is-active[data-status="good"] {
+      border-color: transparent;
+      background: var(--green-soft);
+      color: var(--green);
+    }
+
+    .status-button.is-active[data-status="generate"] {
+      border-color: transparent;
+      background: var(--blue-soft);
+      color: var(--blue);
+    }
+
+    .status-button.is-active[data-status="revise"] {
+      border-color: transparent;
+      background: var(--yellow-soft);
+      color: var(--yellow);
+    }
+
+    .status-button.is-active[data-status="reject"] {
+      border-color: transparent;
+      background: var(--red-soft);
+      color: var(--red);
+    }
+
+    .card-body {
+      display: grid;
+      grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.4fr);
+      gap: 18px;
+      padding: 18px;
+    }
+
+    .moment-box,
+    .prompt-box,
+    .feedback-box {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.58);
+    }
+
+    .moment-box {
+      padding: 14px;
+    }
+
+    .box-label {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .moment-text {
+      margin: 0;
+      font-family: var(--font-serif);
+      font-size: 19px;
+      line-height: 1.5;
+    }
+
+    .style-block {
+      display: grid;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .style-chip,
+    .guardrail-chip {
+      display: block;
+      padding: 10px 11px;
+      border-radius: 8px;
+      color: var(--ink);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .style-chip {
+      background: var(--blue-soft);
+    }
+
+    .guardrail-chip {
+      background: var(--copper-soft);
+    }
+
+    .prompt-column {
+      display: grid;
+      gap: 12px;
+    }
+
+    .prompt-box,
+    .feedback-box {
+      padding: 12px;
+    }
+
+    textarea {
+      display: block;
+      width: 100%;
+      min-height: 156px;
+      resize: vertical;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel-strong);
+      color: var(--ink);
+      outline: none;
+      padding: 12px;
+      font-size: 14px;
+      line-height: 1.55;
+      transition: border-color 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    textarea:focus {
+      border-color: var(--green);
+      box-shadow: 0 0 0 4px rgba(81, 111, 95, 0.14);
+    }
+
+    .feedback-textarea {
+      min-height: 92px;
+    }
+
+    .card-actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 8px;
+      align-items: center;
+      padding: 0 18px 18px;
+    }
+
+    .modified {
+      display: none;
+      color: var(--copper);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .prompt-card.is-modified .modified {
+      display: inline-flex;
+    }
+
+    .small-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .small-button {
+      min-height: 32px;
+      padding: 0 10px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.62);
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .small-button:hover {
+      border-color: var(--line-strong);
+      color: var(--ink);
+      background: var(--panel-strong);
+    }
+
+    .empty-state,
+    .error-state {
+      padding: 28px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+      box-shadow: var(--shadow);
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .error-state strong {
+      color: var(--red);
+    }
+
+    .toast {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      z-index: 10;
+      max-width: min(360px, calc(100% - 36px));
+      padding: 12px 14px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--ink);
+      color: white;
+      box-shadow: var(--shadow);
+      font-size: 13px;
+      font-weight: 700;
+      opacity: 0;
+      transform: translateY(8px);
+      pointer-events: none;
+      transition: opacity 0.18s ease, transform 0.18s ease;
+    }
+
+    .toast.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    @media (max-width: 1120px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        position: static;
+      }
+
+      .stats-grid {
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+      }
+
+      .filter-stack {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 820px) {
+      .shell {
+        width: min(100% - 24px, 1480px);
+        padding-top: 18px;
+      }
+
+      .topbar,
+      .card-head,
+      .card-body {
+        grid-template-columns: 1fr;
+      }
+
+      .top-actions {
+        justify-content: flex-start;
+      }
+
+      .search-row {
+        grid-template-columns: 1fr;
+      }
+
+      .status-buttons {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .stats-grid,
+      .filter-stack {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 520px) {
+      .stats-grid,
+      .filter-stack,
+      .status-buttons {
+        grid-template-columns: 1fr;
+      }
+
+      .button,
+      .small-button,
+      .status-button {
+        width: 100%;
+      }
+
+      .top-actions,
+      .small-actions {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">Poem images</p>
+        <h1>Prompt Review</h1>
+        <p class="subhead">Review, edit, and mark the current `gpt-image-2` prompt drafts before image generation. Feedback is saved locally in this browser and can be exported as JSON.</p>
+      </div>
+      <div class="top-actions">
+        <button class="button" id="import-button" type="button">Import feedback</button>
+        <button class="button" id="copy-button" type="button">Copy JSON</button>
+        <button class="button" id="download-button" type="button">Download JSON</button>
+        <button class="button button--primary" id="save-button" type="button">Save JSON</button>
+      </div>
+    </header>
+
+    <div class="layout">
+      <aside class="sidebar">
+        <section class="panel">
+          <div class="panel__section">
+            <p class="section-title">Progress</p>
+            <div class="stats-grid">
+              <div class="stat">
+                <span class="stat__number" id="total-count">0</span>
+                <span class="stat__label">Total</span>
+              </div>
+              <div class="stat">
+                <span class="stat__number" id="done-count">0</span>
+                <span class="stat__label">Marked</span>
+              </div>
+              <div class="stat">
+                <span class="stat__number" id="generate-count">0</span>
+                <span class="stat__label">Generate</span>
+              </div>
+              <div class="stat">
+                <span class="stat__number" id="revise-count">0</span>
+                <span class="stat__label">Revise</span>
+              </div>
+            </div>
+          </div>
+          <div class="panel__section">
+            <p class="section-title">Status</p>
+            <div class="filter-stack" id="status-filters"></div>
+          </div>
+          <div class="panel__section">
+            <p class="section-title">Collection</p>
+            <div class="filter-stack" id="collection-filters"></div>
+          </div>
+          <div class="panel__section">
+            <button class="button button--danger" id="clear-feedback-button" type="button">Clear local feedback</button>
+          </div>
+        </section>
+      </aside>
+
+      <main>
+        <div class="search-row">
+          <input class="search-input" id="search-input" type="search" placeholder="Search title, author, moment, prompt, or feedback" autocomplete="off">
+          <button class="button" id="clear-search-button" type="button">Clear</button>
+          <div class="view-meta" id="view-meta">Loading</div>
+        </div>
+        <div class="prompt-list" id="prompt-list"></div>
+      </main>
+    </div>
+  </div>
+
+  <input class="hidden" id="import-input" type="file" accept="application/json,.json">
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    const STORAGE_KEY = 'jeffharr-poem-image-prompt-review-v2';
+    const PROMPTS_URL = './poem-image-prompts.md';
+    const MANIFEST_URL = '../poems/manifest.json';
+    const CONTENT_BASE = '../poems/content/';
+
+    const STATUSES = [
+      { id: 'review', label: 'Review' },
+      { id: 'good', label: 'Good' },
+      { id: 'generate', label: 'Generate' },
+      { id: 'revise', label: 'Revise' },
+      { id: 'reject', label: 'Reject' }
+    ];
+
+    const COLLECTIONS = [
+      { id: 'all', label: 'All poems' },
+      { id: 'memorized', label: 'Memorized' },
+      { id: 'learning', label: 'Learning' },
+      { id: 'unmatched', label: 'Unmatched' }
+    ];
+
+    const SLUG_OVERRIDES = {
+      'icarryyourheartwithme': 'i-carry-your-heart-within-me'
+    };
+
+    const app = {
+      prompts: [],
+      poemIndex: null,
+      statusFilter: 'all',
+      collectionFilter: 'all',
+      search: '',
+      state: loadState(),
+      saveHandle: null,
+      toastTimer: null
+    };
+
+    const els = {
+      list: document.getElementById('prompt-list'),
+      search: document.getElementById('search-input'),
+      viewMeta: document.getElementById('view-meta'),
+      statusFilters: document.getElementById('status-filters'),
+      collectionFilters: document.getElementById('collection-filters'),
+      totalCount: document.getElementById('total-count'),
+      doneCount: document.getElementById('done-count'),
+      generateCount: document.getElementById('generate-count'),
+      reviseCount: document.getElementById('revise-count'),
+      importButton: document.getElementById('import-button'),
+      importInput: document.getElementById('import-input'),
+      clearSearchButton: document.getElementById('clear-search-button'),
+      copyButton: document.getElementById('copy-button'),
+      downloadButton: document.getElementById('download-button'),
+      saveButton: document.getElementById('save-button'),
+      clearFeedbackButton: document.getElementById('clear-feedback-button'),
+      toast: document.getElementById('toast')
+    };
+
+    boot();
+
+    async function boot() {
+      try {
+        const [markdown, poemIndex] = await Promise.all([
+          fetchText(PROMPTS_URL),
+          loadPoemIndex()
+        ]);
+
+        app.poemIndex = poemIndex;
+        app.prompts = parsePromptMarkdown(markdown).map((prompt) => attachPoemMetadata(prompt, poemIndex));
+
+        bindEvents();
+        render();
+        showToast(`Loaded ${app.prompts.length} prompt drafts.`);
+      } catch (error) {
+        renderError(error);
+      }
+    }
+
+    async function fetchText(url) {
+      const response = await fetch(url, { cache: 'no-cache' });
+      if (!response.ok) {
+        throw new Error(`Could not load ${url}: ${response.status}`);
+      }
+      return response.text();
+    }
+
+    async function loadPoemIndex() {
+      try {
+        const response = await fetch(MANIFEST_URL, { cache: 'no-cache' });
+        if (!response.ok) throw new Error(`manifest ${response.status}`);
+        const manifest = await response.json();
+        const collections = new Map();
+        for (const slug of manifest.memorized || []) collections.set(slug, 'memorized');
+        for (const slug of manifest.learning || []) collections.set(slug, 'learning');
+        const slugs = Array.from(new Set([...(manifest.memorized || []), ...(manifest.learning || [])]));
+        const poems = await Promise.all(slugs.map(async (slug) => {
+          try {
+            const markdown = await fetchText(`${CONTENT_BASE}${slug}.md`);
+            const parsed = parsePoemMarkdown(markdown);
+            return {
+              slug,
+              title: parsed.title,
+              author: parsed.author,
+              collection: collections.get(slug) || 'unmatched'
+            };
+          } catch {
+            return {
+              slug,
+              title: slugToTitle(slug),
+              author: '',
+              collection: collections.get(slug) || 'unmatched'
+            };
+          }
+        }));
+
+        const bySlug = new Map();
+        const byTitle = new Map();
+        for (const poem of poems) {
+          bySlug.set(poem.slug, poem);
+          byTitle.set(normalizeTitle(poem.title), poem);
+        }
+        return { poems, bySlug, byTitle };
+      } catch {
+        return { poems: [], bySlug: new Map(), byTitle: new Map() };
+      }
+    }
+
+    function parsePoemMarkdown(markdown) {
+      const match = markdown.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n([\s\S]*)$/);
+      if (!match) return { title: '', author: '' };
+      const frontmatter = match[1].split(/\r?\n/).reduce((acc, line) => {
+        const parts = line.split(':');
+        const key = parts.shift();
+        if (!key || parts.length === 0) return acc;
+        acc[key.trim().toLowerCase()] = parts.join(':').trim();
+        return acc;
+      }, {});
+      return {
+        title: frontmatter.title || '',
+        author: frontmatter.author || ''
+      };
+    }
+
+    function parsePromptMarkdown(markdown) {
+      return markdown
+        .split(/\n## /)
+        .slice(1)
+        .map((section, index) => {
+          const lines = section.split('\n');
+          const title = (lines.shift() || '').trim();
+          const block = lines.join('\n');
+          const author = (block.match(/(?:^|\n)Author:\s*(.+)/) || [])[1] || '';
+          const moment = (block.match(/(?:^|\n)Poem moment:\s*([\s\S]*?)\n\nPrompt:/) || [])[1] || '';
+          const promptBlock = (block.match(/(?:^|\n)Prompt:\s*\n\n([\s\S]*)$/) || [])[1] || '';
+          const prompt = promptBlock
+            .split(/\r?\n/)
+            .filter((line) => line.startsWith('>'))
+            .map((line) => line.replace(/^>\s?/, ''))
+            .join('\n')
+            .trim();
+
+          return {
+            order: index + 1,
+            title: title.trim(),
+            author: author.trim(),
+            moment: moment.trim(),
+            prompt,
+            style: extractStyle(prompt),
+            guardrails: extractGuardrails(prompt)
+          };
+        })
+        .filter((item) => item.title && item.prompt);
+    }
+
+    function attachPoemMetadata(prompt, poemIndex) {
+      const normalized = normalizeTitle(prompt.title);
+      const overrideSlug = SLUG_OVERRIDES[normalized];
+      const matched = overrideSlug
+        ? poemIndex.bySlug.get(overrideSlug)
+        : poemIndex.byTitle.get(normalized);
+      const id = matched?.slug || slugify(prompt.title);
+      return {
+        ...prompt,
+        id,
+        slug: matched?.slug || id,
+        sourceTitle: matched?.title || prompt.title,
+        collection: matched?.collection || 'unmatched'
+      };
+    }
+
+    function extractStyle(prompt) {
+      const match = prompt.match(/Visual style:\s*([\s\S]*?)(?:\s+(?:No|Avoid|Keep|Treat|Do not)\b|$)/);
+      return match ? match[1].trim().replace(/\s+$/, '') : '';
+    }
+
+    function extractGuardrails(prompt) {
+      const match = prompt.match(/((?:No|Avoid|Keep|Treat|Do not)\b[\s\S]*)$/);
+      return match ? match[1].trim() : '';
+    }
+
+    function bindEvents() {
+      const applySearch = () => {
+        app.search = els.search.value.trim().toLowerCase();
+        render();
+      };
+
+      els.search.addEventListener('input', applySearch);
+      els.search.addEventListener('search', applySearch);
+      els.search.addEventListener('change', applySearch);
+      els.clearSearchButton.addEventListener('click', () => {
+        els.search.value = '';
+        applySearch();
+        els.search.focus();
+      });
+
+      els.importButton.addEventListener('click', () => els.importInput.click());
+      els.importInput.addEventListener('change', importFeedback);
+      els.copyButton.addEventListener('click', copyFeedbackJson);
+      els.downloadButton.addEventListener('click', downloadFeedbackJson);
+      els.saveButton.addEventListener('click', saveFeedbackJson);
+      els.clearFeedbackButton.addEventListener('click', clearLocalFeedback);
+    }
+
+    function render() {
+      renderFilters();
+      renderStats();
+      renderCards();
+    }
+
+    function renderFilters() {
+      const statusCounts = computeStatusCounts();
+      els.statusFilters.innerHTML = '';
+      const statusFilterItems = [{ id: 'all', label: 'All', count: app.prompts.length }, ...STATUSES.map((status) => ({
+        ...status,
+        count: statusCounts[status.id] || 0
+      }))];
+
+      for (const filter of statusFilterItems) {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = `status-filter${app.statusFilter === filter.id ? ' is-active' : ''}`;
+        button.innerHTML = `<span>${escapeHtml(filter.label)}</span><span class="count-pill">${filter.count}</span>`;
+        button.addEventListener('click', () => {
+          app.statusFilter = filter.id;
+          render();
+        });
+        els.statusFilters.appendChild(button);
+      }
+
+      const collectionCounts = computeCollectionCounts();
+      els.collectionFilters.innerHTML = '';
+      for (const filter of COLLECTIONS) {
+        const count = filter.id === 'all' ? app.prompts.length : collectionCounts[filter.id] || 0;
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = `collection-filter${app.collectionFilter === filter.id ? ' is-active' : ''}`;
+        button.innerHTML = `<span>${escapeHtml(filter.label)}</span><span class="count-pill">${count}</span>`;
+        button.addEventListener('click', () => {
+          app.collectionFilter = filter.id;
+          render();
+        });
+        els.collectionFilters.appendChild(button);
+      }
+    }
+
+    function renderStats() {
+      const counts = computeStatusCounts();
+      els.totalCount.textContent = app.prompts.length;
+      els.doneCount.textContent = app.prompts.filter((item) => getItemStatus(item) !== 'review').length;
+      els.generateCount.textContent = counts.generate || 0;
+      els.reviseCount.textContent = counts.revise || 0;
+    }
+
+    function renderCards() {
+      const visible = getVisiblePrompts();
+      els.viewMeta.textContent = `${visible.length} of ${app.prompts.length}`;
+      els.list.innerHTML = '';
+
+      if (app.prompts.length === 0) {
+        els.list.innerHTML = '<div class="empty-state">No prompt drafts were found.</div>';
+        return;
+      }
+
+      if (visible.length === 0) {
+        els.list.innerHTML = '<div class="empty-state">No prompts match the current filters.</div>';
+        return;
+      }
+
+      const fragment = document.createDocumentFragment();
+      for (const prompt of visible) {
+        fragment.appendChild(createPromptCard(prompt));
+      }
+      els.list.appendChild(fragment);
+    }
+
+    function createPromptCard(item) {
+      const card = document.createElement('article');
+      const status = getItemStatus(item);
+      const state = getItemState(item);
+      const promptText = getPromptText(item);
+      const isModified = Boolean(state.prompt && state.prompt !== item.prompt);
+      card.className = `prompt-card${isModified ? ' is-modified' : ''}`;
+      card.dataset.status = status;
+      card.dataset.id = item.id;
+
+      const statusButtons = STATUSES.map((statusItem) => `
+        <button class="status-button${status === statusItem.id ? ' is-active' : ''}" type="button" data-action="status" data-status="${statusItem.id}">
+          ${escapeHtml(statusItem.label)}
+        </button>
+      `).join('');
+
+      card.innerHTML = `
+        <div class="card-head">
+          <div>
+            <h2 class="card-title">${escapeHtml(item.title)}</h2>
+            <div class="card-meta">
+              <span>${escapeHtml(item.author)}</span>
+              <span class="meta-chip">${escapeHtml(item.slug)}</span>
+              <span class="meta-chip">${escapeHtml(item.collection)}</span>
+            </div>
+          </div>
+          <div class="status-buttons" aria-label="Review status">
+            ${statusButtons}
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="moment-box">
+            <span class="box-label">Poem moment</span>
+            <p class="moment-text">${escapeHtml(item.moment)}</p>
+            <div class="style-block">
+              ${item.style ? `<span class="style-chip"><strong>Style:</strong> ${escapeHtml(item.style)}</span>` : ''}
+              ${item.guardrails ? `<span class="guardrail-chip"><strong>Guardrails:</strong> ${escapeHtml(item.guardrails)}</span>` : ''}
+            </div>
+          </div>
+          <div class="prompt-column">
+            <label class="prompt-box">
+              <span class="box-label">Prompt</span>
+              <textarea class="prompt-textarea" data-field="prompt">${escapeHtml(promptText)}</textarea>
+            </label>
+            <label class="feedback-box">
+              <span class="box-label">Feedback</span>
+              <textarea class="feedback-textarea" data-field="feedback" placeholder="Notes for this poem">${escapeHtml(state.feedback || '')}</textarea>
+            </label>
+          </div>
+        </div>
+        <div class="card-actions">
+          <span class="modified">Prompt edited</span>
+          <div class="small-actions">
+            <button class="small-button" type="button" data-action="copy-prompt">Copy prompt</button>
+            <button class="small-button" type="button" data-action="reset-prompt">Reset prompt</button>
+          </div>
+        </div>
+      `;
+
+      card.addEventListener('click', (event) => {
+        const button = event.target.closest('button');
+        if (!button) return;
+        const action = button.dataset.action;
+        if (action === 'status') {
+          updateItemState(item, { status: button.dataset.status || 'review' });
+          render();
+        }
+        if (action === 'copy-prompt') {
+          copyText(getPromptText(item));
+        }
+        if (action === 'reset-prompt') {
+          const next = getItemState(item);
+          delete next.prompt;
+          setItemState(item, next);
+          render();
+          showToast(`Reset prompt for ${item.title}.`);
+        }
+      });
+
+      card.addEventListener('input', (event) => {
+        const field = event.target.dataset.field;
+        if (!field) return;
+        if (field === 'prompt') {
+          updateItemState(item, { prompt: event.target.value });
+          card.classList.toggle('is-modified', event.target.value !== item.prompt);
+        }
+        if (field === 'feedback') {
+          updateItemState(item, { feedback: event.target.value });
+        }
+        renderStats();
+      });
+
+      return card;
+    }
+
+    function getVisiblePrompts() {
+      return app.prompts.filter((item) => {
+        const state = getItemState(item);
+        const status = getItemStatus(item);
+        if (app.statusFilter !== 'all' && status !== app.statusFilter) return false;
+        if (app.collectionFilter !== 'all' && item.collection !== app.collectionFilter) return false;
+        if (!app.search) return true;
+        const haystack = [
+          item.title,
+          item.author,
+          item.slug,
+          item.collection,
+          item.moment,
+          getPromptText(item),
+          state.feedback || ''
+        ].join(' ').toLowerCase();
+        return haystack.includes(app.search);
+      });
+    }
+
+    function computeStatusCounts() {
+      return app.prompts.reduce((acc, item) => {
+        const status = getItemStatus(item);
+        acc[status] = (acc[status] || 0) + 1;
+        return acc;
+      }, {});
+    }
+
+    function computeCollectionCounts() {
+      return app.prompts.reduce((acc, item) => {
+        acc[item.collection] = (acc[item.collection] || 0) + 1;
+        return acc;
+      }, {});
+    }
+
+    function getItemState(item) {
+      return app.state.items[item.id] || {};
+    }
+
+    function getItemStatus(item) {
+      return getItemState(item).status || 'review';
+    }
+
+    function getPromptText(item) {
+      const state = getItemState(item);
+      return typeof state.prompt === 'string' ? state.prompt : item.prompt;
+    }
+
+    function updateItemState(item, patch) {
+      const next = {
+        ...getItemState(item),
+        ...patch,
+        updatedAt: new Date().toISOString()
+      };
+      setItemState(item, next);
+    }
+
+    function setItemState(item, next) {
+      app.state.items[item.id] = pruneEmptyState(next);
+      app.state.updatedAt = new Date().toISOString();
+      saveState();
+    }
+
+    function pruneEmptyState(state) {
+      const next = { ...state };
+      if (!next.feedback) delete next.feedback;
+      if (!next.prompt) delete next.prompt;
+      if (next.status === 'review') delete next.status;
+      return next;
+    }
+
+    function loadState() {
+      try {
+        const stored = localStorage.getItem(STORAGE_KEY);
+        if (!stored) return { version: 1, items: {} };
+        const parsed = JSON.parse(stored);
+        return {
+          version: parsed.version || 1,
+          updatedAt: parsed.updatedAt,
+          items: parsed.items || {}
+        };
+      } catch {
+        return { version: 1, items: {} };
+      }
+    }
+
+    function saveState() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(app.state));
+    }
+
+    function buildFeedbackPayload() {
+      const counts = computeStatusCounts();
+      return {
+        version: 1,
+        exportedAt: new Date().toISOString(),
+        source: {
+          prompts: 'notes/poem-image-prompts.md',
+          reviewPage: 'notes/poem-image-prompt-review.html'
+        },
+        counts,
+        items: app.prompts.map((item) => {
+          const state = getItemState(item);
+          return {
+            slug: item.slug,
+            title: item.title,
+            author: item.author,
+            collection: item.collection,
+            status: getItemStatus(item),
+            feedback: state.feedback || '',
+            poemMoment: item.moment,
+            prompt: getPromptText(item),
+            originalPrompt: item.prompt,
+            promptEdited: getPromptText(item) !== item.prompt,
+            updatedAt: state.updatedAt || ''
+          };
+        })
+      };
+    }
+
+    async function copyFeedbackJson() {
+      await copyText(JSON.stringify(buildFeedbackPayload(), null, 2), 'Copied feedback JSON.');
+    }
+
+    function downloadFeedbackJson() {
+      const payload = JSON.stringify(buildFeedbackPayload(), null, 2);
+      const blob = new Blob([payload], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `poem-image-prompt-feedback-${new Date().toISOString().slice(0, 10)}.json`;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      URL.revokeObjectURL(url);
+      showToast('Downloaded feedback JSON.');
+    }
+
+    async function saveFeedbackJson() {
+      const payload = JSON.stringify(buildFeedbackPayload(), null, 2);
+      if (!window.showSaveFilePicker) {
+        downloadFeedbackJson();
+        return;
+      }
+
+      try {
+        if (!app.saveHandle) {
+          app.saveHandle = await window.showSaveFilePicker({
+            suggestedName: 'poem-image-prompt-feedback.json',
+            types: [{
+              description: 'JSON',
+              accept: { 'application/json': ['.json'] }
+            }]
+          });
+        }
+        const writable = await app.saveHandle.createWritable();
+        await writable.write(payload);
+        await writable.close();
+        showToast('Saved feedback JSON.');
+      } catch (error) {
+        if (error.name !== 'AbortError') showToast('Could not save feedback JSON.');
+      }
+    }
+
+    async function importFeedback(event) {
+      const file = event.target.files && event.target.files[0];
+      event.target.value = '';
+      if (!file) return;
+
+      try {
+        const payload = JSON.parse(await file.text());
+        const incomingItems = Array.isArray(payload.items) ? payload.items : [];
+        let imported = 0;
+
+        for (const incoming of incomingItems) {
+          const item = findPromptForIncoming(incoming);
+          if (!item) continue;
+          const patch = {};
+          if (STATUSES.some((status) => status.id === incoming.status)) patch.status = incoming.status;
+          if (typeof incoming.feedback === 'string') patch.feedback = incoming.feedback;
+          if (typeof incoming.prompt === 'string' && incoming.prompt !== item.prompt) patch.prompt = incoming.prompt;
+          if (Object.keys(patch).length > 0) {
+            updateItemState(item, patch);
+            imported += 1;
+          }
+        }
+
+        render();
+        showToast(`Imported feedback for ${imported} prompts.`);
+      } catch {
+        showToast('Could not import that JSON file.');
+      }
+    }
+
+    function findPromptForIncoming(incoming) {
+      if (incoming.slug) {
+        const bySlug = app.prompts.find((item) => item.slug === incoming.slug || item.id === incoming.slug);
+        if (bySlug) return bySlug;
+      }
+      if (incoming.title) {
+        const normalized = normalizeTitle(incoming.title);
+        return app.prompts.find((item) => normalizeTitle(item.title) === normalized);
+      }
+      return null;
+    }
+
+    function clearLocalFeedback() {
+      if (!window.confirm('Clear all local prompt feedback in this browser?')) return;
+      app.state = { version: 1, items: {}, updatedAt: new Date().toISOString() };
+      saveState();
+      render();
+      showToast('Cleared local feedback.');
+    }
+
+    async function copyText(text, message = 'Copied prompt.') {
+      try {
+        await navigator.clipboard.writeText(text);
+        showToast(message);
+      } catch {
+        showToast('Copy failed.');
+      }
+    }
+
+    function renderError(error) {
+      els.viewMeta.textContent = 'Error';
+      els.list.innerHTML = `
+        <div class="error-state">
+          <strong>Could not load prompt data.</strong><br>
+          ${escapeHtml(error.message || String(error))}
+        </div>
+      `;
+    }
+
+    function showToast(message) {
+      els.toast.textContent = message;
+      els.toast.classList.add('is-visible');
+      clearTimeout(app.toastTimer);
+      app.toastTimer = setTimeout(() => {
+        els.toast.classList.remove('is-visible');
+      }, 2200);
+    }
+
+    function normalizeTitle(value) {
+      return String(value || '').toLowerCase().replace(/[^a-z0-9]+/g, '');
+    }
+
+    function slugify(value) {
+      return String(value || '')
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '');
+    }
+
+    function slugToTitle(slug) {
+      return String(slug || '')
+        .split('-')
+        .filter(Boolean)
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(' ');
+    }
+
+    function escapeHtml(value) {
+      return String(value || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+  </script>
+</body>
+</html>
