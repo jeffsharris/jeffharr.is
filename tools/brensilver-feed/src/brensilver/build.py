@@ -305,64 +305,69 @@ def render_index(
     all_talks: List[Talk],
     feed_talks: List[Talk],
     guided_feed_talks: List[Talk],
-    guided_site: Dict,
+    guided_site: Dict | None,
 ) -> str:
     site = config["site"]
-    latest = feed_talks[0] if feed_talks else None
-    featured = next((talk for talk in feed_talks if talk.episode_image_url), latest)
-    featured_image = (
-        (featured.episode_image_url or featured.image_url)
-        if featured
-        else site.get("image_url")
-    )
-    featured_image_src = html_media_url(site, featured_image)
-    featured_title = featured.title if featured else site["title"]
-    featured_url = (
-        featured.canonical_url
-        or f"{site['base_url']}talks/{safe_id(featured.id)}/"
-        if featured
-        else site["base_url"]
-    )
-    latest_date = latest.published_at.date().isoformat() if latest else "n/a"
-    enriched_count = sum(
-        1 for talk in all_talks if talk.podcast_description or talk.chapters or talk.episode_image_url
-    )
-    artwork_count = sum(1 for talk in all_talks if talk.episode_image_url)
-    newest_artwork_count = 0
-    for talk in feed_talks:
-        if not talk.episode_image_url:
-            break
-        newest_artwork_count += 1
-    source_counts = {}
-    for talk in all_talks:
-        source_counts[talk.source] = source_counts.get(talk.source, 0) + 1
-
-    source_rows = "\n".join(
-        f"""<div class="stat">
-          <span>{_escape(name)}</span>
-          <strong>{count}</strong>
-        </div>"""
-        for name, count in sorted(source_counts.items())
-    )
+    page_title = str(
+        site.get("page_title")
+        or re.sub(r"\s+(Dharma Talks|Talks|Podcast Feed|Podcast)$", "", str(site["title"]))
+    ).strip()
+    portrait_src = html_media_url(site, site.get("image_url"))
     overcast_url = (
         "overcast://x-callback-url/add?url="
         + urllib.parse.quote(str(site["feed_url"]), safe="")
     )
-    guided_overcast_url = (
-        "overcast://x-callback-url/add?url="
-        + urllib.parse.quote(str(guided_site["feed_url"]), safe="")
+    has_guided_feed = guided_site is not None
+    feed_key = "dharma" if has_guided_feed else "main"
+    feed_urls = {feed_key: site["feed_url"]}
+    guided_alternate_link = ""
+    main_feed_label = site.get("feed_label") or (
+        "Dharma talks" if has_guided_feed else "Podcast feed"
     )
-    feed_urls_json = json.dumps(
-        {
-            "dharma": site["feed_url"],
-            "guided": guided_site["feed_url"],
-        }
+    main_feed_panel = render_subscribe_panel(
+        key=feed_key,
+        title=main_feed_label,
+        count=len(feed_talks),
+        feed_url=str(site["feed_url"]),
+        feed_href="feed.xml",
+        overcast_url=overcast_url,
+        active=True,
     )
-    featured_image_html = (
-        f"""<a class="cover-link" href="{_escape(featured_url)}" aria-label="Open featured talk">
-          <img class="cover" src="{_escape(featured_image_src)}" alt="">
-        </a>"""
-        if featured_image_src
+    guided_feed_panel = ""
+    feed_switch = ""
+    if guided_site:
+        guided_overcast_url = (
+            "overcast://x-callback-url/add?url="
+            + urllib.parse.quote(str(guided_site["feed_url"]), safe="")
+        )
+        feed_urls["guided"] = guided_site["feed_url"]
+        guided_alternate_link = (
+            f'  <link rel="alternate" type="application/rss+xml" '
+            f'title="{_escape(guided_site["title"])}" href="guided-feed.xml">\n'
+        )
+        guided_feed_panel = render_subscribe_panel(
+            key="guided",
+            title="Guided meditations",
+            count=len(guided_feed_talks),
+            feed_url=str(guided_site["feed_url"]),
+            feed_href="guided-feed.xml",
+            overcast_url=guided_overcast_url,
+            active=False,
+        )
+        feed_switch = f"""      <div class="feed-switch" role="tablist" aria-label="Choose a podcast feed">
+        <button class="feed-tab is-active" type="button" role="tab" aria-selected="true" aria-controls="panel-{feed_key}" data-feed-tab="{feed_key}">
+          <span>{_escape(main_feed_label)}</span>
+          <strong>{len(feed_talks)}</strong>
+        </button>
+        <button class="feed-tab" type="button" role="tab" aria-selected="false" aria-controls="panel-guided" data-feed-tab="guided">
+          <span>Guided meditations</span>
+          <strong>{len(guided_feed_talks)}</strong>
+        </button>
+      </div>"""
+    feed_urls_json = json.dumps(feed_urls)
+    portrait_html = (
+        f"""<img class="portrait" src="{_escape(portrait_src)}" alt="{_escape(page_title)}">"""
+        if portrait_src
         else ""
     )
     return f"""<!doctype html>
@@ -370,10 +375,9 @@ def render_index(
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{_escape(site["title"])}</title>
+  <title>{_escape(page_title)}</title>
   <link rel="alternate" type="application/rss+xml" title="{_escape(site["title"])}" href="feed.xml">
-  <link rel="alternate" type="application/rss+xml" title="{_escape(guided_site["title"])}" href="guided-feed.xml">
-  <style>
+{guided_alternate_link}  <style>
     :root {{
       color-scheme: light dark;
       --bg: #f8f7f3;
@@ -414,30 +418,21 @@ def render_index(
       min-height: 100vh;
     }}
     main {{
-      max-width: 1120px;
+      max-width: 960px;
       margin: 0 auto;
-      padding: 52px 22px 72px;
-    }}
-    .eyebrow {{
-      color: var(--rust);
-      font-size: 0.82rem;
-      font-weight: 800;
-      letter-spacing: 0.08em;
-      margin: 0 0 12px;
-      text-transform: uppercase;
+      padding: 56px 22px 72px;
     }}
     h1 {{
-      margin: 0 0 14px;
-      font-size: clamp(2.35rem, 7vw, 5.75rem);
+      margin: 0;
+      font-size: clamp(2.7rem, 8vw, 5.6rem);
       line-height: 0.95;
       letter-spacing: 0;
-      max-width: 840px;
     }}
     h2 {{
-      font-size: clamp(1.45rem, 3vw, 2.15rem);
+      font-size: clamp(1.55rem, 3vw, 2.25rem);
       line-height: 1.1;
       letter-spacing: 0;
-      margin: 0 0 16px;
+      margin: 0 0 8px;
     }}
     p {{
       color: var(--muted);
@@ -449,48 +444,76 @@ def render_index(
     }}
     .hero {{
       display: grid;
-      grid-template-columns: minmax(0, 1fr) minmax(220px, 360px);
-      gap: 42px;
-      align-items: end;
-      padding-bottom: 36px;
+      grid-template-columns: minmax(0, 1fr) minmax(180px, 280px);
+      gap: 34px;
+      align-items: center;
+      padding-bottom: 42px;
     }}
-    .lede {{
-      max-width: 700px;
-      font-size: clamp(1.08rem, 2vw, 1.34rem);
-    }}
-    .cover-link {{
-      display: block;
-      align-self: center;
+    .portrait {{
       justify-self: end;
-      max-width: 360px;
       width: 100%;
-      text-decoration: none;
-    }}
-    .cover {{
-      display: block;
-      width: 100%;
+      max-width: 280px;
       aspect-ratio: 1;
       object-fit: cover;
       border-radius: 8px;
       border: 1px solid var(--line);
       box-shadow: 0 18px 48px var(--shadow);
     }}
+    .subscribe {{
+      border-top: 1px solid var(--line);
+      padding-top: 30px;
+    }}
+    .feed-switch {{
+      display: inline-grid;
+      grid-template-columns: repeat(2, minmax(150px, 1fr));
+      gap: 6px;
+      padding: 6px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: color-mix(in srgb, var(--panel) 72%, var(--bg));
+      margin-bottom: 24px;
+    }}
+    .feed-tab {{
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 10px;
+      min-height: 46px;
+      padding: 0 12px;
+      border: 0;
+      border-radius: 6px;
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      font: inherit;
+      font-weight: 800;
+      text-align: left;
+    }}
+    .feed-tab strong {{
+      color: inherit;
+      font-size: 0.95rem;
+    }}
+    .feed-tab.is-active {{
+      background: var(--accent-strong);
+      color: #ffffff;
+      box-shadow: 0 8px 22px var(--shadow);
+    }}
+    .feed-panel[hidden] {{
+      display: none;
+    }}
+    .feed-panel {{
+      max-width: 760px;
+    }}
+    .feed-count {{
+      margin: 0 0 18px;
+      color: var(--muted);
+      font-weight: 700;
+    }}
     .subscribe-grid {{
       display: grid;
-      grid-template-columns: repeat(4, minmax(150px, 1fr));
+      grid-template-columns: repeat(3, minmax(150px, 1fr));
       gap: 12px;
-      margin: 24px 0 12px;
-    }}
-    .feed-block + .feed-block {{
-      margin-top: 28px;
-    }}
-    .feed-block h3 {{
-      margin: 0 0 6px;
-      font-size: 1.12rem;
-      line-height: 1.2;
-    }}
-    .feed-block p {{
-      margin: 0;
+      margin: 20px 0 14px;
     }}
     .player-button {{
       display: inline-flex;
@@ -514,8 +537,7 @@ def render_index(
       height: 22px;
       flex: 0 0 auto;
     }}
-    .player-button.apple {{ background: #872ec4; }}
-    .player-button.pocket {{ background: #c1435b; }}
+    .player-button.copy {{ background: var(--blue); }}
     .player-button.rss {{ background: var(--rust); }}
     .copy-status {{
       min-height: 1.4em;
@@ -533,51 +555,18 @@ def render_index(
       background: color-mix(in srgb, var(--panel) 82%, var(--bg));
       overflow-wrap: anywhere;
     }}
-    section:not(.hero) {{
-      border-top: 1px solid var(--line);
-      margin-top: 36px;
-      padding-top: 30px;
-    }}
-    .stats {{
-      display: grid;
-      grid-template-columns: repeat(4, minmax(130px, 1fr));
-      gap: 12px;
-      margin-top: 20px;
-    }}
-    .stat {{
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      padding: 16px;
-      background: color-mix(in srgb, var(--panel) 88%, var(--bg));
-    }}
-    .stat span {{
-      display: block;
-      color: var(--muted);
-      font-size: 0.88rem;
-      margin-bottom: 6px;
-    }}
-    .stat strong {{
-      display: block;
-      color: var(--ink);
-      font-size: 1.55rem;
-      line-height: 1;
-    }}
-    .latest {{
-      margin-top: 18px;
-    }}
     code {{
       overflow-wrap: anywhere;
     }}
     @media (max-width: 880px) {{
-      .hero {{ grid-template-columns: 1fr; gap: 24px; }}
-      .cover-link {{ justify-self: start; max-width: 260px; }}
+      .hero {{ grid-template-columns: 1fr; gap: 26px; }}
+      .portrait {{ justify-self: start; max-width: 240px; }}
       .subscribe-grid {{ grid-template-columns: repeat(2, minmax(140px, 1fr)); }}
-      .stats {{ grid-template-columns: repeat(2, minmax(140px, 1fr)); }}
     }}
     @media (max-width: 520px) {{
       main {{ padding: 34px 18px 56px; }}
+      .feed-switch {{ display: grid; grid-template-columns: 1fr; width: 100%; }}
       .subscribe-grid {{ grid-template-columns: 1fr; }}
-      .stats {{ grid-template-columns: 1fr; }}
     }}
   </style>
 </head>
@@ -586,87 +575,34 @@ def render_index(
   <main>
     <section class="hero" aria-labelledby="page-title">
       <div>
-        <p class="eyebrow">Merged podcast feed</p>
-        <h1 id="page-title">{_escape(site["title"])}</h1>
-        <p class="lede">{_escape(site["description"])} New transcript-derived descriptions, chapters, and episode artwork are added as the local corpus pipeline finishes each batch.</p>
+        <h1 id="page-title">{_escape(page_title)}</h1>
       </div>
-      {featured_image_html}
+      {portrait_html}
     </section>
-    <section aria-labelledby="subscribe-heading">
-      <h2 id="subscribe-heading">Subscribe</h2>
-      <p>Overcast can add a feed directly. For Apple Podcasts, Pocket Casts, and other players, copy the RSS URL and add it as a custom feed.</p>
-      <div class="feed-block">
-        <h3>Dharma talks</h3>
-        <p>The main feed excludes guided meditations, guided practice sessions, and retreat sitting instructions.</p>
-        <div class="subscribe-grid">
-          <a class="player-button overcast" href="{_escape(overcast_url)}">
-            <img src="https://cdn.simpleicons.org/overcast/FFFFFF?viewbox=auto" alt="">
-            <span>Add to Overcast</span>
-          </a>
-          <button class="player-button apple" type="button" data-copy-feed="dharma">
-            <img src="https://cdn.simpleicons.org/applepodcasts/FFFFFF?viewbox=auto" alt="">
-            <span>Copy for Apple</span>
-          </button>
-          <button class="player-button pocket" type="button" data-copy-feed="dharma">
-            <img src="https://cdn.simpleicons.org/pocketcasts/FFFFFF?viewbox=auto" alt="">
-            <span>Copy for Pocket</span>
-          </button>
-          <a class="player-button rss" href="feed.xml">
-            <img src="https://cdn.simpleicons.org/rss/FFFFFF?viewbox=auto" alt="">
-            <span>RSS Feed</span>
-          </a>
-        </div>
-        <code class="feed-url">{_escape(site["feed_url"])}</code>
-      </div>
-      <div class="feed-block">
-        <h3>Guided meditations</h3>
-        <p>A companion feed for guided meditations, guided metta, practice sessions, and sitting instructions.</p>
-        <div class="subscribe-grid">
-          <a class="player-button overcast" href="{_escape(guided_overcast_url)}">
-            <img src="https://cdn.simpleicons.org/overcast/FFFFFF?viewbox=auto" alt="">
-            <span>Add to Overcast</span>
-          </a>
-          <button class="player-button apple" type="button" data-copy-feed="guided">
-            <img src="https://cdn.simpleicons.org/applepodcasts/FFFFFF?viewbox=auto" alt="">
-            <span>Copy for Apple</span>
-          </button>
-          <button class="player-button pocket" type="button" data-copy-feed="guided">
-            <img src="https://cdn.simpleicons.org/pocketcasts/FFFFFF?viewbox=auto" alt="">
-            <span>Copy for Pocket</span>
-          </button>
-          <a class="player-button rss" href="guided-feed.xml">
-            <img src="https://cdn.simpleicons.org/rss/FFFFFF?viewbox=auto" alt="">
-            <span>RSS Feed</span>
-          </a>
-        </div>
-        <code class="feed-url">{_escape(guided_site["feed_url"])}</code>
-      </div>
+    <section class="subscribe">
+{feed_switch}
+{main_feed_panel}
+{guided_feed_panel}
       <p id="copy-status" class="copy-status" aria-live="polite"></p>
-    </section>
-    <section>
-      <h2>Feed Status</h2>
-      <p class="latest">Latest item date: <strong>{latest_date}</strong>. Featured talk: <a href="{_escape(featured_url)}">{_escape(featured_title)}</a>. Custom episode artwork is filled newest-to-oldest as batches finish; the generated teacher portrait is used as the fallback cover.</p>
-      <div class="stats">
-        <div class="stat"><span>Dharma feed</span><strong>{len(feed_talks)}</strong></div>
-        <div class="stat"><span>Guided feed</span><strong>{len(guided_feed_talks)}</strong></div>
-        <div class="stat"><span>Indexed talks</span><strong>{len(all_talks)}</strong></div>
-        <div class="stat"><span>Enriched talks</span><strong>{enriched_count}</strong></div>
-        <div class="stat"><span>Custom artwork</span><strong>{artwork_count}</strong></div>
-        <div class="stat"><span>Newest with art</span><strong>{newest_artwork_count}</strong></div>
-        {source_rows}
-      </div>
-    </section>
-    <section>
-      <h2>Data</h2>
-      <p><a href="talks.json">Talk data</a> includes the full corpus. <a href="dharma-talks.json">Dharma talk data</a> and <a href="guided-talks.json">guided meditation data</a> expose the current feed split for review.</p>
     </section>
   </main>
   </div>
   <script>
     const feedUrls = {feed_urls_json};
     const status = document.getElementById('copy-status');
+    function selectFeed(key) {{
+      document.querySelectorAll('[data-feed-panel]').forEach(panel => {{
+        panel.hidden = panel.dataset.feedPanel !== key;
+      }});
+      document.querySelectorAll('[data-feed-tab]').forEach(tab => {{
+        const selected = tab.dataset.feedTab === key;
+        tab.classList.toggle('is-active', selected);
+        tab.setAttribute('aria-selected', String(selected));
+      }});
+      status.textContent = '';
+    }}
     async function copyFeedUrl(key) {{
-      const feedUrl = feedUrls[key] || feedUrls.dharma;
+      const feedUrl = feedUrls[key] || feedUrls.dharma || feedUrls.main;
       try {{
         await navigator.clipboard.writeText(feedUrl);
         status.textContent = 'RSS URL copied.';
@@ -677,10 +613,44 @@ def render_index(
     document.querySelectorAll('[data-copy-feed]').forEach(button => {{
       button.addEventListener('click', () => copyFeedUrl(button.dataset.copyFeed));
     }});
+    document.querySelectorAll('[data-feed-tab]').forEach(button => {{
+      button.addEventListener('click', () => selectFeed(button.dataset.feedTab));
+    }});
   </script>
 </body>
 </html>
 """
+
+
+def render_subscribe_panel(
+    key: str,
+    title: str,
+    count: int,
+    feed_url: str,
+    feed_href: str,
+    overcast_url: str,
+    active: bool,
+) -> str:
+    hidden = "" if active else " hidden"
+    noun = "episode" if count == 1 else "episodes"
+    return f"""      <div class="feed-panel" id="panel-{_escape(key)}" data-feed-panel="{_escape(key)}"{hidden}>
+        <h2>{_escape(title)}</h2>
+        <p class="feed-count">{count} {noun}</p>
+        <div class="subscribe-grid">
+          <a class="player-button overcast" href="{_escape(overcast_url)}">
+            <img src="https://cdn.simpleicons.org/overcast/FFFFFF?viewbox=auto" alt="">
+            <span>Add to Overcast</span>
+          </a>
+          <button class="player-button copy" type="button" data-copy-feed="{_escape(key)}">
+            <span>Copy RSS URL</span>
+          </button>
+          <a class="player-button rss" href="{_escape(feed_href)}">
+            <img src="https://cdn.simpleicons.org/rss/FFFFFF?viewbox=auto" alt="">
+            <span>Open RSS</span>
+          </a>
+        </div>
+        <code class="feed-url">{_escape(feed_url)}</code>
+      </div>"""
 
 
 def write_talk_pages(out_dir: Path, config: Dict, talks: List[Talk]) -> None:
