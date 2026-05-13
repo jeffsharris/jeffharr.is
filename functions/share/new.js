@@ -1,6 +1,6 @@
 import { resolveShareUrl, ShareResolveError } from '../api/share/podcast-resolver.js';
 import { getShareKv, saveShareItem } from '../api/share/store.js';
-import { renderRedirectPage } from './render.js';
+import { renderLoadingPage, renderRedirectPage } from './render.js';
 
 export async function onRequest(context) {
   const { request, env } = context;
@@ -13,6 +13,16 @@ export async function onRequest(context) {
 
   if (!kv || !rawInput) {
     return Response.redirect(new URL('/share?error=missing-url', request.url), 303);
+  }
+
+  if ((request.headers.get('accept') || '').includes('text/html') && url.searchParams.get('resolve') !== '1') {
+    return new Response(renderLoadingPage(rawInput, request.url), {
+      status: 200,
+      headers: {
+        'content-type': 'text/html; charset=utf-8',
+        'cache-control': 'no-store'
+      }
+    });
   }
 
   try {

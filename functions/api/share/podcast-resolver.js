@@ -238,6 +238,9 @@ async function resolveSpotify(inputUrl, classification, fetchImpl, env) {
           durationMillis: spotifyApi?.duration_ms
         })
       : null;
+    const appleEpisodeUrl = episode
+      ? await findAppleEpisodeUrl(String(appleCandidate.collectionId), episode, fetchImpl)
+      : '';
 
     return buildPodcastItem({
       sourceUrl: inputUrl,
@@ -245,7 +248,9 @@ async function resolveSpotify(inputUrl, classification, fetchImpl, env) {
       feed,
       episode,
       platformLinks: normalizePlatformLinks({
-        apple: platformLink('Apple Podcasts', appleCandidate.collectionViewUrl, 'show', 'verified'),
+        apple: appleEpisodeUrl
+          ? platformLink('Apple Podcasts', appleEpisodeUrl, 'episode', 'verified')
+          : platformLink('Apple Podcasts', appleCandidate.collectionViewUrl, 'show', 'verified'),
         overcast: platformLink('Overcast', `https://overcast.fm/itunes${appleCandidate.collectionId}`, 'show', 'verified'),
         spotify: spotifyLink,
         rss: platformLink('RSS Feed', appleCandidate.feedUrl, 'rss', 'exact'),
@@ -323,6 +328,16 @@ async function resolveOvercast(inputUrl, classification, fetchImpl, env) {
       pcstLinks = appleId ? await fetchPcstLinks(String(appleId), fetchImpl) : {};
     } catch {}
     const websiteLinks = feed.link ? await fetchWebsitePlatformLinks(feed.link, fetchImpl) : {};
+    const episodeLinks = episode ? extractEpisodePlatformLinks(episode) : {};
+    const appleEpisodeUrl = episode && appleId ? await findAppleEpisodeUrl(String(appleId), episode, fetchImpl) : '';
+    const spotifyEpisodeLink = episode
+      ? await findSpotifyEpisodeLink(
+          episodeLinks.spotify?.url || pcstLinks.spotify?.url || pageLinks.spotify?.url || '',
+          episode,
+          fetchImpl,
+          env
+        )
+      : null;
 
     return buildPodcastItem({
       sourceUrl: inputUrl,
@@ -333,13 +348,16 @@ async function resolveOvercast(inputUrl, classification, fetchImpl, env) {
         ...pcstLinks,
         ...websiteLinks,
         ...pageLinks,
-        apple: pageLinks.apple || (appleCandidate?.collectionViewUrl
+        ...episodeLinks,
+        apple: appleEpisodeUrl
+          ? platformLink('Apple Podcasts', appleEpisodeUrl, 'episode', 'verified')
+          : pageLinks.apple || (appleCandidate?.collectionViewUrl
           ? platformLink('Apple Podcasts', appleCandidate.collectionViewUrl, 'show', 'verified')
           : null),
+        spotify: spotifyEpisodeLink || episodeLinks.spotify || pcstLinks.spotify || pageLinks.spotify,
         overcast: overcastLink,
         rss: platformLink('RSS Feed', feedUrl, 'rss', 'exact'),
         website: feed.link ? platformLink('Website', feed.link, 'website', 'verified') : null,
-        ...(episode ? extractEpisodePlatformLinks(episode) : {})
       }),
       sourceMetadata: {
         title: pageTitle,
@@ -402,10 +420,21 @@ async function resolveYouTube(inputUrl, classification, fetchImpl, env) {
       const appleCandidate = await searchApplePodcast(author, fetchImpl);
       if (appleCandidate?.feedUrl) {
         const feed = await fetchPodcastFeed(appleCandidate.feedUrl, fetchImpl);
-        const episode = matchEpisodeByLink(feed.episodes, inputUrl) || matchEpisode(feed.episodes, { title });
+        const episode = matchEpisodeByLink(feed.episodes, inputUrl) ||
+          matchEpisode(feed.episodes, { title, alternateTitles: youtubeTitleCandidates(title) });
         if (episode) {
           const pcstLinks = appleCandidate.collectionId ? await fetchPcstLinks(String(appleCandidate.collectionId), fetchImpl) : {};
           const websiteLinks = feed.link ? await fetchWebsitePlatformLinks(feed.link, fetchImpl) : {};
+          const episodeLinks = extractEpisodePlatformLinks(episode);
+          const appleEpisodeUrl = appleCandidate.collectionId
+            ? await findAppleEpisodeUrl(String(appleCandidate.collectionId), episode, fetchImpl)
+            : '';
+          const spotifyEpisodeLink = await findSpotifyEpisodeLink(
+            episodeLinks.spotify?.url || pcstLinks.spotify?.url || '',
+            episode,
+            fetchImpl,
+            env
+          );
           return buildPodcastItem({
             sourceUrl: inputUrl,
             sourcePlatform: 'youtube',
@@ -414,11 +443,14 @@ async function resolveYouTube(inputUrl, classification, fetchImpl, env) {
             platformLinks: normalizePlatformLinks({
               ...pcstLinks,
               ...websiteLinks,
-              apple: appleCandidate.collectionViewUrl ? platformLink('Apple Podcasts', appleCandidate.collectionViewUrl, 'show', 'verified') : null,
+              ...episodeLinks,
+              apple: appleEpisodeUrl
+                ? platformLink('Apple Podcasts', appleEpisodeUrl, 'episode', 'verified')
+                : appleCandidate.collectionViewUrl ? platformLink('Apple Podcasts', appleCandidate.collectionViewUrl, 'show', 'verified') : null,
+              spotify: spotifyEpisodeLink || episodeLinks.spotify || pcstLinks.spotify,
               overcast: appleCandidate.collectionId ? platformLink('Overcast', `https://overcast.fm/itunes${appleCandidate.collectionId}`, 'show', 'verified') : null,
               rss: platformLink('RSS Feed', appleCandidate.feedUrl, 'rss', 'exact'),
               website: feed.link ? platformLink('Website', feed.link, 'website', 'verified') : null,
-              ...extractEpisodePlatformLinks(episode),
               youtube: link
             }),
             sourceMetadata: {
@@ -650,9 +682,171 @@ async function findApplePodcastByFeed(term, feedUrl, fetchImpl) {
     null;
 }
 
+async function findAppleEpisodeUrl(appleId, episode, fetchImpl) {
+  if (!appleId || !episode?.title) return '';
+  try {
+    const lookup = await fetchAppleLookup(appleId, fetchImpl);
+    const results = lookup?.results || [];
+    const match = matchAppleEpisodeResult(results, episode);
+    return match?.trackViewUrl || '';
+  } catch {
+    return '';
+  }
+}
+
+function matchAppleEpisodeResult(results = [], episode = {}) {
+  let best = null;
+  let bestScore = 0;
+  const targetTitle = normalizeTitle(episode.title);
+  const targetDate = episode.publishedAt ? new Date(episode.publishedAt) : null;
+  const targetDuration = episode.duration ? durationToSeconds(episode.duration) : null;
+
+  for (const result of results) {
+    if (!(result.wrapperType === 'podcastEpisode' || result.kind === 'podcast-episode')) continue;
+    let score = titleScore(normalizeTitle(result.trackName || result.collectionName), targetTitle);
+    if (episode.guid && result.episodeGuid && episode.guid === result.episodeGuid) {
+      score = Math.max(score, 1);
+    }
+    if (episode.audioUrl && (normalizeCanonicalUrl(result.episodeUrl) === normalizeCanonicalUrl(episode.audioUrl) ||
+      normalizeCanonicalUrl(result.previewUrl) === normalizeCanonicalUrl(episode.audioUrl))) {
+      score = Math.max(score, 1);
+    }
+    if (targetDate && result.releaseDate) {
+      const deltaDays = Math.abs(new Date(result.releaseDate) - targetDate) / 86400000;
+      if (deltaDays <= 3) score += 0.2;
+    }
+    if (targetDuration && result.trackTimeMillis) {
+      const seconds = Math.round(result.trackTimeMillis / 1000);
+      if (Math.abs(seconds - targetDuration) <= 120) score += 0.15;
+    }
+    if (score > bestScore) {
+      best = result;
+      bestScore = score;
+    }
+  }
+
+  return bestScore >= 0.72 ? best : null;
+}
+
 async function fetchSpotifyApi(inputUrl, classification, fetchImpl, env) {
   if (!env?.SPOTIFY_CLIENT_ID || !env?.SPOTIFY_CLIENT_SECRET || !classification.spotifyId) {
     return null;
+  }
+
+  const token = await fetchSpotifyAccessToken(fetchImpl, env);
+  if (!token) return null;
+
+  const endpoint = classification.spotifyType === 'episode'
+    ? `https://api.spotify.com/v1/episodes/${encodeURIComponent(classification.spotifyId)}?market=US`
+    : `https://api.spotify.com/v1/shows/${encodeURIComponent(classification.spotifyId)}?market=US`;
+
+  return fetchJson(endpoint, fetchImpl, {
+    headers: { Authorization: `Bearer ${token}` }
+  });
+}
+
+async function findSpotifyEpisodeLink(spotifyUrl, episode, fetchImpl, env) {
+  const classification = classifyUrl(spotifyUrl || '');
+  if (classification.platform === 'spotify' && classification.spotifyType === 'episode') {
+    return platformLink('Spotify', spotifyUrl, 'episode', 'exact');
+  }
+  if (classification.platform !== 'spotify' || classification.spotifyType !== 'show' || !classification.spotifyId || !episode?.title) {
+    return null;
+  }
+
+  try {
+    const webEpisodes = await fetchSpotifyShowPageEpisodes(classification.spotifyId, fetchImpl);
+    const webMatch = matchSpotifyEpisodeResult(webEpisodes, episode);
+    const webUrl = webMatch?.external_urls?.spotify || (webMatch?.id ? `https://open.spotify.com/episode/${webMatch.id}` : '');
+    if (webUrl) {
+      return platformLink('Spotify', webUrl, 'episode', 'verified');
+    }
+
+    const apiEpisodes = await fetchSpotifyShowEpisodes(classification.spotifyId, fetchImpl, env);
+    const match = matchSpotifyEpisodeResult(apiEpisodes, episode);
+    const url = match?.external_urls?.spotify || (match?.id ? `https://open.spotify.com/episode/${match.id}` : '');
+    return url ? platformLink('Spotify', url, 'episode', 'verified') : null;
+  } catch {
+    return null;
+  }
+}
+
+async function fetchSpotifyShowPageEpisodes(showId, fetchImpl) {
+  try {
+    const showUrl = `https://open.spotify.com/show/${encodeURIComponent(showId)}`;
+    const response = await fetchText(showUrl, fetchImpl, { maxBytes: MAX_HTML_BYTES });
+    const { document } = parseHTML(response.text);
+    const episodes = [];
+    const seen = new Set();
+
+    for (const anchor of [...document.querySelectorAll('a[href^="/episode/"], a[href*="open.spotify.com/episode/"]')]) {
+      const url = resolveUrl(anchor.getAttribute('href'), showUrl);
+      const classification = classifyUrl(url);
+      if (classification.platform !== 'spotify' || classification.spotifyType !== 'episode' || !classification.spotifyId) {
+        continue;
+      }
+
+      const name = cleanText(anchor.textContent || anchor.getAttribute('aria-label') || '');
+      if (!name || seen.has(classification.spotifyId)) continue;
+      seen.add(classification.spotifyId);
+      episodes.push({
+        id: classification.spotifyId,
+        name,
+        external_urls: { spotify: `https://open.spotify.com/episode/${classification.spotifyId}` }
+      });
+    }
+
+    return episodes;
+  } catch {
+    return [];
+  }
+}
+
+async function fetchSpotifyShowEpisodes(showId, fetchImpl, env) {
+  const token = await fetchSpotifyAccessToken(fetchImpl, env);
+  if (!token) return [];
+
+  const episodes = [];
+  let url = `https://api.spotify.com/v1/shows/${encodeURIComponent(showId)}/episodes?market=US&limit=50`;
+  for (let page = 0; page < 3 && url; page += 1) {
+    const response = await fetchJson(url, fetchImpl, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    episodes.push(...(response?.items || []));
+    url = response?.next || '';
+  }
+  return episodes;
+}
+
+function matchSpotifyEpisodeResult(results = [], episode = {}) {
+  let best = null;
+  let bestScore = 0;
+  const targetTitle = normalizeTitle(episode.title);
+  const targetDate = episode.publishedAt ? new Date(episode.publishedAt) : null;
+  const targetDuration = episode.duration ? durationToSeconds(episode.duration) : null;
+
+  for (const result of results) {
+    let score = titleScore(normalizeTitle(result.name), targetTitle);
+    if (targetDate && result.release_date) {
+      const deltaDays = Math.abs(new Date(result.release_date) - targetDate) / 86400000;
+      if (deltaDays <= 3) score += 0.2;
+    }
+    if (targetDuration && result.duration_ms) {
+      const seconds = Math.round(result.duration_ms / 1000);
+      if (Math.abs(seconds - targetDuration) <= 120) score += 0.15;
+    }
+    if (score > bestScore) {
+      best = result;
+      bestScore = score;
+    }
+  }
+
+  return bestScore >= 0.72 ? best : null;
+}
+
+async function fetchSpotifyAccessToken(fetchImpl, env) {
+  if (!env?.SPOTIFY_CLIENT_ID || !env?.SPOTIFY_CLIENT_SECRET) {
+    return '';
   }
 
   const tokenResponse = await fetchJson('https://accounts.spotify.com/api/token', fetchImpl, {
@@ -663,16 +857,7 @@ async function fetchSpotifyApi(inputUrl, classification, fetchImpl, env) {
     },
     body: 'grant_type=client_credentials'
   });
-  const token = tokenResponse?.access_token;
-  if (!token) return null;
-
-  const endpoint = classification.spotifyType === 'episode'
-    ? `https://api.spotify.com/v1/episodes/${encodeURIComponent(classification.spotifyId)}?market=US`
-    : `https://api.spotify.com/v1/shows/${encodeURIComponent(classification.spotifyId)}?market=US`;
-
-  return fetchJson(endpoint, fetchImpl, {
-    headers: { Authorization: `Bearer ${token}` }
-  });
+  return tokenResponse?.access_token || '';
 }
 
 async function fetchPodcastFeed(feedUrl, fetchImpl) {
@@ -751,14 +936,19 @@ function findRssUrl(document, baseUrl) {
 
 function matchEpisode(episodes = [], target = {}) {
   if (!target.title) return null;
-  const normalizedTarget = normalizeTitle(target.title);
+  const normalizedTargets = uniqueStrings([target.title, ...(target.alternateTitles || [])].map(normalizeTitle));
   const targetDate = target.publishedAt ? new Date(target.publishedAt) : null;
   const targetDuration = target.durationMillis ? Math.round(target.durationMillis / 1000) : null;
 
   let best = null;
   let bestScore = 0;
   for (const episode of episodes) {
-    let score = titleScore(normalizeTitle(episode.title), normalizedTarget);
+    const normalizedEpisodeTitle = normalizeTitle(episode.title);
+    let score = Math.max(...normalizedTargets.map((candidate) => {
+      const baseScore = titleScore(normalizedEpisodeTitle, candidate);
+      const phraseScore = titleContainsDistinctPhrase(normalizedEpisodeTitle, candidate) ? 0.86 : 0;
+      return Math.max(baseScore, phraseScore);
+    }));
     if (targetDate && episode.publishedAt) {
       const deltaDays = Math.abs(new Date(episode.publishedAt) - targetDate) / 86400000;
       if (deltaDays <= 2) score += 0.25;
@@ -800,6 +990,11 @@ function titleScore(a, b) {
   const bWords = new Set(b.split(' ').filter(Boolean));
   const shared = [...aWords].filter((word) => bWords.has(word)).length;
   return shared / Math.max(aWords.size, bWords.size, 1);
+}
+
+function titleContainsDistinctPhrase(title, phrase) {
+  const words = phrase.split(' ').filter(Boolean);
+  return words.length >= 2 && words.length <= 5 && title.includes(phrase);
 }
 
 async function fetchOEmbed(url, fetchImpl) {
@@ -945,6 +1140,17 @@ function cleanSpotifyShowTitle(value) {
 
 function cleanYouTubeTitle(value) {
   return cleanText(value).replace(/\s*-\s*YouTube\s*$/i, '');
+}
+
+function youtubeTitleCandidates(value) {
+  const title = cleanYouTubeTitle(value);
+  const candidates = [];
+  for (const separator of [' | ', ' – ', ' — ', ' - ']) {
+    if (!title.includes(separator)) continue;
+    const parts = title.split(separator).map(cleanText).filter(Boolean);
+    candidates.push(...parts);
+  }
+  return uniqueStrings(candidates.filter((candidate) => candidate && candidate !== title));
 }
 
 function cleanOvercastTitle(value) {

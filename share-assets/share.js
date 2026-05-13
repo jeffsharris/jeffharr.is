@@ -87,7 +87,75 @@
     });
   }
 
+  function setLoadingStep(index, state) {
+    const step = document.querySelector(`[data-loading-step="${index}"]`);
+    if (!step) return;
+    step.classList.toggle('is-active', state === 'active');
+    step.classList.toggle('is-complete', state === 'complete');
+  }
+
+  function advanceLoadingSteps(targetIndex) {
+    for (let index = 0; index <= 4; index += 1) {
+      if (index < targetIndex) setLoadingStep(index, 'complete');
+      if (index === targetIndex) setLoadingStep(index, 'active');
+    }
+  }
+
+  function initShareLoader() {
+    const loader = document.querySelector('[data-share-loader]');
+    if (!loader) return;
+
+    const sourceUrl = loader.getAttribute('data-source-url') || '';
+    const status = loader.querySelector('[data-loading-status]');
+    const messages = [
+      'Reading the shared URL.',
+      'Looking for the podcast feed.',
+      'Matching the exact episode.',
+      'Checking Apple Podcasts, Spotify, YouTube, Overcast, and RSS.',
+      'Opening your share page.'
+    ];
+    let syntheticStep = 0;
+    let done = false;
+
+    const timer = setInterval(() => {
+      if (done) return;
+      syntheticStep = Math.min(syntheticStep + 1, 3);
+      advanceLoadingSteps(syntheticStep);
+      if (status) status.textContent = messages[syntheticStep];
+    }, 1100);
+
+    async function createShare() {
+      try {
+        const response = await fetch('/api/share', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ url: sourceUrl })
+        });
+        const body = await response.json();
+        if (!response.ok || !body.ok) {
+          throw new Error(body.error || 'Unable to create share link');
+        }
+
+        done = true;
+        clearInterval(timer);
+        for (let index = 0; index < 4; index += 1) setLoadingStep(index, 'complete');
+        advanceLoadingSteps(4);
+        if (status) status.textContent = messages[4];
+        await copyText(body.shareUrl);
+        location.replace(body.shareUrl);
+      } catch (error) {
+        done = true;
+        clearInterval(timer);
+        loader.classList.add('is-error');
+        if (status) status.textContent = error.message || 'Unable to create share link.';
+      }
+    }
+
+    createShare();
+  }
+
   reorderPlatformLinks();
   initCopyButtons();
   initShareForm();
+  initShareLoader();
 })();

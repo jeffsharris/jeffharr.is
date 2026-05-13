@@ -46,14 +46,14 @@ export function renderSharePage(item, requestUrl) {
             <h1>${escapeHtml(title)}</h1>
             ${item.author || item.publisher ? `<p class="share-byline">${escapeHtml(item.author || item.publisher)}</p>` : ''}
             ${item.publishedAt || item.media?.duration ? `<p class="share-meta">${escapeHtml(formatMeta(item))}</p>` : ''}
+            <div class="platform-list" data-platform-list>
+              ${renderPlatformLinks(item.platforms || {})}
+            </div>
             ${audioUrl ? `
               <div class="share-player">
                 <audio controls preload="metadata" src="${escapeAttribute(audioUrl)}"></audio>
               </div>
             ` : ''}
-            <div class="platform-list" data-platform-list>
-              ${renderPlatformLinks(item.platforms || {})}
-            </div>
             <p class="share-description">${escapeHtml(description)}</p>
             <div class="share-actions">
               <button class="secondary-btn" type="button" data-copy="${escapeAttribute(shareUrl)}">Copy share link</button>
@@ -62,7 +62,7 @@ export function renderSharePage(item, requestUrl) {
           </div>
         </article>
       </main>
-      <script src="/share-assets/share.js?v=1"></script>
+      <script src="/share-assets/share.js?v=2"></script>
     `
   });
 }
@@ -125,6 +125,48 @@ export function renderNotFoundPage(requestUrl) {
           <a class="primary-btn" href="/share">Create a share link</a>
         </section>
       </main>
+    `
+  });
+}
+
+export function renderLoadingPage(sourceUrl, requestUrl) {
+  const resolveUrl = new URL('/share/new', requestUrl);
+  resolveUrl.searchParams.set('url', sourceUrl);
+  resolveUrl.searchParams.set('resolve', '1');
+
+  return htmlDocument({
+    title: 'Creating Share Link | Jeff Harris',
+    description: 'Finding podcast metadata and app links.',
+    imageUrl: 'https://jeffharr.is/images/profile.jpg',
+    url: requestUrl,
+    noindex: true,
+    body: `
+      <header class="share-header">
+        <a class="back-link" href="/share">Share</a>
+      </header>
+      <main class="share-main share-main--loading">
+        <section class="share-card loading-card" data-share-loader data-source-url="${escapeAttribute(sourceUrl)}">
+          <div class="loading-mark" aria-hidden="true">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+          <div class="share-content loading-content">
+            <p class="share-kicker">Resolving</p>
+            <h1>Building share page</h1>
+            <p class="share-description" data-loading-status>Finding the episode, artwork, audio, and app links.</p>
+            <ol class="loading-steps" aria-label="Share creation progress">
+              <li data-loading-step="0" class="is-active">Reading shared URL</li>
+              <li data-loading-step="1">Finding podcast feed</li>
+              <li data-loading-step="2">Matching the episode</li>
+              <li data-loading-step="3">Checking listening apps</li>
+              <li data-loading-step="4">Opening share page</li>
+            </ol>
+            <a class="secondary-btn loading-fallback" href="${escapeAttribute(resolveUrl.href)}">Continue without loading screen</a>
+          </div>
+        </section>
+      </main>
+      <script src="/share-assets/share.js?v=2"></script>
     `
   });
 }
