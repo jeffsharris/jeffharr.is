@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Guided Meditation: Much Becomes Incidental - Matthew Brensilver Dharma Talks</title>
+  <link rel="canonical" href="https://jeffharr.is/dharma/brensilver/talks/audiodharma-22668/">
+  <meta name="description" content="Matthew Brensilver offers a quiet guided meditation centered on listening to silence and letting the usual mental inventory become incidental. The practice repeatedly returns to receiving the moment without project-making, self-management, or the need to solve experience. As the talk unfolds, surrender is framed not as passivity but as a temporary release of control in which even difficulty can be held more lightly.">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Matthew Brensilver Dharma Talks">
+  <meta property="og:title" content="Guided Meditation: Much Becomes Incidental">
+  <meta property="og:description" content="Matthew Brensilver offers a quiet guided meditation centered on listening to silence and letting the usual mental inventory become incidental. The practice repeatedly returns to receiving the moment without project-making, self-management, or the need to solve experience. As the talk unfolds, surrender is framed not as passivity but as a temporary release of control in which even difficulty can be held more lightly.">
+  <meta property="og:url" content="https://jeffharr.is/dharma/brensilver/talks/audiodharma-22668/">
+  <meta property="og:image" content="https://jeffharr.is/dharma/brensilver/artwork/audiodharma-22668.jpg">
+  <meta property="og:image:secure_url" content="https://jeffharr.is/dharma/brensilver/artwork/audiodharma-22668.jpg">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="1024">
+  <meta property="og:image:height" content="1024">
+  <meta name="twitter:image" content="https://jeffharr.is/dharma/brensilver/artwork/audiodharma-22668.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Guided Meditation: Much Becomes Incidental">
+  <meta name="twitter:description" content="Matthew Brensilver offers a quiet guided meditation centered on listening to silence and letting the usual mental inventory become incidental. The practice repeatedly returns to receiving the moment without project-making, self-management, or the need to solve experience. As the talk unfolds, surrender is framed not as passivity but as a temporary release of control in which even difficulty can be held more lightly.">
+  <link rel="stylesheet" href="../../talk-page.css">
+</head>
+<body>
+  <main>
+    <a class="back" href="../../">Matthew Brensilver Dharma Talks</a>
+    <div class="hero">
+      <div>
+        <h1>Guided Meditation: Much Becomes Incidental</h1>
+        <div class="meta">
+          <span>AudioDharma</span>
+          <span>28:16</span>
+          <span>2025-04-02</span>
+        </div>
+        <p class="description">Matthew Brensilver offers a quiet guided meditation centered on listening to silence and letting the usual mental inventory become incidental. The practice repeatedly returns to receiving the moment without project-making, self-management, or the need to solve experience. As the talk unfolds, surrender is framed not as passivity but as a temporary release of control in which even difficulty can be held more lightly.</p>
+      </div>
+      <img class="art" src="/dharma/brensilver/artwork/audiodharma-22668.jpg" alt="">
+    </div>
+    <div class="primary-player">
+      <audio id="audio" controls preload="none" src="https://audiodharma.us-east-1.linodeobjects.com/talks/22668/20250402-Matthew_Brensilver-IMC-guided_meditation_much_becomes_incidental.mp3"></audio>
+      <a class="download-link" href="https://audiodharma.us-east-1.linodeobjects.com/talks/22668/20250402-Matthew_Brensilver-IMC-guided_meditation_much_becomes_incidental.mp3" download>Download MP3</a>
+    </div>
+    <section>
+      <h2>Chapters</h2>
+      <ol class="chapters">
+        <li><a href="?t=13" data-start="13.0">00:13</a> <strong>Listening to silence</strong> - The meditation begins by inviting attention to silence itself, even when there is noise around it.</li>
+<li><a href="?t=118" data-start="118.0">01:58</a> <strong>What becomes incidental</strong> - Pleasant and unpleasant feeling, autobiography, and fixed ideas are allowed to recede for a little while.</li>
+<li><a href="?t=223" data-start="223.0">03:43</a> <strong>Receiving the moment</strong> - The teaching settles into the simple stance that receiving the present moment is enough.</li>
+<li><a href="?t=401" data-start="401.0">06:41</a> <strong>No projects, no building</strong> - Brensilver emphasizes dropping the impulse to build, manage, or improve experience.</li>
+<li><a href="?t=509" data-start="509.0">08:29</a> <strong>Surrender and love</strong> - Surrender is described as the dissolution of volitional energy, with love named as the one thing worth building.</li>
+<li><a href="?t=567" data-start="567.0">09:27</a> <strong>Receiving space</strong> - The practice widens into a spacious resting in which space seems to receive space.</li>
+<li><a href="?t=1014" data-start="1014.0">16:54</a> <strong>A new chance to let go</strong> - The talk returns to the ordinary urge to medicate feelings and thought, and frames the session as another opportunity to release control.</li>
+<li><a href="?t=1218" data-start="1217.952">20:18</a> <strong>Emerging unchanged</strong> - The closing notes suggest that life will still be there afterward, the same and yet slightly different after practice.</li>
+      </ol>
+    </section>
+    <section>
+      <h2>Source</h2>
+      <p><a href="https://www.audiodharma.org/talks/22668">Original talk page</a></p>
+    </section>
+  </main>
+  <script>
+    const audio = document.getElementById('audio');
+    function seekFromLocation() {
+      if (!audio) return;
+      const value = new URLSearchParams(location.search).get('t');
+      const seconds = Number(value || 0);
+      if (Number.isFinite(seconds) && seconds > 0) {
+        audio.currentTime = seconds;
+      }
+    }
+    document.querySelectorAll('[data-start]').forEach(link => {
+      link.addEventListener('click', event => {
+        if (!audio) return;
+        event.preventDefault();
+        const seconds = Number(link.dataset.start || 0);
+        history.replaceState(null, '', '?t=' + Math.round(seconds));
+        audio.currentTime = seconds;
+        audio.play().catch(() => {});
+      });
+    });
+    audio?.addEventListener('loadedmetadata', seekFromLocation, { once: true });
+  </script>
+</body>
+</html>

@@ -264,7 +264,7 @@ class MergeTests(unittest.TestCase):
             published_at=datetime(2026, 1, 1, tzinfo=timezone.utc),
             link="https://dharmaseed.org/talks/1/",
             audio_url="https://example.test/seed.mp3",
-            canonical_url="https://jeffharr.is/brensilver/talks/dharmaseed-1/",
+            canonical_url="https://jeffharr.is/dharma/brensilver/talks/dharmaseed-1/",
             podcast_description="A preserved generated description.",
             episode_image_url="https://media.example/artwork/dharmaseed-1.jpg",
             chapters_url="https://media.example/chapters/dharmaseed-1.json",
@@ -326,12 +326,12 @@ class PodcastMetadataTests(unittest.TestCase):
 
         [normalized] = apply_site_image(
             [talk],
-            "https://jeffharr.is/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+            "https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
         )
 
         self.assertEqual(
             normalized.image_url,
-            "https://jeffharr.is/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+            "https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
         )
         self.assertEqual(
             normalized.episode_image_url,
@@ -372,7 +372,7 @@ class PodcastMetadataTests(unittest.TestCase):
                             "published_at": "2026-01-01T00:00:00+00:00",
                             "link": "https://example.test/source",
                             "audio_url": "https://example.test/audio.mp3",
-                            "canonical_url": "https://jeffharr.is/brensilver/talks/dharmaseed-1/",
+                            "canonical_url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-1/",
                             "podcast_description": "A preserved description.",
                             "short_summary": "Preserved.",
                             "episode_image_url": "https://media.example/artwork/dharmaseed-1.jpg",
@@ -501,7 +501,7 @@ class PodcastMetadataTests(unittest.TestCase):
                 [talk],
                 corpus_dir=corpus,
                 media_base_url="https://media.example/brensilver",
-                site_base_url="https://jeffharr.is/brensilver/",
+                site_base_url="https://jeffharr.is/dharma/brensilver/",
             )[0]
             self.assertEqual(enriched.podcast_description, "A talk about practice.")
             self.assertEqual(
@@ -514,7 +514,7 @@ class PodcastMetadataTests(unittest.TestCase):
             )
             self.assertEqual(
                 enriched.chapters[0].url,
-                "https://jeffharr.is/brensilver/talks/audiodharma-1/?t=12",
+                "https://jeffharr.is/dharma/brensilver/talks/audiodharma-1/?t=12",
             )
 
             out_dir = root / "out"
@@ -535,7 +535,7 @@ class PodcastMetadataTests(unittest.TestCase):
             published_at=datetime(2026, 1, 1, tzinfo=timezone.utc),
             link="https://example.test/source",
             audio_url="https://example.test/audio.mp3",
-            canonical_url="https://jeffharr.is/brensilver/talks/audiodharma-1/",
+            canonical_url="https://jeffharr.is/dharma/brensilver/talks/audiodharma-1/",
             podcast_description="A talk about practice.",
             venue="Spirit Rock Meditation Center",
             series="Retreat at Spirit Rock",
@@ -546,7 +546,7 @@ class PodcastMetadataTests(unittest.TestCase):
                 PodcastChapter(
                     start=121,
                     title="Wisdom from ordinariness",
-                    url="https://jeffharr.is/brensilver/talks/audiodharma-1/?t=121",
+                    url="https://jeffharr.is/dharma/brensilver/talks/audiodharma-1/?t=121",
                 )
             ],
         )
@@ -554,8 +554,8 @@ class PodcastMetadataTests(unittest.TestCase):
             [talk],
             {
                 "title": "Feed",
-                "base_url": "https://jeffharr.is/brensilver/",
-                "feed_url": "https://jeffharr.is/brensilver/feed.xml",
+                "base_url": "https://jeffharr.is/dharma/brensilver/",
+                "feed_url": "https://jeffharr.is/dharma/brensilver/feed.xml",
                 "description": "Merged talks.",
             },
         )
@@ -569,7 +569,7 @@ class PodcastMetadataTests(unittest.TestCase):
         self.assertIsNotNone(item)
         description = item.findtext("description")
         summary = item.findtext("itunes:summary", namespaces=namespaces)
-        self.assertEqual(item.findtext("link"), "https://jeffharr.is/brensilver/talks/audiodharma-1/")
+        self.assertEqual(item.findtext("link"), "https://jeffharr.is/dharma/brensilver/talks/audiodharma-1/")
         self.assertIn("A talk about practice.", description)
         self.assertIn("Location: Spirit Rock Meditation Center", description)
         self.assertIn("Additional teachers: Sylvia Boorstein", description)
@@ -578,9 +578,9 @@ class PodcastMetadataTests(unittest.TestCase):
         self.assertIn("Additional teachers: Sylvia Boorstein", summary)
         self.assertNotIn("Location: Spirit Rock Meditation Center (Retreat at Spirit Rock)", summary)
         self.assertIn("02:01 Wisdom from ordinariness", description)
-        self.assertNotIn("https://jeffharr.is/brensilver/talks/audiodharma-1/?t=121", description)
+        self.assertNotIn("https://jeffharr.is/dharma/brensilver/talks/audiodharma-1/?t=121", description)
         self.assertIn("02:01 Wisdom from ordinariness", summary)
-        self.assertNotIn("https://jeffharr.is/brensilver/talks/audiodharma-1/?t=121", summary)
+        self.assertNotIn("https://jeffharr.is/dharma/brensilver/talks/audiodharma-1/?t=121", summary)
         self.assertEqual(
             item.find("itunes:image", namespaces).attrib["href"],
             "https://media.example/brensilver/artwork/audiodharma-1.jpg",
@@ -604,17 +604,17 @@ class PodcastMetadataTests(unittest.TestCase):
             published_at=datetime(2026, 1, 1, tzinfo=timezone.utc),
             link="https://example.test/source",
             audio_url="https://example.test/audio.mp3",
-            canonical_url="https://jeffharr.is/brensilver/talks/audiodharma-1/",
+            canonical_url="https://jeffharr.is/dharma/brensilver/talks/audiodharma-1/",
             podcast_description="A talk about practice, release, and attention.",
-            image_url="https://jeffharr.is/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
-            episode_image_url="https://jeffharr.is/brensilver/artwork/audiodharma-1.jpg",
+            image_url="https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+            episode_image_url="https://jeffharr.is/dharma/brensilver/artwork/audiodharma-1.jpg",
         )
 
         html = render_talk_page(
             {
                 "site": {
                     "title": "Matthew Brensilver Dharma Talks",
-                    "base_url": "https://jeffharr.is/brensilver/",
+                    "base_url": "https://jeffharr.is/dharma/brensilver/",
                     "description": "Merged talks.",
                 }
             },
@@ -622,18 +622,18 @@ class PodcastMetadataTests(unittest.TestCase):
         )
 
         self.assertIn(
-            '<link rel="canonical" href="https://jeffharr.is/brensilver/talks/audiodharma-1/">',
+            '<link rel="canonical" href="https://jeffharr.is/dharma/brensilver/talks/audiodharma-1/">',
             html,
         )
         self.assertIn(
-            '<meta property="og:image" content="https://jeffharr.is/brensilver/artwork/audiodharma-1.jpg">',
+            '<meta property="og:image" content="https://jeffharr.is/dharma/brensilver/artwork/audiodharma-1.jpg">',
             html,
         )
         self.assertIn(
-            '<meta name="twitter:image" content="https://jeffharr.is/brensilver/artwork/audiodharma-1.jpg">',
+            '<meta name="twitter:image" content="https://jeffharr.is/dharma/brensilver/artwork/audiodharma-1.jpg">',
             html,
         )
-        self.assertIn('<img class="art" src="/brensilver/artwork/audiodharma-1.jpg"', html)
+        self.assertIn('<img class="art" src="/dharma/brensilver/artwork/audiodharma-1.jpg"', html)
         self.assertNotIn("MatthewBrensilver_small", html)
 
     def test_rss_summary_normalizes_source_venue_without_episode_metadata(self):
@@ -654,8 +654,8 @@ class PodcastMetadataTests(unittest.TestCase):
             [talk],
             {
                 "title": "Feed",
-                "base_url": "https://jeffharr.is/brensilver/",
-                "feed_url": "https://jeffharr.is/brensilver/feed.xml",
+                "base_url": "https://jeffharr.is/dharma/brensilver/",
+                "feed_url": "https://jeffharr.is/dharma/brensilver/feed.xml",
                 "description": "Merged talks.",
             },
         )

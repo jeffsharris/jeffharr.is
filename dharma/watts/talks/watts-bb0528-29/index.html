@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Libido For Ugliness - Alan Watts</title>
+  <link rel="canonical" href="https://jeffharr.is/dharma/watts/talks/watts-bb0528-29/">
+  <meta name="description" content="Alan Watts opens by reading Mencken’s corrosive portrait of industrial Pennsylvania, then turns that complaint toward California, where scenic Marin is being carved up by tract homes and a proposed highway. From there the talk widens into a critique of progress as automatic, machine-led, and finally as a symptom of self-hatred: not just damage to the land, but to the human relation with it. He closes by moving from roads to food to the everyday habits that make ugliness feel normal.">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Alan Watts">
+  <meta property="og:title" content="The Libido For Ugliness">
+  <meta property="og:description" content="Alan Watts opens by reading Mencken’s corrosive portrait of industrial Pennsylvania, then turns that complaint toward California, where scenic Marin is being carved up by tract homes and a proposed highway. From there the talk widens into a critique of progress as automatic, machine-led, and finally as a symptom of self-hatred: not just damage to the land, but to the human relation with it. He closes by moving from roads to food to the everyday habits that make ugliness feel normal.">
+  <meta property="og:url" content="https://jeffharr.is/dharma/watts/talks/watts-bb0528-29/">
+  <meta property="og:image" content="https://jeffharr.is/dharma/watts/artwork/watts-bb0528-29.jpg">
+  <meta property="og:image:secure_url" content="https://jeffharr.is/dharma/watts/artwork/watts-bb0528-29.jpg">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="1024">
+  <meta property="og:image:height" content="1024">
+  <meta name="twitter:image" content="https://jeffharr.is/dharma/watts/artwork/watts-bb0528-29.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="The Libido For Ugliness">
+  <meta name="twitter:description" content="Alan Watts opens by reading Mencken’s corrosive portrait of industrial Pennsylvania, then turns that complaint toward California, where scenic Marin is being carved up by tract homes and a proposed highway. From there the talk widens into a critique of progress as automatic, machine-led, and finally as a symptom of self-hatred: not just damage to the land, but to the human relation with it. He closes by moving from roads to food to the everyday habits that make ugliness feel normal.">
+  <link rel="stylesheet" href="../../talk-page.css">
+</head>
+<body>
+  <main>
+    <a class="back" href="../../">Alan Watts</a>
+    <div class="hero">
+      <div>
+        <h1>The Libido For Ugliness</h1>
+        <div class="meta">
+          <span>KPFA Archive</span>
+          <span>26:26</span>
+          <span>1960-06-24</span>
+        </div>
+        <p class="description">Alan Watts opens by reading Mencken’s corrosive portrait of industrial Pennsylvania, then turns that complaint toward California, where scenic Marin is being carved up by tract homes and a proposed highway. From there the talk widens into a critique of progress as automatic, machine-led, and finally as a symptom of self-hatred: not just damage to the land, but to the human relation with it. He closes by moving from roads to food to the everyday habits that make ugliness feel normal.</p>
+      </div>
+      <img class="art" src="/dharma/watts/artwork/watts-bb0528-29.jpg" alt="">
+    </div>
+    <div class="primary-player">
+      <audio id="audio" controls preload="none" src="https://drive.google.com/uc?export=download&amp;id=1i9lryIDIu_i7qN-bzWP55Bj_Yd9yVGoq"></audio>
+      <a class="download-link" href="https://drive.google.com/uc?export=download&amp;id=1i9lryIDIu_i7qN-bzWP55Bj_Yd9yVGoq" download>Download MP3</a>
+    </div>
+    <section>
+      <h2>Chapters</h2>
+      <ol class="chapters">
+        <li><a href="?t=0" data-start="0.0">00:00</a> <strong>Mencken’s indictment</strong> - Watts introduces the issue by reading Mencken’s portrait of Westmoreland County as a vivid case study in industrial ugliness.</li>
+<li><a href="?t=621" data-start="620.84">10:21</a> <strong>Marin under pressure</strong> - He shifts to Marin County, where tract homes and a planned highway threaten a landscape he describes as still unusually beautiful.</li>
+<li><a href="?t=912" data-start="912.12">15:12</a> <strong>When beauty is consumed</strong> - Watts argues that the desire to reach scenic places by effortless mass travel tends to spoil them, like passive entertainment.</li>
+<li><a href="?t=1091" data-start="1090.52">18:11</a> <strong>Progress and machinery</strong> - He connects road-building to bureaucracy and automatic expansion, then broadens the point into a Chinese-inflected warning about fighting nature.</li>
+<li><a href="?t=1251" data-start="1250.706">20:51</a> <strong>Self-hatred in culture</strong> - Watts suggests that the deeper source of environmental damage may be an inward hostility that shows up in how people build and live.</li>
+<li><a href="?t=1382" data-start="1381.706">23:02</a> <strong>Food and final warning</strong> - He extends the argument to food and everyday taste, then ends with a direct call for citizens to resist destructive development.</li>
+      </ol>
+    </section>
+    <section>
+      <h2>Source</h2>
+      <p><a href="https://drive.google.com/uc?export=download&amp;id=1i9lryIDIu_i7qN-bzWP55Bj_Yd9yVGoq">Original talk page</a></p>
+    </section>
+  </main>
+  <script>
+    const audio = document.getElementById('audio');
+    function seekFromLocation() {
+      if (!audio) return;
+      const value = new URLSearchParams(location.search).get('t');
+      const seconds = Number(value || 0);
+      if (Number.isFinite(seconds) && seconds > 0) {
+        audio.currentTime = seconds;
+      }
+    }
+    document.querySelectorAll('[data-start]').forEach(link => {
+      link.addEventListener('click', event => {
+        if (!audio) return;
+        event.preventDefault();
+        const seconds = Number(link.dataset.start || 0);
+        history.replaceState(null, '', '?t=' + Math.round(seconds));
+        audio.currentTime = seconds;
+        audio.play().catch(() => {});
+      });
+    });
+    audio?.addEventListener('loadedmetadata', seekFromLocation, { once: true });
+  </script>
+</body>
+</html>

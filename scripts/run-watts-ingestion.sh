@@ -24,7 +24,7 @@ fi
 
 : "${WATTS_INGEST_LIMIT:=50}"
 : "${WATTS_FEED_EVERY:=10}"
-: "${WATTS_MEDIA_BASE_URL:=https://jeffharr.is/watts/}"
+: "${WATTS_MEDIA_BASE_URL:=https://jeffharr.is/dharma/watts/}"
 : "${WATTS_AUTO_PUBLISH:=0}"
 
 if [[ "$WATTS_AUTO_PUBLISH" == "1" ]]; then
@@ -59,8 +59,8 @@ PYTHONPATH=tools/brensilver-transcripts/src \
 
 if [[ "$WATTS_AUTO_PUBLISH" == "1" ]]; then
   echo "[$(timestamp)] Publishing generated Watts artifacts"
-  git add watts
-  if git diff --cached --quiet -- watts; then
+  git add dharma/watts
+  if git diff --cached --quiet -- dharma/watts; then
     echo "No Watts generated artifact changes to publish."
   else
     git commit -m "Update Watts generated feed artifacts"

@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Practice Note: Noticing Something New - Matthew Brensilver Dharma Talks</title>
+  <link rel="canonical" href="https://jeffharr.is/dharma/brensilver/talks/audiodharma-8898/">
+  <meta name="description" content="Matthew Brensilver offers a short practice note on attention: our meditation can become familiar and efficient, but it can also be a way of looking anew. He uses the image of a theater of the mind to point to the habits that shape experience, and then invites listeners to ask what might be seen if those habits were loosened. The emphasis is not on forcing insight, but on settling enough to meet experience with fresh eyes.">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Matthew Brensilver Dharma Talks">
+  <meta property="og:title" content="Practice Note: Noticing Something New">
+  <meta property="og:description" content="Matthew Brensilver offers a short practice note on attention: our meditation can become familiar and efficient, but it can also be a way of looking anew. He uses the image of a theater of the mind to point to the habits that shape experience, and then invites listeners to ask what might be seen if those habits were loosened. The emphasis is not on forcing insight, but on settling enough to meet experience with fresh eyes.">
+  <meta property="og:url" content="https://jeffharr.is/dharma/brensilver/talks/audiodharma-8898/">
+  <meta property="og:image" content="https://jeffharr.is/dharma/brensilver/artwork/audiodharma-8898.jpg">
+  <meta property="og:image:secure_url" content="https://jeffharr.is/dharma/brensilver/artwork/audiodharma-8898.jpg">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="1024">
+  <meta property="og:image:height" content="1024">
+  <meta name="twitter:image" content="https://jeffharr.is/dharma/brensilver/artwork/audiodharma-8898.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Practice Note: Noticing Something New">
+  <meta name="twitter:description" content="Matthew Brensilver offers a short practice note on attention: our meditation can become familiar and efficient, but it can also be a way of looking anew. He uses the image of a theater of the mind to point to the habits that shape experience, and then invites listeners to ask what might be seen if those habits were loosened. The emphasis is not on forcing insight, but on settling enough to meet experience with fresh eyes.">
+  <link rel="stylesheet" href="../../talk-page.css">
+</head>
+<body>
+  <main>
+    <a class="back" href="../../">Matthew Brensilver Dharma Talks</a>
+    <div class="hero">
+      <div>
+        <h1>Practice Note: Noticing Something New</h1>
+        <div class="meta">
+          <span>AudioDharma</span>
+          <span>04:37</span>
+          <span>2018-05-16</span>
+        </div>
+        <p class="description">Matthew Brensilver offers a short practice note on attention: our meditation can become familiar and efficient, but it can also be a way of looking anew. He uses the image of a theater of the mind to point to the habits that shape experience, and then invites listeners to ask what might be seen if those habits were loosened. The emphasis is not on forcing insight, but on settling enough to meet experience with fresh eyes.</p>
+      </div>
+      <img class="art" src="/dharma/brensilver/artwork/audiodharma-8898.jpg" alt="">
+    </div>
+    <div class="primary-player">
+      <audio id="audio" controls preload="none" src="https://audiodharma.us-east-1.linodeobjects.com/talks/8898/20180516-Matthew_Brensilver-IMC-practice_note_noticing_something_new.mp3"></audio>
+      <a class="download-link" href="https://audiodharma.us-east-1.linodeobjects.com/talks/8898/20180516-Matthew_Brensilver-IMC-practice_note_noticing_something_new.mp3" download>Download MP3</a>
+    </div>
+    <section>
+      <h2>Chapters</h2>
+      <ol class="chapters">
+        <li><a href="?t=0" data-start="0.0">00:00</a> <strong>Opening Context</strong> - A short introduction from the meditation center lead-in before the teaching begins.</li>
+<li><a href="?t=30" data-start="30.0">00:30</a> <strong>Grooved Attention</strong> - He begins with the idea that attention can become trained into familiar routes, much like looking only in the usual places.</li>
+<li><a href="?t=60" data-start="60.0">01:00</a> <strong>Practice And Familiarity</strong> - The talk turns to the way practice develops efficient habits of looking at body, mind, and feeling, while also inviting a different kind of seeing.</li>
+<li><a href="?t=109" data-start="109.0">01:49</a> <strong>Looking In New Ways</strong> - He asks what it would mean to look in new ways during practice and names the inner life as a kind of theater.</li>
+<li><a href="?t=169" data-start="169.0">02:49</a> <strong>Letting The Frame Go</strong> - The imagery of stage, actors, director, and protagonist is used to show how our usual framing can obscure novelty.</li>
+<li><a href="?t=208" data-start="208.0">03:28</a> <strong>Seeing With New Eyes</strong> - He suggests that the point is not to manufacture something new, but to look in a way that makes new seeing possible.</li>
+      </ol>
+    </section>
+    <section>
+      <h2>Source</h2>
+      <p><a href="https://www.audiodharma.org/talks/8898">Original talk page</a></p>
+    </section>
+  </main>
+  <script>
+    const audio = document.getElementById('audio');
+    function seekFromLocation() {
+      if (!audio) return;
+      const value = new URLSearchParams(location.search).get('t');
+      const seconds = Number(value || 0);
+      if (Number.isFinite(seconds) && seconds > 0) {
+        audio.currentTime = seconds;
+      }
+    }
+    document.querySelectorAll('[data-start]').forEach(link => {
+      link.addEventListener('click', event => {
+        if (!audio) return;
+        event.preventDefault();
+        const seconds = Number(link.dataset.start || 0);
+        history.replaceState(null, '', '?t=' + Math.round(seconds));
+        audio.currentTime = seconds;
+        audio.play().catch(() => {});
+      });
+    });
+    audio?.addEventListener('loadedmetadata', seekFromLocation, { once: true });
+  </script>
+</body>
+</html>

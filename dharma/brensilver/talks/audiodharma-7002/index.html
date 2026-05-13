@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Feedback &amp; the Architecture of Self - Matthew Brensilver Dharma Talks</title>
+  <link rel="canonical" href="https://jeffharr.is/dharma/brensilver/talks/audiodharma-7002/">
+  <meta name="description" content="Matthew Brensilver frames the talk around Shinzen Young’s two maxims: don’t fight with yourself, and take feedback. From there he explores how criticism and misunderstanding can reveal the hidden architecture of self, showing how defensiveness protects self-view and how practice can gradually make us less brittle. He closes by linking this inner work to becoming safer, more open company for others.">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Matthew Brensilver Dharma Talks">
+  <meta property="og:title" content="Feedback &amp; the Architecture of Self">
+  <meta property="og:description" content="Matthew Brensilver frames the talk around Shinzen Young’s two maxims: don’t fight with yourself, and take feedback. From there he explores how criticism and misunderstanding can reveal the hidden architecture of self, showing how defensiveness protects self-view and how practice can gradually make us less brittle. He closes by linking this inner work to becoming safer, more open company for others.">
+  <meta property="og:url" content="https://jeffharr.is/dharma/brensilver/talks/audiodharma-7002/">
+  <meta property="og:image" content="https://jeffharr.is/dharma/brensilver/artwork/audiodharma-7002.jpg">
+  <meta property="og:image:secure_url" content="https://jeffharr.is/dharma/brensilver/artwork/audiodharma-7002.jpg">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="1024">
+  <meta property="og:image:height" content="1024">
+  <meta name="twitter:image" content="https://jeffharr.is/dharma/brensilver/artwork/audiodharma-7002.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Feedback &amp; the Architecture of Self">
+  <meta name="twitter:description" content="Matthew Brensilver frames the talk around Shinzen Young’s two maxims: don’t fight with yourself, and take feedback. From there he explores how criticism and misunderstanding can reveal the hidden architecture of self, showing how defensiveness protects self-view and how practice can gradually make us less brittle. He closes by linking this inner work to becoming safer, more open company for others.">
+  <link rel="stylesheet" href="../../talk-page.css">
+</head>
+<body>
+  <main>
+    <a class="back" href="../../">Matthew Brensilver Dharma Talks</a>
+    <div class="hero">
+      <div>
+        <h1>Feedback &amp; the Architecture of Self</h1>
+        <div class="meta">
+          <span>AudioDharma</span>
+          <span>13:20</span>
+          <span>2016-09-14</span>
+        </div>
+        <p class="description">Matthew Brensilver frames the talk around Shinzen Young’s two maxims: don’t fight with yourself, and take feedback. From there he explores how criticism and misunderstanding can reveal the hidden architecture of self, showing how defensiveness protects self-view and how practice can gradually make us less brittle. He closes by linking this inner work to becoming safer, more open company for others.</p>
+      </div>
+      <img class="art" src="/dharma/brensilver/artwork/audiodharma-7002.jpg" alt="">
+    </div>
+    <div class="primary-player">
+      <audio id="audio" controls preload="none" src="https://audiodharma.us-east-1.linodeobjects.com/talks/7002/20160914-Matthew_Brensilver-IMC-feedback_the_architecture_of_self.mp3"></audio>
+      <a class="download-link" href="https://audiodharma.us-east-1.linodeobjects.com/talks/7002/20160914-Matthew_Brensilver-IMC-feedback_the_architecture_of_self.mp3" download>Download MP3</a>
+    </div>
+    <section>
+      <h2>Chapters</h2>
+      <ol class="chapters">
+        <li><a href="?t=31" data-start="31.0">00:31</a> <strong>Two Maxims</strong> - Matthew introduces Shinzen Young’s two simple guidelines and uses them as the frame for the talk.</li>
+<li><a href="?t=95" data-start="95.4">01:35</a> <strong>Learning From Feedback</strong> - He distinguishes concrete feedback from metaphor and argues that ordinary experience can teach us if we are willing to receive it.</li>
+<li><a href="?t=178" data-start="177.68">02:58</a> <strong>Delusion and Self-Image</strong> - He connects feedback to seeing the blind spots of the mind and to loosening the habit of assuming we already know.</li>
+<li><a href="?t=307" data-start="307.44">05:07</a> <strong>Seeing Self-Clinging</strong> - Matthew explains how feedback makes the structure of self-view visible, especially where defensiveness protects identity.</li>
+<li><a href="?t=430" data-start="430.24">07:10</a> <strong>Becoming Unoffendable</strong> - He describes a Dharma practice of working through raw places in ego so that criticism and misapprehension do not automatically trigger pain.</li>
+<li><a href="?t=570" data-start="570.08">09:30</a> <strong>Tolerating Disorientation</strong> - The talk turns to the instability that arises when self-view is challenged and the need to stay with that disorientation without scrambling to re-solidify.</li>
+<li><a href="?t=651" data-start="650.88">10:51</a> <strong>Safer For Others</strong> - He broadens the practice outward, describing how non-defensiveness and willingness to be wrong can make us more trustworthy and refuge-like for others.</li>
+      </ol>
+    </section>
+    <section>
+      <h2>Source</h2>
+      <p><a href="https://www.audiodharma.org/talks/7002">Original talk page</a></p>
+    </section>
+  </main>
+  <script>
+    const audio = document.getElementById('audio');
+    function seekFromLocation() {
+      if (!audio) return;
+      const value = new URLSearchParams(location.search).get('t');
+      const seconds = Number(value || 0);
+      if (Number.isFinite(seconds) && seconds > 0) {
+        audio.currentTime = seconds;
+      }
+    }
+    document.querySelectorAll('[data-start]').forEach(link => {
+      link.addEventListener('click', event => {
+        if (!audio) return;
+        event.preventDefault();
+        const seconds = Number(link.dataset.start || 0);
+        history.replaceState(null, '', '?t=' + Math.round(seconds));
+        audio.currentTime = seconds;
+        audio.play().catch(() => {});
+      });
+    });
+    audio?.addEventListener('loadedmetadata', seekFromLocation, { once: true });
+  </script>
+</body>
+</html>

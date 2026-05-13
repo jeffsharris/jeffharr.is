@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dharmette: Sourcing our Motivation from Love Rather than Fear - Matthew Brensilver Dharma Talks</title>
+  <link rel="canonical" href="https://jeffharr.is/dharma/brensilver/talks/audiodharma-17000/">
+  <meta name="description" content="Matthew Brensilver reflects on the difference between motivating ourselves through fear and motivating ourselves through love. Using a story from residential treatment work, he shows how harsh self-management can seem effective at first, but tends not to support lasting change. The talk moves toward a quieter alternative: curiosity, humor, tenderness, and care as the basis for practice and daily life.">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Matthew Brensilver Dharma Talks">
+  <meta property="og:title" content="Dharmette: Sourcing our Motivation from Love Rather than Fear">
+  <meta property="og:description" content="Matthew Brensilver reflects on the difference between motivating ourselves through fear and motivating ourselves through love. Using a story from residential treatment work, he shows how harsh self-management can seem effective at first, but tends not to support lasting change. The talk moves toward a quieter alternative: curiosity, humor, tenderness, and care as the basis for practice and daily life.">
+  <meta property="og:url" content="https://jeffharr.is/dharma/brensilver/talks/audiodharma-17000/">
+  <meta property="og:image" content="https://jeffharr.is/dharma/brensilver/artwork/audiodharma-17000.jpg">
+  <meta property="og:image:secure_url" content="https://jeffharr.is/dharma/brensilver/artwork/audiodharma-17000.jpg">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="1024">
+  <meta property="og:image:height" content="1024">
+  <meta name="twitter:image" content="https://jeffharr.is/dharma/brensilver/artwork/audiodharma-17000.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Dharmette: Sourcing our Motivation from Love Rather than Fear">
+  <meta name="twitter:description" content="Matthew Brensilver reflects on the difference between motivating ourselves through fear and motivating ourselves through love. Using a story from residential treatment work, he shows how harsh self-management can seem effective at first, but tends not to support lasting change. The talk moves toward a quieter alternative: curiosity, humor, tenderness, and care as the basis for practice and daily life.">
+  <link rel="stylesheet" href="../../talk-page.css">
+</head>
+<body>
+  <main>
+    <a class="back" href="../../">Matthew Brensilver Dharma Talks</a>
+    <div class="hero">
+      <div>
+        <h1>Dharmette: Sourcing our Motivation from Love Rather than Fear</h1>
+        <div class="meta">
+          <span>AudioDharma</span>
+          <span>14:24</span>
+          <span>2022-09-27</span>
+        </div>
+        <p class="description">Matthew Brensilver reflects on the difference between motivating ourselves through fear and motivating ourselves through love. Using a story from residential treatment work, he shows how harsh self-management can seem effective at first, but tends not to support lasting change. The talk moves toward a quieter alternative: curiosity, humor, tenderness, and care as the basis for practice and daily life.</p>
+      </div>
+      <img class="art" src="/dharma/brensilver/artwork/audiodharma-17000.jpg" alt="">
+    </div>
+    <div class="primary-player">
+      <audio id="audio" controls preload="none" src="https://audiodharma.us-east-1.linodeobjects.com/talks/17000/20220927-Matthew_Brensilver-IMC-dharmette_sourcing_our_motivation_from_love_rather_than_fear.mp3"></audio>
+      <a class="download-link" href="https://audiodharma.us-east-1.linodeobjects.com/talks/17000/20220927-Matthew_Brensilver-IMC-dharmette_sourcing_our_motivation_from_love_rather_than_fear.mp3" download>Download MP3</a>
+    </div>
+    <section>
+      <h2>Chapters</h2>
+      <ol class="chapters">
+        <li><a href="?t=34" data-start="34.0">00:34</a> <strong>A Different Dharma Pleasure</strong> - He introduces the theme of finding pleasure in practice, especially the pleasure of sourcing motivation from love.</li>
+<li><a href="?t=121" data-start="121.0">02:01</a> <strong>Working With Boys</strong> - A story from residential treatment illustrates how behavior programs can be driven by either fear or care.</li>
+<li><a href="?t=176" data-start="176.0">02:56</a> <strong>Fear or Love</strong> - He names the tension between short-term compliance and the kind of change that can actually last.</li>
+<li><a href="?t=248" data-start="248.0">04:08</a> <strong>What Drives Us</strong> - The talk turns inward, asking what kind of program we run on ourselves and where our motivation comes from.</li>
+<li><a href="?t=317" data-start="317.0">05:17</a> <strong>Self-Harshness and Proof</strong> - He describes self-hatred, punishment, and gold-star thinking as ways of trying to change through fear and proving.</li>
+<li><a href="?t=473" data-start="473.0">07:53</a> <strong>Curiosity and Humor</strong> - As shame loosens, limitations can be held with curiosity and even laughter rather than judgment.</li>
+<li><a href="?t=581" data-start="581.0">09:41</a> <strong>Care Over Urgency</strong> - He points to tenderness, sympathy, and a sober appreciation of our condition as a steadier basis for growth.</li>
+<li><a href="?t=721" data-start="721.0">12:01</a> <strong>Less Entangled</strong> - The close emphasizes lightness, discovery, and a motivation rooted in love rather than fear.</li>
+      </ol>
+    </section>
+    <section>
+      <h2>Source</h2>
+      <p><a href="https://www.audiodharma.org/talks/17000">Original talk page</a></p>
+    </section>
+  </main>
+  <script>
+    const audio = document.getElementById('audio');
+    function seekFromLocation() {
+      if (!audio) return;
+      const value = new URLSearchParams(location.search).get('t');
+      const seconds = Number(value || 0);
+      if (Number.isFinite(seconds) && seconds > 0) {
+        audio.currentTime = seconds;
+      }
+    }
+    document.querySelectorAll('[data-start]').forEach(link => {
+      link.addEventListener('click', event => {
+        if (!audio) return;
+        event.preventDefault();
+        const seconds = Number(link.dataset.start || 0);
+        history.replaceState(null, '', '?t=' + Math.round(seconds));
+        audio.currentTime = seconds;
+        audio.play().catch(() => {});
+      });
+    });
+    audio?.addEventListener('loadedmetadata', seekFromLocation, { once: true });
+  </script>
+</body>
+</html>

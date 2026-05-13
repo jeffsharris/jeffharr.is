@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Guided Meditation: Not Predicting Me - Matthew Brensilver Dharma Talks</title>
+  <link rel="canonical" href="https://jeffharr.is/dharma/brensilver/talks/audiodharma-21224/">
+  <meta name="description" content="Matthew Brensilver offers a guided meditation built around softening the habit of predicting who we are from one moment to the next. He points to the “song of self” as something that can be noticed rather than believed, and uses that noticing to make breathing and body awareness feel less crowded. The practice gradually turns toward a quieter, more global wakefulness in which experience is allowed to be wider than any fixed story.">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Matthew Brensilver Dharma Talks">
+  <meta property="og:title" content="Guided Meditation: Not Predicting Me">
+  <meta property="og:description" content="Matthew Brensilver offers a guided meditation built around softening the habit of predicting who we are from one moment to the next. He points to the “song of self” as something that can be noticed rather than believed, and uses that noticing to make breathing and body awareness feel less crowded. The practice gradually turns toward a quieter, more global wakefulness in which experience is allowed to be wider than any fixed story.">
+  <meta property="og:url" content="https://jeffharr.is/dharma/brensilver/talks/audiodharma-21224/">
+  <meta property="og:image" content="https://jeffharr.is/dharma/brensilver/artwork/audiodharma-21224.jpg">
+  <meta property="og:image:secure_url" content="https://jeffharr.is/dharma/brensilver/artwork/audiodharma-21224.jpg">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="1024">
+  <meta property="og:image:height" content="1024">
+  <meta name="twitter:image" content="https://jeffharr.is/dharma/brensilver/artwork/audiodharma-21224.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Guided Meditation: Not Predicting Me">
+  <meta name="twitter:description" content="Matthew Brensilver offers a guided meditation built around softening the habit of predicting who we are from one moment to the next. He points to the “song of self” as something that can be noticed rather than believed, and uses that noticing to make breathing and body awareness feel less crowded. The practice gradually turns toward a quieter, more global wakefulness in which experience is allowed to be wider than any fixed story.">
+  <link rel="stylesheet" href="../../talk-page.css">
+</head>
+<body>
+  <main>
+    <a class="back" href="../../">Matthew Brensilver Dharma Talks</a>
+    <div class="hero">
+      <div>
+        <h1>Guided Meditation: Not Predicting Me</h1>
+        <div class="meta">
+          <span>AudioDharma</span>
+          <span>30:08</span>
+          <span>2024-09-10</span>
+        </div>
+        <p class="description">Matthew Brensilver offers a guided meditation built around softening the habit of predicting who we are from one moment to the next. He points to the “song of self” as something that can be noticed rather than believed, and uses that noticing to make breathing and body awareness feel less crowded. The practice gradually turns toward a quieter, more global wakefulness in which experience is allowed to be wider than any fixed story.</p>
+      </div>
+      <img class="art" src="/dharma/brensilver/artwork/audiodharma-21224.jpg" alt="">
+    </div>
+    <div class="primary-player">
+      <audio id="audio" controls preload="none" src="https://audiodharma.us-east-1.linodeobjects.com/talks/21224/20240910-Matthew_Brensilver-IMC-guided_meditation_not_predicting_me.mp3"></audio>
+      <a class="download-link" href="https://audiodharma.us-east-1.linodeobjects.com/talks/21224/20240910-Matthew_Brensilver-IMC-guided_meditation_not_predicting_me.mp3" download>Download MP3</a>
+    </div>
+    <section>
+      <h2>Chapters</h2>
+      <ol class="chapters">
+        <li><a href="?t=0" data-start="0.0">00:00</a> <strong>Arrival</strong> - A brief welcome and invitation to practice together without a fixed plan.</li>
+<li><a href="?t=60" data-start="60.48">01:00</a> <strong>Predicting Ourselves</strong> - He explores how the mind keeps rehearsing a model of self from moment to moment.</li>
+<li><a href="?t=177" data-start="177.48">02:57</a> <strong>Opening to Not-Knowing</strong> - The talk widens into questions about what it would be like not to expect the next moment to feel like the same person.</li>
+<li><a href="?t=365" data-start="365.48">06:05</a> <strong>The Song of Self</strong> - He names the recurring self-story as something that can be heard, noticed, and slightly alienated from.</li>
+<li><a href="?t=646" data-start="646.48">10:46</a> <strong>Love It to Death</strong> - Using a phrase attributed to Shinzen Young, he suggests meeting selfing with enough familiarity that it loses its grip.</li>
+<li><a href="?t=779" data-start="779.48">12:59</a> <strong>Settling Into Breath</strong> - The practice turns toward surrendering into breathing as expectations and moral pressure begin to loosen.</li>
+<li><a href="?t=1521" data-start="1520.736">25:21</a> <strong>Global Wakefulness</strong> - In the closing instructions, he emphasizes that no story can be a lasting home and invites a wider wakefulness to all of life.</li>
+      </ol>
+    </section>
+    <section>
+      <h2>Source</h2>
+      <p><a href="https://www.audiodharma.org/talks/21224">Original talk page</a></p>
+    </section>
+  </main>
+  <script>
+    const audio = document.getElementById('audio');
+    function seekFromLocation() {
+      if (!audio) return;
+      const value = new URLSearchParams(location.search).get('t');
+      const seconds = Number(value || 0);
+      if (Number.isFinite(seconds) && seconds > 0) {
+        audio.currentTime = seconds;
+      }
+    }
+    document.querySelectorAll('[data-start]').forEach(link => {
+      link.addEventListener('click', event => {
+        if (!audio) return;
+        event.preventDefault();
+        const seconds = Number(link.dataset.start || 0);
+        history.replaceState(null, '', '?t=' + Math.round(seconds));
+        audio.currentTime = seconds;
+        audio.play().catch(() => {});
+      });
+    });
+    audio?.addEventListener('loadedmetadata', seekFromLocation, { once: true });
+  </script>
+</body>
+</html>

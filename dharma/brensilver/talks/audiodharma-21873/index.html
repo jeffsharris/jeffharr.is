@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Guided Meditation: Self-acceptance - Matthew Brensilver Dharma Talks</title>
+  <link rel="canonical" href="https://jeffharr.is/dharma/brensilver/talks/audiodharma-21873/">
+  <meta name="description" content="Matthew Brensilver offers a guided meditation on self-acceptance that moves from settling the body into a broad, compassionate view of conditioning, history, and the forces that shape a life. He invites a radical yes to experience—not as a way to become better, but as the ground from which change can actually happen. The practice ends in a simple self-directed loving-kindness sequence: may I be happy, safe, protected, and at peace.">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Matthew Brensilver Dharma Talks">
+  <meta property="og:title" content="Guided Meditation: Self-acceptance">
+  <meta property="og:description" content="Matthew Brensilver offers a guided meditation on self-acceptance that moves from settling the body into a broad, compassionate view of conditioning, history, and the forces that shape a life. He invites a radical yes to experience—not as a way to become better, but as the ground from which change can actually happen. The practice ends in a simple self-directed loving-kindness sequence: may I be happy, safe, protected, and at peace.">
+  <meta property="og:url" content="https://jeffharr.is/dharma/brensilver/talks/audiodharma-21873/">
+  <meta property="og:image" content="https://jeffharr.is/dharma/brensilver/artwork/audiodharma-21873.jpg">
+  <meta property="og:image:secure_url" content="https://jeffharr.is/dharma/brensilver/artwork/audiodharma-21873.jpg">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="1024">
+  <meta property="og:image:height" content="1024">
+  <meta name="twitter:image" content="https://jeffharr.is/dharma/brensilver/artwork/audiodharma-21873.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Guided Meditation: Self-acceptance">
+  <meta name="twitter:description" content="Matthew Brensilver offers a guided meditation on self-acceptance that moves from settling the body into a broad, compassionate view of conditioning, history, and the forces that shape a life. He invites a radical yes to experience—not as a way to become better, but as the ground from which change can actually happen. The practice ends in a simple self-directed loving-kindness sequence: may I be happy, safe, protected, and at peace.">
+  <link rel="stylesheet" href="../../talk-page.css">
+</head>
+<body>
+  <main>
+    <a class="back" href="../../">Matthew Brensilver Dharma Talks</a>
+    <div class="hero">
+      <div>
+        <h1>Guided Meditation: Self-acceptance</h1>
+        <div class="meta">
+          <span>AudioDharma</span>
+          <span>29:00</span>
+          <span>2024-12-12</span>
+        </div>
+        <p class="description">Matthew Brensilver offers a guided meditation on self-acceptance that moves from settling the body into a broad, compassionate view of conditioning, history, and the forces that shape a life. He invites a radical yes to experience—not as a way to become better, but as the ground from which change can actually happen. The practice ends in a simple self-directed loving-kindness sequence: may I be happy, safe, protected, and at peace.</p>
+      </div>
+      <img class="art" src="/dharma/brensilver/artwork/audiodharma-21873.jpg" alt="">
+    </div>
+    <div class="primary-player">
+      <audio id="audio" controls preload="none" src="https://audiodharma.us-east-1.linodeobjects.com/talks/21873/20241212-Matthew_Brensilver-IMC-guided_meditation_self-acceptance.mp3"></audio>
+      <a class="download-link" href="https://audiodharma.us-east-1.linodeobjects.com/talks/21873/20241212-Matthew_Brensilver-IMC-guided_meditation_self-acceptance.mp3" download>Download MP3</a>
+    </div>
+    <section>
+      <h2>Chapters</h2>
+      <ol class="chapters">
+        <li><a href="?t=112" data-start="112.0">01:52</a> <strong>Settling In</strong> - The meditation begins by inviting stillness and an attentive arrival into practice.</li>
+<li><a href="?t=244" data-start="244.0">04:04</a> <strong>Body and Awareness</strong> - Attention is poured into the body and the body is encouraged to feel bright and vivid with awareness.</li>
+<li><a href="?t=383" data-start="383.0">06:23</a> <strong>Kindness for Conditioning</strong> - The teaching widens into compassion for the forces, seen and unseen, that have shaped this moment and this life.</li>
+<li><a href="?t=552" data-start="552.0">09:12</a> <strong>Accepting My Life</strong> - He frames acceptance as a way of being with the whole of one's life, including suffering, good fortune, and helplessness.</li>
+<li><a href="?t=922" data-start="922.0">15:22</a> <strong>A Radical Yes</strong> - The talk turns to the habit of sorting ourselves into acceptable and unacceptable parts and asks for a complete stop to that pattern.</li>
+<li><a href="?t=1079" data-start="1079.0">17:59</a> <strong>End the Inner Game</strong> - Brensilver encourages dropping self-criticism, shame, and the constant behavioral correction project, and simply opening to the totality of what one is.</li>
+<li><a href="?t=1583" data-start="1583.382">26:23</a> <strong>Loving-Kindness Closing</strong> - The practice closes with repeated phrases of goodwill: may I be happy, safe, protected, and at peace.</li>
+      </ol>
+    </section>
+    <section>
+      <h2>Source</h2>
+      <p><a href="https://www.audiodharma.org/talks/21873">Original talk page</a></p>
+    </section>
+  </main>
+  <script>
+    const audio = document.getElementById('audio');
+    function seekFromLocation() {
+      if (!audio) return;
+      const value = new URLSearchParams(location.search).get('t');
+      const seconds = Number(value || 0);
+      if (Number.isFinite(seconds) && seconds > 0) {
+        audio.currentTime = seconds;
+      }
+    }
+    document.querySelectorAll('[data-start]').forEach(link => {
+      link.addEventListener('click', event => {
+        if (!audio) return;
+        event.preventDefault();
+        const seconds = Number(link.dataset.start || 0);
+        history.replaceState(null, '', '?t=' + Math.round(seconds));
+        audio.currentTime = seconds;
+        audio.play().catch(() => {});
+      });
+    });
+    audio?.addEventListener('loadedmetadata', seekFromLocation, { once: true });
+  </script>
+</body>
+</html>

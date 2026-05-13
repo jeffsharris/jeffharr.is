@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dharmette: Dereification of Self-Model - Matthew Brensilver Dharma Talks</title>
+  <link rel="canonical" href="https://jeffharr.is/dharma/brensilver/talks/audiodharma-21870/">
+  <meta name="description" content="Matthew Brensilver explores emptiness as the progressive dereification of the self-model: the way thoughts, preferences, and ownership stop feeling like reality and become seen as passing phenomena. He begins with a childhood thought experiment about everything falling away, then moves into a more technical explanation of how identification, craving, and selfing are built. The talk closes by linking equanimity, quiet, and a greater comfort with not knowing.">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Matthew Brensilver Dharma Talks">
+  <meta property="og:title" content="Dharmette: Dereification of Self-Model">
+  <meta property="og:description" content="Matthew Brensilver explores emptiness as the progressive dereification of the self-model: the way thoughts, preferences, and ownership stop feeling like reality and become seen as passing phenomena. He begins with a childhood thought experiment about everything falling away, then moves into a more technical explanation of how identification, craving, and selfing are built. The talk closes by linking equanimity, quiet, and a greater comfort with not knowing.">
+  <meta property="og:url" content="https://jeffharr.is/dharma/brensilver/talks/audiodharma-21870/">
+  <meta property="og:image" content="https://jeffharr.is/dharma/brensilver/artwork/audiodharma-21870.jpg">
+  <meta property="og:image:secure_url" content="https://jeffharr.is/dharma/brensilver/artwork/audiodharma-21870.jpg">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="1024">
+  <meta property="og:image:height" content="1024">
+  <meta name="twitter:image" content="https://jeffharr.is/dharma/brensilver/artwork/audiodharma-21870.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Dharmette: Dereification of Self-Model">
+  <meta name="twitter:description" content="Matthew Brensilver explores emptiness as the progressive dereification of the self-model: the way thoughts, preferences, and ownership stop feeling like reality and become seen as passing phenomena. He begins with a childhood thought experiment about everything falling away, then moves into a more technical explanation of how identification, craving, and selfing are built. The talk closes by linking equanimity, quiet, and a greater comfort with not knowing.">
+  <link rel="stylesheet" href="../../talk-page.css">
+</head>
+<body>
+  <main>
+    <a class="back" href="../../">Matthew Brensilver Dharma Talks</a>
+    <div class="hero">
+      <div>
+        <h1>Dharmette: Dereification of Self-Model</h1>
+        <div class="meta">
+          <span>AudioDharma</span>
+          <span>15:05</span>
+          <span>2024-12-11</span>
+        </div>
+        <p class="description">Matthew Brensilver explores emptiness as the progressive dereification of the self-model: the way thoughts, preferences, and ownership stop feeling like reality and become seen as passing phenomena. He begins with a childhood thought experiment about everything falling away, then moves into a more technical explanation of how identification, craving, and selfing are built. The talk closes by linking equanimity, quiet, and a greater comfort with not knowing.</p>
+      </div>
+      <img class="art" src="/dharma/brensilver/artwork/audiodharma-21870.jpg" alt="">
+    </div>
+    <div class="primary-player">
+      <audio id="audio" controls preload="none" src="https://audiodharma.us-east-1.linodeobjects.com/talks/21870/20241211-Matthew_Brensilver-IMC-dharmette_dereification_of_self-model.mp3"></audio>
+      <a class="download-link" href="https://audiodharma.us-east-1.linodeobjects.com/talks/21870/20241211-Matthew_Brensilver-IMC-dharmette_dereification_of_self-model.mp3" download>Download MP3</a>
+    </div>
+    <section>
+      <h2>Chapters</h2>
+      <ol class="chapters">
+        <li><a href="?t=18" data-start="18.0">00:18</a> <strong>A Childhood Thought Experiment</strong> - Matthew opens with an early memory of imagining family, history, and the universe dissolving into nothingness, using it to introduce emptiness through lived experience.</li>
+<li><a href="?t=258" data-start="258.0">04:18</a> <strong>What Dereification Means</strong> - He defines dereification as thoughts becoming mere thoughts rather than reality, and explains mindfulness as seeing phenomena as phenomena.</li>
+<li><a href="?t=434" data-start="434.0">07:14</a> <strong>Thoughts Become Objects</strong> - Using Thomas Metzinger’s language, he describes how a thought like lunch can be recognized as an object of attention instead of being automatically absorbed into the self-model.</li>
+<li><a href="?t=573" data-start="573.0">09:33</a> <strong>Layers of Selfing</strong> - The talk broadens from single thoughts to the ongoing song of self, showing how autobiography, body, and unnoticed preferences keep reinforcing identity.</li>
+<li><a href="?t=737" data-start="737.0">12:17</a> <strong>Ownership and Self</strong> - He cites the Majjhima Nikaya to point toward ownership as a key mechanism of selfing, then links equanimity to loosening craving, aversion, and the sense of 'mine'.</li>
+<li><a href="?t=851" data-start="851.0">14:11</a> <strong>Quiet and Not Knowing</strong> - Matthew closes with Ram Dass and Nisargadatta, emphasizing quiet, comfort with uncertainty, and the openness that comes when reference points soften.</li>
+      </ol>
+    </section>
+    <section>
+      <h2>Source</h2>
+      <p><a href="https://www.audiodharma.org/talks/21870">Original talk page</a></p>
+    </section>
+  </main>
+  <script>
+    const audio = document.getElementById('audio');
+    function seekFromLocation() {
+      if (!audio) return;
+      const value = new URLSearchParams(location.search).get('t');
+      const seconds = Number(value || 0);
+      if (Number.isFinite(seconds) && seconds > 0) {
+        audio.currentTime = seconds;
+      }
+    }
+    document.querySelectorAll('[data-start]').forEach(link => {
+      link.addEventListener('click', event => {
+        if (!audio) return;
+        event.preventDefault();
+        const seconds = Number(link.dataset.start || 0);
+        history.replaceState(null, '', '?t=' + Math.round(seconds));
+        audio.currentTime = seconds;
+        audio.play().catch(() => {});
+      });
+    });
+    audio?.addEventListener('loadedmetadata', seekFromLocation, { once: true });
+  </script>
+</body>
+</html>

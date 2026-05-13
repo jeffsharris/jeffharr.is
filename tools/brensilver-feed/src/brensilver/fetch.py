@@ -6,7 +6,7 @@ from urllib.request import Request, urlopen
 
 USER_AGENT = (
     "brensilver-feed/0.1 "
-    "(https://jeffharr.is/brensilver/; podcast feed merger for personal archive)"
+    "(https://jeffharr.is/dharma/brensilver/; podcast feed merger for personal archive)"
 )
 
 

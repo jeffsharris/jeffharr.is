@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dharmette: Dharma as Cognitive Therapy - Matthew Brensilver Dharma Talks</title>
+  <link rel="canonical" href="https://jeffharr.is/dharma/brensilver/talks/audiodharma-16818/">
+  <meta name="description" content="Matthew Brensilver frames Dharma practice as a form of cognitive therapy: not just training attention, but changing the views and assumptions that organize experience. He moves from Aaron Beck’s model of schemas to Buddhist wise view, the three characteristics, and a fresh way of seeing the self. The talk ends with a practical note that attentional steadiness helps these new views take deeper root.">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Matthew Brensilver Dharma Talks">
+  <meta property="og:title" content="Dharmette: Dharma as Cognitive Therapy">
+  <meta property="og:description" content="Matthew Brensilver frames Dharma practice as a form of cognitive therapy: not just training attention, but changing the views and assumptions that organize experience. He moves from Aaron Beck’s model of schemas to Buddhist wise view, the three characteristics, and a fresh way of seeing the self. The talk ends with a practical note that attentional steadiness helps these new views take deeper root.">
+  <meta property="og:url" content="https://jeffharr.is/dharma/brensilver/talks/audiodharma-16818/">
+  <meta property="og:image" content="https://jeffharr.is/dharma/brensilver/artwork/audiodharma-16818.jpg">
+  <meta property="og:image:secure_url" content="https://jeffharr.is/dharma/brensilver/artwork/audiodharma-16818.jpg">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="1024">
+  <meta property="og:image:height" content="1024">
+  <meta name="twitter:image" content="https://jeffharr.is/dharma/brensilver/artwork/audiodharma-16818.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Dharmette: Dharma as Cognitive Therapy">
+  <meta name="twitter:description" content="Matthew Brensilver frames Dharma practice as a form of cognitive therapy: not just training attention, but changing the views and assumptions that organize experience. He moves from Aaron Beck’s model of schemas to Buddhist wise view, the three characteristics, and a fresh way of seeing the self. The talk ends with a practical note that attentional steadiness helps these new views take deeper root.">
+  <link rel="stylesheet" href="../../talk-page.css">
+</head>
+<body>
+  <main>
+    <a class="back" href="../../">Matthew Brensilver Dharma Talks</a>
+    <div class="hero">
+      <div>
+        <h1>Dharmette: Dharma as Cognitive Therapy</h1>
+        <div class="meta">
+          <span>AudioDharma</span>
+          <span>15:38</span>
+          <span>2022-08-17</span>
+        </div>
+        <p class="description">Matthew Brensilver frames Dharma practice as a form of cognitive therapy: not just training attention, but changing the views and assumptions that organize experience. He moves from Aaron Beck’s model of schemas to Buddhist wise view, the three characteristics, and a fresh way of seeing the self. The talk ends with a practical note that attentional steadiness helps these new views take deeper root.</p>
+      </div>
+      <img class="art" src="/dharma/brensilver/artwork/audiodharma-16818.jpg" alt="">
+    </div>
+    <div class="primary-player">
+      <audio id="audio" controls preload="none" src="https://audiodharma.us-east-1.linodeobjects.com/talks/16818/20220817-Matthew_Brensilver-IMC-dharma_as_cognitive_therapy.mp3"></audio>
+      <a class="download-link" href="https://audiodharma.us-east-1.linodeobjects.com/talks/16818/20220817-Matthew_Brensilver-IMC-dharma_as_cognitive_therapy.mp3" download>Download MP3</a>
+    </div>
+    <section>
+      <h2>Chapters</h2>
+      <ol class="chapters">
+        <li><a href="?t=12" data-start="12.0">00:12</a> <strong>Opening the frame</strong> - Matthew begins by situating the talk and naming that he wants to expand the earlier discussion beyond attention alone.</li>
+<li><a href="?t=59" data-start="59.0">00:59</a> <strong>More than attention</strong> - He argues that mindfulness works in part because it changes more than attention, and that religion can be understood as a kind of cognitive therapy.</li>
+<li><a href="?t=180" data-start="180.0">03:00</a> <strong>Beck’s schemas</strong> - Using Aaron Beck’s language, he explains how schemas, distorted appraisal, and new information can shift symptoms and behavior.</li>
+<li><a href="?t=302" data-start="302.0">05:02</a> <strong>Wise view</strong> - He turns to Buddhist practice as cognitive therapy, emphasizing that wise view comes first and shapes the rest of the path.</li>
+<li><a href="?t=429" data-start="429.0">07:09</a> <strong>A fresh self</strong> - Matthew introduces a different view of self, including Gilbert Ryle’s category mistake example, to loosen fixed identity.</li>
+<li><a href="?t=519" data-start="519.0">08:39</a> <strong>Seeing our stories</strong> - He describes practice as noticing the stories and hidden beliefs we live by, including moralistic assumptions about happiness and worth.</li>
+<li><a href="?t=693" data-start="693.0">11:33</a> <strong>Three characteristics</strong> - The talk gathers around dukkha, anicca, and anatta as corrective lenses for common fantasies about pleasure, control, and completion.</li>
+<li><a href="?t=841" data-start="841.0">14:01</a> <strong>Attention and carryover</strong> - He closes by linking cognitive change with attentional steadiness, suggesting that concentration helps new views settle more deeply.</li>
+      </ol>
+    </section>
+    <section>
+      <h2>Source</h2>
+      <p><a href="https://www.audiodharma.org/talks/16818">Original talk page</a></p>
+    </section>
+  </main>
+  <script>
+    const audio = document.getElementById('audio');
+    function seekFromLocation() {
+      if (!audio) return;
+      const value = new URLSearchParams(location.search).get('t');
+      const seconds = Number(value || 0);
+      if (Number.isFinite(seconds) && seconds > 0) {
+        audio.currentTime = seconds;
+      }
+    }
+    document.querySelectorAll('[data-start]').forEach(link => {
+      link.addEventListener('click', event => {
+        if (!audio) return;
+        event.preventDefault();
+        const seconds = Number(link.dataset.start || 0);
+        history.replaceState(null, '', '?t=' + Math.round(seconds));
+        audio.currentTime = seconds;
+        audio.play().catch(() => {});
+      });
+    });
+    audio?.addEventListener('loadedmetadata', seekFromLocation, { once: true });
+  </script>
+</body>
+</html>

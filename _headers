@@ -24,10 +24,30 @@
 /api/*
   Cache-Control: public, max-age=300
 
-/brensilver/feed.xml
+/dharma/brensilver/feed.xml
   Content-Type: application/rss+xml; charset=utf-8
   Cache-Control: public, max-age=900
 
-/brensilver/talks.json
+/dharma/brensilver/guided-feed.xml
+  Content-Type: application/rss+xml; charset=utf-8
+  Cache-Control: public, max-age=900
+
+/dharma/brensilver/talks.json
+  Content-Type: application/json; charset=utf-8
+  Cache-Control: public, max-age=900
+
+/dharma/brensilver/dharma-talks.json
+  Content-Type: application/json; charset=utf-8
+  Cache-Control: public, max-age=900
+
+/dharma/brensilver/guided-talks.json
+  Content-Type: application/json; charset=utf-8
+  Cache-Control: public, max-age=900
+
+/dharma/watts/feed.xml
+  Content-Type: application/rss+xml; charset=utf-8
+  Cache-Control: public, max-age=900
+
+/dharma/watts/talks.json
   Content-Type: application/json; charset=utf-8
   Cache-Control: public, max-age=900

@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Practice Questions - Matthew Brensilver Dharma Talks</title>
+  <link rel="canonical" href="https://jeffharr.is/dharma/brensilver/talks/audiodharma-5526/">
+  <meta name="description" content="Matthew Brensilver opens with a brief exchange on Rumi, using the line about “living in the nowhere” to talk about mystical experience, emptiness, and why some teachings can’t be read too literally. The talk then moves into practical questions about mindfulness while driving, the gap between retreat language and daily life, and whether Dharma still speaks to ordinary working life. In the closing section he turns to a question about technology and AI, using the film Her to explore self, love, and what Buddhist ideas might illuminate about modern life.">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Matthew Brensilver Dharma Talks">
+  <meta property="og:title" content="Practice Questions">
+  <meta property="og:description" content="Matthew Brensilver opens with a brief exchange on Rumi, using the line about “living in the nowhere” to talk about mystical experience, emptiness, and why some teachings can’t be read too literally. The talk then moves into practical questions about mindfulness while driving, the gap between retreat language and daily life, and whether Dharma still speaks to ordinary working life. In the closing section he turns to a question about technology and AI, using the film Her to explore self, love, and what Buddhist ideas might illuminate about modern life.">
+  <meta property="og:url" content="https://jeffharr.is/dharma/brensilver/talks/audiodharma-5526/">
+  <meta property="og:image" content="https://jeffharr.is/dharma/brensilver/artwork/audiodharma-5526.jpg">
+  <meta property="og:image:secure_url" content="https://jeffharr.is/dharma/brensilver/artwork/audiodharma-5526.jpg">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="1024">
+  <meta property="og:image:height" content="1024">
+  <meta name="twitter:image" content="https://jeffharr.is/dharma/brensilver/artwork/audiodharma-5526.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Practice Questions">
+  <meta name="twitter:description" content="Matthew Brensilver opens with a brief exchange on Rumi, using the line about “living in the nowhere” to talk about mystical experience, emptiness, and why some teachings can’t be read too literally. The talk then moves into practical questions about mindfulness while driving, the gap between retreat language and daily life, and whether Dharma still speaks to ordinary working life. In the closing section he turns to a question about technology and AI, using the film Her to explore self, love, and what Buddhist ideas might illuminate about modern life.">
+  <link rel="stylesheet" href="../../talk-page.css">
+</head>
+<body>
+  <main>
+    <a class="back" href="../../">Matthew Brensilver Dharma Talks</a>
+    <div class="hero">
+      <div>
+        <h1>Practice Questions</h1>
+        <div class="meta">
+          <span>AudioDharma</span>
+          <span>23:57</span>
+          <span>2015-03-19</span>
+        </div>
+        <p class="description">Matthew Brensilver opens with a brief exchange on Rumi, using the line about “living in the nowhere” to talk about mystical experience, emptiness, and why some teachings can’t be read too literally. The talk then moves into practical questions about mindfulness while driving, the gap between retreat language and daily life, and whether Dharma still speaks to ordinary working life. In the closing section he turns to a question about technology and AI, using the film Her to explore self, love, and what Buddhist ideas might illuminate about modern life.</p>
+      </div>
+      <img class="art" src="/dharma/brensilver/artwork/audiodharma-5526.jpg" alt="">
+    </div>
+    <div class="primary-player">
+      <audio id="audio" controls preload="none" src="https://audiodharma.us-east-1.linodeobjects.com/talks/5526/20150319-Matthew_Brensilver-IMC-practice_questions.mp3"></audio>
+      <a class="download-link" href="https://audiodharma.us-east-1.linodeobjects.com/talks/5526/20150319-Matthew_Brensilver-IMC-practice_questions.mp3" download>Download MP3</a>
+    </div>
+    <section>
+      <h2>Chapters</h2>
+      <ol class="chapters">
+        <li><a href="?t=81" data-start="81.0">01:21</a> <strong>Rumi and emptiness</strong> - A question about a Rumi line leads into Matthew’s reading of the poem as an evocation of mystical experience and emptiness rather than a literal claim.</li>
+<li><a href="?t=433" data-start="433.0">07:13</a> <strong>What the line points to</strong> - He clarifies the relation between being, emptiness, and the sense that the phrase resonates before words can fully explain it.</li>
+<li><a href="?t=476" data-start="476.0">07:56</a> <strong>Mindfulness while driving</strong> - The conversation turns to the difficulty of staying present in the car, and Matthew offers practical suggestions along with a realistic view of habit and attention.</li>
+<li><a href="?t=819" data-start="819.0">13:39</a> <strong>Practice and frustration</strong> - He reflects on how repeated struggle can deepen motivation and reveal where practice is genuinely needed.</li>
+<li><a href="?t=861" data-start="861.0">14:21</a> <strong>Daily life and Dharma</strong> - Responding to concern that teachings can feel retreat-bound, Matthew emphasizes that Dharma has to take root in ordinary life and may matter differently in different phases.</li>
+<li><a href="?t=1207" data-start="1206.626">20:07</a> <strong>AI, longevity, self</strong> - A question about longevity, biotechnology, and artificial intelligence becomes a Dharma inquiry into what life is for, and what selfhood and love mean in a changing world.</li>
+      </ol>
+    </section>
+    <section>
+      <h2>Source</h2>
+      <p><a href="https://www.audiodharma.org/talks/5526">Original talk page</a></p>
+    </section>
+  </main>
+  <script>
+    const audio = document.getElementById('audio');
+    function seekFromLocation() {
+      if (!audio) return;
+      const value = new URLSearchParams(location.search).get('t');
+      const seconds = Number(value || 0);
+      if (Number.isFinite(seconds) && seconds > 0) {
+        audio.currentTime = seconds;
+      }
+    }
+    document.querySelectorAll('[data-start]').forEach(link => {
+      link.addEventListener('click', event => {
+        if (!audio) return;
+        event.preventDefault();
+        const seconds = Number(link.dataset.start || 0);
+        history.replaceState(null, '', '?t=' + Math.round(seconds));
+        audio.currentTime = seconds;
+        audio.play().catch(() => {});
+      });
+    });
+    audio?.addEventListener('loadedmetadata', seekFromLocation, { once: true });
+  </script>
+</body>
+</html>

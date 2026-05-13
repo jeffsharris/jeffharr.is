@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The anchor is everywhere - Matthew Brensilver Dharma Talks</title>
+  <link rel="canonical" href="https://jeffharr.is/dharma/brensilver/talks/dharmaseed-77833/">
+  <meta name="description" content="Matthew Brensilver explores meditation not only as a way to stabilize attention, but as a way to reveal the movement of mind itself. He turns from the familiar use of breath as an anchor toward the idea that awareness has no fixed center, so that everything can become part of the field of knowing. The talk closes by returning to non-identification, forgiveness, and the practical instruction to rest where awareness cannot be stopped.">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Matthew Brensilver Dharma Talks">
+  <meta property="og:title" content="The anchor is everywhere">
+  <meta property="og:description" content="Matthew Brensilver explores meditation not only as a way to stabilize attention, but as a way to reveal the movement of mind itself. He turns from the familiar use of breath as an anchor toward the idea that awareness has no fixed center, so that everything can become part of the field of knowing. The talk closes by returning to non-identification, forgiveness, and the practical instruction to rest where awareness cannot be stopped.">
+  <meta property="og:url" content="https://jeffharr.is/dharma/brensilver/talks/dharmaseed-77833/">
+  <meta property="og:image" content="https://jeffharr.is/dharma/brensilver/artwork/dharmaseed-77833.jpg">
+  <meta property="og:image:secure_url" content="https://jeffharr.is/dharma/brensilver/artwork/dharmaseed-77833.jpg">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="1024">
+  <meta property="og:image:height" content="1024">
+  <meta name="twitter:image" content="https://jeffharr.is/dharma/brensilver/artwork/dharmaseed-77833.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="The anchor is everywhere">
+  <meta name="twitter:description" content="Matthew Brensilver explores meditation not only as a way to stabilize attention, but as a way to reveal the movement of mind itself. He turns from the familiar use of breath as an anchor toward the idea that awareness has no fixed center, so that everything can become part of the field of knowing. The talk closes by returning to non-identification, forgiveness, and the practical instruction to rest where awareness cannot be stopped.">
+  <link rel="stylesheet" href="../../talk-page.css">
+</head>
+<body>
+  <main>
+    <a class="back" href="../../">Matthew Brensilver Dharma Talks</a>
+    <div class="hero">
+      <div>
+        <h1>The anchor is everywhere</h1>
+        <div class="meta">
+          <span>Dharma Seed</span>
+          <span>29:58</span>
+          <span>2023-05-12</span>
+        </div>
+        <p class="description">Matthew Brensilver explores meditation not only as a way to stabilize attention, but as a way to reveal the movement of mind itself. He turns from the familiar use of breath as an anchor toward the idea that awareness has no fixed center, so that everything can become part of the field of knowing. The talk closes by returning to non-identification, forgiveness, and the practical instruction to rest where awareness cannot be stopped.</p>
+      </div>
+      <img class="art" src="/dharma/brensilver/artwork/dharmaseed-77833.jpg" alt="">
+    </div>
+    <div class="primary-player">
+      <audio id="audio" controls preload="none" src="https://dharmaseed.org/talks/77833/20230512-Matthew_Brensilver-SR-the_anchor_is_everywhere-77833.mp3?rss="></audio>
+      <a class="download-link" href="https://dharmaseed.org/talks/77833/20230512-Matthew_Brensilver-SR-the_anchor_is_everywhere-77833.mp3?rss=" download>Download MP3</a>
+    </div>
+    <section>
+      <h2>Chapters</h2>
+      <ol class="chapters">
+        <li><a href="?t=0" data-start="0.0">00:00</a> <strong>What an anchor does</strong> - Brensilver describes the two functions of an anchor: gathering attention and making the mind's movements more visible.</li>
+<li><a href="?t=123" data-start="123.22">02:03</a> <strong>Balance and transparency</strong> - He expands on how steady practice can bring balance while also exposing preoccupations, hope, and fear.</li>
+<li><a href="?t=247" data-start="247.26">04:07</a> <strong>What if it's everywhere</strong> - The talk turns to a deeper question: what changes if the anchor is not a single object but something more diffuse or universal?</li>
+<li><a href="?t=679" data-start="679.3">11:19</a> <strong>From circle to field</strong> - Using the breath as an example, he explains how practice usually separates foreground from background, then widens until that division no longer holds.</li>
+<li><a href="?t=749" data-start="749.38">12:29</a> <strong>Unpartitioned knowing</strong> - He points to a way of practicing in which experience is not divided up so sharply, leaving a more open and undivided space of awareness.</li>
+<li><a href="?t=1257" data-start="1257.0">20:57</a> <strong>Non-identification</strong> - Brensilver names awareness as non-identification and notes how attention still often gets snagged into sound, thought, and story.</li>
+<li><a href="?t=1403" data-start="1403.0">23:23</a> <strong>Forgiveness and release</strong> - He brings in forgiveness for the stickiness of experience and encourages a return to bare knowing when identification softens.</li>
+<li><a href="?t=1771" data-start="1771.0">29:31</a> <strong>Rest where awareness stays</strong> - The closing instruction is simple: awareness cannot be stopped, so rest there.</li>
+      </ol>
+    </section>
+    <section>
+      <h2>Source</h2>
+      <p><a href="https://dharmaseed.org/talks/77833/">Original talk page</a></p>
+    </section>
+  </main>
+  <script>
+    const audio = document.getElementById('audio');
+    function seekFromLocation() {
+      if (!audio) return;
+      const value = new URLSearchParams(location.search).get('t');
+      const seconds = Number(value || 0);
+      if (Number.isFinite(seconds) && seconds > 0) {
+        audio.currentTime = seconds;
+      }
+    }
+    document.querySelectorAll('[data-start]').forEach(link => {
+      link.addEventListener('click', event => {
+        if (!audio) return;
+        event.preventDefault();
+        const seconds = Number(link.dataset.start || 0);
+        history.replaceState(null, '', '?t=' + Math.round(seconds));
+        audio.currentTime = seconds;
+        audio.play().catch(() => {});
+      });
+    });
+    audio?.addEventListener('loadedmetadata', seekFromLocation, { once: true });
+  </script>
+</body>
+</html>

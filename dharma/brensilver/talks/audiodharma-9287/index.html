@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Practice Notes - Matthew Brensilver Dharma Talks</title>
+  <link rel="canonical" href="https://jeffharr.is/dharma/brensilver/talks/audiodharma-9287/">
+  <meta name="description" content="Matthew Brensilver offers a short set of practice notes focused on how to work with the mind in meditation. He emphasizes that practice is often personal and idiosyncratic, and that what helps in one moment may be a reminder, a reassurance, an inquiry, or a gentle check on clinging. The talk closes by pointing back to what is already good and present, rather than turning practice into an endless project of self-improvement.">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Matthew Brensilver Dharma Talks">
+  <meta property="og:title" content="Practice Notes">
+  <meta property="og:description" content="Matthew Brensilver offers a short set of practice notes focused on how to work with the mind in meditation. He emphasizes that practice is often personal and idiosyncratic, and that what helps in one moment may be a reminder, a reassurance, an inquiry, or a gentle check on clinging. The talk closes by pointing back to what is already good and present, rather than turning practice into an endless project of self-improvement.">
+  <meta property="og:url" content="https://jeffharr.is/dharma/brensilver/talks/audiodharma-9287/">
+  <meta property="og:image" content="https://jeffharr.is/dharma/brensilver/artwork/audiodharma-9287.jpg">
+  <meta property="og:image:secure_url" content="https://jeffharr.is/dharma/brensilver/artwork/audiodharma-9287.jpg">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="1024">
+  <meta property="og:image:height" content="1024">
+  <meta name="twitter:image" content="https://jeffharr.is/dharma/brensilver/artwork/audiodharma-9287.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Practice Notes">
+  <meta name="twitter:description" content="Matthew Brensilver offers a short set of practice notes focused on how to work with the mind in meditation. He emphasizes that practice is often personal and idiosyncratic, and that what helps in one moment may be a reminder, a reassurance, an inquiry, or a gentle check on clinging. The talk closes by pointing back to what is already good and present, rather than turning practice into an endless project of self-improvement.">
+  <link rel="stylesheet" href="../../talk-page.css">
+</head>
+<body>
+  <main>
+    <a class="back" href="../../">Matthew Brensilver Dharma Talks</a>
+    <div class="hero">
+      <div>
+        <h1>Practice Notes</h1>
+        <div class="meta">
+          <span>AudioDharma</span>
+          <span>07:00</span>
+          <span>2018-09-19</span>
+        </div>
+        <p class="description">Matthew Brensilver offers a short set of practice notes focused on how to work with the mind in meditation. He emphasizes that practice is often personal and idiosyncratic, and that what helps in one moment may be a reminder, a reassurance, an inquiry, or a gentle check on clinging. The talk closes by pointing back to what is already good and present, rather than turning practice into an endless project of self-improvement.</p>
+      </div>
+      <img class="art" src="/dharma/brensilver/artwork/audiodharma-9287.jpg" alt="">
+    </div>
+    <div class="primary-player">
+      <audio id="audio" controls preload="none" src="https://audiodharma.us-east-1.linodeobjects.com/talks/9287/20180919-Matthew_Brensilver-IMC-practice_notes.mp3"></audio>
+      <a class="download-link" href="https://audiodharma.us-east-1.linodeobjects.com/talks/9287/20180919-Matthew_Brensilver-IMC-practice_notes.mp3" download>Download MP3</a>
+    </div>
+    <section>
+      <h2>Chapters</h2>
+      <ol class="chapters">
+        <li><a href="?t=30" data-start="30.0">00:30</a> <strong>Opening Practice Notes</strong> - He begins informally and introduces the morning's walking and sitting practice, along with the invitation for one-on-one practice discussions.</li>
+<li><a href="?t=75" data-start="75.0">01:15</a> <strong>Personal Practice Discussions</strong> - Brensilver describes practice conversations as a place for whatever is closest to the heart, from technical questions to how the teachings fit daily life.</li>
+<li><a href="?t=164" data-start="164.0">02:44</a> <strong>Why Guidance Must Fit</strong> - He reflects on how Dharma is taught broadly but received in highly individual ways, and why practice guidance needs to be tailored.</li>
+<li><a href="?t=231" data-start="231.0">03:51</a> <strong>Learning Inner Pep Talks</strong> - The talk turns to the way practitioners gradually learn to give themselves timely, useful reminders that fit their own minds and the present moment.</li>
+<li><a href="?t=289" data-start="289.0">04:49</a> <strong>Energy, Gentleness, Inquiry</strong> - He names several kinds of support the mind may need: effort, surrender, compassion, reassurance, or a question that exposes clinging.</li>
+<li><a href="?t=356" data-start="356.0">05:56</a> <strong>Returning To Present Goodness</strong> - He warns against turning Dharma into a self-improvement project and suggests asking what goodness is already here so the present can be felt more clearly.</li>
+      </ol>
+    </section>
+    <section>
+      <h2>Source</h2>
+      <p><a href="https://www.audiodharma.org/talks/9287">Original talk page</a></p>
+    </section>
+  </main>
+  <script>
+    const audio = document.getElementById('audio');
+    function seekFromLocation() {
+      if (!audio) return;
+      const value = new URLSearchParams(location.search).get('t');
+      const seconds = Number(value || 0);
+      if (Number.isFinite(seconds) && seconds > 0) {
+        audio.currentTime = seconds;
+      }
+    }
+    document.querySelectorAll('[data-start]').forEach(link => {
+      link.addEventListener('click', event => {
+        if (!audio) return;
+        event.preventDefault();
+        const seconds = Number(link.dataset.start || 0);
+        history.replaceState(null, '', '?t=' + Math.round(seconds));
+        audio.currentTime = seconds;
+        audio.play().catch(() => {});
+      });
+    });
+    audio?.addEventListener('loadedmetadata', seekFromLocation, { once: true });
+  </script>
+</body>
+</html>

@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ripples of Happiness - Matthew Brensilver Dharma Talks</title>
+  <link rel="canonical" href="https://jeffharr.is/dharma/brensilver/talks/audiodharma-4045/">
+  <meta name="description" content="Matthew Brensilver reflects on how practice can begin as self-care and then widen into an intention to benefit others. He links that teaching to a social-network study on happiness, using it to show how well-being can ripple outward through friends and communities. The talk closes by returning to the practical question of how to keep practicing when energy runs low, and how to dedicate that effort outward.">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Matthew Brensilver Dharma Talks">
+  <meta property="og:title" content="Ripples of Happiness">
+  <meta property="og:description" content="Matthew Brensilver reflects on how practice can begin as self-care and then widen into an intention to benefit others. He links that teaching to a social-network study on happiness, using it to show how well-being can ripple outward through friends and communities. The talk closes by returning to the practical question of how to keep practicing when energy runs low, and how to dedicate that effort outward.">
+  <meta property="og:url" content="https://jeffharr.is/dharma/brensilver/talks/audiodharma-4045/">
+  <meta property="og:image" content="https://jeffharr.is/dharma/brensilver/artwork/audiodharma-4045.jpg">
+  <meta property="og:image:secure_url" content="https://jeffharr.is/dharma/brensilver/artwork/audiodharma-4045.jpg">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="1024">
+  <meta property="og:image:height" content="1024">
+  <meta name="twitter:image" content="https://jeffharr.is/dharma/brensilver/artwork/audiodharma-4045.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Ripples of Happiness">
+  <meta name="twitter:description" content="Matthew Brensilver reflects on how practice can begin as self-care and then widen into an intention to benefit others. He links that teaching to a social-network study on happiness, using it to show how well-being can ripple outward through friends and communities. The talk closes by returning to the practical question of how to keep practicing when energy runs low, and how to dedicate that effort outward.">
+  <link rel="stylesheet" href="../../talk-page.css">
+</head>
+<body>
+  <main>
+    <a class="back" href="../../">Matthew Brensilver Dharma Talks</a>
+    <div class="hero">
+      <div>
+        <h1>Ripples of Happiness</h1>
+        <div class="meta">
+          <span>AudioDharma</span>
+          <span>07:07</span>
+          <span>2013-05-02</span>
+        </div>
+        <p class="description">Matthew Brensilver reflects on how practice can begin as self-care and then widen into an intention to benefit others. He links that teaching to a social-network study on happiness, using it to show how well-being can ripple outward through friends and communities. The talk closes by returning to the practical question of how to keep practicing when energy runs low, and how to dedicate that effort outward.</p>
+      </div>
+      <img class="art" src="/dharma/brensilver/artwork/audiodharma-4045.jpg" alt="">
+    </div>
+    <div class="primary-player">
+      <audio id="audio" controls preload="none" src="https://audiodharma.us-east-1.linodeobjects.com/talks/4045/20130502-Matthew_Brensilver-IMC-ripples_of_happiness.mp3"></audio>
+      <a class="download-link" href="https://audiodharma.us-east-1.linodeobjects.com/talks/4045/20130502-Matthew_Brensilver-IMC-ripples_of_happiness.mp3" download>Download MP3</a>
+    </div>
+    <section>
+      <h2>Chapters</h2>
+      <ol class="chapters">
+        <li><a href="?t=13" data-start="13.0">00:13</a> <strong>Opening the talk</strong> - Matthew briefly introduces the sit and sets up a few remarks before silence.</li>
+<li><a href="?t=31" data-start="31.0">00:31</a> <strong>Intention in practice</strong> - He explains how practice may begin with personal well-being and later expand into a clear intention to practice for others.</li>
+<li><a href="?t=89" data-start="88.6">01:29</a> <strong>Self and others</strong> - Matthew develops the idea that practice for oneself and practice for others are not separate, especially when anger, compassion, and generosity are involved.</li>
+<li><a href="?t=160" data-start="160.5">02:40</a> <strong>A happiness study</strong> - He turns to a social-network study of about 5,000 people that examined how happiness moves through relationships.</li>
+<li><a href="?t=232" data-start="232.26">03:52</a> <strong>Three degrees out</strong> - Matthew describes the study’s finding that happiness appears to spread across friends, friends of friends, and even farther out in the network.</li>
+<li><a href="?t=324" data-start="323.82">05:24</a> <strong>What the study suggests</strong> - He quotes the researchers to underline that happiness is not only individual but a property of groups, then connects that to practice.</li>
+<li><a href="?t=367" data-start="366.62">06:07</a> <strong>Dedicating the effort</strong> - The talk closes with an encouragement to dedicate practice to others when motivation fades and to find a posture that is sustainable.</li>
+      </ol>
+    </section>
+    <section>
+      <h2>Source</h2>
+      <p><a href="https://www.audiodharma.org/talks/4045">Original talk page</a></p>
+    </section>
+  </main>
+  <script>
+    const audio = document.getElementById('audio');
+    function seekFromLocation() {
+      if (!audio) return;
+      const value = new URLSearchParams(location.search).get('t');
+      const seconds = Number(value || 0);
+      if (Number.isFinite(seconds) && seconds > 0) {
+        audio.currentTime = seconds;
+      }
+    }
+    document.querySelectorAll('[data-start]').forEach(link => {
+      link.addEventListener('click', event => {
+        if (!audio) return;
+        event.preventDefault();
+        const seconds = Number(link.dataset.start || 0);
+        history.replaceState(null, '', '?t=' + Math.round(seconds));
+        audio.currentTime = seconds;
+        audio.play().catch(() => {});
+      });
+    });
+    audio?.addEventListener('loadedmetadata', seekFromLocation, { once: true });
+  </script>
+</body>
+</html>

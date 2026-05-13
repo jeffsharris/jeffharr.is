@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Guided Meditation - Awareness and Relaxation - Matthew Brensilver Dharma Talks</title>
+  <link rel="canonical" href="https://jeffharr.is/dharma/brensilver/talks/audiodharma-6346/">
+  <meta name="description" content="This guided meditation begins with a brief framing of practice as awareness of mind and body, then turns toward Buddhism’s concern with suffering and release from it. Matthew Brensilver describes suffering as a kind of claustrophobia and invites a simple but radical gesture: let thoughts, sensations, sounds, and emotions be known. The meditation settles into repeated return to the breath and body, emphasizing that what is known does not have to be fought, and that awareness can feel like refuge.">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Matthew Brensilver Dharma Talks">
+  <meta property="og:title" content="Guided Meditation - Awareness and Relaxation">
+  <meta property="og:description" content="This guided meditation begins with a brief framing of practice as awareness of mind and body, then turns toward Buddhism’s concern with suffering and release from it. Matthew Brensilver describes suffering as a kind of claustrophobia and invites a simple but radical gesture: let thoughts, sensations, sounds, and emotions be known. The meditation settles into repeated return to the breath and body, emphasizing that what is known does not have to be fought, and that awareness can feel like refuge.">
+  <meta property="og:url" content="https://jeffharr.is/dharma/brensilver/talks/audiodharma-6346/">
+  <meta property="og:image" content="https://jeffharr.is/dharma/brensilver/artwork/audiodharma-6346.jpg">
+  <meta property="og:image:secure_url" content="https://jeffharr.is/dharma/brensilver/artwork/audiodharma-6346.jpg">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="1024">
+  <meta property="og:image:height" content="1024">
+  <meta name="twitter:image" content="https://jeffharr.is/dharma/brensilver/artwork/audiodharma-6346.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Guided Meditation - Awareness and Relaxation">
+  <meta name="twitter:description" content="This guided meditation begins with a brief framing of practice as awareness of mind and body, then turns toward Buddhism’s concern with suffering and release from it. Matthew Brensilver describes suffering as a kind of claustrophobia and invites a simple but radical gesture: let thoughts, sensations, sounds, and emotions be known. The meditation settles into repeated return to the breath and body, emphasizing that what is known does not have to be fought, and that awareness can feel like refuge.">
+  <link rel="stylesheet" href="../../talk-page.css">
+</head>
+<body>
+  <main>
+    <a class="back" href="../../">Matthew Brensilver Dharma Talks</a>
+    <div class="hero">
+      <div>
+        <h1>Guided Meditation - Awareness and Relaxation</h1>
+        <div class="meta">
+          <span>AudioDharma</span>
+          <span>26:09</span>
+          <span>2016-01-16</span>
+        </div>
+        <p class="description">This guided meditation begins with a brief framing of practice as awareness of mind and body, then turns toward Buddhism’s concern with suffering and release from it. Matthew Brensilver describes suffering as a kind of claustrophobia and invites a simple but radical gesture: let thoughts, sensations, sounds, and emotions be known. The meditation settles into repeated return to the breath and body, emphasizing that what is known does not have to be fought, and that awareness can feel like refuge.</p>
+      </div>
+      <img class="art" src="/dharma/brensilver/artwork/audiodharma-6346.jpg" alt="">
+    </div>
+    <div class="primary-player">
+      <audio id="audio" controls preload="none" src="https://audiodharma.us-east-1.linodeobjects.com/talks/6346/20160116-Matthew_Brensilver-IRC-guided_meditation_awareness_and_relaxation.mp3"></audio>
+      <a class="download-link" href="https://audiodharma.us-east-1.linodeobjects.com/talks/6346/20160116-Matthew_Brensilver-IRC-guided_meditation_awareness_and_relaxation.mp3" download>Download MP3</a>
+    </div>
+    <section>
+      <h2>Chapters</h2>
+      <ol class="chapters">
+        <li><a href="?t=1" data-start="1.0">00:01</a> <strong>Practice Framing</strong> - The talk opens by naming meditation as awareness of mind and body and setting the basic direction of practice.</li>
+<li><a href="?t=63" data-start="63.0">01:03</a> <strong>Suffering and Release</strong> - Brensilver describes Buddhism’s central concern with suffering and frames it as a felt sense of being cornered.</li>
+<li><a href="?t=160" data-start="160.0">02:40</a> <strong>More Than the Corner</strong> - He points out that mindfulness does not erase pain, but reveals that the corner is fabricated and not the whole truth.</li>
+<li><a href="?t=240" data-start="240.0">04:00</a> <strong>Knowing What Arises</strong> - The instruction becomes a quiet act of knowing thoughts, sensations, emotion, and sound without adding harm.</li>
+<li><a href="?t=315" data-start="315.0">05:15</a> <strong>Settling Into Refuge</strong> - After a long stretch of silence, the meditation returns to the sense that being awake can feel like coming home.</li>
+<li><a href="?t=643" data-start="643.0">10:43</a> <strong>Returning Again</strong> - He reassures listeners that it is okay to stop manipulating experience and keep coming back to breath, body, sound, and emotion.</li>
+<li><a href="?t=1504" data-start="1504.336">25:04</a> <strong>Trailing Audio</strong> - The recording ends with repeated trailing words whose wording and role are unclear.</li>
+      </ol>
+    </section>
+    <section>
+      <h2>Source</h2>
+      <p><a href="https://www.audiodharma.org/talks/6346">Original talk page</a></p>
+    </section>
+  </main>
+  <script>
+    const audio = document.getElementById('audio');
+    function seekFromLocation() {
+      if (!audio) return;
+      const value = new URLSearchParams(location.search).get('t');
+      const seconds = Number(value || 0);
+      if (Number.isFinite(seconds) && seconds > 0) {
+        audio.currentTime = seconds;
+      }
+    }
+    document.querySelectorAll('[data-start]').forEach(link => {
+      link.addEventListener('click', event => {
+        if (!audio) return;
+        event.preventDefault();
+        const seconds = Number(link.dataset.start || 0);
+        history.replaceState(null, '', '?t=' + Math.round(seconds));
+        audio.currentTime = seconds;
+        audio.play().catch(() => {});
+      });
+    });
+    audio?.addEventListener('loadedmetadata', seekFromLocation, { once: true });
+  </script>
+</body>
+</html>

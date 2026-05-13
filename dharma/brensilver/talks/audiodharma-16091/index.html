@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lightly Guided Meditation - Matthew Brensilver Dharma Talks</title>
+  <link rel="canonical" href="https://jeffharr.is/dharma/brensilver/talks/audiodharma-16091/">
+  <meta name="description" content="Matthew Brensilver offers a lightly guided meditation centered on posture, breath, and a gradual softening of effort. He repeatedly returns to the sense that we are not responsible for manufacturing insight or concentration, only for sincerity, willingness, and trust in the Dharma. The talk then narrows into simpler and simpler contact with experience—breath, body, feeling, sound, silence, even darkness behind closed eyes—while emphasizing receptivity over control.">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Matthew Brensilver Dharma Talks">
+  <meta property="og:title" content="Lightly Guided Meditation">
+  <meta property="og:description" content="Matthew Brensilver offers a lightly guided meditation centered on posture, breath, and a gradual softening of effort. He repeatedly returns to the sense that we are not responsible for manufacturing insight or concentration, only for sincerity, willingness, and trust in the Dharma. The talk then narrows into simpler and simpler contact with experience—breath, body, feeling, sound, silence, even darkness behind closed eyes—while emphasizing receptivity over control.">
+  <meta property="og:url" content="https://jeffharr.is/dharma/brensilver/talks/audiodharma-16091/">
+  <meta property="og:image" content="https://jeffharr.is/dharma/brensilver/artwork/audiodharma-16091.jpg">
+  <meta property="og:image:secure_url" content="https://jeffharr.is/dharma/brensilver/artwork/audiodharma-16091.jpg">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="1024">
+  <meta property="og:image:height" content="1024">
+  <meta name="twitter:image" content="https://jeffharr.is/dharma/brensilver/artwork/audiodharma-16091.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Lightly Guided Meditation">
+  <meta name="twitter:description" content="Matthew Brensilver offers a lightly guided meditation centered on posture, breath, and a gradual softening of effort. He repeatedly returns to the sense that we are not responsible for manufacturing insight or concentration, only for sincerity, willingness, and trust in the Dharma. The talk then narrows into simpler and simpler contact with experience—breath, body, feeling, sound, silence, even darkness behind closed eyes—while emphasizing receptivity over control.">
+  <link rel="stylesheet" href="../../talk-page.css">
+</head>
+<body>
+  <main>
+    <a class="back" href="../../">Matthew Brensilver Dharma Talks</a>
+    <div class="hero">
+      <div>
+        <h1>Lightly Guided Meditation</h1>
+        <div class="meta">
+          <span>AudioDharma</span>
+          <span>29:54</span>
+          <span>2022-04-14</span>
+        </div>
+        <p class="description">Matthew Brensilver offers a lightly guided meditation centered on posture, breath, and a gradual softening of effort. He repeatedly returns to the sense that we are not responsible for manufacturing insight or concentration, only for sincerity, willingness, and trust in the Dharma. The talk then narrows into simpler and simpler contact with experience—breath, body, feeling, sound, silence, even darkness behind closed eyes—while emphasizing receptivity over control.</p>
+      </div>
+      <img class="art" src="/dharma/brensilver/artwork/audiodharma-16091.jpg" alt="">
+    </div>
+    <div class="primary-player">
+      <audio id="audio" controls preload="none" src="https://audiodharma.us-east-1.linodeobjects.com/talks/16091/20220414-Matthew_Brensilver-IMC-lightly_guided_meditation.mp3"></audio>
+      <a class="download-link" href="https://audiodharma.us-east-1.linodeobjects.com/talks/16091/20220414-Matthew_Brensilver-IMC-lightly_guided_meditation.mp3" download>Download MP3</a>
+    </div>
+    <section>
+      <h2>Chapters</h2>
+      <ol class="chapters">
+        <li><a href="?t=20" data-start="20.0">00:20</a> <strong>Settling In</strong> - The practice begins with posture and breath as a way of landing in the present moment.</li>
+<li><a href="?t=141" data-start="141.0">02:21</a> <strong>Soft Exhalation</strong> - He invites a subtle relaxation through the exhale and a willingness to release tension without forcing anything.</li>
+<li><a href="?t=275" data-start="275.0">04:35</a> <strong>Not Responsible for Everything</strong> - The teaching shifts toward a relinquishment of control: not managing experience, awareness, or the results of practice.</li>
+<li><a href="?t=445" data-start="445.0">07:25</a> <strong>Sincerity and Trust</strong> - He emphasizes that our real responsibility is sincerity and willingness, along with faith in the logic of the path.</li>
+<li><a href="?t=763" data-start="763.0">12:43</a> <strong>Simplifying Experience</strong> - Attention is narrowed from meanings and concepts into more intimate contact with breath, body, feeling, sound, and silence.</li>
+<li><a href="?t=1246" data-start="1246.0">20:46</a> <strong>Receptivity and Softening</strong> - The talk returns to the compulsion to extract something from the moment and invites a softer, more receptive relationship to experience.</li>
+<li><a href="?t=1753" data-start="1752.914">29:13</a> <strong>Surrender in Awareness</strong> - The closing lines rest again on not accumulating anything and continuing to surrender in awareness with faith in Dharma.</li>
+      </ol>
+    </section>
+    <section>
+      <h2>Source</h2>
+      <p><a href="https://www.audiodharma.org/talks/16091">Original talk page</a></p>
+    </section>
+  </main>
+  <script>
+    const audio = document.getElementById('audio');
+    function seekFromLocation() {
+      if (!audio) return;
+      const value = new URLSearchParams(location.search).get('t');
+      const seconds = Number(value || 0);
+      if (Number.isFinite(seconds) && seconds > 0) {
+        audio.currentTime = seconds;
+      }
+    }
+    document.querySelectorAll('[data-start]').forEach(link => {
+      link.addEventListener('click', event => {
+        if (!audio) return;
+        event.preventDefault();
+        const seconds = Number(link.dataset.start || 0);
+        history.replaceState(null, '', '?t=' + Math.round(seconds));
+        audio.currentTime = seconds;
+        audio.play().catch(() => {});
+      });
+    });
+    audio?.addEventListener('loadedmetadata', seekFromLocation, { once: true });
+  </script>
+</body>
+</html>

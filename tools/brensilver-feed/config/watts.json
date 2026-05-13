@@ -1,12 +1,12 @@
 {
   "site": {
     "title": "Alan Watts",
-    "base_url": "https://jeffharr.is/watts/",
-    "feed_url": "https://jeffharr.is/watts/feed.xml",
+    "base_url": "https://jeffharr.is/dharma/watts/",
+    "feed_url": "https://jeffharr.is/dharma/watts/feed.xml",
     "author": "Alan Watts",
     "description": "A growing archive of Alan Watts talks, enriched with transcript-derived summaries, chapters, and episode artwork.",
     "language": "en",
-    "image_url": "https://jeffharr.is/watts/artwork/alan-watts-podcast-cover.jpg",
+    "image_url": "https://jeffharr.is/dharma/watts/artwork/alan-watts-podcast-cover.jpg",
     "feed_label": "Alan Watts talks",
     "feed_description": "The feed includes all currently indexed Alan Watts audio sources.",
     "category": "Religion & Spirituality",
@@ -18,7 +18,7 @@
       "name": "KPFA Archive",
       "id_prefix": "watts",
       "speaker": "Alan Watts",
-      "feed_path": "watts.xml",
+      "feed_path": "tools/brensilver-feed/sources/watts.xml",
       "archive_id_regex": "^([A-Z]{2}\\d{4}[A-Za-z]?(?:_\\d+)?)\\s+",
       "strip_title_prefix": true,
       "title_replacements": {

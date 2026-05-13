@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Guided Meditation: Goodnight Moon - Matthew Brensilver Dharma Talks</title>
+  <link rel="canonical" href="https://jeffharr.is/dharma/brensilver/talks/audiodharma-20468/">
+  <meta name="description" content="Matthew Brensilver offers a guided meditation built around the rhythm of Goodnight Moon, using the book’s repeated bedtime refrain as a gentle model for letting experience rest. He invites listeners to say goodnight to memories, pain, thoughts, and feelings, then to settle into breathing and open awareness without forcing anything away. The practice gradually widens from soft release into a quiet sense of presence, effortlessness, and brightness.">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Matthew Brensilver Dharma Talks">
+  <meta property="og:title" content="Guided Meditation: Goodnight Moon">
+  <meta property="og:description" content="Matthew Brensilver offers a guided meditation built around the rhythm of Goodnight Moon, using the book’s repeated bedtime refrain as a gentle model for letting experience rest. He invites listeners to say goodnight to memories, pain, thoughts, and feelings, then to settle into breathing and open awareness without forcing anything away. The practice gradually widens from soft release into a quiet sense of presence, effortlessness, and brightness.">
+  <meta property="og:url" content="https://jeffharr.is/dharma/brensilver/talks/audiodharma-20468/">
+  <meta property="og:image" content="https://jeffharr.is/dharma/brensilver/artwork/audiodharma-20468.jpg">
+  <meta property="og:image:secure_url" content="https://jeffharr.is/dharma/brensilver/artwork/audiodharma-20468.jpg">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="1024">
+  <meta property="og:image:height" content="1024">
+  <meta name="twitter:image" content="https://jeffharr.is/dharma/brensilver/artwork/audiodharma-20468.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Guided Meditation: Goodnight Moon">
+  <meta name="twitter:description" content="Matthew Brensilver offers a guided meditation built around the rhythm of Goodnight Moon, using the book’s repeated bedtime refrain as a gentle model for letting experience rest. He invites listeners to say goodnight to memories, pain, thoughts, and feelings, then to settle into breathing and open awareness without forcing anything away. The practice gradually widens from soft release into a quiet sense of presence, effortlessness, and brightness.">
+  <link rel="stylesheet" href="../../talk-page.css">
+</head>
+<body>
+  <main>
+    <a class="back" href="../../">Matthew Brensilver Dharma Talks</a>
+    <div class="hero">
+      <div>
+        <h1>Guided Meditation: Goodnight Moon</h1>
+        <div class="meta">
+          <span>AudioDharma</span>
+          <span>29:10</span>
+          <span>2024-05-22</span>
+        </div>
+        <p class="description">Matthew Brensilver offers a guided meditation built around the rhythm of Goodnight Moon, using the book’s repeated bedtime refrain as a gentle model for letting experience rest. He invites listeners to say goodnight to memories, pain, thoughts, and feelings, then to settle into breathing and open awareness without forcing anything away. The practice gradually widens from soft release into a quiet sense of presence, effortlessness, and brightness.</p>
+      </div>
+      <img class="art" src="/dharma/brensilver/artwork/audiodharma-20468.jpg" alt="">
+    </div>
+    <div class="primary-player">
+      <audio id="audio" controls preload="none" src="https://audiodharma.us-east-1.linodeobjects.com/talks/20468/20240522-Matthew_Brensilver-IMC-guided_meditation_goodnight_moon.mp3"></audio>
+      <a class="download-link" href="https://audiodharma.us-east-1.linodeobjects.com/talks/20468/20240522-Matthew_Brensilver-IMC-guided_meditation_goodnight_moon.mp3" download>Download MP3</a>
+    </div>
+    <section>
+      <h2>Chapters</h2>
+      <ol class="chapters">
+        <li><a href="?t=0" data-start="0.0">00:00</a> <strong>Opening the Meditation</strong> - Matthew welcomes the group and introduces the evening’s meditation, then recalls Goodnight Moon as the image that will shape the practice.</li>
+<li><a href="?t=156" data-start="156.0">02:36</a> <strong>Saying Goodnight</strong> - He turns the book’s repeated refrain into an instruction to bless and release memories, pain, thoughts, feelings, and other pieces of experience.</li>
+<li><a href="?t=555" data-start="555.0">09:15</a> <strong>Settling With Breath</strong> - The practice shifts toward breathing as a steady place to land, with attention and awareness described as gentle and open.</li>
+<li><a href="?t=709" data-start="709.0">11:49</a> <strong>Open Awareness</strong> - He explores how the breath can be felt either within attention or arising in spaciousness, and encourages bidding goodnight to whatever can be put down.</li>
+<li><a href="?t=904" data-start="904.0">15:04</a> <strong>Not Rejection</strong> - Matthew clarifies that putting something down is not the same as exile or aversion, and points toward patient, non-grasping attention.</li>
+<li><a href="?t=968" data-start="968.0">16:08</a> <strong>Resting in Presence</strong> - The meditation deepens into a quiet surrender of effort, with an emphasis on placing hope in this moment and allowing awareness to hold what remains.</li>
+<li><a href="?t=1562" data-start="1562.306">26:02</a> <strong>Fatigue and Brightness</strong> - Near the end, he includes fatigue itself as something that can soothe the body, while awareness leaves a brightness in its wake.</li>
+      </ol>
+    </section>
+    <section>
+      <h2>Source</h2>
+      <p><a href="https://www.audiodharma.org/talks/20468">Original talk page</a></p>
+    </section>
+  </main>
+  <script>
+    const audio = document.getElementById('audio');
+    function seekFromLocation() {
+      if (!audio) return;
+      const value = new URLSearchParams(location.search).get('t');
+      const seconds = Number(value || 0);
+      if (Number.isFinite(seconds) && seconds > 0) {
+        audio.currentTime = seconds;
+      }
+    }
+    document.querySelectorAll('[data-start]').forEach(link => {
+      link.addEventListener('click', event => {
+        if (!audio) return;
+        event.preventDefault();
+        const seconds = Number(link.dataset.start || 0);
+        history.replaceState(null, '', '?t=' + Math.round(seconds));
+        audio.currentTime = seconds;
+        audio.play().catch(() => {});
+      });
+    });
+    audio?.addEventListener('loadedmetadata', seekFromLocation, { once: true });
+  </script>
+</body>
+</html>

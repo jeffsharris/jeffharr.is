@@ -12,16 +12,21 @@ from brensilver.build import main
 
 
 if __name__ == "__main__":
+    out_dir = ROOT / "dharma" / "watts"
     args = [
         "--config",
         str(TOOL_ROOT / "config" / "watts.json"),
         "--out-dir",
-        str(ROOT / "watts"),
+        str(out_dir),
         "--corpus-dir",
         str(ROOT / ".local-corpus" / "watts"),
     ]
-    existing_talks = ROOT / "watts" / "talks.json"
-    if existing_talks.exists():
-        args.extend(["--seed-talks-json", str(existing_talks)])
+    for existing_talks in [
+        out_dir / "talks.json",
+        ROOT / "watts" / "talks.json",
+    ]:
+        if existing_talks.exists():
+            args.extend(["--seed-talks-json", str(existing_talks)])
+            break
 
     raise SystemExit(main(args + sys.argv[1:]))

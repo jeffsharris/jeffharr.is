@@ -16,16 +16,16 @@ markdown, and QMD embeddings.
 - Source config: `tools/brensilver-feed/config/sources.json`
 - Feed builder wrapper: `scripts/build-brensilver-feed.py`
 - Local ingestion runner: `scripts/run-brensilver-ingestion.sh`
-- Generated public artifacts: `brensilver/`
+- Generated public artifacts: `dharma/brensilver/`
 - Local private corpus: `.local-corpus/brensilver/`
 - QMD index: `dharma`
 - QMD collection: `brensilver`
-- Main Dharma-talk feed: `brensilver/feed.xml`
-- Guided/practice feed: `brensilver/guided-feed.xml`
+- Main Dharma-talk feed: `dharma/brensilver/feed.xml`
+- Guided/practice feed: `dharma/brensilver/guided-feed.xml`
 
 The feed builder discovers talks and writes static feed/site artifacts. The
 local ingestion runner refreshes source feeds first, then runs `run-corpus`,
-which consumes `brensilver/talks.json` and processes any talk missing local
+which consumes `dharma/brensilver/talks.json` and processes any talk missing local
 enrichment artifacts.
 
 ## Normal Ongoing Operation
@@ -49,14 +49,14 @@ For unattended publishing, the environment sets:
 BRENSILVER_AUTO_PUBLISH=1
 BRENSILVER_INGEST_LIMIT=20
 BRENSILVER_FEED_EVERY=20
-BRENSILVER_MEDIA_BASE_URL=https://jeffharr.is/brensilver/
+BRENSILVER_MEDIA_BASE_URL=https://jeffharr.is/dharma/brensilver/
 ```
 
 The runner refuses to auto-publish from a dirty worktree. That is intentional:
 scheduled jobs should not accidentally commit an agent's unrelated edits.
 
 Cloudflare Pages deploys the site from GitHub pushes to `main`. Normal
-Brensilver publishing should therefore commit generated `brensilver/` artifacts
+Brensilver publishing should therefore commit generated `dharma/brensilver/` artifacts
 and push, not run an ad hoc Pages deployment. Before any push that should
 publish the site, fetch the remote and fast-forward or rebase onto
 `origin/main`; if that cannot be done cleanly, stop and resolve the branch state
@@ -82,7 +82,7 @@ ingestion run.
    python3 - <<'PY'
    import json
    from pathlib import Path
-   talks = json.loads(Path("brensilver/talks.json").read_text())
+   talks = json.loads(Path("dharma/brensilver/talks.json").read_text())
    print(len(talks), talks[0]["id"], talks[0]["title"])
    PY
    ```
@@ -90,9 +90,9 @@ ingestion run.
 5. Check that new talk IDs have:
 
    ```txt
-   brensilver/talks/{safe_id}/index.html
-   brensilver/chapters/{safe_id}.json
-   brensilver/artwork/{safe_id}.jpg
+   dharma/brensilver/talks/{safe_id}/index.html
+   dharma/brensilver/chapters/{safe_id}.json
+   dharma/brensilver/artwork/{safe_id}.jpg
    .local-corpus/brensilver/transcripts/corrected/{safe_id}.json
    .local-corpus/brensilver/references/{safe_id}.json
    .local-corpus/brensilver/transcripts/markdown/{safe_id}.md
@@ -172,7 +172,7 @@ Use this plan:
    PYTHONPATH=tools/.../src python3 -m ... run-corpus \
      --limit 20 \
      --feed-every 20 \
-     --media-base-url https://jeffharr.is/{teacher_path}/ \
+     --media-base-url https://jeffharr.is/dharma/{teacher_slug}/ \
      --copy-artwork \
      --update-qmd \
      --build-feedback-viewer

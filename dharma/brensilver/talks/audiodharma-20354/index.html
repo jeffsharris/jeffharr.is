@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dharmette: Coming Home and Leaving Home - Matthew Brensilver Dharma Talks</title>
+  <link rel="canonical" href="https://jeffharr.is/dharma/brensilver/talks/audiodharma-20354/">
+  <meta name="description" content="Matthew Brensilver frames Dharma practice as a movement between coming home and leaving home: returning to what the heart already knows, then learning to love new things. He explains that transformation usually happens gradually, through small repeated gestures rather than a single decision, and uses Plato, Alfred Adler, and a cited philosopher to make that case. The talk ends by returning to the image of a “new home,” where practice slowly reshapes what feels familiar and worth loving.">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Matthew Brensilver Dharma Talks">
+  <meta property="og:title" content="Dharmette: Coming Home and Leaving Home">
+  <meta property="og:description" content="Matthew Brensilver frames Dharma practice as a movement between coming home and leaving home: returning to what the heart already knows, then learning to love new things. He explains that transformation usually happens gradually, through small repeated gestures rather than a single decision, and uses Plato, Alfred Adler, and a cited philosopher to make that case. The talk ends by returning to the image of a “new home,” where practice slowly reshapes what feels familiar and worth loving.">
+  <meta property="og:url" content="https://jeffharr.is/dharma/brensilver/talks/audiodharma-20354/">
+  <meta property="og:image" content="https://jeffharr.is/dharma/brensilver/artwork/audiodharma-20354.jpg">
+  <meta property="og:image:secure_url" content="https://jeffharr.is/dharma/brensilver/artwork/audiodharma-20354.jpg">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="1024">
+  <meta property="og:image:height" content="1024">
+  <meta name="twitter:image" content="https://jeffharr.is/dharma/brensilver/artwork/audiodharma-20354.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Dharmette: Coming Home and Leaving Home">
+  <meta name="twitter:description" content="Matthew Brensilver frames Dharma practice as a movement between coming home and leaving home: returning to what the heart already knows, then learning to love new things. He explains that transformation usually happens gradually, through small repeated gestures rather than a single decision, and uses Plato, Alfred Adler, and a cited philosopher to make that case. The talk ends by returning to the image of a “new home,” where practice slowly reshapes what feels familiar and worth loving.">
+  <link rel="stylesheet" href="../../talk-page.css">
+</head>
+<body>
+  <main>
+    <a class="back" href="../../">Matthew Brensilver Dharma Talks</a>
+    <div class="hero">
+      <div>
+        <h1>Dharmette: Coming Home and Leaving Home</h1>
+        <div class="meta">
+          <span>AudioDharma</span>
+          <span>12:29</span>
+          <span>2024-05-08</span>
+        </div>
+        <p class="description">Matthew Brensilver frames Dharma practice as a movement between coming home and leaving home: returning to what the heart already knows, then learning to love new things. He explains that transformation usually happens gradually, through small repeated gestures rather than a single decision, and uses Plato, Alfred Adler, and a cited philosopher to make that case. The talk ends by returning to the image of a “new home,” where practice slowly reshapes what feels familiar and worth loving.</p>
+      </div>
+      <img class="art" src="/dharma/brensilver/artwork/audiodharma-20354.jpg" alt="">
+    </div>
+    <div class="primary-player">
+      <audio id="audio" controls preload="none" src="https://audiodharma.us-east-1.linodeobjects.com/talks/20354/20240508-Matthew_Brensilver-IMC-dharmette_coming_home_and_leaving_home.mp3"></audio>
+      <a class="download-link" href="https://audiodharma.us-east-1.linodeobjects.com/talks/20354/20240508-Matthew_Brensilver-IMC-dharmette_coming_home_and_leaving_home.mp3" download>Download MP3</a>
+    </div>
+    <section>
+      <h2>Chapters</h2>
+      <ol class="chapters">
+        <li><a href="?t=18" data-start="18.0">00:18</a> <strong>Coming Home</strong> - The talk opens by naming Dharma as a return to what is familiar, loved, and long known.</li>
+<li><a href="?t=73" data-start="73.0">01:13</a> <strong>Recognition and Refuge</strong> - Matthew explores the feeling of recollection, where the teaching seems to awaken something already present in the heart.</li>
+<li><a href="?t=203" data-start="203.0">03:23</a> <strong>Loving New Things</strong> - He turns to the second movement of the path: learning to value peace, space, and awareness over older habits.</li>
+<li><a href="?t=258" data-start="258.0">04:18</a> <strong>More Than Willpower</strong> - An Alfred Adler story is used to show that transformation is not solved by simply deciding differently or forcing change.</li>
+<li><a href="?t=406" data-start="406.0">06:46</a> <strong>How Values Shift</strong> - Drawing on Agnes Callard, he describes change as gradual, shaped by repeated actions, altered priorities, and time.</li>
+<li><a href="?t=541" data-start="541.0">09:01</a> <strong>Small Gestures</strong> - He offers ordinary practices—quiet sitting, Sangha, reflection, and moments of wakefulness—as the seeds of new love.</li>
+<li><a href="?t=624" data-start="624.0">10:24</a> <strong>A New Home</strong> - The talk closes with the idea that Dharma slowly becomes home, even as practice continues to open outward.</li>
+      </ol>
+    </section>
+    <section>
+      <h2>Source</h2>
+      <p><a href="https://www.audiodharma.org/talks/20354">Original talk page</a></p>
+    </section>
+  </main>
+  <script>
+    const audio = document.getElementById('audio');
+    function seekFromLocation() {
+      if (!audio) return;
+      const value = new URLSearchParams(location.search).get('t');
+      const seconds = Number(value || 0);
+      if (Number.isFinite(seconds) && seconds > 0) {
+        audio.currentTime = seconds;
+      }
+    }
+    document.querySelectorAll('[data-start]').forEach(link => {
+      link.addEventListener('click', event => {
+        if (!audio) return;
+        event.preventDefault();
+        const seconds = Number(link.dataset.start || 0);
+        history.replaceState(null, '', '?t=' + Math.round(seconds));
+        audio.currentTime = seconds;
+        audio.play().catch(() => {});
+      });
+    });
+    audio?.addEventListener('loadedmetadata', seekFromLocation, { once: true });
+  </script>
+</body>
+</html>

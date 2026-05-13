@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Guided Meditation: Vulnerability &amp; Courage - Matthew Brensilver Dharma Talks</title>
+  <link rel="canonical" href="https://jeffharr.is/dharma/brensilver/talks/audiodharma-21718/">
+  <meta name="description" content="Matthew Brensilver leads a quiet guided meditation on vulnerability as a source of steadiness rather than weakness. The practice moves from settling the body and refreshing curiosity, into reflections on being undefended, allowing experience to pass through without hardening. He closes by linking courage to a balanced middle way and to a heart that can remain open without losing its center.">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Matthew Brensilver Dharma Talks">
+  <meta property="og:title" content="Guided Meditation: Vulnerability &amp; Courage">
+  <meta property="og:description" content="Matthew Brensilver leads a quiet guided meditation on vulnerability as a source of steadiness rather than weakness. The practice moves from settling the body and refreshing curiosity, into reflections on being undefended, allowing experience to pass through without hardening. He closes by linking courage to a balanced middle way and to a heart that can remain open without losing its center.">
+  <meta property="og:url" content="https://jeffharr.is/dharma/brensilver/talks/audiodharma-21718/">
+  <meta property="og:image" content="https://jeffharr.is/dharma/brensilver/artwork/audiodharma-21718.jpg">
+  <meta property="og:image:secure_url" content="https://jeffharr.is/dharma/brensilver/artwork/audiodharma-21718.jpg">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="1024">
+  <meta property="og:image:height" content="1024">
+  <meta name="twitter:image" content="https://jeffharr.is/dharma/brensilver/artwork/audiodharma-21718.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Guided Meditation: Vulnerability &amp; Courage">
+  <meta name="twitter:description" content="Matthew Brensilver leads a quiet guided meditation on vulnerability as a source of steadiness rather than weakness. The practice moves from settling the body and refreshing curiosity, into reflections on being undefended, allowing experience to pass through without hardening. He closes by linking courage to a balanced middle way and to a heart that can remain open without losing its center.">
+  <link rel="stylesheet" href="../../talk-page.css">
+</head>
+<body>
+  <main>
+    <a class="back" href="../../">Matthew Brensilver Dharma Talks</a>
+    <div class="hero">
+      <div>
+        <h1>Guided Meditation: Vulnerability &amp; Courage</h1>
+        <div class="meta">
+          <span>AudioDharma</span>
+          <span>28:21</span>
+          <span>2024-11-13</span>
+        </div>
+        <p class="description">Matthew Brensilver leads a quiet guided meditation on vulnerability as a source of steadiness rather than weakness. The practice moves from settling the body and refreshing curiosity, into reflections on being undefended, allowing experience to pass through without hardening. He closes by linking courage to a balanced middle way and to a heart that can remain open without losing its center.</p>
+      </div>
+      <img class="art" src="/dharma/brensilver/artwork/audiodharma-21718.jpg" alt="">
+    </div>
+    <div class="primary-player">
+      <audio id="audio" controls preload="none" src="https://audiodharma.us-east-1.linodeobjects.com/talks/21718/20241113-Matthew_Brensilver-IMC-guided_meditation_vulnerability_courage.mp3"></audio>
+      <a class="download-link" href="https://audiodharma.us-east-1.linodeobjects.com/talks/21718/20241113-Matthew_Brensilver-IMC-guided_meditation_vulnerability_courage.mp3" download>Download MP3</a>
+    </div>
+    <section>
+      <h2>Chapters</h2>
+      <ol class="chapters">
+        <li><a href="?t=12" data-start="12.0">00:12</a> <strong>Settling In</strong> - He invites listeners to get cozy, but not too cozy, and to bring relaxed, energetic openness to body and mind.</li>
+<li><a href="?t=106" data-start="106.0">01:46</a> <strong>Fresh Curiosity</strong> - The practice turns toward sincerity as a willingness to be surprised, with attention resting evenly in the present moment.</li>
+<li><a href="?t=172" data-start="172.0">02:52</a> <strong>Breathing and Waking</strong> - A brief settling period emphasizes breathing, relaxing, and waking up to experience as it is.</li>
+<li><a href="?t=362" data-start="362.0">06:02</a> <strong>Vulnerability as Strength</strong> - He reframes tenderness and vulnerability as the basis of real power, not brittle self-protection.</li>
+<li><a href="?t=503" data-start="503.0">08:23</a> <strong>Undefended Heart</strong> - The talk deepens into the idea of being undefended without losing center, allowing softness, clarity, and love to coexist.</li>
+<li><a href="?t=751" data-start="750.96">12:31</a> <strong>Attuning to Courage</strong> - Listeners are guided to sense their own power and to meet the moment with an open chest and a readiness to let feeling move through.</li>
+<li><a href="?t=1005" data-start="1004.52">16:45</a> <strong>Middle Way of Courage</strong> - He brings in Aristotle’s image of courage between recklessness and cowardice, using it to point toward balanced, grounded openness.</li>
+<li><a href="?t=1395" data-start="1394.914">23:15</a> <strong>Nothing to Defend</strong> - The meditation closes by suggesting that when there is no territory to protect, defensiveness softens and confidence remains.</li>
+      </ol>
+    </section>
+    <section>
+      <h2>Source</h2>
+      <p><a href="https://www.audiodharma.org/talks/21718">Original talk page</a></p>
+    </section>
+  </main>
+  <script>
+    const audio = document.getElementById('audio');
+    function seekFromLocation() {
+      if (!audio) return;
+      const value = new URLSearchParams(location.search).get('t');
+      const seconds = Number(value || 0);
+      if (Number.isFinite(seconds) && seconds > 0) {
+        audio.currentTime = seconds;
+      }
+    }
+    document.querySelectorAll('[data-start]').forEach(link => {
+      link.addEventListener('click', event => {
+        if (!audio) return;
+        event.preventDefault();
+        const seconds = Number(link.dataset.start || 0);
+        history.replaceState(null, '', '?t=' + Math.round(seconds));
+        audio.currentTime = seconds;
+        audio.play().catch(() => {});
+      });
+    });
+    audio?.addEventListener('loadedmetadata', seekFromLocation, { once: true });
+  </script>
+</body>
+</html>

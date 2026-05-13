@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Guided Meditation: Urgency of Feeling - Matthew Brensilver Dharma Talks</title>
+  <link rel="canonical" href="https://jeffharr.is/dharma/brensilver/talks/dharmaseed-93048/">
+  <meta name="description" content="Matthew Brensilver offers a guided meditation centered on the &quot;urgency&quot; that can arise from feeling. The practice begins with settling the body and breathing, then turns toward noticing hidden agendas, control strategies, and the way emotional surges can seem like commands. As the meditation deepens, he repeatedly returns to relaxing, absorbing feeling, and letting breathing become safe again.">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Matthew Brensilver Dharma Talks">
+  <meta property="og:title" content="Guided Meditation: Urgency of Feeling">
+  <meta property="og:description" content="Matthew Brensilver offers a guided meditation centered on the &quot;urgency&quot; that can arise from feeling. The practice begins with settling the body and breathing, then turns toward noticing hidden agendas, control strategies, and the way emotional surges can seem like commands. As the meditation deepens, he repeatedly returns to relaxing, absorbing feeling, and letting breathing become safe again.">
+  <meta property="og:url" content="https://jeffharr.is/dharma/brensilver/talks/dharmaseed-93048/">
+  <meta property="og:image" content="https://jeffharr.is/dharma/brensilver/artwork/dharmaseed-93048.jpg">
+  <meta property="og:image:secure_url" content="https://jeffharr.is/dharma/brensilver/artwork/dharmaseed-93048.jpg">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="1024">
+  <meta property="og:image:height" content="1024">
+  <meta name="twitter:image" content="https://jeffharr.is/dharma/brensilver/artwork/dharmaseed-93048.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Guided Meditation: Urgency of Feeling">
+  <meta name="twitter:description" content="Matthew Brensilver offers a guided meditation centered on the &quot;urgency&quot; that can arise from feeling. The practice begins with settling the body and breathing, then turns toward noticing hidden agendas, control strategies, and the way emotional surges can seem like commands. As the meditation deepens, he repeatedly returns to relaxing, absorbing feeling, and letting breathing become safe again.">
+  <link rel="stylesheet" href="../../talk-page.css">
+</head>
+<body>
+  <main>
+    <a class="back" href="../../">Matthew Brensilver Dharma Talks</a>
+    <div class="hero">
+      <div>
+        <h1>Guided Meditation: Urgency of Feeling</h1>
+        <div class="meta">
+          <span>Dharma Seed</span>
+          <span>32:37</span>
+          <span>2025-09-18</span>
+        </div>
+        <p class="description">Matthew Brensilver offers a guided meditation centered on the &quot;urgency&quot; that can arise from feeling. The practice begins with settling the body and breathing, then turns toward noticing hidden agendas, control strategies, and the way emotional surges can seem like commands. As the meditation deepens, he repeatedly returns to relaxing, absorbing feeling, and letting breathing become safe again.</p>
+      </div>
+      <img class="art" src="/dharma/brensilver/artwork/dharmaseed-93048.jpg" alt="">
+    </div>
+    <div class="primary-player">
+      <audio id="audio" controls preload="none" src="https://dharmaseed.org/talks/93048/20250918-Matthew_Brensilver-BBRC-guided_meditation_urgency_of_feeling-93048.mp3?rss="></audio>
+      <a class="download-link" href="https://dharmaseed.org/talks/93048/20250918-Matthew_Brensilver-BBRC-guided_meditation_urgency_of_feeling-93048.mp3?rss=" download>Download MP3</a>
+    </div>
+    <section>
+      <h2>Chapters</h2>
+      <ol class="chapters">
+        <li><a href="?t=0" data-start="0.0">00:00</a> <strong>Settling the body</strong> - The meditation opens by softening the body through fuller breaths and a soothing exhale.</li>
+<li><a href="?t=172" data-start="172.2">02:52</a> <strong>Relaxation cues</strong> - Attention moves through the face, jaw, shoulders, belly, and a sense of brightness in the spine as the body yields to earth and sky.</li>
+<li><a href="?t=365" data-start="365.16">06:05</a> <strong>Hidden agendas</strong> - The teaching invites noticing the semi-conscious agendas and efforts that keep trying to fix pain, peace, or the future.</li>
+<li><a href="?t=625" data-start="625.24">10:25</a> <strong>Feeling as urgency</strong> - Brensilver describes how bodily feeling creates a sense that something must happen, and how to let feeling remain feeling.</li>
+<li><a href="?t=863" data-start="863.24">14:23</a> <strong>False alarms</strong> - He frames sensations and phenomena as false alarms and emphasizes the difference between control and letting go.</li>
+<li><a href="?t=1190" data-start="1190.24">19:50</a> <strong>Breath and equanimity</strong> - The practice returns to the breath, with repeated reminders to feel breathing in a relaxed way and to stay with each beginning, middle, and end.</li>
+<li><a href="?t=1719" data-start="1719.493">28:39</a> <strong>Relaxing the threat</strong> - The closing section focuses on tension as an innocent control impulse and on relaxing the thorny quality of feeling until breathing feels safe again.</li>
+      </ol>
+    </section>
+    <section>
+      <h2>Source</h2>
+      <p><a href="https://dharmaseed.org/talks/93048/">Original talk page</a></p>
+    </section>
+  </main>
+  <script>
+    const audio = document.getElementById('audio');
+    function seekFromLocation() {
+      if (!audio) return;
+      const value = new URLSearchParams(location.search).get('t');
+      const seconds = Number(value || 0);
+      if (Number.isFinite(seconds) && seconds > 0) {
+        audio.currentTime = seconds;
+      }
+    }
+    document.querySelectorAll('[data-start]').forEach(link => {
+      link.addEventListener('click', event => {
+        if (!audio) return;
+        event.preventDefault();
+        const seconds = Number(link.dataset.start || 0);
+        history.replaceState(null, '', '?t=' + Math.round(seconds));
+        audio.currentTime = seconds;
+        audio.play().catch(() => {});
+      });
+    });
+    audio?.addEventListener('loadedmetadata', seekFromLocation, { once: true });
+  </script>
+</body>
+</html>

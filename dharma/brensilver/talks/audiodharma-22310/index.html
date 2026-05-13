@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Equanimity 4 - Matthew Brensilver Dharma Talks</title>
+  <link rel="canonical" href="https://jeffharr.is/dharma/brensilver/talks/audiodharma-22310/">
+  <meta name="description" content="Matthew Brensilver offers a short, practice-oriented talk on equanimity as a companion to compassion rather than a dry or distant state. He begins with an alternating metta and equanimity exercise, then develops the theme through the experience of loving when we cannot control outcomes. The talk closes by bringing the teaching into everyday and civic life: where care is best spent, and how to remain open without over-identifying with suffering.">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Matthew Brensilver Dharma Talks">
+  <meta property="og:title" content="Equanimity 4">
+  <meta property="og:description" content="Matthew Brensilver offers a short, practice-oriented talk on equanimity as a companion to compassion rather than a dry or distant state. He begins with an alternating metta and equanimity exercise, then develops the theme through the experience of loving when we cannot control outcomes. The talk closes by bringing the teaching into everyday and civic life: where care is best spent, and how to remain open without over-identifying with suffering.">
+  <meta property="og:url" content="https://jeffharr.is/dharma/brensilver/talks/audiodharma-22310/">
+  <meta property="og:image" content="https://jeffharr.is/dharma/brensilver/artwork/audiodharma-22310.jpg">
+  <meta property="og:image:secure_url" content="https://jeffharr.is/dharma/brensilver/artwork/audiodharma-22310.jpg">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="1024">
+  <meta property="og:image:height" content="1024">
+  <meta name="twitter:image" content="https://jeffharr.is/dharma/brensilver/artwork/audiodharma-22310.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Equanimity 4">
+  <meta name="twitter:description" content="Matthew Brensilver offers a short, practice-oriented talk on equanimity as a companion to compassion rather than a dry or distant state. He begins with an alternating metta and equanimity exercise, then develops the theme through the experience of loving when we cannot control outcomes. The talk closes by bringing the teaching into everyday and civic life: where care is best spent, and how to remain open without over-identifying with suffering.">
+  <link rel="stylesheet" href="../../talk-page.css">
+</head>
+<body>
+  <main>
+    <a class="back" href="../../">Matthew Brensilver Dharma Talks</a>
+    <div class="hero">
+      <div>
+        <h1>Equanimity 4</h1>
+        <div class="meta">
+          <span>AudioDharma</span>
+          <span>14:53</span>
+          <span>2025-02-16</span>
+        </div>
+        <p class="description">Matthew Brensilver offers a short, practice-oriented talk on equanimity as a companion to compassion rather than a dry or distant state. He begins with an alternating metta and equanimity exercise, then develops the theme through the experience of loving when we cannot control outcomes. The talk closes by bringing the teaching into everyday and civic life: where care is best spent, and how to remain open without over-identifying with suffering.</p>
+      </div>
+      <img class="art" src="/dharma/brensilver/artwork/audiodharma-22310.jpg" alt="">
+    </div>
+    <div class="primary-player">
+      <audio id="audio" controls preload="none" src="https://audiodharma.us-east-1.linodeobjects.com/talks/22310/20250216-Matthew_Brensilver-IMC-equanimity_4.mp3"></audio>
+      <a class="download-link" href="https://audiodharma.us-east-1.linodeobjects.com/talks/22310/20250216-Matthew_Brensilver-IMC-equanimity_4.mp3" download>Download MP3</a>
+    </div>
+    <section>
+      <h2>Chapters</h2>
+      <ol class="chapters">
+        <li><a href="?t=13" data-start="13.0">00:13</a> <strong>Opening practice frame</strong> - He introduces walking practice and an alternating heart practice that moves between metta and equanimity.</li>
+<li><a href="?t=150" data-start="150.0">02:30</a> <strong>Love at the limit</strong> - The talk turns to what love feels like when our wishes do not govern outcomes and control falls away.</li>
+<li><a href="?t=278" data-start="278.0">04:38</a> <strong>Holding suffering lightly</strong> - He describes feeling another's suffering, letting grief be felt, and then softening into a wider, more relieving heart.</li>
+<li><a href="?t=434" data-start="434.0">07:14</a> <strong>Two sides of love</strong> - Compassion and equanimity are presented as mutually supporting, with each correcting the distortions of the other.</li>
+<li><a href="?t=552" data-start="552.0">09:12</a> <strong>Suffering wisely</strong> - He speaks about global dukkha, the danger of absorbing it in ways that corrode the heart, and the need to rest.</li>
+<li><a href="?t=688" data-start="688.0">11:28</a> <strong>Local and practical care</strong> - A story about a politically engaged teacher leads into a suggestion to ask where love is most effective and local.</li>
+<li><a href="?t=827" data-start="827.0">13:47</a> <strong>Closing practice instructions</strong> - He returns to the metta sequence, pairing taking on suffering with the 'as if' boundary and then releasing into equanimity.</li>
+      </ol>
+    </section>
+    <section>
+      <h2>Source</h2>
+      <p><a href="https://www.audiodharma.org/talks/22310">Original talk page</a></p>
+    </section>
+  </main>
+  <script>
+    const audio = document.getElementById('audio');
+    function seekFromLocation() {
+      if (!audio) return;
+      const value = new URLSearchParams(location.search).get('t');
+      const seconds = Number(value || 0);
+      if (Number.isFinite(seconds) && seconds > 0) {
+        audio.currentTime = seconds;
+      }
+    }
+    document.querySelectorAll('[data-start]').forEach(link => {
+      link.addEventListener('click', event => {
+        if (!audio) return;
+        event.preventDefault();
+        const seconds = Number(link.dataset.start || 0);
+        history.replaceState(null, '', '?t=' + Math.round(seconds));
+        audio.currentTime = seconds;
+        audio.play().catch(() => {});
+      });
+    });
+    audio?.addEventListener('loadedmetadata', seekFromLocation, { once: true });
+  </script>
+</body>
+</html>

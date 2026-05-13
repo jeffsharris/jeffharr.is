@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Guided Meditation: It's all come to this - Matthew Brensilver Dharma Talks</title>
+  <link rel="canonical" href="https://jeffharr.is/dharma/brensilver/talks/audiodharma-21824/">
+  <meta name="description" content="Matthew Brensilver offers a quiet guided meditation centered on gathering the goodness of practice and meeting the present moment without violence. The talk moves from recollecting years of practice and the pain and wisdom that have led here, into a gentler way of relating to breath, body, and mind. He then turns toward refuge, showing how to rest in what is already here rather than trying to outthink uncertainty.">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Matthew Brensilver Dharma Talks">
+  <meta property="og:title" content="Guided Meditation: It's all come to this">
+  <meta property="og:description" content="Matthew Brensilver offers a quiet guided meditation centered on gathering the goodness of practice and meeting the present moment without violence. The talk moves from recollecting years of practice and the pain and wisdom that have led here, into a gentler way of relating to breath, body, and mind. He then turns toward refuge, showing how to rest in what is already here rather than trying to outthink uncertainty.">
+  <meta property="og:url" content="https://jeffharr.is/dharma/brensilver/talks/audiodharma-21824/">
+  <meta property="og:image" content="https://jeffharr.is/dharma/brensilver/artwork/audiodharma-21824.jpg">
+  <meta property="og:image:secure_url" content="https://jeffharr.is/dharma/brensilver/artwork/audiodharma-21824.jpg">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="1024">
+  <meta property="og:image:height" content="1024">
+  <meta name="twitter:image" content="https://jeffharr.is/dharma/brensilver/artwork/audiodharma-21824.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Guided Meditation: It's all come to this">
+  <meta name="twitter:description" content="Matthew Brensilver offers a quiet guided meditation centered on gathering the goodness of practice and meeting the present moment without violence. The talk moves from recollecting years of practice and the pain and wisdom that have led here, into a gentler way of relating to breath, body, and mind. He then turns toward refuge, showing how to rest in what is already here rather than trying to outthink uncertainty.">
+  <link rel="stylesheet" href="../../talk-page.css">
+</head>
+<body>
+  <main>
+    <a class="back" href="../../">Matthew Brensilver Dharma Talks</a>
+    <div class="hero">
+      <div>
+        <h1>Guided Meditation: It's all come to this</h1>
+        <div class="meta">
+          <span>AudioDharma</span>
+          <span>29:10</span>
+          <span>2024-12-04</span>
+        </div>
+        <p class="description">Matthew Brensilver offers a quiet guided meditation centered on gathering the goodness of practice and meeting the present moment without violence. The talk moves from recollecting years of practice and the pain and wisdom that have led here, into a gentler way of relating to breath, body, and mind. He then turns toward refuge, showing how to rest in what is already here rather than trying to outthink uncertainty.</p>
+      </div>
+      <img class="art" src="/dharma/brensilver/artwork/audiodharma-21824.jpg" alt="">
+    </div>
+    <div class="primary-player">
+      <audio id="audio" controls preload="none" src="https://audiodharma.us-east-1.linodeobjects.com/talks/21824/20241204-Matthew_Brensilver-IMC-guided_meditation_it_s_all_come_to_this.mp3"></audio>
+      <a class="download-link" href="https://audiodharma.us-east-1.linodeobjects.com/talks/21824/20241204-Matthew_Brensilver-IMC-guided_meditation_it_s_all_come_to_this.mp3" download>Download MP3</a>
+    </div>
+    <section>
+      <h2>Chapters</h2>
+      <ol class="chapters">
+        <li><a href="?t=12" data-start="12.0">00:12</a> <strong>Settling In</strong> - He welcomes listeners and invites them to settle, alert but comfortable, for meditation.</li>
+<li><a href="?t=67" data-start="67.0">01:07</a> <strong>Recollecting Practice</strong> - The meditation begins by recalling moments of willingness, retreat, practice, and friendship with the Dharma.</li>
+<li><a href="?t=248" data-start="248.0">04:08</a> <strong>All Come To This</strong> - He gathers the whole arc of practice and life—pain, greed, hate, wisdom, and love—into the present moment.</li>
+<li><a href="?t=338" data-start="338.0">05:38</a> <strong>Gently Tending Life</strong> - A long stretch of repeated phrases emphasizes tenderness, acceptance, and non-violence toward experience.</li>
+<li><a href="?t=838" data-start="838.0">13:58</a> <strong>Ordinary Strategies</strong> - He names the ways we try to manage uncertainty through pleasure, planning, and rehashing the past.</li>
+<li><a href="?t=1006" data-start="1006.0">16:46</a> <strong>Deeper Refuge</strong> - The meditation shifts toward refuge, resting in breath, body, and the present life as it is.</li>
+<li><a href="?t=1446" data-start="1446.302">24:06</a> <strong>Winds Of Change</strong> - He closes by inviting trust in impermanence, letting change move through without harm.</li>
+      </ol>
+    </section>
+    <section>
+      <h2>Source</h2>
+      <p><a href="https://www.audiodharma.org/talks/21824">Original talk page</a></p>
+    </section>
+  </main>
+  <script>
+    const audio = document.getElementById('audio');
+    function seekFromLocation() {
+      if (!audio) return;
+      const value = new URLSearchParams(location.search).get('t');
+      const seconds = Number(value || 0);
+      if (Number.isFinite(seconds) && seconds > 0) {
+        audio.currentTime = seconds;
+      }
+    }
+    document.querySelectorAll('[data-start]').forEach(link => {
+      link.addEventListener('click', event => {
+        if (!audio) return;
+        event.preventDefault();
+        const seconds = Number(link.dataset.start || 0);
+        history.replaceState(null, '', '?t=' + Math.round(seconds));
+        audio.currentTime = seconds;
+        audio.play().catch(() => {});
+      });
+    });
+    audio?.addEventListener('loadedmetadata', seekFromLocation, { once: true });
+  </script>
+</body>
+</html>

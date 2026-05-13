@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Guided Meditation: Sound and the Openness of Awareness - Matthew Brensilver Dharma Talks</title>
+  <link rel="canonical" href="https://jeffharr.is/dharma/brensilver/talks/audiodharma-14558/">
+  <meta name="description" content="This guided meditation begins with settling the body through softening and relaxation, then gradually turns toward sound as a way to steady attention. Matthew Brensilver invites listeners to notice not only the arising and ending of sound, but also the spacious, receptive quality of awareness that can hold it all. The practice moves from directed attention to a quieter resting in awareness itself.">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Matthew Brensilver Dharma Talks">
+  <meta property="og:title" content="Guided Meditation: Sound and the Openness of Awareness">
+  <meta property="og:description" content="This guided meditation begins with settling the body through softening and relaxation, then gradually turns toward sound as a way to steady attention. Matthew Brensilver invites listeners to notice not only the arising and ending of sound, but also the spacious, receptive quality of awareness that can hold it all. The practice moves from directed attention to a quieter resting in awareness itself.">
+  <meta property="og:url" content="https://jeffharr.is/dharma/brensilver/talks/audiodharma-14558/">
+  <meta property="og:image" content="https://jeffharr.is/dharma/brensilver/artwork/audiodharma-14558.jpg">
+  <meta property="og:image:secure_url" content="https://jeffharr.is/dharma/brensilver/artwork/audiodharma-14558.jpg">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="1024">
+  <meta property="og:image:height" content="1024">
+  <meta name="twitter:image" content="https://jeffharr.is/dharma/brensilver/artwork/audiodharma-14558.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Guided Meditation: Sound and the Openness of Awareness">
+  <meta name="twitter:description" content="This guided meditation begins with settling the body through softening and relaxation, then gradually turns toward sound as a way to steady attention. Matthew Brensilver invites listeners to notice not only the arising and ending of sound, but also the spacious, receptive quality of awareness that can hold it all. The practice moves from directed attention to a quieter resting in awareness itself.">
+  <link rel="stylesheet" href="../../talk-page.css">
+</head>
+<body>
+  <main>
+    <a class="back" href="../../">Matthew Brensilver Dharma Talks</a>
+    <div class="hero">
+      <div>
+        <h1>Guided Meditation: Sound and the Openness of Awareness</h1>
+        <div class="meta">
+          <span>AudioDharma</span>
+          <span>30:56</span>
+          <span>2021-11-16</span>
+        </div>
+        <p class="description">This guided meditation begins with settling the body through softening and relaxation, then gradually turns toward sound as a way to steady attention. Matthew Brensilver invites listeners to notice not only the arising and ending of sound, but also the spacious, receptive quality of awareness that can hold it all. The practice moves from directed attention to a quieter resting in awareness itself.</p>
+      </div>
+      <img class="art" src="/dharma/brensilver/artwork/audiodharma-14558.jpg" alt="">
+    </div>
+    <div class="primary-player">
+      <audio id="audio" controls preload="none" src="https://audiodharma.us-east-1.linodeobjects.com/talks/14558/20211116-Matthew_Brensilver-IMC-guided_meditation_sound_and_the_openness_of_awareness.mp3"></audio>
+      <a class="download-link" href="https://audiodharma.us-east-1.linodeobjects.com/talks/14558/20211116-Matthew_Brensilver-IMC-guided_meditation_sound_and_the_openness_of_awareness.mp3" download>Download MP3</a>
+    </div>
+    <section>
+      <h2>Chapters</h2>
+      <ol class="chapters">
+        <li><a href="?t=62" data-start="62.0">01:02</a> <strong>Settling In</strong> - The practice opens by arriving, relaxing into the body, and easing the face, jaw, throat, shoulders, and belly.</li>
+<li><a href="?t=178" data-start="178.0">02:58</a> <strong>Softening the Body</strong> - He leads a slow scan through the body, emphasizing release where possible while keeping a gentle alertness.</li>
+<li><a href="?t=482" data-start="482.0">08:02</a> <strong>Alert and Soft</strong> - The spine and bodily posture are framed as a balance of softness and wakefulness before the practice turns to sound.</li>
+<li><a href="?t=615" data-start="615.0">10:15</a> <strong>Entering Soundscape</strong> - Attention is guided to the field of sound and silence, including how the mind tends to notice nearby, loud, and sudden sounds.</li>
+<li><a href="?t=838" data-start="838.0">13:58</a> <strong>Sound Fading</strong> - The instruction shifts toward hearing endings and fading, and briefly toward what is quiet or silent.</li>
+<li><a href="?t=1083" data-start="1083.0">18:03</a> <strong>Resting in Awareness</strong> - Matthew contrasts spotlighted attention with the receptivity of awareness, inviting a sense of ease where nothing needs to be done.</li>
+      </ol>
+    </section>
+    <section>
+      <h2>Source</h2>
+      <p><a href="https://www.audiodharma.org/talks/14558">Original talk page</a></p>
+    </section>
+  </main>
+  <script>
+    const audio = document.getElementById('audio');
+    function seekFromLocation() {
+      if (!audio) return;
+      const value = new URLSearchParams(location.search).get('t');
+      const seconds = Number(value || 0);
+      if (Number.isFinite(seconds) && seconds > 0) {
+        audio.currentTime = seconds;
+      }
+    }
+    document.querySelectorAll('[data-start]').forEach(link => {
+      link.addEventListener('click', event => {
+        if (!audio) return;
+        event.preventDefault();
+        const seconds = Number(link.dataset.start || 0);
+        history.replaceState(null, '', '?t=' + Math.round(seconds));
+        audio.currentTime = seconds;
+        audio.play().catch(() => {});
+      });
+    });
+    audio?.addEventListener('loadedmetadata', seekFromLocation, { once: true });
+  </script>
+</body>
+</html>

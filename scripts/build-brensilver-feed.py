@@ -12,14 +12,19 @@ from brensilver.build import main
 
 
 if __name__ == "__main__":
+    out_dir = ROOT / "dharma" / "brensilver"
     args = [
         "--config",
         str(TOOL_ROOT / "config" / "sources.json"),
         "--out-dir",
-        str(ROOT / "brensilver"),
+        str(out_dir),
     ]
-    existing_talks = ROOT / "brensilver" / "talks.json"
-    if existing_talks.exists():
-        args.extend(["--seed-talks-json", str(existing_talks)])
+    for existing_talks in [
+        out_dir / "talks.json",
+        ROOT / "brensilver" / "talks.json",
+    ]:
+        if existing_talks.exists():
+            args.extend(["--seed-talks-json", str(existing_talks)])
+            break
 
     raise SystemExit(main(args + sys.argv[1:]))

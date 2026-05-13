@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lightly Guided Meditation - Matthew Brensilver Dharma Talks</title>
+  <link rel="canonical" href="https://jeffharr.is/dharma/brensilver/talks/audiodharma-16051/">
+  <meta name="description" content="This talk begins as a lightly guided meditation, using ambient sound, breath, and body awareness to settle the room. Matthew Brensilver then turns toward how the mind keeps wanting to optimize experience, and he gently explores the relief of not sorting every moment into pleasant and unpleasant. The long middle and ending section becomes a quiet, repetitive accompaniment that supports staying with simple presence, though parts of the transcript appear unclear.">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Matthew Brensilver Dharma Talks">
+  <meta property="og:title" content="Lightly Guided Meditation">
+  <meta property="og:description" content="This talk begins as a lightly guided meditation, using ambient sound, breath, and body awareness to settle the room. Matthew Brensilver then turns toward how the mind keeps wanting to optimize experience, and he gently explores the relief of not sorting every moment into pleasant and unpleasant. The long middle and ending section becomes a quiet, repetitive accompaniment that supports staying with simple presence, though parts of the transcript appear unclear.">
+  <meta property="og:url" content="https://jeffharr.is/dharma/brensilver/talks/audiodharma-16051/">
+  <meta property="og:image" content="https://jeffharr.is/dharma/brensilver/artwork/audiodharma-16051.jpg">
+  <meta property="og:image:secure_url" content="https://jeffharr.is/dharma/brensilver/artwork/audiodharma-16051.jpg">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="1024">
+  <meta property="og:image:height" content="1024">
+  <meta name="twitter:image" content="https://jeffharr.is/dharma/brensilver/artwork/audiodharma-16051.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Lightly Guided Meditation">
+  <meta name="twitter:description" content="This talk begins as a lightly guided meditation, using ambient sound, breath, and body awareness to settle the room. Matthew Brensilver then turns toward how the mind keeps wanting to optimize experience, and he gently explores the relief of not sorting every moment into pleasant and unpleasant. The long middle and ending section becomes a quiet, repetitive accompaniment that supports staying with simple presence, though parts of the transcript appear unclear.">
+  <link rel="stylesheet" href="../../talk-page.css">
+</head>
+<body>
+  <main>
+    <a class="back" href="../../">Matthew Brensilver Dharma Talks</a>
+    <div class="hero">
+      <div>
+        <h1>Lightly Guided Meditation</h1>
+        <div class="meta">
+          <span>AudioDharma</span>
+          <span>36:27</span>
+          <span>2022-04-10</span>
+        </div>
+        <p class="description">This talk begins as a lightly guided meditation, using ambient sound, breath, and body awareness to settle the room. Matthew Brensilver then turns toward how the mind keeps wanting to optimize experience, and he gently explores the relief of not sorting every moment into pleasant and unpleasant. The long middle and ending section becomes a quiet, repetitive accompaniment that supports staying with simple presence, though parts of the transcript appear unclear.</p>
+      </div>
+      <img class="art" src="/dharma/brensilver/artwork/audiodharma-16051.jpg" alt="">
+    </div>
+    <div class="primary-player">
+      <audio id="audio" controls preload="none" src="https://audiodharma.us-east-1.linodeobjects.com/talks/16051/20220410-Matthew_Brensilver-IMC-lightly_guided_meditation.mp3"></audio>
+      <a class="download-link" href="https://audiodharma.us-east-1.linodeobjects.com/talks/16051/20220410-Matthew_Brensilver-IMC-lightly_guided_meditation.mp3" download>Download MP3</a>
+    </div>
+    <section>
+      <h2>Chapters</h2>
+      <ol class="chapters">
+        <li><a href="?t=41" data-start="41.04">00:41</a> <strong>Opening the sit</strong> - He welcomes the group, explains the structure, and introduces the lightly guided format.</li>
+<li><a href="?t=120" data-start="120.0">02:00</a> <strong>Ambient sound and settling</strong> - The practice begins with ambient sound and the ordinary movement of people as a way of arriving more fully.</li>
+<li><a href="?t=169" data-start="168.56">02:49</a> <strong>All phenomena as gateway</strong> - He frames all experience as a gateway and emphasizes the relief of not needing to classify everything.</li>
+<li><a href="?t=330" data-start="330.0">05:30</a> <strong>Breath and whole body</strong> - The guidance narrows to breath sensed through the whole body, with repeated reminders to stay close.</li>
+<li><a href="?t=534" data-start="533.88">08:54</a> <strong>Not optimizing the moment</strong> - He speaks about samsara’s constant options and the tendency to optimize experience, inviting a little more letting go.</li>
+<li><a href="?t=841" data-start="841.04">14:01</a> <strong>Undefended presence</strong> - The talk deepens into the vulnerability of presence and being open to imperfection.</li>
+<li><a href="?t=1210" data-start="1209.627">20:10</a> <strong>Extended absorption</strong> - A long, repetitive section follows, with unclear transcript fragments but a sustained, meditative feeling of staying with the practice.</li>
+<li><a href="?t=1648" data-start="1647.927">27:28</a> <strong>Quiet closing stretch</strong> - The final third remains almost entirely with repeated phrases and listening space, suggesting the close of the sit rather than a new teaching.</li>
+      </ol>
+    </section>
+    <section>
+      <h2>Source</h2>
+      <p><a href="https://www.audiodharma.org/talks/16051">Original talk page</a></p>
+    </section>
+  </main>
+  <script>
+    const audio = document.getElementById('audio');
+    function seekFromLocation() {
+      if (!audio) return;
+      const value = new URLSearchParams(location.search).get('t');
+      const seconds = Number(value || 0);
+      if (Number.isFinite(seconds) && seconds > 0) {
+        audio.currentTime = seconds;
+      }
+    }
+    document.querySelectorAll('[data-start]').forEach(link => {
+      link.addEventListener('click', event => {
+        if (!audio) return;
+        event.preventDefault();
+        const seconds = Number(link.dataset.start || 0);
+        history.replaceState(null, '', '?t=' + Math.round(seconds));
+        audio.currentTime = seconds;
+        audio.play().catch(() => {});
+      });
+    });
+    audio?.addEventListener('loadedmetadata', seekFromLocation, { once: true });
+  </script>
+</body>
+</html>

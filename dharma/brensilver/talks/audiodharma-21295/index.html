@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Guided Meditation: Tranquility - Matthew Brensilver Dharma Talks</title>
+  <link rel="canonical" href="https://jeffharr.is/dharma/brensilver/talks/audiodharma-21295/">
+  <meta name="description" content="Matthew Brensilver offers a guided meditation oriented toward settling the body into tranquility without losing aliveness. The practice moves from posture and breath into the belly, then into working gently with hyper-arousal, urgency, and scattered attention. Later he invites resting with whatever pleasantness appears so that ease and tranquility can reinforce one another.">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Matthew Brensilver Dharma Talks">
+  <meta property="og:title" content="Guided Meditation: Tranquility">
+  <meta property="og:description" content="Matthew Brensilver offers a guided meditation oriented toward settling the body into tranquility without losing aliveness. The practice moves from posture and breath into the belly, then into working gently with hyper-arousal, urgency, and scattered attention. Later he invites resting with whatever pleasantness appears so that ease and tranquility can reinforce one another.">
+  <meta property="og:url" content="https://jeffharr.is/dharma/brensilver/talks/audiodharma-21295/">
+  <meta property="og:image" content="https://jeffharr.is/dharma/brensilver/artwork/audiodharma-21295.jpg">
+  <meta property="og:image:secure_url" content="https://jeffharr.is/dharma/brensilver/artwork/audiodharma-21295.jpg">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="1024">
+  <meta property="og:image:height" content="1024">
+  <meta name="twitter:image" content="https://jeffharr.is/dharma/brensilver/artwork/audiodharma-21295.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Guided Meditation: Tranquility">
+  <meta name="twitter:description" content="Matthew Brensilver offers a guided meditation oriented toward settling the body into tranquility without losing aliveness. The practice moves from posture and breath into the belly, then into working gently with hyper-arousal, urgency, and scattered attention. Later he invites resting with whatever pleasantness appears so that ease and tranquility can reinforce one another.">
+  <link rel="stylesheet" href="../../talk-page.css">
+</head>
+<body>
+  <main>
+    <a class="back" href="../../">Matthew Brensilver Dharma Talks</a>
+    <div class="hero">
+      <div>
+        <h1>Guided Meditation: Tranquility</h1>
+        <div class="meta">
+          <span>AudioDharma</span>
+          <span>28:09</span>
+          <span>2024-09-18</span>
+        </div>
+        <p class="description">Matthew Brensilver offers a guided meditation oriented toward settling the body into tranquility without losing aliveness. The practice moves from posture and breath into the belly, then into working gently with hyper-arousal, urgency, and scattered attention. Later he invites resting with whatever pleasantness appears so that ease and tranquility can reinforce one another.</p>
+      </div>
+      <img class="art" src="/dharma/brensilver/artwork/audiodharma-21295.jpg" alt="">
+    </div>
+    <div class="primary-player">
+      <audio id="audio" controls preload="none" src="https://audiodharma.us-east-1.linodeobjects.com/talks/21295/20240918-Matthew_Brensilver-IMC-guided_meditation_tranquility.mp3"></audio>
+      <a class="download-link" href="https://audiodharma.us-east-1.linodeobjects.com/talks/21295/20240918-Matthew_Brensilver-IMC-guided_meditation_tranquility.mp3" download>Download MP3</a>
+    </div>
+    <section>
+      <h2>Chapters</h2>
+      <ol class="chapters">
+        <li><a href="?t=12" data-start="12.0">00:12</a> <strong>Settling in</strong> - He begins by orienting the body and naming how to work with sleepiness or restlessness.</li>
+<li><a href="?t=80" data-start="80.0">01:20</a> <strong>Posture and gravity</strong> - The guidance turns to posture, giving the body to gravity and letting the spine rise gently.</li>
+<li><a href="?t=178" data-start="178.0">02:58</a> <strong>Dropping to the belly</strong> - He invites attention down from the head into the belly and explores a softer center of gravity.</li>
+<li><a href="?t=287" data-start="287.0">04:47</a> <strong>Softening the headspace</strong> - The practice emphasizes releasing tension and noticing the perspective that seems to live in the head.</li>
+<li><a href="?t=451" data-start="451.0">07:31</a> <strong>Working with arousal</strong> - He names the body’s hyper-arousal and urges the listener to meet active zones with breath and awareness.</li>
+<li><a href="?t=638" data-start="638.0">10:38</a> <strong>Urgency and false alarms</strong> - The talk reframes everyday agitation as something to acknowledge without automatically obeying.</li>
+<li><a href="?t=958" data-start="958.0">15:58</a> <strong>Accountability without blame</strong> - He encourages radical but blameless attention to what body and mind are doing moment by moment.</li>
+<li><a href="?t=1306" data-start="1306.29">21:46</a> <strong>Following pleasantness</strong> - The meditation shifts toward any thread of comfort, inviting the listener to rest in it and let tranquility grow.</li>
+      </ol>
+    </section>
+    <section>
+      <h2>Source</h2>
+      <p><a href="https://www.audiodharma.org/talks/21295">Original talk page</a></p>
+    </section>
+  </main>
+  <script>
+    const audio = document.getElementById('audio');
+    function seekFromLocation() {
+      if (!audio) return;
+      const value = new URLSearchParams(location.search).get('t');
+      const seconds = Number(value || 0);
+      if (Number.isFinite(seconds) && seconds > 0) {
+        audio.currentTime = seconds;
+      }
+    }
+    document.querySelectorAll('[data-start]').forEach(link => {
+      link.addEventListener('click', event => {
+        if (!audio) return;
+        event.preventDefault();
+        const seconds = Number(link.dataset.start || 0);
+        history.replaceState(null, '', '?t=' + Math.round(seconds));
+        audio.currentTime = seconds;
+        audio.play().catch(() => {});
+      });
+    });
+    audio?.addEventListener('loadedmetadata', seekFromLocation, { once: true });
+  </script>
+</body>
+</html>

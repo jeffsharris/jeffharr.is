@@ -1,17 +1,17 @@
 # Brensilver Feed Tool
 
-Builds the static podcast artifacts served from `/brensilver/`:
+Builds the static podcast artifacts served from `/dharma/brensilver/`:
 
-- `/brensilver/feed.xml`
-- `/brensilver/guided-feed.xml`
-- `/brensilver/talks.json`
-- `/brensilver/dharma-talks.json`
-- `/brensilver/guided-talks.json`
-- `/brensilver/index.html`
-- `/brensilver/talks/{safe_id}/index.html`
-- `/brensilver/chapters/{safe_id}.json` when local episode metadata exists
-- `/brensilver/artwork/{safe_id}.jpg` in same-site preview mode
-- `/brensilver/artwork/matthew-brensilver-podcast-cover.jpg` as the canonical
+- `/dharma/brensilver/feed.xml`
+- `/dharma/brensilver/guided-feed.xml`
+- `/dharma/brensilver/talks.json`
+- `/dharma/brensilver/dharma-talks.json`
+- `/dharma/brensilver/guided-talks.json`
+- `/dharma/brensilver/index.html`
+- `/dharma/brensilver/talks/{safe_id}/index.html`
+- `/dharma/brensilver/chapters/{safe_id}.json` when local episode metadata exists
+- `/dharma/brensilver/artwork/{safe_id}.jpg` in same-site preview mode
+- `/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg` as the canonical
   feed and fallback talk image
 
 Run from the repo root:
@@ -21,7 +21,7 @@ python3 scripts/build-brensilver-feed.py
 ```
 
 The wrapper script points at `tools/brensilver-feed/config/sources.json`, writes
-to `/brensilver/`, and seeds from the existing `/brensilver/talks.json` when it
+to `/dharma/brensilver/`, and seeds from the existing `/dharma/brensilver/talks.json` when it
 is present. That seed is intentional: source feeds can shrink or change history,
 but this project treats previously generated talks as an archive. Live source
 records are loaded first and win on duplicate IDs; seed-only records are kept.
@@ -59,7 +59,7 @@ To add another Dharma Seed stream:
    for retreat feeds, a skipped non-Matthew item.
 4. Rebuild with `python3 scripts/build-brensilver-feed.py --copy-artwork` when
    `.local-corpus/brensilver/` is available locally.
-5. Check `brensilver/dharma-talks.json` and `brensilver/guided-talks.json` to
+5. Check `dharma/brensilver/dharma-talks.json` and `dharma/brensilver/guided-talks.json` to
    confirm the feed split before committing generated files.
 
 ## Local Podcast Metadata
@@ -69,14 +69,14 @@ episode metadata into the public RSS feed:
 
 ```sh
 python3 scripts/build-brensilver-feed.py \
-  --talks-json brensilver/talks.json \
-  --media-base-url https://jeffharr.is/brensilver/ \
+  --talks-json dharma/brensilver/talks.json \
+  --media-base-url https://jeffharr.is/dharma/brensilver/ \
   --copy-artwork
 ```
 
-That preview mode copies pilot artwork into `/brensilver/artwork/` and points
+That preview mode copies pilot artwork into `/dharma/brensilver/artwork/` and points
 RSS image/chapter URLs at the same site. It is useful for the 20-talk pilot.
-The generated `/brensilver/index.html` page includes a direct Overcast add link,
+The generated `/dharma/brensilver/index.html` page includes a direct Overcast add link,
 RSS/copy affordances for custom-feed podcast players, and player icons from the
 Simple Icons CDN.
 
@@ -84,7 +84,7 @@ For the full corpus, prefer Cloudflare R2 for generated images:
 
 ```sh
 python3 scripts/build-brensilver-feed.py \
-  --talks-json brensilver/talks.json \
+  --talks-json dharma/brensilver/talks.json \
   --media-base-url https://media.jeffharr.is/brensilver/
 ```
 
@@ -100,7 +100,7 @@ Each enriched RSS item includes:
 - `<itunes:image>` pointing to episode artwork when available, otherwise the
   generated teacher portrait stored in each talk's `image_url` field.
 - `<podcast:chapters>` pointing to Podcasting 2.0 chapter JSON.
-- A canonical `/brensilver/talks/{safe_id}/` link whose `?t=seconds` parameter
+- A canonical `/dharma/brensilver/talks/{safe_id}/` link whose `?t=seconds` parameter
   seeks the web audio player.
 
 The main `feed.xml` is the Dharma-talk feed. `guided-feed.xml` is the companion
@@ -122,7 +122,7 @@ PYTHONPATH=tools/brensilver-transcripts/src \
   python3 -m brensilver_transcripts.pipeline run-corpus \
   --limit 20 \
   --feed-every 20 \
-  --media-base-url https://jeffharr.is/brensilver/ \
+  --media-base-url https://jeffharr.is/dharma/brensilver/ \
   --copy-artwork \
   --update-qmd
 ```

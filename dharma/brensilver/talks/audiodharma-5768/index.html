@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sincerity - Matthew Brensilver Dharma Talks</title>
+  <link rel="canonical" href="https://jeffharr.is/dharma/brensilver/talks/audiodharma-5768/">
+  <meta name="description" content="Matthew Brensilver reflects briefly on sincerity as the living basis of practice, not as earnest striving but as a willingness to be surprised by our own experience. He connects that openness with insight: learning to look again, experiment, and meet practice with fresh curiosity. The talk closes by linking surprise, continuity of mindfulness, and the unfolding of insight in ordinary practice.">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Matthew Brensilver Dharma Talks">
+  <meta property="og:title" content="Sincerity">
+  <meta property="og:description" content="Matthew Brensilver reflects briefly on sincerity as the living basis of practice, not as earnest striving but as a willingness to be surprised by our own experience. He connects that openness with insight: learning to look again, experiment, and meet practice with fresh curiosity. The talk closes by linking surprise, continuity of mindfulness, and the unfolding of insight in ordinary practice.">
+  <meta property="og:url" content="https://jeffharr.is/dharma/brensilver/talks/audiodharma-5768/">
+  <meta property="og:image" content="https://jeffharr.is/dharma/brensilver/artwork/audiodharma-5768.jpg">
+  <meta property="og:image:secure_url" content="https://jeffharr.is/dharma/brensilver/artwork/audiodharma-5768.jpg">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="1024">
+  <meta property="og:image:height" content="1024">
+  <meta name="twitter:image" content="https://jeffharr.is/dharma/brensilver/artwork/audiodharma-5768.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Sincerity">
+  <meta name="twitter:description" content="Matthew Brensilver reflects briefly on sincerity as the living basis of practice, not as earnest striving but as a willingness to be surprised by our own experience. He connects that openness with insight: learning to look again, experiment, and meet practice with fresh curiosity. The talk closes by linking surprise, continuity of mindfulness, and the unfolding of insight in ordinary practice.">
+  <link rel="stylesheet" href="../../talk-page.css">
+</head>
+<body>
+  <main>
+    <a class="back" href="../../">Matthew Brensilver Dharma Talks</a>
+    <div class="hero">
+      <div>
+        <h1>Sincerity</h1>
+        <div class="meta">
+          <span>AudioDharma</span>
+          <span>02:44</span>
+          <span>2015-06-24</span>
+        </div>
+        <p class="description">Matthew Brensilver reflects briefly on sincerity as the living basis of practice, not as earnest striving but as a willingness to be surprised by our own experience. He connects that openness with insight: learning to look again, experiment, and meet practice with fresh curiosity. The talk closes by linking surprise, continuity of mindfulness, and the unfolding of insight in ordinary practice.</p>
+      </div>
+      <img class="art" src="/dharma/brensilver/artwork/audiodharma-5768.jpg" alt="">
+    </div>
+    <div class="primary-player">
+      <audio id="audio" controls preload="none" src="https://audiodharma.us-east-1.linodeobjects.com/talks/5768/20150624-Matthew_Brensilver-IMC-sincerity.mp3"></audio>
+      <a class="download-link" href="https://audiodharma.us-east-1.linodeobjects.com/talks/5768/20150624-Matthew_Brensilver-IMC-sincerity.mp3" download>Download MP3</a>
+    </div>
+    <section>
+      <h2>Chapters</h2>
+      <ol class="chapters">
+        <li><a href="?t=20" data-start="20.0">00:20</a> <strong>Sincerity in practice</strong> - He begins by naming sincerity as the lifeblood of the path and asking what it really means.</li>
+<li><a href="?t=50" data-start="50.0">00:50</a> <strong>Willingness to be surprised</strong> - Sincerity is framed as being open to being surprised by ourselves rather than fixed in prior expectations.</li>
+<li><a href="?t=78" data-start="78.0">01:18</a> <strong>Learning to investigate</strong> - He points to experimentation and a fresh way of looking as part of sincere practice.</li>
+<li><a href="?t=109" data-start="109.0">01:49</a> <strong>Insight starts surprising</strong> - Insight is described as something startling and newly discovered, not merely accumulated.</li>
+<li><a href="?t=128" data-start="128.0">02:08</a> <strong>Continuity and curiosity</strong> - Mindfulness and a willingness to be surprised are named as ways to nourish insight.</li>
+<li><a href="?t=146" data-start="146.0">02:26</a> <strong>Seeing in a new way</strong> - The talk ends with a quiet emphasis on curiosity and a blessing for the morning of practice.</li>
+      </ol>
+    </section>
+    <section>
+      <h2>Source</h2>
+      <p><a href="https://www.audiodharma.org/talks/5768">Original talk page</a></p>
+    </section>
+  </main>
+  <script>
+    const audio = document.getElementById('audio');
+    function seekFromLocation() {
+      if (!audio) return;
+      const value = new URLSearchParams(location.search).get('t');
+      const seconds = Number(value || 0);
+      if (Number.isFinite(seconds) && seconds > 0) {
+        audio.currentTime = seconds;
+      }
+    }
+    document.querySelectorAll('[data-start]').forEach(link => {
+      link.addEventListener('click', event => {
+        if (!audio) return;
+        event.preventDefault();
+        const seconds = Number(link.dataset.start || 0);
+        history.replaceState(null, '', '?t=' + Math.round(seconds));
+        audio.currentTime = seconds;
+        audio.play().catch(() => {});
+      });
+    });
+    audio?.addEventListener('loadedmetadata', seekFromLocation, { once: true });
+  </script>
+</body>
+</html>

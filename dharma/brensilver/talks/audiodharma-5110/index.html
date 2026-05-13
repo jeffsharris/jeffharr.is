@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Practice Note - Matthew Brensilver Dharma Talks</title>
+  <link rel="canonical" href="https://jeffharr.is/dharma/brensilver/talks/audiodharma-5110/">
+  <meta name="description" content="Matthew Brensilver offers a short practice note on how the mind turns ordinary life into a series of projects, and why that habit brings stress. He then points to a gentler alternative: doing what needs to be done without fixing each moment into a goal to complete. The emphasis stays practical, with examples from walking, tea, and the ordinary movements of a morning practice period.">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Matthew Brensilver Dharma Talks">
+  <meta property="og:title" content="Practice Note">
+  <meta property="og:description" content="Matthew Brensilver offers a short practice note on how the mind turns ordinary life into a series of projects, and why that habit brings stress. He then points to a gentler alternative: doing what needs to be done without fixing each moment into a goal to complete. The emphasis stays practical, with examples from walking, tea, and the ordinary movements of a morning practice period.">
+  <meta property="og:url" content="https://jeffharr.is/dharma/brensilver/talks/audiodharma-5110/">
+  <meta property="og:image" content="https://jeffharr.is/dharma/brensilver/artwork/audiodharma-5110.jpg">
+  <meta property="og:image:secure_url" content="https://jeffharr.is/dharma/brensilver/artwork/audiodharma-5110.jpg">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="1024">
+  <meta property="og:image:height" content="1024">
+  <meta name="twitter:image" content="https://jeffharr.is/dharma/brensilver/artwork/audiodharma-5110.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Practice Note">
+  <meta name="twitter:description" content="Matthew Brensilver offers a short practice note on how the mind turns ordinary life into a series of projects, and why that habit brings stress. He then points to a gentler alternative: doing what needs to be done without fixing each moment into a goal to complete. The emphasis stays practical, with examples from walking, tea, and the ordinary movements of a morning practice period.">
+  <link rel="stylesheet" href="../../talk-page.css">
+</head>
+<body>
+  <main>
+    <a class="back" href="../../">Matthew Brensilver Dharma Talks</a>
+    <div class="hero">
+      <div>
+        <h1>Practice Note</h1>
+        <div class="meta">
+          <span>AudioDharma</span>
+          <span>05:24</span>
+          <span>2014-09-24</span>
+        </div>
+        <p class="description">Matthew Brensilver offers a short practice note on how the mind turns ordinary life into a series of projects, and why that habit brings stress. He then points to a gentler alternative: doing what needs to be done without fixing each moment into a goal to complete. The emphasis stays practical, with examples from walking, tea, and the ordinary movements of a morning practice period.</p>
+      </div>
+      <img class="art" src="/dharma/brensilver/artwork/audiodharma-5110.jpg" alt="">
+    </div>
+    <div class="primary-player">
+      <audio id="audio" controls preload="none" src="https://audiodharma.us-east-1.linodeobjects.com/talks/5110/20140924-Matthew_Brensilver-IMC-practice_notes.mp3"></audio>
+      <a class="download-link" href="https://audiodharma.us-east-1.linodeobjects.com/talks/5110/20140924-Matthew_Brensilver-IMC-practice_notes.mp3" download>Download MP3</a>
+    </div>
+    <section>
+      <h2>Chapters</h2>
+      <ol class="chapters">
+        <li><a href="?t=18" data-start="18.0">00:18</a> <strong>Life as a Project</strong> - He introduces the tendency to turn life into tasks and explains why that creates strain.</li>
+<li><a href="?t=69" data-start="69.12">01:09</a> <strong>Not Doing Nothing</strong> - He clarifies that releasing project-thinking does not mean becoming passive or avoiding responsibility.</li>
+<li><a href="?t=133" data-start="133.04">02:13</a> <strong>Meditation as Task</strong> - He notes that even walking meditation can become another project, and invites a softer way of practicing.</li>
+<li><a href="?t=171" data-start="170.8">02:51</a> <strong>Relaxing the Schedule</strong> - He describes how the mind organizes practice by time, steps, and outcomes, and what changes when that grip loosens.</li>
+<li><a href="?t=231" data-start="231.16">03:51</a> <strong>Ordinary Actions</strong> - He brings the point into daily life with examples like walking, using the bathroom, and having tea.</li>
+<li><a href="?t=278" data-start="277.88">04:38</a> <strong>Open to What Is Skillful</strong> - He closes by inviting a whole-morning attitude of openness to the present moment and what is skillful.</li>
+      </ol>
+    </section>
+    <section>
+      <h2>Source</h2>
+      <p><a href="https://www.audiodharma.org/talks/5110">Original talk page</a></p>
+    </section>
+  </main>
+  <script>
+    const audio = document.getElementById('audio');
+    function seekFromLocation() {
+      if (!audio) return;
+      const value = new URLSearchParams(location.search).get('t');
+      const seconds = Number(value || 0);
+      if (Number.isFinite(seconds) && seconds > 0) {
+        audio.currentTime = seconds;
+      }
+    }
+    document.querySelectorAll('[data-start]').forEach(link => {
+      link.addEventListener('click', event => {
+        if (!audio) return;
+        event.preventDefault();
+        const seconds = Number(link.dataset.start || 0);
+        history.replaceState(null, '', '?t=' + Math.round(seconds));
+        audio.currentTime = seconds;
+        audio.play().catch(() => {});
+      });
+    });
+    audio?.addEventListener('loadedmetadata', seekFromLocation, { once: true });
+  </script>
+</body>
+</html>

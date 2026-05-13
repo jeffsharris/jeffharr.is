@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Guided Meditation: Clinging is complicated, letting go simplifies - Matthew Brensilver Dharma Talks</title>
+  <link rel="canonical" href="https://jeffharr.is/dharma/brensilver/talks/audiodharma-23706/">
+  <meta name="description" content="Matthew Brensilver offers a quietly structured guided meditation on how clinging complicates experience and letting go can simplify it. He repeatedly invites the listener to rest in the body, notice hope, fear, and thinking without finishing their stories, and soften into the breath. The practice gradually shifts toward gentleness and warmth, with an emphasis on meeting the mind’s movements without neglecting what matters.">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Matthew Brensilver Dharma Talks">
+  <meta property="og:title" content="Guided Meditation: Clinging is complicated, letting go simplifies">
+  <meta property="og:description" content="Matthew Brensilver offers a quietly structured guided meditation on how clinging complicates experience and letting go can simplify it. He repeatedly invites the listener to rest in the body, notice hope, fear, and thinking without finishing their stories, and soften into the breath. The practice gradually shifts toward gentleness and warmth, with an emphasis on meeting the mind’s movements without neglecting what matters.">
+  <meta property="og:url" content="https://jeffharr.is/dharma/brensilver/talks/audiodharma-23706/">
+  <meta property="og:image" content="https://jeffharr.is/dharma/brensilver/artwork/audiodharma-23706.jpg">
+  <meta property="og:image:secure_url" content="https://jeffharr.is/dharma/brensilver/artwork/audiodharma-23706.jpg">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="1024">
+  <meta property="og:image:height" content="1024">
+  <meta name="twitter:image" content="https://jeffharr.is/dharma/brensilver/artwork/audiodharma-23706.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Guided Meditation: Clinging is complicated, letting go simplifies">
+  <meta name="twitter:description" content="Matthew Brensilver offers a quietly structured guided meditation on how clinging complicates experience and letting go can simplify it. He repeatedly invites the listener to rest in the body, notice hope, fear, and thinking without finishing their stories, and soften into the breath. The practice gradually shifts toward gentleness and warmth, with an emphasis on meeting the mind’s movements without neglecting what matters.">
+  <link rel="stylesheet" href="../../talk-page.css">
+</head>
+<body>
+  <main>
+    <a class="back" href="../../">Matthew Brensilver Dharma Talks</a>
+    <div class="hero">
+      <div>
+        <h1>Guided Meditation: Clinging is complicated, letting go simplifies</h1>
+        <div class="meta">
+          <span>AudioDharma</span>
+          <span>30:02</span>
+          <span>2025-08-18</span>
+        </div>
+        <p class="description">Matthew Brensilver offers a quietly structured guided meditation on how clinging complicates experience and letting go can simplify it. He repeatedly invites the listener to rest in the body, notice hope, fear, and thinking without finishing their stories, and soften into the breath. The practice gradually shifts toward gentleness and warmth, with an emphasis on meeting the mind’s movements without neglecting what matters.</p>
+      </div>
+      <img class="art" src="/dharma/brensilver/artwork/audiodharma-23706.jpg" alt="">
+    </div>
+    <div class="primary-player">
+      <audio id="audio" controls preload="none" src="https://audiodharma.us-east-1.linodeobjects.com/talks/23706/20250818-Matthew_Brensilver-IMC-guided_meditation_clinging_is_complicated_letting_go_simplifies.mp3"></audio>
+      <a class="download-link" href="https://audiodharma.us-east-1.linodeobjects.com/talks/23706/20250818-Matthew_Brensilver-IMC-guided_meditation_clinging_is_complicated_letting_go_simplifies.mp3" download>Download MP3</a>
+    </div>
+    <section>
+      <h2>Chapters</h2>
+      <ol class="chapters">
+        <li><a href="?t=12" data-start="12.0">00:12</a> <strong>Opening and posture</strong> - A brief welcome and invitation to settle the body and gather attention for practice.</li>
+<li><a href="?t=125" data-start="125.0">02:05</a> <strong>Taking up practice slowly</strong> - He contrasts a gradual inner settling with the possibility of putting everything down at once.</li>
+<li><a href="?t=252" data-start="252.0">04:12</a> <strong>Laying down complexity</strong> - The talk frames radical simplification as something that can support deeper love and service.</li>
+<li><a href="?t=470" data-start="470.0">07:50</a> <strong>Hope, fear, and the body</strong> - Rather than following thought stories, the practice turns toward the bodily impact of hope, fear, and memory.</li>
+<li><a href="?t=676" data-start="676.0">11:16</a> <strong>Breath as release</strong> - Breathing is presented as a quiet invitation to let go into the present moment.</li>
+<li><a href="?t=1009" data-start="1009.32">16:49</a> <strong>Clinging and stickiness</strong> - He describes how auditory thought can feel sticky when there is little equanimity with feeling.</li>
+<li><a href="?t=1286" data-start="1286.322">21:26</a> <strong>Gentle warmth</strong> - The closing section emphasizes the innocence of the mind and meeting it with warmth, simplicity, and care.</li>
+      </ol>
+    </section>
+    <section>
+      <h2>Source</h2>
+      <p><a href="https://www.audiodharma.org/talks/23706">Original talk page</a></p>
+    </section>
+  </main>
+  <script>
+    const audio = document.getElementById('audio');
+    function seekFromLocation() {
+      if (!audio) return;
+      const value = new URLSearchParams(location.search).get('t');
+      const seconds = Number(value || 0);
+      if (Number.isFinite(seconds) && seconds > 0) {
+        audio.currentTime = seconds;
+      }
+    }
+    document.querySelectorAll('[data-start]').forEach(link => {
+      link.addEventListener('click', event => {
+        if (!audio) return;
+        event.preventDefault();
+        const seconds = Number(link.dataset.start || 0);
+        history.replaceState(null, '', '?t=' + Math.round(seconds));
+        audio.currentTime = seconds;
+        audio.play().catch(() => {});
+      });
+    });
+    audio?.addEventListener('loadedmetadata', seekFromLocation, { once: true });
+  </script>
+</body>
+</html>

@@ -1,8 +1,8 @@
 # Brensilver Feed Agent Notes
 
 This directory is the implementation for configured public podcast feeds. The
-original Matthew Brensilver artifacts live at `/brensilver/`; Alan Watts
-artifacts live at `/watts/`.
+original Matthew Brensilver artifacts live at `/dharma/brensilver/`; Alan Watts
+artifacts live at `/dharma/watts/`.
 
 For the whole content system, including local ingestion, QMD, recurring
 automation, private Dharma Seed keys, and adding another teacher, read
@@ -11,14 +11,14 @@ automation, private Dharma Seed keys, and adding another teacher, read
 ## Edit Here, Generate There
 
 - Hand-edit source code, tests, and config in `tools/brensilver-feed/`.
-- Do not hand-edit `/brensilver/feed.xml`, `/brensilver/guided-feed.xml`,
-  `/brensilver/*.json`, `/brensilver/index.html`, or
-  `/brensilver/talks/*/index.html`; regenerate them.
+- Do not hand-edit `/dharma/brensilver/feed.xml`, `/dharma/brensilver/guided-feed.xml`,
+  `/dharma/brensilver/*.json`, `/dharma/brensilver/index.html`, or
+  `/dharma/brensilver/talks/*/index.html`; regenerate them.
 - The repo-root wrapper is `scripts/build-brensilver-feed.py`. It supplies this
   tool's config and output path.
 - The Watts wrapper is `scripts/build-watts-feed.py`. It supplies
-  `config/watts.json`, writes `/watts/`, and seeds from `/watts/talks.json`.
-- The wrapper also seeds from existing `/brensilver/talks.json` so old archived
+  `config/watts.json`, writes `/dharma/watts/`, and seeds from `/dharma/watts/talks.json`.
+- The wrapper also seeds from existing `/dharma/brensilver/talks.json` so old archived
   talks survive when an upstream feed stops listing them.
 
 ## Source Merging
@@ -33,7 +33,7 @@ automation, private Dharma Seed keys, and adding another teacher, read
   config. Generated RSS/audio URLs will contain the key for podcast clients.
 - `audiodharma` scrapes the speaker page and can optionally probe audio lengths.
 - `podcast_rss` parses a normal podcast RSS feed. It supports local `feed_path`
-  sources such as the legacy `watts.xml`, archive-prefix title stripping, and
+  sources such as `tools/brensilver-feed/sources/watts.xml`, archive-prefix title stripping, and
   exact title replacements for old-feed typo cleanup.
 - `merge_talks` dedupes by exact ID first, then by normalized date/title.
   Dharma Seed is preferred over AudioDharma when both sources expose the same
@@ -66,8 +66,8 @@ scripts/run-brensilver-ingestion.sh
 ```
 
 That command refreshes configured sources, then runs `run-corpus` against any
-pending talks in `brensilver/talks.json`. For unattended scheduling, set
-`BRENSILVER_AUTO_PUBLISH=1` in the environment so the generated `brensilver/`
+pending talks in `dharma/brensilver/talks.json`. For unattended scheduling, set
+`BRENSILVER_AUTO_PUBLISH=1` in the environment so the generated `dharma/brensilver/`
 artifacts are committed and pushed after a successful run.
 
 Publishing should go through Git, not a direct Pages upload. Cloudflare Pages is
@@ -79,7 +79,7 @@ remote site changes.
 
 After a rebuild, audit:
 
-- New IDs appear in `brensilver/talks.json`.
-- Dharma-talk IDs land in `brensilver/dharma-talks.json`.
-- Guided/practice IDs land in `brensilver/guided-talks.json`.
-- New `/brensilver/talks/{safe_id}/index.html` pages exist.
+- New IDs appear in `dharma/brensilver/talks.json`.
+- Dharma-talk IDs land in `dharma/brensilver/dharma-talks.json`.
+- Guided/practice IDs land in `dharma/brensilver/guided-talks.json`.
+- New `/dharma/brensilver/talks/{safe_id}/index.html` pages exist.

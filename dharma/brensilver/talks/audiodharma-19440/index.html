@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dharmette: Compassion &amp; Equanimity - Matthew Brensilver Dharma Talks</title>
+  <link rel="canonical" href="https://jeffharr.is/dharma/brensilver/talks/audiodharma-19440/">
+  <meta name="description" content="Matthew Brensilver explores compassion and equanimity as a paired practice rather than separate ideals. He moves from the Buddha’s nuance and resistance to fundamentalism, into the willingness to feel suffering vividly, then into a quiet kind of love that can rest without collapsing into apathy or blame. The talk closes by describing an alternating rhythm of love and rest, where each supports the other.">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Matthew Brensilver Dharma Talks">
+  <meta property="og:title" content="Dharmette: Compassion &amp; Equanimity">
+  <meta property="og:description" content="Matthew Brensilver explores compassion and equanimity as a paired practice rather than separate ideals. He moves from the Buddha’s nuance and resistance to fundamentalism, into the willingness to feel suffering vividly, then into a quiet kind of love that can rest without collapsing into apathy or blame. The talk closes by describing an alternating rhythm of love and rest, where each supports the other.">
+  <meta property="og:url" content="https://jeffharr.is/dharma/brensilver/talks/audiodharma-19440/">
+  <meta property="og:image" content="https://jeffharr.is/dharma/brensilver/artwork/audiodharma-19440.jpg">
+  <meta property="og:image:secure_url" content="https://jeffharr.is/dharma/brensilver/artwork/audiodharma-19440.jpg">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="1024">
+  <meta property="og:image:height" content="1024">
+  <meta name="twitter:image" content="https://jeffharr.is/dharma/brensilver/artwork/audiodharma-19440.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Dharmette: Compassion &amp; Equanimity">
+  <meta name="twitter:description" content="Matthew Brensilver explores compassion and equanimity as a paired practice rather than separate ideals. He moves from the Buddha’s nuance and resistance to fundamentalism, into the willingness to feel suffering vividly, then into a quiet kind of love that can rest without collapsing into apathy or blame. The talk closes by describing an alternating rhythm of love and rest, where each supports the other.">
+  <link rel="stylesheet" href="../../talk-page.css">
+</head>
+<body>
+  <main>
+    <a class="back" href="../../">Matthew Brensilver Dharma Talks</a>
+    <div class="hero">
+      <div>
+        <h1>Dharmette: Compassion &amp; Equanimity</h1>
+        <div class="meta">
+          <span>AudioDharma</span>
+          <span>15:51</span>
+          <span>2023-12-15</span>
+        </div>
+        <p class="description">Matthew Brensilver explores compassion and equanimity as a paired practice rather than separate ideals. He moves from the Buddha’s nuance and resistance to fundamentalism, into the willingness to feel suffering vividly, then into a quiet kind of love that can rest without collapsing into apathy or blame. The talk closes by describing an alternating rhythm of love and rest, where each supports the other.</p>
+      </div>
+      <img class="art" src="/dharma/brensilver/artwork/audiodharma-19440.jpg" alt="">
+    </div>
+    <div class="primary-player">
+      <audio id="audio" controls preload="none" src="https://audiodharma.us-east-1.linodeobjects.com/talks/19440/20231215-Matthew_Brensilver-IMC-dharmette_compassion_equanimity.mp3"></audio>
+      <a class="download-link" href="https://audiodharma.us-east-1.linodeobjects.com/talks/19440/20231215-Matthew_Brensilver-IMC-dharmette_compassion_equanimity.mp3" download>Download MP3</a>
+    </div>
+    <section>
+      <h2>Chapters</h2>
+      <ol class="chapters">
+        <li><a href="?t=55" data-start="55.0">00:55</a> <strong>Teaching with nuance</strong> - He opens by reflecting on how spiritual teachings can be misread and why the Buddha’s path resists fundamentalism and overconfidence.</li>
+<li><a href="?t=173" data-start="173.0">02:53</a> <strong>Compassion and suffering</strong> - He introduces compassion and explains how practice involves staying present with dukkha rather than deflecting into blame or avoidance.</li>
+<li><a href="?t=326" data-start="326.0">05:26</a> <strong>Why we help</strong> - Opening to suffering reveals the shared wish to be happy and naturally turns toward action on behalf of others.</li>
+<li><a href="?t=392" data-start="392.0">06:32</a> <strong>From grief to love</strong> - He brings in Marx and then a compassion instruction attributed to Matthieu Ricard to show how compassion can deepen into love.</li>
+<li><a href="?t=498" data-start="498.0">08:18</a> <strong>When compassion tires</strong> - He names the danger of compassion becoming exhausting when it is not held in balance.</li>
+<li><a href="?t=546" data-start="546.0">09:06</a> <strong>Equanimity as resting</strong> - Using Michelle McDonald’s flower image, he describes equanimity as the heart’s healthy closing: not apathy, but a refined relationship to helplessness.</li>
+<li><a href="?t=756" data-start="756.0">12:36</a> <strong>Quiet love and rest</strong> - He explains equanimity as a quiet, open love that reduces reactivity, purifies compassion, and makes rest possible when no action is needed.</li>
+      </ol>
+    </section>
+    <section>
+      <h2>Source</h2>
+      <p><a href="https://www.audiodharma.org/talks/19440">Original talk page</a></p>
+    </section>
+  </main>
+  <script>
+    const audio = document.getElementById('audio');
+    function seekFromLocation() {
+      if (!audio) return;
+      const value = new URLSearchParams(location.search).get('t');
+      const seconds = Number(value || 0);
+      if (Number.isFinite(seconds) && seconds > 0) {
+        audio.currentTime = seconds;
+      }
+    }
+    document.querySelectorAll('[data-start]').forEach(link => {
+      link.addEventListener('click', event => {
+        if (!audio) return;
+        event.preventDefault();
+        const seconds = Number(link.dataset.start || 0);
+        history.replaceState(null, '', '?t=' + Math.round(seconds));
+        audio.currentTime = seconds;
+        audio.play().catch(() => {});
+      });
+    });
+    audio?.addEventListener('loadedmetadata', seekFromLocation, { once: true });
+  </script>
+</body>
+</html>

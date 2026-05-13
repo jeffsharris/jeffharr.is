@@ -1,0 +1,7 @@
+/brensilver /dharma/brensilver/ 301
+/brensilver/ /dharma/brensilver/ 301
+/brensilver/* /dharma/brensilver/:splat 301
+/watts /dharma/watts/ 301
+/watts/ /dharma/watts/ 301
+/watts/* /dharma/watts/:splat 301
+/watts.xml /dharma/watts/feed.xml 301

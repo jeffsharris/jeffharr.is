@@ -1,15 +1,15 @@
 {
   "site": {
     "title": "Matthew Brensilver Dharma Talks",
-    "base_url": "https://jeffharr.is/brensilver/",
-    "feed_url": "https://jeffharr.is/brensilver/feed.xml",
+    "base_url": "https://jeffharr.is/dharma/brensilver/",
+    "feed_url": "https://jeffharr.is/dharma/brensilver/feed.xml",
     "author": "Matthew Brensilver",
     "description": "A merged podcast feed of Matthew Brensilver Dharma talks from AudioDharma and Dharma Seed.",
     "language": "en",
-    "image_url": "https://jeffharr.is/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+    "image_url": "https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
     "guided_title": "Matthew Brensilver Guided Meditations",
     "guided_description": "A companion feed of Matthew Brensilver guided meditations, guided practice sessions, and retreat instructions from AudioDharma and Dharma Seed.",
-    "guided_feed_url": "https://jeffharr.is/brensilver/guided-feed.xml",
+    "guided_feed_url": "https://jeffharr.is/dharma/brensilver/guided-feed.xml",
     "category": "Religion & Spirituality",
     "subcategory": "Buddhism"
   },

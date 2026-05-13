@@ -22,12 +22,12 @@ from typing import Any, Iterable
 
 TOOLS_ROOT = Path(__file__).resolve().parents[2]
 SITE_ROOT = TOOLS_ROOT.parents[1]
-DEFAULT_TALKS_JSON = SITE_ROOT / "brensilver" / "talks.json"
+DEFAULT_TALKS_JSON = SITE_ROOT / "dharma" / "brensilver" / "talks.json"
 DEFAULT_CORPUS_DIR = SITE_ROOT / ".local-corpus" / "brensilver"
 DEFAULT_PILOT_CONFIG = TOOLS_ROOT / "config" / "pilot-talks.json"
 DEFAULT_BATCH_CONFIG = TOOLS_ROOT / "config" / "twenty-talks.json"
 DEFAULT_GLOSSARY = TOOLS_ROOT / "config" / "glossary.json"
-DEFAULT_FEED_MEDIA_BASE_URL = "https://jeffharr.is/brensilver/"
+DEFAULT_FEED_MEDIA_BASE_URL = "https://jeffharr.is/dharma/brensilver/"
 DEFAULT_CORRECT_PROMPT = TOOLS_ROOT / "prompts" / "correct_transcript.md"
 DEFAULT_REFERENCES_PROMPT = TOOLS_ROOT / "prompts" / "extract_references.md"
 DEFAULT_EPISODE_METADATA_PROMPT = TOOLS_ROOT / "prompts" / "episode_metadata.md"
@@ -118,7 +118,7 @@ def default_corpus_config() -> CorpusConfig:
         slug="brensilver",
         title="Matthew Brensilver Dharma Talks",
         teacher="Matthew Brensilver",
-        public_base_url="https://jeffharr.is/brensilver/",
+        public_base_url="https://jeffharr.is/dharma/brensilver/",
         talks_json=DEFAULT_TALKS_JSON,
         corpus_dir=DEFAULT_CORPUS_DIR,
         feed_media_base_url=DEFAULT_FEED_MEDIA_BASE_URL,
@@ -137,7 +137,7 @@ def default_corpus_config() -> CorpusConfig:
             "{teacher} Dharma talk: {title}. Use Buddhist terms and names accurately. "
             "Terms: {terms}. Names: {people}."
         ),
-        user_agent="brensilver-transcripts/0.1 (+https://jeffharr.is/brensilver/)",
+        user_agent="brensilver-transcripts/0.1 (+https://jeffharr.is/dharma/brensilver/)",
     )
 
 

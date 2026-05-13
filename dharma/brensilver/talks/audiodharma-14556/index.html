@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Guided Meditation: Grounding and Opening - Matthew Brensilver Dharma Talks</title>
+  <link rel="canonical" href="https://jeffharr.is/dharma/brensilver/talks/audiodharma-14556/">
+  <meta name="description" content="This guided meditation begins with a brief framing of the week’s theme—bringing Dharma into interpersonal life—before moving into a long practice of settling, grounding, and opening. Matthew Brensilver repeatedly returns to the body, gravity, the exhalation, and a softening of effort, then widens into an awareness that can hold whatever is known. The talk gradually turns toward relinquishing fixing and becoming, treating imperfection itself as part of the path toward peace.">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Matthew Brensilver Dharma Talks">
+  <meta property="og:title" content="Guided Meditation: Grounding and Opening">
+  <meta property="og:description" content="This guided meditation begins with a brief framing of the week’s theme—bringing Dharma into interpersonal life—before moving into a long practice of settling, grounding, and opening. Matthew Brensilver repeatedly returns to the body, gravity, the exhalation, and a softening of effort, then widens into an awareness that can hold whatever is known. The talk gradually turns toward relinquishing fixing and becoming, treating imperfection itself as part of the path toward peace.">
+  <meta property="og:url" content="https://jeffharr.is/dharma/brensilver/talks/audiodharma-14556/">
+  <meta property="og:image" content="https://jeffharr.is/dharma/brensilver/artwork/audiodharma-14556.jpg">
+  <meta property="og:image:secure_url" content="https://jeffharr.is/dharma/brensilver/artwork/audiodharma-14556.jpg">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="1024">
+  <meta property="og:image:height" content="1024">
+  <meta name="twitter:image" content="https://jeffharr.is/dharma/brensilver/artwork/audiodharma-14556.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Guided Meditation: Grounding and Opening">
+  <meta name="twitter:description" content="This guided meditation begins with a brief framing of the week’s theme—bringing Dharma into interpersonal life—before moving into a long practice of settling, grounding, and opening. Matthew Brensilver repeatedly returns to the body, gravity, the exhalation, and a softening of effort, then widens into an awareness that can hold whatever is known. The talk gradually turns toward relinquishing fixing and becoming, treating imperfection itself as part of the path toward peace.">
+  <link rel="stylesheet" href="../../talk-page.css">
+</head>
+<body>
+  <main>
+    <a class="back" href="../../">Matthew Brensilver Dharma Talks</a>
+    <div class="hero">
+      <div>
+        <h1>Guided Meditation: Grounding and Opening</h1>
+        <div class="meta">
+          <span>AudioDharma</span>
+          <span>29:11</span>
+          <span>2021-11-15</span>
+        </div>
+        <p class="description">This guided meditation begins with a brief framing of the week’s theme—bringing Dharma into interpersonal life—before moving into a long practice of settling, grounding, and opening. Matthew Brensilver repeatedly returns to the body, gravity, the exhalation, and a softening of effort, then widens into an awareness that can hold whatever is known. The talk gradually turns toward relinquishing fixing and becoming, treating imperfection itself as part of the path toward peace.</p>
+      </div>
+      <img class="art" src="/dharma/brensilver/artwork/audiodharma-14556.jpg" alt="">
+    </div>
+    <div class="primary-player">
+      <audio id="audio" controls preload="none" src="https://audiodharma.us-east-1.linodeobjects.com/talks/14556/20211115-Matthew_Brensilver-IMC-guided_meditation_grounding_and_opening.mp3"></audio>
+      <a class="download-link" href="https://audiodharma.us-east-1.linodeobjects.com/talks/14556/20211115-Matthew_Brensilver-IMC-guided_meditation_grounding_and_opening.mp3" download>Download MP3</a>
+    </div>
+    <section>
+      <h2>Chapters</h2>
+      <ol class="chapters">
+        <li><a href="?t=12" data-start="12.0">00:12</a> <strong>Opening Context</strong> - Matthew introduces the week’s practice frame and the invitation to treat interpersonal life as a laboratory for Dharma.</li>
+<li><a href="?t=177" data-start="177.0">02:57</a> <strong>Settling Into Body</strong> - The meditation begins by settling into the body’s aliveness and establishing a clear, grounded presence.</li>
+<li><a href="?t=347" data-start="347.0">05:47</a> <strong>Awareness and Softening</strong> - Attention expands to the whole body, then repeatedly softens and relaxes into spacious awareness.</li>
+<li><a href="?t=602" data-start="602.04">10:02</a> <strong>Holding Imperfection</strong> - The practice emphasizes not being overwhelmed by what arises and finding peace through imperfection rather than control.</li>
+<li><a href="?t=743" data-start="743.04">12:23</a> <strong>Returning to Ground</strong> - After extended repetition, the meditation continues to emphasize steadiness, receptivity, and a calm willingness to stay present.</li>
+<li><a href="?t=1123" data-start="1123.04">18:43</a> <strong>Letting Dharma Unfold</strong> - The closing movement turns toward renouncing agendas and allowing the logic of the Dharma to unfold through the heart.</li>
+      </ol>
+    </section>
+    <section>
+      <h2>Source</h2>
+      <p><a href="https://www.audiodharma.org/talks/14556">Original talk page</a></p>
+    </section>
+  </main>
+  <script>
+    const audio = document.getElementById('audio');
+    function seekFromLocation() {
+      if (!audio) return;
+      const value = new URLSearchParams(location.search).get('t');
+      const seconds = Number(value || 0);
+      if (Number.isFinite(seconds) && seconds > 0) {
+        audio.currentTime = seconds;
+      }
+    }
+    document.querySelectorAll('[data-start]').forEach(link => {
+      link.addEventListener('click', event => {
+        if (!audio) return;
+        event.preventDefault();
+        const seconds = Number(link.dataset.start || 0);
+        history.replaceState(null, '', '?t=' + Math.round(seconds));
+        audio.currentTime = seconds;
+        audio.play().catch(() => {});
+      });
+    });
+    audio?.addEventListener('loadedmetadata', seekFromLocation, { once: true });
+  </script>
+</body>
+</html>

@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Day 5: Instructions and Sitting - Matthew Brensilver Dharma Talks</title>
+  <link rel="canonical" href="https://jeffharr.is/dharma/brensilver/talks/dharmaseed-41171/">
+  <meta name="description" content="Matthew Brensilver offers a mostly quiet sitting instruction centered on relaxation, receptivity, and letting awareness be present without effort. He begins with Suzuki Roshi’s phrase “soft readiness,” then moves into guidance about releasing doing, dropping concern with the next breath, and trusting the present moment. Later he turns to the seductions of time and future-imagining, ending with a closing invitation to give oneself more fully to the last minutes of sitting.">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Matthew Brensilver Dharma Talks">
+  <meta property="og:title" content="Day 5: Instructions and Sitting">
+  <meta property="og:description" content="Matthew Brensilver offers a mostly quiet sitting instruction centered on relaxation, receptivity, and letting awareness be present without effort. He begins with Suzuki Roshi’s phrase “soft readiness,” then moves into guidance about releasing doing, dropping concern with the next breath, and trusting the present moment. Later he turns to the seductions of time and future-imagining, ending with a closing invitation to give oneself more fully to the last minutes of sitting.">
+  <meta property="og:url" content="https://jeffharr.is/dharma/brensilver/talks/dharmaseed-41171/">
+  <meta property="og:image" content="https://jeffharr.is/dharma/brensilver/artwork/dharmaseed-41171.jpg">
+  <meta property="og:image:secure_url" content="https://jeffharr.is/dharma/brensilver/artwork/dharmaseed-41171.jpg">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="1024">
+  <meta property="og:image:height" content="1024">
+  <meta name="twitter:image" content="https://jeffharr.is/dharma/brensilver/artwork/dharmaseed-41171.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Day 5: Instructions and Sitting">
+  <meta name="twitter:description" content="Matthew Brensilver offers a mostly quiet sitting instruction centered on relaxation, receptivity, and letting awareness be present without effort. He begins with Suzuki Roshi’s phrase “soft readiness,” then moves into guidance about releasing doing, dropping concern with the next breath, and trusting the present moment. Later he turns to the seductions of time and future-imagining, ending with a closing invitation to give oneself more fully to the last minutes of sitting.">
+  <link rel="stylesheet" href="../../talk-page.css">
+</head>
+<body>
+  <main>
+    <a class="back" href="../../">Matthew Brensilver Dharma Talks</a>
+    <div class="hero">
+      <div>
+        <h1>Day 5: Instructions and Sitting</h1>
+        <div class="meta">
+          <span>Dharma Seed</span>
+          <span>38:02</span>
+          <span>2017-05-27</span>
+        </div>
+        <p class="description">Matthew Brensilver offers a mostly quiet sitting instruction centered on relaxation, receptivity, and letting awareness be present without effort. He begins with Suzuki Roshi’s phrase “soft readiness,” then moves into guidance about releasing doing, dropping concern with the next breath, and trusting the present moment. Later he turns to the seductions of time and future-imagining, ending with a closing invitation to give oneself more fully to the last minutes of sitting.</p>
+      </div>
+      <img class="art" src="/dharma/brensilver/artwork/dharmaseed-41171.jpg" alt="">
+    </div>
+    <div class="primary-player">
+      <audio id="audio" controls preload="none" src="https://dharmaseed.org/talks/41171/20170527-Matthew_Brensilver-SR-day_5_instructions_and_sitting-41171.mp3?rss="></audio>
+      <a class="download-link" href="https://dharmaseed.org/talks/41171/20170527-Matthew_Brensilver-SR-day_5_instructions_and_sitting-41171.mp3?rss=" download>Download MP3</a>
+    </div>
+    <section>
+      <h2>Chapters</h2>
+      <ol class="chapters">
+        <li><a href="?t=0" data-start="0.0">00:00</a> <strong>Soft readiness</strong> - Matthew opens with Suzuki Roshi’s image of mindfulness as a soft readiness and translates it into bodily relaxation and receptivity.</li>
+<li><a href="?t=40" data-start="40.24">00:40</a> <strong>Settling the body</strong> - He guides the sit into a quieter, more porous relationship with the body and the surrounding world.</li>
+<li><a href="?t=442" data-start="442.0">07:22</a> <strong>No need to perform</strong> - The instruction shifts toward dropping the effort to be aware and releasing the habit of waiting for the next breath.</li>
+<li><a href="?t=541" data-start="541.0">09:01</a> <strong>Letting the moment be</strong> - He continues to emphasize non-doing, allowing attention to rest without trying to get anywhere.</li>
+<li><a href="?t=1231" data-start="1230.744">20:31</a> <strong>Time and safety</strong> - The talk names how the mind simulates futures for protection and invites a safe letting go into the present.</li>
+<li><a href="?t=1352" data-start="1352.424">22:32</a> <strong>Returning to sitting</strong> - The middle stretch is largely quiet sitting, with the instruction remaining implicit in the atmosphere of the practice.</li>
+<li><a href="?t=2063" data-start="2062.864">34:23</a> <strong>Final release</strong> - In the closing minutes, he asks listeners to surrender even more deeply, setting aside past, future, self, and world.</li>
+      </ol>
+    </section>
+    <section>
+      <h2>Source</h2>
+      <p><a href="https://dharmaseed.org/talks/41171/">Original talk page</a></p>
+    </section>
+  </main>
+  <script>
+    const audio = document.getElementById('audio');
+    function seekFromLocation() {
+      if (!audio) return;
+      const value = new URLSearchParams(location.search).get('t');
+      const seconds = Number(value || 0);
+      if (Number.isFinite(seconds) && seconds > 0) {
+        audio.currentTime = seconds;
+      }
+    }
+    document.querySelectorAll('[data-start]').forEach(link => {
+      link.addEventListener('click', event => {
+        if (!audio) return;
+        event.preventDefault();
+        const seconds = Number(link.dataset.start || 0);
+        history.replaceState(null, '', '?t=' + Math.round(seconds));
+        audio.currentTime = seconds;
+        audio.play().catch(() => {});
+      });
+    });
+    audio?.addEventListener('loadedmetadata', seekFromLocation, { once: true });
+  </script>
+</body>
+</html>

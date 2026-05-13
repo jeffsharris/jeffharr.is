@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Morning Instructions - Matthew Brensilver Dharma Talks</title>
+  <link rel="canonical" href="https://jeffharr.is/dharma/brensilver/talks/audiodharma-10634/">
+  <meta name="description" content="Matthew Brensilver offers a grounded morning instruction centered on paying attention to life as it is, with care rather than ambition. He moves from meeting hindrances and “Mara” directly, to sensing the body as a changing field, to the Buddha’s teaching on conditionality as the basis for a more natural love. The talk closes by noticing subtle efforting in meditation and returning to curiosity without agenda.">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Matthew Brensilver Dharma Talks">
+  <meta property="og:title" content="Morning Instructions">
+  <meta property="og:description" content="Matthew Brensilver offers a grounded morning instruction centered on paying attention to life as it is, with care rather than ambition. He moves from meeting hindrances and “Mara” directly, to sensing the body as a changing field, to the Buddha’s teaching on conditionality as the basis for a more natural love. The talk closes by noticing subtle efforting in meditation and returning to curiosity without agenda.">
+  <meta property="og:url" content="https://jeffharr.is/dharma/brensilver/talks/audiodharma-10634/">
+  <meta property="og:image" content="https://jeffharr.is/dharma/brensilver/artwork/audiodharma-10634.jpg">
+  <meta property="og:image:secure_url" content="https://jeffharr.is/dharma/brensilver/artwork/audiodharma-10634.jpg">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="1024">
+  <meta property="og:image:height" content="1024">
+  <meta name="twitter:image" content="https://jeffharr.is/dharma/brensilver/artwork/audiodharma-10634.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Morning Instructions">
+  <meta name="twitter:description" content="Matthew Brensilver offers a grounded morning instruction centered on paying attention to life as it is, with care rather than ambition. He moves from meeting hindrances and “Mara” directly, to sensing the body as a changing field, to the Buddha’s teaching on conditionality as the basis for a more natural love. The talk closes by noticing subtle efforting in meditation and returning to curiosity without agenda.">
+  <link rel="stylesheet" href="../../talk-page.css">
+</head>
+<body>
+  <main>
+    <a class="back" href="../../">Matthew Brensilver Dharma Talks</a>
+    <div class="hero">
+      <div>
+        <h1>Morning Instructions</h1>
+        <div class="meta">
+          <span>AudioDharma</span>
+          <span>40:03</span>
+          <span>2019-10-05</span>
+        </div>
+        <p class="description">Matthew Brensilver offers a grounded morning instruction centered on paying attention to life as it is, with care rather than ambition. He moves from meeting hindrances and “Mara” directly, to sensing the body as a changing field, to the Buddha’s teaching on conditionality as the basis for a more natural love. The talk closes by noticing subtle efforting in meditation and returning to curiosity without agenda.</p>
+      </div>
+      <img class="art" src="/dharma/brensilver/artwork/audiodharma-10634.jpg" alt="">
+    </div>
+    <div class="primary-player">
+      <audio id="audio" controls preload="none" src="https://audiodharma.us-east-1.linodeobjects.com/talks/10634/20191005-Matthew_Brensilver-IRC-morning_instructions.mp3"></audio>
+      <a class="download-link" href="https://audiodharma.us-east-1.linodeobjects.com/talks/10634/20191005-Matthew_Brensilver-IRC-morning_instructions.mp3" download>Download MP3</a>
+    </div>
+    <section>
+      <h2>Chapters</h2>
+      <ol class="chapters">
+        <li><a href="?t=0" data-start="0.0">00:00</a> <strong>This Life, Attended To</strong> - He opens by framing practice as honoring life through attention and a simple willingness to be present.</li>
+<li><a href="?t=147" data-start="146.6">02:27</a> <strong>Meeting Hindrance</strong> - The instruction turns to relaxing bodily effort and noticing greed, aversion, restlessness, dullness, doubt, and bewilderment without adding drama.</li>
+<li><a href="?t=279" data-start="278.6">04:39</a> <strong>Directness Over Struggle</strong> - He emphasizes not meeting difficulty with force, but with a clear, non-reactive awareness that can simply say, 'I see you.'</li>
+<li><a href="?t=473" data-start="472.6">07:53</a> <strong>Seeing Conditionality</strong> - Using the Buddha’s teaching on cause and effect, he links insight into conditions with the softening of self-harshness and hatred.</li>
+<li><a href="?t=648" data-start="647.6">10:48</a> <strong>Body As Flow</strong> - The talk moves into holding the body in tenderness, noticing physicality, emotionality, and the constant shifting of sensation.</li>
+<li><a href="?t=867" data-start="866.6">14:27</a> <strong>Image And Sensation</strong> - He distinguishes between imagining the body and directly feeling sensation, encouraging awareness to stay close to the changing experience itself.</li>
+<li><a href="?t=1097" data-start="1096.6">18:17</a> <strong>No Hidden Agenda</strong> - He ends by inviting a periodic check for subtle striving, and a return to curiosity that is not trying to manufacture experience.</li>
+      </ol>
+    </section>
+    <section>
+      <h2>Source</h2>
+      <p><a href="https://www.audiodharma.org/talks/10634">Original talk page</a></p>
+    </section>
+  </main>
+  <script>
+    const audio = document.getElementById('audio');
+    function seekFromLocation() {
+      if (!audio) return;
+      const value = new URLSearchParams(location.search).get('t');
+      const seconds = Number(value || 0);
+      if (Number.isFinite(seconds) && seconds > 0) {
+        audio.currentTime = seconds;
+      }
+    }
+    document.querySelectorAll('[data-start]').forEach(link => {
+      link.addEventListener('click', event => {
+        if (!audio) return;
+        event.preventDefault();
+        const seconds = Number(link.dataset.start || 0);
+        history.replaceState(null, '', '?t=' + Math.round(seconds));
+        audio.currentTime = seconds;
+        audio.play().catch(() => {});
+      });
+    });
+    audio?.addEventListener('loadedmetadata', seekFromLocation, { once: true });
+  </script>
+</body>
+</html>

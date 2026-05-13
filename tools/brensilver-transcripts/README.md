@@ -154,16 +154,16 @@ PYTHONPATH=tools/brensilver-transcripts/src \
   python3 -m brensilver_transcripts.pipeline run-corpus \
   --limit 20 \
   --feed-every 20 \
-  --media-base-url https://jeffharr.is/brensilver/ \
+  --media-base-url https://jeffharr.is/dharma/brensilver/ \
   --copy-artwork \
   --update-qmd \
   --build-feedback-viewer
 ```
 
 The same-site `--media-base-url` plus `--copy-artwork` path is the simple
-preview/deploy mode: generated artwork is copied into `brensilver/artwork/`,
-chapter JSON is written into `brensilver/chapters/`, and the RSS feed points at
-`https://jeffharr.is/brensilver/`.
+preview/deploy mode: generated artwork is copied into `dharma/brensilver/artwork/`,
+chapter JSON is written into `dharma/brensilver/chapters/`, and the RSS feed points at
+`https://jeffharr.is/dharma/brensilver/`.
 
 Once Cloudflare R2 media hosting is wired, use the R2 origin instead and omit
 `--copy-artwork`:
@@ -305,10 +305,10 @@ scripts/run-brensilver-ingestion.sh
 ```
 
 That script first runs `scripts/build-brensilver-feed.py --copy-artwork` to
-refresh all configured source feeds into `brensilver/talks.json`, then runs
+refresh all configured source feeds into `dharma/brensilver/talks.json`, then runs
 `run-corpus` so any pending talks get transcripts, correction, reference
 extraction, episode metadata, artwork, markdown, QMD indexing, and rebuilt
-feeds. This order matters: `run-corpus` consumes `brensilver/talks.json`; it
+feeds. This order matters: `run-corpus` consumes `dharma/brensilver/talks.json`; it
 does not discover new upstream source items by itself.
 
 Useful environment variables:
@@ -316,7 +316,7 @@ Useful environment variables:
 ```sh
 BRENSILVER_INGEST_LIMIT=20
 BRENSILVER_FEED_EVERY=20
-BRENSILVER_MEDIA_BASE_URL=https://jeffharr.is/brensilver/
+BRENSILVER_MEDIA_BASE_URL=https://jeffharr.is/dharma/brensilver/
 BRENSILVER_AUTO_PUBLISH=1
 ```
 
@@ -324,7 +324,7 @@ Use `launchd` or a Codex automation for the actual schedule on macOS. A limit of
 20 gives the feed a useful new batch while keeping a transient API or network
 issue from turning one run into a large failure surface. Set
 `BRENSILVER_AUTO_PUBLISH=1` only for the unattended job that should commit and
-push generated `brensilver/` artifacts after a successful run.
+push generated `dharma/brensilver/` artifacts after a successful run.
 
 A launchd template lives at `launchd/com.jeffharris.brensilver-transcripts.plist.example`.
 Install it only after `.env.local` exists and the pilot has been reviewed.
@@ -334,7 +334,7 @@ Install it only after `.env.local` exists and the pilot has been reviewed.
 - Start with `docs/dharma-content-agent-runbook.md` when adding a source, using
   QMD, touching automation, or extending this pattern to another teacher.
 - Public podcast feed generation still lives in `tools/brensilver-feed/`.
-- `run-corpus` consumes `brensilver/talks.json` and calls the feed builder after
+- `run-corpus` consumes `dharma/brensilver/talks.json` and calls the feed builder after
   each batch; it does not fetch new source listings by itself.
 - If an agent adds a new Dharma Seed or AudioDharma source, they must run
   `scripts/run-brensilver-ingestion.sh` before publishing so new talks are not

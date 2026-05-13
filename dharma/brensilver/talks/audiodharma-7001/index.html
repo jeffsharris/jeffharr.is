@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Practice Note - Matthew Brensilver Dharma Talks</title>
+  <link rel="canonical" href="https://jeffharr.is/dharma/brensilver/talks/audiodharma-7001/">
+  <meta name="description" content="Matthew Brensilver offers a brief practice note about how suffering can become so familiar that we stop noticing it, using a simple noise example to show how relief and ease can be easy to miss. He then turns to a Buddha teaching: pay attention to endings, fading away, and absence, not just arising and the next problem. The talk ends with a plain invitation to notice these shifts in walking and sitting, without making the practice complicated.">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Matthew Brensilver Dharma Talks">
+  <meta property="og:title" content="Practice Note">
+  <meta property="og:description" content="Matthew Brensilver offers a brief practice note about how suffering can become so familiar that we stop noticing it, using a simple noise example to show how relief and ease can be easy to miss. He then turns to a Buddha teaching: pay attention to endings, fading away, and absence, not just arising and the next problem. The talk ends with a plain invitation to notice these shifts in walking and sitting, without making the practice complicated.">
+  <meta property="og:url" content="https://jeffharr.is/dharma/brensilver/talks/audiodharma-7001/">
+  <meta property="og:image" content="https://jeffharr.is/dharma/brensilver/artwork/audiodharma-7001.jpg">
+  <meta property="og:image:secure_url" content="https://jeffharr.is/dharma/brensilver/artwork/audiodharma-7001.jpg">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="1024">
+  <meta property="og:image:height" content="1024">
+  <meta name="twitter:image" content="https://jeffharr.is/dharma/brensilver/artwork/audiodharma-7001.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Practice Note">
+  <meta name="twitter:description" content="Matthew Brensilver offers a brief practice note about how suffering can become so familiar that we stop noticing it, using a simple noise example to show how relief and ease can be easy to miss. He then turns to a Buddha teaching: pay attention to endings, fading away, and absence, not just arising and the next problem. The talk ends with a plain invitation to notice these shifts in walking and sitting, without making the practice complicated.">
+  <link rel="stylesheet" href="../../talk-page.css">
+</head>
+<body>
+  <main>
+    <a class="back" href="../../">Matthew Brensilver Dharma Talks</a>
+    <div class="hero">
+      <div>
+        <h1>Practice Note</h1>
+        <div class="meta">
+          <span>AudioDharma</span>
+          <span>04:12</span>
+          <span>2016-09-14</span>
+        </div>
+        <p class="description">Matthew Brensilver offers a brief practice note about how suffering can become so familiar that we stop noticing it, using a simple noise example to show how relief and ease can be easy to miss. He then turns to a Buddha teaching: pay attention to endings, fading away, and absence, not just arising and the next problem. The talk ends with a plain invitation to notice these shifts in walking and sitting, without making the practice complicated.</p>
+      </div>
+      <img class="art" src="/dharma/brensilver/artwork/audiodharma-7001.jpg" alt="">
+    </div>
+    <div class="primary-player">
+      <audio id="audio" controls preload="none" src="https://audiodharma.us-east-1.linodeobjects.com/talks/7001/20160914-Matthew_Brensilver-IMC-practice_notes.mp3"></audio>
+      <a class="download-link" href="https://audiodharma.us-east-1.linodeobjects.com/talks/7001/20160914-Matthew_Brensilver-IMC-practice_notes.mp3" download>Download MP3</a>
+    </div>
+    <section>
+      <h2>Chapters</h2>
+      <ol class="chapters">
+        <li><a href="?t=9" data-start="9.0">00:09</a> <strong>Familiar Noise</strong> - A noisy engine becomes the example for how irritation can be present without being fully noticed.</li>
+<li><a href="?t=79" data-start="79.24">01:19</a> <strong>Ease Goes Unnoticed</strong> - The talk points to how suffering can fade and be missed because the mind keeps scanning for problems.</li>
+<li><a href="?t=118" data-start="118.24">01:58</a> <strong>Noticing Contentment</strong> - Matthew encourages recognizing relative ease and the moments when burden drops away.</li>
+<li><a href="?t=164" data-start="164.24">02:44</a> <strong>The Fading Away</strong> - He links the ending of things to insight, emphasizing cessation more than arising.</li>
+<li><a href="?t=187" data-start="187.24">03:07</a> <strong>Knowing Absence</strong> - The teaching broadens to include aversion's absence, suggesting that what is not present can also be clearly known.</li>
+<li><a href="?t=218" data-start="218.24">03:38</a> <strong>Simple Practice</strong> - The talk closes with a plain invitation to notice endings and absence while walking and sitting, without overcomplicating practice.</li>
+      </ol>
+    </section>
+    <section>
+      <h2>Source</h2>
+      <p><a href="https://www.audiodharma.org/talks/7001">Original talk page</a></p>
+    </section>
+  </main>
+  <script>
+    const audio = document.getElementById('audio');
+    function seekFromLocation() {
+      if (!audio) return;
+      const value = new URLSearchParams(location.search).get('t');
+      const seconds = Number(value || 0);
+      if (Number.isFinite(seconds) && seconds > 0) {
+        audio.currentTime = seconds;
+      }
+    }
+    document.querySelectorAll('[data-start]').forEach(link => {
+      link.addEventListener('click', event => {
+        if (!audio) return;
+        event.preventDefault();
+        const seconds = Number(link.dataset.start || 0);
+        history.replaceState(null, '', '?t=' + Math.round(seconds));
+        audio.currentTime = seconds;
+        audio.play().catch(() => {});
+      });
+    });
+    audio?.addEventListener('loadedmetadata', seekFromLocation, { once: true });
+  </script>
+</body>
+</html>

@@ -24,7 +24,7 @@ fi
 
 : "${BRENSILVER_INGEST_LIMIT:=20}"
 : "${BRENSILVER_FEED_EVERY:=20}"
-: "${BRENSILVER_MEDIA_BASE_URL:=https://jeffharr.is/brensilver/}"
+: "${BRENSILVER_MEDIA_BASE_URL:=https://jeffharr.is/dharma/brensilver/}"
 : "${BRENSILVER_AUTO_PUBLISH:=0}"
 
 if [[ "$BRENSILVER_AUTO_PUBLISH" == "1" ]]; then
@@ -59,8 +59,8 @@ PYTHONPATH=tools/brensilver-transcripts/src \
 
 if [[ "$BRENSILVER_AUTO_PUBLISH" == "1" ]]; then
   echo "[$(timestamp)] Publishing generated Brensilver artifacts"
-  git add brensilver
-  if git diff --cached --quiet -- brensilver; then
+  git add dharma/brensilver
+  if git diff --cached --quiet -- dharma/brensilver; then
     echo "No Brensilver generated artifact changes to publish."
     git pull --ff-only origin "$branch"
   else

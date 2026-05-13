@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dharmette: Question on Social Anxiety - Matthew Brensilver Dharma Talks</title>
+  <link rel="canonical" href="https://jeffharr.is/dharma/brensilver/talks/audiodharma-24944/">
+  <meta name="description" content="Matthew Brensilver responds to a question about social anxiety by beginning with acceptance rather than self-improvement. He moves from non-resistance and feeling the pain directly into a careful look at shame, objectification, and the fear of being seen by others. The talk closes by turning toward anatta, suggesting that the deepest relief may come through loosening the sense of a fixed self rather than defending it.">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Matthew Brensilver Dharma Talks">
+  <meta property="og:title" content="Dharmette: Question on Social Anxiety">
+  <meta property="og:description" content="Matthew Brensilver responds to a question about social anxiety by beginning with acceptance rather than self-improvement. He moves from non-resistance and feeling the pain directly into a careful look at shame, objectification, and the fear of being seen by others. The talk closes by turning toward anatta, suggesting that the deepest relief may come through loosening the sense of a fixed self rather than defending it.">
+  <meta property="og:url" content="https://jeffharr.is/dharma/brensilver/talks/audiodharma-24944/">
+  <meta property="og:image" content="https://jeffharr.is/dharma/brensilver/artwork/audiodharma-24944.jpg">
+  <meta property="og:image:secure_url" content="https://jeffharr.is/dharma/brensilver/artwork/audiodharma-24944.jpg">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="1024">
+  <meta property="og:image:height" content="1024">
+  <meta name="twitter:image" content="https://jeffharr.is/dharma/brensilver/artwork/audiodharma-24944.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Dharmette: Question on Social Anxiety">
+  <meta name="twitter:description" content="Matthew Brensilver responds to a question about social anxiety by beginning with acceptance rather than self-improvement. He moves from non-resistance and feeling the pain directly into a careful look at shame, objectification, and the fear of being seen by others. The talk closes by turning toward anatta, suggesting that the deepest relief may come through loosening the sense of a fixed self rather than defending it.">
+  <link rel="stylesheet" href="../../talk-page.css">
+</head>
+<body>
+  <main>
+    <a class="back" href="../../">Matthew Brensilver Dharma Talks</a>
+    <div class="hero">
+      <div>
+        <h1>Dharmette: Question on Social Anxiety</h1>
+        <div class="meta">
+          <span>AudioDharma</span>
+          <span>15:48</span>
+          <span>2026-02-25</span>
+        </div>
+        <p class="description">Matthew Brensilver responds to a question about social anxiety by beginning with acceptance rather than self-improvement. He moves from non-resistance and feeling the pain directly into a careful look at shame, objectification, and the fear of being seen by others. The talk closes by turning toward anatta, suggesting that the deepest relief may come through loosening the sense of a fixed self rather than defending it.</p>
+      </div>
+      <img class="art" src="/dharma/brensilver/artwork/audiodharma-24944.jpg" alt="">
+    </div>
+    <div class="primary-player">
+      <audio id="audio" controls preload="none" src="https://audiodharma.us-east-1.linodeobjects.com/talks/24944/20260225-matthew_brensilver-imc-dharmette_question_on_social_anxiety.mp3"></audio>
+      <a class="download-link" href="https://audiodharma.us-east-1.linodeobjects.com/talks/24944/20260225-matthew_brensilver-imc-dharmette_question_on_social_anxiety.mp3" download>Download MP3</a>
+    </div>
+    <section>
+      <h2>Chapters</h2>
+      <ol class="chapters">
+        <li><a href="?t=12" data-start="12.0">00:12</a> <strong>Acceptance First</strong> - He begins with the question and frames practice as non-resistance before any effort to change symptoms.</li>
+<li><a href="?t=117" data-start="117.0">01:57</a> <strong>Feeling the Pain</strong> - He encourages staying with the confinement and discomfort of social anxiety long enough for it to be felt clearly.</li>
+<li><a href="?t=223" data-start="223.0">03:43</a> <strong>Why Others Matter</strong> - He explores how social life makes other people a big deal, and why intimacy requires risking being seen.</li>
+<li><a href="?t=352" data-start="352.0">05:52</a> <strong>Judgment And Objectification</strong> - He traces social anxiety to fear of negative and positive judgment, and to the feeling of becoming an object in another mind.</li>
+<li><a href="?t=553" data-start="553.0">09:13</a> <strong>Bathe In The Thought</strong> - He describes a practice of meeting the worst imagined judgment until its charge drains away.</li>
+<li><a href="?t=653" data-start="653.0">10:53</a> <strong>Jump Before Ready</strong> - He shifts from analysis to embodied practice, saying the body often has to move before the mind feels prepared.</li>
+<li><a href="?t=750" data-start="750.0">12:30</a> <strong>Shame And Not-Self</strong> - He turns toward shame, self-judgment, and anatta, ending with the paradox of feeling both deeply known and invisible.</li>
+      </ol>
+    </section>
+    <section>
+      <h2>Source</h2>
+      <p><a href="https://www.audiodharma.org/talks/24944">Original talk page</a></p>
+    </section>
+  </main>
+  <script>
+    const audio = document.getElementById('audio');
+    function seekFromLocation() {
+      if (!audio) return;
+      const value = new URLSearchParams(location.search).get('t');
+      const seconds = Number(value || 0);
+      if (Number.isFinite(seconds) && seconds > 0) {
+        audio.currentTime = seconds;
+      }
+    }
+    document.querySelectorAll('[data-start]').forEach(link => {
+      link.addEventListener('click', event => {
+        if (!audio) return;
+        event.preventDefault();
+        const seconds = Number(link.dataset.start || 0);
+        history.replaceState(null, '', '?t=' + Math.round(seconds));
+        audio.currentTime = seconds;
+        audio.play().catch(() => {});
+      });
+    });
+    audio?.addEventListener('loadedmetadata', seekFromLocation, { once: true });
+  </script>
+</body>
+</html>

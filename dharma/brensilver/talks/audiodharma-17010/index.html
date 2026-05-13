@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Guided Meditation: Sound, Outer and Inner - Matthew Brensilver Dharma Talks</title>
+  <link rel="canonical" href="https://jeffharr.is/dharma/brensilver/talks/audiodharma-17010/">
+  <meta name="description" content="Matthew Brensilver offers a guided meditation on listening, beginning with settling and sensing goodness, then opening attention to the outer soundscape. The practice gradually turns toward sound as passing phenomenon, including the mind's own verbal thought, so that thinking can be heard more as another sound than as self. The talk stays close to direct experience and repeatedly returns to letting sounds move through without grasping.">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Matthew Brensilver Dharma Talks">
+  <meta property="og:title" content="Guided Meditation: Sound, Outer and Inner">
+  <meta property="og:description" content="Matthew Brensilver offers a guided meditation on listening, beginning with settling and sensing goodness, then opening attention to the outer soundscape. The practice gradually turns toward sound as passing phenomenon, including the mind's own verbal thought, so that thinking can be heard more as another sound than as self. The talk stays close to direct experience and repeatedly returns to letting sounds move through without grasping.">
+  <meta property="og:url" content="https://jeffharr.is/dharma/brensilver/talks/audiodharma-17010/">
+  <meta property="og:image" content="https://jeffharr.is/dharma/brensilver/artwork/audiodharma-17010.jpg">
+  <meta property="og:image:secure_url" content="https://jeffharr.is/dharma/brensilver/artwork/audiodharma-17010.jpg">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="1024">
+  <meta property="og:image:height" content="1024">
+  <meta name="twitter:image" content="https://jeffharr.is/dharma/brensilver/artwork/audiodharma-17010.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Guided Meditation: Sound, Outer and Inner">
+  <meta name="twitter:description" content="Matthew Brensilver offers a guided meditation on listening, beginning with settling and sensing goodness, then opening attention to the outer soundscape. The practice gradually turns toward sound as passing phenomenon, including the mind's own verbal thought, so that thinking can be heard more as another sound than as self. The talk stays close to direct experience and repeatedly returns to letting sounds move through without grasping.">
+  <link rel="stylesheet" href="../../talk-page.css">
+</head>
+<body>
+  <main>
+    <a class="back" href="../../">Matthew Brensilver Dharma Talks</a>
+    <div class="hero">
+      <div>
+        <h1>Guided Meditation: Sound, Outer and Inner</h1>
+        <div class="meta">
+          <span>AudioDharma</span>
+          <span>30:38</span>
+          <span>2022-09-29</span>
+        </div>
+        <p class="description">Matthew Brensilver offers a guided meditation on listening, beginning with settling and sensing goodness, then opening attention to the outer soundscape. The practice gradually turns toward sound as passing phenomenon, including the mind's own verbal thought, so that thinking can be heard more as another sound than as self. The talk stays close to direct experience and repeatedly returns to letting sounds move through without grasping.</p>
+      </div>
+      <img class="art" src="/dharma/brensilver/artwork/audiodharma-17010.jpg" alt="">
+    </div>
+    <div class="primary-player">
+      <audio id="audio" controls preload="none" src="https://audiodharma.us-east-1.linodeobjects.com/talks/17010/20220929-Matthew_Brensilver-IMC-guided_meditation_sound_outer_and_inner.mp3"></audio>
+      <a class="download-link" href="https://audiodharma.us-east-1.linodeobjects.com/talks/17010/20220929-Matthew_Brensilver-IMC-guided_meditation_sound_outer_and_inner.mp3" download>Download MP3</a>
+    </div>
+    <section>
+      <h2>Chapters</h2>
+      <ol class="chapters">
+        <li><a href="?t=0" data-start="0.0">00:00</a> <strong>Opening and Settling</strong> - After brief house-keeping, the practice begins by settling into the body, the room, and a sense of what is good in the moment.</li>
+<li><a href="?t=135" data-start="135.0">02:15</a> <strong>Beginning with Goodness</strong> - Matthew invites an easeful start, encouraging sensitivity to intention, the sangha, and the goodness already present in practice.</li>
+<li><a href="?t=488" data-start="488.0">08:08</a> <strong>Outer Soundscape</strong> - The meditation turns to ambient sound, with the invitation to notice near and distant sounds, beginnings and endings, and the open space in which they appear.</li>
+<li><a href="?t=867" data-start="867.0">14:27</a> <strong>Sound Passing Through</strong> - He uses the image of sound like wind moving through the body and mind, contrasting this with the habit of grasping, liking, and disliking.</li>
+<li><a href="?t=1208" data-start="1208.0">20:08</a> <strong>Hearing Inner Speech</strong> - Attention shifts inward as verbal thought is treated as auditory phenomenon that awareness can notice and interrupt.</li>
+<li><a href="?t=1545" data-start="1545.017">25:45</a> <strong>Thoughts as Sound</strong> - The teaching is restated plainly: thoughts are not a special category, but belong with birds, trucks, and neighbors in the same field of listening.</li>
+      </ol>
+    </section>
+    <section>
+      <h2>Source</h2>
+      <p><a href="https://www.audiodharma.org/talks/17010">Original talk page</a></p>
+    </section>
+  </main>
+  <script>
+    const audio = document.getElementById('audio');
+    function seekFromLocation() {
+      if (!audio) return;
+      const value = new URLSearchParams(location.search).get('t');
+      const seconds = Number(value || 0);
+      if (Number.isFinite(seconds) && seconds > 0) {
+        audio.currentTime = seconds;
+      }
+    }
+    document.querySelectorAll('[data-start]').forEach(link => {
+      link.addEventListener('click', event => {
+        if (!audio) return;
+        event.preventDefault();
+        const seconds = Number(link.dataset.start || 0);
+        history.replaceState(null, '', '?t=' + Math.round(seconds));
+        audio.currentTime = seconds;
+        audio.play().catch(() => {});
+      });
+    });
+    audio?.addEventListener('loadedmetadata', seekFromLocation, { once: true });
+  </script>
+</body>
+</html>

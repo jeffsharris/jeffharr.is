@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Practice Note: Vision - Matthew Brensilver Dharma Talks</title>
+  <link rel="canonical" href="https://jeffharr.is/dharma/brensilver/talks/audiodharma-6222/">
+  <meta name="description" content="Matthew Brensilver offers a short practice note on vision as a subtle but important doorway into mindfulness. He suggests that seeing can be known directly as an experience—like the breath or body sensations—rather than as a stream of associations and mental proliferation. The talk closes with an invitation to notice the visual field arising and passing during walking and ordinary activity.">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Matthew Brensilver Dharma Talks">
+  <meta property="og:title" content="Practice Note: Vision">
+  <meta property="og:description" content="Matthew Brensilver offers a short practice note on vision as a subtle but important doorway into mindfulness. He suggests that seeing can be known directly as an experience—like the breath or body sensations—rather than as a stream of associations and mental proliferation. The talk closes with an invitation to notice the visual field arising and passing during walking and ordinary activity.">
+  <meta property="og:url" content="https://jeffharr.is/dharma/brensilver/talks/audiodharma-6222/">
+  <meta property="og:image" content="https://jeffharr.is/dharma/brensilver/artwork/audiodharma-6222.jpg">
+  <meta property="og:image:secure_url" content="https://jeffharr.is/dharma/brensilver/artwork/audiodharma-6222.jpg">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="1024">
+  <meta property="og:image:height" content="1024">
+  <meta name="twitter:image" content="https://jeffharr.is/dharma/brensilver/artwork/audiodharma-6222.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Practice Note: Vision">
+  <meta name="twitter:description" content="Matthew Brensilver offers a short practice note on vision as a subtle but important doorway into mindfulness. He suggests that seeing can be known directly as an experience—like the breath or body sensations—rather than as a stream of associations and mental proliferation. The talk closes with an invitation to notice the visual field arising and passing during walking and ordinary activity.">
+  <link rel="stylesheet" href="../../talk-page.css">
+</head>
+<body>
+  <main>
+    <a class="back" href="../../">Matthew Brensilver Dharma Talks</a>
+    <div class="hero">
+      <div>
+        <h1>Practice Note: Vision</h1>
+        <div class="meta">
+          <span>AudioDharma</span>
+          <span>03:43</span>
+          <span>2015-12-09</span>
+        </div>
+        <p class="description">Matthew Brensilver offers a short practice note on vision as a subtle but important doorway into mindfulness. He suggests that seeing can be known directly as an experience—like the breath or body sensations—rather than as a stream of associations and mental proliferation. The talk closes with an invitation to notice the visual field arising and passing during walking and ordinary activity.</p>
+      </div>
+      <img class="art" src="/dharma/brensilver/artwork/audiodharma-6222.jpg" alt="">
+    </div>
+    <div class="primary-player">
+      <audio id="audio" controls preload="none" src="https://audiodharma.us-east-1.linodeobjects.com/talks/6222/20151209-Matthew_Brensilver-IMC-practice_notes_vision.mp3"></audio>
+      <a class="download-link" href="https://audiodharma.us-east-1.linodeobjects.com/talks/6222/20151209-Matthew_Brensilver-IMC-practice_notes_vision.mp3" download>Download MP3</a>
+    </div>
+    <section>
+      <h2>Chapters</h2>
+      <ol class="chapters">
+        <li><a href="?t=10" data-start="10.0">00:10</a> <strong>Dharma reminders</strong> - He begins by naming the many ways practice can remind us of the Dharma, including the breath, suffering, body sensations, and emotions.</li>
+<li><a href="?t=50" data-start="50.5">00:50</a> <strong>The overlooked sense</strong> - He points to vision as an experience that often slips beneath mindfulness and can become a doorway into mental proliferation.</li>
+<li><a href="?t=74" data-start="73.5">01:14</a> <strong>Seeing as practice</strong> - He notes that some traditions use seeing as a central anchor and invites sensitivity to the fact that seeing is itself an experience.</li>
+<li><a href="?t=96" data-start="96.5">01:36</a> <strong>Associations in the visual field</strong> - He describes how we lose track of the visual field and how sights quickly gather associations that shape thought.</li>
+<li><a href="?t=150" data-start="150.5">02:30</a> <strong>Walking with open eyes</strong> - He connects this challenge to walking meditation, where open eyes make visual experience especially evocative.</li>
+<li><a href="?t=184" data-start="183.5">03:04</a> <strong>Seeing arise and pass</strong> - He ends by encouraging moments of simply knowing the visual field as seeing that arises and passes away.</li>
+      </ol>
+    </section>
+    <section>
+      <h2>Source</h2>
+      <p><a href="https://www.audiodharma.org/talks/6222">Original talk page</a></p>
+    </section>
+  </main>
+  <script>
+    const audio = document.getElementById('audio');
+    function seekFromLocation() {
+      if (!audio) return;
+      const value = new URLSearchParams(location.search).get('t');
+      const seconds = Number(value || 0);
+      if (Number.isFinite(seconds) && seconds > 0) {
+        audio.currentTime = seconds;
+      }
+    }
+    document.querySelectorAll('[data-start]').forEach(link => {
+      link.addEventListener('click', event => {
+        if (!audio) return;
+        event.preventDefault();
+        const seconds = Number(link.dataset.start || 0);
+        history.replaceState(null, '', '?t=' + Math.round(seconds));
+        audio.currentTime = seconds;
+        audio.play().catch(() => {});
+      });
+    });
+    audio?.addEventListener('loadedmetadata', seekFromLocation, { once: true });
+  </script>
+</body>
+</html>
