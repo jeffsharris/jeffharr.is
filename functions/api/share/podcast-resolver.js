@@ -3,7 +3,15 @@ import { DOMParser, parseHTML } from 'linkedom';
 const FETCH_TIMEOUT_MS = 12000;
 const MAX_FEED_BYTES = 2_500_000;
 const MAX_HTML_BYTES = 900_000;
+const YOUTUBE_SEARCH_ACCEPT_SCORE = 0.68;
+const YOUTUBE_SEARCH_MARGIN_ACCEPT_SCORE = 0.52;
+const YOUTUBE_SEARCH_MIN_MARGIN = 0.2;
+const YOUTUBE_SEARCH_MAX_QUERIES = 3;
 const USER_AGENT = 'jeffharr.is share resolver (+https://jeffharr.is/share)';
+const TITLE_STOP_WORDS = new Set([
+  'the', 'and', 'with', 'for', 'from', 'episode', 'podcast', 'why', 'was', 'were',
+  'are', 'how', 'what', 'that', 'this', 'his', 'her', 'its', 'into', 'your', 'you'
+]);
 
 export async function resolveShareUrl(rawInput, options = {}) {
   const fetchImpl = options.fetchImpl || globalThis.fetch;
@@ -197,6 +205,11 @@ async function resolveApple(inputUrl, classification, fetchImpl, env) {
     website: feed?.link ? platformLink('Website', feed.link, 'website', 'verified') : null,
     ...(episode ? extractEpisodePlatformLinks(episode) : {})
   });
+  let youtubeEpisodeLink = null;
+  if (episode && !platformLinks.youtube) {
+    youtubeEpisodeLink = await findYouTubeEpisodeLink(feed, episode, platformLinks, fetchImpl, env);
+    if (youtubeEpisodeLink) platformLinks.youtube = youtubeEpisodeLink;
+  }
 
   return buildPodcastItem({
     sourceUrl: inputUrl,
@@ -213,7 +226,12 @@ async function resolveApple(inputUrl, classification, fetchImpl, env) {
       publishedAt: episodeResult?.releaseDate
     },
     identityFallback: episodeId ? `podcast_episode:apple:${episodeId}` : `podcast_show:apple:${appleId}`,
-    resolutionSources: ['apple-lookup', ...(feed ? ['rss-feed'] : []), ...(Object.keys(pcstLinks).length ? ['pc.st'] : [])]
+    resolutionSources: [
+      'apple-lookup',
+      ...(feed ? ['rss-feed'] : []),
+      ...(Object.keys(pcstLinks).length ? ['pc.st'] : []),
+      ...(youtubeEpisodeLink ? ['youtube-search'] : [])
+    ]
   });
 }
 
@@ -241,6 +259,10 @@ async function resolveSpotify(inputUrl, classification, fetchImpl, env) {
     const appleEpisodeUrl = episode
       ? await findAppleEpisodeUrl(String(appleCandidate.collectionId), episode, fetchImpl)
       : '';
+    const episodeLinks = episode ? extractEpisodePlatformLinks(episode) : {};
+    const youtubeEpisodeLink = episode
+      ? await findYouTubeEpisodeLink(feed, episode, episodeLinks, fetchImpl, env)
+      : null;
 
     return buildPodcastItem({
       sourceUrl: inputUrl,
@@ -256,7 +278,8 @@ async function resolveSpotify(inputUrl, classification, fetchImpl, env) {
         rss: platformLink('RSS Feed', appleCandidate.feedUrl, 'rss', 'exact'),
         website: feed.link ? platformLink('Website', feed.link, 'website', 'verified') : null,
         ...pcstLinks,
-        ...(episode ? extractEpisodePlatformLinks(episode) : {})
+        ...episodeLinks,
+        youtube: youtubeEpisodeLink || episodeLinks.youtube
       }),
       sourceMetadata: {
         title: classification.spotifyType === 'episode' ? title : appleCandidate.collectionName || feed.title || title,
@@ -265,7 +288,13 @@ async function resolveSpotify(inputUrl, classification, fetchImpl, env) {
         author: spotifyApi?.show?.publisher || spotifyApi?.publisher || appleCandidate.artistName
       },
       identityFallback: `podcast_${classification.spotifyType || 'show'}:spotify:${classification.spotifyId || inputUrl}`,
-      resolutionSources: ['spotify', 'apple-search', 'rss-feed', ...(Object.keys(pcstLinks).length ? ['pc.st'] : [])]
+      resolutionSources: [
+        'spotify',
+        'apple-search',
+        'rss-feed',
+        ...(Object.keys(pcstLinks).length ? ['pc.st'] : []),
+        ...(youtubeEpisodeLink ? ['youtube-search'] : [])
+      ]
     });
   }
 
@@ -338,6 +367,14 @@ async function resolveOvercast(inputUrl, classification, fetchImpl, env) {
           env
         )
       : null;
+    const youtubeEpisodeLink = episode
+      ? await findYouTubeEpisodeLink(feed, episode, {
+          ...pcstLinks,
+          ...websiteLinks,
+          ...pageLinks,
+          ...episodeLinks
+        }, fetchImpl, env)
+      : null;
 
     return buildPodcastItem({
       sourceUrl: inputUrl,
@@ -355,6 +392,7 @@ async function resolveOvercast(inputUrl, classification, fetchImpl, env) {
           ? platformLink('Apple Podcasts', appleCandidate.collectionViewUrl, 'show', 'verified')
           : null),
         spotify: spotifyEpisodeLink || episodeLinks.spotify || pcstLinks.spotify || pageLinks.spotify,
+        youtube: youtubeEpisodeLink || episodeLinks.youtube || pageLinks.youtube || websiteLinks.youtube || pcstLinks.youtube,
         overcast: overcastLink,
         rss: platformLink('RSS Feed', feedUrl, 'rss', 'exact'),
         website: feed.link ? platformLink('Website', feed.link, 'website', 'verified') : null,
@@ -373,7 +411,8 @@ async function resolveOvercast(inputUrl, classification, fetchImpl, env) {
         'rss-feed',
         ...(appleCandidate ? ['apple-search'] : []),
         ...(Object.keys(pcstLinks).length ? ['pc.st'] : []),
-        ...(Object.keys(websiteLinks).length ? ['website'] : [])
+        ...(Object.keys(websiteLinks).length ? ['website'] : []),
+        ...(youtubeEpisodeLink ? ['youtube-search'] : [])
       ]
     });
   }
@@ -860,6 +899,169 @@ async function fetchSpotifyAccessToken(fetchImpl, env) {
   return tokenResponse?.access_token || '';
 }
 
+async function findYouTubeEpisodeLink(feed, episode, platformLinks, fetchImpl, env) {
+  if (platformLinks?.youtube?.kind === 'episode') {
+    return platformLinks.youtube;
+  }
+  const apiKey = env?.YOUTUBE_API_KEY || env?.YOUTUBE_DATA_API_KEY;
+  if (!apiKey || !episode?.title) return null;
+
+  try {
+    const queries = buildYouTubeEpisodeQueries(feed, episode);
+    const candidatesById = new Map();
+    for (const query of queries) {
+      const candidates = await searchYouTubeVideos(query, episode, apiKey, fetchImpl);
+      for (const candidate of candidates) {
+        if (!candidate.videoId) continue;
+        const previous = candidatesById.get(candidate.videoId) || {};
+        candidatesById.set(candidate.videoId, {
+          ...previous,
+          ...candidate,
+          queries: uniqueStrings([...(previous.queries || []), query])
+        });
+      }
+    }
+
+    const candidates = await fetchYouTubeVideoDetails([...candidatesById.values()], apiKey, fetchImpl);
+    const ranked = candidates
+      .map((candidate) => scoreYouTubeCandidate(candidate, feed, episode))
+      .sort((a, b) => b.score - a.score);
+    const best = ranked[0];
+    const runnerUpScore = ranked[1]?.score || 0;
+    if (!isAcceptedYouTubeMatch(best, runnerUpScore)) return null;
+
+    return platformLink('YouTube', `https://www.youtube.com/watch?v=${best.videoId}`, 'episode', 'verified');
+  } catch {
+    return null;
+  }
+}
+
+function buildYouTubeEpisodeQueries(feed, episode) {
+  const phrase = episodeTitlePhrase(episode.title);
+  const author = cleanSearchText(feed?.author || feed?.publisher || '');
+  const show = cleanSearchText(feed?.title || '');
+  const descriptionLead = cleanSearchText(firstSentence(episode.description).slice(0, 90));
+
+  return uniqueStrings([
+    author && phrase ? `${author} ${phrase}` : '',
+    show && phrase ? `${show} ${phrase}` : '',
+    phrase && descriptionLead ? `${phrase} ${descriptionLead}` : ''
+  ]).slice(0, YOUTUBE_SEARCH_MAX_QUERIES);
+}
+
+async function searchYouTubeVideos(query, episode, apiKey, fetchImpl) {
+  if (!query) return [];
+  const url = new URL('https://www.googleapis.com/youtube/v3/search');
+  url.searchParams.set('part', 'snippet');
+  url.searchParams.set('type', 'video');
+  url.searchParams.set('maxResults', '5');
+  url.searchParams.set('q', query);
+  url.searchParams.set('key', apiKey);
+  const durationSeconds = durationToSeconds(episode?.duration);
+  if (durationSeconds >= 30 * 60) {
+    url.searchParams.set('videoDuration', 'long');
+  }
+
+  const response = await fetchJson(url.href, fetchImpl);
+  return (response?.items || []).map((item) => ({
+    videoId: item.id?.videoId || '',
+    title: item.snippet?.title || '',
+    channel: item.snippet?.channelTitle || '',
+    publishedAt: item.snippet?.publishedAt || '',
+    description: item.snippet?.description || ''
+  })).filter((item) => item.videoId);
+}
+
+async function fetchYouTubeVideoDetails(candidates, apiKey, fetchImpl) {
+  const byId = new Map(candidates.map((candidate) => [candidate.videoId, candidate]));
+  const ids = [...byId.keys()].filter(Boolean);
+  if (!ids.length) return [];
+
+  for (let index = 0; index < ids.length; index += 50) {
+    const url = new URL('https://www.googleapis.com/youtube/v3/videos');
+    url.searchParams.set('part', 'snippet,contentDetails');
+    url.searchParams.set('id', ids.slice(index, index + 50).join(','));
+    url.searchParams.set('key', apiKey);
+    const response = await fetchJson(url.href, fetchImpl);
+
+    for (const item of response?.items || []) {
+      const previous = byId.get(item.id) || { videoId: item.id };
+      byId.set(item.id, {
+        ...previous,
+        title: item.snippet?.title || previous.title || '',
+        channel: item.snippet?.channelTitle || previous.channel || '',
+        publishedAt: item.snippet?.publishedAt || previous.publishedAt || '',
+        description: item.snippet?.description || previous.description || '',
+        durationSeconds: parseIsoDurationSeconds(item.contentDetails?.duration)
+      });
+    }
+  }
+
+  return [...byId.values()];
+}
+
+function scoreYouTubeCandidate(candidate, feed, episode) {
+  const phrase = episodeTitlePhrase(episode.title);
+  const titleScoreValue = Math.max(
+    fuzzyTokenScore(candidate.title, episode.title),
+    fuzzyTokenScore(candidate.title, phrase)
+  );
+  const channelScoreValue = Math.max(
+    fuzzyTokenScore(candidate.channel, feed?.title),
+    fuzzyTokenScore(candidate.channel, feed?.author),
+    fuzzyTokenScore(candidate.channel, feed?.publisher)
+  );
+  const descriptionScoreValue = Math.max(
+    fuzzyTokenScore(candidate.description, episode.description),
+    fuzzyTokenScore(candidate.description, phrase)
+  );
+
+  let score = (0.45 * titleScoreValue) + (0.2 * channelScoreValue) + (0.15 * descriptionScoreValue);
+  const episodeDuration = durationToSeconds(episode.duration);
+  if (episodeDuration && candidate.durationSeconds) {
+    const deltaSeconds = Math.abs(episodeDuration - candidate.durationSeconds);
+    score += deltaSeconds <= 120 ? 0.2 : deltaSeconds <= 600 ? 0.09 : -0.12;
+  }
+  if (episode.publishedAt && candidate.publishedAt) {
+    const deltaDays = Math.abs(new Date(candidate.publishedAt) - new Date(episode.publishedAt)) / 86400000;
+    score += deltaDays <= 7 ? 0.08 : deltaDays <= 30 ? 0.03 : -0.05;
+  }
+  if (normalizeTitle(candidate.title).includes(normalizeTitle(phrase))) {
+    score += 0.08;
+  }
+
+  return {
+    ...candidate,
+    score,
+    titleScore: titleScoreValue,
+    channelScore: channelScoreValue,
+    descriptionScore: descriptionScoreValue
+  };
+}
+
+function isAcceptedYouTubeMatch(candidate, runnerUpScore) {
+  if (!candidate?.videoId) return false;
+  if (candidate.score >= YOUTUBE_SEARCH_ACCEPT_SCORE) return true;
+  return candidate.score >= YOUTUBE_SEARCH_MARGIN_ACCEPT_SCORE &&
+    candidate.score - runnerUpScore >= YOUTUBE_SEARCH_MIN_MARGIN &&
+    candidate.titleScore >= 0.2 &&
+    (candidate.channelScore >= 0.2 || candidate.descriptionScore >= 0.2 || Boolean(candidate.durationSeconds));
+}
+
+function fuzzyTokenScore(a, b) {
+  const aWords = new Set(significantWords(a));
+  const bWords = new Set(significantWords(b));
+  if (!aWords.size || !bWords.size) return 0;
+  const shared = [...aWords].filter((word) => bWords.has(word)).length;
+  return shared / Math.max(aWords.size, bWords.size, 1);
+}
+
+function significantWords(value) {
+  return normalizeTitle(value)
+    .split(' ')
+    .filter((word) => word.length > 2 && !TITLE_STOP_WORDS.has(word));
+}
+
 async function fetchPodcastFeed(feedUrl, fetchImpl) {
   const fetched = await fetchText(feedUrl, fetchImpl, { maxBytes: MAX_FEED_BYTES });
   return parsePodcastFeed(fetched.text, feedUrl);
@@ -1142,6 +1344,24 @@ function cleanYouTubeTitle(value) {
   return cleanText(value).replace(/\s*-\s*YouTube\s*$/i, '');
 }
 
+function cleanSearchText(value) {
+  return cleanText(value)
+    .replace(/[|]+/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function firstSentence(value) {
+  return cleanText(value).split(/[.!?]\s/)[0] || '';
+}
+
+function episodeTitlePhrase(value) {
+  const title = cleanText(value)
+    .replace(/^#?\d+\s*[-–—:]\s*/, '')
+    .replace(/\[[^\]]+\]/g, '');
+  return title.split(/\s+[|–—-]\s+/).map(cleanText).find(Boolean) || title;
+}
+
 function youtubeTitleCandidates(value) {
   const title = cleanYouTubeTitle(value);
   const candidates = [];
@@ -1226,6 +1446,14 @@ function durationToSeconds(value) {
   const parts = String(value).split(':').map((part) => Number.parseInt(part, 10));
   if (parts.some(Number.isNaN)) return Number.parseInt(value, 10) || 0;
   return parts.reduce((total, part) => total * 60 + part, 0);
+}
+
+function parseIsoDurationSeconds(value) {
+  const match = String(value || '').match(/^PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?$/);
+  if (!match) return 0;
+  return (Number.parseInt(match[1] || '0', 10) * 3600) +
+    (Number.parseInt(match[2] || '0', 10) * 60) +
+    Number.parseInt(match[3] || '0', 10);
 }
 
 function normalizeDuration(value) {

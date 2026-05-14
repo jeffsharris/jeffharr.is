@@ -111,7 +111,7 @@
       'Reading the shared URL.',
       'Looking for the podcast feed.',
       'Matching the exact episode.',
-      'Checking Apple Podcasts, Spotify, YouTube, Overcast, and RSS.',
+      'Searching for video and app links.',
       'Opening your share page.'
     ];
     let syntheticStep = 0;

@@ -206,6 +206,194 @@ test('resolveShareUrl enriches Overcast episode links from page app links', asyn
   assert.equal(item.platforms.rss.url, 'https://feeds.example.com/example');
 });
 
+test('resolveShareUrl finds a YouTube episode via API search when RSS has no video link', async () => {
+  const overcastHtml = `<!doctype html>
+    <html>
+      <head>
+        <title>#51 - Elena Lake &mdash; The Metagame &mdash; Overcast</title>
+        <link rel="canonical" href="https://play.prx.org/listen?ge=episode-51&amp;uf=https%3A%2F%2Fexample.com%2Fmetagame.xml">
+        <meta name="og:title" content="#51 - Elena Lake &mdash; The Metagame">
+      </head>
+      <body></body>
+    </html>`;
+  const metagameFeed = `<?xml version="1.0"?>
+    <rss version="2.0" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd">
+      <channel>
+        <title>The Metagame</title>
+        <link>https://example.com/metagame</link>
+        <description>Interviews about agency and meaning.</description>
+        <itunes:author>Daniel Kazandjian</itunes:author>
+        <item>
+          <title><![CDATA[#51 - Elena Lake | Nondual Bodywork, Fascia, and Somatic Healing]]></title>
+          <guid>episode-51</guid>
+          <pubDate>Mon, 11 May 2026 12:00:00 GMT</pubDate>
+          <itunes:duration>1:17:17</itunes:duration>
+          <description><![CDATA[Elena Lake is a bodyworker and former mathematician.]]></description>
+          <enclosure url="https://example.com/51.mp3" type="audio/mpeg" />
+        </item>
+      </channel>
+    </rss>`;
+
+  const fetchImpl = async (url) => {
+    const urlString = String(url);
+    if (urlString === 'https://overcast.fm/+AA7GZetHsMs') {
+      return new Response(overcastHtml, {
+        headers: { 'content-type': 'text/html' }
+      });
+    }
+    if (urlString === 'https://example.com/metagame.xml') {
+      return new Response(metagameFeed, {
+        headers: { 'content-type': 'application/rss+xml' }
+      });
+    }
+    if (urlString.startsWith('https://itunes.apple.com/search?')) {
+      return Response.json({ results: [] });
+    }
+    if (urlString.startsWith('https://www.googleapis.com/youtube/v3/search?')) {
+      const parsed = new URL(urlString);
+      assert.equal(parsed.searchParams.get('key'), 'test-youtube-key');
+      return Response.json({
+        items: [{
+          id: { videoId: 'CcP-I5RG0fg' },
+          snippet: {
+            title: 'Bodyworker Sees Organs with Her Hands | Elena Lake',
+            channelTitle: 'Daniel Kazandjian',
+            publishedAt: '2026-05-11T18:00:00Z',
+            description: 'Elena Lake is a bodyworker and former mathematician.'
+          }
+        }, {
+          id: { videoId: 'wrong-video' },
+          snippet: {
+            title: 'Metagame tournament recap',
+            channelTitle: 'Card Games',
+            publishedAt: '2026-05-11T18:00:00Z',
+            description: 'Unrelated card game coverage.'
+          }
+        }]
+      });
+    }
+    if (urlString.startsWith('https://www.googleapis.com/youtube/v3/videos?')) {
+      return Response.json({
+        items: [{
+          id: 'CcP-I5RG0fg',
+          snippet: {
+            title: 'Bodyworker Sees Organs with Her Hands | Elena Lake',
+            channelTitle: 'Daniel Kazandjian',
+            publishedAt: '2026-05-11T18:00:00Z',
+            description: 'Elena Lake is a bodyworker and former mathematician.'
+          },
+          contentDetails: { duration: 'PT1H17M17S' }
+        }, {
+          id: 'wrong-video',
+          snippet: {
+            title: 'Metagame tournament recap',
+            channelTitle: 'Card Games',
+            publishedAt: '2026-05-11T18:00:00Z',
+            description: 'Unrelated card game coverage.'
+          },
+          contentDetails: { duration: 'PT12M' }
+        }]
+      });
+    }
+    return new Response('<html></html>', {
+      headers: { 'content-type': 'text/html' }
+    });
+  };
+
+  const item = await resolveShareUrl('https://overcast.fm/+AA7GZetHsMs', {
+    fetchImpl,
+    env: { YOUTUBE_API_KEY: 'test-youtube-key' }
+  });
+
+  assert.equal(item.platforms.youtube.url, 'https://www.youtube.com/watch?v=CcP-I5RG0fg');
+  assert.equal(item.platforms.youtube.kind, 'episode');
+  assert.equal(item.platforms.youtube.confidence, 'verified');
+  assert.ok(item.resolution.sources.includes('youtube-search'));
+});
+
+test('resolveShareUrl rejects weak YouTube API search matches', async () => {
+  const overcastHtml = `<!doctype html>
+    <html>
+      <head>
+        <title>Key Change: Emma Straub &mdash; Song Exploder &mdash; Overcast</title>
+        <link rel="canonical" href="https://play.prx.org/listen?ge=emma-straub&amp;uf=https%3A%2F%2Fexample.com%2Fsong-exploder.xml">
+      </head>
+      <body></body>
+    </html>`;
+  const songExploderFeed = `<?xml version="1.0"?>
+    <rss version="2.0" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd">
+      <channel>
+        <title>Song Exploder</title>
+        <link>https://songexploder.net</link>
+        <description>A show about songs.</description>
+        <itunes:author>Hrishikesh Hirway</itunes:author>
+        <item>
+          <title>Key Change: Emma Straub</title>
+          <guid>emma-straub</guid>
+          <pubDate>Mon, 11 May 2026 12:00:00 GMT</pubDate>
+          <itunes:duration>22:35</itunes:duration>
+          <description><![CDATA[My guest today is the bestselling author Emma Straub.]]></description>
+          <enclosure url="https://example.com/emma.mp3" type="audio/mpeg" />
+        </item>
+      </channel>
+    </rss>`;
+
+  const fetchImpl = async (url) => {
+    const urlString = String(url);
+    if (urlString === 'https://overcast.fm/+AA8CzMTP1Rc') {
+      return new Response(overcastHtml, {
+        headers: { 'content-type': 'text/html' }
+      });
+    }
+    if (urlString === 'https://example.com/song-exploder.xml') {
+      return new Response(songExploderFeed, {
+        headers: { 'content-type': 'application/rss+xml' }
+      });
+    }
+    if (urlString.startsWith('https://itunes.apple.com/search?')) {
+      return Response.json({ results: [] });
+    }
+    if (urlString.startsWith('https://www.googleapis.com/youtube/v3/search?')) {
+      return Response.json({
+        items: [{
+          id: { videoId: 'weak-video' },
+          snippet: {
+            title: 'Backlash with Brad Thor and Fred Burton on Stratfor Podcast',
+            channelTitle: 'RANE',
+            publishedAt: '2026-05-11T18:00:00Z',
+            description: 'A different podcast.'
+          }
+        }]
+      });
+    }
+    if (urlString.startsWith('https://www.googleapis.com/youtube/v3/videos?')) {
+      return Response.json({
+        items: [{
+          id: 'weak-video',
+          snippet: {
+            title: 'Backlash with Brad Thor and Fred Burton on Stratfor Podcast',
+            channelTitle: 'RANE',
+            publishedAt: '2026-05-11T18:00:00Z',
+            description: 'A different podcast.'
+          },
+          contentDetails: { duration: 'PT28M' }
+        }]
+      });
+    }
+    return new Response('<html></html>', {
+      headers: { 'content-type': 'text/html' }
+    });
+  };
+
+  const item = await resolveShareUrl('https://overcast.fm/+AA8CzMTP1Rc', {
+    fetchImpl,
+    env: { YOUTUBE_API_KEY: 'test-youtube-key' }
+  });
+
+  assert.equal(item.platforms.youtube, undefined);
+  assert.equal(item.resolution.sources.includes('youtube-search'), false);
+});
+
 test('resolveShareUrl matches YouTube podcast videos by title fragments and upgrades episode links', async () => {
   const metagameFeed = `<?xml version="1.0"?>
   <rss version="2.0" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd">

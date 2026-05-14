@@ -154,12 +154,12 @@ export function renderLoadingPage(sourceUrl, requestUrl) {
           <div class="share-content loading-content">
             <p class="share-kicker">Resolving</p>
             <h1>Building share page</h1>
-            <p class="share-description" data-loading-status>Finding the episode, artwork, audio, and app links.</p>
+            <p class="share-description" data-loading-status>Finding the episode, artwork, audio, video, and app links.</p>
             <ol class="loading-steps" aria-label="Share creation progress">
               <li data-loading-step="0" class="is-active">Reading shared URL</li>
               <li data-loading-step="1">Finding podcast feed</li>
               <li data-loading-step="2">Matching the episode</li>
-              <li data-loading-step="3">Checking listening apps</li>
+              <li data-loading-step="3">Finding video and app links</li>
               <li data-loading-step="4">Opening share page</li>
             </ol>
             <a class="secondary-btn loading-fallback" href="${escapeAttribute(resolveUrl.href)}">Continue without loading screen</a>
