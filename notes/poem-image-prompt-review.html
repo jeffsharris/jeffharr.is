@@ -945,13 +945,6 @@
         <section class="image-board" id="image-board" aria-label="Image review board">
           <div class="image-board__section">
             <div class="image-board__header">
-              <h2 class="image-board__title">Accepted Images</h2>
-              <span class="image-board__meta" id="accepted-meta">0 images</span>
-            </div>
-            <div class="accepted-grid" id="accepted-grid"></div>
-          </div>
-          <div class="image-board__section">
-            <div class="image-board__header">
               <h2 class="image-board__title">Still Developing</h2>
               <span class="image-board__meta" id="developing-meta">0 poems</span>
             </div>
@@ -959,6 +952,15 @@
           </div>
         </section>
         <div class="prompt-list" id="prompt-list"></div>
+        <section class="image-board" id="accepted-board" aria-label="Accepted image board">
+          <div class="image-board__section">
+            <div class="image-board__header">
+              <h2 class="image-board__title">Accepted Images</h2>
+              <span class="image-board__meta" id="accepted-meta">0 images</span>
+            </div>
+            <div class="accepted-grid" id="accepted-grid"></div>
+          </div>
+        </section>
       </main>
     </div>
   </div>
@@ -966,7 +968,9 @@
   <input class="hidden" id="import-input" type="file" accept="application/json,.json">
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-  <script src="./poem-image-review-data.js"></script>
+  <script>
+    document.write(`<script src="./poem-image-review-data.js?t=${Date.now()}"><\/script>`);
+  </script>
   <script>
     const STORAGE_KEY = 'jeffharr-poem-image-prompt-review-v3';
     const PROMPTS_URL = './poem-image-prompts.md';
@@ -1021,6 +1025,7 @@
       statusFilters: document.getElementById('status-filters'),
       collectionFilters: document.getElementById('collection-filters'),
       imageBoard: document.getElementById('image-board'),
+      acceptedBoard: document.getElementById('accepted-board'),
       acceptedGrid: document.getElementById('accepted-grid'),
       acceptedMeta: document.getElementById('accepted-meta'),
       developingGrid: document.getElementById('developing-grid'),
@@ -1232,6 +1237,8 @@
       els.clearFeedbackButton.addEventListener('click', clearLocalFeedback);
       els.imageBoard.addEventListener('click', handleBoardClick);
       els.imageBoard.addEventListener('input', handleBoardInput);
+      els.acceptedBoard.addEventListener('click', handleBoardClick);
+      els.acceptedBoard.addEventListener('input', handleBoardInput);
     }
 
     function render() {
@@ -1303,7 +1310,7 @@
     }
 
     function renderCards() {
-      const visible = getVisiblePrompts();
+      const visible = getVisiblePrompts().sort(comparePromptWorkState);
       els.viewMeta.textContent = `${visible.length} of ${app.prompts.length}`;
       els.list.innerHTML = '';
 
@@ -1402,6 +1409,13 @@
 
     function compareCandidatesNewestFirst(a, b) {
       return getPassNumber(b.pass) - getPassNumber(a.pass) || String(b.id).localeCompare(String(a.id));
+    }
+
+    function comparePromptWorkState(a, b) {
+      const aAccepted = getImageSummary(a).hasKeep;
+      const bAccepted = getImageSummary(b).hasKeep;
+      if (aAccepted !== bAccepted) return aAccepted ? 1 : -1;
+      return a.order - b.order;
     }
 
     function getPassNumber(pass) {
@@ -1718,7 +1732,7 @@
     function loadState() {
       try {
         const stored = localStorage.getItem(STORAGE_KEY);
-        if (!stored) return { version: 3, items: {}, candidates: {} };
+        if (!stored) return getEmbeddedReviewState() || getEmptyState();
         const parsed = JSON.parse(stored);
         return {
           version: parsed.version || 3,
@@ -1727,8 +1741,24 @@
           candidates: parsed.candidates || {}
         };
       } catch {
-        return { version: 3, items: {}, candidates: {} };
+        return getEmbeddedReviewState() || getEmptyState();
       }
+    }
+
+    function getEmbeddedReviewState() {
+      const embedded = window.POEM_IMAGE_REVIEW_DATA?.reviewState;
+      if (!embedded || typeof embedded !== 'object') return null;
+      return {
+        version: embedded.version || 3,
+        updatedAt: embedded.updatedAt,
+        importedFromFeedback: Boolean(embedded.importedFromFeedback),
+        items: embedded.items || {},
+        candidates: embedded.candidates || {}
+      };
+    }
+
+    function getEmptyState() {
+      return { version: 3, items: {}, candidates: {} };
     }
 
     function saveState() {

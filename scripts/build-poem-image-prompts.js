@@ -562,6 +562,124 @@ const PASS_TWO_REVISIONS = {
   }
 };
 
+const PASS_THREE_REVISIONS = {
+  'a-finger-two-dots-then-me': {
+    context: 'Keep the celestial hand idea, but move the human presence offscreen: a human hand reaches from the bottom-left edge toward a vast celestial hand in the sky, without showing the person.',
+    style: 'luminous cosmic surrealism, intimate scale contrast and warm starlight',
+    avoid: 'avoid a central human figure, faces, cartoon space art, literal gods, and visual text'
+  },
+  'against-still-life': {
+    lines: [[73, 82]],
+    context: 'Preserve the luminous blown-open interior imagery, but make the silhouette clearly male: mountains, garden and chaos, ocean, hurricane, private rooms, deserts, dinosaurs, and the first woman held inside him.',
+    style: 'refined surreal male silhouette, interior imagery blown open and luminous',
+    avoid: 'avoid a female silhouette, oranges, gore, cracked heads, and over-explaining every symbol'
+  },
+  'as-bad-as-a-mile': {
+    context: 'The image should finally carry the feeling of being a failure: the tiny missed apple core becomes a humiliating inner collapse spreading backward into the calm unraised hand.',
+    style: 'psychological editorial surrealism, stark and dry, with Larkin-like bitterness',
+    avoid: 'avoid bland still life, slapstick, cute humor, and ordinary kitchen realism'
+  },
+  'do-not-go-gentle-into-that-good-night': {
+    context: 'Move closer to night: a small distant father on the sad height almost disappears into darkness, with only a last pressure of light and fierce feeling remaining.',
+    style: 'dark nocturne landscape, spare and almost black, with one dying edge of light',
+    avoid: 'avoid daytime skies, close portraits, deathbeds, angels, and literal flames on a body'
+  },
+  'grandfathers-hands': {
+    context: 'The close-up should let the map cover the hand, skin, wrist, and forearm more completely, as if geography and family memory are drawn into the body itself.',
+    style: 'intimate watercolor and colored pencil close-up, warm skin and hand-drawn map texture',
+    avoid: 'avoid faces, full bodies, explicit nudity, stereotypes, and literal readable map labels'
+  },
+  'high-windows': {
+    context: 'Make this a child looking up from below at a normal high window in an ordinary room, seeing only perfect blue sky beyond it and none of the bleak ground world.',
+    style: 'plain domestic realism with a metaphysical blank blue beyond the window',
+    avoid: 'avoid monumental architecture, surreal towers, explicit sexuality, visible people outside, and showing the ground'
+  },
+  'i-like-my-body-when-it-is-with-your': {
+    lines: [[3, 3]],
+    context: 'Blend the two earlier directions through non-representational abstraction: muscles and nerves feel newly awake as tactile curves, charged lines, warmth, and motion, without depicting a person.',
+    style: 'modernist abstract composition, graceful kinetic curves and tactile warmth',
+    avoid: 'avoid visible bodies, nudity, sexual content, faces, voyeurism, and pornographic posing'
+  },
+  'if': {
+    lines: [[19, 26], [32, 35]],
+    context: 'Try a fresh image around endurance after loss: everything risked and lost, the body emptied out, and the will still saying hold on into the unforgiving minute.',
+    style: 'severe symbolic realism, quiet pressure rather than triumph',
+    avoid: 'avoid colonial nostalgia, military heroics, sports-poster triumph, and literal father-son staging'
+  },
+  'in-the-trance': {
+    lines: [[1, 17]],
+    context: 'Return the glacier to the image: one small craft or boat held in a trance-like water world, with the glacier making time feel suspended and strange.',
+    style: 'minimal airy surrealism, glacier light, small boat, and quiet negative space',
+    avoid: 'avoid crowded collage, political caricature, and illustrating every noun'
+  },
+  'jabberwocky': {
+    context: 'Bring back the Alice-in-Wonderland creature-world feeling: strange creatures in the wabe and tulgey wood should surround the quest, not just the Jabberwock.',
+    style: 'mythic storybook engraving with hand-tinted color, curious creatures and a charged blade',
+    avoid: 'avoid gore, severed heads, childish cartooning, and making only a monster portrait'
+  },
+  'london': {
+    context: 'Keep the bleak-but-not-overdone city mood, but remove visible chains entirely; let fog, soot, posture, architecture, and pressure carry the manacles.',
+    style: 'spare Blakean engraving with noir watercolor wash',
+    avoid: 'avoid visible chains, many faces in the sky, graphic poverty, explicit sex work, and readable signs'
+  },
+  'on-this-the-100th-anniversary-of-the-sinking-of-the-titanic': {
+    context: 'Show a woman at the bottom of the ocean looking up at the sunken ship, while the Titanic itself remains a vivid interior world rather than a personified figure.',
+    style: 'cinematic underwater surrealism, glowing interiors above a solitary woman below',
+    avoid: 'avoid faces on the ship, skeletons, gore, disaster spectacle, and film still references'
+  },
+  'pyramid-scheme': {
+    context: 'Bring back the playful first-attempt vibe: a couple walking down the sidewalk together, with sun, raining coins, and maybe cold pizza on stairs as the focused comic-romantic world.',
+    style: 'playful surreal editorial gouache, sweet, bright, and lightly absurd',
+    avoid: 'avoid eyes, dogs, extra side images, MLM infographics, and brand logos'
+  },
+  'sailing-to-byzantium': {
+    lines: [[1, 8], [29, 39]],
+    context: 'The ship is sailing toward Byzantium; the golden bird belongs in Byzantium, waiting on a golden bough or in the city, not perched on the ship.',
+    style: 'Byzantine gold mosaic influence with lyrical sea voyage imagery',
+    avoid: 'avoid putting the gold bird on the ship, generic fantasy cities, and readable religious text'
+  },
+  'telemachus': {
+    lines: [[27, 35]],
+    context: 'Focus on the image of looking down at the father: sea-black eyes holding a cathedral, with perhaps a faint reflection of the sun looking down.',
+    style: 'lyrical close realism with restrained surreal reflection',
+    avoid: 'avoid visible wounds, gore, sensational violence, and wide action scenes'
+  },
+  'the-kingfisher': {
+    lines: [[21, 24]],
+    context: 'Use the final flight over the bright sea but return to the more photorealistic naturalist feeling of the first image.',
+    style: 'photorealistic naturalist marine image, vivid blue kingfisher over bright sea',
+    avoid: 'avoid cartoon prettiness, painterly looseness that loses realism, blood, and dark wave focus'
+  },
+  'the-road-not-taken': {
+    context: 'Move back toward realism while preserving ambiguity: two close autumn paths in a real yellow wood, neither presented as the heroic or correct choice.',
+    style: 'realistic atmospheric autumn landscape with subtle painterly texture',
+    avoid: 'avoid stylized print abstraction, signs, arrows, and spotlighting one path as correct'
+  },
+  'the-second-coming': {
+    lines: [[1, 8]],
+    context: 'Stay with the widening gyre and falcon losing the falconer, but make the image aesthetically stranger and more compelling while preserving the near-successful composition.',
+    style: 'apocalyptic abstract landscape, spiraling motion, stark falcon silhouette, visually arresting composition',
+    avoid: 'avoid desert beast imagery, gore, explicit religious horror, and monster-movie treatment',
+    n: 2
+  },
+  'to-my-favorite-17-year-old-high-school-girl': {
+    context: 'Remove thought-bubble or fantasy-comparison devices. Make this a mundane affectionate scene of the girl and her dad hanging out while she plays with her food.',
+    style: 'warm playful domestic editorial realism, ordinary and gently funny',
+    avoid: 'avoid thought bubbles, fantasy cutaways, sexualizing the minor, celebrity likenesses, readable posters, and scolding tone'
+  },
+  'variation-on-the-word-sleep': {
+    lines: [[9, 17]],
+    context: 'Keep the composition close, but make it more watercolor-like and slightly more abstract: two figures in the lucent bluegreen forest approaching the cave, one carrying the silver branch and small white flower.',
+    style: 'loose nocturne watercolor, translucent bluegreen washes, softly abstract and protective',
+    avoid: 'avoid hard-edged digital fantasy, disembodied hands, voyeuristic sleeping-body imagery, and horror'
+  }
+};
+
+const REVISIONS_BY_PASS = {
+  2: PASS_TWO_REVISIONS,
+  3: PASS_THREE_REVISIONS
+};
+
 function parseArgs(argv) {
   const args = {
     write: false,
@@ -651,7 +769,7 @@ function buildPrompt({ title, author, selectedLines, context, style, avoid, revi
   ];
 
   if (revision) {
-    lines.push(`Reviewer direction for this second pass: ${revision}`, '');
+    lines.push(`Reviewer direction for this pass: ${revision}`, '');
   }
 
   lines.push(
@@ -674,7 +792,7 @@ function loadManifest() {
 }
 
 function loadFeedback(feedbackJson) {
-  const empty = { bySlug: new Map(), byCandidate: new Map(), rejectedSlugs: new Set() };
+  const empty = { payload: null, bySlug: new Map(), byCandidate: new Map(), rejectedSlugs: new Set() };
   if (!feedbackJson) return empty;
   const payload = JSON.parse(fs.readFileSync(feedbackJson, 'utf8'));
   const bySlug = new Map();
@@ -712,7 +830,7 @@ function loadFeedback(feedbackJson) {
     }
   }
 
-  return { bySlug, byCandidate, rejectedSlugs };
+  return { payload, bySlug, byCandidate, rejectedSlugs };
 }
 
 function getCandidatePassNumber(candidate) {
@@ -721,7 +839,7 @@ function getCandidatePassNumber(candidate) {
 
 function applyRevision(spec, pass, feedback) {
   if (pass === 'pass-001') return spec;
-  const revision = PASS_TWO_REVISIONS[spec.slug];
+  const revision = REVISIONS_BY_PASS[parsePassNumber(pass)]?.[spec.slug];
   if (!revision && !feedback?.rejectedNotes?.length && !feedback?.promptFeedback) return spec;
   return {
     ...spec,
@@ -762,6 +880,7 @@ function loadPromptItems(args, feedback) {
       style: effectiveSpec.style,
       avoid: effectiveSpec.avoid,
       revision: effectiveSpec.revision || '',
+      n: effectiveSpec.n || 1,
       prompt,
       candidates: findCandidates(candidateDirs, spec.slug)
     };
@@ -849,11 +968,12 @@ function renderMarkdown(items) {
   return `${lines.join('\n').trimEnd()}\n`;
 }
 
-function renderReviewData(items) {
+function renderReviewData(items, feedback) {
   const payload = {
     version: 2,
     generatedAt: new Date().toISOString(),
-    prompts: items
+    prompts: items,
+    reviewState: buildEmbeddedReviewState(feedback)
   };
 
   return [
@@ -863,11 +983,48 @@ function renderReviewData(items) {
   ].join('');
 }
 
+function buildEmbeddedReviewState(feedback) {
+  if (!feedback.payload) return null;
+  const state = {
+    version: 3,
+    updatedAt: feedback.payload.exportedAt || new Date().toISOString(),
+    importedFromFeedback: true,
+    items: {},
+    candidates: {}
+  };
+
+  for (const item of feedback.payload.items || []) {
+    const itemState = {};
+    if (item.status && item.status !== 'review') itemState.status = item.status;
+    if (item.feedback) itemState.feedback = item.feedback;
+    if (item.promptEdited && item.prompt) itemState.prompt = item.prompt;
+    if (Object.keys(itemState).length > 0) {
+      itemState.updatedAt = item.updatedAt || state.updatedAt;
+      state.items[item.slug] = itemState;
+    }
+
+    for (const candidate of item.candidates || []) {
+      if (!candidate.id || !candidate.feedback) continue;
+      const candidateState = {};
+      if (candidate.feedback.status && candidate.feedback.status !== 'review') {
+        candidateState.status = candidate.feedback.status;
+      }
+      if (candidate.feedback.note) candidateState.note = candidate.feedback.note;
+      if (Object.keys(candidateState).length > 0) {
+        candidateState.updatedAt = candidate.feedback.updatedAt || state.updatedAt;
+        state.candidates[candidate.id] = candidateState;
+      }
+    }
+  }
+
+  return state;
+}
+
 function renderBatchJsonl(items) {
   return `${items.map((item) => JSON.stringify({
     prompt: item.prompt,
     out: `${item.slug}.png`,
-    n: 1,
+    n: item.n || 1,
     size: '1024x1024',
     quality: 'medium',
     output_format: 'png'
@@ -920,7 +1077,7 @@ function main() {
 
   if (args.write) {
     fs.writeFileSync(promptMarkdownPath, renderMarkdown(items));
-    fs.writeFileSync(reviewDataPath, renderReviewData(items));
+    fs.writeFileSync(reviewDataPath, renderReviewData(items, feedback));
   }
 
   if (args.batchJson) {

@@ -31,9 +31,9 @@ The planets will bow.
 And I will say “Oh, there you are. I been waitin’ for ya. Now we can go.”
 ```
 
-Context: The image should understand this as a cosmic love poem about reunion after death: specific directions through space, uncertainty about bodies, and recognition by light.
+Context: Keep the celestial hand idea, but move the human presence offscreen: a human hand reaches from the bottom-left edge toward a vast celestial hand in the sky, without showing the person.
 
-Style guidance: luminous, emotionally warm cosmic surrealism; let the composition breathe.
+Style guidance: luminous cosmic surrealism, intimate scale contrast and warm starlight.
 
 Prompt:
 
@@ -58,13 +58,15 @@ Prompt:
 > And I will say “Oh, there you are. I been waitin’ for ya. Now we can go.”
 > """
 >
-> Context: The image should understand this as a cosmic love poem about reunion after death: specific directions through space, uncertainty about bodies, and recognition by light.
+> Context: Keep the celestial hand idea, but move the human presence offscreen: a human hand reaches from the bottom-left edge toward a vast celestial hand in the sky, without showing the person.
+>
+> Reviewer direction for this pass: i like the celestial hand quite a bit but the person is too central. try having a human hand reaching from bottom left corner towards celestial hand in the sky but don't show the human
 >
 > Goal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.
 >
-> Light style guidance: luminous, emotionally warm cosmic surrealism; let the composition breathe.
+> Light style guidance: luminous cosmic surrealism, intimate scale contrast and warm starlight.
 >
-> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid cartoon space art, literal gods, and visual text.
+> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid a central human figure, faces, cartoon space art, literal gods, and visual text.
 
 ## A Great Wagon
 
@@ -185,9 +187,9 @@ dinosaurs; the first
 woman)
 ```
 
-Context: Focus on the end image: the silhouette contains mountains, garden and chaos, ocean and hurricane, private rooms, deserts, dinosaurs, and the first woman.
+Context: Preserve the luminous blown-open interior imagery, but make the silhouette clearly male: mountains, garden and chaos, ocean, hurricane, private rooms, deserts, dinosaurs, and the first woman held inside him.
 
-Style guidance: refined surreal silhouette, interior imagery blown open and luminous.
+Style guidance: refined surreal male silhouette, interior imagery blown open and luminous.
 
 Prompt:
 
@@ -208,15 +210,15 @@ Prompt:
 > woman)
 > """
 >
-> Context: Focus on the end image: the silhouette contains mountains, garden and chaos, ocean and hurricane, private rooms, deserts, dinosaurs, and the first woman.
+> Context: Preserve the luminous blown-open interior imagery, but make the silhouette clearly male: mountains, garden and chaos, ocean, hurricane, private rooms, deserts, dinosaurs, and the first woman held inside him.
 >
-> Reviewer direction for this second pass: get rid of the orange and refine / blowout the imagery at the end of the poem. you've chosen the right part (mountains inside your skull...) and I like the silouhette treatment
+> Reviewer direction for this pass: very good. but the silouhette needs to be of a man not a woman. otherwise I love the aeshtetic, so see if you can just fix that part and leave the rest
 >
 > Goal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.
 >
-> Light style guidance: refined surreal silhouette, interior imagery blown open and luminous.
+> Light style guidance: refined surreal male silhouette, interior imagery blown open and luminous.
 >
-> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid oranges, gore, cracked heads, and over-explaining every symbol.
+> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid a female silhouette, oranges, gore, cracked heads, and over-explaining every symbol.
 
 ## As Bad as a Mile
 
@@ -235,9 +237,9 @@ Earlier, and earlier, the unraised hand calm
 The apple unbitten in the palm
 ```
 
-Context: The small miss should feel witty and existential: an ordinary failure suddenly exposes the whole backward chain of intention, hand, arm, mind, and self.
+Context: The image should finally carry the feeling of being a failure: the tiny missed apple core becomes a humiliating inner collapse spreading backward into the calm unraised hand.
 
-Style guidance: wry, sharply composed editorial surrealism with mid-century restraint.
+Style guidance: psychological editorial surrealism, stark and dry, with Larkin-like bitterness.
 
 Prompt:
 
@@ -254,15 +256,15 @@ Prompt:
 > The apple unbitten in the palm
 > """
 >
-> Context: The small miss should feel witty and existential: an ordinary failure suddenly exposes the whole backward chain of intention, hand, arm, mind, and self.
+> Context: The image should finally carry the feeling of being a failure: the tiny missed apple core becomes a humiliating inner collapse spreading backward into the calm unraised hand.
 >
-> Reviewer direction for this second pass: too boring. missing the feel/vibe of the poem
+> Reviewer direction for this pass: still way off. missing the essence of this poem ... the feeling of being a failure
 >
 > Goal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.
 >
-> Light style guidance: wry, sharply composed editorial surrealism with mid-century restraint.
+> Light style guidance: psychological editorial surrealism, stark and dry, with Larkin-like bitterness.
 >
-> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid bland kitchen realism, slapstick, and dramatic mess.
+> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid bland still life, slapstick, cute humor, and ordinary kitchen realism.
 
 ## Do not go gentle into that good night
 
@@ -279,9 +281,9 @@ Do not go gentle into that good night.
 Rage, rage against the dying of the light.
 ```
 
-Context: Make the father a small distant figure high on the ridge, nearly swallowed by the sad height, with the emotional force carried by scale and atmosphere.
+Context: Move closer to night: a small distant father on the sad height almost disappears into darkness, with only a last pressure of light and fierce feeling remaining.
 
-Style guidance: spare mythic landscape, tiny human figure against vast twilight.
+Style guidance: dark nocturne landscape, spare and almost black, with one dying edge of light.
 
 Prompt:
 
@@ -296,15 +298,15 @@ Prompt:
 > Rage, rage against the dying of the light.
 > """
 >
-> Context: Make the father a small distant figure high on the ridge, nearly swallowed by the sad height, with the emotional force carried by scale and atmosphere.
+> Context: Move closer to night: a small distant father on the sad height almost disappears into darkness, with only a last pressure of light and fierce feeling remaining.
 >
-> Reviewer direction for this second pass: make the man on the top of the hill a more small figure in the distance. revise style
+> Reviewer direction for this pass: close - but needs to be closer to just night
 >
 > Goal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.
 >
-> Light style guidance: spare mythic landscape, tiny human figure against vast twilight.
+> Light style guidance: dark nocturne landscape, spare and almost black, with one dying edge of light.
 >
-> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid close portraits, deathbeds, angels, and literal flames on a body.
+> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid daytime skies, close portraits, deathbeds, angels, and literal flames on a body.
 
 ## Fire and Ice
 
@@ -372,9 +374,9 @@ about good bones: This place could be beautiful,
 right? You could make this place beautiful.
 ```
 
-Context: Use the end of the poem: someone looking around a genuinely rough, damaged place and seeing only the faintest potential that it could become beautiful.
+Context: A parent tries to sell a damaged world to children by seeing the possibility inside its structure.
 
-Style guidance: tough contemporary editorial realism, unsentimental and a little bleak.
+Style guidance: contemporary editorial illustration, humane and unsentimental.
 
 Prompt:
 
@@ -390,15 +392,13 @@ Prompt:
 > right? You could make this place beautiful.
 > """
 >
-> Context: Use the end of the poem: someone looking around a genuinely rough, damaged place and seeing only the faintest potential that it could become beautiful.
->
-> Reviewer direction for this second pass: missing the flavor of the toughness of the world. something from the end ... looking around and seeing the vaguest potential for a shitty environment
+> Context: A parent tries to sell a damaged world to children by seeing the possibility inside its structure.
 >
 > Goal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.
 >
-> Light style guidance: tough contemporary editorial realism, unsentimental and a little bleak.
+> Light style guidance: contemporary editorial illustration, humane and unsentimental.
 >
-> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid harmed children, gore, clean real-estate staging, and easy optimism.
+> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid harmed children, gore, or a real estate advertisement look.
 
 ## Grandfather's Hands
 
@@ -419,9 +419,9 @@ on his wrist, kissed him there,
 named the ocean after herself.
 ```
 
-Context: Make this an intimate close-up of one hand as geography, memory, origin, and family tenderness.
+Context: The close-up should let the map cover the hand, skin, wrist, and forearm more completely, as if geography and family memory are drawn into the body itself.
 
-Style guidance: close watercolor and colored pencil study, warm skin tones and quiet shadow.
+Style guidance: intimate watercolor and colored pencil close-up, warm skin and hand-drawn map texture.
 
 Prompt:
 
@@ -440,15 +440,15 @@ Prompt:
 > named the ocean after herself.
 > """
 >
-> Context: Make this an intimate close-up of one hand as geography, memory, origin, and family tenderness.
+> Context: The close-up should let the map cover the hand, skin, wrist, and forearm more completely, as if geography and family memory are drawn into the body itself.
 >
-> Reviewer direction for this second pass: closeup of just the hand
+> Reviewer direction for this pass: make the map cover the hand / skin / arm more completely
 >
 > Goal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.
 >
-> Light style guidance: close watercolor and colored pencil study, warm skin tones and quiet shadow.
+> Light style guidance: intimate watercolor and colored pencil close-up, warm skin and hand-drawn map texture.
 >
-> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid faces, full bodies, explicit nudity, stereotypes, and literal map labels.
+> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid faces, full bodies, explicit nudity, stereotypes, and literal readable map labels.
 
 ## Having a Coke with You
 
@@ -459,15 +459,13 @@ Author: Frank O'Hara
 Selected lines:
 
 ```
-and the portrait show seems to have no faces in it at all, just paint
-you suddenly wonder why in the world anyone ever did them
-                                                                    I look
-at you and I would rather look at you than all the portraits in the world
-except possibly for the _Polish Rider_ occasionally and anyway it’s in the Frick
-which thank heavens you haven’t gone to yet so we can go together for the first time
-and the fact that you move so beautifully more or less takes care of Futurism
-just as at home I never think of the _Nude Descending a Staircase_ or
-at a rehearsal a single drawing of Leonardo or Michelangelo that used to wow me
+partly because in your orange shirt you look like a better happier St. Sebastian
+partly because of my love for you, partly because of your love for yoghurt
+partly because of the fluorescent orange tulips around the birches
+partly because of the secrecy our smiles take on before people and statuary
+it is hard to believe when I’m with you that there can be anything as still
+as solemn as unpleasantly definitive as statuary when right in front of it
+[other lines omitted]
 and what good does all the research of the Impressionists do them
 when they never got the right person to stand near the tree when the sun sank
 or for that matter Marino Marini when he didn’t pick the rider as carefully
@@ -476,9 +474,9 @@ as the horse
 which is not going to go wasted on me which is why I’m telling you about it
 ```
 
-Context: Use the more abstract movement of the poem: portraiture loses its faces, art history recedes, and the living beloved becomes the marvelous experience.
+Context: The beloved standing in ordinary light matters more than famous travel, museums, and finished art.
 
-Style guidance: abstract romantic city painting, warm 1960s color pushed toward painterly abstraction.
+Style guidance: warm city realism with a 1960s color-film feeling.
 
 Prompt:
 
@@ -487,15 +485,13 @@ Prompt:
 >
 > Use these exact selected lines as the source passage:
 > """
-> and the portrait show seems to have no faces in it at all, just paint
-> you suddenly wonder why in the world anyone ever did them
->                                                                     I look
-> at you and I would rather look at you than all the portraits in the world
-> except possibly for the _Polish Rider_ occasionally and anyway it’s in the Frick
-> which thank heavens you haven’t gone to yet so we can go together for the first time
-> and the fact that you move so beautifully more or less takes care of Futurism
-> just as at home I never think of the _Nude Descending a Staircase_ or
-> at a rehearsal a single drawing of Leonardo or Michelangelo that used to wow me
+> partly because in your orange shirt you look like a better happier St. Sebastian
+> partly because of my love for you, partly because of your love for yoghurt
+> partly because of the fluorescent orange tulips around the birches
+> partly because of the secrecy our smiles take on before people and statuary
+> it is hard to believe when I’m with you that there can be anything as still
+> as solemn as unpleasantly definitive as statuary when right in front of it
+> [other lines omitted]
 > and what good does all the research of the Impressionists do them
 > when they never got the right person to stand near the tree when the sun sank
 > or for that matter Marino Marini when he didn’t pick the rider as carefully
@@ -504,15 +500,15 @@ Prompt:
 > which is not going to go wasted on me which is why I’m telling you about it
 > """
 >
-> Context: Use the more abstract movement of the poem: portraiture loses its faces, art history recedes, and the living beloved becomes the marvelous experience.
+> Context: The beloved standing in ordinary light matters more than famous travel, museums, and finished art.
 >
-> Reviewer direction for this second pass: try different lines. more abstract style
+> Reviewer direction for this pass: try different lines. more abstract style
 >
 > Goal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.
 >
-> Light style guidance: abstract romantic city painting, warm 1960s color pushed toward painterly abstraction.
+> Light style guidance: warm city realism with a 1960s color-film feeling.
 >
-> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid soda branding, copied artworks, readable labels, literal museum rooms, and postcard stiffness.
+> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid soda branding, copied artworks, readable labels, and museum-postcard stiffness.
 
 ## Having "Having a Coke with You" with You
 
@@ -585,9 +581,9 @@ And beyond it, the deep blue air, that shows
 Nothing, and is nowhere, and is endless.
 ```
 
-Context: The viewpoint should be so far below the high window that only perfect blue sky is visible through it, while the bleak ground world is excluded.
+Context: Make this a child looking up from below at a normal high window in an ordinary room, seeing only perfect blue sky beyond it and none of the bleak ground world.
 
-Style guidance: sparse mid-century surreal realism, severe vertical framing and cool negative space.
+Style guidance: plain domestic realism with a metaphysical blank blue beyond the window.
 
 Prompt:
 
@@ -602,15 +598,15 @@ Prompt:
 > Nothing, and is nowhere, and is endless.
 > """
 >
-> Context: The viewpoint should be so far below the high window that only perfect blue sky is visible through it, while the bleak ground world is excluded.
+> Context: Make this a child looking up from below at a normal high window in an ordinary room, seeing only perfect blue sky beyond it and none of the bleak ground world.
 >
-> Reviewer direction for this second pass: the idea with the high window image is that the image is so high above your line of site that you only see the perfect sky and not the bleak world on the ground. good vibe though
+> Reviewer direction for this pass: make it more of a normal window. the idea is you're a kid looking up at a normal high window
 >
 > Goal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.
 >
-> Light style guidance: sparse mid-century surreal realism, severe vertical framing and cool negative space.
+> Light style guidance: plain domestic realism with a metaphysical blank blue beyond the window.
 >
-> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid explicit sexuality, visible people, and showing the ground outside the window.
+> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid monumental architecture, surreal towers, explicit sexuality, visible people outside, and showing the ground.
 
 ## Home
 
@@ -801,19 +797,12 @@ Author: E.E. Cummings
 Selected lines:
 
 ```
-i like my body when it is with your
-body. It is so quite new a thing.
 Muscles better and nerves more.
-i like your body.  i like what it does,
-i like its hows.  i like to feel the spine
-of your body and its bones,and the trembling
--firm-smooth ness and which i will
-again and again and again
 ```
 
-Context: Make this lightly sexual but abstract: embodied closeness, a beautiful female form suggested through curves, breath, and charged touch rather than literal nudity.
+Context: Blend the two earlier directions through non-representational abstraction: muscles and nerves feel newly awake as tactile curves, charged lines, warmth, and motion, without depicting a person.
 
-Style guidance: sensual modernist abstraction with graceful body imagery and tactile warmth.
+Style guidance: modernist abstract composition, graceful kinetic curves and tactile warmth.
 
 Prompt:
 
@@ -822,25 +811,18 @@ Prompt:
 >
 > Use these exact selected lines as the source passage:
 > """
-> i like my body when it is with your
-> body. It is so quite new a thing.
 > Muscles better and nerves more.
-> i like your body.  i like what it does,
-> i like its hows.  i like to feel the spine
-> of your body and its bones,and the trembling
-> -firm-smooth ness and which i will
-> again and again and again
 > """
 >
-> Context: Make this lightly sexual but abstract: embodied closeness, a beautiful female form suggested through curves, breath, and charged touch rather than literal nudity.
+> Context: Blend the two earlier directions through non-representational abstraction: muscles and nerves feel newly awake as tactile curves, charged lines, warmth, and motion, without depicting a person.
 >
-> Reviewer direction for this second pass: more body imagery. it can be lightly sexual while still abstract. beautiful female form
+> Reviewer direction for this pass: more abstract. mix between the two
 >
 > Goal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.
 >
-> Light style guidance: sensual modernist abstraction with graceful body imagery and tactile warmth.
+> Light style guidance: modernist abstract composition, graceful kinetic curves and tactile warmth.
 >
-> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid explicit sex, exposed genitals, voyeurism, identifiable faces, and pornographic posing.
+> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid visible bodies, nudity, sexual content, faces, voyeurism, and pornographic posing.
 
 ## If
 
@@ -851,24 +833,24 @@ Author: Rudyard Kipling
 Selected lines:
 
 ```
-If you can dream—and not make dreams your master;
-    If you can think—and not make thoughts your aim;
-If you can meet with Triumph and Disaster
-    And treat those two impostors just the same;
-If you can bear to hear the truth you’ve spoken
-    Twisted by knaves to make a trap for fools,
-Or watch the things you gave your life to, broken,
-    And stoop and build ’em up with worn-out tools:
-[other lines omitted]
+If you can make one heap of all your winnings
+    And risk it on one turn of pitch-and-toss,
+And lose, and start again at your beginnings
+    And never breathe a word about your loss;
 If you can force your heart and nerve and sinew
     To serve your turn long after they are gone,
 And so hold on when there is nothing in you
     Except the Will which says to them: ‘Hold on!’
+[other lines omitted]
+If you can fill the unforgiving minute
+    With sixty seconds’ worth of distance run,
+Yours is the Earth and everything that’s in it,
+    And—which is more—you’ll be a Man, my son!
 ```
 
-Context: Try a less obvious approach: inner steadiness under pressure, dreams and thoughts not ruling the self, broken work rebuilt, and the will holding on after exhaustion.
+Context: Try a fresh image around endurance after loss: everything risked and lost, the body emptied out, and the will still saying hold on into the unforgiving minute.
 
-Style guidance: symbolic psychological realism with restrained graphic power.
+Style guidance: severe symbolic realism, quiet pressure rather than triumph.
 
 Prompt:
 
@@ -877,28 +859,26 @@ Prompt:
 >
 > Use these exact selected lines as the source passage:
 > """
-> If you can dream—and not make dreams your master;
->     If you can think—and not make thoughts your aim;
-> If you can meet with Triumph and Disaster
->     And treat those two impostors just the same;
-> If you can bear to hear the truth you’ve spoken
->     Twisted by knaves to make a trap for fools,
-> Or watch the things you gave your life to, broken,
->     And stoop and build ’em up with worn-out tools:
-> [other lines omitted]
+> If you can make one heap of all your winnings
+>     And risk it on one turn of pitch-and-toss,
+> And lose, and start again at your beginnings
+>     And never breathe a word about your loss;
 > If you can force your heart and nerve and sinew
 >     To serve your turn long after they are gone,
 > And so hold on when there is nothing in you
 >     Except the Will which says to them: ‘Hold on!’
+> [other lines omitted]
+> If you can fill the unforgiving minute
+>     With sixty seconds’ worth of distance run,
+> Yours is the Earth and everything that’s in it,
+>     And—which is more—you’ll be a Man, my son!
 > """
 >
-> Context: Try a less obvious approach: inner steadiness under pressure, dreams and thoughts not ruling the self, broken work rebuilt, and the will holding on after exhaustion.
->
-> Reviewer direction for this second pass: try a different approach
+> Context: Try a fresh image around endurance after loss: everything risked and lost, the body emptied out, and the will still saying hold on into the unforgiving minute.
 >
 > Goal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.
 >
-> Light style guidance: symbolic psychological realism with restrained graphic power.
+> Light style guidance: severe symbolic realism, quiet pressure rather than triumph.
 >
 > Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid colonial nostalgia, military heroics, sports-poster triumph, and literal father-son staging.
 
@@ -928,9 +908,9 @@ and, when the time comes to let it go,
 to let it go.
 ```
 
-Context: The trees and the black river of loss should both be present: autumn beauty reflected in dark water, with letting go carried by the landscape.
+Context: Attention to autumn beauty becomes instruction in loving what is mortal and letting it go.
 
-Style guidance: luminous naturalist watercolor with a dark reflective river.
+Style guidance: luminous naturalist watercolor, reflective and quiet.
 
 Prompt:
 
@@ -956,15 +936,13 @@ Prompt:
 > to let it go.
 > """
 >
-> Context: The trees and the black river of loss should both be present: autumn beauty reflected in dark water, with letting go carried by the landscape.
->
-> Reviewer direction for this second pass: I think the trees and black river of loss should both be part
+> Context: Attention to autumn beauty becomes instruction in loving what is mortal and letting it go.
 >
 > Goal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.
 >
-> Light style guidance: luminous naturalist watercolor with a dark reflective river.
+> Light style guidance: luminous naturalist watercolor, reflective and quiet.
 >
-> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid sentimental symbols, visible words, and making the river merely decorative.
+> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid sentimental symbols or visible words.
 
 ## In the Trance
 
@@ -981,11 +959,17 @@ What happened became your great love
 her echo had an ancient glow & so
 proved buoyant for my little craft
 I left the world & felt a world
+The bee loading its gloves with powder
+The albatross wanting one thing from the sea
+Nothing can wreck our boat said she
+& when the water felt the glacier
+The future held a present tense
+The present held a future without cease.
 ```
 
-Context: Choose one singular image from the trance: the speaker making a small wooden boat and entering a simplified dream of love and craft.
+Context: Return the glacier to the image: one small craft or boat held in a trance-like water world, with the glacier making time feel suspended and strange.
 
-Style guidance: minimal airy surrealism, one clear maritime image with quiet space.
+Style guidance: minimal airy surrealism, glacier light, small boat, and quiet negative space.
 
 Prompt:
 
@@ -1000,17 +984,23 @@ Prompt:
 > her echo had an ancient glow & so
 > proved buoyant for my little craft
 > I left the world & felt a world
+> The bee loading its gloves with powder
+> The albatross wanting one thing from the sea
+> Nothing can wreck our boat said she
+> & when the water felt the glacier
+> The future held a present tense
+> The present held a future without cease.
 > """
 >
-> Context: Choose one singular image from the trance: the speaker making a small wooden boat and entering a simplified dream of love and craft.
+> Context: Return the glacier to the image: one small craft or boat held in a trance-like water world, with the glacier making time feel suspended and strange.
 >
-> Reviewer direction for this second pass: too mcuh happening. choose a more singular imagery
+> Reviewer direction for this pass: need to include the glacier
 >
 > Goal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.
 >
-> Light style guidance: minimal airy surrealism, one clear maritime image with quiet space.
+> Light style guidance: minimal airy surrealism, glacier light, small boat, and quiet negative space.
 >
-> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid crowded symbolic collage, political caricature, and literal illustration of every noun.
+> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid crowded collage, political caricature, and illustrating every noun.
 
 ## Jabberwocky
 
@@ -1036,9 +1026,9 @@ Came whiffling through the tulgey wood,
       And burbled as it came!
 ```
 
-Context: Keep the playful danger but make the vorpal sword feel mythic, charged, and central without turning the image into gore.
+Context: Bring back the Alice-in-Wonderland creature-world feeling: strange creatures in the wabe and tulgey wood should surround the quest, not just the Jabberwock.
 
-Style guidance: mythic storybook engraving with hand-tinted color and a luminous blade.
+Style guidance: mythic storybook engraving with hand-tinted color, curious creatures and a charged blade.
 
 Prompt:
 
@@ -1062,15 +1052,15 @@ Prompt:
 >       And burbled as it came!
 > """
 >
-> Context: Keep the playful danger but make the vorpal sword feel mythic, charged, and central without turning the image into gore.
+> Context: Bring back the Alice-in-Wonderland creature-world feeling: strange creatures in the wabe and tulgey wood should surround the quest, not just the Jabberwock.
 >
-> Reviewer direction for this second pass: close. make the vorpal sword more mythic
+> Reviewer direction for this pass: liked how the first image had more of the alice in wonderland creatures, not just the jabberwocky
 >
 > Goal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.
 >
-> Light style guidance: mythic storybook engraving with hand-tinted color and a luminous blade.
+> Light style guidance: mythic storybook engraving with hand-tinted color, curious creatures and a charged blade.
 >
-> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid gore, severed heads, childish cartooning, and generic fantasy armor.
+> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid gore, severed heads, childish cartooning, and making only a monster portrait.
 
 ## Kindness
 
@@ -1182,9 +1172,9 @@ And here were forests ancient as the hills,
 Enfolding sunny spots of greenery.
 ```
 
-Context: Make the visionary landscape fantastical, ominous, and vivid: dome, sacred river, caverns, gardens, and impossible scale should pop with modern color.
+Context: The selected lines are a visionary landscape of dome, sacred river, caverns, gardens, and impossible scale.
 
-Style guidance: hyper-modern fantastical sublime, vivid ominous color, cinematic depth.
+Style guidance: Romantic sublime watercolor, dreamlike but not crowded.
 
 Prompt:
 
@@ -1206,15 +1196,13 @@ Prompt:
 > Enfolding sunny spots of greenery.
 > """
 >
-> Context: Make the visionary landscape fantastical, ominous, and vivid: dome, sacred river, caverns, gardens, and impossible scale should pop with modern color.
->
-> Reviewer direction for this second pass: make it more fantastical and popping with vivid ominous color. more hyper modern than watercolor / dream
+> Context: The selected lines are a visionary landscape of dome, sacred river, caverns, gardens, and impossible scale.
 >
 > Goal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.
 >
-> Light style guidance: hyper-modern fantastical sublime, vivid ominous color, cinematic depth.
+> Light style guidance: Romantic sublime watercolor, dreamlike but not crowded.
 >
-> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid muted watercolor, orientalist stereotypes, and generic palace fantasy.
+> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid orientalist stereotypes and generic fantasy-palace imagery.
 
 ## Leda and the Swan
 
@@ -1225,6 +1213,8 @@ Author: William Butler Yeats
 Selected lines:
 
 ```
+A sudden blow: the great wings beating still
+[other lines omitted]
 A shudder in the loins engenders there
 The broken wall, the burning roof and tower
 And Agamemnon dead.
@@ -1234,9 +1224,9 @@ Did she put on his knowledge with his power
 Before the indifferent beak could let her drop?
 ```
 
-Context: Try a different approach: focus on the catastrophe the myth unleashes, with wing, broken wall, burning roof and tower, and indifferent power implied rather than enacted.
+Context: The poem links mythic violence to historical catastrophe; the image should face the terror without eroticizing it.
 
-Style guidance: severe symbolist abstraction, classical fragments and white wing shadow.
+Style guidance: classical-symbolist chiaroscuro, severe and morally uneasy.
 
 Prompt:
 
@@ -1245,6 +1235,8 @@ Prompt:
 >
 > Use these exact selected lines as the source passage:
 > """
+> A sudden blow: the great wings beating still
+> [other lines omitted]
 > A shudder in the loins engenders there
 > The broken wall, the burning roof and tower
 > And Agamemnon dead.
@@ -1254,15 +1246,13 @@ Prompt:
 > Before the indifferent beak could let her drop?
 > """
 >
-> Context: Try a different approach: focus on the catastrophe the myth unleashes, with wing, broken wall, burning roof and tower, and indifferent power implied rather than enacted.
->
-> Reviewer direction for this second pass: try a different approach
+> Context: The poem links mythic violence to historical catastrophe; the image should face the terror without eroticizing it.
 >
 > Goal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.
 >
-> Light style guidance: severe symbolist abstraction, classical fragments and white wing shadow.
+> Light style guidance: classical-symbolist chiaroscuro, severe and morally uneasy.
 >
-> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid nudity, explicit assault, erotic posing, gore, and depicting the act itself.
+> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid nudity, explicit assault, erotic posing, and gore.
 
 ## Let's Not Begin
 
@@ -1344,7 +1334,7 @@ Blasts the new-born Infants tear
 And blights with plagues the Marriage hearse
 ```
 
-Context: Keep the engraving mood but simplify: a bleak city walk, invisible manacles, soot, fog, and moral pressure without a sky crowded by sad faces.
+Context: Keep the bleak-but-not-overdone city mood, but remove visible chains entirely; let fog, soot, posture, architecture, and pressure carry the manacles.
 
 Style guidance: spare Blakean engraving with noir watercolor wash.
 
@@ -1370,15 +1360,15 @@ Prompt:
 > And blights with plagues the Marriage hearse
 > """
 >
-> Context: Keep the engraving mood but simplify: a bleak city walk, invisible manacles, soot, fog, and moral pressure without a sky crowded by sad faces.
+> Context: Keep the bleak-but-not-overdone city mood, but remove visible chains entirely; let fog, soot, posture, architecture, and pressure carry the manacles.
 >
-> Reviewer direction for this second pass: style is good... make a simpler image that conveys the bleakness without so many just sad faces in the sky
+> Reviewer direction for this pass: remove the chains. otherwise it's good ... bleak but not overly so
 >
 > Goal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.
 >
 > Light style guidance: spare Blakean engraving with noir watercolor wash.
 >
-> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid many faces in the sky, graphic poverty, explicit sex work, and readable signs.
+> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid visible chains, many faces in the sky, graphic poverty, explicit sex work, and readable signs.
 
 ## Nothing Gold Can Stay
 
@@ -1399,9 +1389,9 @@ So dawn goes down to day.
 Nothing gold can stay.
 ```
 
-Context: The style is close; make the fragile first gold more clearly golden while keeping the image restrained and transient.
+Context: The image should hold the fragile instant when first beauty is already passing away.
 
-Style guidance: restrained macro watercolor realism, clearer gold-green first light.
+Style guidance: restrained macro watercolor realism.
 
 Prompt:
 
@@ -1420,15 +1410,13 @@ Prompt:
 > Nothing gold can stay.
 > """
 >
-> Context: The style is close; make the fragile first gold more clearly golden while keeping the image restrained and transient.
->
-> Reviewer direction for this second pass: close. slightly more clearly golden... this is a great style
+> Context: The image should hold the fragile instant when first beauty is already passing away.
 >
 > Goal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.
 >
-> Light style guidance: restrained macro watercolor realism, clearer gold-green first light.
+> Light style guidance: restrained macro watercolor realism.
 >
-> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid added symbols, inspirational-poster mood, and over-saturation.
+> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid added symbols or inspirational-poster mood.
 
 ## On This the 100th Anniversary of the Sinking of the Titanic, We Reconsider the Buoyancy of the Human Heart
 
@@ -1446,9 +1434,9 @@ That’s what the Titanic told me this morning, me, lying next to her on the oce
 There are enough ballrooms in you.
 ```
 
-Context: Do not personify the Titanic. Show the vivid interior life of the ship underwater, with rooms of warmth and memory visible inside the sunken structure.
+Context: Show a woman at the bottom of the ocean looking up at the sunken ship, while the Titanic itself remains a vivid interior world rather than a personified figure.
 
-Style guidance: cinematic underwater surrealism, intimate glowing interiors inside the wreck.
+Style guidance: cinematic underwater surrealism, glowing interiors above a solitary woman below.
 
 Prompt:
 
@@ -1464,13 +1452,13 @@ Prompt:
 > There are enough ballrooms in you.
 > """
 >
-> Context: Do not personify the Titanic. Show the vivid interior life of the ship underwater, with rooms of warmth and memory visible inside the sunken structure.
+> Context: Show a woman at the bottom of the ocean looking up at the sunken ship, while the Titanic itself remains a vivid interior world rather than a personified figure.
 >
-> Reviewer direction for this second pass: don't personify the titanic ... but i like the being able to see the vividness of the titanic in its interior underground
+> Reviewer direction for this pass: missing the woman looking up at the ship from the bottom of the ocean
 >
 > Goal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.
 >
-> Light style guidance: cinematic underwater surrealism, intimate glowing interiors inside the wreck.
+> Light style guidance: cinematic underwater surrealism, glowing interiors above a solitary woman below.
 >
 > Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid faces on the ship, skeletons, gore, disaster spectacle, and film still references.
 
@@ -1559,9 +1547,9 @@ we walk down the street, with the grass blowing back and forth
 i have never been so happy
 ```
 
-Context: Keep the style but simplify: focus on the couple, the sun, raining coins, and maybe cold pizza on the stairs; let the joke stay romantic and absurd.
+Context: Bring back the playful first-attempt vibe: a couple walking down the sidewalk together, with sun, raining coins, and maybe cold pizza on stairs as the focused comic-romantic world.
 
-Style guidance: playful surreal editorial gouache, bright and focused.
+Style guidance: playful surreal editorial gouache, sweet, bright, and lightly absurd.
 
 Prompt:
 
@@ -1590,13 +1578,13 @@ Prompt:
 > i have never been so happy
 > """
 >
-> Context: Keep the style but simplify: focus on the couple, the sun, raining coins, and maybe cold pizza on the stairs; let the joke stay romantic and absurd.
+> Context: Bring back the playful first-attempt vibe: a couple walking down the sidewalk together, with sun, raining coins, and maybe cold pizza on stairs as the focused comic-romantic world.
 >
-> Reviewer direction for this second pass: love the style... but too many distinct images. focus on the couple and the sun and the coins and maybe the pizza on the stairs. not the eyes stuff or the dog
+> Reviewer direction for this pass: missing the couple walking down the sidewalk together. that was a sweet part of the first attempt. the aesthetic / vibe of the first is better / more playful
 >
 > Goal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.
 >
-> Light style guidance: playful surreal editorial gouache, bright and focused.
+> Light style guidance: playful surreal editorial gouache, sweet, bright, and lightly absurd.
 >
 > Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid eyes, dogs, extra side images, MLM infographics, and brand logos.
 
@@ -1630,7 +1618,7 @@ To lords and ladies of Byzantium
 Of what is past, or passing, or to come.
 ```
 
-Context: Keep the Grecian gold bird, but bring in the sailing passage: mortal nature recedes behind the voyage toward Byzantium and crafted eternity.
+Context: The ship is sailing toward Byzantium; the golden bird belongs in Byzantium, waiting on a golden bough or in the city, not perched on the ship.
 
 Style guidance: Byzantine gold mosaic influence with lyrical sea voyage imagery.
 
@@ -1662,15 +1650,15 @@ Prompt:
 > Of what is past, or passing, or to come.
 > """
 >
-> Context: Keep the Grecian gold bird, but bring in the sailing passage: mortal nature recedes behind the voyage toward Byzantium and crafted eternity.
+> Context: The ship is sailing toward Byzantium; the golden bird belongs in Byzantium, waiting on a golden bough or in the city, not perched on the ship.
 >
-> Reviewer direction for this second pass: the grecian gold bird is great, but we need sailing imagery
+> Reviewer direction for this pass: the bird is in byzantium, not on the ship
 >
 > Goal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.
 >
 > Light style guidance: Byzantine gold mosaic influence with lyrical sea voyage imagery.
 >
-> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid generic fantasy cities, readable religious text, and losing the sense of travel by water.
+> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid putting the gold bird on the ship, generic fantasy cities, and readable religious text.
 
 ## Sonnet 116
 
@@ -1691,9 +1679,9 @@ It is the star to every wand'ring bark
 Whose worth's unknown, although his height be taken.
 ```
 
-Context: Try a more love-forward approach: love as a steadfast presence between two people that still carries the fixed mark, guiding star, and storm imagery.
+Context: Love is imagined as a fixed mark and guiding star, steady through alteration and storm.
 
-Style guidance: tender romantic symbolism, elegant maritime light, unsentimental warmth.
+Style guidance: romantic maritime chiaroscuro, elegant and unsentimental.
 
 Prompt:
 
@@ -1712,15 +1700,13 @@ Prompt:
 > Whose worth's unknown, although his height be taken.
 > """
 >
-> Context: Try a more love-forward approach: love as a steadfast presence between two people that still carries the fixed mark, guiding star, and storm imagery.
->
-> Reviewer direction for this second pass: try a different approach. need to capture more of the love vibe on this one
+> Context: Love is imagined as a fixed mark and guiding star, steady through alteration and storm.
 >
 > Goal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.
 >
-> Light style guidance: tender romantic symbolism, elegant maritime light, unsentimental warmth.
+> Light style guidance: romantic maritime chiaroscuro, elegant and unsentimental.
 >
-> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid wedding cliches, heart icons, and cold empty lighthouse imagery.
+> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid wedding imagery and heart symbols.
 
 ## Sonnet 73
 
@@ -1854,9 +1840,9 @@ And miles to go before I sleep,
 And miles to go before I sleep.
 ```
 
-Context: Keep the quiet winter nocturne, but place woods on both sides of the sleigh instead of opening the scene to a lake.
+Context: The image should hold the hush and temptation of stopping between dark woods, frozen lake, snow, and obligations.
 
-Style guidance: quiet winter nocturne watercolor, close dark woods and falling snow.
+Style guidance: quiet winter nocturne watercolor.
 
 Prompt:
 
@@ -1880,15 +1866,13 @@ Prompt:
 > And miles to go before I sleep.
 > """
 >
-> Context: Keep the quiet winter nocturne, but place woods on both sides of the sleigh instead of opening the scene to a lake.
->
-> Reviewer direction for this second pass: very close but it should be woods on both sides of the sleigh instead of this lake. style is good
+> Context: The image should hold the hush and temptation of stopping between dark woods, frozen lake, snow, and obligations.
 >
 > Goal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.
 >
-> Light style guidance: quiet winter nocturne watercolor, close dark woods and falling snow.
+> Light style guidance: quiet winter nocturne watercolor.
 >
-> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid lakes, cozy holiday-card warmth, and bright village scenes.
+> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid cozy holiday-card warmth.
 
 ## Telemachus
 
@@ -1899,15 +1883,6 @@ Author: Ocean Vuong
 Selected lines:
 
 ```
-Like any good son, I pull my father out
-of the water, drag him by his hair
-through white sand, his knuckles carving a trail
-the waves rush in to erase. Because the city
-beyond the shore is no longer
-where we left it. Because the bombed
-cathedral is now a cathedral
-of trees. I kneel beside him to show how far
-[other lines omitted]
 in his sea-black eyes. The face
 not mine — but one I will wear
 to kiss all my lovers good-night:
@@ -1916,9 +1891,9 @@ with my own & begin
 the faithful work of drowning.
 ```
 
-Context: The son, father, shore, erased tracks, and cathedral of trees make a grief image of inheritance and war.
+Context: Focus on the image of looking down at the father: sea-black eyes holding a cathedral, with perhaps a faint reflection of the sun looking down.
 
-Style guidance: lyrical watercolor realism with restrained surreal memory.
+Style guidance: lyrical close realism with restrained surreal reflection.
 
 Prompt:
 
@@ -1927,15 +1902,6 @@ Prompt:
 >
 > Use these exact selected lines as the source passage:
 > """
-> Like any good son, I pull my father out
-> of the water, drag him by his hair
-> through white sand, his knuckles carving a trail
-> the waves rush in to erase. Because the city
-> beyond the shore is no longer
-> where we left it. Because the bombed
-> cathedral is now a cathedral
-> of trees. I kneel beside him to show how far
-> [other lines omitted]
 > in his sea-black eyes. The face
 > not mine — but one I will wear
 > to kiss all my lovers good-night:
@@ -1944,13 +1910,15 @@ Prompt:
 > the faithful work of drowning.
 > """
 >
-> Context: The son, father, shore, erased tracks, and cathedral of trees make a grief image of inheritance and war.
+> Context: Focus on the image of looking down at the father: sea-black eyes holding a cathedral, with perhaps a faint reflection of the sun looking down.
+>
+> Reviewer direction for this pass: focus more on imagery ... looking down at the father with the cathedral in his eyes and perhaps a faint reflection of the sun looking down
 >
 > Goal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.
 >
-> Light style guidance: lyrical watercolor realism with restrained surreal memory.
+> Light style guidance: lyrical close realism with restrained surreal reflection.
 >
-> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid visible wounds, gore, and sensational violence.
+> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid visible wounds, gore, sensational violence, and wide action scenes.
 
 ## Tell all the truth but tell it slant
 
@@ -2239,9 +2207,9 @@ over the bright sea to do the same thing, to do it
 (as I long to do something, anything) perfectly.
 ```
 
-Context: Use the final image: the kingfisher flying perfectly back over the bright sea, carrying the force of hunger, beauty, and a cry the speaker cannot make.
+Context: Use the final flight over the bright sea but return to the more photorealistic naturalist feeling of the first image.
 
-Style guidance: vivid naturalist watercolor, clean bright sea and perfect movement.
+Style guidance: photorealistic naturalist marine image, vivid blue kingfisher over bright sea.
 
 Prompt:
 
@@ -2256,15 +2224,15 @@ Prompt:
 > (as I long to do something, anything) perfectly.
 > """
 >
-> Context: Use the final image: the kingfisher flying perfectly back over the bright sea, carrying the force of hunger, beauty, and a cry the speaker cannot make.
+> Context: Use the final flight over the bright sea but return to the more photorealistic naturalist feeling of the first image.
 >
-> Reviewer direction for this second pass: let's do the image at the end of the fisher flying perfectly over the bright sea
+> Reviewer direction for this pass: liked the phot realistic vibe of the first image
 >
 > Goal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.
 >
-> Light style guidance: vivid naturalist watercolor, clean bright sea and perfect movement.
+> Light style guidance: photorealistic naturalist marine image, vivid blue kingfisher over bright sea.
 >
-> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid blood, dark wave focus, and cartoon prettiness.
+> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid cartoon prettiness, painterly looseness that loses realism, blood, and dark wave focus.
 
 ## The Light Wraps You
 
@@ -2275,6 +2243,21 @@ Author: Pablo Neruda
 Selected lines:
 
 ```
+The light wraps you in its mortal flame.
+Abstracted pale mourner, standing that way
+against the old propellers of the twighlight
+that revolves around you.
+Speechless, my friend,
+alone in the loneliness of this hour of the dead
+and filled with the lives of fire,
+pure heir of the ruined day.
+A bough of fruit falls from the sun on your dark garment.
+The great roots of night
+grow suddenly from your soul,
+and the things that hide in you come out again
+so that a blue and palled people
+your newly born, takes nourishment.
+[other lines omitted]
 Oh magnificent and fecund and magnetic slave
 of the circle that moves in turn through black and gold:
 rise, lead and possess a creation
@@ -2282,9 +2265,9 @@ so rich in life that its flowers perish
 and it is full of sadness.
 ```
 
-Context: Treat this as an ode to the moon: a magnetic black-and-gold circle, fertility, sadness, and creation revolving around a solitary presence.
+Context: Light, mourning, fire, night roots, creation, fertility, and sadness move around one solitary figure.
 
-Style guidance: lunar surrealism in black, gold, and pale blue; elegant and magnetic.
+Style guidance: surreal portrait in watercolor and oil pastel.
 
 Prompt:
 
@@ -2293,6 +2276,21 @@ Prompt:
 >
 > Use these exact selected lines as the source passage:
 > """
+> The light wraps you in its mortal flame.
+> Abstracted pale mourner, standing that way
+> against the old propellers of the twighlight
+> that revolves around you.
+> Speechless, my friend,
+> alone in the loneliness of this hour of the dead
+> and filled with the lives of fire,
+> pure heir of the ruined day.
+> A bough of fruit falls from the sun on your dark garment.
+> The great roots of night
+> grow suddenly from your soul,
+> and the things that hide in you come out again
+> so that a blue and palled people
+> your newly born, takes nourishment.
+> [other lines omitted]
 > Oh magnificent and fecund and magnetic slave
 > of the circle that moves in turn through black and gold:
 > rise, lead and possess a creation
@@ -2300,15 +2298,13 @@ Prompt:
 > and it is full of sadness.
 > """
 >
-> Context: Treat this as an ode to the moon: a magnetic black-and-gold circle, fertility, sadness, and creation revolving around a solitary presence.
->
-> Reviewer direction for this second pass: try a different approach. it's an ode to the moon
+> Context: Light, mourning, fire, night roots, creation, fertility, and sadness move around one solitary figure.
 >
 > Goal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.
 >
-> Light style guidance: lunar surrealism in black, gold, and pale blue; elegant and magnetic.
+> Light style guidance: surreal portrait in watercolor and oil pastel.
 >
-> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid bondage imagery, oversexualization, and sun-dominated compositions.
+> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid bondage imagery and oversexualization.
 
 ## The Moment
 
@@ -2450,9 +2446,9 @@ Though as for that the passing there
 Had worn them really about the same,
 ```
 
-Context: Keep the ambiguity of two close paths, but make the visual style more distinctive and less conventional.
+Context: Move back toward realism while preserving ambiguity: two close autumn paths in a real yellow wood, neither presented as the heroic or correct choice.
 
-Style guidance: stylized printmaking and watercolor, layered autumn texture and unusual perspective.
+Style guidance: realistic atmospheric autumn landscape with subtle painterly texture.
 
 Prompt:
 
@@ -2474,15 +2470,15 @@ Prompt:
 > Had worn them really about the same,
 > """
 >
-> Context: Keep the ambiguity of two close paths, but make the visual style more distinctive and less conventional.
+> Context: Move back toward realism while preserving ambiguity: two close autumn paths in a real yellow wood, neither presented as the heroic or correct choice.
 >
-> Reviewer direction for this second pass: decent. but see if you can make the style more interesting or distinct
+> Reviewer direction for this pass: needs more realism. the aesthetic/style of the first was closer
 >
 > Goal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.
 >
-> Light style guidance: stylized printmaking and watercolor, layered autumn texture and unusual perspective.
+> Light style guidance: realistic atmospheric autumn landscape with subtle painterly texture.
 >
-> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid signs, arrows, and spotlighting one path as correct.
+> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid stylized print abstraction, signs, arrows, and spotlighting one path as correct.
 
 ## The Second Coming
 
@@ -2503,9 +2499,9 @@ The best lack all conviction, while the worst
 Are full of passionate intensity.
 ```
 
-Context: Use the opening image: widening gyre, falcon losing the falconer, the center failing, and things falling apart.
+Context: Stay with the widening gyre and falcon losing the falconer, but make the image aesthetically stranger and more compelling while preserving the near-successful composition.
 
-Style guidance: apocalyptic abstract landscape, spiraling motion and stark falcon silhouette.
+Style guidance: apocalyptic abstract landscape, spiraling motion, stark falcon silhouette, visually arresting composition.
 
 Prompt:
 
@@ -2524,13 +2520,13 @@ Prompt:
 > Are full of passionate intensity.
 > """
 >
-> Context: Use the opening image: widening gyre, falcon losing the falconer, the center failing, and things falling apart.
+> Context: Stay with the widening gyre and falcon losing the falconer, but make the image aesthetically stranger and more compelling while preserving the near-successful composition.
 >
-> Reviewer direction for this second pass: let's use the image at the start of the poem of the widening gyre, falcon, things falling apart, etcc..
+> Reviewer direction for this pass: very close ... do more variants to make it aesthetically interesting
 >
 > Goal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.
 >
-> Light style guidance: apocalyptic abstract landscape, spiraling motion and stark falcon silhouette.
+> Light style guidance: apocalyptic abstract landscape, spiraling motion, stark falcon silhouette, visually arresting composition.
 >
 > Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid desert beast imagery, gore, explicit religious horror, and monster-movie treatment.
 
@@ -2738,9 +2734,9 @@ By the way, I lied about Schubert doing the dishes,
 but that doesn’t mean he never helped out around the house.
 ```
 
-Context: Try a more playful approach: ordinary teenage mess and comic historical comparison should feel affectionate, not moralizing.
+Context: Remove thought-bubble or fantasy-comparison devices. Make this a mundane affectionate scene of the girl and her dad hanging out while she plays with her food.
 
-Style guidance: playful editorial illustration, bright domestic wit and loose composition.
+Style guidance: warm playful domestic editorial realism, ordinary and gently funny.
 
 Prompt:
 
@@ -2762,15 +2758,15 @@ Prompt:
 > but that doesn’t mean he never helped out around the house.
 > """
 >
-> Context: Try a more playful approach: ordinary teenage mess and comic historical comparison should feel affectionate, not moralizing.
+> Context: Remove thought-bubble or fantasy-comparison devices. Make this a mundane affectionate scene of the girl and her dad hanging out while she plays with her food.
 >
-> Reviewer direction for this second pass: try a different approach ... more playful
+> Reviewer direction for this pass: remove the thought bubble stuff ... make it more of just a mundane scene with the girl and dad hanging out and the girl playing with her good
 >
 > Goal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.
 >
-> Light style guidance: playful editorial illustration, bright domestic wit and loose composition.
+> Light style guidance: warm playful domestic editorial realism, ordinary and gently funny.
 >
-> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid sexualizing the minor, celebrity likenesses, readable posters, and scolding tone.
+> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid thought bubbles, fantasy cutaways, sexualizing the minor, celebrity likenesses, readable posters, and scolding tone.
 
 ## Toad
 
@@ -2835,9 +2831,9 @@ branch, the small white flower, the one
 word that will protect you
 ```
 
-Context: Focus on two people walking through the lucent bluegreen forest toward the cave; one carries a silver branch with a small white flower.
+Context: Keep the composition close, but make it more watercolor-like and slightly more abstract: two figures in the lucent bluegreen forest approaching the cave, one carrying the silver branch and small white flower.
 
-Style guidance: nocturne watercolor and ink, lucent bluegreen forest, protective and dreamlike.
+Style guidance: loose nocturne watercolor, translucent bluegreen washes, softly abstract and protective.
 
 Prompt:
 
@@ -2856,27 +2852,15 @@ Prompt:
 > word that will protect you
 > """
 >
-> Context: Focus on two people walking through the lucent bluegreen forest toward the cave; one carries a silver branch with a small white flower.
+> Context: Keep the composition close, but make it more watercolor-like and slightly more abstract: two figures in the lucent bluegreen forest approaching the cave, one carrying the silver branch and small white flower.
 >
-> Reviewer direction for this second pass: close. good style. don't need the hands. but focus on
-> and walk with you through that lucent
-> wavering forest of bluegreen leaves
-> with its watery sun & three moons
-> towards the cave where you must descend,
-> towards your worst fear
-> I would like to give you the silver
-> branch, the small white flower, the one
->
->
-> have it be two people walking through the forest towards the cave. one carrying the silver branch with the small white flower.
->
-> good style
+> Reviewer direction for this pass: more watercolor'ey and slightly more abstract. but very close
 >
 > Goal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.
 >
-> Light style guidance: nocturne watercolor and ink, lucent bluegreen forest, protective and dreamlike.
+> Light style guidance: loose nocturne watercolor, translucent bluegreen washes, softly abstract and protective.
 >
-> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid disembodied hands, voyeuristic sleeping-body imagery, and horror.
+> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid hard-edged digital fantasy, disembodied hands, voyeuristic sleeping-body imagery, and horror.
 
 ## What I Didn't Know Before
 
@@ -2903,9 +2887,9 @@ us wasn’t a fragile thing to be coddled, cooed
 over. It came out fully formed, ready to run.
 ```
 
-Context: Focus on the foal arriving newly born yet already full of running speed: ungentle, alive, and ready to leap into itself.
+Context: A love is compared to a foal arriving already itself, ungentle, embodied, and ready to run.
 
-Style guidance: clean contemporary realism with watercolor softness and kinetic newborn energy.
+Style guidance: clean contemporary realism with watercolor softness.
 
 Prompt:
 
@@ -2930,15 +2914,13 @@ Prompt:
 > over. It came out fully formed, ready to run.
 > """
 >
-> Context: Focus on the foal arriving newly born yet already full of running speed: ungentle, alive, and ready to leap into itself.
->
-> Reviewer direction for this second pass: just have the image focus on giving birth to a horse that's ready to run. make the horse more clearly newly born but still full of running speed
+> Context: A love is compared to a foal arriving already itself, ungentle, embodied, and ready to run.
 >
 > Goal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.
 >
-> Light style guidance: clean contemporary realism with watercolor softness and kinetic newborn energy.
+> Light style guidance: clean contemporary realism with watercolor softness.
 >
-> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid graphic birth imagery, sentimentality, and making the horse look fully grown.
+> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid graphic birth imagery.
 
 ## White Owl Flies Into And Out Of The Field
 
@@ -2988,9 +2970,9 @@ in which we are washed and washed
 out of our bones.
 ```
 
-Context: Make the central image a river of pure, blindingly white owl feathers moving through the rest of the winter scene.
+Context: The owl strike and rise transform death from darkness into overwhelming light.
 
-Style guidance: high-key winter watercolor, almost overwhelming white feather-light.
+Style guidance: high-key winter watercolor realism, pale and spiritual without sentimentality.
 
 Prompt:
 
@@ -3038,15 +3020,13 @@ Prompt:
 > out of our bones.
 > """
 >
-> Context: Make the central image a river of pure, blindingly white owl feathers moving through the rest of the winter scene.
->
-> Reviewer direction for this second pass: make the central image be a river of pure blindingly white owl feathers moving through the rest of the scene
+> Context: The owl strike and rise transform death from darkness into overwhelming light.
 >
 > Goal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.
 >
-> Light style guidance: high-key winter watercolor, almost overwhelming white feather-light.
+> Light style guidance: high-key winter watercolor realism, pale and spiritual without sentimentality.
 >
-> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid blood, prey, macabre death imagery, and a conventional owl portrait.
+> Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid blood, prey, and macabre death imagery.
 
 ## Wild Geese
 
