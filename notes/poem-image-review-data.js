@@ -1,6 +1,6 @@
 window.POEM_IMAGE_REVIEW_DATA = {
-  "version": 2,
-  "generatedAt": "2026-05-14T09:35:17.695Z",
+  "version": 3,
+  "generatedAt": "2026-05-14T22:54:33.000Z",
   "prompts": [
     {
       "order": 1,
@@ -263,6 +263,22 @@ window.POEM_IMAGE_REVIEW_DATA = {
           "src": "../tmp/poem-image-candidates/pass-003/do-not-go-gentle-into-that-good-night.png",
           "file": "tmp/poem-image-candidates/pass-003/do-not-go-gentle-into-that-good-night.png",
           "model": "gpt-image-2"
+        },
+        {
+          "id": "do-not-go-gentle-into-that-good-night::pass-007::1",
+          "label": "Pass 7 candidate 1",
+          "pass": "pass-007",
+          "src": "../tmp/poem-image-candidates/pass-007/do-not-go-gentle-into-that-good-night-1.png",
+          "file": "tmp/poem-image-candidates/pass-007/do-not-go-gentle-into-that-good-night-1.png",
+          "model": "gpt-image-2"
+        },
+        {
+          "id": "do-not-go-gentle-into-that-good-night::pass-007::2",
+          "label": "Pass 7 candidate 2",
+          "pass": "pass-007",
+          "src": "../tmp/poem-image-candidates/pass-007/do-not-go-gentle-into-that-good-night-2.png",
+          "file": "tmp/poem-image-candidates/pass-007/do-not-go-gentle-into-that-good-night-2.png",
+          "model": "gpt-image-2"
         }
       ]
     },
@@ -318,6 +334,22 @@ window.POEM_IMAGE_REVIEW_DATA = {
           "pass": "pass-002",
           "src": "../tmp/poem-image-candidates/pass-002/good-bones.png",
           "file": "tmp/poem-image-candidates/pass-002/good-bones.png",
+          "model": "gpt-image-2"
+        },
+        {
+          "id": "good-bones::pass-007::1",
+          "label": "Pass 7 candidate 1",
+          "pass": "pass-007",
+          "src": "../tmp/poem-image-candidates/pass-007/good-bones-1.png",
+          "file": "tmp/poem-image-candidates/pass-007/good-bones-1.png",
+          "model": "gpt-image-2"
+        },
+        {
+          "id": "good-bones::pass-007::2",
+          "label": "Pass 7 candidate 2",
+          "pass": "pass-007",
+          "src": "../tmp/poem-image-candidates/pass-007/good-bones-2.png",
+          "file": "tmp/poem-image-candidates/pass-007/good-bones-2.png",
           "model": "gpt-image-2"
         }
       ]
@@ -519,6 +551,22 @@ window.POEM_IMAGE_REVIEW_DATA = {
           "src": "../tmp/poem-image-candidates/pass-001/humpbacks.png",
           "file": "tmp/poem-image-candidates/pass-001/humpbacks.png",
           "model": "gpt-image-2"
+        },
+        {
+          "id": "humpbacks::pass-007::1",
+          "label": "Pass 7 candidate 1",
+          "pass": "pass-007",
+          "src": "../tmp/poem-image-candidates/pass-007/humpbacks-1.png",
+          "file": "tmp/poem-image-candidates/pass-007/humpbacks-1.png",
+          "model": "gpt-image-2"
+        },
+        {
+          "id": "humpbacks::pass-007::2",
+          "label": "Pass 7 candidate 2",
+          "pass": "pass-007",
+          "src": "../tmp/poem-image-candidates/pass-007/humpbacks-2.png",
+          "file": "tmp/poem-image-candidates/pass-007/humpbacks-2.png",
+          "model": "gpt-image-2"
         }
       ]
     },
@@ -542,6 +590,22 @@ window.POEM_IMAGE_REVIEW_DATA = {
           "pass": "pass-001",
           "src": "../tmp/poem-image-candidates/pass-001/i-carry-your-heart-within-me.png",
           "file": "tmp/poem-image-candidates/pass-001/i-carry-your-heart-within-me.png",
+          "model": "gpt-image-2"
+        },
+        {
+          "id": "i-carry-your-heart-within-me::pass-007::1",
+          "label": "Pass 7 candidate 1",
+          "pass": "pass-007",
+          "src": "../tmp/poem-image-candidates/pass-007/i-carry-your-heart-within-me-1.png",
+          "file": "tmp/poem-image-candidates/pass-007/i-carry-your-heart-within-me-1.png",
+          "model": "gpt-image-2"
+        },
+        {
+          "id": "i-carry-your-heart-within-me::pass-007::2",
+          "label": "Pass 7 candidate 2",
+          "pass": "pass-007",
+          "src": "../tmp/poem-image-candidates/pass-007/i-carry-your-heart-within-me-2.png",
+          "file": "tmp/poem-image-candidates/pass-007/i-carry-your-heart-within-me-2.png",
           "model": "gpt-image-2"
         }
       ]
@@ -582,6 +646,22 @@ window.POEM_IMAGE_REVIEW_DATA = {
           "pass": "pass-003",
           "src": "../tmp/poem-image-candidates/pass-003/i-like-my-body-when-it-is-with-your.png",
           "file": "tmp/poem-image-candidates/pass-003/i-like-my-body-when-it-is-with-your.png",
+          "model": "gpt-image-2"
+        },
+        {
+          "id": "i-like-my-body-when-it-is-with-your::pass-007::1",
+          "label": "Pass 7 candidate 1",
+          "pass": "pass-007",
+          "src": "../tmp/poem-image-candidates/pass-007/i-like-my-body-when-it-is-with-your-1.png",
+          "file": "tmp/poem-image-candidates/pass-007/i-like-my-body-when-it-is-with-your-1.png",
+          "model": "gpt-image-2"
+        },
+        {
+          "id": "i-like-my-body-when-it-is-with-your::pass-007::2",
+          "label": "Pass 7 candidate 2",
+          "pass": "pass-007",
+          "src": "../tmp/poem-image-candidates/pass-007/i-like-my-body-when-it-is-with-your-2.png",
+          "file": "tmp/poem-image-candidates/pass-007/i-like-my-body-when-it-is-with-your-2.png",
           "model": "gpt-image-2"
         }
       ]
@@ -871,6 +951,22 @@ window.POEM_IMAGE_REVIEW_DATA = {
           "src": "../tmp/poem-image-candidates/pass-002/leda-and-the-swan.png",
           "file": "tmp/poem-image-candidates/pass-002/leda-and-the-swan.png",
           "model": "gpt-image-2"
+        },
+        {
+          "id": "leda-and-the-swan::pass-007::1",
+          "label": "Pass 7 candidate 1",
+          "pass": "pass-007",
+          "src": "../tmp/poem-image-candidates/pass-007/leda-and-the-swan-1.png",
+          "file": "tmp/poem-image-candidates/pass-007/leda-and-the-swan-1.png",
+          "model": "gpt-image-2"
+        },
+        {
+          "id": "leda-and-the-swan::pass-007::2",
+          "label": "Pass 7 candidate 2",
+          "pass": "pass-007",
+          "src": "../tmp/poem-image-candidates/pass-007/leda-and-the-swan-2.png",
+          "file": "tmp/poem-image-candidates/pass-007/leda-and-the-swan-2.png",
+          "model": "gpt-image-2"
         }
       ]
     },
@@ -1006,6 +1102,22 @@ window.POEM_IMAGE_REVIEW_DATA = {
           "pass": "pass-003",
           "src": "../tmp/poem-image-candidates/pass-003/on-this-the-100th-anniversary-of-the-sinking-of-the-titanic.png",
           "file": "tmp/poem-image-candidates/pass-003/on-this-the-100th-anniversary-of-the-sinking-of-the-titanic.png",
+          "model": "gpt-image-2"
+        },
+        {
+          "id": "on-this-the-100th-anniversary-of-the-sinking-of-the-titanic::pass-007::1",
+          "label": "Pass 7 candidate 1",
+          "pass": "pass-007",
+          "src": "../tmp/poem-image-candidates/pass-007/on-this-the-100th-anniversary-of-the-sinking-of-the-titanic-1.png",
+          "file": "tmp/poem-image-candidates/pass-007/on-this-the-100th-anniversary-of-the-sinking-of-the-titanic-1.png",
+          "model": "gpt-image-2"
+        },
+        {
+          "id": "on-this-the-100th-anniversary-of-the-sinking-of-the-titanic::pass-007::2",
+          "label": "Pass 7 candidate 2",
+          "pass": "pass-007",
+          "src": "../tmp/poem-image-candidates/pass-007/on-this-the-100th-anniversary-of-the-sinking-of-the-titanic-2.png",
+          "file": "tmp/poem-image-candidates/pass-007/on-this-the-100th-anniversary-of-the-sinking-of-the-titanic-2.png",
           "model": "gpt-image-2"
         }
       ]
@@ -1159,6 +1271,22 @@ window.POEM_IMAGE_REVIEW_DATA = {
           "src": "../tmp/poem-image-candidates/pass-002/sonnet-116.png",
           "file": "tmp/poem-image-candidates/pass-002/sonnet-116.png",
           "model": "gpt-image-2"
+        },
+        {
+          "id": "sonnet-116::pass-007::1",
+          "label": "Pass 7 candidate 1",
+          "pass": "pass-007",
+          "src": "../tmp/poem-image-candidates/pass-007/sonnet-116-1.png",
+          "file": "tmp/poem-image-candidates/pass-007/sonnet-116-1.png",
+          "model": "gpt-image-2"
+        },
+        {
+          "id": "sonnet-116::pass-007::2",
+          "label": "Pass 7 candidate 2",
+          "pass": "pass-007",
+          "src": "../tmp/poem-image-candidates/pass-007/sonnet-116-2.png",
+          "file": "tmp/poem-image-candidates/pass-007/sonnet-116-2.png",
+          "model": "gpt-image-2"
         }
       ]
     },
@@ -1182,6 +1310,22 @@ window.POEM_IMAGE_REVIEW_DATA = {
           "pass": "pass-001",
           "src": "../tmp/poem-image-candidates/pass-001/sonnet-73.png",
           "file": "tmp/poem-image-candidates/pass-001/sonnet-73.png",
+          "model": "gpt-image-2"
+        },
+        {
+          "id": "sonnet-73::pass-007::1",
+          "label": "Pass 7 candidate 1",
+          "pass": "pass-007",
+          "src": "../tmp/poem-image-candidates/pass-007/sonnet-73-1.png",
+          "file": "tmp/poem-image-candidates/pass-007/sonnet-73-1.png",
+          "model": "gpt-image-2"
+        },
+        {
+          "id": "sonnet-73::pass-007::2",
+          "label": "Pass 7 candidate 2",
+          "pass": "pass-007",
+          "src": "../tmp/poem-image-candidates/pass-007/sonnet-73-2.png",
+          "file": "tmp/poem-image-candidates/pass-007/sonnet-73-2.png",
           "model": "gpt-image-2"
         }
       ]
@@ -1551,6 +1695,22 @@ window.POEM_IMAGE_REVIEW_DATA = {
           "src": "../tmp/poem-image-candidates/pass-001/the-red-wheelbarrow.png",
           "file": "tmp/poem-image-candidates/pass-001/the-red-wheelbarrow.png",
           "model": "gpt-image-2"
+        },
+        {
+          "id": "the-red-wheelbarrow::pass-007::1",
+          "label": "Pass 7 candidate 1",
+          "pass": "pass-007",
+          "src": "../tmp/poem-image-candidates/pass-007/the-red-wheelbarrow-1.png",
+          "file": "tmp/poem-image-candidates/pass-007/the-red-wheelbarrow-1.png",
+          "model": "gpt-image-2"
+        },
+        {
+          "id": "the-red-wheelbarrow::pass-007::2",
+          "label": "Pass 7 candidate 2",
+          "pass": "pass-007",
+          "src": "../tmp/poem-image-candidates/pass-007/the-red-wheelbarrow-2.png",
+          "file": "tmp/poem-image-candidates/pass-007/the-red-wheelbarrow-2.png",
+          "model": "gpt-image-2"
         }
       ]
     },
@@ -1590,6 +1750,22 @@ window.POEM_IMAGE_REVIEW_DATA = {
           "pass": "pass-003",
           "src": "../tmp/poem-image-candidates/pass-003/the-road-not-taken.png",
           "file": "tmp/poem-image-candidates/pass-003/the-road-not-taken.png",
+          "model": "gpt-image-2"
+        },
+        {
+          "id": "the-road-not-taken::pass-007::1",
+          "label": "Pass 7 candidate 1",
+          "pass": "pass-007",
+          "src": "../tmp/poem-image-candidates/pass-007/the-road-not-taken-1.png",
+          "file": "tmp/poem-image-candidates/pass-007/the-road-not-taken-1.png",
+          "model": "gpt-image-2"
+        },
+        {
+          "id": "the-road-not-taken::pass-007::2",
+          "label": "Pass 7 candidate 2",
+          "pass": "pass-007",
+          "src": "../tmp/poem-image-candidates/pass-007/the-road-not-taken-2.png",
+          "file": "tmp/poem-image-candidates/pass-007/the-road-not-taken-2.png",
           "model": "gpt-image-2"
         }
       ]

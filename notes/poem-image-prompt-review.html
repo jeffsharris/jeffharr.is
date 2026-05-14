@@ -357,6 +357,12 @@
       padding: 13px;
     }
 
+    .tile__candidate {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 760;
+    }
+
     .tile__row {
       display: flex;
       align-items: center;
@@ -558,6 +564,7 @@
     }
 
     .candidate {
+      position: relative;
       padding: 0;
       overflow: hidden;
       border: 2px solid transparent;
@@ -574,6 +581,27 @@
       width: 100%;
       aspect-ratio: 1;
       object-fit: cover;
+    }
+
+    .candidate__badge {
+      position: absolute;
+      left: 5px;
+      right: 5px;
+      bottom: 5px;
+      min-height: 18px;
+      padding: 2px 5px;
+      border-radius: 6px;
+      background: rgba(19, 16, 13, 0.74);
+      color: rgba(255, 255, 255, 0.86);
+      font-size: 10px;
+      font-weight: 800;
+      line-height: 1.2;
+      text-align: center;
+    }
+
+    .candidate__badge--new {
+      background: rgba(212, 185, 134, 0.92);
+      color: #211b15;
     }
 
     .detail-panel {
@@ -749,6 +777,7 @@
       </div>
       <div class="actions" aria-label="Page actions">
         <button class="button button--primary" type="button" id="copy-handoff">Copy Handoff</button>
+        <button class="button" type="button" id="copy-publish-plan">Copy Publish Plan</button>
         <button class="button" type="button" id="download-handoff">Download JSON</button>
         <button class="button button--danger" type="button" id="reset-state">Reset Slate</button>
       </div>
@@ -842,7 +871,7 @@
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-  <script src="./poem-image-review-data.js?v=20260515"></script>
+  <script src="./poem-image-review-data.js?v=20260515-pass007"></script>
   <script>
     const STORAGE_KEY = 'jeffharr-poem-image-iteration-v1';
     const CURRENT_CANDIDATE_SUFFIX = '::current';
@@ -869,6 +898,7 @@
       iterateMeta: document.getElementById('iterate-meta'),
       finalMeta: document.getElementById('final-meta'),
       copyHandoff: document.getElementById('copy-handoff'),
+      copyPublishPlan: document.getElementById('copy-publish-plan'),
       downloadHandoff: document.getElementById('download-handoff'),
       resetState: document.getElementById('reset-state'),
       modal: document.getElementById('detail-modal'),
@@ -972,6 +1002,11 @@
         showToast('Handoff copied');
       });
 
+      els.copyPublishPlan.addEventListener('click', async () => {
+        await copyText(JSON.stringify(buildPublishPlan(), null, 2));
+        showToast('Publish plan copied');
+      });
+
       els.downloadHandoff.addEventListener('click', () => {
         const payload = JSON.stringify(buildHandoff(), null, 2);
         const blob = new Blob([payload], { type: 'application/json' });
@@ -1016,7 +1051,14 @@
       els.detailMode.addEventListener('click', (event) => {
         const button = event.target.closest('[data-mode]');
         if (!button || !app.activeSlug) return;
-        setMode(app.activeSlug, button.dataset.mode);
+        if (button.dataset.mode === 'finalized') {
+          updateItemState(app.activeSlug, {
+            mode: 'finalized',
+            contenderId: app.activeCandidateId || currentCandidateId(app.activeSlug)
+          });
+        } else {
+          setMode(app.activeSlug, button.dataset.mode);
+        }
         render();
         renderDetailIfOpen();
       });
@@ -1079,8 +1121,9 @@
       const finalized = visible.filter((item) => getMode(item.slug) === 'finalized');
       const allIterating = app.items.filter((item) => getMode(item.slug) === 'iterate').length;
       const allFinalized = app.items.length - allIterating;
+      const replacementCount = getFinalizedReplacements().length;
 
-      els.counts.innerHTML = `<strong>${allIterating}</strong> iterating / <strong>${allFinalized}</strong> finalized`;
+      els.counts.innerHTML = `<strong>${allIterating}</strong> iterating / <strong>${allFinalized}</strong> finalized${replacementCount ? ` / <strong>${replacementCount}</strong> ready to publish` : ''}`;
       els.iterateMeta.textContent = countLabel(iterating.length, 'image');
       els.finalMeta.textContent = countLabel(finalized.length, 'image');
 
@@ -1120,6 +1163,7 @@
                 <button class="mini-button" type="button" data-action="${isIterating ? 'finalize' : 'iterate'}">${isIterating ? 'Finalize' : 'Iterate'}</button>
               </div>
             </div>
+            ${candidate.id !== currentCandidateId(item.slug) ? `<div class="tile__candidate">${escapeHtml(candidate.label)}</div>` : ''}
             ${isIterating ? `
               <div class="feedback">
                 <label for="feedback-${escapeAttribute(item.slug)}">Feedback</label>
@@ -1142,7 +1186,12 @@
         return;
       }
       if (action === 'finalize') {
-        setMode(slug, 'finalized');
+        const item = app.items.find((entry) => entry.slug === slug);
+        const candidate = item ? getContenderCandidate(item) : null;
+        updateItemState(slug, {
+          mode: 'finalized',
+          contenderId: candidate?.id || currentCandidateId(slug)
+        });
         render();
         return;
       }
@@ -1162,7 +1211,7 @@
       const item = app.items.find((entry) => entry.slug === slug);
       if (!item) return;
       app.activeSlug = slug;
-      app.activeCandidateId = getItemState(slug).contenderId || currentCandidateId(slug);
+      app.activeCandidateId = getContenderCandidate(item).id;
       app.isEditingPrompt = false;
       els.modal.classList.add('is-open');
       els.modal.setAttribute('aria-hidden', 'false');
@@ -1201,15 +1250,17 @@
       els.promptView.classList.toggle('is-hidden', app.isEditingPrompt);
       els.promptEditor.classList.toggle('is-hidden', !app.isEditingPrompt);
       els.editPrompt.textContent = app.isEditingPrompt ? 'Save Prompt' : 'Edit Prompt';
-      els.setContender.disabled = state.contenderId === candidate.id || (!state.contenderId && candidate.id === currentCandidateId(item.slug));
+      els.setContender.disabled = getContenderCandidate(item).id === candidate.id;
 
       for (const button of els.detailMode.querySelectorAll('[data-mode]')) {
         button.classList.toggle('is-active', button.dataset.mode === mode);
       }
 
+      const latestPass = getLatestPass(item);
       els.candidateRail.innerHTML = getCandidates(item).map((candidateOption) => `
         <button class="candidate${candidateOption.id === candidate.id ? ' is-active' : ''}" type="button" data-candidate-id="${escapeAttribute(candidateOption.id)}" title="${escapeAttribute(candidateOption.label)}">
           <img src="${escapeAttribute(candidateOption.src)}" alt="${escapeAttribute(candidateOption.label)}" loading="lazy">
+          <span class="candidate__badge${candidateOption.pass === latestPass ? ' candidate__badge--new' : ''}">${escapeHtml(candidateOption.shortLabel || candidateOption.label)}</span>
         </button>
       `).join('');
     }
@@ -1246,7 +1297,13 @@
     function getContenderCandidate(item) {
       const state = getItemState(item.slug);
       const candidates = getCandidates(item);
-      return candidates.find((candidate) => candidate.id === state.contenderId) || candidates[0];
+      const selected = candidates.find((candidate) => candidate.id === state.contenderId);
+      if (selected) return selected;
+      if (getMode(item.slug) === 'iterate') {
+        const latest = getLatestCandidates(item);
+        if (latest.length) return latest[0];
+      }
+      return candidates[0];
     }
 
     function getCandidates(item) {
@@ -1254,6 +1311,7 @@
         {
           id: currentCandidateId(item.slug),
           label: 'Current site image',
+          shortLabel: 'Current',
           src: item.imageSrc,
           file: `poems/images/${item.slug}.jpg`,
           pass: 'current',
@@ -1262,9 +1320,36 @@
         ...item.candidates.map((candidate) => ({
           ...candidate,
           label: candidate.label || candidate.id,
+          shortLabel: candidateShortLabel(candidate),
           src: candidate.src || `../${candidate.file}`
         }))
       ];
+    }
+
+    function getLatestPass(item) {
+      const passes = item.candidates
+        .map((candidate) => candidate.pass)
+        .filter((pass) => /^pass-\d+$/i.test(pass || ''));
+      if (!passes.length) return '';
+      return passes.sort((a, b) => passNumber(b) - passNumber(a))[0];
+    }
+
+    function getLatestCandidates(item) {
+      const latestPass = getLatestPass(item);
+      if (!latestPass) return [];
+      return getCandidates(item).filter((candidate) => candidate.pass === latestPass);
+    }
+
+    function passNumber(pass) {
+      const match = String(pass || '').match(/(\d+)/);
+      return match ? Number(match[1]) : 0;
+    }
+
+    function candidateShortLabel(candidate) {
+      if (!candidate.pass || candidate.pass === 'current') return 'Current';
+      const pass = passNumber(candidate.pass);
+      const index = String(candidate.id || '').split('::').pop();
+      return `P${pass}${index ? ` #${index}` : ''}`;
     }
 
     function currentCandidateId(slug) {
@@ -1365,10 +1450,44 @@
         counts: {
           total: app.items.length,
           iterating: iterating.length,
-          finalized: app.items.length - iterating.length
+          finalized: app.items.length - iterating.length,
+          replacementsReady: getFinalizedReplacements().length
         },
-        iterating
+        iterating,
+        replacementsReady: getFinalizedReplacements()
       };
+    }
+
+    function buildPublishPlan() {
+      const replacements = getFinalizedReplacements();
+      return {
+        version: 1,
+        exportedAt: new Date().toISOString(),
+        stateKey: STORAGE_KEY,
+        summary: `${replacements.length} poem image replacement${replacements.length === 1 ? '' : 's'} ready for publish`,
+        publishSteps: [
+          'Copy each source file to its target path, converting to site-ready JPG if needed.',
+          'Run the poem page visual check and repository tests.',
+          'Commit only the changed poem images and related metadata.',
+          'Fetch/rebase against origin/main, then push main so Cloudflare Pages deploys jeffharr.is.'
+        ],
+        replacements
+      };
+    }
+
+    function getFinalizedReplacements() {
+      return app.items
+        .filter((item) => getMode(item.slug) === 'finalized')
+        .map((item) => ({ item, candidate: getContenderCandidate(item) }))
+        .filter(({ item, candidate }) => candidate.id !== currentCandidateId(item.slug))
+        .map(({ item, candidate }) => ({
+          slug: item.slug,
+          title: item.title,
+          author: item.author,
+          source: serializeCandidate(candidate),
+          target: `poems/images/${item.slug}.jpg`,
+          prompt: getDisplayPrompt(item, candidate)
+        }));
     }
 
     function serializeCandidate(candidate) {
@@ -1381,6 +1500,18 @@
         model: candidate.model || 'gpt-image-2'
       };
     }
+
+    const iterationApi = {
+      buildHandoff,
+      buildPublishPlan,
+      getSummary: () => ({
+        total: app.items.length,
+        iterating: app.items.filter((item) => getMode(item.slug) === 'iterate').length,
+        replacementsReady: getFinalizedReplacements().length
+      })
+    };
+    window.PoemImageIteration = iterationApi;
+    globalThis.PoemImageIteration = iterationApi;
 
     async function copyText(text) {
       if (navigator.clipboard?.writeText) {
