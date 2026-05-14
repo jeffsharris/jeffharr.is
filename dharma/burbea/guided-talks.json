@@ -2092,6 +2092,84 @@
     "description": "(Gaia House)",
     "image_url": "https://jeffharr.is/dharma/burbea/artwork/rob-burbea-podcast-cover.jpg",
     "canonical_url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-12516/",
+    "podcast_description": "Rob Burbea offers a guided metta meditation that begins with posture, body awareness, and a sense of being held, then moves into phrases of self-kindness and a wider, more spacious field of attention. After the guided practice, he explains metta as unconditional well-wishing, and emphasizes flexibility: using phrases, visualization, or body-sense in whatever way is most supportive. He closes by encouraging patience, noting that even small moments of kindness accumulate over time, like planting seeds and trusting their own pace.",
+    "short_summary": "A guided introduction to metta practice, followed by practical advice on keeping loving-kindness flexible, gentle, and patient.",
+    "episode_image_url": "https://jeffharr.is/dharma/burbea/artwork/dharmaseed-12516.jpg",
+    "chapters_url": "https://jeffharr.is/dharma/burbea/chapters/dharmaseed-12516.json",
+    "chapters": [
+      {
+        "start": 0.0,
+        "title": "Entering the practice",
+        "description": "Burbea introduces the metta practice, settles listeners into posture, and asks for a comfortable, upright, relaxed seat.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-12516/?t=0",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 271.72,
+        "title": "Opening the field",
+        "description": "Attention widens from the body to the whole sphere of experience, with an emphasis on warmth, receptivity, and being held.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-12516/?t=272",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 610.72,
+        "title": "Self-directed metta",
+        "description": "He begins the phrases of self-well-wishing and stresses that the practice should be tender, patient, and without pressure.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-12516/?t=611",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1149.72,
+        "title": "Seeds and tenderness",
+        "description": "A Buddha saying about the bucket being filled drop by drop supports the theme of gradual cultivation, and the guided self-practice continues.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-12516/?t=1150",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1583.0,
+        "title": "The easiest person",
+        "description": "The meditation shifts to someone it is easy to wish well for, with suggestions for using phrases, light, or simple imaginative contact.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-12516/?t=1583",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 2044.0,
+        "title": "Returning to openness",
+        "description": "The image of the other person fades, and the practice returns to the whole body and a more open field of awareness.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-12516/?t=2044",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 2189.0,
+        "title": "What metta means",
+        "description": "Burbea explains metta as deep friendliness and describes its unconditional and boundless ideal, while also introducing stepping stones and flexibility in practice.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-12516/?t=2189",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 2409.84,
+        "title": "Ways of practicing",
+        "description": "He explores different modes of metta—phrases, visualization, body sense, devotion—and warns against turning the practice into a corrective agenda.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-12516/?t=2410",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 2883.7,
+        "title": "Patience and walking",
+        "description": "The talk ends with an emphasis on not forcing results, trusting the gradual planting of seeds, and bringing metta into walking practice and everyday movement.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-12516/?t=2884",
+        "img": null,
+        "toc": true
+      }
+    ],
     "venue": "Gaia House",
     "series": null,
     "tags": [],

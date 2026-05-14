@@ -94,6 +94,7 @@
     "canonical_url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-62456/",
     "podcast_description": "Rob Burbea offers a short preliminary practice that combines voicing, posture, and small movement as a way of training sensitivity. He demonstrates how to vary a simple sustained sound across gesture, pitch, loudness, and bodily orientation, then invites listeners to notice effects in the energy body, emotions, and soul resonance. The talk stays practical and exploratory, emphasizing repetition, subtlety, and not expecting too much from the exercise.",
     "short_summary": "A brief guided exploration of how voice and gesture can be combined to refine sensitivity to body, emotion, and soul resonance.",
+    "episode_image_url": "https://jeffharr.is/dharma/burbea/artwork/dharmaseed-62456.jpg",
     "chapters_url": "https://jeffharr.is/dharma/burbea/chapters/dharmaseed-62456.json",
     "chapters": [
       {
@@ -781,6 +782,84 @@
     "description": "(Gaia House) CRUCIAL NOTE: It is highly unlikely that this talk will be properly or adequately understood without a prior very good working familiarity and competence – both in actual practice and conceptually – with Soulmaking Dharma teachings and practices, as well as with Insight Meditation. Without this background it may be that the talk will in fact be misunderstood, and it is unlikely that the talk will be helpful. Please note too that much of the material in this series of talks (<i>In Psyche’s Orchard</i>) is based on or continues explorations of material laid out in a particular previous series (<i>Four Circles, Four Parables of Stone and Light</i>). <i>In Psyche’s Orchard</i> was recorded by Rob at his home.",
     "image_url": "https://jeffharr.is/dharma/burbea/artwork/rob-burbea-podcast-cover.jpg",
     "canonical_url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-61068/",
+    "podcast_description": "In this final part of the talk, Rob Burbea keeps returning to a single question: what kind of ontology and epistemology actually support ethics, rather than flattening it. He moves between Buddhadharma, emptiness, modern science, Plato, Hartman, Augustine, and contemporary culture to ask what makes values feel real, livable, and worthy of care. The talk does not try to settle those questions cleanly; instead, it opens them as matters of practice, discernment, and soulmaking.",
+    "short_summary": "Rob Burbea explores how views of reality and ways of knowing shape ethics, beauty, and soulmaking practice.",
+    "episode_image_url": "https://jeffharr.is/dharma/burbea/artwork/dharmaseed-61068.jpg",
+    "chapters_url": "https://jeffharr.is/dharma/burbea/chapters/dharmaseed-61068.json",
+    "chapters": [
+      {
+        "start": 0.0,
+        "title": "Framing the inquiry",
+        "description": "He recaps the central aim of the series: to ask what our assumptions about reality and knowledge make possible for ethics and practice.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-61068/?t=0",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 520.24,
+        "title": "Buddhist views of value",
+        "description": "He contrasts Pali Canon, Mahayana, and Vajrayana perspectives on virtue, karma, emptiness, and symbolic transgression.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-61068/?t=520",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 819.52,
+        "title": "Realism and its limits",
+        "description": "Using Abhidhamma and Nagarjuna, he examines a realist picture of mind moments and why it can feel mechanically thin.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-61068/?t=820",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1046.08,
+        "title": "Ethics and modern reductionism",
+        "description": "He pushes back on scientistic and conversational reductions of ethics, tracing how modern assumptions about reality have shaped the problem.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-61068/?t=1046",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1649.172,
+        "title": "Ways of looking",
+        "description": "He returns to emptiness as an open-ended practice of seeing suffering, self, and world, insisting that ethics remains built in.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-61068/?t=1649",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 2019.172,
+        "title": "Ontology for soulmaking",
+        "description": "Through arithmetic, dependent origination, and soulmaking Dharma, he argues that emptiness is enough for liberation but not for every human domain.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-61068/?t=2019",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 2448.421,
+        "title": "Plato, Hartman, and hierarchy",
+        "description": "He compares competing ontologies of value, asking how ideal realities, material reality, and human meaning relate.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-61068/?t=2448",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 3738.678,
+        "title": "Eros and Augustine",
+        "description": "He turns from skepticism toward a more lived epistemology, then reads Augustine on divine illumination and the imprint of righteousness.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-61068/?t=3739",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 5837.223,
+        "title": "Beauty, expertise, and democracy",
+        "description": "He broadens the discussion from ethics to beauty, art, and political judgment, wondering whether discernment should be trained rather than merely voted on.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-61068/?t=5837",
+        "img": null,
+        "toc": true
+      }
+    ],
     "venue": "Gaia House",
     "series": null,
     "tags": [],
@@ -8249,6 +8328,84 @@
     "description": "(Gaia House) Please Note: This series of teachings is from a retreat for experienced practitioners led by Rob Burbea and Catherine McGee. Although they attempt to outline and elaborate a little on some of the basics of Soulmaking Dharma practice, still the requirements for participation on the retreat included some understanding of and working familiarity with practices of emptiness, samatha, metta, the emotional/energy body, and the imaginal, as well as basic mindfulness practice; without this experience it is possible that the material and teachings from this retreat will be difficult to understand and confusing for some.",
     "image_url": "https://jeffharr.is/dharma/burbea/artwork/rob-burbea-podcast-cover.jpg",
     "canonical_url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-51523/",
+    "podcast_description": "Rob Burbea continues a retreat teaching on the imaginal, beginning with a practical invitation to listen actively and treat the talk as something to work with in experience. He outlines a flexible map of practice, then slowly builds a richer sense of what makes an image imaginal: relationship, trust, beauty, love, dimensionality, and a quality of soulmaking that is more important than initial doubt or visual clarity. Later he expands the “middle way” of the imaginal—neither real nor not real—using theatre, emptiness, and the Kaccayana Sutta, and closes by emphasizing experiment, maturing, and learning from one’s own practice.",
+    "short_summary": "A detailed retreat talk on imaginal practice, soulmaking, and the middle way between literalism and denial.",
+    "episode_image_url": "https://jeffharr.is/dharma/burbea/artwork/dharmaseed-51523.jpg",
+    "chapters_url": "https://jeffharr.is/dharma/burbea/chapters/dharmaseed-51523.json",
+    "chapters": [
+      {
+        "start": 0.0,
+        "title": "Listening Proactively",
+        "description": "Rob asks listeners to engage the talk actively, bookmarking what they do not yet understand and returning to it later.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-51523/?t=0",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 106.04,
+        "title": "A Flexible Practice Map",
+        "description": "He lays out the retreat's open set of practices—samadhi, energy body, emotion, images, mindfulness, and metta—as a kind of buffet rather than a sequence.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-51523/?t=106",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 271.9,
+        "title": "Working Through Doubt",
+        "description": "Rob addresses doubt as a common response to imaginal work and suggests staying with what arises long enough to see whether it bears fruit.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-51523/?t=272",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 415.38,
+        "title": "Soulmaking as Measure",
+        "description": "He argues that the key test is whether a relationship with an image deepens soulfulness, beauty, and richness, not whether the image appears immediately significant or clear.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-51523/?t=415",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 745.5,
+        "title": "What Imaginal Means",
+        "description": "Rob describes the imaginal as a spectrum or constellation of qualities rather than a fixed category, and explains how noticing can illuminate what is already there.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-51523/?t=746",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1102.3,
+        "title": "Love and Deliberate Cultivation",
+        "description": "He uses love as an example of an imaginal quality that can be drawn out, and adds that practitioners can intentionally introduce elements that support the field.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-51523/?t=1102",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1363.43,
+        "title": "The Full Constellation",
+        "description": "Rob introduces a long list of imaginal qualities—trust, autonomy, two-ness, meaningfulness, participation, and more—to orient listeners to the structure of the practice.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-51523/?t=1363",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1745.43,
+        "title": "Imaginal Relationship",
+        "description": "He explains that imaginal experience is soulmaking through a relational dynamic of eros, psyche, and logos, and emphasizes the autonomy and reciprocity of the image.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-51523/?t=1745",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 2280.95,
+        "title": "Theatre and Middle Way",
+        "description": "Using theatre as an analogy, he describes the imaginal as neither real nor not real, and begins to connect this to questions of ontology and emptiness.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-51523/?t=2281",
+        "img": null,
+        "toc": true
+      }
+    ],
     "venue": "Gaia House",
     "series": null,
     "tags": [],
@@ -14405,6 +14562,84 @@
     "description": "(Gaia House) Please Note: This series of talks is from a retreat led by Rob Burbea and Catherine McGee for experienced practitioners. The requirements for participation included some understanding of and working familiarity with practices of emptiness, samatha, metta, the emotional/energy body, and the imaginal, as well as basic mindfulness practice. Without this experience it is possible that the material and teachings from this retreat will be difficult to understand and confusing for some.",
     "image_url": "https://jeffharr.is/dharma/burbea/artwork/rob-burbea-podcast-cover.jpg",
     "canonical_url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-43941/",
+    "podcast_description": "Rob Burbea introduces a practice thread he calls “opening to the current of desire,” distinguishing it from both renunciation and imaginal practice with eros. He lays out three steps: notice dukkha or desire, ask what is really wanted at a deeper level, and then open the body to the energetic current of desire itself. The talk then moves through several examples, showing how this can reveal freedom, connection, aliveness, or a broader sense of being without requiring any external change.",
+    "short_summary": "A practical teaching on working with desire by loosening fixation and opening to the deeper current underneath.",
+    "episode_image_url": "https://jeffharr.is/dharma/burbea/artwork/dharmaseed-43941.jpg",
+    "chapters_url": "https://jeffharr.is/dharma/burbea/chapters/dharmaseed-43941.json",
+    "chapters": [
+      {
+        "start": 0.0,
+        "title": "Practice threads",
+        "description": "Rob sets the retreat context by naming the main threads of practice and where desire fits among them.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-43941/?t=0",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 132.0,
+        "title": "Introducing desire practice",
+        "description": "He distinguishes imaginal eros from the new practice of opening to the current of desire and emphasizes the role of trust.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-43941/?t=132",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 290.0,
+        "title": "Three-step method",
+        "description": "Rob gives the basic sequence: notice dukkha or desire, ask what is really wanted, and trust that desire may hold something worthwhile.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-43941/?t=290",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 562.0,
+        "title": "Opening the body",
+        "description": "He explains how to open bodily and energetically to desire rather than merely observing it mindfully.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-43941/?t=562",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 748.0,
+        "title": "Freedom and joining",
+        "description": "Two examples show desire opening into felt freedom from constraint and then into a sense of joining that does not depend on the object.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-43941/?t=748",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 983.0,
+        "title": "Craving and hype",
+        "description": "A new-romance example leads into a more standard Dharma analysis of craving, papancha, and the mind’s exaggeration of here and there.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-43941/?t=983",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1217.692,
+        "title": "Deeper wants",
+        "description": "Rob works through a case where the surface object gives way to wider wants such as being heard, heart-opening, connection, and love.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-43941/?t=1218",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1437.692,
+        "title": "Lack and fabrication",
+        "description": "He warns that desire is often entangled with lack, grief, and frustration, and that attention can help fabricate the whole pattern.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-43941/?t=1438",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1646.692,
+        "title": "Trusting the current",
+        "description": "He closes by restating the practice and noting that opening to desire may lead into imaginal manifestation or into a fuller internal fulfillment, with action sometimes relevant and sometimes not.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-43941/?t=1647",
+        "img": null,
+        "toc": true
+      }
+    ],
     "venue": "Gaia House",
     "series": null,
     "tags": [],
@@ -16233,6 +16468,84 @@
     "description": "(Gaia House) PLEASE NOTE: This series of talks is intended for experienced practitioners who have already developed some understanding of and working familiarity with practices of emptiness, samatha, metta, the emotional/energy body, and the imaginal, as well as basic mindfulness practice. In particular, it is strongly recommended that before approaching this set you study and work with the material from the following talks and series: The Theatre of Selves (Parts 1 - 3); Approaching the Dharma, Part 1 (Unbinding the World), and Part 2 (Liberating Ways of Looking); the three-part series Questioning Awakening, Buddhism Beyond Modernism, In Praise of Restlessness; Image, Mythos, Dharma (Parts 1 - 3); An Ecology of Love (Parts 1 - 4); The Path of the Imaginal (Longer Course); and Re-enchanting the Cosmos: The Poetry of Perception. Integrating that previous material and also taking the talks in this new set in their intended order will, for most, support a better and fuller understanding of the teachings from this course.",
     "image_url": "https://jeffharr.is/dharma/burbea/artwork/rob-burbea-podcast-cover.jpg",
     "canonical_url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-40187/",
+    "podcast_description": "Rob Burbea explores the early Buddhist path as having a clear transcendent thrust: not just calmer experience, but a movement beyond sense experience, fabrication, and the world. He tracks this through repeated Pali Canon passages, then asks what it means for eros, soul-making, and the meaning of the “holy life.” The talk closes by setting early Buddhism alongside later Mahayana and modern attitudes, asking how each orients us toward transcendence, immanence, and the world.",
+    "short_summary": "A close reading of early Buddhist texts on the unfabricated, and a reflection on how eros may be directed toward transcendence, the holy life, and the world.",
+    "episode_image_url": "https://jeffharr.is/dharma/burbea/artwork/dharmaseed-40187.jpg",
+    "chapters_url": "https://jeffharr.is/dharma/burbea/chapters/dharmaseed-40187.json",
+    "chapters": [
+      {
+        "start": 0.0,
+        "title": "Eros and the path",
+        "description": "Burbea opens by asking where eros is directed in practice and whether the path itself can be understood as a form of soul-making.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-40187/?t=0",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 158.04,
+        "title": "Beyond the senses",
+        "description": "He reads passages from the Samyutta Nikaya that describe liberation as a dimension where the sense bases cease and dukkha ends.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-40187/?t=158",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 335.88,
+        "title": "Beyond ordinary perception",
+        "description": "A Majjhima Nikaya passage is used to show that even refined jhana states are still not the final goal, which lies beyond the whole field of perception.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-40187/?t=336",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 486.28,
+        "title": "The unfabricated",
+        "description": "He turns to the Udana and a strong instruction to 'smash' the aggregates, interpreting it as meditative unfabrication rather than literal destruction.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-40187/?t=486",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 653.8,
+        "title": "Consciousness without attribute",
+        "description": "Burbea gathers more Pali passages that describe an objectless, attribute-free mode beyond the six senses, beyond the immaterial realms, and beyond concentration alone.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-40187/?t=654",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 923.72,
+        "title": "No coming, no going",
+        "description": "Another cluster of verses points to a dimension without arising or passing away, which he presents as utterly beyond time, process, and objecthood.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-40187/?t=924",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1155.08,
+        "title": "Via negativa and longing",
+        "description": "He broadens the discussion into apophatic language and then brings in Gregory of Nyssa to suggest that human longing may point beyond the limited world.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-40187/?t=1155",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1445.509,
+        "title": "The soul's more",
+        "description": "Returning to eros and soul-making, he distinguishes ordinary accumulation from a deeper 'more' that seeks the transcendent and maps onto jhana and nibbana.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-40187/?t=1446",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1750.669,
+        "title": "The holy life",
+        "description": "Burbea explains how the phrase 'the holy life' functions in the Pali Canon, then contrasts the early Buddhist renunciate aim with the Mahayana Bodhisattva ideal.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-40187/?t=1751",
+        "img": null,
+        "toc": true
+      }
+    ],
     "venue": "Gaia House",
     "series": null,
     "tags": [],
@@ -22751,6 +23064,84 @@
     "description": "(Gaia House) The set of talks and meditations from this course outlines the foundations and some of the possibilities for opening up a practice of the imaginal. Please note that this set forms a progressively unfolding series of teachings, so the talks and practices will probably be more fully understood and absorbed if they are taken in order.",
     "image_url": "https://jeffharr.is/dharma/burbea/artwork/rob-burbea-podcast-cover.jpg",
     "canonical_url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-31538/",
+    "podcast_description": "Rob Burbea outlines what he means by “image,” “fantasy,” and “mythos,” starting from ordinary uses of imagination in practice and then moving toward a more imaginal, soulful sense. He distinguishes visual from aural and bodily images, warns against taking them too literally, and emphasizes that their value lies in resonance, mystery, and the way they shape how we relate. The talk gradually turns from examples to a clearer account of poetic and archetypal images, with Jung, Hillman, Rumi, Ibn Arabi, and several personal stories used as supports.",
+    "short_summary": "A careful introduction to imaginal practice, focusing on soulful, non-literal images and the way they reshape perception and practice.",
+    "episode_image_url": "https://jeffharr.is/dharma/burbea/artwork/dharmaseed-31538.jpg",
+    "chapters_url": "https://jeffharr.is/dharma/burbea/chapters/dharmaseed-31538.json",
+    "chapters": [
+      {
+        "start": 0.0,
+        "title": "Opening the topic",
+        "description": "He frames the talk as an attempt to clarify what he means by image, fantasy, and mythos, and recalls the earlier retreat context.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-31538/?t=0",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 105.6,
+        "title": "Familiar uses of imagination",
+        "description": "He surveys ordinary and Buddhist uses of imagination, from death contemplation and metta to deity imagery and recollection of the Buddha.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-31538/?t=106",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 396.72,
+        "title": "Relationship and healing",
+        "description": "He notes psychotherapeutic uses of images and stresses that healing comes through relationship rather than turning away from inner figures.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-31538/?t=397",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 572.72,
+        "title": "Not just visual",
+        "description": "He broadens the definition of image to include sound and body-sense, with examples of the nada sound and bodily or felt images.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-31538/?t=573",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 987.12,
+        "title": "Dreams, music, and dialogue",
+        "description": "Through a dream of music under threat and examples of inner dialogue, he shows how images can orient devotion and need not be treated as literal objects.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-31538/?t=987",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1443.619,
+        "title": "Ibn Arabi and presence",
+        "description": "He uses Ibn Arabi to suggest that imaginal figures may disclose themselves through presence rather than verbal exchange.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-31538/?t=1444",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1576.219,
+        "title": "Poetic images",
+        "description": "He develops the idea of soulful, ambiguous, inexhaustible images, contrasting them with decipherable symbols and illustrating this with Rumi and Mary Oliver.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-31538/?t=1576",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 2251.139,
+        "title": "Iconic and narrative",
+        "description": "He distinguishes narrative images from more timeless iconic ones, showing how images may be repeated, revisited, and gradually reshape sensibility.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-31538/?t=2251",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 3213.441,
+        "title": "Archetypal value",
+        "description": "He closes by discussing images that feel archetypal in Hillman’s sense, then returns to dependence, emptiness, and the importance of a relational way of seeing.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-31538/?t=3213",
+        "img": null,
+        "toc": true
+      }
+    ],
     "venue": "Gaia House",
     "series": null,
     "tags": [],
@@ -26249,6 +26640,84 @@
     "description": "(Insight Meditation Community of Berkeley) An impassioned talk that includes a little known story from the suttas about the dangers of and suffering caused by the notion of private property. During the talk, winds of 45 mph buffeted the monastery, emergency sirens sounded in the distance, and three power outages occurred. Ends with a lively discussion with the sangha.",
     "image_url": "https://jeffharr.is/dharma/burbea/artwork/rob-burbea-podcast-cover.jpg",
     "canonical_url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-21552/",
+    "podcast_description": "Joanna Macy begins with the climate crisis and the political economy that surrounds it, then turns to an early Buddhist origin story to ask what the Buddha might say about private property, hierarchy, and suffering. She retells the Aggañña Sutta in detail, linking craving, comparison, hoarding, and fences to the rise of violence and social order, and then brings that frame back to climate change, fossil fuel power, and collective responsibility. The talk closes in conversation with the sangha, moving toward practical action, peer support, divestment, and small groups that can keep responding together.",
+    "short_summary": "Joanna Macy connects climate change, capitalism, and the Buddha’s teaching on private property to argue for collective, sangha-based climate action.",
+    "episode_image_url": "https://jeffharr.is/dharma/burbea/artwork/dharmaseed-21552.jpg",
+    "chapters_url": "https://jeffharr.is/dharma/burbea/chapters/dharmaseed-21552.json",
+    "chapters": [
+      {
+        "start": 0.0,
+        "title": "Opening the crisis",
+        "description": "She situates the talk in the climate emergency and the Warsaw COP meeting, with a focus on the urgency, injustice, and corporate power involved.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-21552/?t=0",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 552.36,
+        "title": "Buddhist lens",
+        "description": "She grounds her reading in the early Pali Canon and turns toward Buddhist ideas of anatta, mine-ness, and the suffering that comes from possession.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-21552/?t=552",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 952.4,
+        "title": "Introducing the sutta",
+        "description": "She introduces the Aggañña Sutta as a satirical origin story and sets up its challenge to caste and fixed social hierarchy.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-21552/?t=952",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1552.118,
+        "title": "Desire and comparison",
+        "description": "She retells the story of luminous beings, tasting, differentiation, comparison, lust, and discrimination as conditions shift.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-21552/?t=1552",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1924.998,
+        "title": "Property and violence",
+        "description": "The story moves to rice hoarding, fences, theft, lying, and violence, which she reads as the arising of private property and social conflict.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-21552/?t=1925",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 2158.838,
+        "title": "Climate and capitalism",
+        "description": "She returns from the sutta to the present, arguing that climate breakdown and fossil fuel power reveal the same patterns of extraction and denial.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-21552/?t=2159",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 2401.663,
+        "title": "How to speak and organize",
+        "description": "In the discussion, she offers ways to talk about climate without forcing resistance, and points to groups like 350.org and One Earth Sangha.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-21552/?t=2402",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 2795.623,
+        "title": "Divestment and resistance",
+        "description": "She speaks about socially responsible investing, divestment, and the limits of international agreements in the face of corporate power.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-21552/?t=2796",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 3128.023,
+        "title": "Local action together",
+        "description": "The closing comments return to grassroots response, peer support, and small groups, ending with the Buddha’s teaching that we go forth together for the welfare of all beings.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-21552/?t=3128",
+        "img": null,
+        "toc": true
+      }
+    ],
     "venue": "Insight Meditation Community of Berkeley",
     "series": null,
     "tags": [],
@@ -28485,6 +28954,84 @@
     "description": "(Gaia House)",
     "image_url": "https://jeffharr.is/dharma/burbea/artwork/rob-burbea-podcast-cover.jpg",
     "canonical_url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-17962/",
+    "podcast_description": "Rob Burbea explores calm as more than stress relief or rigid concentration. He argues that samadhi includes well-being, sensitivity, unification, and a kind of lightness, and he keeps returning to the ways kindness, connection, and less clinging support it. In the second half, he widens the question further, asking whether the common image of a calm, simple Dharma life may be too narrow for modern practice, lay life, and the deeper mystery of perception.",
+    "short_summary": "Rob Burbea presents calm as a broad, living quality supported by kindness, non-clinging, and lightness, then questions whether calm is being too narrowly imagined in contemporary Dharma.",
+    "episode_image_url": "https://jeffharr.is/dharma/burbea/artwork/dharmaseed-17962.jpg",
+    "chapters_url": "https://jeffharr.is/dharma/burbea/chapters/dharmaseed-17962.json",
+    "chapters": [
+      {
+        "start": 0.0,
+        "title": "Opening the question",
+        "description": "He begins by noting the range of people and practices in the room and frames calm as a topic that may be useful in different ways for different listeners.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-17962/?t=0",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 111.44,
+        "title": "Why calm matters",
+        "description": "Using the Buddha’s pond image, he describes calm as both relief from stress and a condition that allows clearer seeing.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-17962/?t=111",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 253.42,
+        "title": "What samadhi includes",
+        "description": "He broadens samadhi beyond one-pointed focus into well-being, harmonization, energization, sensitivity, and subtle refinement of attention.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-17962/?t=253",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 697.76,
+        "title": "Nourishing practice",
+        "description": "He turns to retreat life as part of practice, emphasizing kindness, gratitude, appreciation, and human connection as supports for samadhi.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-17962/?t=698",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 938.18,
+        "title": "Less entanglement",
+        "description": "He explains that letting go of entanglement with phenomena allows the mind to gather and settle, and he warns against over-effort that turns practice tight and joyless.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-17962/?t=938",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1134.54,
+        "title": "Clinging in the body",
+        "description": "He names clinging as bodily contraction and offers the body, especially tension and tightness, as a practical indicator for easing effort and releasing grasping.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-17962/?t=1135",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1451.25,
+        "title": "Whole-body practice",
+        "description": "He describes samadhi as including the whole body and suggests practices that begin from the subtle or energy body, or even make clinging itself the theme.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-17962/?t=1451",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1876.45,
+        "title": "Reservoir and perception",
+        "description": "He presents samadhi as a reservoir of well-being that empowers letting go, then moves into a deeper view in which practice fabricates and gradually unfabricates perception.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-17962/?t=1876",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 2533.635,
+        "title": "Questioning the image",
+        "description": "He questions the modern ideal of calm as a final spiritual image, asks what gets lost in that framing, and ends by returning to retreat as a time for deepening rather than settling for a narrow ideal.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-17962/?t=2534",
+        "img": null,
+        "toc": true
+      }
+    ],
     "venue": "Gaia House",
     "series": null,
     "tags": [],
@@ -28511,6 +29058,7 @@
     "canonical_url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-16804/",
     "podcast_description": "James Baraz offers a Dharma-inflected reading of ecological responsibility through Bob Doppelt’s book From Me to We, focusing on two commitments: acknowledging trustee obligations and choosing one’s destiny. He moves from interdependence, karma, and moral responsibility into a practical model of trusteeship, then closes with a change process for moving out of denial and into action. Along the way he uses Buddha references, Ram Dass, Julia Butterfly Hill, and a remembered Andreas Vollenweider concert to make the ethical stakes feel personal and concrete.",
     "short_summary": "A Dharma talk on ecological trusteeship, moral responsibility, and the inner process of choosing to act.",
+    "episode_image_url": "https://jeffharr.is/dharma/burbea/artwork/dharmaseed-16804.jpg",
     "chapters_url": "https://jeffharr.is/dharma/burbea/chapters/dharmaseed-16804.json",
     "chapters": [
       {
@@ -31166,6 +31714,84 @@
     "description": "(Gaia House)",
     "image_url": "https://jeffharr.is/dharma/burbea/artwork/rob-burbea-podcast-cover.jpg",
     "canonical_url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-12518/",
+    "podcast_description": "This question-and-answer session stays close to the felt details of metta practice: walking practice, choosing phrases, using imagery, and finding the right amount of openness. Rob Burbea repeatedly distinguishes between cultivating warmth and using mindfulness for insight, showing how the two support one another rather than compete. Toward the end, the talk turns more directly to pain, aversion, and how practice changes the whole pattern of reaction rather than just the feeling itself.",
+    "short_summary": "Rob Burbea explores how metta can be refined in walking, sitting, and daily life, and how cultivation supports insight into perception, pain, and aversion.",
+    "episode_image_url": "https://jeffharr.is/dharma/burbea/artwork/dharmaseed-12518.jpg",
+    "chapters_url": "https://jeffharr.is/dharma/burbea/chapters/dharmaseed-12518.json",
+    "chapters": [
+      {
+        "start": 0.0,
+        "title": "Opening the inquiry",
+        "description": "The session begins with a practical question about difficulty doing metta while walking, and Rob starts by exploring attention, body sense, and visual imagination.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-12518/?t=0",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 385.0,
+        "title": "Walking with a friend",
+        "description": "He develops Catherine McGee’s advice to imagine walking side by side with a friend, adjusting pace and posture so metta can remain workable in motion.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-12518/?t=385",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 663.0,
+        "title": "Cultivation and insight",
+        "description": "Rob frames practice as having two wings, cultivation and insight, and explains why loving-kindness and other heart practices create the nourishment needed to let go.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-12518/?t=663",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 847.0,
+        "title": "Mindfulness and metta",
+        "description": "The talk turns to how mindfulness serves insight, how metta can also lead to insight, and why different practices are suited to different aims.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-12518/?t=847",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1192.0,
+        "title": "Range, space, and choice",
+        "description": "He describes metta as restfulness and resource, then introduces the idea that awareness can work either in a smaller bubble or in a more open field.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-12518/?t=1192",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1571.0,
+        "title": "Words, tone, and deepening",
+        "description": "Rob explains how different words and phrases change the quality of metta, and how repeated practice can make the field feel more open, unified, and less made by the practitioner.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-12518/?t=1571",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 2033.0,
+        "title": "Metta and perception",
+        "description": "He balances a psychological and a more imaginal view of metta, then uses the talk to point toward the malleability and emptiness of perception.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-12518/?t=2033",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 2396.0,
+        "title": "Entering metta in daily life",
+        "description": "The conversation shifts to metta as a shared field rather than something one gives, and to choosing the easier object first, with the campfire image for building momentum.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-12518/?t=2396",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 2990.28,
+        "title": "Pain, aversion, and fire",
+        "description": "The final stretch works with chest pain and difficult bodily experience, showing how different phrases, spaciousness, and a gentler response can avoid pouring gasoline on the fire.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-12518/?t=2990",
+        "img": null,
+        "toc": true
+      }
+    ],
     "venue": "Gaia House",
     "series": null,
     "tags": [],
