@@ -916,6 +916,84 @@
     "description": "(Gaia House)",
     "image_url": "https://jeffharr.is/dharma/burbea/artwork/rob-burbea-podcast-cover.jpg",
     "canonical_url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-14583/",
+    "podcast_description": "Rob Burbea offers a guided meditation that begins with grounding in the felt sense of the body and a gentle frame of kindness. The practice then moves through a detailed contemplative exploration of body parts and elements, shifting from anatomy into imagination, elemental reflection, and questions about solidity, space, and perception. In the final section, he introduces a luminous mind-made body as an optional imaginal exercise, then returns to stillness and integration.",
+    "short_summary": "A guided exploration of the body that moves from anatomy and elemental contemplation into imaginal freedom and back to grounded stillness.",
+    "episode_image_url": "https://jeffharr.is/dharma/burbea/artwork/dharmaseed-14583.jpg",
+    "chapters_url": "https://jeffharr.is/dharma/burbea/chapters/dharmaseed-14583.json",
+    "chapters": [
+      {
+        "start": 161.0,
+        "title": "Settling In",
+        "description": "The meditation begins by finding posture, feeling the body from within, and orienting toward a simple, kind way of practicing.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-14583/?t=161",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 212.0,
+        "title": "Practice as Kindness",
+        "description": "He frames the whole exercise as a gift of kindness to oneself and suggests holding the meditation inside that perspective.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-14583/?t=212",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 394.0,
+        "title": "Exploring the Lower Body",
+        "description": "Attention moves through the legs and feet with anatomical detail, while staying lightly connected to the whole body and the heart's response.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-14583/?t=394",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 999.0,
+        "title": "Pelvis and Digestive System",
+        "description": "The exploration continues through the genitals, bladder, kidneys, and digestive organs, emphasizing playfulness and a sense of wonder.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-14583/?t=999",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1463.19,
+        "title": "Head and Nervous System",
+        "description": "He turns to the head, eyes, teeth, skull, brain, spinal cord, and nerves, inviting a fuller sense of the body's intricate sensitivity.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-14583/?t=1463",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1718.19,
+        "title": "Elements and Interbeing",
+        "description": "Water, air, fire, and earth are contemplated as shared elements that blur the boundary between body and world.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-14583/?t=1718",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 2135.19,
+        "title": "Solidity and Mystery",
+        "description": "The talk moves into atoms, space, and the appearance of matter, opening into non-thingness and the role of consciousness in perception.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-14583/?t=2135",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 2510.611,
+        "title": "Luminous Body",
+        "description": "An optional imaginal practice invites the listener to draw out a radiant body of light, float and move freely, then return it to the physical body.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-14583/?t=2511",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 3059.571,
+        "title": "Integration",
+        "description": "The meditation closes by re-grounding in the body, stillness, awareness, and a final return to kindness and care.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-14583/?t=3060",
+        "img": null,
+        "toc": true
+      }
+    ],
     "venue": "Gaia House",
     "series": null,
     "tags": [],
