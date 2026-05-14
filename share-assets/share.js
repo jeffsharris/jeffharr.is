@@ -106,7 +106,7 @@
       const url = input.value.trim();
       if (!url) return;
 
-      status.textContent = 'Resolving link...';
+      status.textContent = looksLikeXStatusUrl(url) ? 'Gathering X post and thread...' : 'Resolving link...';
       const submit = form.querySelector('button[type="submit"]');
       submit.disabled = true;
 
@@ -131,6 +131,17 @@
     });
   }
 
+  function looksLikeXStatusUrl(value) {
+    try {
+      const parsed = new URL(value);
+      const host = parsed.hostname.toLowerCase().replace(/^www\./, '').replace(/^mobile\./, '');
+      return (host === 'x.com' || host === 'twitter.com' || host.endsWith('.x.com') || host.endsWith('.twitter.com')) &&
+        (/\/status\/\d+/i.test(parsed.pathname) || /^\/i\/web\/status\/\d+/i.test(parsed.pathname));
+    } catch {
+      return false;
+    }
+  }
+
   function setLoadingStep(index, state) {
     const step = document.querySelector(`[data-loading-step="${index}"]`);
     if (!step) return;
@@ -150,14 +161,23 @@
     if (!loader) return;
 
     const sourceUrl = loader.getAttribute('data-source-url') || '';
+    const kind = loader.getAttribute('data-share-kind') || 'podcast';
     const status = loader.querySelector('[data-loading-status]');
-    const messages = [
-      'Reading the shared URL.',
-      'Looking for the podcast feed.',
-      'Matching the exact episode.',
-      'Searching for video and app links.',
-      'Opening your share page.'
-    ];
+    const messages = kind === 'x'
+      ? [
+          'Reading the shared URL.',
+          'Fetching the X post.',
+          'Following the reply chain.',
+          'Collecting profile images and media.',
+          'Opening your share page.'
+        ]
+      : [
+          'Reading the shared URL.',
+          'Looking for the podcast feed.',
+          'Matching the exact episode.',
+          'Searching for video and app links.',
+          'Opening your share page.'
+        ];
     let syntheticStep = 0;
     let done = false;
 

@@ -4,9 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Share | Jeff Harris</title>
-  <meta name="description" content="Create rich, app-friendly share pages for podcasts and links.">
+  <meta name="description" content="Create rich, app-friendly share pages for podcasts, X posts, and links.">
   <meta property="og:title" content="Share | Jeff Harris">
-  <meta property="og:description" content="Create rich, app-friendly share pages for podcasts and links.">
+  <meta property="og:description" content="Create rich, app-friendly share pages for podcasts, X posts, and links.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://jeffharr.is/share">
   <meta property="og:image" content="https://jeffharr.is/images/profile.jpg">
@@ -16,7 +16,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/share-assets/share.css?v=1">
+  <link rel="stylesheet" href="/share-assets/share.css?v=4">
 </head>
 <body>
   <div class="bg-gradient"></div>
@@ -30,15 +30,15 @@
   <main class="share-main">
     <section class="share-card share-home">
       <div class="share-content">
-        <p class="share-kicker">Podcast sharing</p>
+        <p class="share-kicker">Share pages</p>
         <h1>Create one link for every listener.</h1>
-        <p class="share-description">Paste a podcast URL from Apple Podcasts, Spotify, YouTube, Overcast, RSS, or a podcast website. The share page resolves artwork, playback, and app links.</p>
+        <p class="share-description">Paste a podcast URL from Apple Podcasts, Spotify, YouTube, Overcast, RSS, or a podcast website. X post URLs become standalone thread pages with media, reply context, and a native share button.</p>
       </div>
 
       <form class="share-form" id="share-form">
-        <label for="share-url">Podcast or episode URL</label>
+        <label for="share-url">Podcast episode or X post URL</label>
         <div class="share-form__row">
-          <input id="share-url" name="url" type="url" inputmode="url" autocomplete="url" placeholder="https://podcasts.apple.com/..." required>
+          <input id="share-url" name="url" type="url" inputmode="url" autocomplete="url" placeholder="https://x.com/username/status/..." required>
           <button class="primary-btn" type="submit">Create</button>
         </div>
         <p class="form-status" id="form-status" aria-live="polite"></p>
@@ -46,11 +46,11 @@
 
       <section class="shortcut-card">
         <h2>Share sheet setup</h2>
-        <p>Make an iOS or macOS Shortcut that accepts URLs from the Share Sheet, URL-encodes the shared URL, then opens <code>https://jeffharr.is/share/new?url=...</code>.</p>
+        <p>Make an iOS or macOS Shortcut that accepts URLs from the Share Sheet, URL-encodes the shared URL, then opens <code>https://jeffharr.is/share/new?url=...</code>. The created page can be shared again with the native OS share sheet.</p>
       </section>
     </section>
   </main>
 
-  <script src="/share-assets/share.js?v=1"></script>
+  <script src="/share-assets/share.js?v=4"></script>
 </body>
 </html>

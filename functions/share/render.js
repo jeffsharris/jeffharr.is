@@ -1,4 +1,5 @@
 const PLATFORM_ORDER = [
+  'x',
   'apple',
   'spotify',
   'youtube',
@@ -10,6 +11,7 @@ const PLATFORM_ORDER = [
 ];
 
 const PLATFORM_NAMES = {
+  x: 'X',
   apple: 'Apple Podcasts',
   spotify: 'Spotify',
   youtube: 'YouTube',
@@ -21,6 +23,10 @@ const PLATFORM_NAMES = {
 };
 
 export function renderSharePage(item, requestUrl) {
+  if (item.type === 'x_post') {
+    return renderXSharePage(item, requestUrl);
+  }
+
   const shareUrl = new URL(`/share/${item.id}`, requestUrl).href;
   const title = item.title || 'Shared podcast';
   const description = truncate(item.description || item.podcast?.description || 'A shared podcast link from jeffharr.is.', 220);
@@ -67,7 +73,57 @@ export function renderSharePage(item, requestUrl) {
           </div>
         </article>
       </main>
-      <script src="/share-assets/share.js?v=3"></script>
+      <script src="/share-assets/share.js?v=4"></script>
+    `
+  });
+}
+
+function renderXSharePage(item, requestUrl) {
+  const shareUrl = new URL(`/share/${item.id}`, requestUrl).href;
+  const posts = Array.isArray(item.x?.posts) ? item.x.posts : [];
+  const sharedPost = posts.find((post) => post.id === item.x?.sharedTweetId) || posts[0] || null;
+  const title = item.title || buildXPostTitle(sharedPost) || 'Shared X post';
+  const description = truncate(item.description || sharedPost?.text || 'A shared X post from jeffharr.is.', 220);
+  const imageUrl = item.imageUrl || firstXPostImage(sharedPost) || sharedPost?.author?.profileImageUrl || 'https://jeffharr.is/images/profile.jpg';
+  const shareText = sharedPost?.author?.username
+    ? `${sharedPost.author.name || `@${sharedPost.author.username}`} on X`
+    : title;
+  const originalUrl = item.canonicalUrl || sharedPost?.url || '';
+  const warnings = item.x?.warnings || item.resolution?.warnings || [];
+
+  return htmlDocument({
+    title: `${title} | Jeff Harris`,
+    description,
+    imageUrl,
+    url: shareUrl,
+    noindex: false,
+    body: `
+      <header class="share-header">
+        <a class="back-link" href="/share">Share</a>
+        <a class="back-link" href="/share/history">History</a>
+      </header>
+      <main class="share-main share-main--x">
+        <article class="share-card x-share-detail">
+          <section class="x-share-summary">
+            <p class="share-kicker">X thread</p>
+            <h1>${escapeHtml(title)}</h1>
+            <p class="share-description">${escapeHtml(description)}</p>
+            <div class="share-actions share-actions--hero">
+              <button class="native-share-btn" type="button" data-native-share data-share-title="${escapeAttribute(title)}" data-share-text="${escapeAttribute(shareText)}" data-share-url="${escapeAttribute(shareUrl)}">
+                <span class="native-share-btn__icon" aria-hidden="true">${shareIconSvg()}</span>
+                <span>Share thread</span>
+              </button>
+              <button class="secondary-btn secondary-btn--compact" type="button" data-copy="${escapeAttribute(shareUrl)}">Copy link</button>
+              ${originalUrl ? `<a class="secondary-btn secondary-btn--compact" href="${escapeAttribute(originalUrl)}" target="_blank" rel="noopener">Open on X</a>` : ''}
+            </div>
+          </section>
+          <section class="x-thread" aria-label="Shared X thread">
+            ${posts.map((post) => renderXPostCard(post)).join('') || '<p class="empty-state">This X post could not be rendered.</p>'}
+          </section>
+          ${warnings.length ? `<p class="x-thread-note">${escapeHtml(warnings[0])}</p>` : ''}
+        </article>
+      </main>
+      <script src="/share-assets/share.js?v=4"></script>
     `
   });
 }
@@ -138,10 +194,36 @@ export function renderLoadingPage(sourceUrl, requestUrl) {
   const resolveUrl = new URL('/share/new', requestUrl);
   resolveUrl.searchParams.set('url', sourceUrl);
   resolveUrl.searchParams.set('resolve', '1');
+  const isXPost = looksLikeXStatusSource(sourceUrl);
+  const loadingCopy = isXPost ? {
+    description: 'Gathering the X post, reply chain, author thread, and media.',
+    kicker: 'Gathering',
+    heading: 'Building X share page',
+    status: 'Fetching the post and nearby thread.',
+    steps: [
+      'Reading shared URL',
+      'Fetching the X post',
+      'Following the reply chain',
+      'Collecting media',
+      'Opening share page'
+    ]
+  } : {
+    description: 'Finding podcast metadata and app links.',
+    kicker: 'Resolving',
+    heading: 'Building share page',
+    status: 'Finding the episode, artwork, audio, video, and app links.',
+    steps: [
+      'Reading shared URL',
+      'Finding podcast feed',
+      'Matching the episode',
+      'Finding video and app links',
+      'Opening share page'
+    ]
+  };
 
   return htmlDocument({
     title: 'Creating Share Link | Jeff Harris',
-    description: 'Finding podcast metadata and app links.',
+    description: loadingCopy.description,
     imageUrl: 'https://jeffharr.is/images/profile.jpg',
     url: requestUrl,
     noindex: true,
@@ -150,28 +232,24 @@ export function renderLoadingPage(sourceUrl, requestUrl) {
         <a class="back-link" href="/share">Share</a>
       </header>
       <main class="share-main share-main--loading">
-        <section class="share-card loading-card" data-share-loader data-source-url="${escapeAttribute(sourceUrl)}">
+        <section class="share-card loading-card" data-share-loader data-share-kind="${escapeAttribute(isXPost ? 'x' : 'podcast')}" data-source-url="${escapeAttribute(sourceUrl)}">
           <div class="loading-mark" aria-hidden="true">
             <span></span>
             <span></span>
             <span></span>
           </div>
           <div class="share-content loading-content">
-            <p class="share-kicker">Resolving</p>
-            <h1>Building share page</h1>
-            <p class="share-description" data-loading-status>Finding the episode, artwork, audio, video, and app links.</p>
+            <p class="share-kicker">${escapeHtml(loadingCopy.kicker)}</p>
+            <h1>${escapeHtml(loadingCopy.heading)}</h1>
+            <p class="share-description" data-loading-status>${escapeHtml(loadingCopy.status)}</p>
             <ol class="loading-steps" aria-label="Share creation progress">
-              <li data-loading-step="0" class="is-active">Reading shared URL</li>
-              <li data-loading-step="1">Finding podcast feed</li>
-              <li data-loading-step="2">Matching the episode</li>
-              <li data-loading-step="3">Finding video and app links</li>
-              <li data-loading-step="4">Opening share page</li>
+              ${loadingCopy.steps.map((step, index) => `<li data-loading-step="${index}"${index === 0 ? ' class="is-active"' : ''}>${escapeHtml(step)}</li>`).join('')}
             </ol>
             <a class="secondary-btn loading-fallback" href="${escapeAttribute(resolveUrl.href)}">Continue without loading screen</a>
           </div>
         </section>
       </main>
-      <script src="/share-assets/share.js?v=3"></script>
+      <script src="/share-assets/share.js?v=4"></script>
     `
   });
 }
@@ -221,7 +299,7 @@ function htmlDocument({ title, description, imageUrl, url, body, noindex }) {
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="manifest" href="/share-assets/manifest.webmanifest">
-  <link rel="stylesheet" href="/share-assets/share.css?v=2">
+  <link rel="stylesheet" href="/share-assets/share.css?v=4">
 </head>
 <body>
   <div class="bg-gradient"></div>
@@ -271,9 +349,143 @@ function formatMeta(item) {
 
 function formatHistoryMeta(item) {
   return [
-    item.type === 'podcast_episode' ? 'Podcast episode' : item.type === 'podcast_show' ? 'Podcast' : 'Shared link',
+    item.type === 'podcast_episode' ? 'Podcast episode' : item.type === 'podcast_show' ? 'Podcast' : item.type === 'x_post' ? 'X post' : 'Shared link',
     item.sharedAt ? formatDate(item.sharedAt) : ''
   ].filter(Boolean).join(' · ');
+}
+
+function renderXPostCard(post) {
+  const author = post.author || {};
+  const name = author.name || (author.username ? `@${author.username}` : 'X');
+  const handle = author.username ? `@${author.username}` : '';
+  const profileImage = author.profileImageUrl || 'https://jeffharr.is/images/profile.jpg';
+  const metrics = formatXMetrics(post.metrics || {});
+  const cardClass = post.isShared ? 'x-post x-post--shared' : 'x-post';
+
+  return `
+    <article class="${cardClass}" id="x-post-${escapeAttribute(post.id)}">
+      <div class="x-post__rail" aria-hidden="true"></div>
+      <div class="x-post__body">
+        <header class="x-post__header">
+          <img class="x-post__avatar" src="${escapeAttribute(profileImage)}" alt="" width="44" height="44" loading="lazy" decoding="async">
+          <div class="x-post__author">
+            <strong>${escapeHtml(name)}${author.verified ? '<span class="x-post__verified" aria-label="Verified">✓</span>' : ''}</strong>
+            <span>${escapeHtml([handle, post.createdAt ? formatDate(post.createdAt) : ''].filter(Boolean).join(' · '))}</span>
+          </div>
+          ${post.isShared ? '<span class="x-post__badge">Shared</span>' : ''}
+        </header>
+        ${post.text ? `<div class="x-post__text">${renderLinkedText(post.text)}</div>` : ''}
+        ${renderXMediaGrid(post.media || [])}
+        ${post.quotedPost ? renderQuotedXPost(post.quotedPost) : ''}
+        <footer class="x-post__footer">
+          ${metrics ? `<span>${escapeHtml(metrics)}</span>` : '<span>Post on X</span>'}
+          ${post.url ? `<a href="${escapeAttribute(post.url)}" target="_blank" rel="noopener">View original</a>` : ''}
+        </footer>
+      </div>
+    </article>
+  `;
+}
+
+function renderQuotedXPost(post) {
+  const author = post.author || {};
+  const label = author.username ? `${author.name || author.username} @${author.username}` : author.name || 'Quoted post';
+  return `
+    <aside class="x-quote">
+      <strong>${escapeHtml(label)}</strong>
+      ${post.text ? `<div>${renderLinkedText(truncate(post.text, 220))}</div>` : ''}
+      ${renderXMediaGrid((post.media || []).slice(0, 1), true)}
+    </aside>
+  `;
+}
+
+function renderXMediaGrid(mediaItems, compact = false) {
+  const usable = mediaItems.filter((media) => media.url || media.previewImageUrl).slice(0, compact ? 1 : 4);
+  if (!usable.length) return '';
+
+  return `
+    <div class="x-media-grid x-media-grid--${usable.length}${compact ? ' x-media-grid--compact' : ''}">
+      ${usable.map((media) => {
+        const src = media.url || media.previewImageUrl;
+        const alt = media.altText || '';
+        const isVideo = media.type === 'video' || media.type === 'animated_gif';
+        return `
+          <figure class="x-media">
+            <img src="${escapeAttribute(src)}" alt="${escapeAttribute(alt)}" loading="lazy" decoding="async">
+            ${isVideo ? '<span class="x-media__type">Video</span>' : ''}
+          </figure>
+        `;
+      }).join('')}
+    </div>
+  `;
+}
+
+function renderLinkedText(value) {
+  const input = String(value || '');
+  const urlPattern = /https?:\/\/[^\s<>"']+/g;
+  let html = '';
+  let cursor = 0;
+  let match;
+
+  while ((match = urlPattern.exec(input)) !== null) {
+    const start = match.index;
+    const rawUrl = trimTrailingUrlPunctuation(match[0]);
+    const end = start + rawUrl.length;
+    html += escapeHtml(input.slice(cursor, start));
+    html += `<a href="${escapeAttribute(rawUrl)}" target="_blank" rel="noopener">${escapeHtml(shortDisplayUrl(rawUrl))}</a>`;
+    cursor = end;
+  }
+
+  html += escapeHtml(input.slice(cursor));
+  return html.replace(/\n/g, '<br>');
+}
+
+function formatXMetrics(metrics) {
+  return [
+    metrics.replies ? `${formatCompactNumber(metrics.replies)} replies` : '',
+    metrics.reposts ? `${formatCompactNumber(metrics.reposts)} reposts` : '',
+    metrics.likes ? `${formatCompactNumber(metrics.likes)} likes` : ''
+  ].filter(Boolean).join(' · ');
+}
+
+function formatCompactNumber(value) {
+  const number = Number(value || 0);
+  if (!Number.isFinite(number) || number <= 0) return '';
+  return new Intl.NumberFormat('en', { notation: number >= 1000 ? 'compact' : 'standard' }).format(number);
+}
+
+function firstXPostImage(post) {
+  return (post?.media || []).find((media) => media.url || media.previewImageUrl)?.url || '';
+}
+
+function buildXPostTitle(post) {
+  if (!post) return '';
+  const author = post.author?.name || (post.author?.username ? `@${post.author.username}` : 'X');
+  const text = truncate(post.text || '', 88);
+  return text ? `${author}: ${text}` : `${author} on X`;
+}
+
+function trimTrailingUrlPunctuation(value) {
+  return String(value || '').replace(/[),.;\]]+$/g, '');
+}
+
+function shortDisplayUrl(value) {
+  try {
+    const url = new URL(value);
+    return `${url.hostname.replace(/^www\./, '')}${url.pathname === '/' ? '' : url.pathname}`;
+  } catch {
+    return value;
+  }
+}
+
+function looksLikeXStatusSource(value) {
+  try {
+    const url = new URL(value);
+    const host = url.hostname.toLowerCase().replace(/^www\./, '').replace(/^mobile\./, '');
+    return (host === 'x.com' || host === 'twitter.com' || host.endsWith('.x.com') || host.endsWith('.twitter.com')) &&
+      (/\/status\/\d+/i.test(url.pathname) || /^\/i\/web\/status\/\d+/i.test(url.pathname));
+  } catch {
+    return false;
+  }
 }
 
 function formatDate(value) {

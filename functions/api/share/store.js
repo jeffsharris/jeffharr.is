@@ -95,6 +95,7 @@ async function saveHistoryEvent(kv, item, sourceUrl) {
 
 function getIdPrefix(type) {
   if (typeof type === 'string' && type.startsWith('podcast_')) return 'p';
+  if (type === 'x_post') return 'x';
   if (type === 'article') return 'a';
   return 's';
 }

@@ -3,6 +3,7 @@ import test from 'node:test';
 import { classifyUrl, normalizeInputUrl, parsePodcastFeed, resolveShareUrl } from '../functions/api/share/podcast-resolver.js';
 import { hashText, saveShareItem } from '../functions/api/share/store.js';
 import { getQueryParamPreservingPlus } from '../functions/share/new.js';
+import { renderLoadingPage, renderSharePage } from '../functions/share/render.js';
 
 const SAMPLE_FEED = `<?xml version="1.0"?>
 <rss version="2.0" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" xmlns:content="http://purl.org/rss/1.0/modules/content/">
@@ -34,6 +35,11 @@ test('classifyUrl recognizes supported podcast platforms', () => {
   assert.equal(classifyUrl('https://itunes.apple.com/us/app/overcast-podcast-player/id888422857?mt=8').platform, 'unknown');
   assert.equal(classifyUrl('https://open.spotify.com/show/abc').spotifyType, 'show');
   assert.equal(classifyUrl('https://youtu.be/abc123').videoId, 'abc123');
+  assert.deepEqual(classifyUrl('https://x.com/alice/status/101?s=20'), {
+    platform: 'x',
+    username: 'alice',
+    tweetId: '101'
+  });
 });
 
 test('share new URL parsing preserves Overcast plus links', () => {
@@ -71,6 +77,26 @@ test('saveShareItem uses stable podcast ids for the same identity', async () => 
   assert.match(first.id, /^p_[a-f0-9]{12}$/);
 });
 
+test('saveShareItem uses stable x ids for the same post identity', async () => {
+  const kv = new MemoryKV();
+  const item = {
+    type: 'x_post',
+    sourceUrl: 'https://x.com/alice/status/101',
+    canonicalUrl: 'https://x.com/alice/status/101',
+    identityKey: 'x_post:101',
+    title: 'Alice on X',
+    platforms: {},
+    media: {},
+    x: { tweetId: '101', posts: [] },
+    resolution: { confidence: 'high', sources: ['test'], warnings: [] }
+  };
+
+  const first = await saveShareItem({ kv, item, sourceUrl: item.sourceUrl });
+  const second = await saveShareItem({ kv, item, sourceUrl: item.sourceUrl });
+  assert.equal(first.id, second.id);
+  assert.match(first.id, /^x_[a-f0-9]{12}$/);
+});
+
 test('resolveShareUrl resolves a raw RSS feed URL', async () => {
   const fetchImpl = async (url) => {
     assert.equal(url, 'https://example.com/feed.xml');
@@ -83,6 +109,146 @@ test('resolveShareUrl resolves a raw RSS feed URL', async () => {
   assert.equal(item.type, 'podcast_show');
   assert.equal(item.title, 'Example Podcast');
   assert.equal(item.platforms.rss.url, 'https://example.com/feed.xml');
+});
+
+test('resolveShareUrl builds an X share item with previous and subsequent author posts', async () => {
+  const tweets = new Map([
+    ['100', {
+      id: '100',
+      author_id: '1',
+      text: 'First thought in the thread',
+      created_at: '2026-05-12T10:00:00.000Z',
+      conversation_id: '100',
+      public_metrics: { reply_count: 2, retweet_count: 3, like_count: 40, quote_count: 1 }
+    }],
+    ['101', {
+      id: '101',
+      author_id: '1',
+      text: 'Second post with a picture https://t.co/pic',
+      created_at: '2026-05-12T10:01:00.000Z',
+      conversation_id: '100',
+      referenced_tweets: [{ type: 'replied_to', id: '100' }],
+      entities: {
+        urls: [{
+          url: 'https://t.co/pic',
+          expanded_url: 'https://x.com/alice/status/101/photo/1'
+        }]
+      },
+      attachments: { media_keys: ['m1'] },
+      public_metrics: { reply_count: 1, retweet_count: 2, like_count: 30, quote_count: 0 }
+    }],
+    ['102', {
+      id: '102',
+      author_id: '1',
+      text: 'Third post continues it',
+      created_at: '2026-05-12T10:02:00.000Z',
+      conversation_id: '100',
+      referenced_tweets: [{ type: 'replied_to', id: '101' }],
+      public_metrics: { reply_count: 1, retweet_count: 1, like_count: 20, quote_count: 0 }
+    }],
+    ['103', {
+      id: '103',
+      author_id: '1',
+      text: 'Final post closes the loop',
+      created_at: '2026-05-12T10:03:00.000Z',
+      conversation_id: '100',
+      referenced_tweets: [{ type: 'replied_to', id: '102' }],
+      public_metrics: { reply_count: 0, retweet_count: 1, like_count: 10, quote_count: 0 }
+    }],
+    ['104', {
+      id: '104',
+      author_id: '1',
+      text: 'Same conversation but not in this branch',
+      created_at: '2026-05-12T10:04:00.000Z',
+      conversation_id: '100',
+      referenced_tweets: [{ type: 'replied_to', id: '100' }],
+      public_metrics: { reply_count: 0, retweet_count: 0, like_count: 0, quote_count: 0 }
+    }]
+  ]);
+  const users = [{ id: '1', name: 'Alice Example', username: 'alice', profile_image_url: 'https://img.example/alice.jpg', verified: true }];
+  const media = [{ media_key: 'm1', type: 'photo', url: 'https://pbs.twimg.com/media/pic.jpg', alt_text: 'A test image' }];
+
+  const fetchImpl = async (url, options = {}) => {
+    assert.equal(options.headers.Authorization, 'Bearer test-x-token');
+    const parsed = new URL(String(url));
+    if (parsed.pathname === '/2/tweets') {
+      const ids = parsed.searchParams.get('ids').split(',');
+      return Response.json({
+        data: ids.map((id) => tweets.get(id)).filter(Boolean),
+        includes: { users, media }
+      });
+    }
+    if (parsed.pathname === '/2/tweets/search/recent') {
+      assert.match(parsed.searchParams.get('query'), /conversation_id:100/);
+      assert.match(parsed.searchParams.get('query'), /from:alice/);
+      return Response.json({
+        data: ['103', '104', '102'].map((id) => tweets.get(id)),
+        includes: { users, media }
+      });
+    }
+    throw new Error(`Unexpected URL ${url}`);
+  };
+
+  const item = await resolveShareUrl('https://x.com/alice/status/101?s=20', {
+    fetchImpl,
+    env: { X_API_BEARER_TOKEN: 'test-x-token' }
+  });
+
+  assert.equal(item.type, 'x_post');
+  assert.equal(item.identityKey, 'x_post:101');
+  assert.equal(item.canonicalUrl, 'https://x.com/alice/status/101');
+  assert.equal(item.imageUrl, 'https://pbs.twimg.com/media/pic.jpg');
+  assert.deepEqual(item.x.posts.map((post) => post.id), ['100', '101', '102', '103']);
+  assert.equal(item.x.posts[1].isShared, true);
+  assert.equal(item.x.posts[1].text, 'Second post with a picture');
+  assert.equal(item.x.posts[1].media[0].altText, 'A test image');
+  assert.ok(item.resolution.sources.includes('x-conversation-search'));
+});
+
+test('renderSharePage renders X posts with native share and rich media', () => {
+  const item = {
+    id: 'x_abc123',
+    type: 'x_post',
+    title: 'Alice Example: Second post',
+    description: '@alice: Second post with a picture',
+    imageUrl: 'https://pbs.twimg.com/media/pic.jpg',
+    canonicalUrl: 'https://x.com/alice/status/101',
+    x: {
+      sharedTweetId: '101',
+      posts: [{
+        id: '100',
+        url: 'https://x.com/alice/status/100',
+        text: 'First thought',
+        author: { name: 'Alice Example', username: 'alice', profileImageUrl: 'https://img.example/alice.jpg' },
+        createdAt: '2026-05-12T10:00:00.000Z',
+        metrics: {},
+        media: []
+      }, {
+        id: '101',
+        url: 'https://x.com/alice/status/101',
+        text: 'Second post with a picture',
+        author: { name: 'Alice Example', username: 'alice', profileImageUrl: 'https://img.example/alice.jpg', verified: true },
+        createdAt: '2026-05-12T10:01:00.000Z',
+        isShared: true,
+        metrics: { replies: 1, reposts: 2, likes: 30 },
+        media: [{ type: 'photo', url: 'https://pbs.twimg.com/media/pic.jpg', altText: 'A test image' }]
+      }]
+    }
+  };
+
+  const html = renderSharePage(item, 'https://jeffharr.is/share/x_abc123');
+  assert.match(html, /data-native-share/);
+  assert.match(html, /Share thread/);
+  assert.match(html, /x-post--shared/);
+  assert.match(html, /https:\/\/pbs\.twimg\.com\/media\/pic\.jpg/);
+  assert.match(html, /Open on X/);
+});
+
+test('renderLoadingPage uses X-specific loading copy for x.com status URLs', () => {
+  const html = renderLoadingPage('https://x.com/alice/status/101', 'https://jeffharr.is/share/new?url=x');
+  assert.match(html, /data-share-kind="x"/);
+  assert.match(html, /Building X share page/);
+  assert.match(html, /Following the reply chain/);
 });
 
 test('resolveShareUrl resolves an Overcast short episode URL through the feed', async () => {

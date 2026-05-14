@@ -1,4 +1,5 @@
 import { DOMParser, parseHTML } from 'linkedom';
+import { parseXStatusUrl, resolveXShareUrl } from './x-resolver.js';
 
 const FETCH_TIMEOUT_MS = 12000;
 const MAX_FEED_BYTES = 2_500_000;
@@ -28,6 +29,10 @@ export async function resolveShareUrl(rawInput, options = {}) {
   }
 
   const classification = classifyUrl(inputUrl);
+
+  if (classification.platform === 'x') {
+    return resolveXShareUrl(inputUrl, classification, fetchImpl, env, ShareResolveError);
+  }
 
   if (classification.platform === 'apple') {
     return resolveApple(inputUrl, classification, fetchImpl, env);
@@ -115,6 +120,9 @@ export function classifyUrl(urlString) {
     const channelHandle = path.match(/^\/@([^/?#]+)/)?.[1] || null;
     return { platform: 'youtube', videoId, playlistId, channelHandle };
   }
+
+  const xStatus = parseXStatusUrl(urlString);
+  if (xStatus) return xStatus;
 
   return { platform: 'unknown' };
 }
