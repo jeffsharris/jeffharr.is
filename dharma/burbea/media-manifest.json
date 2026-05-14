@@ -1445,6 +1445,126 @@
       "key": "chapters/dharmaseed-31530.json",
       "source_path": "chapters/dharmaseed-31530.json",
       "url": "https://jeffharr.is/dharma/burbea/chapters/dharmaseed-31530.json"
+    },
+    {
+      "talk_id": "dharmaseed:31529",
+      "key": "chapters/dharmaseed-31529.json",
+      "source_path": "chapters/dharmaseed-31529.json",
+      "url": "https://jeffharr.is/dharma/burbea/chapters/dharmaseed-31529.json"
+    },
+    {
+      "talk_id": "dharmaseed:27491",
+      "key": "chapters/dharmaseed-27491.json",
+      "source_path": "chapters/dharmaseed-27491.json",
+      "url": "https://jeffharr.is/dharma/burbea/chapters/dharmaseed-27491.json"
+    },
+    {
+      "talk_id": "dharmaseed:27492",
+      "key": "chapters/dharmaseed-27492.json",
+      "source_path": "chapters/dharmaseed-27492.json",
+      "url": "https://jeffharr.is/dharma/burbea/chapters/dharmaseed-27492.json"
+    },
+    {
+      "talk_id": "dharmaseed:27488",
+      "key": "chapters/dharmaseed-27488.json",
+      "source_path": "chapters/dharmaseed-27488.json",
+      "url": "https://jeffharr.is/dharma/burbea/chapters/dharmaseed-27488.json"
+    },
+    {
+      "talk_id": "dharmaseed:27490",
+      "key": "chapters/dharmaseed-27490.json",
+      "source_path": "chapters/dharmaseed-27490.json",
+      "url": "https://jeffharr.is/dharma/burbea/chapters/dharmaseed-27490.json"
+    },
+    {
+      "talk_id": "dharmaseed:26009",
+      "key": "chapters/dharmaseed-26009.json",
+      "source_path": "chapters/dharmaseed-26009.json",
+      "url": "https://jeffharr.is/dharma/burbea/chapters/dharmaseed-26009.json"
+    },
+    {
+      "talk_id": "dharmaseed:26007",
+      "key": "chapters/dharmaseed-26007.json",
+      "source_path": "chapters/dharmaseed-26007.json",
+      "url": "https://jeffharr.is/dharma/burbea/chapters/dharmaseed-26007.json"
+    },
+    {
+      "talk_id": "dharmaseed:26010",
+      "key": "chapters/dharmaseed-26010.json",
+      "source_path": "chapters/dharmaseed-26010.json",
+      "url": "https://jeffharr.is/dharma/burbea/chapters/dharmaseed-26010.json"
+    },
+    {
+      "talk_id": "dharmaseed:26008",
+      "key": "chapters/dharmaseed-26008.json",
+      "source_path": "chapters/dharmaseed-26008.json",
+      "url": "https://jeffharr.is/dharma/burbea/chapters/dharmaseed-26008.json"
+    },
+    {
+      "talk_id": "dharmaseed:29723",
+      "key": "chapters/dharmaseed-29723.json",
+      "source_path": "chapters/dharmaseed-29723.json",
+      "url": "https://jeffharr.is/dharma/burbea/chapters/dharmaseed-29723.json"
+    },
+    {
+      "talk_id": "dharmaseed:29722",
+      "key": "chapters/dharmaseed-29722.json",
+      "source_path": "chapters/dharmaseed-29722.json",
+      "url": "https://jeffharr.is/dharma/burbea/chapters/dharmaseed-29722.json"
+    },
+    {
+      "talk_id": "dharmaseed:29721",
+      "key": "chapters/dharmaseed-29721.json",
+      "source_path": "chapters/dharmaseed-29721.json",
+      "url": "https://jeffharr.is/dharma/burbea/chapters/dharmaseed-29721.json"
+    },
+    {
+      "talk_id": "dharmaseed:29720",
+      "key": "chapters/dharmaseed-29720.json",
+      "source_path": "chapters/dharmaseed-29720.json",
+      "url": "https://jeffharr.is/dharma/burbea/chapters/dharmaseed-29720.json"
+    },
+    {
+      "talk_id": "dharmaseed:25028",
+      "key": "chapters/dharmaseed-25028.json",
+      "source_path": "chapters/dharmaseed-25028.json",
+      "url": "https://jeffharr.is/dharma/burbea/chapters/dharmaseed-25028.json"
+    },
+    {
+      "talk_id": "dharmaseed:28027",
+      "key": "chapters/dharmaseed-28027.json",
+      "source_path": "chapters/dharmaseed-28027.json",
+      "url": "https://jeffharr.is/dharma/burbea/chapters/dharmaseed-28027.json"
+    },
+    {
+      "talk_id": "dharmaseed:29718",
+      "key": "chapters/dharmaseed-29718.json",
+      "source_path": "chapters/dharmaseed-29718.json",
+      "url": "https://jeffharr.is/dharma/burbea/chapters/dharmaseed-29718.json"
+    },
+    {
+      "talk_id": "dharmaseed:28028",
+      "key": "chapters/dharmaseed-28028.json",
+      "source_path": "chapters/dharmaseed-28028.json",
+      "url": "https://jeffharr.is/dharma/burbea/chapters/dharmaseed-28028.json"
+    },
+    {
+      "talk_id": "dharmaseed:28026",
+      "key": "chapters/dharmaseed-28026.json",
+      "source_path": "chapters/dharmaseed-28026.json",
+      "url": "https://jeffharr.is/dharma/burbea/chapters/dharmaseed-28026.json"
+    },
+    {
+      "talk_id": "dharmaseed:24680",
+      "key": "chapters/dharmaseed-24680.json",
+      "source_path": "chapters/dharmaseed-24680.json",
+      "url": "https://jeffharr.is/dharma/burbea/chapters/dharmaseed-24680.json"
+    },
+    {
+      "talk_id": "dharmaseed:24681",
+      "key": "chapters/dharmaseed-24681.json",
+      "source_path": "chapters/dharmaseed-24681.json",
+      "url": "https://jeffharr.is/dharma/burbea/chapters/dharmaseed-24681.json"
     }
   ],
   "artwork": [
@@ -2887,6 +3007,126 @@
       "key": "artwork/dharmaseed-31530.jpg",
       "source_path": "artwork/dharmaseed-31530.jpg",
       "url": "https://jeffharr.is/dharma/burbea/artwork/dharmaseed-31530.jpg"
+    },
+    {
+      "talk_id": "dharmaseed:31529",
+      "key": "artwork/dharmaseed-31529.jpg",
+      "source_path": "artwork/dharmaseed-31529.jpg",
+      "url": "https://jeffharr.is/dharma/burbea/artwork/dharmaseed-31529.jpg"
+    },
+    {
+      "talk_id": "dharmaseed:27491",
+      "key": "artwork/dharmaseed-27491.jpg",
+      "source_path": "artwork/dharmaseed-27491.jpg",
+      "url": "https://jeffharr.is/dharma/burbea/artwork/dharmaseed-27491.jpg"
+    },
+    {
+      "talk_id": "dharmaseed:27492",
+      "key": "artwork/dharmaseed-27492.jpg",
+      "source_path": "artwork/dharmaseed-27492.jpg",
+      "url": "https://jeffharr.is/dharma/burbea/artwork/dharmaseed-27492.jpg"
+    },
+    {
+      "talk_id": "dharmaseed:27488",
+      "key": "artwork/dharmaseed-27488.jpg",
+      "source_path": "artwork/dharmaseed-27488.jpg",
+      "url": "https://jeffharr.is/dharma/burbea/artwork/dharmaseed-27488.jpg"
+    },
+    {
+      "talk_id": "dharmaseed:27490",
+      "key": "artwork/dharmaseed-27490.jpg",
+      "source_path": "artwork/dharmaseed-27490.jpg",
+      "url": "https://jeffharr.is/dharma/burbea/artwork/dharmaseed-27490.jpg"
+    },
+    {
+      "talk_id": "dharmaseed:26009",
+      "key": "artwork/dharmaseed-26009.jpg",
+      "source_path": "artwork/dharmaseed-26009.jpg",
+      "url": "https://jeffharr.is/dharma/burbea/artwork/dharmaseed-26009.jpg"
+    },
+    {
+      "talk_id": "dharmaseed:26007",
+      "key": "artwork/dharmaseed-26007.jpg",
+      "source_path": "artwork/dharmaseed-26007.jpg",
+      "url": "https://jeffharr.is/dharma/burbea/artwork/dharmaseed-26007.jpg"
+    },
+    {
+      "talk_id": "dharmaseed:26010",
+      "key": "artwork/dharmaseed-26010.jpg",
+      "source_path": "artwork/dharmaseed-26010.jpg",
+      "url": "https://jeffharr.is/dharma/burbea/artwork/dharmaseed-26010.jpg"
+    },
+    {
+      "talk_id": "dharmaseed:26008",
+      "key": "artwork/dharmaseed-26008.jpg",
+      "source_path": "artwork/dharmaseed-26008.jpg",
+      "url": "https://jeffharr.is/dharma/burbea/artwork/dharmaseed-26008.jpg"
+    },
+    {
+      "talk_id": "dharmaseed:29723",
+      "key": "artwork/dharmaseed-29723.jpg",
+      "source_path": "artwork/dharmaseed-29723.jpg",
+      "url": "https://jeffharr.is/dharma/burbea/artwork/dharmaseed-29723.jpg"
+    },
+    {
+      "talk_id": "dharmaseed:29722",
+      "key": "artwork/dharmaseed-29722.jpg",
+      "source_path": "artwork/dharmaseed-29722.jpg",
+      "url": "https://jeffharr.is/dharma/burbea/artwork/dharmaseed-29722.jpg"
+    },
+    {
+      "talk_id": "dharmaseed:29721",
+      "key": "artwork/dharmaseed-29721.jpg",
+      "source_path": "artwork/dharmaseed-29721.jpg",
+      "url": "https://jeffharr.is/dharma/burbea/artwork/dharmaseed-29721.jpg"
+    },
+    {
+      "talk_id": "dharmaseed:29720",
+      "key": "artwork/dharmaseed-29720.jpg",
+      "source_path": "artwork/dharmaseed-29720.jpg",
+      "url": "https://jeffharr.is/dharma/burbea/artwork/dharmaseed-29720.jpg"
+    },
+    {
+      "talk_id": "dharmaseed:25028",
+      "key": "artwork/dharmaseed-25028.jpg",
+      "source_path": "artwork/dharmaseed-25028.jpg",
+      "url": "https://jeffharr.is/dharma/burbea/artwork/dharmaseed-25028.jpg"
+    },
+    {
+      "talk_id": "dharmaseed:28027",
+      "key": "artwork/dharmaseed-28027.jpg",
+      "source_path": "artwork/dharmaseed-28027.jpg",
+      "url": "https://jeffharr.is/dharma/burbea/artwork/dharmaseed-28027.jpg"
+    },
+    {
+      "talk_id": "dharmaseed:29718",
+      "key": "artwork/dharmaseed-29718.jpg",
+      "source_path": "artwork/dharmaseed-29718.jpg",
+      "url": "https://jeffharr.is/dharma/burbea/artwork/dharmaseed-29718.jpg"
+    },
+    {
+      "talk_id": "dharmaseed:28028",
+      "key": "artwork/dharmaseed-28028.jpg",
+      "source_path": "artwork/dharmaseed-28028.jpg",
+      "url": "https://jeffharr.is/dharma/burbea/artwork/dharmaseed-28028.jpg"
+    },
+    {
+      "talk_id": "dharmaseed:28026",
+      "key": "artwork/dharmaseed-28026.jpg",
+      "source_path": "artwork/dharmaseed-28026.jpg",
+      "url": "https://jeffharr.is/dharma/burbea/artwork/dharmaseed-28026.jpg"
+    },
+    {
+      "talk_id": "dharmaseed:24680",
+      "key": "artwork/dharmaseed-24680.jpg",
+      "source_path": "artwork/dharmaseed-24680.jpg",
+      "url": "https://jeffharr.is/dharma/burbea/artwork/dharmaseed-24680.jpg"
+    },
+    {
+      "talk_id": "dharmaseed:24681",
+      "key": "artwork/dharmaseed-24681.jpg",
+      "source_path": "artwork/dharmaseed-24681.jpg",
+      "url": "https://jeffharr.is/dharma/burbea/artwork/dharmaseed-24681.jpg"
     }
   ]
 }

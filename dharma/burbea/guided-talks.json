@@ -814,6 +814,84 @@
     "description": "(Gaia House)",
     "image_url": "https://jeffharr.is/dharma/burbea/artwork/rob-burbea-podcast-cover.jpg",
     "canonical_url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-27488/",
+    "podcast_description": "This guided meditation begins with settling posture and releasing obvious tension in the face, throat, shoulders, chest, and belly. It then widens into a larger field of awareness, first as a spacious bodily sense and then as a bright, energetic space that can be supported by imagined lines of energy and, optionally, the breath. The practice gradually becomes more imaginal, suggesting a radiant body of light and inviting the listener to notice what feels helpful rather than forcing any one visualization.",
+    "short_summary": "A sparse guided meditation that moves from posture and relaxation into spacious, luminous, imaginal awareness.",
+    "episode_image_url": "https://jeffharr.is/dharma/burbea/artwork/dharmaseed-27488.jpg",
+    "chapters_url": "https://jeffharr.is/dharma/burbea/chapters/dharmaseed-27488.json",
+    "chapters": [
+      {
+        "start": 0.0,
+        "title": "Settling the posture",
+        "description": "The meditation begins by establishing an upright but relaxed posture and sensing a balance of wakefulness and softness.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-27488/?t=0",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 78.0,
+        "title": "Releasing tension",
+        "description": "Attention moves through the face, throat, neck, shoulders, back, chest, and belly, encouraging gentle relaxation and release.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-27488/?t=78",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 173.0,
+        "title": "Grounding in contact",
+        "description": "The practice widens to simple sensations in the hands, backside, legs, and feet, grounding awareness in immediate bodily contact.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-27488/?t=173",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 228.0,
+        "title": "Opening the field",
+        "description": "Awareness is invited to expand beyond the body into a larger space filled with bright, sensitive presence.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-27488/?t=228",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 337.0,
+        "title": "Restoring spacious presence",
+        "description": "The talk emphasizes repeatedly re-expanding attention when it shrinks, using a wind-and-sail image to support an open, filled space.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-27488/?t=337",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 542.0,
+        "title": "Imagining energy lines",
+        "description": "A central line of energy is introduced, then extended into additional lines down the legs, with an emphasis on sensing what feels supportive.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-27488/?t=542",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 703.0,
+        "title": "Breath and support",
+        "description": "The meditation offers the breath as an optional support for the whole-body field, including gentle expansion on the in-breath and relaxation on the out-breath.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-27488/?t=703",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 918.0,
+        "title": "Experimenting with form",
+        "description": "Listeners are encouraged to try different combinations of breath, energy lines, and imagination, always returning to the felt sense of the whole space.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-27488/?t=918",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1140.0,
+        "title": "Body of light",
+        "description": "The practice deepens into a radiant or translucent body of light, with color and luminosity left open to the listener's own response.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-27488/?t=1140",
+        "img": null,
+        "toc": true
+      }
+    ],
     "venue": "Gaia House",
     "series": null,
     "tags": [],
