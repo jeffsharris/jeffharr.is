@@ -604,6 +604,18 @@
       color: #211b15;
     }
 
+    .candidate.has-notes::after {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      width: 9px;
+      height: 9px;
+      border: 2px solid rgba(19, 16, 13, 0.72);
+      border-radius: 50%;
+      background: #d4b986;
+      content: "";
+    }
+
     .detail-panel {
       display: grid;
       gap: 18px;
@@ -623,6 +635,45 @@
       font-weight: 800;
       letter-spacing: 0.06em;
       text-transform: uppercase;
+    }
+
+    .feedback-history {
+      display: grid;
+      gap: 12px;
+    }
+
+    .feedback-history__item {
+      display: grid;
+      grid-template-columns: 52px 1fr;
+      gap: 11px;
+      align-items: start;
+      padding: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.035);
+    }
+
+    .feedback-history__item img {
+      width: 52px;
+      aspect-ratio: 1;
+      border-radius: 6px;
+      object-fit: cover;
+    }
+
+    .feedback-history__meta {
+      color: rgba(255, 255, 255, 0.54);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .feedback-history__text {
+      margin: 4px 0 0;
+      color: rgba(255, 255, 255, 0.78);
+      font-size: 13px;
+      line-height: 1.45;
+      white-space: pre-wrap;
     }
 
     .dark-segmented {
@@ -840,8 +891,13 @@
           </div>
 
           <div class="detail-card" id="detail-feedback-card">
-            <label class="detail-label" for="detail-feedback">Feedback</label>
+            <label class="detail-label" for="detail-feedback" id="detail-feedback-label">Feedback</label>
             <textarea id="detail-feedback" placeholder="What should change in the next generation pass?"></textarea>
+          </div>
+
+          <div class="detail-card" id="detail-feedback-history-card">
+            <span class="detail-label">Feedback History</span>
+            <div class="feedback-history" id="feedback-history"></div>
           </div>
 
           <div class="detail-card">
@@ -874,11 +930,12 @@
   <script src="./poem-image-review-data.js?v=20260515-pass007"></script>
   <script>
     const STORAGE_KEY = 'jeffharr-poem-image-iteration-v1';
+    const STORAGE_VERSION = 2;
     const CURRENT_CANDIDATE_SUFFIX = '::current';
 
     const app = {
       items: [],
-      state: { version: 1, items: {} },
+      state: createEmptyState(),
       promptsByCandidate: new Map(),
       filter: 'all',
       query: '',
@@ -910,6 +967,9 @@
       detailMode: document.getElementById('detail-mode'),
       setContender: document.getElementById('set-contender'),
       feedbackCard: document.getElementById('detail-feedback-card'),
+      feedbackHistoryCard: document.getElementById('detail-feedback-history-card'),
+      feedbackHistory: document.getElementById('feedback-history'),
+      detailFeedbackLabel: document.getElementById('detail-feedback-label'),
       detailFeedback: document.getElementById('detail-feedback'),
       promptView: document.getElementById('prompt-view'),
       promptEditor: document.getElementById('prompt-editor'),
@@ -1023,7 +1083,7 @@
       els.resetState.addEventListener('click', () => {
         if (!confirm('Reset all iteration selections, feedback, contenders, and prompt edits?')) return;
         localStorage.removeItem(STORAGE_KEY);
-        app.state = { version: 1, items: {} };
+        app.state = createEmptyState();
         app.activeCandidateId = null;
         app.isEditingPrompt = false;
         render();
@@ -1057,7 +1117,10 @@
             contenderId: app.activeCandidateId || currentCandidateId(app.activeSlug)
           });
         } else {
-          setMode(app.activeSlug, button.dataset.mode);
+          updateItemState(app.activeSlug, {
+            mode: 'iterate',
+            contenderId: app.activeCandidateId || currentCandidateId(app.activeSlug)
+          });
         }
         render();
         renderDetailIfOpen();
@@ -1073,9 +1136,11 @@
       });
 
       els.detailFeedback.addEventListener('input', () => {
-        if (!app.activeSlug) return;
-        updateItemState(app.activeSlug, { feedback: els.detailFeedback.value });
+        if (!app.activeSlug || !app.activeCandidateId) return;
+        const item = getActiveItem();
+        updateCandidateState(app.activeSlug, app.activeCandidateId, { feedback: els.detailFeedback.value });
         render();
+        if (item) renderFeedbackHistory(item);
       });
 
       els.copyPrompt.addEventListener('click', async () => {
@@ -1092,7 +1157,7 @@
         if (app.isEditingPrompt) {
           els.promptEditor.value = getDisplayPrompt(item, getActiveCandidate(item));
         } else {
-          updateItemState(item.slug, { promptOverride: els.promptEditor.value });
+          updateCandidateState(item.slug, getActiveCandidate(item).id, { promptOverride: els.promptEditor.value });
           showToast('Prompt edit saved');
         }
         renderDetailIfOpen();
@@ -1102,13 +1167,13 @@
       els.promptEditor.addEventListener('input', () => {
         const item = getActiveItem();
         if (!item) return;
-        updateItemState(item.slug, { promptOverride: els.promptEditor.value });
+        updateCandidateState(item.slug, getActiveCandidate(item).id, { promptOverride: els.promptEditor.value });
       });
 
       els.resetPrompt.addEventListener('click', () => {
         const item = getActiveItem();
         if (!item) return;
-        updateItemState(item.slug, { promptOverride: '' });
+        updateCandidateState(item.slug, getActiveCandidate(item).id, { promptOverride: '' });
         app.isEditingPrompt = false;
         renderDetailIfOpen();
         showToast('Prompt reset');
@@ -1142,9 +1207,9 @@
     }
 
     function renderTile(item) {
-      const state = getItemState(item.slug);
       const mode = getMode(item.slug);
       const candidate = getContenderCandidate(item);
+      const candidateState = getCandidateState(item.slug, candidate.id);
       const isIterating = mode === 'iterate';
       return `
         <article class="tile${isIterating ? ' is-iterating' : ''}" data-slug="${escapeAttribute(item.slug)}">
@@ -1166,8 +1231,8 @@
             ${candidate.id !== currentCandidateId(item.slug) ? `<div class="tile__candidate">${escapeHtml(candidate.label)}</div>` : ''}
             ${isIterating ? `
               <div class="feedback">
-                <label for="feedback-${escapeAttribute(item.slug)}">Feedback</label>
-                <textarea id="feedback-${escapeAttribute(item.slug)}" data-action="feedback" placeholder="What should the next pass understand?">${escapeHtml(state.feedback || '')}</textarea>
+                <label for="feedback-${escapeAttribute(item.slug)}">Feedback on ${escapeHtml(candidate.shortLabel || candidate.label)}</label>
+                <textarea id="feedback-${escapeAttribute(item.slug)}" data-action="feedback" data-candidate-id="${escapeAttribute(candidate.id)}" placeholder="What should this image's next pass understand?">${escapeHtml(candidateState.feedback || '')}</textarea>
               </div>
             ` : ''}
           </div>
@@ -1181,7 +1246,12 @@
       if (!tile || !action || action === 'feedback') return;
       const slug = tile.dataset.slug;
       if (action === 'iterate') {
-        setMode(slug, 'iterate');
+        const item = app.items.find((entry) => entry.slug === slug);
+        const candidate = item ? getContenderCandidate(item) : null;
+        updateItemState(slug, {
+          mode: 'iterate',
+          contenderId: candidate?.id || currentCandidateId(slug)
+        });
         render();
         return;
       }
@@ -1204,7 +1274,7 @@
       const textarea = event.target.closest('[data-action="feedback"]');
       const tile = event.target.closest('[data-slug]');
       if (!textarea || !tile) return;
-      updateItemState(tile.dataset.slug, { feedback: textarea.value });
+      updateCandidateState(tile.dataset.slug, textarea.dataset.candidateId || currentCandidateId(tile.dataset.slug), { feedback: textarea.value });
     }
 
     function openDetail(slug) {
@@ -1233,7 +1303,7 @@
       const item = getActiveItem();
       if (!item) return;
       const candidate = getActiveCandidate(item);
-      const state = getItemState(item.slug);
+      const candidateState = getCandidateState(item.slug, candidate.id);
       const mode = getMode(item.slug);
       const prompt = getDisplayPrompt(item, candidate);
 
@@ -1241,12 +1311,14 @@
       els.detailAuthor.textContent = item.author || '';
       els.detailImage.src = candidate.src;
       els.detailImage.alt = `${item.title} image`;
-      els.detailFeedback.value = state.feedback || '';
+      els.detailFeedbackLabel.textContent = `Feedback on ${candidate.shortLabel || candidate.label}`;
+      els.detailFeedback.value = candidateState.feedback || '';
       els.feedbackCard.classList.toggle('is-hidden', mode !== 'iterate');
+      renderFeedbackHistory(item);
       els.selectedLines.textContent = item.selectedLines || '';
       els.poemContext.textContent = item.context || '';
       els.promptView.textContent = prompt;
-      els.promptEditor.value = state.promptOverride || prompt;
+      els.promptEditor.value = candidateState.promptOverride || prompt;
       els.promptView.classList.toggle('is-hidden', app.isEditingPrompt);
       els.promptEditor.classList.toggle('is-hidden', !app.isEditingPrompt);
       els.editPrompt.textContent = app.isEditingPrompt ? 'Save Prompt' : 'Edit Prompt';
@@ -1258,7 +1330,7 @@
 
       const latestPass = getLatestPass(item);
       els.candidateRail.innerHTML = getCandidates(item).map((candidateOption) => `
-        <button class="candidate${candidateOption.id === candidate.id ? ' is-active' : ''}" type="button" data-candidate-id="${escapeAttribute(candidateOption.id)}" title="${escapeAttribute(candidateOption.label)}">
+        <button class="candidate${candidateOption.id === candidate.id ? ' is-active' : ''}${candidateHasNotes(item.slug, candidateOption.id) ? ' has-notes' : ''}" type="button" data-candidate-id="${escapeAttribute(candidateOption.id)}" title="${escapeAttribute(candidateOption.label)}">
           <img src="${escapeAttribute(candidateOption.src)}" alt="${escapeAttribute(candidateOption.label)}" loading="lazy">
           <span class="candidate__badge${candidateOption.pass === latestPass ? ' candidate__badge--new' : ''}">${escapeHtml(candidateOption.shortLabel || candidateOption.label)}</span>
         </button>
@@ -1271,6 +1343,7 @@
         if (app.filter !== 'all' && app.filter !== mode) return false;
         if (!app.query) return true;
         const state = getItemState(item.slug);
+        const candidateNotes = Object.values(state.candidateState || {}).flatMap((entry) => [entry.feedback, entry.promptOverride]);
         const haystack = [
           item.title,
           item.author,
@@ -1278,8 +1351,7 @@
           item.context,
           item.style,
           item.prompt,
-          state.feedback,
-          state.promptOverride
+          ...candidateNotes
         ].join(' ').toLowerCase();
         return haystack.includes(app.query);
       });
@@ -1357,7 +1429,12 @@
     }
 
     function setMode(slug, mode) {
-      updateItemState(slug, { mode: mode === 'iterate' ? 'iterate' : 'finalized' });
+      const item = app.items.find((entry) => entry.slug === slug);
+      const candidate = item ? getContenderCandidate(item) : null;
+      updateItemState(slug, {
+        mode: mode === 'iterate' ? 'iterate' : 'finalized',
+        contenderId: mode === 'iterate' ? candidate?.id || currentCandidateId(slug) : getItemState(slug).contenderId
+      });
     }
 
     function getMode(slug) {
@@ -1372,25 +1449,73 @@
       const current = getItemState(slug);
       const next = {
         ...current,
-        ...patch
+        ...patch,
+        candidateState: {
+          ...(current.candidateState || {}),
+          ...(patch.candidateState || {})
+        }
       };
-      if (!next.contenderId) next.contenderId = currentCandidateId(slug);
       app.state.items[slug] = cleanItemState(slug, next);
       if (!Object.keys(app.state.items[slug]).length) delete app.state.items[slug];
       saveState();
     }
 
+    function getCandidateState(slug, candidateId) {
+      return getItemState(slug).candidateState?.[candidateId] || {};
+    }
+
+    function updateCandidateState(slug, candidateId, patch) {
+      if (!candidateId) return;
+      const current = getCandidateState(slug, candidateId);
+      updateItemState(slug, {
+        candidateState: {
+          [candidateId]: cleanCandidateState({
+            ...current,
+            ...patch,
+            updatedAt: new Date().toISOString()
+          })
+        }
+      });
+    }
+
+    function candidateHasNotes(slug, candidateId) {
+      const state = getCandidateState(slug, candidateId);
+      return Boolean(state.feedback?.trim() || state.promptOverride?.trim());
+    }
+
     function cleanItemState(slug, state) {
       const next = { ...state };
       if (!next.mode || next.mode === 'finalized') delete next.mode;
+      if (!next.contenderId || (next.contenderId === currentCandidateId(slug) && next.mode !== 'iterate')) delete next.contenderId;
+      if (next.candidateState && typeof next.candidateState === 'object') {
+        const cleanedCandidates = {};
+        for (const [candidateId, candidateState] of Object.entries(next.candidateState)) {
+          const cleaned = cleanCandidateState(candidateState);
+          if (Object.keys(cleaned).length) cleanedCandidates[candidateId] = cleaned;
+        }
+        if (Object.keys(cleanedCandidates).length) {
+          next.candidateState = cleanedCandidates;
+        } else {
+          delete next.candidateState;
+        }
+      } else {
+        delete next.candidateState;
+      }
+      delete next.feedback;
+      delete next.promptOverride;
+      return next;
+    }
+
+    function cleanCandidateState(state) {
+      const next = { ...state };
       if (!next.feedback?.trim()) delete next.feedback;
       if (!next.promptOverride?.trim()) delete next.promptOverride;
-      if (!next.contenderId || next.contenderId === currentCandidateId(slug)) delete next.contenderId;
+      if (!next.updatedAt || (!next.feedback && !next.promptOverride)) delete next.updatedAt;
       return next;
     }
 
     function getDisplayPrompt(item, candidate) {
-      const override = getItemState(item.slug).promptOverride;
+      const override = getCandidateState(item.slug, candidate.id).promptOverride;
       if (override?.trim()) return override;
       if (candidate.id !== currentCandidateId(item.slug)) {
         const prompt = getPromptForCandidate(candidate);
@@ -1409,8 +1534,14 @@
     function loadState() {
       try {
         const stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
-        if (stored && stored.version === 1 && stored.items && typeof stored.items === 'object') {
-          app.state = { version: 1, items: stored.items };
+        if (stored?.version === STORAGE_VERSION && stored.items && typeof stored.items === 'object') {
+          app.state = cleanStoredState(stored);
+          saveState();
+          return;
+        }
+        if (stored?.version === 1 && stored.items && typeof stored.items === 'object') {
+          app.state = migrateLegacyState(stored);
+          saveState();
         }
       } catch (error) {
         console.warn('Could not parse iteration state', error);
@@ -1421,30 +1552,132 @@
       localStorage.setItem(STORAGE_KEY, JSON.stringify(app.state));
     }
 
+    function createEmptyState() {
+      return { version: STORAGE_VERSION, items: {} };
+    }
+
+    function cleanStoredState(stored) {
+      const next = createEmptyState();
+      for (const [slug, state] of Object.entries(stored.items || {})) {
+        const cleaned = cleanItemState(slug, state || {});
+        if (Object.keys(cleaned).length) next.items[slug] = cleaned;
+      }
+      return next;
+    }
+
+    function migrateLegacyState(stored) {
+      const next = createEmptyState();
+      const migratedAt = new Date().toISOString();
+      for (const [slug, legacyState] of Object.entries(stored.items || {})) {
+        if (!legacyState || typeof legacyState !== 'object') continue;
+        const migrated = {
+          mode: legacyState.mode,
+          contenderId: legacyState.contenderId,
+          candidateState: {}
+        };
+
+        if (legacyState.feedback?.trim() || legacyState.promptOverride?.trim()) {
+          const legacyFeedbackCandidateId = currentCandidateId(slug);
+          migrated.candidateState[legacyFeedbackCandidateId] = cleanCandidateState({
+            feedback: legacyState.feedback || '',
+            promptOverride: legacyState.promptOverride || '',
+            updatedAt: migratedAt
+          });
+        }
+
+        const cleaned = cleanItemState(slug, migrated);
+        if (Object.keys(cleaned).length) next.items[slug] = cleaned;
+      }
+      return next;
+    }
+
+    function getCandidateNotes(item) {
+      const state = getItemState(item.slug);
+      const notes = state.candidateState || {};
+      const ordered = [];
+      const seen = new Set();
+
+      for (const candidate of getCandidates(item)) {
+        const candidateState = notes[candidate.id];
+        if (!candidateState) continue;
+        const cleaned = cleanCandidateState(candidateState);
+        if (!Object.keys(cleaned).length) continue;
+        seen.add(candidate.id);
+        ordered.push(serializeCandidateNote(candidate, cleaned));
+      }
+
+      for (const [candidateId, candidateState] of Object.entries(notes)) {
+        if (seen.has(candidateId)) continue;
+        const cleaned = cleanCandidateState(candidateState);
+        if (!Object.keys(cleaned).length) continue;
+        ordered.push(serializeCandidateNote({
+          id: candidateId,
+          label: candidateId,
+          shortLabel: candidateId,
+          src: '',
+          file: '',
+          pass: ''
+        }, cleaned));
+      }
+
+      return ordered;
+    }
+
+    function getFeedbackHistory(item) {
+      return getCandidateNotes(item).filter((note) => note.feedback);
+    }
+
+    function serializeCandidateNote(candidate, candidateState) {
+      return {
+        candidate: serializeCandidate(candidate),
+        feedback: candidateState.feedback || '',
+        promptOverride: candidateState.promptOverride || '',
+        promptEdited: Boolean(candidateState.promptOverride),
+        updatedAt: candidateState.updatedAt || ''
+      };
+    }
+
+    function renderFeedbackHistory(item) {
+      const history = getFeedbackHistory(item);
+      els.feedbackHistoryCard.classList.toggle('is-hidden', !history.length);
+      els.feedbackHistory.innerHTML = history.map((entry) => `
+        <div class="feedback-history__item">
+          <img src="${escapeAttribute(entry.candidate.src)}" alt="${escapeAttribute(entry.candidate.label)}">
+          <div>
+            <div class="feedback-history__meta">${escapeHtml(entry.candidate.label)}</div>
+            <p class="feedback-history__text">${escapeHtml(entry.feedback)}</p>
+          </div>
+        </div>
+      `).join('');
+    }
+
     function buildHandoff() {
       const iterating = app.items
         .filter((item) => getMode(item.slug) === 'iterate')
         .map((item) => {
-          const state = getItemState(item.slug);
           const contender = getContenderCandidate(item);
+          const contenderState = getCandidateState(item.slug, contender.id);
           return {
             slug: item.slug,
             title: item.title,
             author: item.author,
-            feedback: state.feedback || '',
+            feedback: contenderState.feedback || '',
+            feedbackCandidate: serializeCandidate(contender),
+            feedbackHistory: getFeedbackHistory(item),
             prompt: getDisplayPrompt(item, contender),
-            promptEdited: Boolean(state.promptOverride),
+            promptEdited: Boolean(contenderState.promptOverride),
             selectedLines: item.selectedLines || '',
             context: item.context || '',
             style: item.style || '',
             avoid: item.avoid || '',
             currentContender: serializeCandidate(contender),
+            candidateNotes: getCandidateNotes(item),
             candidates: getCandidates(item).map(serializeCandidate)
           };
         });
 
       return {
-        version: 1,
+        version: 2,
         exportedAt: new Date().toISOString(),
         stateKey: STORAGE_KEY,
         counts: {
@@ -1461,7 +1694,7 @@
     function buildPublishPlan() {
       const replacements = getFinalizedReplacements();
       return {
-        version: 1,
+        version: 2,
         exportedAt: new Date().toISOString(),
         stateKey: STORAGE_KEY,
         summary: `${replacements.length} poem image replacement${replacements.length === 1 ? '' : 's'} ready for publish`,
@@ -1486,7 +1719,9 @@
           author: item.author,
           source: serializeCandidate(candidate),
           target: `poems/images/${item.slug}.jpg`,
-          prompt: getDisplayPrompt(item, candidate)
+          prompt: getDisplayPrompt(item, candidate),
+          sourceFeedback: getCandidateState(item.slug, candidate.id).feedback || '',
+          feedbackHistory: getFeedbackHistory(item)
         }));
     }
 
@@ -1494,6 +1729,7 @@
       return {
         id: candidate.id,
         label: candidate.label,
+        shortLabel: candidate.shortLabel || candidate.label,
         src: candidate.src,
         file: candidate.file || '',
         pass: candidate.pass || '',
@@ -1504,6 +1740,7 @@
     const iterationApi = {
       buildHandoff,
       buildPublishPlan,
+      getState: () => app.state,
       getSummary: () => ({
         total: app.items.length,
         iterating: app.items.filter((item) => getMode(item.slug) === 'iterate').length,
