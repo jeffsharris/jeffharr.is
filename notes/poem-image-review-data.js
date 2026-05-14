@@ -1,6 +1,6 @@
 window.POEM_IMAGE_REVIEW_DATA = {
   "version": 2,
-  "generatedAt": "2026-05-14T09:15:25.997Z",
+  "generatedAt": "2026-05-14T09:35:17.695Z",
   "prompts": [
     {
       "order": 1,
@@ -137,12 +137,12 @@ window.POEM_IMAGE_REVIEW_DATA = {
       "author": "Philip Larkin",
       "collection": "memorized",
       "selectedLines": "Watching the shied core\nStriking the basket, skidding across the floor\nShows less and less of luck, and more and more\nOf failure spreading back up the arm\nEarlier, and earlier, the unraised hand calm\nThe apple unbitten in the palm",
-      "context": "Use a first-person point of view looking down at the speaker's own hand just before tossing the apple core. The ordinary hand, the apple core, and the small gap ahead should already carry the feeling of failure before the miss happens.",
-      "style": "POV psychological realism, spare and dry, with subtle existential pressure in the composition",
-      "avoid": "avoid third-person scenes, bland still life, slapstick, cute humor, kitchen realism, and motivational symbolism",
-      "revision": "let's try a view that's POV looking down at the hand about to toss the apple",
+      "context": "Use a first-person point of view looking down at the speaker's own hand holding the apple core just before the toss. The image should be only the hand, the apple core, and the imminent small failure, with no basket or target shown.",
+      "style": "POV psychological realism, spare and dry, with subtle existential pressure in the hand and empty space",
+      "avoid": "avoid baskets, bins, targets, third-person scenes, bland still life, slapstick, cute humor, kitchen realism, and motivational symbolism",
+      "revision": "don't show the basket. just the hand looking down at the apple core",
       "n": 2,
-      "prompt": "Create one square companion image for the poem \"As Bad as a Mile\" by Philip Larkin.\n\nUse these exact selected lines as the source passage:\n\"\"\"\nWatching the shied core\nStriking the basket, skidding across the floor\nShows less and less of luck, and more and more\nOf failure spreading back up the arm\nEarlier, and earlier, the unraised hand calm\nThe apple unbitten in the palm\n\"\"\"\n\nContext: Use a first-person point of view looking down at the speaker's own hand just before tossing the apple core. The ordinary hand, the apple core, and the small gap ahead should already carry the feeling of failure before the miss happens.\n\nReviewer direction for this pass: let's try a view that's POV looking down at the hand about to toss the apple\n\nGoal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.\n\nLight style guidance: POV psychological realism, spare and dry, with subtle existential pressure in the composition.\n\nConstraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid third-person scenes, bland still life, slapstick, cute humor, kitchen realism, and motivational symbolism.",
+      "prompt": "Create one square companion image for the poem \"As Bad as a Mile\" by Philip Larkin.\n\nUse these exact selected lines as the source passage:\n\"\"\"\nWatching the shied core\nStriking the basket, skidding across the floor\nShows less and less of luck, and more and more\nOf failure spreading back up the arm\nEarlier, and earlier, the unraised hand calm\nThe apple unbitten in the palm\n\"\"\"\n\nContext: Use a first-person point of view looking down at the speaker's own hand holding the apple core just before the toss. The image should be only the hand, the apple core, and the imminent small failure, with no basket or target shown.\n\nReviewer direction for this pass: don't show the basket. just the hand looking down at the apple core\n\nGoal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.\n\nLight style guidance: POV psychological realism, spare and dry, with subtle existential pressure in the hand and empty space.\n\nConstraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid baskets, bins, targets, third-person scenes, bland still life, slapstick, cute humor, kitchen realism, and motivational symbolism.",
       "candidates": [
         {
           "id": "as-bad-as-a-mile::pass-001::1",
@@ -206,6 +206,22 @@ window.POEM_IMAGE_REVIEW_DATA = {
           "pass": "pass-005",
           "src": "../tmp/poem-image-candidates/pass-005/as-bad-as-a-mile-2.png",
           "file": "tmp/poem-image-candidates/pass-005/as-bad-as-a-mile-2.png",
+          "model": "gpt-image-2"
+        },
+        {
+          "id": "as-bad-as-a-mile::pass-006::1",
+          "label": "Pass 6 candidate 1",
+          "pass": "pass-006",
+          "src": "../tmp/poem-image-candidates/pass-006/as-bad-as-a-mile-1.png",
+          "file": "tmp/poem-image-candidates/pass-006/as-bad-as-a-mile-1.png",
+          "model": "gpt-image-2"
+        },
+        {
+          "id": "as-bad-as-a-mile::pass-006::2",
+          "label": "Pass 6 candidate 2",
+          "pass": "pass-006",
+          "src": "../tmp/poem-image-candidates/pass-006/as-bad-as-a-mile-2.png",
+          "file": "tmp/poem-image-candidates/pass-006/as-bad-as-a-mile-2.png",
           "model": "gpt-image-2"
         }
       ]
@@ -576,13 +592,13 @@ window.POEM_IMAGE_REVIEW_DATA = {
       "title": "If",
       "author": "Rudyard Kipling",
       "collection": "memorized",
-      "selectedLines": "If you can make one heap of all your winnings\n    And risk it on one turn of pitch-and-toss,\nAnd lose, and start again at your beginnings\n    And never breathe a word about your loss;\nIf you can force your heart and nerve and sinew\n    To serve your turn long after they are gone,\nAnd so hold on when there is nothing in you\n    Except the Will which says to them: ‘Hold on!’\n[other lines omitted]\nIf you can fill the unforgiving minute\n    With sixty seconds’ worth of distance run,\nYours is the Earth and everything that’s in it,\n    And—which is more—you’ll be a Man, my son!",
-      "context": "Try diverse nonliteral images for the triumphant and noble force of the poem: endurance after loss, composure under pressure, inward command, risk, patience, and the unforgiving minute fully inhabited.",
-      "style": "varied abstract-symbolic compositions with restraint, nobility, pressure, balance, and warm disciplined light",
-      "avoid": "avoid literal men, workshops, father-son staging, colonial nostalgia, military heroics, sports-poster triumph, trophies, and readable text",
-      "revision": "try a bunch more diverse variants representing the triumph/nobility of the poem",
-      "n": 4,
-      "prompt": "Create one square companion image for the poem \"If\" by Rudyard Kipling.\n\nUse these exact selected lines as the source passage:\n\"\"\"\nIf you can make one heap of all your winnings\n    And risk it on one turn of pitch-and-toss,\nAnd lose, and start again at your beginnings\n    And never breathe a word about your loss;\nIf you can force your heart and nerve and sinew\n    To serve your turn long after they are gone,\nAnd so hold on when there is nothing in you\n    Except the Will which says to them: ‘Hold on!’\n[other lines omitted]\nIf you can fill the unforgiving minute\n    With sixty seconds’ worth of distance run,\nYours is the Earth and everything that’s in it,\n    And—which is more—you’ll be a Man, my son!\n\"\"\"\n\nContext: Try diverse nonliteral images for the triumphant and noble force of the poem: endurance after loss, composure under pressure, inward command, risk, patience, and the unforgiving minute fully inhabited.\n\nReviewer direction for this pass: try a bunch more diverse variants representing the triumph/nobility of the poem\n\nGoal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.\n\nLight style guidance: varied abstract-symbolic compositions with restraint, nobility, pressure, balance, and warm disciplined light.\n\nConstraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid literal men, workshops, father-son staging, colonial nostalgia, military heroics, sports-poster triumph, trophies, and readable text.",
+      "selectedLines": "If you can keep your head when all about you\n    Are losing theirs and blaming it on you,\nIf you can trust yourself when all men doubt you,\n    But make allowance for their doubting too;\nIf you can wait and not be tired by waiting,\n    Or being lied about, don’t deal in lies,\nOr being hated, don’t give way to hating,\n    And yet don’t look too good, nor talk too wise:\n[other lines omitted]\nIf you can fill the unforgiving minute\n    With sixty seconds’ worth of distance run,\nYours is the Earth and everything that’s in it,\n    And—which is more—you’ll be a Man, my son!",
+      "context": "The poem imagines steadiness under pressure and a life measured by discipline, patience, and composure.",
+      "style": "stoic allegorical realism with warm workshop light",
+      "avoid": "avoid colonial nostalgia, military heroics, and triumphalist poster art",
+      "revision": "",
+      "n": 1,
+      "prompt": "Create one square companion image for the poem \"If\" by Rudyard Kipling.\n\nUse these exact selected lines as the source passage:\n\"\"\"\nIf you can keep your head when all about you\n    Are losing theirs and blaming it on you,\nIf you can trust yourself when all men doubt you,\n    But make allowance for their doubting too;\nIf you can wait and not be tired by waiting,\n    Or being lied about, don’t deal in lies,\nOr being hated, don’t give way to hating,\n    And yet don’t look too good, nor talk too wise:\n[other lines omitted]\nIf you can fill the unforgiving minute\n    With sixty seconds’ worth of distance run,\nYours is the Earth and everything that’s in it,\n    And—which is more—you’ll be a Man, my son!\n\"\"\"\n\nContext: The poem imagines steadiness under pressure and a life measured by discipline, patience, and composure.\n\nGoal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.\n\nLight style guidance: stoic allegorical realism with warm workshop light.\n\nConstraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid colonial nostalgia, military heroics, and triumphalist poster art.",
       "candidates": [
         {
           "id": "if::pass-001::1",
@@ -1025,12 +1041,12 @@ window.POEM_IMAGE_REVIEW_DATA = {
       "author": "Hera Lindsay Bird",
       "collection": "learning",
       "selectedLines": "it has been a great honor and privilege to love you\nit has been a great honor and privilege to eat cold pizza on your steps at dawn\nlove is so stupid: it’s like punching the sun\nand having a million gold coins rain down on you\nwhich you don’t even have to pay tax on\nbecause sun money is free money\nand i’m pretty sure there are no laws about that\nbut i would pay tax\nbecause i believe that hospitals and education\nand the arts should be publicly funded\neven this poem\nwhen i look at you, my eyes are two identical neighborhood houses on fire\nwhen i look at you my eyes bulge out of my skull like a dog in a cartoon\nwhen i am with you\nan enormous silence descends upon me\nand i feel like i am sinking into the deepest part of my life\nwe walk down the street, with the grass blowing back and forth\ni have never been so happy",
-      "context": "Keep the good pose of the couple walking through the streets together, but remove the pizza entirely. Recover the magic of the first-pass sun: playful, radiant, strange, coin-like, and romantic without becoming apocalyptic.",
-      "style": "playful surreal editorial gouache, sweet street scene, magical flat radiant sun, lightly absurd romance",
-      "avoid": "avoid pizza, burning buildings, smoke, apocalyptic skies, eyes, dogs, extra side images, MLM infographics, and brand logos",
-      "revision": "remove the mention of pizza (that part of the poem). Try to get back the magic of the sun from pass 1 candidate 1. the pose here of the couple walking through the streets is good",
+      "context": "The poem turns love into a comic economy of sarcophagi, cold pizza, sun money, fire, and impossible happiness.",
+      "style": "playful surreal editorial gouache",
+      "avoid": "avoid MLM infographics, brand logos, and making the joke too literal",
+      "revision": "",
       "n": 1,
-      "prompt": "Create one square companion image for the poem \"Pyramid Scheme\" by Hera Lindsay Bird.\n\nUse these exact selected lines as the source passage:\n\"\"\"\nit has been a great honor and privilege to love you\nit has been a great honor and privilege to eat cold pizza on your steps at dawn\nlove is so stupid: it’s like punching the sun\nand having a million gold coins rain down on you\nwhich you don’t even have to pay tax on\nbecause sun money is free money\nand i’m pretty sure there are no laws about that\nbut i would pay tax\nbecause i believe that hospitals and education\nand the arts should be publicly funded\neven this poem\nwhen i look at you, my eyes are two identical neighborhood houses on fire\nwhen i look at you my eyes bulge out of my skull like a dog in a cartoon\nwhen i am with you\nan enormous silence descends upon me\nand i feel like i am sinking into the deepest part of my life\nwe walk down the street, with the grass blowing back and forth\ni have never been so happy\n\"\"\"\n\nContext: Keep the good pose of the couple walking through the streets together, but remove the pizza entirely. Recover the magic of the first-pass sun: playful, radiant, strange, coin-like, and romantic without becoming apocalyptic.\n\nReviewer direction for this pass: remove the mention of pizza (that part of the poem). Try to get back the magic of the sun from pass 1 candidate 1. the pose here of the couple walking through the streets is good\n\nGoal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.\n\nLight style guidance: playful surreal editorial gouache, sweet street scene, magical flat radiant sun, lightly absurd romance.\n\nConstraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid pizza, burning buildings, smoke, apocalyptic skies, eyes, dogs, extra side images, MLM infographics, and brand logos.",
+      "prompt": "Create one square companion image for the poem \"Pyramid Scheme\" by Hera Lindsay Bird.\n\nUse these exact selected lines as the source passage:\n\"\"\"\nit has been a great honor and privilege to love you\nit has been a great honor and privilege to eat cold pizza on your steps at dawn\nlove is so stupid: it’s like punching the sun\nand having a million gold coins rain down on you\nwhich you don’t even have to pay tax on\nbecause sun money is free money\nand i’m pretty sure there are no laws about that\nbut i would pay tax\nbecause i believe that hospitals and education\nand the arts should be publicly funded\neven this poem\nwhen i look at you, my eyes are two identical neighborhood houses on fire\nwhen i look at you my eyes bulge out of my skull like a dog in a cartoon\nwhen i am with you\nan enormous silence descends upon me\nand i feel like i am sinking into the deepest part of my life\nwe walk down the street, with the grass blowing back and forth\ni have never been so happy\n\"\"\"\n\nContext: The poem turns love into a comic economy of sarcophagi, cold pizza, sun money, fire, and impossible happiness.\n\nGoal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.\n\nLight style guidance: playful surreal editorial gouache.\n\nConstraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid MLM infographics, brand logos, and making the joke too literal.",
       "candidates": [
         {
           "id": "pyramid-scheme::pass-001::1",
@@ -1233,12 +1249,12 @@ window.POEM_IMAGE_REVIEW_DATA = {
       "author": "Ocean Vuong",
       "collection": "memorized",
       "selectedLines": "in his sea-black eyes. The face\nnot mine — but one I will wear\nto kiss all my lovers good-night:\nthe way I seal my father’s lips\nwith my own & begin\nthe faithful work of drowning.",
-      "context": "Return to the pass-three viewpoint: the boy looks down from above the father's head as the father lies on sand. Keep the eyes nearly black like sea water, with bright cathedral light reflected inside them against the dark black of the rest of the eyes.",
-      "style": "lyrical close realism, overhead intimate viewpoint, sand, black sea-eyes, luminous cathedral reflection, quiet grief",
-      "avoid": "avoid gore, visible wounds, sensational violence, wide action scenes, and making the father look merely asleep",
-      "revision": "prefer the view of pass 3 candidate 1, with the boy looking down from above the father's head. and like the light of the cathedrals in his eyes against dark black backdrop on the rest of his eyes",
-      "n": 1,
-      "prompt": "Create one square companion image for the poem \"Telemachus\" by Ocean Vuong.\n\nUse these exact selected lines as the source passage:\n\"\"\"\nin his sea-black eyes. The face\nnot mine — but one I will wear\nto kiss all my lovers good-night:\nthe way I seal my father’s lips\nwith my own & begin\nthe faithful work of drowning.\n\"\"\"\n\nContext: Return to the pass-three viewpoint: the boy looks down from above the father's head as the father lies on sand. Keep the eyes nearly black like sea water, with bright cathedral light reflected inside them against the dark black of the rest of the eyes.\n\nReviewer direction for this pass: prefer the view of pass 3 candidate 1, with the boy looking down from above the father's head. and like the light of the cathedrals in his eyes against dark black backdrop on the rest of his eyes\n\nGoal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.\n\nLight style guidance: lyrical close realism, overhead intimate viewpoint, sand, black sea-eyes, luminous cathedral reflection, quiet grief.\n\nConstraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid gore, visible wounds, sensational violence, wide action scenes, and making the father look merely asleep.",
+      "context": "Move closer in on the father's face as he lies on sand. The boy may be present only as a partial edge, shadow, or small above-frame presence looking down; the father's nearly black sea-eyes with luminous cathedral reflections should dominate.",
+      "style": "lyrical close realism, intimate face close-up, sand, black sea-eyes, luminous cathedral reflection, quiet grief",
+      "avoid": "avoid making the boy's face prominent, gore, visible wounds, sensational violence, wide action scenes, and making the father look merely asleep",
+      "revision": "closer in on the dad's face. the boy's face is too prominent in this one",
+      "n": 2,
+      "prompt": "Create one square companion image for the poem \"Telemachus\" by Ocean Vuong.\n\nUse these exact selected lines as the source passage:\n\"\"\"\nin his sea-black eyes. The face\nnot mine — but one I will wear\nto kiss all my lovers good-night:\nthe way I seal my father’s lips\nwith my own & begin\nthe faithful work of drowning.\n\"\"\"\n\nContext: Move closer in on the father's face as he lies on sand. The boy may be present only as a partial edge, shadow, or small above-frame presence looking down; the father's nearly black sea-eyes with luminous cathedral reflections should dominate.\n\nReviewer direction for this pass: closer in on the dad's face. the boy's face is too prominent in this one\n\nGoal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.\n\nLight style guidance: lyrical close realism, intimate face close-up, sand, black sea-eyes, luminous cathedral reflection, quiet grief.\n\nConstraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid making the boy's face prominent, gore, visible wounds, sensational violence, wide action scenes, and making the father look merely asleep.",
       "candidates": [
         {
           "id": "telemachus::pass-001::1",
@@ -1270,6 +1286,22 @@ window.POEM_IMAGE_REVIEW_DATA = {
           "pass": "pass-005",
           "src": "../tmp/poem-image-candidates/pass-005/telemachus.png",
           "file": "tmp/poem-image-candidates/pass-005/telemachus.png",
+          "model": "gpt-image-2"
+        },
+        {
+          "id": "telemachus::pass-006::1",
+          "label": "Pass 6 candidate 1",
+          "pass": "pass-006",
+          "src": "../tmp/poem-image-candidates/pass-006/telemachus-1.png",
+          "file": "tmp/poem-image-candidates/pass-006/telemachus-1.png",
+          "model": "gpt-image-2"
+        },
+        {
+          "id": "telemachus::pass-006::2",
+          "label": "Pass 6 candidate 2",
+          "pass": "pass-006",
+          "src": "../tmp/poem-image-candidates/pass-006/telemachus-2.png",
+          "file": "tmp/poem-image-candidates/pass-006/telemachus-2.png",
           "model": "gpt-image-2"
         }
       ]
@@ -1885,7 +1917,7 @@ window.POEM_IMAGE_REVIEW_DATA = {
   ],
   "reviewState": {
     "version": 3,
-    "updatedAt": "2026-05-14T09:12:16.266Z",
+    "updatedAt": "2026-05-14T09:32:18.434Z",
     "importedFromFeedback": true,
     "items": {
       "having-a-coke-with-you": {
@@ -1952,6 +1984,15 @@ window.POEM_IMAGE_REVIEW_DATA = {
         "status": "reject",
         "note": "let's try a view that's POV looking down at the hand about to toss the apple",
         "updatedAt": "2026-05-14T09:07:22.887Z"
+      },
+      "as-bad-as-a-mile::pass-005::1": {
+        "status": "reject",
+        "updatedAt": "2026-05-14T09:29:20.824Z"
+      },
+      "as-bad-as-a-mile::pass-005::2": {
+        "status": "reject",
+        "note": "don't show the basket. just the hand looking down at the apple core",
+        "updatedAt": "2026-05-14T09:29:19.856Z"
       },
       "do-not-go-gentle-into-that-good-night::pass-001::1": {
         "status": "reject",
@@ -2074,6 +2115,10 @@ window.POEM_IMAGE_REVIEW_DATA = {
         "status": "reject",
         "note": "try a bunch more diverse variants representing the triumph/nobility of the poem",
         "updatedAt": "2026-05-14T09:10:29.633Z"
+      },
+      "if::pass-005::3": {
+        "status": "keep",
+        "updatedAt": "2026-05-14T09:31:13.236Z"
       },
       "in-blackwater-woods::pass-001::1": {
         "status": "reject",
@@ -2200,6 +2245,10 @@ window.POEM_IMAGE_REVIEW_DATA = {
         "note": "remove the mention of pizza (that part of the poem). Try to get back the magic of the sun from pass 1 candidate 1. the pose here of the couple walking through the streets is good",
         "updatedAt": "2026-05-14T09:10:06.433Z"
       },
+      "pyramid-scheme::pass-005::1": {
+        "status": "keep",
+        "updatedAt": "2026-05-14T09:29:57.307Z"
+      },
       "sailing-to-byzantium::pass-001::1": {
         "status": "reject",
         "note": "the grecian gold bird is great, but we need sailing imagery",
@@ -2254,6 +2303,11 @@ window.POEM_IMAGE_REVIEW_DATA = {
         "status": "reject",
         "note": "prefer the view of pass 3 candidate 1, with the boy looking down from above the father's head. and like the light of the cathedrals in his eyes against dark black backdrop on the rest of his eyes",
         "updatedAt": "2026-05-14T09:09:13.215Z"
+      },
+      "telemachus::pass-005::1": {
+        "status": "reject",
+        "note": "closer in on the dad's face. the boy's face is too prominent in this one",
+        "updatedAt": "2026-05-14T09:30:27.181Z"
       },
       "tell-all-the-truth-but-tell-it-slant::pass-001::1": {
         "status": "keep",

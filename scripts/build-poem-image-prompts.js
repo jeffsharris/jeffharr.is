@@ -761,11 +761,29 @@ const PASS_FIVE_REVISIONS = {
   }
 };
 
+const PASS_SIX_REVISIONS = {
+  'as-bad-as-a-mile': {
+    lines: [[1, 7]],
+    context: 'Use a first-person point of view looking down at the speaker\'s own hand holding the apple core just before the toss. The image should be only the hand, the apple core, and the imminent small failure, with no basket or target shown.',
+    style: 'POV psychological realism, spare and dry, with subtle existential pressure in the hand and empty space',
+    avoid: 'avoid baskets, bins, targets, third-person scenes, bland still life, slapstick, cute humor, kitchen realism, and motivational symbolism',
+    n: 2
+  },
+  'telemachus': {
+    lines: [[27, 35]],
+    context: 'Move closer in on the father\'s face as he lies on sand. The boy may be present only as a partial edge, shadow, or small above-frame presence looking down; the father\'s nearly black sea-eyes with luminous cathedral reflections should dominate.',
+    style: 'lyrical close realism, intimate face close-up, sand, black sea-eyes, luminous cathedral reflection, quiet grief',
+    avoid: 'avoid making the boy\'s face prominent, gore, visible wounds, sensational violence, wide action scenes, and making the father look merely asleep',
+    n: 2
+  }
+};
+
 const REVISIONS_BY_PASS = {
   2: PASS_TWO_REVISIONS,
   3: PASS_THREE_REVISIONS,
   4: PASS_FOUR_REVISIONS,
-  5: PASS_FIVE_REVISIONS
+  5: PASS_FIVE_REVISIONS,
+  6: PASS_SIX_REVISIONS
 };
 
 function parseArgs(argv) {
