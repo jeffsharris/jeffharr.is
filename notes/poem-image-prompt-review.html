@@ -1730,18 +1730,20 @@
     }
 
     function loadState() {
+      const embedded = getEmbeddedReviewState();
       try {
         const stored = localStorage.getItem(STORAGE_KEY);
-        if (!stored) return getEmbeddedReviewState() || getEmptyState();
+        if (!stored) return embedded || getEmptyState();
         const parsed = JSON.parse(stored);
-        return {
+        const localState = {
           version: parsed.version || 3,
           updatedAt: parsed.updatedAt,
           items: parsed.items || {},
           candidates: parsed.candidates || {}
         };
+        return mergeReviewStates(localState, embedded);
       } catch {
-        return getEmbeddedReviewState() || getEmptyState();
+        return embedded || getEmptyState();
       }
     }
 
@@ -1759,6 +1761,47 @@
 
     function getEmptyState() {
       return { version: 3, items: {}, candidates: {} };
+    }
+
+    function mergeReviewStates(localState, embeddedState) {
+      if (!embeddedState) return localState || getEmptyState();
+      if (!localState) return embeddedState;
+
+      const merged = {
+        version: Math.max(localState.version || 3, embeddedState.version || 3),
+        updatedAt: latestTimestamp(localState.updatedAt, embeddedState.updatedAt),
+        importedFromFeedback: Boolean(localState.importedFromFeedback || embeddedState.importedFromFeedback),
+        items: { ...(localState.items || {}) },
+        candidates: { ...(localState.candidates || {}) }
+      };
+
+      mergeStateBucket(merged.items, embeddedState.items || {});
+      mergeStateBucket(merged.candidates, embeddedState.candidates || {});
+      return merged;
+    }
+
+    function mergeStateBucket(target, source) {
+      Object.entries(source).forEach(([id, embeddedEntry]) => {
+        const localEntry = target[id];
+        if (!localEntry || isNewerTimestamp(embeddedEntry.updatedAt, localEntry.updatedAt)) {
+          target[id] = embeddedEntry;
+        }
+      });
+    }
+
+    function latestTimestamp(first, second) {
+      if (isNewerTimestamp(second, first)) return second;
+      return first || second || new Date().toISOString();
+    }
+
+    function isNewerTimestamp(candidate, baseline) {
+      if (!candidate) return false;
+      if (!baseline) return true;
+      const candidateTime = Date.parse(candidate);
+      const baselineTime = Date.parse(baseline);
+      if (Number.isNaN(candidateTime)) return false;
+      if (Number.isNaN(baselineTime)) return true;
+      return candidateTime > baselineTime;
     }
 
     function saveState() {

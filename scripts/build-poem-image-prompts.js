@@ -675,9 +675,68 @@ const PASS_THREE_REVISIONS = {
   }
 };
 
+const PASS_FOUR_REVISIONS = {
+  'a-finger-two-dots-then-me': {
+    context: 'Keep searching within the celestial-hand idea: a human hand only enters from the extreme lower-left edge, reaching toward a vast celestial hand or presence in the sky, with the rest of the person completely outside the frame.',
+    style: 'luminous cosmic surrealism, intimate scale contrast, warm starlight, and quiet negative space',
+    avoid: 'avoid a central human figure, faces, bodies, cartoon space art, literal gods, and visual text'
+  },
+  'as-bad-as-a-mile': {
+    context: 'Try a few more varied tactics for the feeling of failure. The missed apple core is tiny, but the image should make the viewer feel the whole inward collapse of having failed before anything has visibly happened.',
+    style: 'psychological editorial image-making, dry and spare, with room for surreal or abstract solutions',
+    avoid: 'avoid bland still life, slapstick, cute humor, ordinary kitchen realism, and motivational symbolism',
+    n: 3
+  },
+  'grandfathers-hands': {
+    context: 'Make the hand unmistakably old: weathered skin, age spots, veins, and softened strength. The map should cover the hand, wrist, and forearm as family geography drawn into elderly skin.',
+    style: 'intimate watercolor and colored pencil close-up, tactile elderly skin, hand-drawn map texture',
+    avoid: 'avoid young or smooth hands, faces, full bodies, explicit nudity, stereotypes, and readable map labels'
+  },
+  'high-windows': {
+    context: 'Keep the ordinary high window but remove the person entirely. The viewer is low in a plain room looking up at a normal high window that holds only perfect blue sky, with no human figure inside or outside.',
+    style: 'plain domestic realism with metaphysical blue emptiness beyond the glass',
+    avoid: 'avoid people, silhouettes, monumental architecture, surreal towers, explicit sexuality, and showing the ground'
+  },
+  'if': {
+    lines: [[19, 26], [32, 35]],
+    context: 'Move away from literal scenes and make an abstract image of the poem noble and triumphant without becoming a poster: steadiness, discipline, loss, endurance, and the inner command to hold on.',
+    style: 'abstract symbolic composition with restrained nobility, pressure, balance, and a quiet gold warmth',
+    avoid: 'avoid literal men, workshops, father-son staging, colonial nostalgia, military heroics, sports-poster triumph, and readable text'
+  },
+  'in-the-trance': {
+    lines: [[1, 17]],
+    context: 'Keep the glacier and the small craft in a suspended trance-like water world, but remove the bird entirely. Let glacier, boat, water, and stillness carry the strangeness of love being made.',
+    style: 'minimal airy surrealism, glacier light, small boat, and quiet negative space',
+    avoid: 'avoid birds, albatrosses, crowded collage, political caricature, and illustrating every noun'
+  },
+  'pyramid-scheme': {
+    context: 'Keep the couple walking down the sidewalk together, the playful coins, and the sweet absurd romance. Remove the burning buildings in the sky; make the sun feel like the flat radiant playful sun from the first attempt.',
+    style: 'playful surreal editorial gouache, sweet, bright, lightly absurd, with a simple radiant coin-like sun',
+    avoid: 'avoid burning buildings, smoke, apocalyptic skies, eyes, dogs, extra side images, MLM infographics, and brand logos'
+  },
+  'telemachus': {
+    lines: [[27, 35]],
+    context: 'Make the father lie on sand while the boy looks down at him. The father should feel near death, with sea-black eyes that hold the cathedral reflection; the sun may faintly look down too.',
+    style: 'lyrical close realism with restrained surreal reflection, sand, black sea-eyes, and quiet grief',
+    avoid: 'avoid gore, visible wounds, sensational violence, wide action scenes, and making the father look merely asleep'
+  },
+  'the-kingfisher': {
+    lines: [[21, 24]],
+    context: 'Show the kingfisher flying away from the camera, from a behind and slightly over-the-shoulder view, skimming perfectly over the bright sea.',
+    style: 'photorealistic naturalist marine image, vivid blue kingfisher, bright sea, precise motion',
+    avoid: 'avoid front-facing bird portraits, cartoon prettiness, painterly looseness that loses realism, blood, and dark wave focus'
+  },
+  'to-my-favorite-17-year-old-high-school-girl': {
+    context: 'Remove the father and keep the scene mundane: a teenage girl absent-mindedly playing with her food, ordinary and affectionate, with gentle humor and no fantasy-comparison devices.',
+    style: 'loose playful domestic editorial illustration, less photorealistic, warm and ordinary',
+    avoid: 'avoid the father, thought bubbles, fantasy cutaways, sexualizing the minor, celebrity likenesses, readable posters, and scolding tone'
+  }
+};
+
 const REVISIONS_BY_PASS = {
   2: PASS_TWO_REVISIONS,
-  3: PASS_THREE_REVISIONS
+  3: PASS_THREE_REVISIONS,
+  4: PASS_FOUR_REVISIONS
 };
 
 function parseArgs(argv) {
@@ -687,6 +746,7 @@ function parseArgs(argv) {
     candidateDir: '',
     candidateRoot: DEFAULT_CANDIDATE_ROOT,
     feedbackJson: '',
+    onlyDeveloping: false,
     onlyRejected: false,
     pass: 'pass-001',
     summaryJson: ''
@@ -711,6 +771,7 @@ function parseArgs(argv) {
       args.feedbackJson = path.resolve(repoRoot, argv[i + 1]);
       i += 1;
     }
+    if (arg === '--only-developing') args.onlyDeveloping = true;
     if (arg === '--only-rejected') args.onlyRejected = true;
     if (arg === '--pass') {
       args.pass = argv[i + 1];
@@ -792,12 +853,19 @@ function loadManifest() {
 }
 
 function loadFeedback(feedbackJson) {
-  const empty = { payload: null, bySlug: new Map(), byCandidate: new Map(), rejectedSlugs: new Set() };
+  const empty = {
+    payload: null,
+    bySlug: new Map(),
+    byCandidate: new Map(),
+    rejectedSlugs: new Set(),
+    developingSlugs: new Set()
+  };
   if (!feedbackJson) return empty;
   const payload = JSON.parse(fs.readFileSync(feedbackJson, 'utf8'));
   const bySlug = new Map();
   const byCandidate = new Map();
   const rejectedSlugs = new Set();
+  const developingSlugs = new Set(payload.developingSlugs || []);
 
   for (const item of payload.items || []) {
     const candidates = item.candidates || [];
@@ -828,9 +896,10 @@ function loadFeedback(feedbackJson) {
     if (kept.length === 0 && latestCandidates.some((candidate) => candidate.feedback?.status === 'reject')) {
       rejectedSlugs.add(item.slug);
     }
+    if (kept.length === 0) developingSlugs.add(item.slug);
   }
 
-  return { payload, bySlug, byCandidate, rejectedSlugs };
+  return { payload, bySlug, byCandidate, rejectedSlugs, developingSlugs };
 }
 
 function getCandidatePassNumber(candidate) {
@@ -1071,9 +1140,12 @@ function main() {
     throw new Error(`Expected ${SPECS.length} prompt specs, got ${items.length}`);
   }
 
-  const batchItems = args.onlyRejected
-    ? items.filter((item) => feedback.rejectedSlugs.has(item.slug))
-    : items;
+  let batchItems = items;
+  if (args.onlyDeveloping) {
+    batchItems = items.filter((item) => feedback.developingSlugs.has(item.slug));
+  } else if (args.onlyRejected) {
+    batchItems = items.filter((item) => feedback.rejectedSlugs.has(item.slug));
+  }
 
   if (args.write) {
     fs.writeFileSync(promptMarkdownPath, renderMarkdown(items));
