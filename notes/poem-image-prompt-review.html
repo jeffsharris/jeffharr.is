@@ -565,6 +565,133 @@
       line-height: 1.4;
     }
 
+    .image-board {
+      display: grid;
+      gap: 18px;
+      margin: 0 0 18px;
+    }
+
+    .image-board__section {
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+      box-shadow: var(--shadow);
+    }
+
+    .image-board__header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 12px;
+    }
+
+    .image-board__title {
+      margin: 0;
+      color: var(--ink);
+      font-size: 15px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .image-board__meta {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .accepted-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 12px;
+    }
+
+    .developing-grid {
+      display: grid;
+      gap: 12px;
+    }
+
+    .developing-card {
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel-strong);
+    }
+
+    .developing-card__header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .developing-card__title {
+      margin: 0;
+      color: var(--ink);
+      font-size: 15px;
+    }
+
+    .developing-card__meta {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .developing-card__candidates {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 10px;
+    }
+
+    .board-candidate {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: white;
+    }
+
+    .board-candidate[data-board-status="reject"] {
+      opacity: 0.62;
+    }
+
+    .board-candidate__image {
+      display: block;
+      width: 100%;
+      aspect-ratio: 1;
+      object-fit: cover;
+      background: var(--bg);
+    }
+
+    .board-candidate__body {
+      display: grid;
+      gap: 8px;
+      padding: 9px;
+    }
+
+    .board-candidate__title {
+      display: grid;
+      gap: 2px;
+      min-width: 0;
+    }
+
+    .board-candidate__poem {
+      overflow: hidden;
+      color: var(--ink);
+      font-size: 12px;
+      font-weight: 800;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .board-candidate__label {
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 700;
+    }
+
     .prompt-box,
     .feedback-box {
       padding: 12px;
@@ -779,17 +906,21 @@
               </div>
               <div class="stat">
                 <span class="stat__number" id="done-count">0</span>
-                <span class="stat__label">Marked</span>
+                <span class="stat__label">Accepted</span>
               </div>
               <div class="stat">
                 <span class="stat__number" id="generate-count">0</span>
-                <span class="stat__label">Generate</span>
+                <span class="stat__label">Developing</span>
               </div>
               <div class="stat">
                 <span class="stat__number" id="revise-count">0</span>
-                <span class="stat__label">Revise</span>
+                <span class="stat__label">Unreviewed</span>
               </div>
             </div>
+          </div>
+          <div class="panel__section">
+            <p class="section-title">Image State</p>
+            <div class="filter-stack" id="image-filters"></div>
           </div>
           <div class="panel__section">
             <p class="section-title">Status</p>
@@ -811,6 +942,22 @@
           <button class="button" id="clear-search-button" type="button">Clear</button>
           <div class="view-meta" id="view-meta">Loading</div>
         </div>
+        <section class="image-board" id="image-board" aria-label="Image review board">
+          <div class="image-board__section">
+            <div class="image-board__header">
+              <h2 class="image-board__title">Accepted Images</h2>
+              <span class="image-board__meta" id="accepted-meta">0 images</span>
+            </div>
+            <div class="accepted-grid" id="accepted-grid"></div>
+          </div>
+          <div class="image-board__section">
+            <div class="image-board__header">
+              <h2 class="image-board__title">Still Developing</h2>
+              <span class="image-board__meta" id="developing-meta">0 poems</span>
+            </div>
+            <div class="developing-grid" id="developing-grid"></div>
+          </div>
+        </section>
         <div class="prompt-list" id="prompt-list"></div>
       </main>
     </div>
@@ -841,6 +988,14 @@
       { id: 'unmatched', label: 'Unmatched' }
     ];
 
+    const IMAGE_FILTERS = [
+      { id: 'all', label: 'All images' },
+      { id: 'accepted', label: 'Accepted' },
+      { id: 'developing', label: 'Developing' },
+      { id: 'new', label: 'New pass' },
+      { id: 'unreviewed', label: 'Unreviewed' }
+    ];
+
     const SLUG_OVERRIDES = {
       'icarryyourheartwithme': 'i-carry-your-heart-within-me'
     };
@@ -848,7 +1003,9 @@
     const app = {
       prompts: [],
       poemIndex: null,
+      latestPass: 0,
       statusFilter: 'all',
+      imageFilter: 'all',
       collectionFilter: 'all',
       search: '',
       state: loadState(),
@@ -860,8 +1017,14 @@
       list: document.getElementById('prompt-list'),
       search: document.getElementById('search-input'),
       viewMeta: document.getElementById('view-meta'),
+      imageFilters: document.getElementById('image-filters'),
       statusFilters: document.getElementById('status-filters'),
       collectionFilters: document.getElementById('collection-filters'),
+      imageBoard: document.getElementById('image-board'),
+      acceptedGrid: document.getElementById('accepted-grid'),
+      acceptedMeta: document.getElementById('accepted-meta'),
+      developingGrid: document.getElementById('developing-grid'),
+      developingMeta: document.getElementById('developing-meta'),
       totalCount: document.getElementById('total-count'),
       doneCount: document.getElementById('done-count'),
       generateCount: document.getElementById('generate-count'),
@@ -892,6 +1055,7 @@
           app.prompts = parsePromptMarkdown(markdown).map((prompt) => attachPoemMetadata(prompt, poemIndex));
         }
 
+        app.latestPass = computeLatestPass(app.prompts);
         bindEvents();
         render();
         showToast(`Loaded ${app.prompts.length} prompt drafts.`);
@@ -1066,15 +1230,19 @@
       els.downloadButton.addEventListener('click', downloadFeedbackJson);
       els.saveButton.addEventListener('click', saveFeedbackJson);
       els.clearFeedbackButton.addEventListener('click', clearLocalFeedback);
+      els.imageBoard.addEventListener('click', handleBoardClick);
+      els.imageBoard.addEventListener('input', handleBoardInput);
     }
 
     function render() {
       renderFilters();
       renderStats();
+      renderImageBoard();
       renderCards();
     }
 
     function renderFilters() {
+      renderImageFilters();
       const statusCounts = computeStatusCounts();
       els.statusFilters.innerHTML = '';
       const statusFilterItems = [{ id: 'all', label: 'All', count: app.prompts.length }, ...STATUSES.map((status) => ({
@@ -1110,12 +1278,28 @@
       }
     }
 
+    function renderImageFilters() {
+      const imageCounts = computeImageFilterCounts();
+      els.imageFilters.innerHTML = '';
+      for (const filter of IMAGE_FILTERS) {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = `status-filter${app.imageFilter === filter.id ? ' is-active' : ''}`;
+        button.innerHTML = `<span>${escapeHtml(filter.label)}</span><span class="count-pill">${imageCounts[filter.id] || 0}</span>`;
+        button.addEventListener('click', () => {
+          app.imageFilter = filter.id;
+          render();
+        });
+        els.imageFilters.appendChild(button);
+      }
+    }
+
     function renderStats() {
-      const counts = computeStatusCounts();
+      const imageCounts = computeImageFilterCounts();
       els.totalCount.textContent = app.prompts.length;
-      els.doneCount.textContent = app.prompts.filter((item) => getItemStatus(item) !== 'review').length;
-      els.generateCount.textContent = counts.generate || 0;
-      els.reviseCount.textContent = counts.revise || 0;
+      els.doneCount.textContent = imageCounts.accepted || 0;
+      els.generateCount.textContent = imageCounts.developing || 0;
+      els.reviseCount.textContent = imageCounts.unreviewed || 0;
     }
 
     function renderCards() {
@@ -1138,6 +1322,115 @@
         fragment.appendChild(createPromptCard(prompt));
       }
       els.list.appendChild(fragment);
+    }
+
+    function renderImageBoard() {
+      const visible = getVisiblePrompts();
+      const accepted = [];
+      const developing = [];
+
+      for (const item of visible) {
+        const candidates = (item.candidates || [])
+          .map((candidate) => ({
+            ...candidate,
+            feedback: getCandidateState(candidate.id),
+            status: getCandidateStatus(candidate.id)
+          }))
+          .sort(compareCandidatesNewestFirst);
+        const kept = candidates.filter((candidate) => candidate.status === 'keep');
+
+        if (kept.length > 0) {
+          for (const candidate of kept) accepted.push({ item, candidate });
+        } else if (candidates.length > 0) {
+          developing.push({ item, candidates });
+        }
+      }
+
+      els.acceptedMeta.textContent = `${accepted.length} ${accepted.length === 1 ? 'image' : 'images'}`;
+      els.developingMeta.textContent = `${developing.length} ${developing.length === 1 ? 'poem' : 'poems'}`;
+      els.acceptedGrid.innerHTML = accepted.length
+        ? accepted.map(({ item, candidate }) => renderBoardCandidate(item, candidate)).join('')
+        : '<div class="empty-state">No accepted images match the current filters.</div>';
+      els.developingGrid.innerHTML = developing.length
+        ? developing.map(({ item, candidates }) => renderDevelopingCard(item, candidates)).join('')
+        : '<div class="empty-state">Every visible poem has an accepted image.</div>';
+    }
+
+    function renderDevelopingCard(item, candidates) {
+      return `
+        <article class="developing-card">
+          <div class="developing-card__header">
+            <h3 class="developing-card__title">${escapeHtml(item.title)}</h3>
+            <span class="developing-card__meta">${candidates.length} ${candidates.length === 1 ? 'candidate' : 'candidates'}</span>
+          </div>
+          <div class="developing-card__candidates">
+            ${candidates.map((candidate) => renderBoardCandidate(item, candidate)).join('')}
+          </div>
+        </article>
+      `;
+    }
+
+    function renderBoardCandidate(item, candidate) {
+      const state = candidate.feedback || getCandidateState(candidate.id);
+      const status = candidate.status || getCandidateStatus(candidate.id);
+      return `
+        <div class="board-candidate" data-board-status="${escapeHtml(status)}">
+          <img class="board-candidate__image" src="${escapeHtml(candidate.src)}" alt="${escapeHtml(item.title)} ${escapeHtml(candidate.label || 'candidate')}">
+          <div class="board-candidate__body">
+            <div class="board-candidate__title">
+              <span class="board-candidate__poem">${escapeHtml(item.title)}</span>
+              <span class="board-candidate__label">${escapeHtml(candidate.label || 'Candidate')}</span>
+            </div>
+            <div class="candidate-statuses">${renderCandidateStatusButtons(candidate.id, status)}</div>
+            <textarea class="candidate-note" data-field="candidate-note" data-candidate-id="${escapeHtml(candidate.id)}" placeholder="Image notes">${escapeHtml(state.note || '')}</textarea>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderCandidateStatusButtons(candidateId, status) {
+      return [
+        ['keep', 'Keep'],
+        ['maybe', 'Maybe'],
+        ['reject', 'Reject']
+      ].map(([id, label]) => `
+        <button class="candidate-status${status === id ? ' is-active' : ''}" type="button" data-action="candidate-status" data-candidate-id="${escapeHtml(candidateId)}" data-candidate-status="${id}">
+          ${label}
+        </button>
+      `).join('');
+    }
+
+    function compareCandidatesNewestFirst(a, b) {
+      return getPassNumber(b.pass) - getPassNumber(a.pass) || String(b.id).localeCompare(String(a.id));
+    }
+
+    function getPassNumber(pass) {
+      const match = String(pass || '').match(/^pass-0*(\d+)$/);
+      return match ? Number(match[1]) : 0;
+    }
+
+    function getCandidateStatus(candidateId) {
+      return getCandidateState(candidateId).status || 'review';
+    }
+
+    function handleBoardClick(event) {
+      const button = event.target.closest('button[data-action]');
+      if (!button) return;
+      if (button.dataset.action === 'candidate-status') {
+        updateCandidateState(button.dataset.candidateId, {
+          status: button.dataset.candidateStatus || 'review'
+        });
+        render();
+      }
+    }
+
+    function handleBoardInput(event) {
+      if (event.target.dataset.field === 'candidate-note') {
+        updateCandidateState(event.target.dataset.candidateId, {
+          note: event.target.value
+        });
+        renderStats();
+      }
     }
 
     function createPromptCard(item) {
@@ -1253,22 +1546,13 @@
       if (!item.candidates || item.candidates.length === 0) return '';
       const cards = item.candidates.map((candidate) => {
         const state = getCandidateState(candidate.id);
-        const statuses = [
-          ['keep', 'Keep'],
-          ['maybe', 'Maybe'],
-          ['reject', 'Reject']
-        ].map(([id, label]) => `
-          <button class="candidate-status${state.status === id ? ' is-active' : ''}" type="button" data-action="candidate-status" data-candidate-id="${escapeHtml(candidate.id)}" data-candidate-status="${id}">
-            ${label}
-          </button>
-        `).join('');
 
         return `
           <div class="candidate-card">
             <img class="candidate-image" src="${escapeHtml(candidate.src)}" alt="${escapeHtml(item.title)} ${escapeHtml(candidate.label || 'candidate')}">
             <div class="candidate-controls">
               <span class="box-label">${escapeHtml(candidate.label || 'Candidate')}</span>
-              <div class="candidate-statuses">${statuses}</div>
+              <div class="candidate-statuses">${renderCandidateStatusButtons(candidate.id, state.status || 'review')}</div>
               <textarea class="candidate-note" data-field="candidate-note" data-candidate-id="${escapeHtml(candidate.id)}" placeholder="Image notes">${escapeHtml(state.note || '')}</textarea>
             </div>
           </div>
@@ -1287,6 +1571,7 @@
       return app.prompts.filter((item) => {
         const state = getItemState(item);
         const status = getItemStatus(item);
+        if (!matchesImageFilter(item)) return false;
         if (app.statusFilter !== 'all' && status !== app.statusFilter) return false;
         if (app.collectionFilter !== 'all' && item.collection !== app.collectionFilter) return false;
         if (!app.search) return true;
@@ -1305,12 +1590,66 @@
       });
     }
 
+    function matchesImageFilter(item) {
+      if (app.imageFilter === 'all') return true;
+      const summary = getImageSummary(item);
+      if (app.imageFilter === 'accepted') return summary.hasKeep;
+      if (app.imageFilter === 'developing') return !summary.hasKeep;
+      if (app.imageFilter === 'new') return summary.hasLatestPass;
+      if (app.imageFilter === 'unreviewed') return summary.hasReview;
+      return true;
+    }
+
     function computeStatusCounts() {
       return app.prompts.reduce((acc, item) => {
         const status = getItemStatus(item);
         acc[status] = (acc[status] || 0) + 1;
         return acc;
       }, {});
+    }
+
+    function computeImageFilterCounts() {
+      return app.prompts.reduce((acc, item) => {
+        const summary = getImageSummary(item);
+        acc.all += 1;
+        if (summary.hasKeep) acc.accepted += 1;
+        if (!summary.hasKeep) acc.developing += 1;
+        if (summary.hasLatestPass) acc.new += 1;
+        if (summary.hasReview) acc.unreviewed += 1;
+        return acc;
+      }, {
+        all: 0,
+        accepted: 0,
+        developing: 0,
+        new: 0,
+        unreviewed: 0
+      });
+    }
+
+    function computeCandidateStatusCounts() {
+      return app.prompts.reduce((acc, item) => {
+        for (const candidate of item.candidates || []) {
+          const status = getCandidateStatus(candidate.id);
+          acc[status] = (acc[status] || 0) + 1;
+        }
+        return acc;
+      }, {});
+    }
+
+    function getImageSummary(item) {
+      const candidates = item.candidates || [];
+      const statuses = candidates.map((candidate) => getCandidateStatus(candidate.id));
+      return {
+        hasKeep: statuses.includes('keep'),
+        hasReview: statuses.includes('review'),
+        hasLatestPass: candidates.some((candidate) => getPassNumber(candidate.pass) === app.latestPass)
+      };
+    }
+
+    function computeLatestPass(prompts) {
+      return prompts.reduce((max, item) => {
+        return Math.max(max, ...(item.candidates || []).map((candidate) => getPassNumber(candidate.pass)));
+      }, 0);
     }
 
     function computeCollectionCounts() {
@@ -1398,6 +1737,8 @@
 
     function buildFeedbackPayload() {
       const counts = computeStatusCounts();
+      const imageCounts = computeImageFilterCounts();
+      const candidateCounts = computeCandidateStatusCounts();
       return {
         version: 3,
         exportedAt: new Date().toISOString(),
@@ -1406,6 +1747,11 @@
           reviewPage: 'notes/poem-image-prompt-review.html'
         },
         counts,
+        imageCounts,
+        candidateCounts,
+        latestPass: app.latestPass,
+        acceptedSlugs: app.prompts.filter((item) => getImageSummary(item).hasKeep).map((item) => item.slug),
+        developingSlugs: app.prompts.filter((item) => !getImageSummary(item).hasKeep).map((item) => item.slug),
         items: app.prompts.map((item) => {
           const state = getItemState(item);
           return {

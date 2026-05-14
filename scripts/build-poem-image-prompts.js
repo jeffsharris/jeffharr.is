@@ -12,6 +12,7 @@ const manifestPath = path.join(repoRoot, 'poems', 'manifest.json');
 const promptMarkdownPath = path.join(repoRoot, 'notes', 'poem-image-prompts.md');
 const reviewDataPath = path.join(repoRoot, 'notes', 'poem-image-review-data.js');
 
+const DEFAULT_CANDIDATE_ROOT = path.join(repoRoot, 'tmp', 'poem-image-candidates');
 const DEFAULT_CANDIDATE_DIR = path.join(repoRoot, 'tmp', 'poem-image-candidates', 'pass-001');
 
 const SPECS = [
@@ -402,11 +403,175 @@ const SPECS = [
   }
 ];
 
+const PASS_TWO_REVISIONS = {
+  'against-still-life': {
+    lines: [[73, 82]],
+    context: 'Focus on the end image: the silhouette contains mountains, garden and chaos, ocean and hurricane, private rooms, deserts, dinosaurs, and the first woman.',
+    style: 'refined surreal silhouette, interior imagery blown open and luminous',
+    avoid: 'avoid oranges, gore, cracked heads, and over-explaining every symbol'
+  },
+  'as-bad-as-a-mile': {
+    context: 'The small miss should feel witty and existential: an ordinary failure suddenly exposes the whole backward chain of intention, hand, arm, mind, and self.',
+    style: 'wry, sharply composed editorial surrealism with mid-century restraint',
+    avoid: 'avoid bland kitchen realism, slapstick, and dramatic mess'
+  },
+  'do-not-go-gentle-into-that-good-night': {
+    context: 'Make the father a small distant figure high on the ridge, nearly swallowed by the sad height, with the emotional force carried by scale and atmosphere.',
+    style: 'spare mythic landscape, tiny human figure against vast twilight',
+    avoid: 'avoid close portraits, deathbeds, angels, and literal flames on a body'
+  },
+  'good-bones': {
+    context: 'Use the end of the poem: someone looking around a genuinely rough, damaged place and seeing only the faintest potential that it could become beautiful.',
+    style: 'tough contemporary editorial realism, unsentimental and a little bleak',
+    avoid: 'avoid harmed children, gore, clean real-estate staging, and easy optimism'
+  },
+  'grandfathers-hands': {
+    context: 'Make this an intimate close-up of one hand as geography, memory, origin, and family tenderness.',
+    style: 'close watercolor and colored pencil study, warm skin tones and quiet shadow',
+    avoid: 'avoid faces, full bodies, explicit nudity, stereotypes, and literal map labels'
+  },
+  'having-a-coke-with-you': {
+    lines: [[12, 26]],
+    context: 'Use the more abstract movement of the poem: portraiture loses its faces, art history recedes, and the living beloved becomes the marvelous experience.',
+    style: 'abstract romantic city painting, warm 1960s color pushed toward painterly abstraction',
+    avoid: 'avoid soda branding, copied artworks, readable labels, literal museum rooms, and postcard stiffness'
+  },
+  'high-windows': {
+    context: 'The viewpoint should be so far below the high window that only perfect blue sky is visible through it, while the bleak ground world is excluded.',
+    style: 'sparse mid-century surreal realism, severe vertical framing and cool negative space',
+    avoid: 'avoid explicit sexuality, visible people, and showing the ground outside the window'
+  },
+  'i-like-my-body-when-it-is-with-your': {
+    lines: [[1, 8]],
+    context: 'Make this lightly sexual but abstract: embodied closeness, a beautiful female form suggested through curves, breath, and charged touch rather than literal nudity.',
+    style: 'sensual modernist abstraction with graceful body imagery and tactile warmth',
+    avoid: 'avoid explicit sex, exposed genitals, voyeurism, identifiable faces, and pornographic posing'
+  },
+  'if': {
+    lines: [[10, 17], [23, 26]],
+    context: 'Try a less obvious approach: inner steadiness under pressure, dreams and thoughts not ruling the self, broken work rebuilt, and the will holding on after exhaustion.',
+    style: 'symbolic psychological realism with restrained graphic power',
+    avoid: 'avoid colonial nostalgia, military heroics, sports-poster triumph, and literal father-son staging'
+  },
+  'in-blackwater-woods': {
+    context: 'The trees and the black river of loss should both be present: autumn beauty reflected in dark water, with letting go carried by the landscape.',
+    style: 'luminous naturalist watercolor with a dark reflective river',
+    avoid: 'avoid sentimental symbols, visible words, and making the river merely decorative'
+  },
+  'in-the-trance': {
+    lines: [[1, 8]],
+    context: 'Choose one singular image from the trance: the speaker making a small wooden boat and entering a simplified dream of love and craft.',
+    style: 'minimal airy surrealism, one clear maritime image with quiet space',
+    avoid: 'avoid crowded symbolic collage, political caricature, and literal illustration of every noun'
+  },
+  'jabberwocky': {
+    context: 'Keep the playful danger but make the vorpal sword feel mythic, charged, and central without turning the image into gore.',
+    style: 'mythic storybook engraving with hand-tinted color and a luminous blade',
+    avoid: 'avoid gore, severed heads, childish cartooning, and generic fantasy armor'
+  },
+  'kubla-kahn': {
+    context: 'Make the visionary landscape fantastical, ominous, and vivid: dome, sacred river, caverns, gardens, and impossible scale should pop with modern color.',
+    style: 'hyper-modern fantastical sublime, vivid ominous color, cinematic depth',
+    avoid: 'avoid muted watercolor, orientalist stereotypes, and generic palace fantasy'
+  },
+  'leda-and-the-swan': {
+    lines: [[11, 17]],
+    context: 'Try a different approach: focus on the catastrophe the myth unleashes, with wing, broken wall, burning roof and tower, and indifferent power implied rather than enacted.',
+    style: 'severe symbolist abstraction, classical fragments and white wing shadow',
+    avoid: 'avoid nudity, explicit assault, erotic posing, gore, and depicting the act itself'
+  },
+  'london': {
+    context: 'Keep the engraving mood but simplify: a bleak city walk, invisible manacles, soot, fog, and moral pressure without a sky crowded by sad faces.',
+    style: 'spare Blakean engraving with noir watercolor wash',
+    avoid: 'avoid many faces in the sky, graphic poverty, explicit sex work, and readable signs'
+  },
+  'nothing-gold-can-stay': {
+    context: 'The style is close; make the fragile first gold more clearly golden while keeping the image restrained and transient.',
+    style: 'restrained macro watercolor realism, clearer gold-green first light',
+    avoid: 'avoid added symbols, inspirational-poster mood, and over-saturation'
+  },
+  'on-this-the-100th-anniversary-of-the-sinking-of-the-titanic': {
+    context: 'Do not personify the Titanic. Show the vivid interior life of the ship underwater, with rooms of warmth and memory visible inside the sunken structure.',
+    style: 'cinematic underwater surrealism, intimate glowing interiors inside the wreck',
+    avoid: 'avoid faces on the ship, skeletons, gore, disaster spectacle, and film still references'
+  },
+  'pyramid-scheme': {
+    context: 'Keep the style but simplify: focus on the couple, the sun, raining coins, and maybe cold pizza on the stairs; let the joke stay romantic and absurd.',
+    style: 'playful surreal editorial gouache, bright and focused',
+    avoid: 'avoid eyes, dogs, extra side images, MLM infographics, and brand logos'
+  },
+  'sailing-to-byzantium': {
+    lines: [[1, 8], [29, 39]],
+    context: 'Keep the Grecian gold bird, but bring in the sailing passage: mortal nature recedes behind the voyage toward Byzantium and crafted eternity.',
+    style: 'Byzantine gold mosaic influence with lyrical sea voyage imagery',
+    avoid: 'avoid generic fantasy cities, readable religious text, and losing the sense of travel by water'
+  },
+  'sonnet-116': {
+    context: 'Try a more love-forward approach: love as a steadfast presence between two people that still carries the fixed mark, guiding star, and storm imagery.',
+    style: 'tender romantic symbolism, elegant maritime light, unsentimental warmth',
+    avoid: 'avoid wedding cliches, heart icons, and cold empty lighthouse imagery'
+  },
+  'stopping-by-woods-on-a-snowy-evening': {
+    context: 'Keep the quiet winter nocturne, but place woods on both sides of the sleigh instead of opening the scene to a lake.',
+    style: 'quiet winter nocturne watercolor, close dark woods and falling snow',
+    avoid: 'avoid lakes, cozy holiday-card warmth, and bright village scenes'
+  },
+  'the-kingfisher': {
+    lines: [[21, 24]],
+    context: 'Use the final image: the kingfisher flying perfectly back over the bright sea, carrying the force of hunger, beauty, and a cry the speaker cannot make.',
+    style: 'vivid naturalist watercolor, clean bright sea and perfect movement',
+    avoid: 'avoid blood, dark wave focus, and cartoon prettiness'
+  },
+  'the-light-wraps-you': {
+    lines: [[18, 22]],
+    context: 'Treat this as an ode to the moon: a magnetic black-and-gold circle, fertility, sadness, and creation revolving around a solitary presence.',
+    style: 'lunar surrealism in black, gold, and pale blue; elegant and magnetic',
+    avoid: 'avoid bondage imagery, oversexualization, and sun-dominated compositions'
+  },
+  'the-road-not-taken': {
+    context: 'Keep the ambiguity of two close paths, but make the visual style more distinctive and less conventional.',
+    style: 'stylized printmaking and watercolor, layered autumn texture and unusual perspective',
+    avoid: 'avoid signs, arrows, and spotlighting one path as correct'
+  },
+  'the-second-coming': {
+    lines: [[1, 8]],
+    context: 'Use the opening image: widening gyre, falcon losing the falconer, the center failing, and things falling apart.',
+    style: 'apocalyptic abstract landscape, spiraling motion and stark falcon silhouette',
+    avoid: 'avoid desert beast imagery, gore, explicit religious horror, and monster-movie treatment'
+  },
+  'to-my-favorite-17-year-old-high-school-girl': {
+    context: 'Try a more playful approach: ordinary teenage mess and comic historical comparison should feel affectionate, not moralizing.',
+    style: 'playful editorial illustration, bright domestic wit and loose composition',
+    avoid: 'avoid sexualizing the minor, celebrity likenesses, readable posters, and scolding tone'
+  },
+  'variation-on-the-word-sleep': {
+    lines: [[9, 17]],
+    context: 'Focus on two people walking through the lucent bluegreen forest toward the cave; one carries a silver branch with a small white flower.',
+    style: 'nocturne watercolor and ink, lucent bluegreen forest, protective and dreamlike',
+    avoid: 'avoid disembodied hands, voyeuristic sleeping-body imagery, and horror'
+  },
+  'what-i-didnt-know-before': {
+    context: 'Focus on the foal arriving newly born yet already full of running speed: ungentle, alive, and ready to leap into itself.',
+    style: 'clean contemporary realism with watercolor softness and kinetic newborn energy',
+    avoid: 'avoid graphic birth imagery, sentimentality, and making the horse look fully grown'
+  },
+  'white-owl-flies-into-and-out-of-the-field': {
+    context: 'Make the central image a river of pure, blindingly white owl feathers moving through the rest of the winter scene.',
+    style: 'high-key winter watercolor, almost overwhelming white feather-light',
+    avoid: 'avoid blood, prey, macabre death imagery, and a conventional owl portrait'
+  }
+};
+
 function parseArgs(argv) {
   const args = {
     write: false,
     batchJson: '',
-    candidateDir: DEFAULT_CANDIDATE_DIR
+    candidateDir: '',
+    candidateRoot: DEFAULT_CANDIDATE_ROOT,
+    feedbackJson: '',
+    onlyRejected: false,
+    pass: 'pass-001',
+    summaryJson: ''
   };
 
   for (let i = 0; i < argv.length; i += 1) {
@@ -418,6 +583,23 @@ function parseArgs(argv) {
     }
     if (arg === '--candidate-dir') {
       args.candidateDir = path.resolve(repoRoot, argv[i + 1]);
+      i += 1;
+    }
+    if (arg === '--candidate-root') {
+      args.candidateRoot = path.resolve(repoRoot, argv[i + 1]);
+      i += 1;
+    }
+    if (arg === '--feedback-json') {
+      args.feedbackJson = path.resolve(repoRoot, argv[i + 1]);
+      i += 1;
+    }
+    if (arg === '--only-rejected') args.onlyRejected = true;
+    if (arg === '--pass') {
+      args.pass = argv[i + 1];
+      i += 1;
+    }
+    if (arg === '--summary-json') {
+      args.summaryJson = path.resolve(repoRoot, argv[i + 1]);
       i += 1;
     }
   }
@@ -455,8 +637,8 @@ function extractLines(bodyLines, ranges) {
   return blocks.filter(Boolean).join('\n[other lines omitted]\n');
 }
 
-function buildPrompt({ title, author, selectedLines, context, style, avoid }) {
-  return [
+function buildPrompt({ title, author, selectedLines, context, style, avoid, revision }) {
+  const lines = [
     `Create one square companion image for the poem "${title}" by ${author}.`,
     '',
     'Use these exact selected lines as the source passage:',
@@ -465,13 +647,22 @@ function buildPrompt({ title, author, selectedLines, context, style, avoid }) {
     '"""',
     '',
     `Context: ${context}`,
-    '',
+    ''
+  ];
+
+  if (revision) {
+    lines.push(`Reviewer direction for this second pass: ${revision}`, '');
+  }
+
+  lines.push(
     'Goal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.',
     '',
     `Light style guidance: ${style}.`,
     '',
     `Constraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; ${avoid}.`
-  ].join('\n');
+  );
+
+  return lines.join('\n');
 }
 
 function loadManifest() {
@@ -482,19 +673,83 @@ function loadManifest() {
   return collections;
 }
 
-function loadPromptItems(candidateDir) {
+function loadFeedback(feedbackJson) {
+  const empty = { bySlug: new Map(), byCandidate: new Map(), rejectedSlugs: new Set() };
+  if (!feedbackJson) return empty;
+  const payload = JSON.parse(fs.readFileSync(feedbackJson, 'utf8'));
+  const bySlug = new Map();
+  const byCandidate = new Map();
+  const rejectedSlugs = new Set();
+
+  for (const item of payload.items || []) {
+    const candidates = item.candidates || [];
+    for (const candidate of candidates) {
+      if (candidate.id) byCandidate.set(candidate.id, candidate.feedback || {});
+    }
+    const kept = candidates
+      .filter((candidate) => candidate.feedback?.status === 'keep')
+      .map((candidate) => candidate.id);
+    const latestPass = candidates.reduce((max, candidate) => {
+      return Math.max(max, getCandidatePassNumber(candidate));
+    }, 0);
+    const latestCandidates = candidates.filter((candidate) => {
+      return getCandidatePassNumber(candidate) === latestPass;
+    });
+    const rejected = latestCandidates
+      .filter((candidate) => candidate.feedback?.status === 'reject')
+      .map((candidate) => candidate.feedback?.note || '')
+      .filter(Boolean);
+    const entry = {
+      slug: item.slug,
+      promptFeedback: item.feedback || '',
+      rejectedNotes: rejected,
+      keptCandidates: kept,
+      latestPass
+    };
+    bySlug.set(item.slug, entry);
+    if (kept.length === 0 && latestCandidates.some((candidate) => candidate.feedback?.status === 'reject')) {
+      rejectedSlugs.add(item.slug);
+    }
+  }
+
+  return { bySlug, byCandidate, rejectedSlugs };
+}
+
+function getCandidatePassNumber(candidate) {
+  return parsePassNumber(candidate.pass || String(candidate.id || '').split('::')[1]);
+}
+
+function applyRevision(spec, pass, feedback) {
+  if (pass === 'pass-001') return spec;
+  const revision = PASS_TWO_REVISIONS[spec.slug];
+  if (!revision && !feedback?.rejectedNotes?.length && !feedback?.promptFeedback) return spec;
+  return {
+    ...spec,
+    ...(revision || {}),
+    revision: [
+      revision?.revision,
+      feedback?.promptFeedback,
+      ...(feedback?.rejectedNotes || [])
+    ].filter(Boolean).join(' ')
+  };
+}
+
+function loadPromptItems(args, feedback) {
   const collections = loadManifest();
+  const candidateDirs = findCandidateDirs(args);
   return SPECS.map((spec, index) => {
+    const effectiveSpec = applyRevision(spec, args.pass, feedback.bySlug.get(spec.slug));
     const markdown = fs.readFileSync(path.join(poemsDir, `${spec.slug}.md`), 'utf8');
     const poem = parsePoem(markdown);
-    const selectedLines = extractLines(poem.bodyLines, spec.lines);
+    const selectedLines = extractLines(poem.bodyLines, effectiveSpec.lines);
     const prompt = buildPrompt({
       title: poem.title,
       author: poem.author,
       selectedLines,
-      context: spec.context,
-      style: spec.style,
-      avoid: spec.avoid
+      context: effectiveSpec.context,
+      style: effectiveSpec.style,
+      avoid: effectiveSpec.avoid,
+      revision: effectiveSpec.revision
     });
     return {
       order: index + 1,
@@ -503,28 +758,54 @@ function loadPromptItems(candidateDir) {
       author: poem.author,
       collection: collections.get(spec.slug) || 'unmatched',
       selectedLines,
-      context: spec.context,
-      style: spec.style,
-      avoid: spec.avoid,
+      context: effectiveSpec.context,
+      style: effectiveSpec.style,
+      avoid: effectiveSpec.avoid,
+      revision: effectiveSpec.revision || '',
       prompt,
-      candidates: findCandidates(candidateDir, spec.slug)
+      candidates: findCandidates(candidateDirs, spec.slug)
     };
   });
 }
 
-function findCandidates(candidateDir, slug) {
-  if (!candidateDir || !fs.existsSync(candidateDir)) return [];
-  const files = fs.readdirSync(candidateDir)
-    .filter((name) => name === `${slug}.png` || name.startsWith(`${slug}-`) && name.endsWith('.png'))
+function findCandidateDirs(args) {
+  if (args.candidateDir) {
+    return fs.existsSync(args.candidateDir) ? [args.candidateDir] : [];
+  }
+  if (!args.candidateRoot || !fs.existsSync(args.candidateRoot)) return [];
+  return fs.readdirSync(args.candidateRoot)
+    .map((name) => path.join(args.candidateRoot, name))
+    .filter((candidatePath) => fs.statSync(candidatePath).isDirectory())
     .sort();
+}
 
-  return files.map((name, index) => ({
-    id: `${slug}::${path.basename(candidateDir)}::${index + 1}`,
-    label: `Candidate ${index + 1}`,
-    src: path.posix.join('..', 'tmp', 'poem-image-candidates', path.basename(candidateDir), name),
-    file: path.relative(repoRoot, path.join(candidateDir, name)),
-    model: 'gpt-image-2'
-  }));
+function findCandidates(candidateDirs, slug) {
+  return candidateDirs.flatMap((candidateDir) => {
+    const pass = path.basename(candidateDir);
+    const files = fs.readdirSync(candidateDir)
+      .filter((name) => name === `${slug}.png` || name.startsWith(`${slug}-`) && name.endsWith('.png'))
+      .sort();
+
+    return files.map((name, index) => ({
+      id: `${slug}::${pass}::${index + 1}`,
+      label: `${formatPassLabel(pass)} candidate ${index + 1}`,
+      pass,
+      src: path.posix.join('..', 'tmp', 'poem-image-candidates', pass, name),
+      file: path.relative(repoRoot, path.join(candidateDir, name)),
+      model: 'gpt-image-2'
+    }));
+  });
+}
+
+function formatPassLabel(pass) {
+  const match = pass.match(/^pass-0*(\d+)$/);
+  if (!match) return pass;
+  return `Pass ${match[1]}`;
+}
+
+function parsePassNumber(pass) {
+  const match = String(pass || '').match(/^pass-0*(\d+)$/);
+  return match ? Number(match[1]) : 0;
 }
 
 function renderMarkdown(items) {
@@ -593,13 +874,49 @@ function renderBatchJsonl(items) {
   })).join('\n')}\n`;
 }
 
+function buildSummary(items, batchItems, feedback, args) {
+  const candidateCounts = {};
+  let acceptedPoems = 0;
+  let developingPoems = 0;
+  let unreviewedPoems = 0;
+
+  for (const item of items) {
+    const statuses = (item.candidates || []).map((candidate) => {
+      const status = feedback.byCandidate.get(candidate.id)?.status || 'review';
+      candidateCounts[status] = (candidateCounts[status] || 0) + 1;
+      return { status, pass: parsePassNumber(candidate.pass) };
+    });
+    const hasKeep = statuses.some((candidate) => candidate.status === 'keep');
+    if (hasKeep) acceptedPoems += 1;
+    if (!hasKeep) developingPoems += 1;
+    if (statuses.some((candidate) => candidate.status === 'review')) unreviewedPoems += 1;
+  }
+
+  return {
+    generatedAt: new Date().toISOString(),
+    feedbackJson: args.feedbackJson ? path.relative(repoRoot, args.feedbackJson) : '',
+    pass: args.pass,
+    totalPoems: items.length,
+    acceptedPoems,
+    developingPoems,
+    unreviewedPoems,
+    candidateCounts,
+    batchPrompts: batchItems.map((item) => item.slug)
+  };
+}
+
 function main() {
   const args = parseArgs(process.argv.slice(2));
-  const items = loadPromptItems(args.candidateDir);
+  const feedback = loadFeedback(args.feedbackJson);
+  const items = loadPromptItems(args, feedback);
 
   if (items.length !== SPECS.length) {
     throw new Error(`Expected ${SPECS.length} prompt specs, got ${items.length}`);
   }
+
+  const batchItems = args.onlyRejected
+    ? items.filter((item) => feedback.rejectedSlugs.has(item.slug))
+    : items;
 
   if (args.write) {
     fs.writeFileSync(promptMarkdownPath, renderMarkdown(items));
@@ -608,12 +925,18 @@ function main() {
 
   if (args.batchJson) {
     fs.mkdirSync(path.dirname(args.batchJson), { recursive: true });
-    fs.writeFileSync(args.batchJson, renderBatchJsonl(items));
+    fs.writeFileSync(args.batchJson, renderBatchJsonl(batchItems));
+  }
+
+  if (args.summaryJson) {
+    fs.mkdirSync(path.dirname(args.summaryJson), { recursive: true });
+    fs.writeFileSync(args.summaryJson, `${JSON.stringify(buildSummary(items, batchItems, feedback, args), null, 2)}\n`);
   }
 
   const unmatched = items.filter((item) => item.collection === 'unmatched').map((item) => item.slug);
   console.log(JSON.stringify({
     prompts: items.length,
+    batchPrompts: batchItems.length,
     candidates: items.reduce((sum, item) => sum + item.candidates.length, 0),
     unmatched
   }, null, 2));
