@@ -217,85 +217,124 @@
       gap: 24px;
     }
 
-    /* Card - Fade Animation */
+    /* Poem image cards */
     .card {
       position: relative;
-      height: 300px;
+      aspect-ratio: 1;
       cursor: pointer;
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 12px;
+      background: #16120f;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 14px;
       box-shadow: var(--shadow);
       overflow: hidden;
-      transition: box-shadow 0.3s, transform 0.3s;
+      isolation: isolate;
+      transition: box-shadow 0.3s, transform 0.3s, border-color 0.3s;
     }
 
     .card:hover {
       box-shadow: var(--shadow-lg);
-      transform: translateY(-2px);
+      transform: translateY(-3px);
+      border-color: rgba(255, 255, 255, 0.28);
     }
 
     .card.hidden {
       display: none;
     }
 
-    .card__layer {
+    .card:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 3px;
+    }
+
+    .card__image {
       position: absolute;
       inset: 0;
-      padding: 32px;
-      display: flex;
-      flex-direction: column;
-      transition: opacity 0.4s ease;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transform: scale(1);
+      transition: transform 0.6s ease, filter 0.4s ease;
+      z-index: -2;
+    }
+
+    .card:hover .card__image,
+    .card:focus-visible .card__image {
+      transform: scale(1.045);
+      filter: saturate(1.04) contrast(1.03);
+    }
+
+    .card__scrim {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 50% 18%, rgba(0, 0, 0, 0.04), rgba(0, 0, 0, 0.36) 70%),
+        linear-gradient(180deg, rgba(0, 0, 0, 0.16) 0%, rgba(0, 0, 0, 0.12) 36%, rgba(0, 0, 0, 0.82) 100%);
+      z-index: -1;
+      transition: opacity 0.3s ease;
+    }
+
+    .card:hover .card__scrim,
+    .card:focus-visible .card__scrim {
+      opacity: 0.92;
     }
 
     .card__front {
+      position: absolute;
+      inset: auto 0 0;
+      min-height: 50%;
+      padding: 72px 24px 24px;
+      display: flex;
+      flex-direction: column;
       align-items: center;
-      justify-content: center;
+      justify-content: flex-end;
       text-align: center;
       opacity: 1;
     }
 
-    .card__back {
-      opacity: 0;
-    }
-
     .card:hover .card__front {
-      opacity: 0;
-    }
-
-    .card:hover .card__back {
       opacity: 1;
     }
 
     .card__title {
       font-family: var(--font-serif);
-      font-size: 1.5rem;
-      font-weight: 500;
+      font-size: 1.6rem;
+      font-weight: 600;
       margin: 0 0 8px 0;
-      color: var(--text);
-      line-height: 1.3;
+      color: #fff;
+      line-height: 1.14;
+      letter-spacing: 0;
+      overflow-wrap: anywhere;
+      text-shadow: 0 2px 20px rgba(0, 0, 0, 0.78), 0 1px 3px rgba(0, 0, 0, 0.88);
+    }
+
+    .card--long-title .card__front {
+      min-height: 66%;
+      padding-top: 88px;
+    }
+
+    .card--long-title .card__title {
+      font-size: 1.28rem;
+      line-height: 1.12;
+    }
+
+    .card--very-long-title .card__front {
+      min-height: 82%;
+      padding: 96px 20px 22px;
+    }
+
+    .card--very-long-title .card__title {
+      font-size: 1.05rem;
+      line-height: 1.1;
     }
 
     .card__author {
       font-size: 14px;
-      color: var(--text-muted);
+      color: rgba(255, 255, 255, 0.82);
       font-style: italic;
+      text-shadow: 0 1px 12px rgba(0, 0, 0, 0.8), 0 1px 2px rgba(0, 0, 0, 0.9);
     }
 
-    .card__preview {
-      font-family: var(--font-serif);
-      font-size: 15px;
-      color: var(--text);
-      line-height: 1.7;
-      white-space: pre-line;
-      margin: 0;
-      flex: 1;
-      overflow: hidden;
-      mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
-      -webkit-mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
-    }
-
-    .card__expand {
+    .card__open {
       position: absolute;
       bottom: 16px;
       right: 16px;
@@ -310,14 +349,15 @@
       color: var(--text-muted);
       opacity: 0;
       transition: all 0.3s;
-      z-index: 1;
+      z-index: 2;
     }
 
-    .card:hover .card__expand {
+    .card:hover .card__open,
+    .card:focus-visible .card__open {
       opacity: 1;
     }
 
-    .card__expand:hover {
+    .card__open:hover {
       background: var(--accent);
       border-color: var(--accent);
       color: white;
@@ -352,7 +392,7 @@
     .modal__content {
       position: relative;
       width: 100%;
-      max-width: 900px;
+      max-width: 1080px;
       max-height: 90vh;
       max-height: 90dvh;
       background: var(--bg-card);
@@ -521,11 +561,51 @@
     }
 
     .modal__body {
-      padding: 32px;
-      padding-bottom: calc(32px + env(safe-area-inset-bottom, 0px));
+      padding: 0;
       overflow-y: auto;
       flex: 1;
       min-height: 0;
+    }
+
+    .modal__reader {
+      display: grid;
+      grid-template-columns: minmax(260px, 34%) minmax(0, 1fr);
+      gap: 34px;
+      align-items: start;
+      padding: 32px;
+      padding-bottom: calc(32px + env(safe-area-inset-bottom, 0px));
+    }
+
+    .modal__art {
+      position: sticky;
+      top: 0;
+      margin: 0;
+      aspect-ratio: 1;
+      border-radius: 14px;
+      overflow: hidden;
+      background: #16120f;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+    }
+
+    .modal__art::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(0, 0, 0, 0.04), rgba(0, 0, 0, 0.22));
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+      pointer-events: none;
+    }
+
+    .modal__art img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+    }
+
+    .modal__text {
+      min-width: 0;
     }
 
     .modal__poem {
@@ -535,6 +615,7 @@
       white-space: pre-line;
       margin: 0;
       text-align: left;
+      max-width: 64ch;
     }
 
     .modal__close {
@@ -614,7 +695,7 @@
     /* Responsive */
     @media (min-width: 1200px) {
       .modal__content {
-        max-width: 1000px;
+        max-width: 1120px;
       }
 
       .modal__poem {
@@ -665,15 +746,15 @@
       }
 
       .card {
-        height: 260px;
+        aspect-ratio: 1;
       }
 
-      .card__layer {
-        padding: 24px;
+      .card__front {
+        padding: 68px 22px 22px;
       }
 
       .card__title {
-        font-size: 1.3rem;
+        font-size: 1.45rem;
       }
 
       .modal {
@@ -696,8 +777,19 @@
       }
 
       .modal__body {
-        padding: 24px;
-        padding-bottom: calc(24px + env(safe-area-inset-bottom, 0px));
+        padding: 0;
+      }
+
+      .modal__reader {
+        display: block;
+        padding: 20px 20px calc(28px + env(safe-area-inset-bottom, 0px));
+      }
+
+      .modal__art {
+        position: relative;
+        top: auto;
+        aspect-ratio: 16 / 10;
+        margin-bottom: 24px;
       }
 
       .modal__poem {
@@ -727,15 +819,11 @@
       }
 
       .card {
-        height: 240px;
+        aspect-ratio: 1;
       }
 
       .card__title {
-        font-size: 1.2rem;
-      }
-
-      .card__preview {
-        font-size: 14px;
+        font-size: 1.3rem;
       }
 
       .filter-btn {
@@ -836,7 +924,14 @@
         </div>
       </div>
       <div class="modal__body">
-        <p class="modal__poem" id="modal-poem"></p>
+        <div class="modal__reader">
+          <figure class="modal__art" id="modal-art">
+            <img id="modal-image" alt="" width="1024" height="1024">
+          </figure>
+          <div class="modal__text">
+            <p class="modal__poem" id="modal-poem"></p>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -851,6 +946,8 @@
     const modalTitle = document.getElementById('modal-title');
     const modalAuthor = document.getElementById('modal-author');
     const modalBadge = document.getElementById('modal-badge');
+    const modalArt = document.getElementById('modal-art');
+    const modalImage = document.getElementById('modal-image');
     const modalPoem = document.getElementById('modal-poem');
     const copyButton = document.getElementById('copy-poem');
     const shareButton = document.getElementById('share-poem');
@@ -975,6 +1072,20 @@
       clearTimeout(feedbackTimeout);
     }
 
+    function escapeHtml(value = '') {
+      return String(value).replace(/[&<>"']/g, (char) => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#039;'
+      }[char]));
+    }
+
+    function escapeAttribute(value = '') {
+      return escapeHtml(value).replace(/`/g, '&#096;');
+    }
+
     // Parse markdown frontmatter and content
     function parsePoem(markdown) {
       const match = markdown.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n([\s\S]*)$/);
@@ -1003,32 +1114,41 @@
     // Create card element
     function createCard(poem, isMemorized) {
       const card = document.createElement('div');
-      card.className = 'card';
+      const titleLengthClass = poem.title.length > 70
+        ? ' card--very-long-title'
+        : poem.title.length > 42
+          ? ' card--long-title'
+          : '';
+      card.className = `card${titleLengthClass}`;
+      card.setAttribute('role', 'button');
+      card.setAttribute('tabindex', '0');
+      card.setAttribute('aria-label', `Open ${poem.title} by ${poem.author}`);
       card.dataset.title = poem.title.toLowerCase();
       card.dataset.author = poem.author.toLowerCase();
       card.dataset.content = poem.content.toLowerCase();
       card.dataset.memorized = isMemorized ? 'true' : 'false';
       card.dataset.slug = poem.slug || '';
 
-      const lines = poem.content.split('\n').slice(0, 10);
-      const preview = lines.join('\n');
-
       card.innerHTML = `
-        <div class="card__layer card__front">
-          <h2 class="card__title">${poem.title}</h2>
-          <p class="card__author">${poem.author}</p>
+        ${poem.image ? `<img class="card__image" src="${escapeAttribute(poem.image)}" alt="" width="1024" height="1024" loading="lazy" decoding="async">` : ''}
+        <div class="card__scrim" aria-hidden="true"></div>
+        <div class="card__front">
+          <h2 class="card__title">${escapeHtml(poem.title)}</h2>
+          <p class="card__author">${escapeHtml(poem.author)}</p>
         </div>
-        <div class="card__layer card__back">
-          <p class="card__preview">${preview}</p>
-          <button class="card__expand" aria-label="Expand poem">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/>
-            </svg>
-          </button>
-        </div>
+        <span class="card__open" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/>
+          </svg>
+        </span>
       `;
 
-      card.addEventListener('click', (e) => {
+      card.addEventListener('click', () => {
+        openModal(poem, isMemorized);
+      });
+      card.addEventListener('keydown', (event) => {
+        if (event.key !== 'Enter' && event.key !== ' ') return;
+        event.preventDefault();
         openModal(poem, isMemorized);
       });
 
@@ -1040,6 +1160,15 @@
       modalTitle.textContent = poem.title;
       modalAuthor.textContent = poem.author;
       modalPoem.textContent = poem.content;
+      if (poem.image) {
+        modalImage.src = poem.image;
+        modalImage.alt = `Companion image for ${poem.title}`;
+        modalArt.hidden = false;
+      } else {
+        modalImage.removeAttribute('src');
+        modalImage.alt = '';
+        modalArt.hidden = true;
+      }
       if (modalBadge) {
         modalBadge.style.display = isMemorized ? 'inline-flex' : 'none';
       }
@@ -1212,6 +1341,7 @@
         const manifestRes = await fetch('/poems/manifest.json');
         if (!manifestRes.ok) throw new Error('Manifest unavailable');
         const manifest = await manifestRes.json();
+        const imageMap = manifest.images || {};
 
         // Combine memorized and learning into single list
         const memorizedSlugs = manifest.memorized || [];
@@ -1227,6 +1357,7 @@
               const markdown = await res.text();
               const poem = parsePoem(markdown);
               if (poem) poem.slug = slug;
+              if (poem) poem.image = imageMap[slug] || '';
               return poem;
             } catch {
               return null;
