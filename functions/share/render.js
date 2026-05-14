@@ -27,6 +27,7 @@ export function renderSharePage(item, requestUrl) {
   const imageUrl = item.imageUrl || item.podcast?.imageUrl || 'https://jeffharr.is/images/profile.jpg';
   const audioUrl = item.media?.audioUrl || '';
   const isEpisode = item.type === 'podcast_episode';
+  const shareText = buildShareText(item, title);
 
   return htmlDocument({
     title: `${title} | Jeff Harris`,
@@ -46,6 +47,13 @@ export function renderSharePage(item, requestUrl) {
             <h1>${escapeHtml(title)}</h1>
             ${item.author || item.publisher ? `<p class="share-byline">${escapeHtml(item.author || item.publisher)}</p>` : ''}
             ${item.publishedAt || item.media?.duration ? `<p class="share-meta">${escapeHtml(formatMeta(item))}</p>` : ''}
+            <div class="share-actions share-actions--hero">
+              <button class="native-share-btn" type="button" data-native-share data-share-title="${escapeAttribute(title)}" data-share-text="${escapeAttribute(shareText)}" data-share-url="${escapeAttribute(shareUrl)}">
+                <span class="native-share-btn__icon" aria-hidden="true">${shareIconSvg()}</span>
+                <span>Share</span>
+              </button>
+              <button class="secondary-btn secondary-btn--compact" type="button" data-copy="${escapeAttribute(shareUrl)}">Copy link</button>
+            </div>
             <div class="platform-list" data-platform-list>
               ${renderPlatformLinks(item.platforms || {})}
             </div>
@@ -55,14 +63,11 @@ export function renderSharePage(item, requestUrl) {
               </div>
             ` : ''}
             <p class="share-description">${escapeHtml(description)}</p>
-            <div class="share-actions">
-              <button class="secondary-btn" type="button" data-copy="${escapeAttribute(shareUrl)}">Copy share link</button>
-              ${item.podcast?.feedUrl ? `<button class="secondary-btn" type="button" data-copy="${escapeAttribute(item.podcast.feedUrl)}">Copy RSS</button>` : ''}
-            </div>
+            ${item.podcast?.feedUrl ? `<div class="share-actions"><button class="secondary-btn" type="button" data-copy="${escapeAttribute(item.podcast.feedUrl)}">Copy RSS</button></div>` : ''}
           </div>
         </article>
       </main>
-      <script src="/share-assets/share.js?v=2"></script>
+      <script src="/share-assets/share.js?v=3"></script>
     `
   });
 }
@@ -166,7 +171,7 @@ export function renderLoadingPage(sourceUrl, requestUrl) {
           </div>
         </section>
       </main>
-      <script src="/share-assets/share.js?v=2"></script>
+      <script src="/share-assets/share.js?v=3"></script>
     `
   });
 }
@@ -216,7 +221,7 @@ function htmlDocument({ title, description, imageUrl, url, body, noindex }) {
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="manifest" href="/share-assets/manifest.webmanifest">
-  <link rel="stylesheet" href="/share-assets/share.css?v=1">
+  <link rel="stylesheet" href="/share-assets/share.css?v=2">
 </head>
 <body>
   <div class="bg-gradient"></div>
@@ -240,6 +245,21 @@ function renderPlatformLinks(platforms) {
         <small>${escapeHtml(platform.kind === 'rss' ? 'Subscribe by feed' : platform.kind === 'website' ? 'Open original site' : platform.kind === 'episode' ? 'Open episode' : 'Open podcast')}</small>
       </a>
     `).join('');
+}
+
+function buildShareText(item, title) {
+  if (item.type === 'podcast_episode' && item.podcast?.title) {
+    return `${title} - ${item.podcast.title}`;
+  }
+  return title;
+}
+
+function shareIconSvg() {
+  return `<svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+    <path d="M12 3v12"></path>
+    <path d="M7 8l5-5 5 5"></path>
+    <path d="M5 13v5a3 3 0 0 0 3 3h8a3 3 0 0 0 3-3v-5"></path>
+  </svg>`;
 }
 
 function formatMeta(item) {

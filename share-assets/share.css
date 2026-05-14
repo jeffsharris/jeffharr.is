@@ -211,7 +211,8 @@ h2 {
 
 .platform-btn,
 .primary-btn,
-.secondary-btn {
+.secondary-btn,
+.native-share-btn {
   min-height: 46px;
   border-radius: var(--radius);
   font-family: var(--font-body);
@@ -240,7 +241,8 @@ h2 {
 
 .platform-btn:hover,
 .primary-btn:hover,
-.secondary-btn:hover {
+.secondary-btn:hover,
+.native-share-btn:hover {
   transform: translateY(-1px);
   border-color: var(--accent);
 }
@@ -271,18 +273,53 @@ h2 {
   margin-top: 18px;
 }
 
+.share-actions--hero {
+  margin-top: 18px;
+}
+
 .primary-btn,
-.secondary-btn {
+.secondary-btn,
+.native-share-btn {
   border: 1px solid var(--accent);
   background: var(--accent);
   color: #FFFFFF;
   padding: 0 18px;
 }
 
+.native-share-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  min-width: 132px;
+  box-shadow: 0 8px 20px color-mix(in srgb, var(--accent), transparent 76%);
+}
+
+.native-share-btn__icon {
+  display: inline-grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+}
+
+.native-share-btn svg {
+  width: 19px;
+  height: 19px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
 .secondary-btn {
   border-color: var(--border);
   background: var(--bg-soft);
   color: var(--text);
+}
+
+.secondary-btn--compact {
+  padding-inline: 14px;
 }
 
 .share-form {
@@ -585,9 +622,24 @@ code {
   }
 
   .primary-btn,
-  .secondary-btn {
+  .secondary-btn,
+  .native-share-btn {
     min-height: 48px;
     width: 100%;
+  }
+
+  .share-actions--hero {
+    grid-template-columns: 1fr auto;
+    display: grid;
+  }
+
+  .share-actions--hero .native-share-btn {
+    width: auto;
+  }
+
+  .share-actions--hero .secondary-btn {
+    width: auto;
+    min-width: 104px;
   }
 
   .share-actions {

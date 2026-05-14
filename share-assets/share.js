@@ -48,6 +48,50 @@
     }
   }
 
+  function sharePayloadFromButton(button) {
+    return {
+      title: button.getAttribute('data-share-title') || document.title,
+      text: button.getAttribute('data-share-text') || '',
+      url: button.getAttribute('data-share-url') || location.href
+    };
+  }
+
+  function setTemporaryButtonText(button, text, duration = 1600) {
+    const label = button.querySelector('[data-share-label]') || button;
+    const original = label.textContent;
+    label.textContent = text;
+    setTimeout(() => {
+      label.textContent = original;
+    }, duration);
+  }
+
+  function initNativeShareButtons() {
+    for (const button of document.querySelectorAll('[data-native-share]')) {
+      const textNode = button.querySelector('span:last-child');
+      if (textNode && !textNode.hasAttribute('data-share-label')) {
+        textNode.setAttribute('data-share-label', '');
+      }
+
+      button.addEventListener('click', async () => {
+        const payload = sharePayloadFromButton(button);
+        try {
+          if (navigator.share && (!navigator.canShare || navigator.canShare(payload))) {
+            await navigator.share(payload);
+            setTemporaryButtonText(button, 'Shared');
+            return;
+          }
+
+          const copied = await copyText(payload.url);
+          setTemporaryButtonText(button, copied ? 'Link copied' : 'Share unavailable');
+        } catch (error) {
+          if (error && error.name === 'AbortError') return;
+          const copied = await copyText(payload.url);
+          setTemporaryButtonText(button, copied ? 'Link copied' : 'Share unavailable');
+        }
+      });
+    }
+  }
+
   function initShareForm() {
     const form = document.getElementById('share-form');
     if (!form) return;
@@ -156,6 +200,7 @@
 
   reorderPlatformLinks();
   initCopyButtons();
+  initNativeShareButtons();
   initShareForm();
   initShareLoader();
 })();
