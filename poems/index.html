@@ -1205,12 +1205,7 @@
 
     async function sharePoemLink() {
       const url = getPoemUrl();
-      const title = modalTitle.textContent || 'Poem';
-      const author = modalAuthor.textContent || 'Unknown';
-      const excerpt = createShareExcerpt(modalPoem.textContent || '');
       const shareData = {
-        title: `${title} by ${author}`,
-        text: [title, author, excerpt].filter(Boolean).join('\n\n'),
         url
       };
 
@@ -1230,15 +1225,6 @@
       } catch {
         showFeedback('Unable to copy link', true);
       }
-    }
-
-    function createShareExcerpt(content = '') {
-      return content
-        .split('\n')
-        .map(line => line.trim())
-        .filter(Boolean)
-        .slice(0, 4)
-        .join('\n');
     }
 
     // Author link click - search by author
