@@ -733,10 +733,39 @@ const PASS_FOUR_REVISIONS = {
   }
 };
 
+const PASS_FIVE_REVISIONS = {
+  'as-bad-as-a-mile': {
+    lines: [[1, 7]],
+    context: 'Use a first-person point of view looking down at the speaker\'s own hand just before tossing the apple core. The ordinary hand, the apple core, and the small gap ahead should already carry the feeling of failure before the miss happens.',
+    style: 'POV psychological realism, spare and dry, with subtle existential pressure in the composition',
+    avoid: 'avoid third-person scenes, bland still life, slapstick, cute humor, kitchen realism, and motivational symbolism',
+    n: 2
+  },
+  'if': {
+    lines: [[19, 26], [32, 35]],
+    context: 'Try diverse nonliteral images for the triumphant and noble force of the poem: endurance after loss, composure under pressure, inward command, risk, patience, and the unforgiving minute fully inhabited.',
+    style: 'varied abstract-symbolic compositions with restraint, nobility, pressure, balance, and warm disciplined light',
+    avoid: 'avoid literal men, workshops, father-son staging, colonial nostalgia, military heroics, sports-poster triumph, trophies, and readable text',
+    n: 4
+  },
+  'pyramid-scheme': {
+    context: 'Keep the good pose of the couple walking through the streets together, but remove the pizza entirely. Recover the magic of the first-pass sun: playful, radiant, strange, coin-like, and romantic without becoming apocalyptic.',
+    style: 'playful surreal editorial gouache, sweet street scene, magical flat radiant sun, lightly absurd romance',
+    avoid: 'avoid pizza, burning buildings, smoke, apocalyptic skies, eyes, dogs, extra side images, MLM infographics, and brand logos'
+  },
+  'telemachus': {
+    lines: [[27, 35]],
+    context: 'Return to the pass-three viewpoint: the boy looks down from above the father\'s head as the father lies on sand. Keep the eyes nearly black like sea water, with bright cathedral light reflected inside them against the dark black of the rest of the eyes.',
+    style: 'lyrical close realism, overhead intimate viewpoint, sand, black sea-eyes, luminous cathedral reflection, quiet grief',
+    avoid: 'avoid gore, visible wounds, sensational violence, wide action scenes, and making the father look merely asleep'
+  }
+};
+
 const REVISIONS_BY_PASS = {
   2: PASS_TWO_REVISIONS,
   3: PASS_THREE_REVISIONS,
-  4: PASS_FOUR_REVISIONS
+  4: PASS_FOUR_REVISIONS,
+  5: PASS_FIVE_REVISIONS
 };
 
 function parseArgs(argv) {

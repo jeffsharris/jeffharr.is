@@ -1,6 +1,6 @@
 window.POEM_IMAGE_REVIEW_DATA = {
   "version": 2,
-  "generatedAt": "2026-05-14T08:54:18.058Z",
+  "generatedAt": "2026-05-14T09:15:25.997Z",
   "prompts": [
     {
       "order": 1,
@@ -9,12 +9,12 @@ window.POEM_IMAGE_REVIEW_DATA = {
       "author": "Derrick Brown",
       "collection": "memorized",
       "selectedLines": "So love, you should know what to look for\nand exactly where to go…\nTake your time and don't worry about getting lost.\nYou'll find me.\nUp there, a finger and two dots away.\nIf you're wondering if I'll still be able to hold you\n…I honestly don't know\nBut I do know that I could still fall for\na swish of light that comes barreling\nand cascading towards me.\nIt will resemble your sweet definite hands.\nThe universe will bend.\nThe planets will bow.\nAnd I will say “Oh, there you are. I been waitin’ for ya. Now we can go.”",
-      "context": "Keep searching within the celestial-hand idea: a human hand only enters from the extreme lower-left edge, reaching toward a vast celestial hand or presence in the sky, with the rest of the person completely outside the frame.",
-      "style": "luminous cosmic surrealism, intimate scale contrast, warm starlight, and quiet negative space",
-      "avoid": "avoid a central human figure, faces, bodies, cartoon space art, literal gods, and visual text",
+      "context": "The image should understand this as a cosmic love poem about reunion after death: specific directions through space, uncertainty about bodies, and recognition by light.",
+      "style": "luminous, emotionally warm cosmic surrealism; let the composition breathe",
+      "avoid": "avoid cartoon space art, literal gods, and visual text",
       "revision": "",
       "n": 1,
-      "prompt": "Create one square companion image for the poem \"A Finger, Two Dots, Then Me\" by Derrick Brown.\n\nUse these exact selected lines as the source passage:\n\"\"\"\nSo love, you should know what to look for\nand exactly where to go…\nTake your time and don't worry about getting lost.\nYou'll find me.\nUp there, a finger and two dots away.\nIf you're wondering if I'll still be able to hold you\n…I honestly don't know\nBut I do know that I could still fall for\na swish of light that comes barreling\nand cascading towards me.\nIt will resemble your sweet definite hands.\nThe universe will bend.\nThe planets will bow.\nAnd I will say “Oh, there you are. I been waitin’ for ya. Now we can go.”\n\"\"\"\n\nContext: Keep searching within the celestial-hand idea: a human hand only enters from the extreme lower-left edge, reaching toward a vast celestial hand or presence in the sky, with the rest of the person completely outside the frame.\n\nGoal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.\n\nLight style guidance: luminous cosmic surrealism, intimate scale contrast, warm starlight, and quiet negative space.\n\nConstraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid a central human figure, faces, bodies, cartoon space art, literal gods, and visual text.",
+      "prompt": "Create one square companion image for the poem \"A Finger, Two Dots, Then Me\" by Derrick Brown.\n\nUse these exact selected lines as the source passage:\n\"\"\"\nSo love, you should know what to look for\nand exactly where to go…\nTake your time and don't worry about getting lost.\nYou'll find me.\nUp there, a finger and two dots away.\nIf you're wondering if I'll still be able to hold you\n…I honestly don't know\nBut I do know that I could still fall for\na swish of light that comes barreling\nand cascading towards me.\nIt will resemble your sweet definite hands.\nThe universe will bend.\nThe planets will bow.\nAnd I will say “Oh, there you are. I been waitin’ for ya. Now we can go.”\n\"\"\"\n\nContext: The image should understand this as a cosmic love poem about reunion after death: specific directions through space, uncertainty about bodies, and recognition by light.\n\nGoal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.\n\nLight style guidance: luminous, emotionally warm cosmic surrealism; let the composition breathe.\n\nConstraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid cartoon space art, literal gods, and visual text.",
       "candidates": [
         {
           "id": "a-finger-two-dots-then-me::pass-001::1",
@@ -137,12 +137,12 @@ window.POEM_IMAGE_REVIEW_DATA = {
       "author": "Philip Larkin",
       "collection": "memorized",
       "selectedLines": "Watching the shied core\nStriking the basket, skidding across the floor\nShows less and less of luck, and more and more\nOf failure spreading back up the arm\nEarlier, and earlier, the unraised hand calm\nThe apple unbitten in the palm",
-      "context": "Try a few more varied tactics for the feeling of failure. The missed apple core is tiny, but the image should make the viewer feel the whole inward collapse of having failed before anything has visibly happened.",
-      "style": "psychological editorial image-making, dry and spare, with room for surreal or abstract solutions",
-      "avoid": "avoid bland still life, slapstick, cute humor, ordinary kitchen realism, and motivational symbolism",
-      "revision": "suggest a few different approaches for this one. try more varied tactics",
-      "n": 3,
-      "prompt": "Create one square companion image for the poem \"As Bad as a Mile\" by Philip Larkin.\n\nUse these exact selected lines as the source passage:\n\"\"\"\nWatching the shied core\nStriking the basket, skidding across the floor\nShows less and less of luck, and more and more\nOf failure spreading back up the arm\nEarlier, and earlier, the unraised hand calm\nThe apple unbitten in the palm\n\"\"\"\n\nContext: Try a few more varied tactics for the feeling of failure. The missed apple core is tiny, but the image should make the viewer feel the whole inward collapse of having failed before anything has visibly happened.\n\nReviewer direction for this pass: suggest a few different approaches for this one. try more varied tactics\n\nGoal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.\n\nLight style guidance: psychological editorial image-making, dry and spare, with room for surreal or abstract solutions.\n\nConstraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid bland still life, slapstick, cute humor, ordinary kitchen realism, and motivational symbolism.",
+      "context": "Use a first-person point of view looking down at the speaker's own hand just before tossing the apple core. The ordinary hand, the apple core, and the small gap ahead should already carry the feeling of failure before the miss happens.",
+      "style": "POV psychological realism, spare and dry, with subtle existential pressure in the composition",
+      "avoid": "avoid third-person scenes, bland still life, slapstick, cute humor, kitchen realism, and motivational symbolism",
+      "revision": "let's try a view that's POV looking down at the hand about to toss the apple",
+      "n": 2,
+      "prompt": "Create one square companion image for the poem \"As Bad as a Mile\" by Philip Larkin.\n\nUse these exact selected lines as the source passage:\n\"\"\"\nWatching the shied core\nStriking the basket, skidding across the floor\nShows less and less of luck, and more and more\nOf failure spreading back up the arm\nEarlier, and earlier, the unraised hand calm\nThe apple unbitten in the palm\n\"\"\"\n\nContext: Use a first-person point of view looking down at the speaker's own hand just before tossing the apple core. The ordinary hand, the apple core, and the small gap ahead should already carry the feeling of failure before the miss happens.\n\nReviewer direction for this pass: let's try a view that's POV looking down at the hand about to toss the apple\n\nGoal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.\n\nLight style guidance: POV psychological realism, spare and dry, with subtle existential pressure in the composition.\n\nConstraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid third-person scenes, bland still life, slapstick, cute humor, kitchen realism, and motivational symbolism.",
       "candidates": [
         {
           "id": "as-bad-as-a-mile::pass-001::1",
@@ -190,6 +190,22 @@ window.POEM_IMAGE_REVIEW_DATA = {
           "pass": "pass-004",
           "src": "../tmp/poem-image-candidates/pass-004/as-bad-as-a-mile-3.png",
           "file": "tmp/poem-image-candidates/pass-004/as-bad-as-a-mile-3.png",
+          "model": "gpt-image-2"
+        },
+        {
+          "id": "as-bad-as-a-mile::pass-005::1",
+          "label": "Pass 5 candidate 1",
+          "pass": "pass-005",
+          "src": "../tmp/poem-image-candidates/pass-005/as-bad-as-a-mile-1.png",
+          "file": "tmp/poem-image-candidates/pass-005/as-bad-as-a-mile-1.png",
+          "model": "gpt-image-2"
+        },
+        {
+          "id": "as-bad-as-a-mile::pass-005::2",
+          "label": "Pass 5 candidate 2",
+          "pass": "pass-005",
+          "src": "../tmp/poem-image-candidates/pass-005/as-bad-as-a-mile-2.png",
+          "file": "tmp/poem-image-candidates/pass-005/as-bad-as-a-mile-2.png",
           "model": "gpt-image-2"
         }
       ]
@@ -297,12 +313,12 @@ window.POEM_IMAGE_REVIEW_DATA = {
       "author": "Warsan Shire",
       "collection": "memorized",
       "selectedLines": "Your grandfather's hands were brown.\nYour grandmother kissed each knuckle,\ncircled an island into his palm\nand told him which parts they would share,\nwhich part they would leave alone.\nShe wet a finger to draw where the ocean would be\non his wrist, kissed him there,\nnamed the ocean after herself.",
-      "context": "Make the hand unmistakably old: weathered skin, age spots, veins, and softened strength. The map should cover the hand, wrist, and forearm as family geography drawn into elderly skin.",
-      "style": "intimate watercolor and colored pencil close-up, tactile elderly skin, hand-drawn map texture",
-      "avoid": "avoid young or smooth hands, faces, full bodies, explicit nudity, stereotypes, and readable map labels",
-      "revision": "hands need to look older",
+      "context": "Hands become geography, intimacy, family memory, and a private origin map.",
+      "style": "intimate watercolor and colored pencil, warm chiaroscuro",
+      "avoid": "avoid explicit nudity, stereotypes, and literal map labels",
+      "revision": "",
       "n": 1,
-      "prompt": "Create one square companion image for the poem \"Grandfather's Hands\" by Warsan Shire.\n\nUse these exact selected lines as the source passage:\n\"\"\"\nYour grandfather's hands were brown.\nYour grandmother kissed each knuckle,\ncircled an island into his palm\nand told him which parts they would share,\nwhich part they would leave alone.\nShe wet a finger to draw where the ocean would be\non his wrist, kissed him there,\nnamed the ocean after herself.\n\"\"\"\n\nContext: Make the hand unmistakably old: weathered skin, age spots, veins, and softened strength. The map should cover the hand, wrist, and forearm as family geography drawn into elderly skin.\n\nReviewer direction for this pass: hands need to look older\n\nGoal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.\n\nLight style guidance: intimate watercolor and colored pencil close-up, tactile elderly skin, hand-drawn map texture.\n\nConstraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid young or smooth hands, faces, full bodies, explicit nudity, stereotypes, and readable map labels.",
+      "prompt": "Create one square companion image for the poem \"Grandfather's Hands\" by Warsan Shire.\n\nUse these exact selected lines as the source passage:\n\"\"\"\nYour grandfather's hands were brown.\nYour grandmother kissed each knuckle,\ncircled an island into his palm\nand told him which parts they would share,\nwhich part they would leave alone.\nShe wet a finger to draw where the ocean would be\non his wrist, kissed him there,\nnamed the ocean after herself.\n\"\"\"\n\nContext: Hands become geography, intimacy, family memory, and a private origin map.\n\nGoal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.\n\nLight style guidance: intimate watercolor and colored pencil, warm chiaroscuro.\n\nConstraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid explicit nudity, stereotypes, and literal map labels.",
       "candidates": [
         {
           "id": "grandfathers-hands::pass-001::1",
@@ -401,12 +417,12 @@ window.POEM_IMAGE_REVIEW_DATA = {
       "author": "Philip Larkin",
       "collection": "memorized",
       "selectedLines": "Rather than words comes the thought of high windows:\nThe sun-comprehending glass,\nAnd beyond it, the deep blue air, that shows\nNothing, and is nowhere, and is endless.",
-      "context": "Keep the ordinary high window but remove the person entirely. The viewer is low in a plain room looking up at a normal high window that holds only perfect blue sky, with no human figure inside or outside.",
-      "style": "plain domestic realism with metaphysical blue emptiness beyond the glass",
-      "avoid": "avoid people, silhouettes, monumental architecture, surreal towers, explicit sexuality, and showing the ground",
-      "revision": "remove the person, but the high window is good",
+      "context": "The poem ends by leaving social provocation behind for a blank, impersonal, endless blue beyond glass.",
+      "style": "sparse mid-century surreal realism, cool light and negative space",
+      "avoid": "avoid explicit sexuality and literal people",
+      "revision": "",
       "n": 1,
-      "prompt": "Create one square companion image for the poem \"High Windows\" by Philip Larkin.\n\nUse these exact selected lines as the source passage:\n\"\"\"\nRather than words comes the thought of high windows:\nThe sun-comprehending glass,\nAnd beyond it, the deep blue air, that shows\nNothing, and is nowhere, and is endless.\n\"\"\"\n\nContext: Keep the ordinary high window but remove the person entirely. The viewer is low in a plain room looking up at a normal high window that holds only perfect blue sky, with no human figure inside or outside.\n\nReviewer direction for this pass: remove the person, but the high window is good\n\nGoal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.\n\nLight style guidance: plain domestic realism with metaphysical blue emptiness beyond the glass.\n\nConstraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid people, silhouettes, monumental architecture, surreal towers, explicit sexuality, and showing the ground.",
+      "prompt": "Create one square companion image for the poem \"High Windows\" by Philip Larkin.\n\nUse these exact selected lines as the source passage:\n\"\"\"\nRather than words comes the thought of high windows:\nThe sun-comprehending glass,\nAnd beyond it, the deep blue air, that shows\nNothing, and is nowhere, and is endless.\n\"\"\"\n\nContext: The poem ends by leaving social provocation behind for a blank, impersonal, endless blue beyond glass.\n\nGoal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.\n\nLight style guidance: sparse mid-century surreal realism, cool light and negative space.\n\nConstraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid explicit sexuality and literal people.",
       "candidates": [
         {
           "id": "high-windows::pass-001::1",
@@ -561,12 +577,12 @@ window.POEM_IMAGE_REVIEW_DATA = {
       "author": "Rudyard Kipling",
       "collection": "memorized",
       "selectedLines": "If you can make one heap of all your winnings\n    And risk it on one turn of pitch-and-toss,\nAnd lose, and start again at your beginnings\n    And never breathe a word about your loss;\nIf you can force your heart and nerve and sinew\n    To serve your turn long after they are gone,\nAnd so hold on when there is nothing in you\n    Except the Will which says to them: ‘Hold on!’\n[other lines omitted]\nIf you can fill the unforgiving minute\n    With sixty seconds’ worth of distance run,\nYours is the Earth and everything that’s in it,\n    And—which is more—you’ll be a Man, my son!",
-      "context": "Move away from literal scenes and make an abstract image of the poem noble and triumphant without becoming a poster: steadiness, discipline, loss, endurance, and the inner command to hold on.",
-      "style": "abstract symbolic composition with restrained nobility, pressure, balance, and a quiet gold warmth",
-      "avoid": "avoid literal men, workshops, father-son staging, colonial nostalgia, military heroics, sports-poster triumph, and readable text",
-      "revision": "try a prompt that's more abstractly representing the triumphant and noble theme of the poem. these are all too literal",
-      "n": 1,
-      "prompt": "Create one square companion image for the poem \"If\" by Rudyard Kipling.\n\nUse these exact selected lines as the source passage:\n\"\"\"\nIf you can make one heap of all your winnings\n    And risk it on one turn of pitch-and-toss,\nAnd lose, and start again at your beginnings\n    And never breathe a word about your loss;\nIf you can force your heart and nerve and sinew\n    To serve your turn long after they are gone,\nAnd so hold on when there is nothing in you\n    Except the Will which says to them: ‘Hold on!’\n[other lines omitted]\nIf you can fill the unforgiving minute\n    With sixty seconds’ worth of distance run,\nYours is the Earth and everything that’s in it,\n    And—which is more—you’ll be a Man, my son!\n\"\"\"\n\nContext: Move away from literal scenes and make an abstract image of the poem noble and triumphant without becoming a poster: steadiness, discipline, loss, endurance, and the inner command to hold on.\n\nReviewer direction for this pass: try a prompt that's more abstractly representing the triumphant and noble theme of the poem. these are all too literal\n\nGoal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.\n\nLight style guidance: abstract symbolic composition with restrained nobility, pressure, balance, and a quiet gold warmth.\n\nConstraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid literal men, workshops, father-son staging, colonial nostalgia, military heroics, sports-poster triumph, and readable text.",
+      "context": "Try diverse nonliteral images for the triumphant and noble force of the poem: endurance after loss, composure under pressure, inward command, risk, patience, and the unforgiving minute fully inhabited.",
+      "style": "varied abstract-symbolic compositions with restraint, nobility, pressure, balance, and warm disciplined light",
+      "avoid": "avoid literal men, workshops, father-son staging, colonial nostalgia, military heroics, sports-poster triumph, trophies, and readable text",
+      "revision": "try a bunch more diverse variants representing the triumph/nobility of the poem",
+      "n": 4,
+      "prompt": "Create one square companion image for the poem \"If\" by Rudyard Kipling.\n\nUse these exact selected lines as the source passage:\n\"\"\"\nIf you can make one heap of all your winnings\n    And risk it on one turn of pitch-and-toss,\nAnd lose, and start again at your beginnings\n    And never breathe a word about your loss;\nIf you can force your heart and nerve and sinew\n    To serve your turn long after they are gone,\nAnd so hold on when there is nothing in you\n    Except the Will which says to them: ‘Hold on!’\n[other lines omitted]\nIf you can fill the unforgiving minute\n    With sixty seconds’ worth of distance run,\nYours is the Earth and everything that’s in it,\n    And—which is more—you’ll be a Man, my son!\n\"\"\"\n\nContext: Try diverse nonliteral images for the triumphant and noble force of the poem: endurance after loss, composure under pressure, inward command, risk, patience, and the unforgiving minute fully inhabited.\n\nReviewer direction for this pass: try a bunch more diverse variants representing the triumph/nobility of the poem\n\nGoal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.\n\nLight style guidance: varied abstract-symbolic compositions with restraint, nobility, pressure, balance, and warm disciplined light.\n\nConstraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid literal men, workshops, father-son staging, colonial nostalgia, military heroics, sports-poster triumph, trophies, and readable text.",
       "candidates": [
         {
           "id": "if::pass-001::1",
@@ -598,6 +614,38 @@ window.POEM_IMAGE_REVIEW_DATA = {
           "pass": "pass-004",
           "src": "../tmp/poem-image-candidates/pass-004/if.png",
           "file": "tmp/poem-image-candidates/pass-004/if.png",
+          "model": "gpt-image-2"
+        },
+        {
+          "id": "if::pass-005::1",
+          "label": "Pass 5 candidate 1",
+          "pass": "pass-005",
+          "src": "../tmp/poem-image-candidates/pass-005/if-1.png",
+          "file": "tmp/poem-image-candidates/pass-005/if-1.png",
+          "model": "gpt-image-2"
+        },
+        {
+          "id": "if::pass-005::2",
+          "label": "Pass 5 candidate 2",
+          "pass": "pass-005",
+          "src": "../tmp/poem-image-candidates/pass-005/if-2.png",
+          "file": "tmp/poem-image-candidates/pass-005/if-2.png",
+          "model": "gpt-image-2"
+        },
+        {
+          "id": "if::pass-005::3",
+          "label": "Pass 5 candidate 3",
+          "pass": "pass-005",
+          "src": "../tmp/poem-image-candidates/pass-005/if-3.png",
+          "file": "tmp/poem-image-candidates/pass-005/if-3.png",
+          "model": "gpt-image-2"
+        },
+        {
+          "id": "if::pass-005::4",
+          "label": "Pass 5 candidate 4",
+          "pass": "pass-005",
+          "src": "../tmp/poem-image-candidates/pass-005/if-4.png",
+          "file": "tmp/poem-image-candidates/pass-005/if-4.png",
           "model": "gpt-image-2"
         }
       ]
@@ -641,12 +689,12 @@ window.POEM_IMAGE_REVIEW_DATA = {
       "author": "Brenda Hillman",
       "collection": "memorized",
       "selectedLines": "A pretty anarchist said to me\nIt’s not that a great love happens\nWhat happened became your great love\nher echo had an ancient glow & so\nproved buoyant for my little craft\nI left the world & felt a world\nThe bee loading its gloves with powder\nThe albatross wanting one thing from the sea\nNothing can wreck our boat said she\n& when the water felt the glacier\nThe future held a present tense\nThe present held a future without cease.",
-      "context": "Keep the glacier and the small craft in a suspended trance-like water world, but remove the bird entirely. Let glacier, boat, water, and stillness carry the strangeness of love being made.",
-      "style": "minimal airy surrealism, glacier light, small boat, and quiet negative space",
-      "avoid": "avoid birds, albatrosses, crowded collage, political caricature, and illustrating every noun",
-      "revision": "remove the bird",
+      "context": "The poem makes love feel like a made thing, a trance, a small craft held between bee, albatross, glacier, and time.",
+      "style": "airy surreal maritime watercolor",
+      "avoid": "avoid political caricature or overly literal illustration",
+      "revision": "",
       "n": 1,
-      "prompt": "Create one square companion image for the poem \"In the Trance\" by Brenda Hillman.\n\nUse these exact selected lines as the source passage:\n\"\"\"\nA pretty anarchist said to me\nIt’s not that a great love happens\nWhat happened became your great love\nher echo had an ancient glow & so\nproved buoyant for my little craft\nI left the world & felt a world\nThe bee loading its gloves with powder\nThe albatross wanting one thing from the sea\nNothing can wreck our boat said she\n& when the water felt the glacier\nThe future held a present tense\nThe present held a future without cease.\n\"\"\"\n\nContext: Keep the glacier and the small craft in a suspended trance-like water world, but remove the bird entirely. Let glacier, boat, water, and stillness carry the strangeness of love being made.\n\nReviewer direction for this pass: remove the bird\n\nGoal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.\n\nLight style guidance: minimal airy surrealism, glacier light, small boat, and quiet negative space.\n\nConstraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid birds, albatrosses, crowded collage, political caricature, and illustrating every noun.",
+      "prompt": "Create one square companion image for the poem \"In the Trance\" by Brenda Hillman.\n\nUse these exact selected lines as the source passage:\n\"\"\"\nA pretty anarchist said to me\nIt’s not that a great love happens\nWhat happened became your great love\nher echo had an ancient glow & so\nproved buoyant for my little craft\nI left the world & felt a world\nThe bee loading its gloves with powder\nThe albatross wanting one thing from the sea\nNothing can wreck our boat said she\n& when the water felt the glacier\nThe future held a present tense\nThe present held a future without cease.\n\"\"\"\n\nContext: The poem makes love feel like a made thing, a trance, a small craft held between bee, albatross, glacier, and time.\n\nGoal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.\n\nLight style guidance: airy surreal maritime watercolor.\n\nConstraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid political caricature or overly literal illustration.",
       "candidates": [
         {
           "id": "in-the-trance::pass-001::1",
@@ -977,12 +1025,12 @@ window.POEM_IMAGE_REVIEW_DATA = {
       "author": "Hera Lindsay Bird",
       "collection": "learning",
       "selectedLines": "it has been a great honor and privilege to love you\nit has been a great honor and privilege to eat cold pizza on your steps at dawn\nlove is so stupid: it’s like punching the sun\nand having a million gold coins rain down on you\nwhich you don’t even have to pay tax on\nbecause sun money is free money\nand i’m pretty sure there are no laws about that\nbut i would pay tax\nbecause i believe that hospitals and education\nand the arts should be publicly funded\neven this poem\nwhen i look at you, my eyes are two identical neighborhood houses on fire\nwhen i look at you my eyes bulge out of my skull like a dog in a cartoon\nwhen i am with you\nan enormous silence descends upon me\nand i feel like i am sinking into the deepest part of my life\nwe walk down the street, with the grass blowing back and forth\ni have never been so happy",
-      "context": "Keep the couple walking down the sidewalk together, the playful coins, and the sweet absurd romance. Remove the burning buildings in the sky; make the sun feel like the flat radiant playful sun from the first attempt.",
-      "style": "playful surreal editorial gouache, sweet, bright, lightly absurd, with a simple radiant coin-like sun",
-      "avoid": "avoid burning buildings, smoke, apocalyptic skies, eyes, dogs, extra side images, MLM infographics, and brand logos",
-      "revision": "remove the burning buildings in the sky and draw the sun in the style of candidate #1",
+      "context": "Keep the good pose of the couple walking through the streets together, but remove the pizza entirely. Recover the magic of the first-pass sun: playful, radiant, strange, coin-like, and romantic without becoming apocalyptic.",
+      "style": "playful surreal editorial gouache, sweet street scene, magical flat radiant sun, lightly absurd romance",
+      "avoid": "avoid pizza, burning buildings, smoke, apocalyptic skies, eyes, dogs, extra side images, MLM infographics, and brand logos",
+      "revision": "remove the mention of pizza (that part of the poem). Try to get back the magic of the sun from pass 1 candidate 1. the pose here of the couple walking through the streets is good",
       "n": 1,
-      "prompt": "Create one square companion image for the poem \"Pyramid Scheme\" by Hera Lindsay Bird.\n\nUse these exact selected lines as the source passage:\n\"\"\"\nit has been a great honor and privilege to love you\nit has been a great honor and privilege to eat cold pizza on your steps at dawn\nlove is so stupid: it’s like punching the sun\nand having a million gold coins rain down on you\nwhich you don’t even have to pay tax on\nbecause sun money is free money\nand i’m pretty sure there are no laws about that\nbut i would pay tax\nbecause i believe that hospitals and education\nand the arts should be publicly funded\neven this poem\nwhen i look at you, my eyes are two identical neighborhood houses on fire\nwhen i look at you my eyes bulge out of my skull like a dog in a cartoon\nwhen i am with you\nan enormous silence descends upon me\nand i feel like i am sinking into the deepest part of my life\nwe walk down the street, with the grass blowing back and forth\ni have never been so happy\n\"\"\"\n\nContext: Keep the couple walking down the sidewalk together, the playful coins, and the sweet absurd romance. Remove the burning buildings in the sky; make the sun feel like the flat radiant playful sun from the first attempt.\n\nReviewer direction for this pass: remove the burning buildings in the sky and draw the sun in the style of candidate #1\n\nGoal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.\n\nLight style guidance: playful surreal editorial gouache, sweet, bright, lightly absurd, with a simple radiant coin-like sun.\n\nConstraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid burning buildings, smoke, apocalyptic skies, eyes, dogs, extra side images, MLM infographics, and brand logos.",
+      "prompt": "Create one square companion image for the poem \"Pyramid Scheme\" by Hera Lindsay Bird.\n\nUse these exact selected lines as the source passage:\n\"\"\"\nit has been a great honor and privilege to love you\nit has been a great honor and privilege to eat cold pizza on your steps at dawn\nlove is so stupid: it’s like punching the sun\nand having a million gold coins rain down on you\nwhich you don’t even have to pay tax on\nbecause sun money is free money\nand i’m pretty sure there are no laws about that\nbut i would pay tax\nbecause i believe that hospitals and education\nand the arts should be publicly funded\neven this poem\nwhen i look at you, my eyes are two identical neighborhood houses on fire\nwhen i look at you my eyes bulge out of my skull like a dog in a cartoon\nwhen i am with you\nan enormous silence descends upon me\nand i feel like i am sinking into the deepest part of my life\nwe walk down the street, with the grass blowing back and forth\ni have never been so happy\n\"\"\"\n\nContext: Keep the good pose of the couple walking through the streets together, but remove the pizza entirely. Recover the magic of the first-pass sun: playful, radiant, strange, coin-like, and romantic without becoming apocalyptic.\n\nReviewer direction for this pass: remove the mention of pizza (that part of the poem). Try to get back the magic of the sun from pass 1 candidate 1. the pose here of the couple walking through the streets is good\n\nGoal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.\n\nLight style guidance: playful surreal editorial gouache, sweet street scene, magical flat radiant sun, lightly absurd romance.\n\nConstraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid pizza, burning buildings, smoke, apocalyptic skies, eyes, dogs, extra side images, MLM infographics, and brand logos.",
       "candidates": [
         {
           "id": "pyramid-scheme::pass-001::1",
@@ -1014,6 +1062,14 @@ window.POEM_IMAGE_REVIEW_DATA = {
           "pass": "pass-004",
           "src": "../tmp/poem-image-candidates/pass-004/pyramid-scheme.png",
           "file": "tmp/poem-image-candidates/pass-004/pyramid-scheme.png",
+          "model": "gpt-image-2"
+        },
+        {
+          "id": "pyramid-scheme::pass-005::1",
+          "label": "Pass 5 candidate 1",
+          "pass": "pass-005",
+          "src": "../tmp/poem-image-candidates/pass-005/pyramid-scheme.png",
+          "file": "tmp/poem-image-candidates/pass-005/pyramid-scheme.png",
           "model": "gpt-image-2"
         }
       ]
@@ -1177,12 +1233,12 @@ window.POEM_IMAGE_REVIEW_DATA = {
       "author": "Ocean Vuong",
       "collection": "memorized",
       "selectedLines": "in his sea-black eyes. The face\nnot mine — but one I will wear\nto kiss all my lovers good-night:\nthe way I seal my father’s lips\nwith my own & begin\nthe faithful work of drowning.",
-      "context": "Make the father lie on sand while the boy looks down at him. The father should feel near death, with sea-black eyes that hold the cathedral reflection; the sun may faintly look down too.",
-      "style": "lyrical close realism with restrained surreal reflection, sand, black sea-eyes, and quiet grief",
+      "context": "Return to the pass-three viewpoint: the boy looks down from above the father's head as the father lies on sand. Keep the eyes nearly black like sea water, with bright cathedral light reflected inside them against the dark black of the rest of the eyes.",
+      "style": "lyrical close realism, overhead intimate viewpoint, sand, black sea-eyes, luminous cathedral reflection, quiet grief",
       "avoid": "avoid gore, visible wounds, sensational violence, wide action scenes, and making the father look merely asleep",
-      "revision": "close ... but the man needs to by lying on sand with the boy looking down on him. make man look closer to dead (sea black eyes). the reflection of the cathedral in his eyes is great",
+      "revision": "prefer the view of pass 3 candidate 1, with the boy looking down from above the father's head. and like the light of the cathedrals in his eyes against dark black backdrop on the rest of his eyes",
       "n": 1,
-      "prompt": "Create one square companion image for the poem \"Telemachus\" by Ocean Vuong.\n\nUse these exact selected lines as the source passage:\n\"\"\"\nin his sea-black eyes. The face\nnot mine — but one I will wear\nto kiss all my lovers good-night:\nthe way I seal my father’s lips\nwith my own & begin\nthe faithful work of drowning.\n\"\"\"\n\nContext: Make the father lie on sand while the boy looks down at him. The father should feel near death, with sea-black eyes that hold the cathedral reflection; the sun may faintly look down too.\n\nReviewer direction for this pass: close ... but the man needs to by lying on sand with the boy looking down on him. make man look closer to dead (sea black eyes). the reflection of the cathedral in his eyes is great\n\nGoal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.\n\nLight style guidance: lyrical close realism with restrained surreal reflection, sand, black sea-eyes, and quiet grief.\n\nConstraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid gore, visible wounds, sensational violence, wide action scenes, and making the father look merely asleep.",
+      "prompt": "Create one square companion image for the poem \"Telemachus\" by Ocean Vuong.\n\nUse these exact selected lines as the source passage:\n\"\"\"\nin his sea-black eyes. The face\nnot mine — but one I will wear\nto kiss all my lovers good-night:\nthe way I seal my father’s lips\nwith my own & begin\nthe faithful work of drowning.\n\"\"\"\n\nContext: Return to the pass-three viewpoint: the boy looks down from above the father's head as the father lies on sand. Keep the eyes nearly black like sea water, with bright cathedral light reflected inside them against the dark black of the rest of the eyes.\n\nReviewer direction for this pass: prefer the view of pass 3 candidate 1, with the boy looking down from above the father's head. and like the light of the cathedrals in his eyes against dark black backdrop on the rest of his eyes\n\nGoal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.\n\nLight style guidance: lyrical close realism, overhead intimate viewpoint, sand, black sea-eyes, luminous cathedral reflection, quiet grief.\n\nConstraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid gore, visible wounds, sensational violence, wide action scenes, and making the father look merely asleep.",
       "candidates": [
         {
           "id": "telemachus::pass-001::1",
@@ -1206,6 +1262,14 @@ window.POEM_IMAGE_REVIEW_DATA = {
           "pass": "pass-004",
           "src": "../tmp/poem-image-candidates/pass-004/telemachus.png",
           "file": "tmp/poem-image-candidates/pass-004/telemachus.png",
+          "model": "gpt-image-2"
+        },
+        {
+          "id": "telemachus::pass-005::1",
+          "label": "Pass 5 candidate 1",
+          "pass": "pass-005",
+          "src": "../tmp/poem-image-candidates/pass-005/telemachus.png",
+          "file": "tmp/poem-image-candidates/pass-005/telemachus.png",
           "model": "gpt-image-2"
         }
       ]
@@ -1336,13 +1400,13 @@ window.POEM_IMAGE_REVIEW_DATA = {
       "title": "The Kingfisher",
       "author": "Mary Oliver",
       "collection": "memorized",
-      "selectedLines": "I couldn't rouse out of my thoughtful body\nif my life depended on it, he swings back\nover the bright sea to do the same thing, to do it\n(as I long to do something, anything) perfectly.",
-      "context": "Show the kingfisher flying away from the camera, from a behind and slightly over-the-shoulder view, skimming perfectly over the bright sea.",
-      "style": "photorealistic naturalist marine image, vivid blue kingfisher, bright sea, precise motion",
-      "avoid": "avoid front-facing bird portraits, cartoon prettiness, painterly looseness that loses realism, blood, and dark wave focus",
+      "selectedLines": "The kingfisher rises out of the black wave\nlike a blue flower, in his beak\nhe carries a silver leaf. I think this is\nthe prettiest world--so long as you don't mind\na little dying, how could there be a day in your\nwhole life\nthat doesn't have its splash of happiness?\n[other lines omitted]\nwith its broken red river, and with a rough and\neasy cry\nI couldn't rouse out of my thoughtful body\nif my life depended on it, he swings back\nover the bright sea to do the same thing, to do it\n(as I long to do something, anything) perfectly.",
+      "context": "The kingfisher is beauty and predation at once: a perfect flash of blue, silver, black water, and happiness.",
+      "style": "vivid naturalist watercolor freeze-frame",
+      "avoid": "avoid blood and cartoon prettiness",
       "revision": "",
       "n": 1,
-      "prompt": "Create one square companion image for the poem \"The Kingfisher\" by Mary Oliver.\n\nUse these exact selected lines as the source passage:\n\"\"\"\nI couldn't rouse out of my thoughtful body\nif my life depended on it, he swings back\nover the bright sea to do the same thing, to do it\n(as I long to do something, anything) perfectly.\n\"\"\"\n\nContext: Show the kingfisher flying away from the camera, from a behind and slightly over-the-shoulder view, skimming perfectly over the bright sea.\n\nGoal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.\n\nLight style guidance: photorealistic naturalist marine image, vivid blue kingfisher, bright sea, precise motion.\n\nConstraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid front-facing bird portraits, cartoon prettiness, painterly looseness that loses realism, blood, and dark wave focus.",
+      "prompt": "Create one square companion image for the poem \"The Kingfisher\" by Mary Oliver.\n\nUse these exact selected lines as the source passage:\n\"\"\"\nThe kingfisher rises out of the black wave\nlike a blue flower, in his beak\nhe carries a silver leaf. I think this is\nthe prettiest world--so long as you don't mind\na little dying, how could there be a day in your\nwhole life\nthat doesn't have its splash of happiness?\n[other lines omitted]\nwith its broken red river, and with a rough and\neasy cry\nI couldn't rouse out of my thoughtful body\nif my life depended on it, he swings back\nover the bright sea to do the same thing, to do it\n(as I long to do something, anything) perfectly.\n\"\"\"\n\nContext: The kingfisher is beauty and predation at once: a perfect flash of blue, silver, black water, and happiness.\n\nGoal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.\n\nLight style guidance: vivid naturalist watercolor freeze-frame.\n\nConstraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid blood and cartoon prettiness.",
       "candidates": [
         {
           "id": "the-kingfisher::pass-001::1",
@@ -1625,12 +1689,12 @@ window.POEM_IMAGE_REVIEW_DATA = {
       "author": "Billy Collins",
       "collection": "learning",
       "selectedLines": "Do you realize that if you had started\nbuilding the Parthenon on the day you were born,\nyou would be all done in only one more year?\nOf course, you couldn’t have done it alone,\nso never mind, you’re fine just as you are.\nYou’re loved for just being yourself.\n[other lines omitted]\nWe think you are special just being you,\nplaying with your food and staring into space.\nBy the way, I lied about Schubert doing the dishes,\nbut that doesn’t mean he never helped out around the house.",
-      "context": "Remove the father and keep the scene mundane: a teenage girl absent-mindedly playing with her food, ordinary and affectionate, with gentle humor and no fantasy-comparison devices.",
-      "style": "loose playful domestic editorial illustration, less photorealistic, warm and ordinary",
-      "avoid": "avoid the father, thought bubbles, fantasy cutaways, sexualizing the minor, celebrity likenesses, readable posters, and scolding tone",
-      "revision": "remove the father, just a girl abstant mindedly playing with food. less photo realistic like pass #2",
+      "context": "The poem affectionately rejects achievement comparisons in favor of ordinary teenage being.",
+      "style": "warm domestic editorial illustration, gently funny",
+      "avoid": "avoid sexualizing the minor, celebrity likenesses, and readable posters",
+      "revision": "",
       "n": 1,
-      "prompt": "Create one square companion image for the poem \"To My Favorite 17-Year-Old High School Girl\" by Billy Collins.\n\nUse these exact selected lines as the source passage:\n\"\"\"\nDo you realize that if you had started\nbuilding the Parthenon on the day you were born,\nyou would be all done in only one more year?\nOf course, you couldn’t have done it alone,\nso never mind, you’re fine just as you are.\nYou’re loved for just being yourself.\n[other lines omitted]\nWe think you are special just being you,\nplaying with your food and staring into space.\nBy the way, I lied about Schubert doing the dishes,\nbut that doesn’t mean he never helped out around the house.\n\"\"\"\n\nContext: Remove the father and keep the scene mundane: a teenage girl absent-mindedly playing with her food, ordinary and affectionate, with gentle humor and no fantasy-comparison devices.\n\nReviewer direction for this pass: remove the father, just a girl abstant mindedly playing with food. less photo realistic like pass #2\n\nGoal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.\n\nLight style guidance: loose playful domestic editorial illustration, less photorealistic, warm and ordinary.\n\nConstraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid the father, thought bubbles, fantasy cutaways, sexualizing the minor, celebrity likenesses, readable posters, and scolding tone.",
+      "prompt": "Create one square companion image for the poem \"To My Favorite 17-Year-Old High School Girl\" by Billy Collins.\n\nUse these exact selected lines as the source passage:\n\"\"\"\nDo you realize that if you had started\nbuilding the Parthenon on the day you were born,\nyou would be all done in only one more year?\nOf course, you couldn’t have done it alone,\nso never mind, you’re fine just as you are.\nYou’re loved for just being yourself.\n[other lines omitted]\nWe think you are special just being you,\nplaying with your food and staring into space.\nBy the way, I lied about Schubert doing the dishes,\nbut that doesn’t mean he never helped out around the house.\n\"\"\"\n\nContext: The poem affectionately rejects achievement comparisons in favor of ordinary teenage being.\n\nGoal: Give a viewer a beautiful visual entry point into this passage for a quiet literary archive. Do not mechanically illustrate every noun. Use the poem context and your own strong aesthetic judgment to choose the image that best carries the feeling, visual tension, and imaginative world of the selected lines.\n\nLight style guidance: warm domestic editorial illustration, gently funny.\n\nConstraints: no visible text, handwriting, captions, book covers, logos, signatures, watermarks, frames, or UI; avoid sexualizing the minor, celebrity likenesses, and readable posters.",
       "candidates": [
         {
           "id": "to-my-favorite-17-year-old-high-school-girl::pass-001::1",
@@ -1821,7 +1885,7 @@ window.POEM_IMAGE_REVIEW_DATA = {
   ],
   "reviewState": {
     "version": 3,
-    "updatedAt": "2026-05-14T08:48:08.040Z",
+    "updatedAt": "2026-05-14T09:12:16.266Z",
     "importedFromFeedback": true,
     "items": {
       "having-a-coke-with-you": {
@@ -1834,6 +1898,10 @@ window.POEM_IMAGE_REVIEW_DATA = {
         "status": "reject",
         "note": "i like the celestial hand quite a bit but the person is too central. try having a human hand reaching from bottom left corner towards celestial hand in the sky but don't show the human",
         "updatedAt": "2026-05-14T07:43:06.704Z"
+      },
+      "a-finger-two-dots-then-me::pass-004::1": {
+        "status": "keep",
+        "updatedAt": "2026-05-14T09:07:34.663Z"
       },
       "a-great-wagon::pass-001::1": {
         "status": "keep",
@@ -1871,6 +1939,19 @@ window.POEM_IMAGE_REVIEW_DATA = {
         "status": "reject",
         "note": "suggest a few different approaches for this one. try more varied tactics",
         "updatedAt": "2026-05-14T08:40:00.828Z"
+      },
+      "as-bad-as-a-mile::pass-004::1": {
+        "status": "reject",
+        "updatedAt": "2026-05-14T09:07:07.648Z"
+      },
+      "as-bad-as-a-mile::pass-004::2": {
+        "status": "reject",
+        "updatedAt": "2026-05-14T09:07:06.480Z"
+      },
+      "as-bad-as-a-mile::pass-004::3": {
+        "status": "reject",
+        "note": "let's try a view that's POV looking down at the hand about to toss the apple",
+        "updatedAt": "2026-05-14T09:07:22.887Z"
       },
       "do-not-go-gentle-into-that-good-night::pass-001::1": {
         "status": "reject",
@@ -1914,6 +1995,10 @@ window.POEM_IMAGE_REVIEW_DATA = {
         "note": "hands need to look older",
         "updatedAt": "2026-05-14T08:40:14.435Z"
       },
+      "grandfathers-hands::pass-004::1": {
+        "status": "keep",
+        "updatedAt": "2026-05-14T09:07:46.980Z"
+      },
       "having-a-coke-with-you::pass-001::1": {
         "status": "reject",
         "updatedAt": "2026-05-14T00:20:59.629Z"
@@ -1940,6 +2025,10 @@ window.POEM_IMAGE_REVIEW_DATA = {
         "status": "reject",
         "note": "remove the person, but the high window is good",
         "updatedAt": "2026-05-14T08:40:35.209Z"
+      },
+      "high-windows::pass-004::1": {
+        "status": "keep",
+        "updatedAt": "2026-05-14T09:07:53.838Z"
       },
       "home::pass-001::1": {
         "status": "keep",
@@ -1981,6 +2070,11 @@ window.POEM_IMAGE_REVIEW_DATA = {
         "note": "try a prompt that's more abstractly representing the triumphant and noble theme of the poem. these are all too literal",
         "updatedAt": "2026-05-14T08:41:32.142Z"
       },
+      "if::pass-004::1": {
+        "status": "reject",
+        "note": "try a bunch more diverse variants representing the triumph/nobility of the poem",
+        "updatedAt": "2026-05-14T09:10:29.633Z"
+      },
       "in-blackwater-woods::pass-001::1": {
         "status": "reject",
         "note": "I think the trees and black river of loss should both be part",
@@ -2004,6 +2098,10 @@ window.POEM_IMAGE_REVIEW_DATA = {
         "status": "reject",
         "note": "remove the bird",
         "updatedAt": "2026-05-14T08:41:55.555Z"
+      },
+      "in-the-trance::pass-004::1": {
+        "status": "keep",
+        "updatedAt": "2026-05-14T09:08:11.565Z"
       },
       "jabberwocky::pass-001::1": {
         "status": "keep",
@@ -2097,6 +2195,11 @@ window.POEM_IMAGE_REVIEW_DATA = {
         "note": "remove the burning buildings in the sky and draw the sun in the style of candidate #1",
         "updatedAt": "2026-05-14T08:43:00.097Z"
       },
+      "pyramid-scheme::pass-004::1": {
+        "status": "reject",
+        "note": "remove the mention of pizza (that part of the poem). Try to get back the magic of the sun from pass 1 candidate 1. the pose here of the couple walking through the streets is good",
+        "updatedAt": "2026-05-14T09:10:06.433Z"
+      },
       "sailing-to-byzantium::pass-001::1": {
         "status": "reject",
         "note": "the grecian gold bird is great, but we need sailing imagery",
@@ -2147,6 +2250,11 @@ window.POEM_IMAGE_REVIEW_DATA = {
         "note": "close ... but the man needs to by lying on sand with the boy looking down on him. make man look closer to dead (sea black eyes). the reflection of the cathedral in his eyes is great",
         "updatedAt": "2026-05-14T08:43:57.179Z"
       },
+      "telemachus::pass-004::1": {
+        "status": "reject",
+        "note": "prefer the view of pass 3 candidate 1, with the boy looking down from above the father's head. and like the light of the cathedrals in his eyes against dark black backdrop on the rest of his eyes",
+        "updatedAt": "2026-05-14T09:09:13.215Z"
+      },
       "tell-all-the-truth-but-tell-it-slant::pass-001::1": {
         "status": "keep",
         "updatedAt": "2026-05-14T00:30:16.063Z"
@@ -2180,6 +2288,10 @@ window.POEM_IMAGE_REVIEW_DATA = {
       "the-kingfisher::pass-003::1": {
         "note": "have the bird flying away from the camera with a behind and over the shoulder view",
         "updatedAt": "2026-05-14T08:44:27.949Z"
+      },
+      "the-kingfisher::pass-004::1": {
+        "status": "keep",
+        "updatedAt": "2026-05-14T09:09:18.600Z"
       },
       "the-light-wraps-you::pass-001::1": {
         "status": "reject",
@@ -2252,6 +2364,10 @@ window.POEM_IMAGE_REVIEW_DATA = {
         "status": "reject",
         "note": "remove the father, just a girl abstant mindedly playing with food. less photo realistic like pass #2",
         "updatedAt": "2026-05-14T08:45:35.401Z"
+      },
+      "to-my-favorite-17-year-old-high-school-girl::pass-004::1": {
+        "status": "keep",
+        "updatedAt": "2026-05-14T09:09:23.817Z"
       },
       "toad::pass-001::1": {
         "status": "keep",
