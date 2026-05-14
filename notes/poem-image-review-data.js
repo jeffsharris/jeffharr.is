@@ -1,6 +1,6 @@
 window.POEM_IMAGE_REVIEW_DATA = {
-  "version": 3,
-  "generatedAt": "2026-05-14T22:54:33.000Z",
+  "version": 4,
+  "generatedAt": "2026-05-14T23:31:40.742Z",
   "prompts": [
     {
       "order": 1,
@@ -278,6 +278,22 @@ window.POEM_IMAGE_REVIEW_DATA = {
           "pass": "pass-007",
           "src": "../tmp/poem-image-candidates/pass-007/do-not-go-gentle-into-that-good-night-2.png",
           "file": "tmp/poem-image-candidates/pass-007/do-not-go-gentle-into-that-good-night-2.png",
+          "model": "gpt-image-2"
+        },
+        {
+          "id": "do-not-go-gentle-into-that-good-night::pass-008::1",
+          "label": "Pass 8 candidate 1",
+          "pass": "pass-008",
+          "src": "../tmp/poem-image-candidates/pass-008/do-not-go-gentle-into-that-good-night-1.png",
+          "file": "tmp/poem-image-candidates/pass-008/do-not-go-gentle-into-that-good-night-1.png",
+          "model": "gpt-image-2"
+        },
+        {
+          "id": "do-not-go-gentle-into-that-good-night::pass-008::2",
+          "label": "Pass 8 candidate 2",
+          "pass": "pass-008",
+          "src": "../tmp/poem-image-candidates/pass-008/do-not-go-gentle-into-that-good-night-2.png",
+          "file": "tmp/poem-image-candidates/pass-008/do-not-go-gentle-into-that-good-night-2.png",
           "model": "gpt-image-2"
         }
       ]
@@ -662,6 +678,22 @@ window.POEM_IMAGE_REVIEW_DATA = {
           "pass": "pass-007",
           "src": "../tmp/poem-image-candidates/pass-007/i-like-my-body-when-it-is-with-your-2.png",
           "file": "tmp/poem-image-candidates/pass-007/i-like-my-body-when-it-is-with-your-2.png",
+          "model": "gpt-image-2"
+        },
+        {
+          "id": "i-like-my-body-when-it-is-with-your::pass-008::1",
+          "label": "Pass 8 candidate 1",
+          "pass": "pass-008",
+          "src": "../tmp/poem-image-candidates/pass-008/i-like-my-body-when-it-is-with-your-1.png",
+          "file": "tmp/poem-image-candidates/pass-008/i-like-my-body-when-it-is-with-your-1.png",
+          "model": "gpt-image-2"
+        },
+        {
+          "id": "i-like-my-body-when-it-is-with-your::pass-008::2",
+          "label": "Pass 8 candidate 2",
+          "pass": "pass-008",
+          "src": "../tmp/poem-image-candidates/pass-008/i-like-my-body-when-it-is-with-your-2.png",
+          "file": "tmp/poem-image-candidates/pass-008/i-like-my-body-when-it-is-with-your-2.png",
           "model": "gpt-image-2"
         }
       ]
@@ -2640,5 +2672,18 @@ window.POEM_IMAGE_REVIEW_DATA = {
         "updatedAt": "2026-05-14T00:36:30.959Z"
       }
     }
+  },
+  "publishedCandidateIds": [
+    "good-bones::pass-007::1",
+    "humpbacks::pass-007::1",
+    "leda-and-the-swan::pass-007::1",
+    "on-this-the-100th-anniversary-of-the-sinking-of-the-titanic::pass-007::1",
+    "sonnet-116::pass-007::1",
+    "sonnet-73::pass-007::1",
+    "the-red-wheelbarrow::pass-007::1"
+  ],
+  "preferredCandidateIds": {
+    "do-not-go-gentle-into-that-good-night": "do-not-go-gentle-into-that-good-night::pass-008::1",
+    "i-like-my-body-when-it-is-with-your": "i-like-my-body-when-it-is-with-your::pass-008::1"
   }
 };

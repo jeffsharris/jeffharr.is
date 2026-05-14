@@ -927,7 +927,7 @@
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-  <script src="./poem-image-review-data.js?v=20260515-pass007"></script>
+  <script src="./poem-image-review-data.js?v=20260515-pass008"></script>
   <script>
     const STORAGE_KEY = 'jeffharr-poem-image-iteration-v1';
     const STORAGE_VERSION = 2;
@@ -937,6 +937,8 @@
       items: [],
       state: createEmptyState(),
       promptsByCandidate: new Map(),
+      publishedCandidateIds: new Set(),
+      preferredCandidateIds: new Map(),
       filter: 'all',
       query: '',
       activeSlug: null,
@@ -984,7 +986,10 @@
     init();
 
     async function init() {
-      const prompts = window.POEM_IMAGE_REVIEW_DATA?.prompts || [];
+      const data = window.POEM_IMAGE_REVIEW_DATA || {};
+      const prompts = data.prompts || [];
+      app.publishedCandidateIds = new Set(data.publishedCandidateIds || []);
+      app.preferredCandidateIds = new Map(Object.entries(data.preferredCandidateIds || {}));
       app.items = prompts
         .map(normalizeItem)
         .filter((item) => item.slug && item.title)
@@ -1536,11 +1541,15 @@
         const stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
         if (stored?.version === STORAGE_VERSION && stored.items && typeof stored.items === 'object') {
           app.state = cleanStoredState(stored);
+          applyPublishedCandidateState();
+          applyPreferredCandidateState();
           saveState();
           return;
         }
         if (stored?.version === 1 && stored.items && typeof stored.items === 'object') {
           app.state = migrateLegacyState(stored);
+          applyPublishedCandidateState();
+          applyPreferredCandidateState();
           saveState();
         }
       } catch (error) {
@@ -1563,6 +1572,41 @@
         if (Object.keys(cleaned).length) next.items[slug] = cleaned;
       }
       return next;
+    }
+
+    function applyPublishedCandidateState() {
+      if (!app.publishedCandidateIds.size) return;
+      for (const [slug, state] of Object.entries(app.state.items || {})) {
+        if (!state?.contenderId || !app.publishedCandidateIds.has(state.contenderId)) continue;
+        state.contenderId = currentCandidateId(slug);
+        const cleaned = cleanItemState(slug, state);
+        if (Object.keys(cleaned).length) {
+          app.state.items[slug] = cleaned;
+        } else {
+          delete app.state.items[slug];
+        }
+      }
+    }
+
+    function applyPreferredCandidateState() {
+      if (!app.preferredCandidateIds.size) return;
+      for (const item of app.items) {
+        if (getMode(item.slug) !== 'iterate') continue;
+        const preferredId = app.preferredCandidateIds.get(item.slug);
+        if (!preferredId) continue;
+        const candidates = getCandidates(item);
+        const preferred = candidates.find((candidate) => candidate.id === preferredId);
+        if (!preferred) continue;
+        const state = getItemState(item.slug);
+        const selected = candidates.find((candidate) => candidate.id === state.contenderId);
+        if (selected && passNumber(selected.pass) >= passNumber(preferred.pass)) continue;
+        const cleaned = cleanItemState(item.slug, { ...state, contenderId: preferred.id });
+        if (Object.keys(cleaned).length) {
+          app.state.items[item.slug] = cleaned;
+        } else {
+          delete app.state.items[item.slug];
+        }
+      }
     }
 
     function migrateLegacyState(stored) {
