@@ -1,5 +1,99 @@
 [
   {
+    "id": "audiodharma:25456",
+    "source": "AudioDharma",
+    "source_id": "25456",
+    "title": "Tranquility",
+    "speaker": "Matthew Brensilver",
+    "published_at": "2026-05-13T12:00:00+00:00",
+    "link": "https://www.audiodharma.org/talks/25456",
+    "audio_url": "https://audiodharma.us-east-1.linodeobjects.com/talks/25456/20260513-matthew_brensilver-imc-tranquility.mp3",
+    "audio_type": "audio/mpeg",
+    "audio_length": null,
+    "duration": "16:21",
+    "description": "AudioDharma talk by Matthew Brensilver.",
+    "image_url": "https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+    "canonical_url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25456/",
+    "podcast_description": "Matthew Brensilver reflects on tranquility as a central quality of practice, using a remembered remark that “the Dharma is parasympathetically biased” to explore calming without flattening aliveness. He argues that steadiness, patience, and bodily ease support clearer perception, while hyperarousal can drive story-making, clinging, and selfing. In the second half, he brings in a Harvard article on low-effort emotion regulation and names simple supports like music, smell, nature, touch, and self-talk as practical ways to restore balance when energy is low.",
+    "short_summary": "A talk on tranquility as a quiet, embodied condition that supports clarity, freedom, and low-effort ways of soothing the mind.",
+    "episode_image_url": "https://jeffharr.is/dharma/brensilver/artwork/audiodharma-25456.jpg",
+    "chapters_url": "https://jeffharr.is/dharma/brensilver/chapters/audiodharma-25456.json",
+    "chapters": [
+      {
+        "start": 9.0,
+        "title": "A Wilder Friend",
+        "description": "Matthew opens with a retreat memory and a contrast in temperaments that leads into the talk’s central question about calm and vitality.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25456/?t=9",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 83.0,
+        "title": "Parasympathetic Dharma",
+        "description": "He develops the idea that Dharma practice is oriented toward replenishment, rest, and soothing rather than mere control or emotional narrowing.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25456/?t=83",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 214.0,
+        "title": "Why Tranquility Matters",
+        "description": "He argues that knowledge and vision depend on steadiness in body and mind, and invites listeners to notice which states bring clarity or confusion.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25456/?t=214",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 303.0,
+        "title": "Feeling Into Story",
+        "description": "Matthew describes how arousal and discomfort generate meaning-making, and how stories can grow out of the pressure of feeling.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25456/?t=303",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 436.0,
+        "title": "Tension and Selfing",
+        "description": "He links afflictive states such as clinging, greed, hatred, and selfing with bodily tension, and frames deep relaxation as part of insight.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25456/?t=436",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 624.0,
+        "title": "Practicing Refuge",
+        "description": "The talk turns to the slow cultivation of refuge, love, and awareness, especially when resources are depleted and effort is limited.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25456/?t=624",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 697.0,
+        "title": "Low-Effort Regulation",
+        "description": "Matthew introduces a Harvard article on low-effort emotion regulation and uses it to support his emphasis on simple, accessible forms of soothing.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25456/?t=697",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 832.0,
+        "title": "Small Soothing Supports",
+        "description": "He names examples like music, smells, nature, touch, self-distanced language, and affect labeling as ways to bring tranquility into ordinary life.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25456/?t=832",
+        "img": null,
+        "toc": true
+      }
+    ],
+    "venue": null,
+    "series": null,
+    "tags": [],
+    "transcript": {
+      "status": "pending",
+      "url": null,
+      "text_path": null
+    }
+  },
+  {
     "id": "dharmaseed:97003",
     "source": "Dharma Seed",
     "source_id": "97003",

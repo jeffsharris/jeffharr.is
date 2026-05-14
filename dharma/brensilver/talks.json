@@ -1,5 +1,193 @@
 [
   {
+    "id": "audiodharma:25456",
+    "source": "AudioDharma",
+    "source_id": "25456",
+    "title": "Tranquility",
+    "speaker": "Matthew Brensilver",
+    "published_at": "2026-05-13T12:00:00+00:00",
+    "link": "https://www.audiodharma.org/talks/25456",
+    "audio_url": "https://audiodharma.us-east-1.linodeobjects.com/talks/25456/20260513-matthew_brensilver-imc-tranquility.mp3",
+    "audio_type": "audio/mpeg",
+    "audio_length": null,
+    "duration": "16:21",
+    "description": "AudioDharma talk by Matthew Brensilver.",
+    "image_url": "https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+    "canonical_url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25456/",
+    "podcast_description": "Matthew Brensilver reflects on tranquility as a central quality of practice, using a remembered remark that “the Dharma is parasympathetically biased” to explore calming without flattening aliveness. He argues that steadiness, patience, and bodily ease support clearer perception, while hyperarousal can drive story-making, clinging, and selfing. In the second half, he brings in a Harvard article on low-effort emotion regulation and names simple supports like music, smell, nature, touch, and self-talk as practical ways to restore balance when energy is low.",
+    "short_summary": "A talk on tranquility as a quiet, embodied condition that supports clarity, freedom, and low-effort ways of soothing the mind.",
+    "episode_image_url": "https://jeffharr.is/dharma/brensilver/artwork/audiodharma-25456.jpg",
+    "chapters_url": "https://jeffharr.is/dharma/brensilver/chapters/audiodharma-25456.json",
+    "chapters": [
+      {
+        "start": 9.0,
+        "title": "A Wilder Friend",
+        "description": "Matthew opens with a retreat memory and a contrast in temperaments that leads into the talk’s central question about calm and vitality.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25456/?t=9",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 83.0,
+        "title": "Parasympathetic Dharma",
+        "description": "He develops the idea that Dharma practice is oriented toward replenishment, rest, and soothing rather than mere control or emotional narrowing.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25456/?t=83",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 214.0,
+        "title": "Why Tranquility Matters",
+        "description": "He argues that knowledge and vision depend on steadiness in body and mind, and invites listeners to notice which states bring clarity or confusion.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25456/?t=214",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 303.0,
+        "title": "Feeling Into Story",
+        "description": "Matthew describes how arousal and discomfort generate meaning-making, and how stories can grow out of the pressure of feeling.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25456/?t=303",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 436.0,
+        "title": "Tension and Selfing",
+        "description": "He links afflictive states such as clinging, greed, hatred, and selfing with bodily tension, and frames deep relaxation as part of insight.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25456/?t=436",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 624.0,
+        "title": "Practicing Refuge",
+        "description": "The talk turns to the slow cultivation of refuge, love, and awareness, especially when resources are depleted and effort is limited.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25456/?t=624",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 697.0,
+        "title": "Low-Effort Regulation",
+        "description": "Matthew introduces a Harvard article on low-effort emotion regulation and uses it to support his emphasis on simple, accessible forms of soothing.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25456/?t=697",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 832.0,
+        "title": "Small Soothing Supports",
+        "description": "He names examples like music, smells, nature, touch, self-distanced language, and affect labeling as ways to bring tranquility into ordinary life.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25456/?t=832",
+        "img": null,
+        "toc": true
+      }
+    ],
+    "venue": null,
+    "series": null,
+    "tags": [],
+    "transcript": {
+      "status": "pending",
+      "url": null,
+      "text_path": null
+    }
+  },
+  {
+    "id": "audiodharma:25455",
+    "source": "AudioDharma",
+    "source_id": "25455",
+    "title": "Guided Meditation: Attention in the body",
+    "speaker": "Matthew Brensilver",
+    "published_at": "2026-05-13T12:00:00+00:00",
+    "link": "https://www.audiodharma.org/talks/25455",
+    "audio_url": "https://audiodharma.us-east-1.linodeobjects.com/talks/25455/20260513-matthew_brensilver-imc-guided_meditation_attention_in_the_body.mp3",
+    "audio_type": "audio/mpeg",
+    "audio_length": null,
+    "duration": "26:57",
+    "description": "AudioDharma talk by Matthew Brensilver.",
+    "image_url": "https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+    "canonical_url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25455/",
+    "podcast_description": "Matthew Brensilver offers a guided meditation centered on feeling attention in the body as a way to settle, unify, and soften the mind. The practice moves from posture and breath into subtler body sensations, including the back of the body, while emphasizing relaxation without force and equal care for pleasant, unpleasant, and neutral experience. He also frames meditation as a way of soothing the bodily atmosphere that underlies anxiety, hope, and fear.",
+    "short_summary": "A guided body-centered meditation that gradually shifts from settling posture and breath to subtle sensation, equanimity, and a softer relationship with fear and difficulty.",
+    "episode_image_url": "https://jeffharr.is/dharma/brensilver/artwork/audiodharma-25455.jpg",
+    "chapters_url": "https://jeffharr.is/dharma/brensilver/chapters/audiodharma-25455.json",
+    "chapters": [
+      {
+        "start": 11.56,
+        "title": "Settling In",
+        "description": "The meditation begins with posture, gathering the mind, and arriving in the present moment.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25455/?t=12",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 60.56,
+        "title": "Making Peace",
+        "description": "He invites a sense of blessing and asks what peace needs to be made with this moment.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25455/?t=61",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 226.84,
+        "title": "Body and Breath",
+        "description": "Attention moves into the body and breath, including places that are easy to miss or feel numb.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25455/?t=227",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 346.84,
+        "title": "Subtle Sensation",
+        "description": "The practice deepens into finer bodily energy and awareness of the back of the body.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25455/?t=347",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 489.68,
+        "title": "Relaxing Resistance",
+        "description": "He encourages relaxing what can be relaxed while allowing remaining tension to be there.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25455/?t=490",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 639.64,
+        "title": "Cohering the Field",
+        "description": "Breath and attention are described as gathering experience into a more unified field, rather than fighting sensation.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25455/?t=640",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 899.16,
+        "title": "Hope and Fear",
+        "description": "The talk turns to how attention can snag on hope and fear, and how forgiveness can restore steadiness.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25455/?t=899",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1146.24,
+        "title": "Soothing the Body",
+        "description": "Meditation is presented as a way to soothe the bodily feeling that underlies our problems and to speak more gently to the body.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25455/?t=1146",
+        "img": null,
+        "toc": true
+      }
+    ],
+    "venue": null,
+    "series": null,
+    "tags": [],
+    "transcript": {
+      "status": "pending",
+      "url": null,
+      "text_path": null
+    }
+  },
+  {
     "id": "dharmaseed:97005",
     "source": "Dharma Seed",
     "source_id": "97005",
