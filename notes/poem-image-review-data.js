@@ -1,6 +1,6 @@
 window.POEM_IMAGE_REVIEW_DATA = {
-  "version": 7,
-  "generatedAt": "2026-05-15T08:09:47.302Z",
+  "version": 8,
+  "generatedAt": "2026-05-15T08:44:53.185Z",
   "prompts": [
     {
       "order": 1,
@@ -2888,13 +2888,12 @@ window.POEM_IMAGE_REVIEW_DATA = {
     "on-this-the-100th-anniversary-of-the-sinking-of-the-titanic::pass-007::1",
     "sonnet-116::pass-007::1",
     "sonnet-73::pass-007::1",
-    "the-red-wheelbarrow::pass-007::1"
+    "the-red-wheelbarrow::pass-007::1",
+    "a-finger-two-dots-then-me::pass-009::1",
+    "do-not-go-gentle-into-that-good-night::pass-010::1",
+    "i-carry-your-heart-within-me::pass-011::1",
+    "i-like-my-body-when-it-is-with-your::pass-011::1",
+    "the-road-not-taken::pass-011::1"
   ],
-  "preferredCandidateIds": {
-    "do-not-go-gentle-into-that-good-night": "do-not-go-gentle-into-that-good-night::pass-010::1",
-    "i-like-my-body-when-it-is-with-your": "i-like-my-body-when-it-is-with-your::pass-011::1",
-    "i-carry-your-heart-within-me": "i-carry-your-heart-within-me::pass-011::1",
-    "the-road-not-taken": "the-road-not-taken::pass-011::1",
-    "a-finger-two-dots-then-me": "a-finger-two-dots-then-me::pass-009::1"
-  }
+  "preferredCandidateIds": {}
 };
