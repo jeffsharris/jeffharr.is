@@ -949,7 +949,7 @@
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-  <script src="./poem-image-review-data.js?v=20260515-published-pass011"></script>
+  <script src="./poem-image-review-data.js?v=20260515-clean-published-state"></script>
   <script>
     const STORAGE_KEY = 'jeffharr-poem-image-iteration-v1';
     const STORAGE_VERSION = 2;
@@ -961,7 +961,9 @@
       state: createEmptyState(),
       promptsByCandidate: new Map(),
       publishedCandidateIds: new Set(),
+      publishedSlugs: new Set(),
       preferredCandidateIds: new Map(),
+      dataGeneratedAt: '',
       filter: 'all',
       query: '',
       activeSlug: null,
@@ -1020,7 +1022,9 @@
     async function init() {
       const data = window.POEM_IMAGE_REVIEW_DATA || {};
       const prompts = data.prompts || [];
+      app.dataGeneratedAt = data.generatedAt || '';
       app.publishedCandidateIds = new Set(data.publishedCandidateIds || []);
+      app.publishedSlugs = new Set(Array.from(app.publishedCandidateIds).map((id) => String(id).split('::')[0]).filter(Boolean));
       app.preferredCandidateIds = new Map(Object.entries(data.preferredCandidateIds || {}));
       app.items = prompts
         .map(normalizeItem)
@@ -1726,11 +1730,28 @@
     }
 
     function applyPublishedCandidateState() {
-      if (!app.publishedCandidateIds.size) return;
+      if (!app.publishedCandidateIds.size && !app.publishedSlugs.size) return;
+      const publishedAt = Date.parse(app.dataGeneratedAt || '') || 0;
       for (const [slug, state] of Object.entries(app.state.items || {})) {
-        if (!state?.contenderId || !app.publishedCandidateIds.has(state.contenderId)) continue;
-        state.contenderId = currentCandidateId(slug);
-        const cleaned = cleanItemState(slug, state);
+        if (!state || !app.publishedSlugs.has(slug)) continue;
+        const next = {
+          ...state,
+          candidateState: state.candidateState ? { ...state.candidateState } : undefined
+        };
+
+        if (next.contenderId && app.publishedCandidateIds.has(next.contenderId)) {
+          delete next.contenderId;
+          if (next.mode === 'iterate') delete next.mode;
+        }
+
+        for (const [candidateId, candidateState] of Object.entries(next.candidateState || {})) {
+          const updatedAt = Date.parse(candidateState?.updatedAt || '') || 0;
+          if (!updatedAt || !publishedAt || updatedAt <= publishedAt) {
+            delete next.candidateState[candidateId];
+          }
+        }
+
+        const cleaned = cleanItemState(slug, next);
         if (Object.keys(cleaned).length) {
           app.state.items[slug] = cleaned;
         } else {
