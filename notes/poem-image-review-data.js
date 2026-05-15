@@ -1,6 +1,6 @@
 window.POEM_IMAGE_REVIEW_DATA = {
-  "version": 8,
-  "generatedAt": "2026-05-15T08:44:53.185Z",
+  "version": 9,
+  "generatedAt": "2026-05-15T09:24:51.750Z",
   "prompts": [
     {
       "order": 1,
@@ -367,6 +367,30 @@ window.POEM_IMAGE_REVIEW_DATA = {
           "src": "../tmp/poem-image-candidates/pass-001/fire-and-ice.png",
           "file": "tmp/poem-image-candidates/pass-001/fire-and-ice.png",
           "model": "gpt-image-2"
+        },
+        {
+          "id": "fire-and-ice::pass-012::1",
+          "label": "Pass 12 candidate 1",
+          "pass": "pass-012",
+          "src": "../tmp/poem-image-candidates/pass-012/fire-and-ice-1.png",
+          "file": "tmp/poem-image-candidates/pass-012/fire-and-ice-1.png",
+          "model": "gpt-image-2"
+        },
+        {
+          "id": "fire-and-ice::pass-012::2",
+          "label": "Pass 12 candidate 2",
+          "pass": "pass-012",
+          "src": "../tmp/poem-image-candidates/pass-012/fire-and-ice-2.png",
+          "file": "tmp/poem-image-candidates/pass-012/fire-and-ice-2.png",
+          "model": "gpt-image-2"
+        },
+        {
+          "id": "fire-and-ice::pass-012::3",
+          "label": "Pass 12 candidate 3",
+          "pass": "pass-012",
+          "src": "../tmp/poem-image-candidates/pass-012/fire-and-ice-3.png",
+          "file": "tmp/poem-image-candidates/pass-012/fire-and-ice-3.png",
+          "model": "gpt-image-2"
         }
       ]
     },
@@ -566,6 +590,30 @@ window.POEM_IMAGE_REVIEW_DATA = {
           "pass": "pass-004",
           "src": "../tmp/poem-image-candidates/pass-004/high-windows.png",
           "file": "tmp/poem-image-candidates/pass-004/high-windows.png",
+          "model": "gpt-image-2"
+        },
+        {
+          "id": "high-windows::pass-012::1",
+          "label": "Pass 12 candidate 1",
+          "pass": "pass-012",
+          "src": "../tmp/poem-image-candidates/pass-012/high-windows-1.png",
+          "file": "tmp/poem-image-candidates/pass-012/high-windows-1.png",
+          "model": "gpt-image-2"
+        },
+        {
+          "id": "high-windows::pass-012::2",
+          "label": "Pass 12 candidate 2",
+          "pass": "pass-012",
+          "src": "../tmp/poem-image-candidates/pass-012/high-windows-2.png",
+          "file": "tmp/poem-image-candidates/pass-012/high-windows-2.png",
+          "model": "gpt-image-2"
+        },
+        {
+          "id": "high-windows::pass-012::3",
+          "label": "Pass 12 candidate 3",
+          "pass": "pass-012",
+          "src": "../tmp/poem-image-candidates/pass-012/high-windows-3.png",
+          "file": "tmp/poem-image-candidates/pass-012/high-windows-3.png",
           "model": "gpt-image-2"
         }
       ]
@@ -2895,5 +2943,8 @@ window.POEM_IMAGE_REVIEW_DATA = {
     "i-like-my-body-when-it-is-with-your::pass-011::1",
     "the-road-not-taken::pass-011::1"
   ],
-  "preferredCandidateIds": {}
+  "preferredCandidateIds": {
+    "fire-and-ice": "fire-and-ice::pass-012::1",
+    "high-windows": "high-windows::pass-012::1"
+  }
 };
