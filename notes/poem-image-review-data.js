@@ -1,6 +1,6 @@
 window.POEM_IMAGE_REVIEW_DATA = {
-  "version": 9,
-  "generatedAt": "2026-05-15T09:24:51.750Z",
+  "version": 10,
+  "generatedAt": "2026-05-15T09:33:46.251Z",
   "prompts": [
     {
       "order": 1,
@@ -2941,10 +2941,9 @@ window.POEM_IMAGE_REVIEW_DATA = {
     "do-not-go-gentle-into-that-good-night::pass-010::1",
     "i-carry-your-heart-within-me::pass-011::1",
     "i-like-my-body-when-it-is-with-your::pass-011::1",
-    "the-road-not-taken::pass-011::1"
+    "the-road-not-taken::pass-011::1",
+    "fire-and-ice::pass-012::1",
+    "high-windows::pass-012::1"
   ],
-  "preferredCandidateIds": {
-    "fire-and-ice": "fire-and-ice::pass-012::1",
-    "high-windows": "high-windows::pass-012::1"
-  }
+  "preferredCandidateIds": {}
 };
