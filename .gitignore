@@ -4,6 +4,9 @@ __pycache__/
 .env.local
 .playwright-mcp/
 tmp/
+notes/poem-image-iteration-state.json
+notes/poem-image-iteration-handoff.json
+notes/poem-image-publish-plan.json
 .wrangler/
 .pycache-check/
 node_modules/.cache/

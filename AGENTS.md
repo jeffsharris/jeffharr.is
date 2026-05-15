@@ -87,6 +87,11 @@ PYTHONPATH=tools/brensilver-transcripts/src python3 -m brensilver_transcripts.pi
 - `index.html`: theme toggle persists, system preference is respected when no local override, panel open/close, deep links via `?view=`, and history back/forward close the panel.
 - `poems/index.html`: manifest loads, search/filter works, modal open/close, deep links via `?poem=`, and copy/share actions behave gracefully when APIs are unavailable.
 
+## Poem image iteration workflow
+- Use `npm run poem-images:review` for the local review UI. It serves `notes/poem-image-prompt-review.html` and autosaves browser edits into gitignored JSON files under `notes/`.
+- Future image-iteration agents should read `notes/poem-image-iteration-handoff.json`, not Chrome LocalStorage. Generate only entries where the current contender has non-empty feedback.
+- The full workflow playbook is `notes/poem-image-review-workflow.md`.
+
 ## Reliability notes
 - Prefer fetch timeouts for external APIs.
 - When errors occur, functions should return empty results with cache headers rather than throw.

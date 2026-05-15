@@ -113,6 +113,27 @@
       gap: 10px;
     }
 
+    .sync-status {
+      flex-basis: 100%;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 720;
+      line-height: 1.35;
+      text-align: right;
+    }
+
+    .sync-status.is-live {
+      color: var(--green);
+    }
+
+    .sync-status.is-saving {
+      color: var(--gold);
+    }
+
+    .sync-status.is-error {
+      color: var(--red);
+    }
+
     .button {
       min-height: 38px;
       padding: 0 14px;
@@ -831,6 +852,7 @@
         <button class="button" type="button" id="copy-publish-plan">Copy Publish Plan</button>
         <button class="button" type="button" id="download-handoff">Download JSON</button>
         <button class="button button--danger" type="button" id="reset-state">Reset Slate</button>
+        <div class="sync-status" id="sync-status" aria-live="polite">Checking file sync</div>
       </div>
     </header>
 
@@ -932,6 +954,7 @@
     const STORAGE_KEY = 'jeffharr-poem-image-iteration-v1';
     const STORAGE_VERSION = 2;
     const CURRENT_CANDIDATE_SUFFIX = '::current';
+    const FILE_SYNC_API = '/api/poem-image-iteration/state';
 
     const app = {
       items: [],
@@ -944,7 +967,15 @@
       activeSlug: null,
       activeCandidateId: null,
       isEditingPrompt: false,
-      toastTimer: null
+      toastTimer: null,
+      fileSyncTimer: null,
+      fileSync: {
+        enabled: false,
+        status: 'checking',
+        lastSavedAt: '',
+        error: '',
+        files: null
+      }
     };
 
     const els = {
@@ -960,6 +991,7 @@
       copyPublishPlan: document.getElementById('copy-publish-plan'),
       downloadHandoff: document.getElementById('download-handoff'),
       resetState: document.getElementById('reset-state'),
+      syncStatus: document.getElementById('sync-status'),
       modal: document.getElementById('detail-modal'),
       closeDetail: document.getElementById('close-detail'),
       detailTitle: document.getElementById('detail-title'),
@@ -995,10 +1027,11 @@
         .filter((item) => item.slug && item.title)
         .sort((a, b) => (a.order || 0) - (b.order || 0));
 
-      loadState();
+      await loadState();
       bindEvents();
       render();
       await loadPassPrompts();
+      await saveState({ immediate: true });
       renderDetailIfOpen();
     }
 
@@ -1091,6 +1124,7 @@
         app.state = createEmptyState();
         app.activeCandidateId = null;
         app.isEditingPrompt = false;
+        saveState({ immediate: true });
         render();
         renderDetailIfOpen();
         showToast('Slate reset');
@@ -1536,33 +1570,152 @@
       return app.promptsByCandidate.get(`${candidate.pass}/${file}`) || app.promptsByCandidate.get(`${candidate.pass}/${canonical}`) || '';
     }
 
-    function loadState() {
+    async function loadState() {
+      renderFileSyncStatus();
+      const fileState = await loadFileState();
+      const loaded = fileState || loadLocalState();
+      app.state = loaded || createEmptyState();
+      applyPublishedCandidateState();
+      applyPreferredCandidateState();
+      await saveState({ immediate: Boolean(app.fileSync.enabled) });
+    }
+
+    async function loadFileState() {
+      if (!canUseFileSync()) {
+        app.fileSync.status = 'local';
+        renderFileSyncStatus();
+        return null;
+      }
+
       try {
-        const stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
-        if (stored?.version === STORAGE_VERSION && stored.items && typeof stored.items === 'object') {
-          app.state = cleanStoredState(stored);
-          applyPublishedCandidateState();
-          applyPreferredCandidateState();
-          saveState();
-          return;
+        const response = await fetch(`${FILE_SYNC_API}?v=${Date.now()}`, { cache: 'no-store' });
+        if (!response.ok) {
+          app.fileSync.status = 'local';
+          renderFileSyncStatus();
+          return null;
         }
-        if (stored?.version === 1 && stored.items && typeof stored.items === 'object') {
-          app.state = migrateLegacyState(stored);
-          applyPublishedCandidateState();
-          applyPreferredCandidateState();
-          saveState();
-        }
+        const payload = await response.json();
+        app.fileSync.enabled = true;
+        app.fileSync.status = payload.state ? 'ready' : 'empty';
+        app.fileSync.files = payload.files || null;
+        renderFileSyncStatus();
+        return normalizeStoredState(payload.state);
       } catch (error) {
-        console.warn('Could not parse iteration state', error);
+        app.fileSync.status = 'local';
+        app.fileSync.error = error.message || String(error);
+        renderFileSyncStatus();
+        return null;
       }
     }
 
-    function saveState() {
+    function loadLocalState() {
+      try {
+        return normalizeStoredState(JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'));
+      } catch (error) {
+        console.warn('Could not parse iteration state', error);
+        return null;
+      }
+    }
+
+    function normalizeStoredState(stored) {
+      if (stored?.version === STORAGE_VERSION && stored.items && typeof stored.items === 'object') {
+        return cleanStoredState(stored);
+      }
+      if (stored?.version === 1 && stored.items && typeof stored.items === 'object') {
+        return migrateLegacyState(stored);
+      }
+      return null;
+    }
+
+    async function saveState({ immediate = false } = {}) {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(app.state));
+      if (immediate) {
+        await syncStateToFiles();
+        return;
+      }
+      scheduleFileSync();
     }
 
     function createEmptyState() {
       return { version: STORAGE_VERSION, items: {} };
+    }
+
+    function canUseFileSync() {
+      return location.protocol === 'http:' || location.protocol === 'https:';
+    }
+
+    function scheduleFileSync() {
+      if (!app.fileSync.enabled) {
+        renderFileSyncStatus();
+        return;
+      }
+      window.clearTimeout(app.fileSyncTimer);
+      app.fileSync.status = 'saving';
+      renderFileSyncStatus();
+      app.fileSyncTimer = window.setTimeout(syncStateToFiles, 360);
+    }
+
+    async function syncStateToFiles() {
+      if (!app.fileSync.enabled) {
+        renderFileSyncStatus();
+        return;
+      }
+
+      window.clearTimeout(app.fileSyncTimer);
+      app.fileSync.status = 'saving';
+      renderFileSyncStatus();
+
+      try {
+        const response = await fetch(FILE_SYNC_API, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            state: app.state,
+            handoff: buildHandoff(),
+            publishPlan: buildPublishPlan()
+          })
+        });
+        if (!response.ok) {
+          throw new Error(`File sync failed (${response.status})`);
+        }
+        const payload = await response.json();
+        app.fileSync.enabled = true;
+        app.fileSync.status = 'saved';
+        app.fileSync.lastSavedAt = payload.savedAt || new Date().toISOString();
+        app.fileSync.error = '';
+        app.fileSync.files = payload.files || app.fileSync.files;
+      } catch (error) {
+        app.fileSync.status = 'error';
+        app.fileSync.error = error.message || String(error);
+      }
+
+      renderFileSyncStatus();
+    }
+
+    function renderFileSyncStatus() {
+      if (!els.syncStatus) return;
+      const { status, lastSavedAt, error, files } = app.fileSync;
+      els.syncStatus.classList.toggle('is-live', status === 'ready' || status === 'saved' || status === 'empty');
+      els.syncStatus.classList.toggle('is-saving', status === 'saving' || status === 'checking');
+      els.syncStatus.classList.toggle('is-error', status === 'error');
+
+      if (status === 'checking') {
+        els.syncStatus.textContent = 'Checking file sync';
+      } else if (status === 'local') {
+        els.syncStatus.textContent = 'Local browser storage only. Run npm run poem-images:review for file sync.';
+      } else if (status === 'empty') {
+        els.syncStatus.textContent = 'File sync ready. State file will be created on first edit.';
+      } else if (status === 'ready') {
+        els.syncStatus.textContent = 'File sync ready';
+      } else if (status === 'saving') {
+        els.syncStatus.textContent = 'Saving state to JSON files';
+      } else if (status === 'saved') {
+        const savedTime = lastSavedAt ? new Date(lastSavedAt).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', second: '2-digit' }) : 'now';
+        const statePath = files?.state ? ` · ${files.state}` : '';
+        els.syncStatus.textContent = `Saved to files at ${savedTime}${statePath}`;
+      } else if (status === 'error') {
+        els.syncStatus.textContent = `File sync error: ${error || 'unknown error'}`;
+      }
     }
 
     function cleanStoredState(stored) {
@@ -1785,6 +1938,7 @@
       buildHandoff,
       buildPublishPlan,
       getState: () => app.state,
+      getFileSync: () => app.fileSync,
       getSummary: () => ({
         total: app.items.length,
         iterating: app.items.filter((item) => getMode(item.slug) === 'iterate').length,
