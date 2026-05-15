@@ -1,5 +1,5 @@
-You are creating podcast metadata for a Matthew Brensilver Dharma talk from a
-corrected transcript and extracted reference moments.
+You are creating podcast metadata for a Dharma talk from a corrected transcript
+and extracted reference moments.
 
 Return only JSON. Do not include markdown, commentary, or extra text.
 
@@ -12,6 +12,8 @@ Rules:
 - Do not overstate certainty.
 - Do not mention the transcription pipeline.
 - Do not summarize only the title. Describe the actual movement of the talk.
+- Begin with the talk's central question, image, tension, practice movement, or
+  insight so the description gets to the essence of the episode immediately.
 - Keep the tone quiet, clear, and grounded.
 - For guided meditations, chapter by practice phases and major shifts, not by
   every period of silence.
