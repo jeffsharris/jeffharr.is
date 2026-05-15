@@ -949,7 +949,7 @@
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-  <script src="./poem-image-review-data.js?v=20260515-pass010"></script>
+  <script src="./poem-image-review-data.js?v=20260515-pass011"></script>
   <script>
     const STORAGE_KEY = 'jeffharr-poem-image-iteration-v1';
     const STORAGE_VERSION = 2;
@@ -1556,10 +1556,8 @@
     function getDisplayPrompt(item, candidate) {
       const override = getCandidateState(item.slug, candidate.id).promptOverride;
       if (override?.trim()) return override;
-      if (candidate.id !== currentCandidateId(item.slug)) {
-        const prompt = getPromptForCandidate(candidate);
-        if (prompt) return prompt;
-      }
+      const prompt = getPromptForCandidate(candidate);
+      if (prompt) return prompt;
       return item.prompt || '';
     }
 

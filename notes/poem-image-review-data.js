@@ -1,6 +1,6 @@
 window.POEM_IMAGE_REVIEW_DATA = {
-  "version": 6,
-  "generatedAt": "2026-05-15T07:47:55.116Z",
+  "version": 7,
+  "generatedAt": "2026-05-15T08:09:47.302Z",
   "prompts": [
     {
       "order": 1,
@@ -703,6 +703,22 @@ window.POEM_IMAGE_REVIEW_DATA = {
           "src": "../tmp/poem-image-candidates/pass-010/i-carry-your-heart-within-me-2.png",
           "file": "tmp/poem-image-candidates/pass-010/i-carry-your-heart-within-me-2.png",
           "model": "gpt-image-2"
+        },
+        {
+          "id": "i-carry-your-heart-within-me::pass-011::1",
+          "label": "Pass 11 candidate 1",
+          "pass": "pass-011",
+          "src": "../tmp/poem-image-candidates/pass-011/i-carry-your-heart-within-me-1.png",
+          "file": "tmp/poem-image-candidates/pass-011/i-carry-your-heart-within-me-1.png",
+          "model": "gpt-image-2"
+        },
+        {
+          "id": "i-carry-your-heart-within-me::pass-011::2",
+          "label": "Pass 11 candidate 2",
+          "pass": "pass-011",
+          "src": "../tmp/poem-image-candidates/pass-011/i-carry-your-heart-within-me-2.png",
+          "file": "tmp/poem-image-candidates/pass-011/i-carry-your-heart-within-me-2.png",
+          "model": "gpt-image-2"
         }
       ]
     },
@@ -806,6 +822,38 @@ window.POEM_IMAGE_REVIEW_DATA = {
           "pass": "pass-010",
           "src": "../tmp/poem-image-candidates/pass-010/i-like-my-body-when-it-is-with-your-2.png",
           "file": "tmp/poem-image-candidates/pass-010/i-like-my-body-when-it-is-with-your-2.png",
+          "model": "gpt-image-2"
+        },
+        {
+          "id": "i-like-my-body-when-it-is-with-your::pass-011::1",
+          "label": "Pass 11 candidate 1",
+          "pass": "pass-011",
+          "src": "../tmp/poem-image-candidates/pass-011/i-like-my-body-when-it-is-with-your-1.png",
+          "file": "tmp/poem-image-candidates/pass-011/i-like-my-body-when-it-is-with-your-1.png",
+          "model": "gpt-image-2"
+        },
+        {
+          "id": "i-like-my-body-when-it-is-with-your::pass-011::2",
+          "label": "Pass 11 candidate 2",
+          "pass": "pass-011",
+          "src": "../tmp/poem-image-candidates/pass-011/i-like-my-body-when-it-is-with-your-2.png",
+          "file": "tmp/poem-image-candidates/pass-011/i-like-my-body-when-it-is-with-your-2.png",
+          "model": "gpt-image-2"
+        },
+        {
+          "id": "i-like-my-body-when-it-is-with-your::pass-011::3",
+          "label": "Pass 11 candidate 3",
+          "pass": "pass-011",
+          "src": "../tmp/poem-image-candidates/pass-011/i-like-my-body-when-it-is-with-your-3.png",
+          "file": "tmp/poem-image-candidates/pass-011/i-like-my-body-when-it-is-with-your-3.png",
+          "model": "gpt-image-2"
+        },
+        {
+          "id": "i-like-my-body-when-it-is-with-your::pass-011::4",
+          "label": "Pass 11 candidate 4",
+          "pass": "pass-011",
+          "src": "../tmp/poem-image-candidates/pass-011/i-like-my-body-when-it-is-with-your-4.png",
+          "file": "tmp/poem-image-candidates/pass-011/i-like-my-body-when-it-is-with-your-4.png",
           "model": "gpt-image-2"
         }
       ]
@@ -1943,6 +1991,22 @@ window.POEM_IMAGE_REVIEW_DATA = {
           "src": "../tmp/poem-image-candidates/pass-010/the-road-not-taken-2.png",
           "file": "tmp/poem-image-candidates/pass-010/the-road-not-taken-2.png",
           "model": "gpt-image-2"
+        },
+        {
+          "id": "the-road-not-taken::pass-011::1",
+          "label": "Pass 11 candidate 1",
+          "pass": "pass-011",
+          "src": "../tmp/poem-image-candidates/pass-011/the-road-not-taken-1.png",
+          "file": "tmp/poem-image-candidates/pass-011/the-road-not-taken-1.png",
+          "model": "gpt-image-2"
+        },
+        {
+          "id": "the-road-not-taken::pass-011::2",
+          "label": "Pass 11 candidate 2",
+          "pass": "pass-011",
+          "src": "../tmp/poem-image-candidates/pass-011/the-road-not-taken-2.png",
+          "file": "tmp/poem-image-candidates/pass-011/the-road-not-taken-2.png",
+          "model": "gpt-image-2"
         }
       ]
     },
@@ -2828,9 +2892,9 @@ window.POEM_IMAGE_REVIEW_DATA = {
   ],
   "preferredCandidateIds": {
     "do-not-go-gentle-into-that-good-night": "do-not-go-gentle-into-that-good-night::pass-010::1",
-    "i-like-my-body-when-it-is-with-your": "i-like-my-body-when-it-is-with-your::pass-010::1",
-    "i-carry-your-heart-within-me": "i-carry-your-heart-within-me::pass-010::1",
-    "the-road-not-taken": "the-road-not-taken::pass-010::1",
+    "i-like-my-body-when-it-is-with-your": "i-like-my-body-when-it-is-with-your::pass-011::1",
+    "i-carry-your-heart-within-me": "i-carry-your-heart-within-me::pass-011::1",
+    "the-road-not-taken": "the-road-not-taken::pass-011::1",
     "a-finger-two-dots-then-me": "a-finger-two-dots-then-me::pass-009::1"
   }
 };
