@@ -1,6 +1,6 @@
 window.POEM_IMAGE_REVIEW_DATA = {
-  "version": 5,
-  "generatedAt": "2026-05-15T06:51:07.399Z",
+  "version": 6,
+  "generatedAt": "2026-05-15T07:47:55.116Z",
   "prompts": [
     {
       "order": 1,
@@ -326,6 +326,22 @@ window.POEM_IMAGE_REVIEW_DATA = {
           "pass": "pass-009",
           "src": "../tmp/poem-image-candidates/pass-009/do-not-go-gentle-into-that-good-night-2.png",
           "file": "tmp/poem-image-candidates/pass-009/do-not-go-gentle-into-that-good-night-2.png",
+          "model": "gpt-image-2"
+        },
+        {
+          "id": "do-not-go-gentle-into-that-good-night::pass-010::1",
+          "label": "Pass 10 candidate 1",
+          "pass": "pass-010",
+          "src": "../tmp/poem-image-candidates/pass-010/do-not-go-gentle-into-that-good-night-1.png",
+          "file": "tmp/poem-image-candidates/pass-010/do-not-go-gentle-into-that-good-night-1.png",
+          "model": "gpt-image-2"
+        },
+        {
+          "id": "do-not-go-gentle-into-that-good-night::pass-010::2",
+          "label": "Pass 10 candidate 2",
+          "pass": "pass-010",
+          "src": "../tmp/poem-image-candidates/pass-010/do-not-go-gentle-into-that-good-night-2.png",
+          "file": "tmp/poem-image-candidates/pass-010/do-not-go-gentle-into-that-good-night-2.png",
           "model": "gpt-image-2"
         }
       ]
@@ -671,6 +687,22 @@ window.POEM_IMAGE_REVIEW_DATA = {
           "src": "../tmp/poem-image-candidates/pass-009/i-carry-your-heart-within-me-2.png",
           "file": "tmp/poem-image-candidates/pass-009/i-carry-your-heart-within-me-2.png",
           "model": "gpt-image-2"
+        },
+        {
+          "id": "i-carry-your-heart-within-me::pass-010::1",
+          "label": "Pass 10 candidate 1",
+          "pass": "pass-010",
+          "src": "../tmp/poem-image-candidates/pass-010/i-carry-your-heart-within-me-1.png",
+          "file": "tmp/poem-image-candidates/pass-010/i-carry-your-heart-within-me-1.png",
+          "model": "gpt-image-2"
+        },
+        {
+          "id": "i-carry-your-heart-within-me::pass-010::2",
+          "label": "Pass 10 candidate 2",
+          "pass": "pass-010",
+          "src": "../tmp/poem-image-candidates/pass-010/i-carry-your-heart-within-me-2.png",
+          "file": "tmp/poem-image-candidates/pass-010/i-carry-your-heart-within-me-2.png",
+          "model": "gpt-image-2"
         }
       ]
     },
@@ -758,6 +790,22 @@ window.POEM_IMAGE_REVIEW_DATA = {
           "pass": "pass-009",
           "src": "../tmp/poem-image-candidates/pass-009/i-like-my-body-when-it-is-with-your-2.png",
           "file": "tmp/poem-image-candidates/pass-009/i-like-my-body-when-it-is-with-your-2.png",
+          "model": "gpt-image-2"
+        },
+        {
+          "id": "i-like-my-body-when-it-is-with-your::pass-010::1",
+          "label": "Pass 10 candidate 1",
+          "pass": "pass-010",
+          "src": "../tmp/poem-image-candidates/pass-010/i-like-my-body-when-it-is-with-your-1.png",
+          "file": "tmp/poem-image-candidates/pass-010/i-like-my-body-when-it-is-with-your-1.png",
+          "model": "gpt-image-2"
+        },
+        {
+          "id": "i-like-my-body-when-it-is-with-your::pass-010::2",
+          "label": "Pass 10 candidate 2",
+          "pass": "pass-010",
+          "src": "../tmp/poem-image-candidates/pass-010/i-like-my-body-when-it-is-with-your-2.png",
+          "file": "tmp/poem-image-candidates/pass-010/i-like-my-body-when-it-is-with-your-2.png",
           "model": "gpt-image-2"
         }
       ]
@@ -1879,6 +1927,22 @@ window.POEM_IMAGE_REVIEW_DATA = {
           "src": "../tmp/poem-image-candidates/pass-009/the-road-not-taken-2.png",
           "file": "tmp/poem-image-candidates/pass-009/the-road-not-taken-2.png",
           "model": "gpt-image-2"
+        },
+        {
+          "id": "the-road-not-taken::pass-010::1",
+          "label": "Pass 10 candidate 1",
+          "pass": "pass-010",
+          "src": "../tmp/poem-image-candidates/pass-010/the-road-not-taken-1.png",
+          "file": "tmp/poem-image-candidates/pass-010/the-road-not-taken-1.png",
+          "model": "gpt-image-2"
+        },
+        {
+          "id": "the-road-not-taken::pass-010::2",
+          "label": "Pass 10 candidate 2",
+          "pass": "pass-010",
+          "src": "../tmp/poem-image-candidates/pass-010/the-road-not-taken-2.png",
+          "file": "tmp/poem-image-candidates/pass-010/the-road-not-taken-2.png",
+          "model": "gpt-image-2"
         }
       ]
     },
@@ -2763,10 +2827,10 @@ window.POEM_IMAGE_REVIEW_DATA = {
     "the-red-wheelbarrow::pass-007::1"
   ],
   "preferredCandidateIds": {
-    "do-not-go-gentle-into-that-good-night": "do-not-go-gentle-into-that-good-night::pass-009::1",
-    "i-like-my-body-when-it-is-with-your": "i-like-my-body-when-it-is-with-your::pass-009::1",
-    "i-carry-your-heart-within-me": "i-carry-your-heart-within-me::pass-009::1",
-    "the-road-not-taken": "the-road-not-taken::pass-009::1",
+    "do-not-go-gentle-into-that-good-night": "do-not-go-gentle-into-that-good-night::pass-010::1",
+    "i-like-my-body-when-it-is-with-your": "i-like-my-body-when-it-is-with-your::pass-010::1",
+    "i-carry-your-heart-within-me": "i-carry-your-heart-within-me::pass-010::1",
+    "the-road-not-taken": "the-road-not-taken::pass-010::1",
     "a-finger-two-dots-then-me": "a-finger-two-dots-then-me::pass-009::1"
   }
 };
