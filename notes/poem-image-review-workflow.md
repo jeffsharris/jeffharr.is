@@ -29,4 +29,13 @@ These files are gitignored workflow state. Do not use Chrome LocalStorage or bro
 5. After generating a new pass, append candidates to `notes/poem-image-review-data.js`, update `preferredCandidateIds` for the regenerated slugs, and bump the review data cache query in `notes/poem-image-prompt-review.html`.
 6. Verify the review page through the local server, then run `npm test`.
 
-For publishing finalized replacements, read `notes/poem-image-publish-plan.json`, copy only the listed replacements into `poems/images/`, run visual checks and tests, then commit and push.
+For publishing finalized replacements, use the publish script instead of doing the checklist by hand:
+
+```sh
+npm run poem-images:publish -- --dry-run
+npm run poem-images:publish -- --commit --push
+```
+
+The script reads `notes/poem-image-publish-plan.json`, copies only the listed replacements into `poems/images/` as site-ready JPGs, marks the candidate IDs as published in `notes/poem-image-review-data.js`, clears the published items from the file-backed workflow state, bumps the review-page cache key, runs `npm test`, commits, fetches `origin`, verifies the branch is a fast-forward over `origin/main`, and pushes `HEAD:main`.
+
+Fast publish playbook: when Jeff says "publish", run `npm run poem-images:publish -- --dry-run`, confirm the printed replacement list matches the intended poems, then run `npm run poem-images:publish -- --commit --push`. After push, verify one changed image URL on `https://jeffharr.is/poems/images/<slug>.jpg`.

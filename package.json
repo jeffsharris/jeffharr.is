@@ -4,6 +4,7 @@
   "type": "module",
   "scripts": {
     "poem-images:review": "node scripts/poem-image-review-server.mjs",
+    "poem-images:publish": "node scripts/publish-poem-images.mjs",
     "test": "node --test tests/*.test.js"
   },
   "dependencies": {
