@@ -4,9 +4,9 @@ compatibility_flags = ["nodejs_compat"]
 pages_build_output_dir = "."
 
 [vars]
-CONTENT_LIBRARY_READ_LATER = "0"
-CONTENT_LIBRARY_SHARE = "0"
-CONTENT_LIBRARY_SYNC_ENABLED = "0"
+CONTENT_LIBRARY_READ_LATER = "1"
+CONTENT_LIBRARY_SHARE = "1"
+CONTENT_LIBRARY_SYNC_ENABLED = "1"
 
 [[kv_namespaces]]
 binding = "READ_LATER"

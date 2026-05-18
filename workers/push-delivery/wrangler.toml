@@ -4,7 +4,8 @@ compatibility_date = "2026-01-11"
 compatibility_flags = ["nodejs_compat"]
 
 [vars]
-CONTENT_LIBRARY_READ_LATER = "0"
+CONTENT_LIBRARY_READ_LATER = "1"
+CONTENT_LIBRARY_SYNC_ENABLED = "1"
 
 [[kv_namespaces]]
 binding = "READ_LATER"
