@@ -4,9 +4,6 @@ import {
   READ_LATER_LIST_ID,
   getAssetByRole,
   getItemByCanonicalKey,
-  getListEntryById,
-  listEntries,
-  parseRowJson,
   upsertItem,
   upsertItemSource,
   upsertListEntry
@@ -24,12 +21,8 @@ const MAX_TITLE_LENGTH = 220;
 const MIN_VIDEO_SECONDS = 300;
 
 async function listReadLaterItems(db) {
-  const rows = await listEntries(db, 'read-later', { limit: 1000 });
-  const items = [];
-  for (const row of rows) {
-    items.push(await readLaterRowToItem(db, row));
-  }
-  return items;
+  const rows = await listReadLaterRows(db, { limit: 1000 });
+  return Promise.all(rows.map((row) => readLaterRowToItem(null, row)));
 }
 
 async function getReadLaterItem(db, entryId) {
@@ -298,6 +291,56 @@ async function getReadState(db, entryId) {
   ).bind(entryId).first();
 }
 
+async function listReadLaterRows(db, { limit = 1000 } = {}) {
+  const safeLimit = Math.min(Math.max(Number.parseInt(limit, 10) || 1000, 1), 1000);
+  const result = await db.prepare(
+    `SELECT
+      le.id AS entry_id,
+      le.status AS entry_status,
+      le.position,
+      le.note,
+      le.added_at,
+      le.updated_at AS entry_updated_at,
+      le.extra_json AS entry_extra_json,
+      i.id AS item_id,
+      i.kind AS item_kind,
+      i.canonical_key,
+      i.canonical_url,
+      i.source_url,
+      i.title,
+      i.subtitle,
+      i.summary,
+      i.creator,
+      i.publisher,
+      i.published_at,
+      i.language,
+      i.thumbnail_asset_id,
+      i.primary_asset_id,
+      i.extra_json AS item_extra_json,
+      rs.read_at,
+      rs.progress_json,
+      rs.kindle_json,
+      rs.cover_sync_json,
+      rs.push_channels_json,
+      cover.updated_at AS cover_updated_at
+     FROM list_entries le
+     JOIN items i ON i.id = le.item_id
+     LEFT JOIN read_state rs ON rs.entry_id = le.id
+     LEFT JOIN assets cover ON cover.id = (
+       SELECT a.id
+       FROM assets a
+       WHERE a.item_id = i.id AND a.role = 'generated_cover'
+       ORDER BY a.updated_at DESC
+       LIMIT 1
+     )
+     WHERE le.list_id = ?
+     ORDER BY le.added_at DESC
+     LIMIT ?`
+  ).bind(READ_LATER_LIST_ID, safeLimit).all();
+
+  return result.results || [];
+}
+
 async function getReadLaterEntryForItem(db, itemId) {
   return db.prepare(
     `SELECT le.*, rs.read_at
@@ -349,7 +392,8 @@ async function readLaterRowToItem(db, row) {
   const kindle = safeJsonParse(row.kindle_json, null);
   const coverSync = safeJsonParse(row.cover_sync_json, null);
   const pushChannels = safeJsonParse(row.push_channels_json, null);
-  const coverAsset = db ? await getAssetByRole(db, row.item_id, 'generated_cover') : null;
+  const coverUpdatedAt = row.cover_updated_at || null;
+  const coverAsset = coverUpdatedAt ? null : (db ? await getAssetByRole(db, row.item_id, 'generated_cover') : null);
   const url = row.canonical_url || row.source_url || '';
   const readAt = row.read_at || null;
   const item = {
@@ -370,8 +414,9 @@ async function readLaterRowToItem(db, row) {
   if (row.publisher) item.publisher = row.publisher;
   if (kindle) item.kindle = kindle;
   if (coverSync) item.coverSync = coverSync;
-  if (coverAsset?.updated_at) {
-    item.cover = { updatedAt: coverAsset.updated_at };
+  const resolvedCoverUpdatedAt = coverUpdatedAt || coverAsset?.updated_at || null;
+  if (resolvedCoverUpdatedAt) {
+    item.cover = { updatedAt: resolvedCoverUpdatedAt };
   }
   return item;
 }
