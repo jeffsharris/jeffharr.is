@@ -75,6 +75,9 @@ function createContentLibraryKvAdapter(env) {
         return fallback ? fallback.get(key, options) : null;
       }
       const value = await getContentLibraryValue({ db, bucket, key });
+      if (value == null && fallback) {
+        return fallback.get(key, options);
+      }
       if (options?.type === 'json') return value;
       if (value == null) return null;
       return typeof value === 'string' ? value : JSON.stringify(value);
@@ -85,7 +88,10 @@ function createContentLibraryKvAdapter(env) {
         if (fallback) await fallback.put(key, value, options);
         return;
       }
-      return putContentLibraryValue({ db, bucket, key, value });
+      const handled = await putContentLibraryValue({ db, bucket, key, value });
+      if (!handled && fallback) {
+        await fallback.put(key, value, options);
+      }
     },
 
     async delete(key) {
@@ -93,7 +99,10 @@ function createContentLibraryKvAdapter(env) {
         if (fallback) await fallback.delete(key);
         return;
       }
-      return deleteContentLibraryValue({ db, bucket, key });
+      const handled = await deleteContentLibraryValue({ db, bucket, key });
+      if (!handled && fallback) {
+        await fallback.delete(key);
+      }
     },
 
     async list(options = {}) {
@@ -135,53 +144,52 @@ async function getContentLibraryValue({ db, bucket, key }) {
 }
 
 async function putContentLibraryValue({ db, bucket, key, value }) {
-  if (!db || !key) return;
+  if (!db || !key) return false;
   const parsed = parseStoredJson(value);
 
   if (key.startsWith(ITEM_PREFIX)) {
-    await putReadLaterItem(db, key.slice(ITEM_PREFIX.length), parsed);
-    return;
+    return putReadLaterItem(db, key.slice(ITEM_PREFIX.length), parsed);
   }
 
   if (key.startsWith(READER_PREFIX)) {
-    if (!bucket) return;
-    await putReaderAsset({ db, bucket, entryId: key.slice(READER_PREFIX.length), reader: parsed });
-    return;
+    if (!bucket) return false;
+    return putReaderAsset({ db, bucket, entryId: key.slice(READER_PREFIX.length), reader: parsed });
   }
 
   if (key.startsWith(COVER_PREFIX)) {
-    if (!bucket) return;
-    await putCoverAsset({ db, bucket, entryId: key.slice(COVER_PREFIX.length), cover: parsed });
+    if (!bucket) return false;
+    return putCoverAsset({ db, bucket, entryId: key.slice(COVER_PREFIX.length), cover: parsed });
   }
+  return false;
 }
 
 async function deleteContentLibraryValue({ db, bucket, key }) {
-  if (!db || !key) return;
+  if (!db || !key) return false;
 
   if (key.startsWith(READER_PREFIX)) {
-    await deleteAssetByRole({
+    return deleteAssetByRole({
       db,
       bucket,
       entryId: key.slice(READER_PREFIX.length),
       role: 'reader_html'
     });
-    return;
   }
 
   if (key.startsWith(COVER_PREFIX)) {
-    await deleteAssetByRole({
+    return deleteAssetByRole({
       db,
       bucket,
       entryId: key.slice(COVER_PREFIX.length),
       role: 'generated_cover'
     });
   }
+  return false;
 }
 
 async function putReadLaterItem(db, entryId, item) {
-  if (!entryId || !item || typeof item !== 'object') return;
+  if (!entryId || !item || typeof item !== 'object') return false;
   const row = await getReadLaterRow(db, entryId);
-  if (!row) return;
+  if (!row) return false;
 
   const now = getNowIso();
   const readAt = item.read ? (item.readAt || now) : null;
@@ -222,6 +230,7 @@ async function putReadLaterItem(db, entryId, item) {
     pushChannels: item.pushChannels || null,
     updatedAt: now
   });
+  return true;
 }
 
 async function getReaderAsset({ db, bucket, entryId }) {
@@ -233,9 +242,9 @@ async function getReaderAsset({ db, bucket, entryId }) {
 }
 
 async function putReaderAsset({ db, bucket, entryId, reader }) {
-  if (!reader?.contentHtml) return;
+  if (!reader?.contentHtml) return false;
   const row = await getReadLaterRow(db, entryId);
-  if (!row) return;
+  if (!row) return false;
 
   const asset = await putJsonAsset({
     db,
@@ -269,6 +278,7 @@ async function putReaderAsset({ db, bucket, entryId, reader }) {
     stringOrNull(reader.excerpt),
     getNowIso()
   ).run();
+  return true;
 }
 
 async function getCoverAsset({ db, bucket, entryId }) {
@@ -286,9 +296,9 @@ async function getCoverAsset({ db, bucket, entryId }) {
 }
 
 async function putCoverAsset({ db, bucket, entryId, cover }) {
-  if (!cover?.base64) return;
+  if (!cover?.base64) return false;
   const row = await getReadLaterRow(db, entryId);
-  if (!row) return;
+  if (!row) return false;
 
   const contentType = cover.contentType || 'image/png';
   const ext = contentType.includes('jpeg') ? 'jpg' : contentType.includes('webp') ? 'webp' : 'png';
@@ -316,17 +326,19 @@ async function putCoverAsset({ db, bucket, entryId, cover }) {
     createdAt: cover.createdAt || getNowIso(),
     updatedAt: cover.createdAt || getNowIso()
   });
+  return true;
 }
 
 async function deleteAssetByRole({ db, bucket, entryId, role }) {
   const row = await getReadLaterRow(db, entryId);
-  if (!row) return;
+  if (!row) return false;
   const asset = await getAssetByRole(db, row.item_id, role);
-  if (!asset) return;
+  if (!asset) return false;
   if (bucket && asset.r2_key) {
     await bucket.delete(asset.r2_key);
   }
   await db.prepare(`DELETE FROM assets WHERE id = ?`).bind(asset.id).run();
+  return true;
 }
 
 function parseStoredJson(value) {
