@@ -1,11 +1,14 @@
 import { createLogger, formatError } from './lib/logger.js';
 import { resolveShareUrl, ShareResolveError } from './share/podcast-resolver.js';
 import { getShareKv, saveShareItem } from './share/store.js';
+import { getContentDb } from './content-library/db.js';
+import { saveShareItemToContentLibrary } from './content-library/share-store.js';
 
 export async function onRequest(context) {
   const { request, env } = context;
   const logger = createLogger({ request, source: 'share' });
   const log = logger.log;
+  const contentDb = shouldUseContentLibrary(env) ? getContentDb(env) : null;
 
   if (request.method === 'OPTIONS') {
     return new Response(null, { status: 204, headers: corsHeaders() });
@@ -16,7 +19,7 @@ export async function onRequest(context) {
   }
 
   const kv = getShareKv(env);
-  if (!kv) {
+  if (!contentDb && !kv) {
     log('error', 'storage_unavailable', { stage: 'init' });
     return jsonResponse({ ok: false, error: 'Storage unavailable' }, { status: 500 });
   }
@@ -25,11 +28,18 @@ export async function onRequest(context) {
     const payload = await readPayload(request);
     const rawUrl = payload?.url || payload?.text || '';
     const resolvedItem = await resolveShareUrl(rawUrl, { env });
-    const item = await saveShareItem({
-      kv,
-      item: resolvedItem,
-      sourceUrl: rawUrl
-    });
+    const item = contentDb
+      ? await saveShareItemToContentLibrary({
+        db: contentDb,
+        item: resolvedItem,
+        sourceUrl: rawUrl,
+        requestUrl: request.url
+      })
+      : await saveShareItem({
+        kv,
+        item: resolvedItem,
+        sourceUrl: rawUrl
+      });
     const shareUrl = new URL(`/share/${item.id}`, request.url).href;
 
     log('info', 'share_created', {
@@ -51,6 +61,10 @@ export async function onRequest(context) {
       { status }
     );
   }
+}
+
+function shouldUseContentLibrary(env) {
+  return Boolean(env?.CONTENT_DB && env?.CONTENT_LIBRARY_SHARE === '1');
 }
 
 async function readPayload(request) {

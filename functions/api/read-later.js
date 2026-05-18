@@ -7,6 +7,19 @@ import { deriveTitleFromUrl, preferReaderTitle } from './read-later/reader-utils
 import { createInitialPushChannels } from './read-later/article-push-service.js';
 import { enqueueKindleSync } from './read-later/sync-service.js';
 import { createLogger, formatError } from './lib/logger.js';
+import { getContentDb } from './content-library/db.js';
+import {
+  createSyncStorage,
+  shouldUseContentLibraryReadLater,
+  shouldUseContentLibrarySync,
+  withReadLaterStorage
+} from './content-library/kv-adapter.js';
+import {
+  deleteReadLaterItem,
+  listReadLaterItems,
+  saveReadLaterItem,
+  updateReadLaterRead
+} from './content-library/read-later-store.js';
 
 const KV_PREFIX = 'item:';
 const MAX_TITLE_LENGTH = 220;
@@ -15,8 +28,13 @@ const MAX_URL_LENGTH = 2048;
 export async function onRequest(context) {
   const { request, env } = context;
   const kv = env.READ_LATER;
+  const contentDb = shouldUseContentLibraryReadLater(env) ? getContentDb(env) : null;
   const logger = createLogger({ request, source: 'read-later' });
   const log = logger.log;
+
+  if (contentDb) {
+    return handleContentLibraryRequest({ request, env, db: contentDb, log });
+  }
 
   if (!kv) {
     log('error', 'storage_unavailable', { stage: 'init' });
@@ -60,6 +78,157 @@ export async function onRequest(context) {
     { ok: false, error: 'Method not allowed' },
     { status: 405, cache: 'no-store' }
   );
+}
+
+async function handleContentLibraryRequest({ request, env, db, log }) {
+  try {
+    if (request.method === 'GET') {
+      const items = await listReadLaterItems(db);
+      return jsonResponse(
+        { items, count: items.length },
+        { status: 200, cache: 'no-store' }
+      );
+    }
+
+    if (request.method === 'POST') {
+      if (shouldStreamResponse(request)) {
+        return handleContentLibrarySaveStream(request, db, env, log);
+      }
+
+      const result = await saveReadLaterItem(db, await parseJson(request));
+      if (!result.ok) {
+        return jsonResponse(
+          { ok: false, error: result.error },
+          { status: result.status, cache: 'no-store' }
+        );
+      }
+      if (shouldUseContentLibrarySync(env)) {
+        const enqueueResult = await enqueueContentLibrarySync({
+          item: result.item,
+          env,
+          log,
+          reason: result.duplicate ? 'duplicate-save' : 'save',
+          force: result.duplicate
+        });
+        result.item = enqueueResult?.item || result.item;
+      }
+      return jsonResponse(
+        {
+          ok: true,
+          item: result.item,
+          duplicate: result.duplicate,
+          unarchived: result.unarchived
+        },
+        { status: result.status, cache: 'no-store' }
+      );
+    }
+
+    if (request.method === 'PATCH') {
+      const payload = await parseJson(request);
+      const result = await updateReadLaterRead(db, {
+        id: typeof payload?.id === 'string' ? payload.id.trim() : '',
+        read: payload?.read
+      });
+      if (!result.ok) {
+        return jsonResponse(
+          { ok: false, error: result.error },
+          { status: result.status, cache: 'no-store' }
+        );
+      }
+      return jsonResponse({ ok: true, item: result.item }, { status: 200, cache: 'no-store' });
+    }
+
+    if (request.method === 'DELETE') {
+      const payload = await parseJson(request);
+      const idFromQuery = new URL(request.url).searchParams.get('id');
+      const id = typeof payload?.id === 'string' ? payload.id.trim() : (idFromQuery || '').trim();
+      const result = await deleteReadLaterItem(db, id);
+      if (!result.ok) {
+        return jsonResponse(
+          { ok: false, error: result.error },
+          { status: result.status, cache: 'no-store' }
+        );
+      }
+      return jsonResponse({ ok: true, item: result.item }, { status: 200, cache: 'no-store' });
+    }
+
+    if (request.method === 'OPTIONS') {
+      return new Response(null, { status: 204 });
+    }
+  } catch (error) {
+    log('error', 'content_library_request_failed', {
+      stage: 'content-library',
+      ...formatError(error)
+    });
+  }
+
+  return jsonResponse(
+    { ok: false, error: 'Method not allowed' },
+    { status: 405, cache: 'no-store' }
+  );
+}
+
+async function handleContentLibrarySaveStream(request, db, env, log) {
+  const stream = createEventStream(log);
+
+  (async () => {
+    let savedItem = null;
+    try {
+      const result = await saveReadLaterItem(db, await parseJson(request));
+      if (!result.ok) {
+        await safeStreamSend(stream, 'error', { ok: false, error: result.error });
+        return;
+      }
+
+      savedItem = result.item;
+      await safeStreamSend(stream, 'saved', { ok: true, item: { ...result.item } });
+
+      if (shouldUseContentLibrarySync(env)) {
+        const enqueueResult = await enqueueContentLibrarySync({
+          item: result.item,
+          env,
+          log,
+          reason: result.duplicate ? 'duplicate-save' : 'save',
+          force: result.duplicate
+        });
+        result.item = enqueueResult?.item || result.item;
+        savedItem = result.item;
+        await safeStreamSend(stream, 'status', {
+          ok: true,
+          message: 'Queued Kindle sync'
+        });
+      }
+
+      await safeStreamSend(stream, 'done', {
+        ok: true,
+        item: result.item,
+        duplicate: result.duplicate,
+        unarchived: result.unarchived
+      });
+    } catch (error) {
+      log('error', 'content_library_save_stream_failed', {
+        stage: 'save',
+        itemId: savedItem?.id || null,
+        ...formatError(error)
+      });
+      if (savedItem) {
+        await safeStreamSend(stream, 'done', { ok: true, item: savedItem, syncFailed: true });
+      } else {
+        await safeStreamSend(stream, 'error', { ok: false, error: 'Failed to save item' });
+      }
+    } finally {
+      await stream.close();
+    }
+  })();
+
+  return new Response(stream.readable, {
+    status: 200,
+    headers: {
+      'Content-Type': 'text/event-stream',
+      'Cache-Control': 'no-store',
+      'Connection': 'keep-alive'
+    }
+  });
 }
 
 async function handleList(kv, log) {
@@ -422,6 +591,19 @@ function createEventStream(log) {
   };
 
   return { readable, send, close };
+}
+
+async function enqueueContentLibrarySync({ item, env, log, reason, force = false }) {
+  const storage = createSyncStorage(env);
+  if (!storage || !item?.id) return { queued: false, item };
+  return enqueueKindleSync({
+    item,
+    kv: storage,
+    env: withReadLaterStorage(env, storage),
+    log,
+    reason,
+    force
+  });
 }
 
 async function safeStreamSend(stream, event, data) {

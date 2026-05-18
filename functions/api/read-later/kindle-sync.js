@@ -1,11 +1,16 @@
 import { enqueueKindleSync } from './sync-service.js';
 import { createLogger, formatError } from '../lib/logger.js';
+import {
+  createReadLaterStorage,
+  withReadLaterStorage
+} from '../content-library/kv-adapter.js';
 
 const KV_PREFIX = 'item:';
 
 export async function onRequest(context) {
   const { request, env } = context;
-  const kv = env.READ_LATER;
+  const kv = createReadLaterStorage(env, { requireAssets: true });
+  const storageEnv = withReadLaterStorage(env, kv);
   const logger = createLogger({ request, source: 'read-later-kindle-sync' });
   const log = logger.log;
 
@@ -58,7 +63,7 @@ export async function onRequest(context) {
     await enqueueKindleSync({
       item,
       kv,
-      env,
+      env: storageEnv,
       log,
       reason: 'manual-sync',
       force: true

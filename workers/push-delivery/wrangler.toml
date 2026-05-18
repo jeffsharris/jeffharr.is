@@ -3,9 +3,21 @@ main = "index.js"
 compatibility_date = "2026-01-11"
 compatibility_flags = ["nodejs_compat"]
 
+[vars]
+CONTENT_LIBRARY_READ_LATER = "0"
+
 [[kv_namespaces]]
 binding = "READ_LATER"
 id = "1ab7a301e16e47f7a17651e89f7442b6"
+
+[[d1_databases]]
+binding = "CONTENT_DB"
+database_name = "jeffharr-is-content"
+database_id = "efe5518b-5617-4ee8-992a-5c84f4cfe900"
+
+[[r2_buckets]]
+binding = "CONTENT_ASSETS"
+bucket_name = "jeffharr-is-content-assets"
 
 [[queues.consumers]]
 queue = "push-delivery"

@@ -4,6 +4,8 @@
  */
 
 import { createLogger, formatError } from '../lib/logger.js';
+import { getContentDb } from '../content-library/db.js';
+import { saveReadLaterProgress } from '../content-library/read-later-store.js';
 
 const KV_PREFIX = 'item:';
 const MIN_VIDEO_SECONDS = 300;
@@ -11,8 +13,13 @@ const MIN_VIDEO_SECONDS = 300;
 export async function onRequest(context) {
   const { request, env } = context;
   const kv = env.READ_LATER;
+  const contentDb = shouldUseContentLibrary(env) ? getContentDb(env) : null;
   const logger = createLogger({ request, source: 'read-later-progress' });
   const log = logger.log;
+
+  if (contentDb) {
+    return handleContentLibraryProgress(request, contentDb, log);
+  }
 
   if (!kv) {
     log('error', 'storage_unavailable', { stage: 'init' });
@@ -119,6 +126,39 @@ export async function onRequest(context) {
   }
 }
 
+async function handleContentLibraryProgress(request, db, log) {
+  if (!['PATCH', 'POST'].includes(request.method)) {
+    log('warn', 'method_not_allowed', { stage: 'request' });
+    return jsonResponse(
+      { ok: false, error: 'Method not allowed' },
+      { status: 405, cache: 'no-store' }
+    );
+  }
+
+  try {
+    const result = await saveReadLaterProgress(db, await parseJson(request));
+    if (!result.ok) {
+      return jsonResponse(
+        { ok: false, error: result.error },
+        { status: result.status, cache: 'no-store' }
+      );
+    }
+    return jsonResponse(
+      { ok: true, progress: result.progress },
+      { status: 200, cache: 'no-store' }
+    );
+  } catch (error) {
+    log('error', 'content_library_progress_save_failed', {
+      stage: 'save',
+      ...formatError(error)
+    });
+    return jsonResponse(
+      { ok: false, error: 'Failed to save progress' },
+      { status: 200, cache: 'no-store' }
+    );
+  }
+}
+
 async function parseJson(request) {
   try {
     return await request.json();
@@ -155,4 +195,8 @@ function jsonResponse(payload, { status = 200, cache = 'no-store' } = {}) {
       'Cache-Control': cache
     }
   });
+}
+
+function shouldUseContentLibrary(env) {
+  return Boolean(env?.CONTENT_DB && env?.CONTENT_LIBRARY_READ_LATER === '1');
 }

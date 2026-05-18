@@ -1,10 +1,11 @@
 import { createLogger } from '../lib/logger.js';
+import { createReadLaterStorage } from '../content-library/kv-adapter.js';
 
 const KV_PREFIX = 'item:';
 
 export async function onRequest(context) {
   const { request, env } = context;
-  const kv = env.READ_LATER;
+  const kv = createReadLaterStorage(env, { requireAssets: true });
   const logger = createLogger({ request, source: 'read-later-cover-sync' });
   const log = logger.log;
 
