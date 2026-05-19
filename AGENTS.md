@@ -4,6 +4,7 @@
 - Static site with Cloudflare Pages Functions under `functions/api`.
 - Preserve API response shapes; frontend expects the current JSON fields.
 - Avoid adding production dependencies without explicit approval.
+- Current content storage is documented in `notes/content-storage.md`. Start there before changing Read Later, shared items, Dharma talk shares, assets, lists, or push device storage.
 
 ## Brensilver Dharma project
 - Public feed merge lives in `tools/brensilver-feed/` and publishes static files under `dharma/brensilver/`.
@@ -55,6 +56,7 @@ PYTHONPATH=tools/brensilver-transcripts/src python3 -m brensilver_transcripts.pi
 - A Pages deploy does **not** deploy `workers/read-later-sync`.
 - A Pages deploy does **not** deploy `workers/push-delivery`.
 - If background sync behavior changes, deploy both surfaces as needed.
+- Read Later no longer uses KV. Metadata/state lives in D1 `CONTENT_DB`; reader HTML and generated covers live in R2 `CONTENT_ASSETS`.
 
 ## Queue worker gotchas
 - Queue consumer code path: `workers/read-later-sync/index.js`.
