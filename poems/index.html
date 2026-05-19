@@ -406,10 +406,6 @@
       max-width: 1080px;
       max-height: 90vh;
       max-height: 90dvh;
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      box-shadow: var(--shadow-lg);
       display: flex;
       flex-direction: column;
       transform: scale(0.95) translateY(20px);
@@ -418,6 +414,29 @@
 
     .modal.is-open .modal__content {
       transform: scale(1) translateY(0);
+    }
+
+    /* Inner card — holds the actual content. Slides on prev/next. */
+    .modal__inner {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      min-height: 0;
+      width: 100%;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      box-shadow: var(--shadow-lg);
+      overflow: hidden;
+      will-change: transform;
+    }
+
+    .modal__inner--ghost {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
     }
 
     .modal__header {
@@ -643,39 +662,42 @@
       margin-top: 1.4em;
     }
 
-    /* Prev / Next navigation */
+    /* Prev / Next navigation — floats in the dim overlay, fully outside the card. */
     .modal__nav {
       position: absolute;
       top: 50%;
-      width: 44px;
-      height: 44px;
+      width: 46px;
+      height: 46px;
       display: flex;
       align-items: center;
       justify-content: center;
-      background: color-mix(in srgb, var(--bg-card), transparent 8%);
-      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.28);
       border-radius: 50%;
-      color: var(--text-muted);
+      color: rgba(255, 255, 255, 0.92);
       cursor: pointer;
-      box-shadow: var(--shadow);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
       transform: translateY(-50%);
       transition: opacity 0.2s ease, transform 0.2s ease, color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
       z-index: 5;
+      opacity: 0.92;
     }
 
-    .modal__nav--prev { left: -22px; }
-    .modal__nav--next { right: -22px; }
+    .modal__nav--prev { left: -66px; }
+    .modal__nav--next { right: -66px; }
 
     .modal__nav:hover {
-      color: var(--accent);
-      border-color: var(--accent);
-      background: var(--bg-card);
-      transform: translateY(-50%) scale(1.05);
+      opacity: 1;
+      color: #fff;
+      border-color: rgba(255, 255, 255, 0.5);
+      background: rgba(255, 255, 255, 0.22);
+      transform: translateY(-50%) scale(1.06);
     }
 
     .modal__nav:focus-visible {
-      outline: 2px solid var(--accent);
-      outline-offset: 2px;
+      outline: 2px solid rgba(255, 255, 255, 0.85);
+      outline-offset: 3px;
     }
 
     .modal__nav[disabled] {
@@ -684,6 +706,11 @@
     }
 
     .modal__nav svg { width: 18px; height: 18px; }
+
+    /* Hide chevrons when the modal card would be too close to the viewport edge. */
+    @media (max-width: 1180px) {
+      .modal__nav { display: none; }
+    }
 
     /* Swipe hint indicators (mobile) */
     .modal__swipe {
@@ -712,23 +739,17 @@
       transform: translate(0, -50%) scale(1.06);
     }
 
-    /* Slide transition between poems */
-    .modal__content {
-      --slide-x: 0px;
-      --slide-opacity: 1;
+    /* Slide transition between poems — applied to .modal__inner. */
+    .modal__inner.is-sliding {
+      transition: transform 0.44s cubic-bezier(0.22, 0.61, 0.36, 1);
     }
 
-    .modal.is-open .modal__content {
-      transform: translateX(var(--slide-x)) scale(1) translateY(0);
-      opacity: var(--slide-opacity);
-    }
-
-    .modal__content.is-sliding {
-      transition: transform 0.22s cubic-bezier(0.22, 0.61, 0.36, 1), opacity 0.22s ease;
-    }
-
-    .modal__content.is-dragging {
+    .modal__inner.is-dragging {
       transition: none;
+    }
+
+    .modal__inner--ghost.is-sliding {
+      transition: transform 0.44s cubic-bezier(0.22, 0.61, 0.36, 1);
     }
 
     .modal__close {
@@ -1044,6 +1065,7 @@
           <line x1="6" y1="6" x2="18" y2="18"></line>
         </svg>
       </button>
+      <div class="modal__inner" id="modal-inner">
       <div class="modal__header">
         <h2 class="modal__title" id="modal-title"></h2>
         <p class="modal__author">
@@ -1072,7 +1094,7 @@
                 <path d="M15.41 6.51l-6.82 3.98"></path>
               </svg>
             </button>
-            <button class="modal__action-btn favorite-button favorite-button--compact" id="favorite-poem" aria-label="Favorite" data-favorite-kind="poem" hidden></button>
+            <button class="favorite-button" id="favorite-poem" aria-label="Favorite" data-favorite-kind="poem" hidden></button>
             <span class="modal__feedback" id="action-feedback" aria-live="polite"></span>
           </div>
         </div>
@@ -1087,6 +1109,7 @@
           </div>
         </div>
       </div>
+      </div><!-- /modal__inner -->
     </div>
   </div>
 
@@ -1109,6 +1132,7 @@
     const favoriteButton = document.getElementById('favorite-poem');
     const actionFeedback = document.getElementById('action-feedback');
     const modalContent = modal.querySelector('.modal__content');
+    const modalInner = modal.querySelector('.modal__inner');
     const modalBody = modal.querySelector('.modal__body');
 
     let allPoems = [];
@@ -1303,7 +1327,7 @@
 
       card.innerHTML = `
         ${poem.image ? `<img class="card__image" src="${escapeAttribute(poem.image)}" alt="" width="1024" height="1024" loading="lazy" decoding="async">` : ''}
-        <button class="favorite-button favorite-button--card" type="button" hidden data-favorite-kind="poem" data-favorite-poem-slug="${escapeAttribute(poem.slug || '')}" aria-label="Favorite"></button>
+        <span class="favorite-indicator favorite-indicator--corner" hidden data-favorite-kind="poem" data-favorite-poem-slug="${escapeAttribute(poem.slug || '')}" aria-hidden="true"></span>
         <div class="card__scrim" aria-hidden="true"></div>
         <div class="card__front">
           <h2 class="card__title">${escapeHtml(poem.title)}</h2>
@@ -1421,42 +1445,50 @@
       if (!targetPoem) return;
       const isMemorized = memorizedSet.has(targetSlug);
 
-      // Slide-out distance: full viewport for swipe commit, ~30% for click/keyboard.
-      const slideDistance = source === 'swipe'
-        ? Math.min(window.innerWidth, 720)
-        : Math.min(window.innerWidth * 0.18, 160);
-      const outX = direction === 'next' ? -slideDistance : slideDistance;
-      const inX = direction === 'next' ? slideDistance * 0.6 : -slideDistance * 0.6;
-
       isAnimatingNav = true;
-      modalContent.classList.remove('is-dragging');
-      modalContent.classList.add('is-sliding');
-      modalContent.style.setProperty('--slide-x', `${outX}px`);
-      modalContent.style.setProperty('--slide-opacity', '0');
 
-      const swap = () => {
-        // Snap to the entry position with no transition…
-        modalContent.classList.remove('is-sliding');
-        modalContent.classList.add('is-dragging');
-        modalContent.style.setProperty('--slide-x', `${inX}px`);
-        modalContent.style.setProperty('--slide-opacity', '0');
-        // …then update the poem and animate in.
-        openModal(targetPoem, isMemorized, { historyMethod: 'push' });
+      // Snapshot the visible card as a ghost, preserving any drag offset and scroll position.
+      const dragTransform = modalInner.style.transform;
+      const oldScrollTop = modalBody.scrollTop;
+      const ghost = modalInner.cloneNode(true);
+      ghost.removeAttribute('id');
+      ghost.classList.add('modal__inner--ghost');
+      ghost.classList.remove('is-sliding', 'is-dragging');
+      if (dragTransform) ghost.style.transform = dragTransform;
+      modalContent.insertBefore(ghost, modalInner);
+      const ghostBody = ghost.querySelector('.modal__body');
+      if (ghostBody) ghostBody.scrollTop = oldScrollTop;
+
+      // Place the real inner offscreen on the entry side (no transition).
+      modalInner.classList.remove('is-sliding');
+      modalInner.classList.add('is-dragging');
+      const inX = direction === 'next' ? '100%' : '-100%';
+      modalInner.style.transform = `translateX(${inX})`;
+
+      // Render the new poem into the real inner.
+      openModal(targetPoem, isMemorized, { historyMethod: 'push' });
+
+      // openModal may run additional layout; re-assert entry transform.
+      modalInner.style.transform = `translateX(${inX})`;
+
+      requestAnimationFrame(() => {
         requestAnimationFrame(() => {
-          requestAnimationFrame(() => {
-            modalContent.classList.remove('is-dragging');
-            modalContent.classList.add('is-sliding');
-            modalContent.style.setProperty('--slide-x', '0px');
-            modalContent.style.setProperty('--slide-opacity', '1');
-          });
+          modalInner.classList.remove('is-dragging');
+          modalInner.classList.add('is-sliding');
+          ghost.classList.add('is-sliding');
+          const outX = direction === 'next' ? '-100%' : '100%';
+          ghost.style.transform = `translateX(${outX})`;
+          modalInner.style.transform = 'translateX(0)';
         });
-        setTimeout(() => {
-          modalContent.classList.remove('is-sliding');
-          isAnimatingNav = false;
-        }, 260);
-      };
+      });
 
-      setTimeout(swap, 220);
+      setTimeout(() => {
+        if (ghost.parentNode) ghost.parentNode.removeChild(ghost);
+        modalInner.classList.remove('is-sliding');
+        modalInner.style.transform = '';
+        isAnimatingNav = false;
+        updateNavButtons();
+      }, 500);
     }
 
     modalPrev.addEventListener('click', (e) => {
@@ -1552,16 +1584,17 @@
         swipeNext.style.opacity = '';
         swipePrev.style.transform = '';
         swipeNext.style.transform = '';
+        modalInner.classList.remove('is-dragging');
         if (animateBack) {
-          modalContent.classList.add('is-sliding');
-        }
-        modalContent.classList.remove('is-dragging');
-        modalContent.style.setProperty('--slide-x', '0px');
-        modalContent.style.setProperty('--slide-opacity', '1');
-        if (animateBack) {
-          setTimeout(() => modalContent.classList.remove('is-sliding'), 220);
+          modalInner.classList.add('is-sliding');
+          modalInner.style.transform = 'translateX(0)';
+          setTimeout(() => {
+            modalInner.classList.remove('is-sliding');
+            modalInner.style.transform = '';
+          }, 260);
         } else {
-          modalContent.classList.remove('is-sliding');
+          modalInner.classList.remove('is-sliding');
+          modalInner.style.transform = '';
         }
       }
 
@@ -1592,7 +1625,7 @@
           // Decide: is this a horizontal swipe?
           if (Math.abs(dx) > Math.abs(dy) * HORIZONTAL_DOM) {
             claimed = true;
-            modalContent.classList.add('is-dragging');
+            modalInner.classList.add('is-dragging');
           } else {
             // Vertical scroll dominates → release the gesture.
             reset(false);
@@ -1604,11 +1637,7 @@
         const hasNeighbour = !!getNeighbourSlug(direction);
         const damp = hasNeighbour ? 1 : 0.28; // resistive feel at ends
         const dragX = dx * damp;
-        modalContent.style.setProperty('--slide-x', `${dragX}px`);
-
-        // Subtle fade as you pull further.
-        const progress = Math.min(1, Math.abs(dragX) / 180);
-        modalContent.style.setProperty('--slide-opacity', `${1 - progress * 0.35}`);
+        modalInner.style.transform = `translateX(${dragX}px)`;
 
         // Swipe-hint indicators
         const hint = direction === 'next' ? swipeNext : swipePrev;
@@ -1647,7 +1676,8 @@
           swipeNext.style.opacity = '';
           swipePrev.style.transform = '';
           swipeNext.style.transform = '';
-          modalContent.classList.remove('is-dragging');
+          // navigateToNeighbour reads modalInner.style.transform to clone the ghost
+          // at the current drag offset, so leave it untouched.
           navigateToNeighbour(dir, { source: 'swipe' });
           active = false;
           claimed = false;
