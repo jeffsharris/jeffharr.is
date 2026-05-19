@@ -561,10 +561,15 @@
     }
 
     .modal__body {
+      --reader-fade-height: 32px;
       padding: 0;
       overflow-y: auto;
       flex: 1;
       min-height: 0;
+      -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 var(--reader-fade-height), #000 100%);
+      mask-image: linear-gradient(to bottom, transparent 0, #000 var(--reader-fade-height), #000 100%);
+      -webkit-mask-repeat: no-repeat;
+      mask-repeat: no-repeat;
     }
 
     .modal__reader {
@@ -572,13 +577,13 @@
       grid-template-columns: minmax(260px, 34%) minmax(0, 1fr);
       gap: 34px;
       align-items: start;
-      padding: 32px;
+      padding: var(--reader-fade-height) 32px 32px;
       padding-bottom: calc(32px + env(safe-area-inset-bottom, 0px));
     }
 
     .modal__art {
       position: sticky;
-      top: 24px;
+      top: var(--reader-fade-height);
       margin: 0;
       aspect-ratio: 1;
       border-radius: 14px;
@@ -777,12 +782,13 @@
       }
 
       .modal__body {
+        --reader-fade-height: 20px;
         padding: 0;
       }
 
       .modal__reader {
         display: block;
-        padding: 20px 20px calc(28px + env(safe-area-inset-bottom, 0px));
+        padding: var(--reader-fade-height) 20px calc(28px + env(safe-area-inset-bottom, 0px));
       }
 
       .modal__art {
