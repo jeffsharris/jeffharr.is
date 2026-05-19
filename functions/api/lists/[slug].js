@@ -4,6 +4,7 @@ import {
   serializeList,
   serializeListEntryRow
 } from '../content-library/serialize.js';
+import { getAuthenticatedUser, unauthorizedResponse } from '../content-library/auth.js';
 
 export async function onRequest(context) {
   const { request, env, params } = context;
@@ -21,6 +22,9 @@ export async function onRequest(context) {
   const list = await getListBySlug(db, slug);
   if (!list) {
     return jsonResponse({ ok: false, error: 'List not found' }, { status: 404 });
+  }
+  if (list.visibility !== 'public' && !(await getAuthenticatedUser(request, env))) {
+    return unauthorizedResponse();
   }
 
   const url = new URL(request.url);

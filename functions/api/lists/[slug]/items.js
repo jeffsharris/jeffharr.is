@@ -28,7 +28,7 @@ export async function onRequest(context) {
     return jsonResponse({ ok: false, error: 'Method not allowed' }, { status: 405 });
   }
 
-  if (!isWriteAuthorized(request, env)) return unauthorizedResponse();
+  if (!(await isWriteAuthorized(request, env))) return unauthorizedResponse();
 
   try {
     const list = await getListBySlug(db, params.slug);

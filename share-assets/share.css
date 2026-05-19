@@ -502,6 +502,13 @@ code {
   gap: 10px;
 }
 
+.history-item-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: center;
+}
+
 .history-item {
   display: grid;
   grid-template-columns: 72px 1fr;
@@ -517,6 +524,10 @@ code {
 
 .history-item:hover {
   border-color: var(--accent);
+}
+
+.history-item-row > .favorite-button {
+  color: var(--text-muted);
 }
 
 .history-item img {

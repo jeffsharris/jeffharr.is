@@ -1,0 +1,119 @@
+import {
+  getItemById,
+  getListBySlug,
+  getListEntry,
+  upsertListEntry
+} from './db.js';
+import { createRandomId, getNowIso } from './ids.js';
+import { resolveContentInput, resolveContentLookup } from './resolve.js';
+
+const STARRED_SLUG = 'starred';
+
+async function listFavoriteStates({ db, refs = [], env }) {
+  const list = await getListBySlug(db, STARRED_SLUG);
+  if (!list) return [];
+
+  return Promise.all(refs.map(async (ref) => {
+    const lookup = await resolveContentLookup({ db, payload: ref, env });
+    const entry = await getStarredEntryForLookup(db, list.id, lookup);
+    return serializeFavoriteState(ref, lookup, entry);
+  }));
+}
+
+async function addFavorite({ db, payload, env, requestUrl }) {
+  const list = await getListBySlug(db, STARRED_SLUG);
+  if (!list) {
+    return { ok: false, status: 404, error: 'Favorites list not found' };
+  }
+
+  const item = await resolveContentInput({
+    db,
+    payload: { ...payload, requestUrl },
+    env
+  });
+  const existing = await getListEntry(db, list.id, item.id);
+  const now = getNowIso();
+  const entry = await upsertListEntry(db, {
+    id: existing?.id || createRandomId('fav'),
+    listId: list.id,
+    itemId: item.id,
+    status: 'active',
+    position: payload?.position ?? null,
+    note: typeof payload?.note === 'string' ? payload.note : null,
+    addedAt: existing?.added_at || now,
+    updatedAt: now,
+    extra: payload?.extra || {}
+  });
+
+  return {
+    ok: true,
+    status: existing ? 200 : 201,
+    duplicate: Boolean(existing),
+    item,
+    entry
+  };
+}
+
+async function removeFavorite({ db, payload, env }) {
+  const list = await getListBySlug(db, STARRED_SLUG);
+  if (!list) {
+    return { ok: false, status: 404, error: 'Favorites list not found' };
+  }
+
+  const lookup = await resolveContentLookup({ db, payload, env });
+  const entry = await getStarredEntryForLookup(db, list.id, lookup);
+  if (!entry) {
+    return { ok: false, status: 404, error: 'Favorite not found' };
+  }
+
+  await db.prepare(
+    `DELETE FROM list_entries WHERE id = ? AND list_id = ?`
+  ).bind(entry.id, list.id).run();
+
+  return {
+    ok: true,
+    status: 200,
+    entry
+  };
+}
+
+async function getStarredEntryForLookup(db, listId, lookup) {
+  if (!lookup?.itemId && !lookup?.canonicalKey) return null;
+
+  if (lookup.itemId) {
+    const item = await getItemById(db, lookup.itemId);
+    if (!item) return null;
+    return db.prepare(
+      `SELECT le.*, i.canonical_key
+       FROM list_entries le
+       JOIN items i ON i.id = le.item_id
+       WHERE le.list_id = ? AND le.item_id = ?`
+    ).bind(listId, item.id).first();
+  }
+
+  return db.prepare(
+    `SELECT le.*, i.canonical_key
+     FROM list_entries le
+     JOIN items i ON i.id = le.item_id
+     WHERE le.list_id = ? AND i.canonical_key = ?`
+  ).bind(listId, lookup.canonicalKey).first();
+}
+
+function serializeFavoriteState(ref, lookup, entry) {
+  return {
+    key: ref?.key || lookup?.canonicalKey || lookup?.itemId || '',
+    itemId: entry?.item_id || lookup?.itemId || null,
+    canonicalKey: entry?.canonical_key || lookup?.canonicalKey || null,
+    favorited: Boolean(entry),
+    entryId: entry?.id || null,
+    addedAt: entry?.added_at || null,
+    updatedAt: entry?.updated_at || null
+  };
+}
+
+export {
+  STARRED_SLUG,
+  addFavorite,
+  listFavoriteStates,
+  removeFavorite
+};

@@ -1,6 +1,10 @@
 import { getContentDb, listLists } from './content-library/db.js';
 import { jsonResponse, serializeList } from './content-library/serialize.js';
-import { isWriteAuthorized, unauthorizedResponse } from './content-library/auth.js';
+import {
+  getAuthenticatedUser,
+  isWriteAuthorized,
+  unauthorizedResponse
+} from './content-library/auth.js';
 
 export async function onRequest(context) {
   const { request, env } = context;
@@ -10,12 +14,14 @@ export async function onRequest(context) {
   }
 
   if (request.method === 'GET') {
+    const user = await getAuthenticatedUser(request, env);
     const lists = await listLists(db);
-    return jsonResponse({ lists: lists.map(serializeList), count: lists.length });
+    const visible = user ? lists : lists.filter((list) => list.visibility === 'public');
+    return jsonResponse({ lists: visible.map(serializeList), count: visible.length });
   }
 
   if (request.method === 'POST') {
-    if (!isWriteAuthorized(request, env)) return unauthorizedResponse();
+    if (!(await isWriteAuthorized(request, env))) return unauthorizedResponse();
     return jsonResponse(
       { ok: false, error: 'Custom list creation is not enabled yet' },
       { status: 501 }

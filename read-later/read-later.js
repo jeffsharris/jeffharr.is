@@ -150,6 +150,7 @@
     items.forEach(item => {
       renderItem(item);
     });
+    window.Favorites?.scheduleRefresh(listEl);
   }
 
   function renderSavingItem(item) {
@@ -191,6 +192,7 @@
     const domain = node.querySelector('.item__domain');
     const time = node.querySelector('.item__time');
     const summary = node.querySelector('.item__summary');
+    const favorite = node.querySelector('.item__favorite');
     const toggle = node.querySelector('.item__toggle');
     const remove = node.querySelector('.item__delete');
     const kindleLink = node.querySelector('.item__kindle-link');
@@ -210,6 +212,9 @@
 
     title.textContent = item.title || item.url;
     title.href = item.url;
+    if (favorite) {
+      favorite.dataset.favoriteItemId = item.itemId || '';
+    }
     renderCoverThumb(item, thumb, thumbImg);
 
     domain.textContent = formatDomain(item.url);

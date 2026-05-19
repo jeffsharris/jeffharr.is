@@ -65,6 +65,7 @@ export function renderSharePage(item, requestUrl) {
                 <span>Share</span>
               </button>
               <button class="secondary-btn secondary-btn--compact" type="button" data-copy="${escapeAttribute(shareUrl)}">Copy link</button>
+              ${renderFavoriteButton(item.id)}
             </div>
             ${renderPlatformSection(item.platforms || {})}
             ${audioUrl ? `
@@ -118,6 +119,7 @@ function renderXSharePage(item, requestUrl) {
               </button>
               <button class="secondary-btn secondary-btn--compact" type="button" data-copy="${escapeAttribute(shareUrl)}">Copy link</button>
               ${originalUrl ? `<a class="secondary-btn secondary-btn--compact" href="${escapeAttribute(originalUrl)}" target="_blank" rel="noopener">Open on X</a>` : ''}
+              ${renderFavoriteButton(item.id)}
             </div>
           </section>
           <section class="x-thread" aria-label="Shared X thread">
@@ -136,14 +138,17 @@ export function renderHistoryPage(items, requestUrl) {
     const url = new URL(`/share/${item.id}`, requestUrl).href;
     const image = item.imageUrl || 'https://jeffharr.is/images/profile.jpg';
     return `
-      <a class="history-item" href="/share/${escapeAttribute(item.id)}">
-        <img src="${escapeAttribute(image)}" alt="" width="72" height="72">
-        <span class="history-item__body">
-          <strong>${escapeHtml(item.title || 'Untitled share')}</strong>
-          <span>${escapeHtml(formatHistoryMeta(item))}</span>
-          <small>${escapeHtml(url)}</small>
-        </span>
-      </a>
+      <div class="history-item-row">
+        <a class="history-item" href="/share/${escapeAttribute(item.id)}">
+          <img src="${escapeAttribute(image)}" alt="" width="72" height="72">
+          <span class="history-item__body">
+            <strong>${escapeHtml(item.title || 'Untitled share')}</strong>
+            <span>${escapeHtml(formatHistoryMeta(item))}</span>
+            <small>${escapeHtml(url)}</small>
+          </span>
+        </a>
+        ${renderFavoriteButton(item.id)}
+      </div>
     `;
   }).join('');
 
@@ -302,14 +307,20 @@ function htmlDocument({ title, description, imageUrl, url, body, noindex }) {
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="manifest" href="/share-assets/manifest.webmanifest">
+  <link rel="stylesheet" href="/css/favorites.css?v=1">
   <link rel="stylesheet" href="/share-assets/share.css?v=7">
 </head>
 <body>
   <div class="bg-gradient"></div>
   <div class="bg-noise"></div>
   ${body}
+  <script src="/js/favorites.js?v=1" defer></script>
 </body>
 </html>`;
+}
+
+function renderFavoriteButton(shareSlug) {
+  return `<button class="favorite-button favorite-button--compact" type="button" hidden data-favorite-kind="share_page" data-favorite-share-slug="${escapeAttribute(shareSlug)}" aria-label="Favorite"></button>`;
 }
 
 function renderPlatformSection(platforms) {

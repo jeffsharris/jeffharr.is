@@ -1,4 +1,5 @@
 import { parsePoem, slugToTitle } from '../api/poems.js';
+import { injectFavoritesAssets } from '../api/content-library/html-assets.js';
 
 const USER_AGENT = 'Mozilla/5.0 (compatible; jeffharr.is/1.0; +https://jeffharr.is)';
 const VALID_SLUG = /^[a-z0-9-]+$/;
@@ -8,7 +9,7 @@ export async function onRequest(context) {
   const slug = requestUrl.searchParams.get('poem') || '';
 
   if (!slug || !VALID_SLUG.test(slug)) {
-    return context.next();
+    return injectFavoritesForHtml(context);
   }
 
   try {
@@ -16,7 +17,7 @@ export async function onRequest(context) {
     const slugs = new Set([...(manifest.memorized || []), ...(manifest.learning || [])]);
 
     if (!slugs.has(slug)) {
-      return context.next();
+      return injectFavoritesForHtml(context);
     }
 
     const [indexHtml, markdown] = await Promise.all([
@@ -31,13 +32,13 @@ export async function onRequest(context) {
     const previewUrl = new URL('/poems/', context.request.url);
     previewUrl.searchParams.set('poem', slug);
 
-    const html = injectPoemPreviewMetadata(indexHtml, {
+    const html = injectFavoritesAssets(injectPoemPreviewMetadata(indexHtml, {
       title,
       author,
       description,
       imageUrl: new URL(imagePath, context.request.url).href,
       url: previewUrl.href
-    });
+    }));
 
     return new Response(html, {
       headers: {
@@ -47,8 +48,23 @@ export async function onRequest(context) {
     });
   } catch (error) {
     console.error(`Poem preview metadata error for ${slug}:`, error);
-    return context.next();
+    return injectFavoritesForHtml(context);
   }
+}
+
+async function injectFavoritesForHtml(context) {
+  const response = await context.next();
+  const contentType = response.headers.get('content-type') || '';
+  if (!contentType.includes('text/html') || context.request.method === 'HEAD') {
+    return response;
+  }
+  const headers = new Headers(response.headers);
+  headers.delete('content-length');
+  return new Response(injectFavoritesAssets(await response.text()), {
+    status: response.status,
+    statusText: response.statusText,
+    headers
+  });
 }
 
 async function fetchJsonAsset(context, path) {
