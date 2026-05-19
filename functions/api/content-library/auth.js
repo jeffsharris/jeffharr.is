@@ -1,4 +1,3 @@
-const DEFAULT_ALLOWED_EMAIL = 'jeff.s.harris@gmail.com';
 const ACCESS_JWT_HEADER = 'cf-access-jwt-assertion';
 const JWKS_CACHE = new Map();
 
@@ -98,7 +97,8 @@ function audienceMatches(value, expected) {
 
 function isAllowedEmail(email, env) {
   if (!email) return false;
-  const configured = String(env?.ADMIN_ALLOWED_EMAILS || DEFAULT_ALLOWED_EMAIL);
+  const configured = stringOrNull(env?.ADMIN_ALLOWED_EMAILS);
+  if (!configured) return false;
   const allowed = configured
     .split(',')
     .map((value) => normalizeEmail(value))
