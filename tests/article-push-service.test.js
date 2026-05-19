@@ -85,6 +85,42 @@ test('article push readiness stays pending until both reader and cover are ready
   assert.equal(Boolean(second.item.pushChannels.readiness.readyAt), true);
 });
 
+test('article push readiness becomes ready after terminal cover failure', async () => {
+  const item = {
+    id: 'item-cover-failed',
+    url: 'https://example.com/a',
+    title: 'Example A',
+    savedAt: '2026-02-22T00:00:00.000Z',
+    coverSync: {
+      status: 'failed',
+      updatedAt: '2026-02-22T00:02:00.000Z',
+      lastError: 'cover blocked'
+    },
+    pushChannels: createInitialPushChannels('2026-02-22T00:00:00.000Z')
+  };
+
+  const kv = createMockKv({
+    'item:item-cover-failed': JSON.stringify(item),
+    'reader:item-cover-failed': JSON.stringify({
+      title: 'Example A',
+      byline: 'Author',
+      excerpt: 'Excerpt',
+      siteName: 'Example',
+      wordCount: 200,
+      contentHtml: buildReaderHtml(),
+      retrievedAt: '2026-02-22T00:00:01.000Z'
+    })
+  });
+
+  const result = await updateArticlePushReadiness('item-cover-failed', kv, null);
+  assert.equal(result.ready, true);
+  assert.equal(result.readerReady, true);
+  assert.equal(result.coverReady, false);
+  assert.equal(result.coverTerminal, true);
+  assert.equal(result.reason, null);
+  assert.equal(result.item.pushChannels.readiness.status, 'ready');
+});
+
 test('maybeQueueIosPush enqueues exactly once after readiness is ready', async () => {
   const sent = [];
   const env = {
@@ -148,6 +184,51 @@ test('maybeQueueIosPush enqueues exactly once after readiness is ready', async (
   assert.equal(second.queued, false);
   assert.equal(second.reason, 'already_queued_or_sent');
   assert.equal(sent.length, 1);
+});
+
+test('maybeQueueIosPush sends text-only notification when no cover exists', async () => {
+  const sent = [];
+  const env = {
+    PUSH_DELIVERY_QUEUE: {
+      async send(body) {
+        sent.push(JSON.parse(body));
+      }
+    }
+  };
+
+  const item = {
+    id: 'item-no-cover',
+    url: 'https://example.com/c',
+    title: 'Example C',
+    savedAt: '2026-02-22T00:00:00.000Z',
+    pushChannels: {
+      readiness: {
+        status: 'ready',
+        readyAt: '2026-02-22T00:01:00.000Z',
+        reason: null
+      },
+      kindle: {
+        status: 'sent',
+        updatedAt: '2026-02-22T00:00:00.000Z',
+        lastError: null
+      },
+      ios: {
+        status: 'pending',
+        updatedAt: '2026-02-22T00:00:00.000Z',
+        eventId: null,
+        lastError: null
+      }
+    }
+  };
+
+  const kv = createMockKv({
+    'item:item-no-cover': JSON.stringify(item)
+  });
+
+  const result = await maybeQueueIosPush({ item, env, kv, log: null, source: 'test' });
+  assert.equal(result.queued, true);
+  assert.equal(sent.length, 1);
+  assert.equal(sent[0].notification.media.length, 0);
 });
 
 test('recordKindleChannelState mirrors kindle sync outcomes', async () => {

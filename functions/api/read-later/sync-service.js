@@ -183,7 +183,7 @@ async function reconcileArticlePushReadiness({ itemId, kv, env, log, source }) {
 
   let latestItem = readiness.item;
 
-  if (readiness.readerReady && !readiness.coverReady) {
+  if (readiness.readerReady && !readiness.coverReady && !readiness.coverTerminal) {
     try {
       const enqueueResult = await enqueueCoverGeneration({
         item: latestItem,

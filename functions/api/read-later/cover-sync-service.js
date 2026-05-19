@@ -732,6 +732,17 @@ async function markCoverSyncFailure({
       error: message
     });
   }
+
+  const readiness = await updateArticlePushReadiness(itemId, kv, log);
+  if (readiness?.ready && readiness?.item) {
+    await maybeQueueIosPush({
+      item: readiness.item,
+      env,
+      kv,
+      log,
+      source: 'cover-sync-failed'
+    });
+  }
 }
 
 export {

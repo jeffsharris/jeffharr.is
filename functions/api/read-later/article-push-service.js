@@ -106,9 +106,14 @@ function ensurePushChannels(item, now = getNowIso()) {
   return channels;
 }
 
-function buildReadinessReason({ readerReady, coverReady }) {
-  if (readerReady && coverReady) return null;
-  if (!readerReady && !coverReady) return 'waiting_for_reader_and_cover';
+function isTerminalCoverSyncFailure(item) {
+  return item?.coverSync?.status === 'failed';
+}
+
+function buildReadinessReason({ readerReady, coverReady, coverTerminal }) {
+  const coverDone = coverReady || coverTerminal;
+  if (readerReady && coverDone) return null;
+  if (!readerReady && !coverDone) return 'waiting_for_reader_and_cover';
   if (!readerReady) return 'waiting_for_reader';
   return 'waiting_for_cover';
 }
@@ -171,8 +176,9 @@ async function updateArticlePushReadiness(itemId, kv, log) {
   const reader = await kv.get(`${KV_READER_PREFIX}${itemId}`, { type: 'json' });
   const readerReady = shouldCacheReader(reader);
   const coverReady = Boolean(item?.cover?.updatedAt);
-  const ready = readerReady && coverReady;
-  const reason = buildReadinessReason({ readerReady, coverReady });
+  const coverTerminal = isTerminalCoverSyncFailure(item);
+  const ready = readerReady && (coverReady || coverTerminal);
+  const reason = buildReadinessReason({ readerReady, coverReady, coverTerminal });
 
   item.pushChannels.readiness = {
     status: ready ? 'ready' : 'pending',
@@ -199,6 +205,7 @@ async function updateArticlePushReadiness(itemId, kv, log) {
     ready,
     readerReady,
     coverReady,
+    coverTerminal,
     reason
   };
 }
