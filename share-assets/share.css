@@ -202,14 +202,25 @@ h2 {
   width: 100%;
 }
 
+.platform-section {
+  margin-top: 26px;
+}
+
+.platform-section__label {
+  margin: 0 0 10px;
+  color: var(--text-light);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
 .platform-list {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px;
-  margin-top: 24px;
+  gap: 8px;
 }
 
-.platform-btn,
 .primary-btn,
 .secondary-btn,
 .native-share-btn {
@@ -218,28 +229,93 @@ h2 {
   font-family: var(--font-body);
   font-weight: 700;
   cursor: pointer;
-  transition: transform var(--transition), border-color var(--transition), background var(--transition);
+  transition: transform var(--transition), border-color var(--transition), background var(--transition), box-shadow var(--transition);
 }
 
 .platform-btn {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 2px;
-  padding: 12px 14px;
-  color: var(--text);
-  background: var(--bg-soft);
+  --brand: var(--text-muted);
+  --brand-ink: #FFFFFF;
+  --brand-tint: color-mix(in srgb, var(--brand) 12%, transparent);
+  display: grid;
+  grid-template-columns: 40px minmax(0, 1fr) 16px;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 14px 11px 11px;
+  border-radius: 10px;
+  background: var(--bg-card);
   border: 1px solid var(--border);
+  color: var(--text);
   text-decoration: none;
+  cursor: pointer;
+  transition: transform var(--transition), border-color var(--transition), background var(--transition), box-shadow var(--transition);
 }
 
-.platform-btn small {
+.platform-btn__icon {
+  display: inline-grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 9px;
+  background: var(--brand);
+  color: var(--brand-ink);
+  flex: none;
+}
+
+.platform-btn__icon svg {
+  width: 22px;
+  height: 22px;
+}
+
+.platform-btn__body {
+  display: grid;
+  gap: 1px;
+  min-width: 0;
+}
+
+.platform-btn__name {
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: -0.005em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.platform-btn__meta {
   color: var(--text-muted);
-  font-size: 11px;
+  font-size: 11.5px;
   font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-.platform-btn:hover,
+.platform-btn__chev {
+  display: inline-grid;
+  place-items: center;
+  width: 16px;
+  height: 16px;
+  color: var(--text-light);
+  transition: color var(--transition), transform var(--transition);
+}
+
+.platform-btn__chev svg {
+  width: 14px;
+  height: 14px;
+}
+
+.platform-btn:hover {
+  transform: translateY(-1px);
+  border-color: color-mix(in srgb, var(--brand) 55%, var(--border));
+  background: linear-gradient(180deg, var(--brand-tint), transparent 60%) var(--bg-card);
+  box-shadow: 0 6px 18px color-mix(in srgb, var(--brand) 18%, transparent);
+}
+
+.platform-btn:hover .platform-btn__chev {
+  color: var(--brand);
+  transform: translateX(2px);
+}
+
 .primary-btn:hover,
 .secondary-btn:hover,
 .native-share-btn:hover {
@@ -247,34 +323,29 @@ h2 {
   border-color: var(--accent);
 }
 
-.platform-btn--apple { background: linear-gradient(135deg, rgba(244, 244, 244, 0.92), rgba(226, 226, 231, 0.82)); color: #151515; }
-.platform-btn--spotify { background: #1DB954; color: #07150B; border-color: rgba(0, 0, 0, 0.12); }
-.platform-btn--youtube { background: #FF0033; color: #FFFFFF; border-color: rgba(0, 0, 0, 0.12); }
-.platform-btn--overcast { background: #FC7E0F; color: #1F0E00; border-color: rgba(0, 0, 0, 0.12); }
-.platform-btn--pocketCasts { background: #F43E37; color: #FFFFFF; border-color: rgba(0, 0, 0, 0.12); }
-.platform-btn--antennaPod { background: #5E35B1; color: #FFFFFF; border-color: rgba(0, 0, 0, 0.12); }
+.platform-btn--apple { --brand: #A347E0; --brand-ink: #FFFFFF; }
+.platform-btn--spotify { --brand: #1DB954; --brand-ink: #07150B; }
+.platform-btn--youtube { --brand: #FF0033; --brand-ink: #FFFFFF; }
+.platform-btn--overcast { --brand: #FC7E0F; --brand-ink: #1F0E00; }
+.platform-btn--pocketCasts { --brand: #F43E37; --brand-ink: #FFFFFF; }
+.platform-btn--antennaPod { --brand: #5E35B1; --brand-ink: #FFFFFF; }
+.platform-btn--rss { --brand: #F26522; --brand-ink: #FFFFFF; }
+.platform-btn--website { --brand: #3678A8; --brand-ink: #FFFFFF; }
+.platform-btn--x { --brand: #111111; --brand-ink: #FFFFFF; }
 
-.platform-btn--spotify small,
-.platform-btn--youtube small,
-.platform-btn--pocketCasts small,
-.platform-btn--antennaPod small {
-  color: rgba(255, 255, 255, 0.78);
-}
-
-.platform-btn--apple small,
-.platform-btn--overcast small {
-  color: rgba(0, 0, 0, 0.62);
+@media (prefers-color-scheme: dark) {
+  .platform-btn--x { --brand: #F5F1EA; --brand-ink: #111111; }
 }
 
 .share-actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 18px;
+  gap: 8px;
+  margin-top: 20px;
 }
 
 .share-actions--hero {
-  margin-top: 18px;
+  margin-top: 22px;
 }
 
 .primary-btn,
@@ -298,9 +369,10 @@ h2 {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 9px;
-  min-width: 132px;
-  box-shadow: 0 8px 20px color-mix(in srgb, var(--accent), transparent 76%);
+  gap: 8px;
+  min-width: 124px;
+  background: linear-gradient(180deg, var(--accent), var(--accent-strong));
+  box-shadow: 0 8px 22px color-mix(in srgb, var(--accent), transparent 72%);
 }
 
 .native-share-btn__icon {
@@ -840,19 +912,37 @@ code {
     margin-top: 14px;
   }
 
+  .platform-section {
+    margin-top: 22px;
+  }
+
   .platform-list {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 8px;
-    margin-top: 14px;
+    grid-template-columns: 1fr;
+    gap: 7px;
   }
 
   .platform-btn {
-    min-height: 52px;
-    padding: 9px 10px;
+    grid-template-columns: 36px minmax(0, 1fr) 14px;
+    gap: 10px;
+    padding: 9px 12px 9px 9px;
   }
 
-  .platform-btn small {
-    font-size: 10px;
+  .platform-btn__icon {
+    width: 36px;
+    height: 36px;
+  }
+
+  .platform-btn__icon svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .platform-btn__name {
+    font-size: 14px;
+  }
+
+  .platform-btn__meta {
+    font-size: 11px;
   }
 
   .share-player {

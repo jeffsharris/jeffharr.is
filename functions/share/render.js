@@ -60,9 +60,7 @@ export function renderSharePage(item, requestUrl) {
               </button>
               <button class="secondary-btn secondary-btn--compact" type="button" data-copy="${escapeAttribute(shareUrl)}">Copy link</button>
             </div>
-            <div class="platform-list" data-platform-list>
-              ${renderPlatformLinks(item.platforms || {})}
-            </div>
+            ${renderPlatformSection(item.platforms || {})}
             ${audioUrl ? `
               <div class="share-player">
                 <audio controls preload="metadata" src="${escapeAttribute(audioUrl)}"></audio>
@@ -73,7 +71,7 @@ export function renderSharePage(item, requestUrl) {
           </div>
         </article>
       </main>
-      <script src="/share-assets/share.js?v=4"></script>
+      <script src="/share-assets/share.js?v=5"></script>
     `
   });
 }
@@ -123,7 +121,7 @@ function renderXSharePage(item, requestUrl) {
           ${warnings.length ? `<p class="x-thread-note">${escapeHtml(warnings[0])}</p>` : ''}
         </article>
       </main>
-      <script src="/share-assets/share.js?v=4"></script>
+      <script src="/share-assets/share.js?v=5"></script>
     `
   });
 }
@@ -249,7 +247,7 @@ export function renderLoadingPage(sourceUrl, requestUrl) {
           </div>
         </section>
       </main>
-      <script src="/share-assets/share.js?v=4"></script>
+      <script src="/share-assets/share.js?v=5"></script>
     `
   });
 }
@@ -299,7 +297,7 @@ function htmlDocument({ title, description, imageUrl, url, body, noindex }) {
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="manifest" href="/share-assets/manifest.webmanifest">
-  <link rel="stylesheet" href="/share-assets/share.css?v=4">
+  <link rel="stylesheet" href="/share-assets/share.css?v=5">
 </head>
 <body>
   <div class="bg-gradient"></div>
@@ -309,20 +307,113 @@ function htmlDocument({ title, description, imageUrl, url, body, noindex }) {
 </html>`;
 }
 
+function renderPlatformSection(platforms) {
+  const links = renderPlatformLinks(platforms);
+  if (!links) return '';
+  return `
+    <section class="platform-section" aria-label="Open in app">
+      <p class="platform-section__label">Open in</p>
+      <div class="platform-list" data-platform-list>
+        ${links}
+      </div>
+    </section>
+  `;
+}
+
 function renderPlatformLinks(platforms) {
   return PLATFORM_ORDER
     .map((key) => [key, platforms[key]])
     .filter(([, platform]) => platform?.url)
-    .map(([key, platform]) => `
-      <a class="platform-btn platform-btn--${escapeAttribute(key)}"
-         data-platform="${escapeAttribute(key)}"
-         href="${escapeAttribute(platform.url)}"
-         target="_blank"
-         rel="noopener">
-        <span>${escapeHtml(platform.label || PLATFORM_NAMES[key] || key)}</span>
-        <small>${escapeHtml(platform.kind === 'rss' ? 'Subscribe by feed' : platform.kind === 'website' ? 'Open original site' : platform.kind === 'episode' ? 'Open episode' : 'Open podcast')}</small>
-      </a>
-    `).join('');
+    .map(([key, platform]) => {
+      const subtitle = platform.kind === 'rss'
+        ? 'Subscribe by feed'
+        : platform.kind === 'website'
+          ? 'Open original site'
+          : platform.kind === 'episode'
+            ? 'Open episode'
+            : 'Open podcast';
+      return `
+        <a class="platform-btn platform-btn--${escapeAttribute(key)}"
+           data-platform="${escapeAttribute(key)}"
+           href="${escapeAttribute(platform.url)}"
+           target="_blank"
+           rel="noopener">
+          <span class="platform-btn__icon" aria-hidden="true">${platformIconSvg(key)}</span>
+          <span class="platform-btn__body">
+            <span class="platform-btn__name">${escapeHtml(platform.label || PLATFORM_NAMES[key] || key)}</span>
+            <span class="platform-btn__meta">${escapeHtml(subtitle)}</span>
+          </span>
+          <span class="platform-btn__chev" aria-hidden="true">${chevronIconSvg()}</span>
+        </a>
+      `;
+    }).join('');
+}
+
+function platformIconSvg(key) {
+  switch (key) {
+    case 'apple':
+      return `<svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+        <rect x="10" y="3.4" width="4" height="9.4" rx="2" fill="currentColor"></rect>
+        <path d="M6.5 11.4a5.5 5.5 0 0 0 11 0" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path>
+        <path d="M12 17v3.6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path>
+        <path d="M9.4 20.6h5.2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path>
+      </svg>`;
+    case 'spotify':
+      return `<svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+        <path d="M4.6 9Q12 6 19.4 9" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"></path>
+        <path d="M6.4 13Q12 10.8 17.6 13" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"></path>
+        <path d="M8.2 17Q12 15.2 15.8 17" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
+      </svg>`;
+    case 'youtube':
+      return `<svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+        <path d="M9 7l9 5-9 5z" fill="currentColor"></path>
+      </svg>`;
+    case 'overcast':
+      return `<svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+        <path d="M5.2 6.6a9 9 0 0 1 13.6 0" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" opacity="0.5"></path>
+        <path d="M7.8 8.4a5.6 5.6 0 0 1 8.4 0" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path>
+        <circle cx="12" cy="12" r="2.2" fill="currentColor"></circle>
+        <path d="M11.2 13.8l-1.6 5.8a1 1 0 0 0 1.6 1.1l.8-.5.8.5a1 1 0 0 0 1.6-1.1l-1.6-5.8z" fill="currentColor"></path>
+      </svg>`;
+    case 'pocketCasts':
+      return `<svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+        <path d="M12 4.4a7.6 7.6 0 1 1-7.6 7.6" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"></path>
+        <circle cx="12" cy="12" r="2.6" fill="currentColor"></circle>
+      </svg>`;
+    case 'antennaPod':
+      return `<svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+        <circle cx="12" cy="9.4" r="2.4" fill="currentColor"></circle>
+        <path d="M8 13.6a5.4 5.4 0 1 1 8 0" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"></path>
+        <path d="M5 16a9.4 9.4 0 1 1 14 0" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" opacity="0.55"></path>
+        <path d="M10.6 13l-1 7.2a.9.9 0 0 0 1.4 1l1-.7 1 .7a.9.9 0 0 0 1.4-1l-1-7.2z" fill="currentColor"></path>
+      </svg>`;
+    case 'rss':
+      return `<svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+        <circle cx="6.4" cy="17.6" r="2.1" fill="currentColor"></circle>
+        <path d="M4.4 11.4a8.2 8.2 0 0 1 8.2 8.2" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"></path>
+        <path d="M4.4 5.4a13.6 13.6 0 0 1 14.2 14.2" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"></path>
+      </svg>`;
+    case 'website':
+      return `<svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+        <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.8"></circle>
+        <ellipse cx="12" cy="12" rx="4" ry="9" fill="none" stroke="currentColor" stroke-width="1.8"></ellipse>
+        <path d="M3.2 12h17.6" fill="none" stroke="currentColor" stroke-width="1.8"></path>
+      </svg>`;
+    case 'x':
+      return `<svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+        <path d="M3.2 3.2h4.5l4 5.7 4.6-5.7h2.5l-6 7.3 6.6 9.3h-4.5l-4.5-6.4-5.1 6.4H3l6.5-8z" fill="currentColor"></path>
+      </svg>`;
+    default:
+      return `<svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+        <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.6"></circle>
+      </svg>`;
+  }
+}
+
+function chevronIconSvg() {
+  return `<svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+    <path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
+  </svg>`;
 }
 
 function buildShareText(item, title) {
