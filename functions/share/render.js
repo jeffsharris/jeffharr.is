@@ -71,7 +71,7 @@ export function renderSharePage(item, requestUrl) {
           </div>
         </article>
       </main>
-      <script src="/share-assets/share.js?v=5"></script>
+      <script src="/share-assets/share.js?v=6"></script>
     `
   });
 }
@@ -121,7 +121,7 @@ function renderXSharePage(item, requestUrl) {
           ${warnings.length ? `<p class="x-thread-note">${escapeHtml(warnings[0])}</p>` : ''}
         </article>
       </main>
-      <script src="/share-assets/share.js?v=5"></script>
+      <script src="/share-assets/share.js?v=6"></script>
     `
   });
 }
@@ -247,7 +247,7 @@ export function renderLoadingPage(sourceUrl, requestUrl) {
           </div>
         </section>
       </main>
-      <script src="/share-assets/share.js?v=5"></script>
+      <script src="/share-assets/share.js?v=6"></script>
     `
   });
 }
@@ -297,7 +297,7 @@ function htmlDocument({ title, description, imageUrl, url, body, noindex }) {
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="manifest" href="/share-assets/manifest.webmanifest">
-  <link rel="stylesheet" href="/share-assets/share.css?v=5">
+  <link rel="stylesheet" href="/share-assets/share.css?v=6">
 </head>
 <body>
   <div class="bg-gradient"></div>
@@ -324,29 +324,17 @@ function renderPlatformLinks(platforms) {
   return PLATFORM_ORDER
     .map((key) => [key, platforms[key]])
     .filter(([, platform]) => platform?.url)
-    .map(([key, platform]) => {
-      const subtitle = platform.kind === 'rss'
-        ? 'Subscribe by feed'
-        : platform.kind === 'website'
-          ? 'Open original site'
-          : platform.kind === 'episode'
-            ? 'Open episode'
-            : 'Open podcast';
-      return `
-        <a class="platform-btn platform-btn--${escapeAttribute(key)}"
-           data-platform="${escapeAttribute(key)}"
-           href="${escapeAttribute(platform.url)}"
-           target="_blank"
-           rel="noopener">
-          <span class="platform-btn__icon" aria-hidden="true">${platformIconSvg(key)}</span>
-          <span class="platform-btn__body">
-            <span class="platform-btn__name">${escapeHtml(platform.label || PLATFORM_NAMES[key] || key)}</span>
-            <span class="platform-btn__meta">${escapeHtml(subtitle)}</span>
-          </span>
-          <span class="platform-btn__chev" aria-hidden="true">${chevronIconSvg()}</span>
-        </a>
-      `;
-    }).join('');
+    .map(([key, platform]) => `
+      <a class="platform-btn platform-btn--${escapeAttribute(key)}"
+         data-platform="${escapeAttribute(key)}"
+         href="${escapeAttribute(platform.url)}"
+         target="_blank"
+         rel="noopener">
+        <span class="platform-btn__icon" aria-hidden="true">${platformIconSvg(key)}</span>
+        <span class="platform-btn__name">${escapeHtml(platform.label || PLATFORM_NAMES[key] || key)}</span>
+        <span class="platform-btn__chev" aria-hidden="true">${chevronIconSvg()}</span>
+      </a>
+    `).join('');
 }
 
 function platformIconSvg(key) {
