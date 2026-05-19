@@ -1,8 +1,8 @@
 import { getContentDb, listLists } from './content-library/db.js';
 import { jsonResponse, serializeList } from './content-library/serialize.js';
 import {
-  getAuthenticatedUser,
-  isWriteAuthorized,
+  getAdminUser,
+  isAdminAuthorized,
   unauthorizedResponse
 } from './content-library/auth.js';
 
@@ -14,14 +14,14 @@ export async function onRequest(context) {
   }
 
   if (request.method === 'GET') {
-    const user = await getAuthenticatedUser(request, env);
+    const user = await getAdminUser(request, env);
     const lists = await listLists(db);
     const visible = user ? lists : lists.filter((list) => list.visibility === 'public');
     return jsonResponse({ lists: visible.map(serializeList), count: visible.length });
   }
 
   if (request.method === 'POST') {
-    if (!(await isWriteAuthorized(request, env))) return unauthorizedResponse();
+    if (!(await isAdminAuthorized(request, env))) return unauthorizedResponse();
     return jsonResponse(
       { ok: false, error: 'Custom list creation is not enabled yet' },
       { status: 501 }

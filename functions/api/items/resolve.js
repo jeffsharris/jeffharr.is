@@ -1,5 +1,5 @@
 import { getContentDb } from '../content-library/db.js';
-import { isWriteAuthorized, unauthorizedResponse } from '../content-library/auth.js';
+import { isAdminAuthorized, unauthorizedResponse } from '../content-library/auth.js';
 import { resolveContentInput } from '../content-library/resolve.js';
 import { jsonResponse } from '../content-library/serialize.js';
 
@@ -18,7 +18,7 @@ export async function onRequest(context) {
     return jsonResponse({ ok: false, error: 'Method not allowed' }, { status: 405 });
   }
 
-  if (!(await isWriteAuthorized(request, env))) return unauthorizedResponse();
+  if (!(await isAdminAuthorized(request, env))) return unauthorizedResponse();
 
   try {
     const payload = await request.json();

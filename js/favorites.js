@@ -1,7 +1,7 @@
 (function() {
   'use strict';
 
-  const SESSION_URL = '/api/favorites/session';
+  const SESSION_URL = '/api/admin/session';
   const STATE_URL = '/api/favorites/state';
   const FAVORITES_URL = '/api/favorites';
   const STAR_ICON = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.2l2.74 5.55 6.12.89-4.43 4.32 1.05 6.09L12 17.17l-5.48 2.88 1.05-6.09-4.43-4.32 6.12-.89L12 3.2z"></path></svg>';
@@ -201,14 +201,14 @@
   }
 
   function renderSignIn(show) {
-    let link = document.querySelector('.favorites-sign-in');
+    let link = document.querySelector('.admin-sign-in');
     if (!show) {
       if (link) link.hidden = true;
       return;
     }
     if (!link) {
       link = document.createElement('a');
-      link.className = 'favorites-sign-in';
+      link.className = 'admin-sign-in';
       link.setAttribute('aria-label', 'Sign in');
       document.body.appendChild(link);
     }

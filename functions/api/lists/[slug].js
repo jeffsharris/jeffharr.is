@@ -4,7 +4,7 @@ import {
   serializeList,
   serializeListEntryRow
 } from '../content-library/serialize.js';
-import { getAuthenticatedUser, unauthorizedResponse } from '../content-library/auth.js';
+import { getAdminUser, unauthorizedResponse } from '../content-library/auth.js';
 
 export async function onRequest(context) {
   const { request, env, params } = context;
@@ -23,7 +23,7 @@ export async function onRequest(context) {
   if (!list) {
     return jsonResponse({ ok: false, error: 'List not found' }, { status: 404 });
   }
-  if (list.visibility !== 'public' && !(await getAuthenticatedUser(request, env))) {
+  if (list.visibility !== 'public' && !(await getAdminUser(request, env))) {
     return unauthorizedResponse();
   }
 

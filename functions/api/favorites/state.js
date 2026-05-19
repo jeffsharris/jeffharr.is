@@ -1,4 +1,4 @@
-import { getAuthenticatedUser, unauthorizedResponse } from '../content-library/auth.js';
+import { getAdminUser, unauthorizedResponse } from '../content-library/auth.js';
 import { getContentDb } from '../content-library/db.js';
 import { listFavoriteStates } from '../content-library/list-store.js';
 import { jsonResponse } from '../content-library/serialize.js';
@@ -18,7 +18,7 @@ export async function onRequest(context) {
     return jsonResponse({ ok: false, error: 'Method not allowed' }, { status: 405 });
   }
 
-  const user = await getAuthenticatedUser(request, env);
+  const user = await getAdminUser(request, env);
   if (!user) return unauthorizedResponse();
 
   const payload = await readPayload(request);

@@ -2,11 +2,11 @@ const DEFAULT_ALLOWED_EMAIL = 'jeff.s.harris@gmail.com';
 const ACCESS_JWT_HEADER = 'cf-access-jwt-assertion';
 const JWKS_CACHE = new Map();
 
-async function isWriteAuthorized(request, env) {
-  return Boolean(await getAuthenticatedUser(request, env));
+async function isAdminAuthorized(request, env) {
+  return Boolean(await getAdminUser(request, env));
 }
 
-async function getAuthenticatedUser(request, env) {
+async function getAdminUser(request, env) {
   const token = request.headers.get(ACCESS_JWT_HEADER);
   const config = getAccessConfig(env);
   if (!token || !config) return null;
@@ -27,7 +27,7 @@ async function getAuthenticatedUser(request, env) {
 
 function getAccessConfig(env) {
   const teamDomain = normalizeTeamDomain(env?.CLOUDFLARE_ACCESS_TEAM_DOMAIN);
-  const audience = stringOrNull(env?.CLOUDFLARE_ACCESS_AUD);
+  const audience = stringOrNull(env?.ADMIN_ACCESS_AUD);
   if (!teamDomain || !audience) return null;
   return { teamDomain, audience };
 }
@@ -98,7 +98,7 @@ function audienceMatches(value, expected) {
 
 function isAllowedEmail(email, env) {
   if (!email) return false;
-  const configured = String(env?.FAVORITES_ALLOWED_EMAILS || env?.FAVORITES_ALLOWED_EMAIL || DEFAULT_ALLOWED_EMAIL);
+  const configured = String(env?.ADMIN_ALLOWED_EMAILS || DEFAULT_ALLOWED_EMAIL);
   const allowed = configured
     .split(',')
     .map((value) => normalizeEmail(value))
@@ -155,4 +155,4 @@ function unauthorizedResponse() {
   });
 }
 
-export { getAuthenticatedUser, isWriteAuthorized, unauthorizedResponse };
+export { getAdminUser, isAdminAuthorized, unauthorizedResponse };

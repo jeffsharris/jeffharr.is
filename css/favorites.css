@@ -1,5 +1,5 @@
 .favorite-button[hidden],
-.favorites-sign-in[hidden] {
+.admin-sign-in[hidden] {
   display: none !important;
 }
 
@@ -64,7 +64,7 @@
   background: rgba(0, 0, 0, 0.46);
 }
 
-.favorites-sign-in {
+.admin-sign-in {
   position: fixed;
   right: 10px;
   bottom: 8px;
@@ -79,11 +79,11 @@
   text-align: center;
 }
 
-.favorites-sign-in:hover,
-.favorites-sign-in:focus-visible {
+.admin-sign-in:hover,
+.admin-sign-in:focus-visible {
   opacity: 0.38;
 }
 
-.favorites-sign-in::before {
+.admin-sign-in::before {
   content: "*";
 }
