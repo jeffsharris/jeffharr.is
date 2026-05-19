@@ -1,4 +1,5 @@
 import { createLogger, formatError } from '../lib/logger.js';
+import { getContentDb } from '../content-library/db.js';
 import { getOwnerId, normalizeDeviceId, normalizeMetadataValue } from './device-store.js';
 
 const DEFAULT_ALERT_TITLE = 'Sukha Test Push';
@@ -142,8 +143,7 @@ export async function onRequest(context) {
     );
   }
 
-  const kv = env?.READ_LATER;
-  if (!kv) {
+  if (!getContentDb(env)) {
     return jsonResponse(
       { ok: false, error: 'Storage unavailable' },
       { status: 500 }

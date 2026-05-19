@@ -4,6 +4,7 @@ import { generateKeyPairSync } from 'node:crypto';
 import { createInitialPushChannels } from '../functions/api/read-later/article-push-service.js';
 import { processIosPushBatch } from '../functions/api/push/ios-push-service.js';
 import { upsertPushDevice } from '../functions/api/push/device-store.js';
+import { createMockPushDb, listPushDeviceRows } from './mock-push-db.js';
 
 function createMockKv(initial = {}) {
   const store = new Map(Object.entries(initial));
@@ -89,12 +90,13 @@ function buildMessage(item, ownerId, eventId) {
 
 test('ios push prunes invalid APNs token and marks item as skipped', async (t) => {
   const kv = createMockKv();
+  const db = createMockPushDb();
   const ownerId = 'owner-1';
   const item = buildReadyItem('item-ios-1', 'event-1');
   await kv.put(`item:${item.id}`, JSON.stringify(item));
 
   await upsertPushDevice({
-    kv,
+    db,
     ownerId,
     deviceId: 'device-1',
     token: 'token-1',
@@ -122,6 +124,7 @@ test('ios push prunes invalid APNs token and marks item as skipped', async (t) =
 
   const env = {
     READ_LATER: kv,
+    CONTENT_DB: db,
     PUSH_DEFAULT_OWNER_ID: ownerId,
     APNS_TEAM_ID: 'TEAM123456',
     APNS_KEY_ID: 'ABC123DEFG',
@@ -135,11 +138,7 @@ test('ios push prunes invalid APNs token and marks item as skipped', async (t) =
     null
   );
 
-  const device = await kv.get(`push_device:${ownerId}:device-1`, { type: 'json' });
-  assert.equal(device, null);
-
-  const tokenEntries = Array.from(kv.store.keys()).filter((key) => key.startsWith('push_token:'));
-  assert.equal(tokenEntries.length, 0);
+  assert.equal(listPushDeviceRows(db).length, 0);
 
   const updatedItem = await kv.get(`item:${item.id}`, { type: 'json' });
   assert.equal(updatedItem.pushChannels.ios.status, 'skipped');
@@ -148,12 +147,13 @@ test('ios push prunes invalid APNs token and marks item as skipped', async (t) =
 
 test('ios push worker drops stale event messages without sending', async (t) => {
   const kv = createMockKv();
+  const db = createMockPushDb();
   const ownerId = 'owner-1';
   const item = buildReadyItem('item-ios-2', 'event-current');
   await kv.put(`item:${item.id}`, JSON.stringify(item));
 
   await upsertPushDevice({
-    kv,
+    db,
     ownerId,
     deviceId: 'device-2',
     token: 'token-2',
@@ -179,6 +179,7 @@ test('ios push worker drops stale event messages without sending', async (t) => 
     { messages: [buildMessage(item, ownerId, 'event-old')] },
     {
       READ_LATER: kv,
+      CONTENT_DB: db,
       PUSH_DEFAULT_OWNER_ID: ownerId,
       APNS_TEAM_ID: 'TEAM123456',
       APNS_KEY_ID: 'ABC123DEFG',
@@ -196,10 +197,11 @@ test('ios push worker drops stale event messages without sending', async (t) => 
 
 test('ios push worker processes queued test push message without item lookup', async (t) => {
   const kv = createMockKv();
+  const db = createMockPushDb();
   const ownerId = 'owner-1';
 
   await upsertPushDevice({
-    kv,
+    db,
     ownerId,
     deviceId: 'device-3',
     token: 'token-3',
@@ -253,6 +255,7 @@ test('ios push worker processes queued test push message without item lookup', a
     },
     {
       READ_LATER: kv,
+      CONTENT_DB: db,
       PUSH_DEFAULT_OWNER_ID: ownerId,
       APNS_TEAM_ID: 'TEAM123456',
       APNS_KEY_ID: 'ABC123DEFG',

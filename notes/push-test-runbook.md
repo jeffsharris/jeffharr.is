@@ -61,7 +61,8 @@ Notes:
   - `APNS_KEY_ID`
   - `APNS_PRIVATE_KEY_P8`
   - `APNS_TOPIC`
-  - KV binding `READ_LATER`
+  - D1 binding `CONTENT_DB` for registered push devices
+  - `READ_LATER`/`CONTENT_ASSETS` bindings for read-later item state and notification media
 
 ## Secret access rule (important)
 - `PUSH_TEST_API_KEY` is a Cloudflare secret and is write-only.
@@ -127,8 +128,7 @@ curl -sS -X POST \
 
 ## Optional: target one device
 - Include `--device-id <DEVICE_ID>` in `send-test-push.js`.
-- Device ids are from iOS registration payloads stored in KV keys:
-  - `push_device:<ownerId>:<deviceId>`
+- Device ids are from iOS registration payloads stored in the D1 `push_devices` table.
 
 ## Event map (expected)
 - Pages API:

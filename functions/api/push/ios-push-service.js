@@ -1,4 +1,5 @@
 import { formatError } from '../lib/logger.js';
+import { getContentDb } from '../content-library/db.js';
 import { PUSH_NOTIFICATION_MESSAGE_TYPE, ensurePushChannels } from '../read-later/article-push-service.js';
 import { getOwnerId, listPushDevicesForOwner, removePushDeviceByRecord } from './device-store.js';
 
@@ -492,7 +493,7 @@ async function updateIosChannel(kv, item, { status, eventId, lastError }) {
 
 async function deliverIosPush({
   env,
-  kv,
+  deviceDb,
   ownerId,
   payload,
   log,
@@ -502,7 +503,7 @@ async function deliverIosPush({
   targetDeviceId = null
 }) {
   const targetDevice = typeof targetDeviceId === 'string' ? targetDeviceId.trim() : '';
-  const devices = await listPushDevicesForOwner(kv, ownerId);
+  const devices = await listPushDevicesForOwner(deviceDb, ownerId);
   const validDevices = devices.filter((device) => {
     if (device?.platform !== 'ios') return false;
     if (typeof device?.token !== 'string' || !device.token) return false;
@@ -556,7 +557,7 @@ async function deliverIosPush({
 
       failedCount += 1;
       if (TERMINAL_TOKEN_REASONS.has(result.reason)) {
-        const prune = await removePushDeviceByRecord(kv, device);
+        const prune = await removePushDeviceByRecord(deviceDb, device);
         if (prune.removed) {
           prunedCount += 1;
         }
@@ -611,7 +612,7 @@ async function deliverIosPush({
 
 async function sendIosTestPush({
   env,
-  kv,
+  deviceDb,
   ownerId,
   payload,
   log,
@@ -619,7 +620,7 @@ async function sendIosTestPush({
 }) {
   return deliverIosPush({
     env,
-    kv,
+    deviceDb,
     ownerId,
     payload,
     log,
@@ -631,8 +632,8 @@ async function sendIosTestPush({
 }
 
 async function processIosTestPushMessage(payload, env, log) {
-  const kv = env?.READ_LATER;
-  if (!kv) {
+  const deviceDb = getContentDb(env);
+  if (!deviceDb) {
     if (log) {
       log('error', 'storage_unavailable', {
         stage: 'test_push'
@@ -652,7 +653,7 @@ async function processIosTestPushMessage(payload, env, log) {
 
   const delivery = await sendIosTestPush({
     env,
-    kv,
+    deviceDb,
     ownerId,
     payload,
     log,
@@ -715,7 +716,18 @@ async function processIosPushMessage(message, env, log) {
   }
 
   const kv = env?.READ_LATER;
+  const deviceDb = getContentDb(env);
   if (!kv) {
+    if (log) {
+      log('error', 'storage_unavailable', {
+        stage: 'queue',
+        itemId
+      });
+    }
+    return;
+  }
+
+  if (!deviceDb) {
     if (log) {
       log('error', 'storage_unavailable', {
         stage: 'queue',
@@ -770,7 +782,7 @@ async function processIosPushMessage(message, env, log) {
 
   const delivery = await deliverIosPush({
     env,
-    kv,
+    deviceDb,
     ownerId,
     payload,
     log,

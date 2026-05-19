@@ -1,4 +1,5 @@
 import { createLogger, formatError } from '../lib/logger.js';
+import { getContentDb } from '../content-library/db.js';
 import {
   getOwnerId,
   normalizeDeviceId,
@@ -33,11 +34,11 @@ function tokenSuffix(tokenHash) {
 
 export async function onRequest(context) {
   const { request, env } = context;
-  const kv = env.READ_LATER;
+  const db = getContentDb(env);
   const logger = createLogger({ request, source: 'push-devices-api' });
   const log = logger.log;
 
-  if (!kv) {
+  if (!db) {
     log('error', 'storage_unavailable', { stage: 'init' });
     return jsonResponse(
       { ok: false, error: 'Storage unavailable' },
@@ -71,7 +72,7 @@ export async function onRequest(context) {
       }
 
       const record = await upsertPushDevice({
-        kv,
+        db,
         ownerId,
         deviceId,
         token,
@@ -116,7 +117,7 @@ export async function onRequest(context) {
         );
       }
 
-      const result = await removePushDevice(kv, ownerId, deviceId);
+      const result = await removePushDevice(db, ownerId, deviceId);
 
       if (result.removed) {
         log('info', 'push_device_unregistered', {

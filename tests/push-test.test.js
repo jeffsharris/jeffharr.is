@@ -1,48 +1,13 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { onRequest } from '../functions/api/push/test.js';
-
-function createMockKv(initial = {}) {
-  const store = new Map(Object.entries(initial));
-
-  return {
-    store,
-    async get(key, options = {}) {
-      const value = store.get(key);
-      if (value == null) return null;
-      if (options.type === 'json') {
-        return JSON.parse(value);
-      }
-      return value;
-    },
-    async put(key, value) {
-      store.set(key, value);
-    },
-    async delete(key) {
-      store.delete(key);
-    },
-    async list({ prefix = '' } = {}) {
-      const keys = [];
-      for (const key of store.keys()) {
-        if (key.startsWith(prefix)) {
-          keys.push({ name: key });
-        }
-      }
-      return {
-        keys,
-        list_complete: true,
-        cursor: null
-      };
-    }
-  };
-}
+import { createMockPushDb } from './mock-push-db.js';
 
 async function decodeJson(response) {
   return JSON.parse(await response.text());
 }
 
 test('push-test endpoint requires API key', async () => {
-  const kv = createMockKv();
   const request = new Request('https://example.com/api/push/test', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -52,7 +17,7 @@ test('push-test endpoint requires API key', async () => {
   const response = await onRequest({
     request,
     env: {
-      READ_LATER: kv,
+      CONTENT_DB: createMockPushDb(),
       PUSH_TEST_API_KEY: 'secret-key'
     }
   });
@@ -63,7 +28,6 @@ test('push-test endpoint requires API key', async () => {
 });
 
 test('push-test endpoint enqueues test push', async () => {
-  const kv = createMockKv();
   let queuedPayload = null;
   const queue = {
     async send(body) {
@@ -106,7 +70,7 @@ test('push-test endpoint enqueues test push', async () => {
   const response = await onRequest({
     request,
     env: {
-      READ_LATER: kv,
+      CONTENT_DB: createMockPushDb(),
       PUSH_TEST_API_KEY: 'secret-key',
       PUSH_DEFAULT_OWNER_ID: 'default',
       PUSH_DELIVERY_QUEUE: queue
@@ -129,7 +93,6 @@ test('push-test endpoint enqueues test push', async () => {
 });
 
 test('push-test endpoint fails when queue binding is missing', async () => {
-  const kv = createMockKv();
   const request = new Request('https://example.com/api/push/test', {
     method: 'POST',
     headers: {
@@ -142,7 +105,7 @@ test('push-test endpoint fails when queue binding is missing', async () => {
   const response = await onRequest({
     request,
     env: {
-      READ_LATER: kv,
+      CONTENT_DB: createMockPushDb(),
       PUSH_TEST_API_KEY: 'secret-key'
     }
   });

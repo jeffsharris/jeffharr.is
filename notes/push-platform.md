@@ -11,10 +11,13 @@ Push delivery is an app-level platform capability. `read-later` is one producer 
 
 ## Runtime Config
 - Pages Functions (`/api/push/*`):
+  - D1 binding `CONTENT_DB` for registered push devices.
   - `PUSH_DEFAULT_OWNER_ID` (default `default`)
   - `PUSH_TEST_API_KEY`
   - Queue producer binding: `PUSH_DELIVERY_QUEUE`
 - Push delivery worker (`workers/push-delivery`):
+  - D1 binding `CONTENT_DB` for registered push devices.
+  - Read Later item/media bindings for push state and rich media.
   - `PUSH_DEFAULT_OWNER_ID` (default `default`)
   - `APNS_TEAM_ID`
   - `APNS_KEY_ID`

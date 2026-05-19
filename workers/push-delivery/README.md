@@ -25,7 +25,7 @@ npx wrangler queues resume-delivery push-delivery
 For end-to-end manual test pushes, use `notes/push-test-runbook.md`.
 
 ## Required bindings and secrets
-- Defined in `workers/push-delivery/wrangler.toml`: `READ_LATER`.
+- Defined in `workers/push-delivery/wrangler.toml`: `CONTENT_DB`, `READ_LATER`, `CONTENT_ASSETS`.
 - Queue consumer: `push-delivery`.
 - Secrets/vars managed on this worker:
   - `APNS_TEAM_ID`

@@ -1,5 +1,3 @@
-const PUSH_DEVICE_PREFIX = 'push_device:';
-const PUSH_TOKEN_PREFIX = 'push_token:';
 const DEFAULT_OWNER_ID = 'default';
 
 function getNowIso() {
@@ -44,18 +42,6 @@ function normalizeMetadataValue(value, maxLength = 200) {
   return trimmed.slice(0, maxLength);
 }
 
-function buildDeviceKey(ownerId, deviceId) {
-  return `${PUSH_DEVICE_PREFIX}${ownerId}:${deviceId}`;
-}
-
-function buildDevicePrefix(ownerId) {
-  return `${PUSH_DEVICE_PREFIX}${ownerId}:`;
-}
-
-function buildTokenKey(tokenHash) {
-  return `${PUSH_TOKEN_PREFIX}${tokenHash}`;
-}
-
 function toHex(buffer) {
   const bytes = new Uint8Array(buffer);
   return Array.from(bytes, (byte) => byte.toString(16).padStart(2, '0')).join('');
@@ -67,59 +53,44 @@ async function hashToken(token) {
   return toHex(digest);
 }
 
-async function listPushDevicesForOwner(kv, ownerId) {
-  const records = [];
-  if (!kv || !ownerId) return records;
-
-  const prefix = buildDevicePrefix(ownerId);
-  let cursor;
-
-  do {
-    const response = await kv.list({ prefix, cursor });
-    const batch = await Promise.all(
-      (response.keys || []).map((entry) => kv.get(entry.name, { type: 'json' }))
-    );
-    batch.filter(Boolean).forEach((record) => records.push(record));
-    cursor = response.list_complete ? undefined : response.cursor;
-  } while (cursor);
-
-  return records;
+async function listPushDevicesForOwner(db, ownerId) {
+  if (!db || !ownerId) return [];
+  const result = await db.prepare(
+    `SELECT *
+     FROM push_devices
+     WHERE owner_id = ?
+     ORDER BY updated_at DESC`
+  ).bind(ownerId).all();
+  return (result.results || []).map(rowToPushDevice);
 }
 
-async function removePushDeviceByRecord(kv, record) {
-  if (!kv || !record) return { removed: false };
+async function removePushDeviceByRecord(db, record) {
+  if (!db || !record) return { removed: false };
   const ownerId = normalizeMetadataValue(record.ownerId, 120) || DEFAULT_OWNER_ID;
   const deviceId = normalizeDeviceId(record.deviceId);
   const tokenHash = normalizeMetadataValue(record.tokenHash, 128);
   if (!deviceId) return { removed: false };
 
-  await kv.delete(buildDeviceKey(ownerId, deviceId));
-
-  if (tokenHash) {
-    const tokenKey = buildTokenKey(tokenHash);
-    const linked = await kv.get(tokenKey, { type: 'json' });
-    if (linked?.ownerId === ownerId && linked?.deviceId === deviceId) {
-      await kv.delete(tokenKey);
-    }
-  }
+  const result = await db.prepare(
+    `DELETE FROM push_devices WHERE owner_id = ? AND device_id = ?`
+  ).bind(ownerId, deviceId).run();
 
   return {
-    removed: true,
+    removed: Number(result.meta?.changes || 0) > 0,
     ownerId,
     deviceId,
     tokenHash
   };
 }
 
-async function removePushDevice(kv, ownerId, deviceId) {
-  if (!kv) return { removed: false, missing: true };
+async function removePushDevice(db, ownerId, deviceId) {
+  if (!db) return { removed: false, missing: true };
 
   const normalizedOwnerId = normalizeMetadataValue(ownerId, 120) || DEFAULT_OWNER_ID;
   const normalizedDeviceId = normalizeDeviceId(deviceId);
   if (!normalizedDeviceId) return { removed: false, missing: true };
 
-  const key = buildDeviceKey(normalizedOwnerId, normalizedDeviceId);
-  const existing = await kv.get(key, { type: 'json' });
+  const existing = await getPushDevice(db, normalizedOwnerId, normalizedDeviceId);
   if (!existing) {
     return {
       removed: false,
@@ -129,7 +100,7 @@ async function removePushDevice(kv, ownerId, deviceId) {
     };
   }
 
-  const result = await removePushDeviceByRecord(kv, existing);
+  const result = await removePushDeviceByRecord(db, existing);
   return {
     ...result,
     missing: false,
@@ -139,7 +110,7 @@ async function removePushDevice(kv, ownerId, deviceId) {
 }
 
 async function upsertPushDevice({
-  kv,
+  db,
   ownerId,
   deviceId,
   token,
@@ -149,7 +120,7 @@ async function upsertPushDevice({
   appVersion,
   buildNumber
 }) {
-  if (!kv) {
+  if (!db) {
     throw new Error('Storage unavailable');
   }
 
@@ -163,26 +134,15 @@ async function upsertPushDevice({
 
   const now = getNowIso();
   const tokenHash = await hashToken(normalizedToken);
-  const deviceKey = buildDeviceKey(normalizedOwnerId, normalizedDeviceId);
-  const tokenKey = buildTokenKey(tokenHash);
 
-  const existing = await kv.get(deviceKey, { type: 'json' });
-  if (existing?.tokenHash && existing.tokenHash !== tokenHash) {
-    const oldTokenKey = buildTokenKey(existing.tokenHash);
-    const previousIndex = await kv.get(oldTokenKey, { type: 'json' });
-    if (previousIndex?.ownerId === normalizedOwnerId && previousIndex?.deviceId === normalizedDeviceId) {
-      await kv.delete(oldTokenKey);
-    }
-  }
-
-  const linkedRecord = await kv.get(tokenKey, { type: 'json' });
+  const existing = await getPushDevice(db, normalizedOwnerId, normalizedDeviceId);
+  const linkedRecord = await getPushDeviceByTokenHash(db, tokenHash);
   if (
     linkedRecord?.ownerId &&
     linkedRecord?.deviceId &&
     (linkedRecord.ownerId !== normalizedOwnerId || linkedRecord.deviceId !== normalizedDeviceId)
   ) {
-    const staleDeviceKey = buildDeviceKey(linkedRecord.ownerId, linkedRecord.deviceId);
-    await kv.delete(staleDeviceKey);
+    await removePushDevice(db, linkedRecord.ownerId, linkedRecord.deviceId);
   }
 
   const record = {
@@ -199,24 +159,72 @@ async function upsertPushDevice({
     updatedAt: now
   };
 
-  await kv.put(deviceKey, JSON.stringify(record));
-  await kv.put(
-    tokenKey,
-    JSON.stringify({
-      ownerId: normalizedOwnerId,
-      deviceId: normalizedDeviceId,
-      tokenHash,
-      updatedAt: now
-    })
-  );
+  await db.prepare(
+    `INSERT INTO push_devices (
+      owner_id, device_id, token, token_hash, platform, environment,
+      bundle_id, app_version, build_number, registered_at, updated_at
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    ON CONFLICT(owner_id, device_id) DO UPDATE SET
+      token = excluded.token,
+      token_hash = excluded.token_hash,
+      platform = excluded.platform,
+      environment = excluded.environment,
+      bundle_id = excluded.bundle_id,
+      app_version = excluded.app_version,
+      build_number = excluded.build_number,
+      updated_at = excluded.updated_at`
+  ).bind(
+    record.ownerId,
+    record.deviceId,
+    record.token,
+    record.tokenHash,
+    record.platform,
+    record.environment,
+    record.bundleId,
+    record.appVersion,
+    record.buildNumber,
+    record.registeredAt,
+    record.updatedAt
+  ).run();
 
   return record;
 }
 
+async function getPushDevice(db, ownerId, deviceId) {
+  if (!db || !ownerId || !deviceId) return null;
+  const row = await db.prepare(
+    `SELECT * FROM push_devices WHERE owner_id = ? AND device_id = ?`
+  ).bind(ownerId, deviceId).first();
+  return row ? rowToPushDevice(row) : null;
+}
+
+async function getPushDeviceByTokenHash(db, tokenHash) {
+  if (!db || !tokenHash) return null;
+  const row = await db.prepare(
+    `SELECT * FROM push_devices WHERE token_hash = ?`
+  ).bind(tokenHash).first();
+  return row ? rowToPushDevice(row) : null;
+}
+
+function rowToPushDevice(row) {
+  if (!row) return null;
+  return {
+    ownerId: row.owner_id,
+    deviceId: row.device_id,
+    token: row.token,
+    tokenHash: row.token_hash,
+    platform: row.platform,
+    environment: row.environment,
+    bundleId: row.bundle_id || null,
+    appVersion: row.app_version || null,
+    buildNumber: row.build_number || null,
+    registeredAt: row.registered_at,
+    updatedAt: row.updated_at
+  };
+}
+
 export {
   DEFAULT_OWNER_ID,
-  PUSH_DEVICE_PREFIX,
-  PUSH_TOKEN_PREFIX,
   getOwnerId,
   normalizeDeviceId,
   normalizeEnvironment,
@@ -224,11 +232,11 @@ export {
   normalizeToken,
   normalizeMetadataValue,
   hashToken,
-  buildDeviceKey,
-  buildDevicePrefix,
-  buildTokenKey,
+  getPushDevice,
+  getPushDeviceByTokenHash,
   listPushDevicesForOwner,
   removePushDevice,
   removePushDeviceByRecord,
+  rowToPushDevice,
   upsertPushDevice
 };

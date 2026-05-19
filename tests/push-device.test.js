@@ -1,48 +1,14 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { onRequest } from '../functions/api/push/devices.js';
-
-function createMockKv(initial = {}) {
-  const store = new Map(Object.entries(initial));
-
-  return {
-    store,
-    async get(key, options = {}) {
-      const value = store.get(key);
-      if (value == null) return null;
-      if (options.type === 'json') {
-        return JSON.parse(value);
-      }
-      return value;
-    },
-    async put(key, value) {
-      store.set(key, value);
-    },
-    async delete(key) {
-      store.delete(key);
-    },
-    async list({ prefix = '' } = {}) {
-      const keys = [];
-      for (const key of store.keys()) {
-        if (key.startsWith(prefix)) {
-          keys.push({ name: key });
-        }
-      }
-      return {
-        keys,
-        list_complete: true,
-        cursor: null
-      };
-    }
-  };
-}
+import { createMockPushDb, listPushDeviceRows } from './mock-push-db.js';
 
 async function decodeJson(response) {
   return JSON.parse(await response.text());
 }
 
 test('push-device register and unregister flow', async () => {
-  const kv = createMockKv();
+  const db = createMockPushDb();
 
   const registerRequest = new Request('https://example.com/api/push/devices', {
     method: 'POST',
@@ -61,7 +27,7 @@ test('push-device register and unregister flow', async () => {
   const registerResponse = await onRequest({
     request: registerRequest,
     env: {
-      READ_LATER: kv,
+      CONTENT_DB: db,
       PUSH_DEFAULT_OWNER_ID: 'owner-1'
     }
   });
@@ -71,10 +37,10 @@ test('push-device register and unregister flow', async () => {
   assert.equal(registerPayload.ok, true);
   assert.equal(registerPayload.registered, true);
 
-  const deviceEntries = Array.from(kv.store.keys()).filter((key) => key.startsWith('push_device:owner-1:'));
-  const tokenEntries = Array.from(kv.store.keys()).filter((key) => key.startsWith('push_token:'));
-  assert.equal(deviceEntries.length, 1);
-  assert.equal(tokenEntries.length, 1);
+  const deviceRows = listPushDeviceRows(db);
+  assert.equal(deviceRows.length, 1);
+  assert.equal(deviceRows[0].owner_id, 'owner-1');
+  assert.equal(deviceRows[0].device_id, 'device-1');
 
   const unregisterRequest = new Request('https://example.com/api/push/devices', {
     method: 'DELETE',
@@ -85,7 +51,7 @@ test('push-device register and unregister flow', async () => {
   const unregisterResponse = await onRequest({
     request: unregisterRequest,
     env: {
-      READ_LATER: kv,
+      CONTENT_DB: db,
       PUSH_DEFAULT_OWNER_ID: 'owner-1'
     }
   });
@@ -95,12 +61,11 @@ test('push-device register and unregister flow', async () => {
   assert.equal(unregisterPayload.ok, true);
   assert.equal(unregisterPayload.removed, true);
 
-  const remainingEntries = Array.from(kv.store.keys()).filter((key) => key.startsWith('push_'));
-  assert.equal(remainingEntries.length, 0);
+  assert.equal(listPushDeviceRows(db).length, 0);
 });
 
 test('push-device rebind moves token between device ids', async () => {
-  const kv = createMockKv();
+  const db = createMockPushDb();
 
   const firstRegister = new Request('https://example.com/api/push/devices', {
     method: 'POST',
@@ -113,7 +78,7 @@ test('push-device rebind moves token between device ids', async () => {
     })
   });
 
-  await onRequest({ request: firstRegister, env: { READ_LATER: kv } });
+  await onRequest({ request: firstRegister, env: { CONTENT_DB: db } });
 
   const secondRegister = new Request('https://example.com/api/push/devices', {
     method: 'POST',
@@ -126,10 +91,9 @@ test('push-device rebind moves token between device ids', async () => {
     })
   });
 
-  await onRequest({ request: secondRegister, env: { READ_LATER: kv } });
+  await onRequest({ request: secondRegister, env: { CONTENT_DB: db } });
 
-  const deviceA = await kv.get('push_device:default:device-a', { type: 'json' });
-  const deviceB = await kv.get('push_device:default:device-b', { type: 'json' });
-  assert.equal(deviceA, null);
-  assert.equal(deviceB?.deviceId, 'device-b');
+  const rows = listPushDeviceRows(db);
+  assert.equal(rows.length, 1);
+  assert.equal(rows[0].device_id, 'device-b');
 });
