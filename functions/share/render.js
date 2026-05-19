@@ -67,7 +67,6 @@ export function renderSharePage(item, requestUrl) {
               </div>
             ` : ''}
             <p class="share-description">${escapeHtml(description)}</p>
-            ${item.podcast?.feedUrl ? `<div class="share-actions"><button class="secondary-btn" type="button" data-copy="${escapeAttribute(item.podcast.feedUrl)}">Copy RSS</button></div>` : ''}
           </div>
         </article>
       </main>
