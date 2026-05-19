@@ -11,6 +11,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@400;500&display=swap" rel="stylesheet">
 
   <link rel="icon" href="/favicon.ico">
+  <link rel="stylesheet" href="/css/favorites.css?v=1">
   <style>
     :root {
       --bg: #FDFCFA;
@@ -19,8 +20,9 @@
       --text: #2D2A26;
       --text-muted: #6B6560;
       --text-light: #9A9590;
-      --accent: #8B7355;
-      --accent-light: rgba(139, 115, 85, 0.1);
+      --accent: #6F5743;
+      --accent-strong: #523F2F;
+      --accent-light: rgba(111, 87, 67, 0.1);
       --border: rgba(0, 0, 0, 0.08);
       --shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
       --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.12);
@@ -36,8 +38,9 @@
         --text: #E8E4DF;
         --text-muted: #9A9590;
         --text-light: #6B6560;
-        --accent: #C4A77D;
-        --accent-light: rgba(196, 167, 125, 0.15);
+        --accent: #C9A877;
+        --accent-strong: #DBBE8E;
+        --accent-light: rgba(201, 168, 119, 0.16);
         --border: rgba(255, 255, 255, 0.1);
         --shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
         --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.5);
@@ -267,15 +270,14 @@
       position: absolute;
       inset: 0;
       background:
-        radial-gradient(circle at 50% 18%, rgba(0, 0, 0, 0.04), rgba(0, 0, 0, 0.36) 70%),
-        linear-gradient(180deg, rgba(0, 0, 0, 0.16) 0%, rgba(0, 0, 0, 0.12) 36%, rgba(0, 0, 0, 0.82) 100%);
+        linear-gradient(180deg, transparent 0%, transparent 48%, rgba(0, 0, 0, 0.22) 72%, rgba(0, 0, 0, 0.62) 100%);
       z-index: -1;
       transition: opacity 0.3s ease;
     }
 
     .card:hover .card__scrim,
     .card:focus-visible .card__scrim {
-      opacity: 0.92;
+      opacity: 0.85;
     }
 
     .card__front {
@@ -304,7 +306,10 @@
       line-height: 1.14;
       letter-spacing: 0;
       overflow-wrap: anywhere;
-      text-shadow: 0 2px 20px rgba(0, 0, 0, 0.78), 0 1px 3px rgba(0, 0, 0, 0.88);
+      text-shadow:
+        0 1px 2px rgba(0, 0, 0, 0.95),
+        0 2px 14px rgba(0, 0, 0, 0.85),
+        0 0 24px rgba(0, 0, 0, 0.55);
     }
 
     .card--long-title .card__front {
@@ -329,38 +334,44 @@
 
     .card__author {
       font-size: 14px;
-      color: rgba(255, 255, 255, 0.82);
+      color: rgba(255, 255, 255, 0.86);
       font-style: italic;
-      text-shadow: 0 1px 12px rgba(0, 0, 0, 0.8), 0 1px 2px rgba(0, 0, 0, 0.9);
+      text-shadow:
+        0 1px 2px rgba(0, 0, 0, 0.95),
+        0 1px 10px rgba(0, 0, 0, 0.8);
     }
 
-    .card__open {
+    /* Skeleton loading cards */
+    .card--skeleton {
+      cursor: default;
+      pointer-events: none;
+      background: var(--bg-hover);
+      border-color: var(--border);
+      box-shadow: none;
+    }
+
+    .card--skeleton::before {
+      content: '';
       position: absolute;
-      bottom: 16px;
-      right: 16px;
-      width: 36px;
-      height: 36px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: 50%;
-      color: var(--text-muted);
-      opacity: 0;
-      transition: all 0.3s;
-      z-index: 2;
+      inset: 0;
+      background: linear-gradient(
+        110deg,
+        transparent 20%,
+        color-mix(in srgb, var(--bg-card), transparent 30%) 50%,
+        transparent 80%
+      );
+      transform: translateX(-100%);
+      animation: card-shimmer 1.6s ease-in-out infinite;
+      z-index: 1;
     }
 
-    .card:hover .card__open,
-    .card:focus-visible .card__open {
-      opacity: 1;
+    @keyframes card-shimmer {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
     }
 
-    .card__open:hover {
-      background: var(--accent);
-      border-color: var(--accent);
-      color: white;
+    @media (prefers-reduced-motion: reduce) {
+      .card--skeleton::before { animation: none; opacity: 0.5; }
     }
 
     /* Modal */
@@ -399,7 +410,6 @@
       border: 1px solid var(--border);
       border-radius: 16px;
       box-shadow: var(--shadow-lg);
-      overflow: hidden;
       display: flex;
       flex-direction: column;
       transform: scale(0.95) translateY(20px);
@@ -430,10 +440,14 @@
     }
 
     .modal__author {
-      font-size: 15px;
+      font-family: var(--font-serif);
+      font-size: 0.9rem;
       color: var(--text-muted);
-      font-style: italic;
+      font-style: normal;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
       text-align: center;
+      margin: 4px 0 0;
       max-height: 50px;
       overflow: hidden;
       opacity: calc(1 - var(--sp, 0) * 3);
@@ -561,15 +575,11 @@
     }
 
     .modal__body {
-      --reader-fade-height: 32px;
+      --reader-top: 28px;
       padding: 0;
       overflow-y: auto;
       flex: 1;
       min-height: 0;
-      -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 var(--reader-fade-height), #000 100%);
-      mask-image: linear-gradient(to bottom, transparent 0, #000 var(--reader-fade-height), #000 100%);
-      -webkit-mask-repeat: no-repeat;
-      mask-repeat: no-repeat;
     }
 
     .modal__reader {
@@ -577,13 +587,13 @@
       grid-template-columns: minmax(260px, 34%) minmax(0, 1fr);
       gap: 34px;
       align-items: start;
-      padding: var(--reader-fade-height) 32px 32px;
+      padding: var(--reader-top) 32px 32px;
       padding-bottom: calc(32px + env(safe-area-inset-bottom, 0px));
     }
 
     .modal__art {
       position: sticky;
-      top: var(--reader-fade-height);
+      top: var(--reader-top);
       margin: 0;
       aspect-ratio: 1;
       border-radius: 14px;
@@ -615,12 +625,110 @@
 
     .modal__poem {
       font-family: var(--font-serif);
-      font-size: 1.125rem;
-      line-height: 1.8;
-      white-space: pre-line;
+      font-size: 1.15rem;
+      line-height: 1.78;
       margin: 0;
       text-align: left;
-      max-width: 64ch;
+      max-width: 60ch;
+      color: var(--text);
+    }
+
+    .modal__stanza {
+      display: block;
+      white-space: pre-line;
+      margin: 0;
+    }
+
+    .modal__stanza + .modal__stanza {
+      margin-top: 1.4em;
+    }
+
+    /* Prev / Next navigation */
+    .modal__nav {
+      position: absolute;
+      top: 50%;
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: color-mix(in srgb, var(--bg-card), transparent 8%);
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      color: var(--text-muted);
+      cursor: pointer;
+      box-shadow: var(--shadow);
+      transform: translateY(-50%);
+      transition: opacity 0.2s ease, transform 0.2s ease, color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+      z-index: 5;
+    }
+
+    .modal__nav--prev { left: -22px; }
+    .modal__nav--next { right: -22px; }
+
+    .modal__nav:hover {
+      color: var(--accent);
+      border-color: var(--accent);
+      background: var(--bg-card);
+      transform: translateY(-50%) scale(1.05);
+    }
+
+    .modal__nav:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    .modal__nav[disabled] {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .modal__nav svg { width: 18px; height: 18px; }
+
+    /* Swipe hint indicators (mobile) */
+    .modal__swipe {
+      position: absolute;
+      top: 50%;
+      width: 56px;
+      height: 56px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #fff;
+      box-shadow: 0 8px 24px color-mix(in srgb, var(--accent), transparent 60%);
+      pointer-events: none;
+      opacity: 0;
+      transform: translate(0, -50%) scale(0.6);
+      transition: opacity 0.18s ease, transform 0.18s ease;
+      z-index: 7;
+    }
+
+    .modal__swipe svg { width: 26px; height: 26px; }
+    .modal__swipe--prev { left: 22px; transform: translate(-40px, -50%) scale(0.6); }
+    .modal__swipe--next { right: 22px; transform: translate(40px, -50%) scale(0.6); }
+
+    .modal__swipe.is-armed {
+      transform: translate(0, -50%) scale(1.06);
+    }
+
+    /* Slide transition between poems */
+    .modal__content {
+      --slide-x: 0px;
+      --slide-opacity: 1;
+    }
+
+    .modal.is-open .modal__content {
+      transform: translateX(var(--slide-x)) scale(1) translateY(0);
+      opacity: var(--slide-opacity);
+    }
+
+    .modal__content.is-sliding {
+      transition: transform 0.22s cubic-bezier(0.22, 0.61, 0.36, 1), opacity 0.22s ease;
+    }
+
+    .modal__content.is-dragging {
+      transition: none;
     }
 
     .modal__close {
@@ -638,6 +746,7 @@
       cursor: pointer;
       color: var(--text-muted);
       transition: all 0.2s;
+      z-index: 6;
     }
 
     .modal__close:hover {
@@ -673,6 +782,7 @@
       padding-right: 72px;
       text-align: left;
       border-bottom-color: var(--border);
+      box-shadow: 0 2px 14px color-mix(in srgb, var(--text), transparent 94%);
     }
 
     .modal__content.is-scrolled .modal__title {
@@ -782,25 +892,44 @@
       }
 
       .modal__body {
-        --reader-fade-height: 20px;
+        --reader-top: 16px;
         padding: 0;
       }
 
       .modal__reader {
         display: block;
-        padding: var(--reader-fade-height) 20px calc(28px + env(safe-area-inset-bottom, 0px));
+        padding: 14px 0 calc(28px + env(safe-area-inset-bottom, 0px));
       }
 
       .modal__art {
         position: relative;
         top: auto;
-        aspect-ratio: 16 / 10;
-        margin-bottom: 24px;
+        aspect-ratio: 5 / 4;
+        margin: 0;
+        border-radius: 0;
+        border-left: none;
+        border-right: none;
+        box-shadow: none;
+      }
+
+      .modal__art::after {
+        background: linear-gradient(180deg,
+          rgba(0, 0, 0, 0.04) 0%,
+          rgba(0, 0, 0, 0) 32%,
+          rgba(0, 0, 0, 0) 60%,
+          var(--bg-card) 100%);
+      }
+
+      .modal__text {
+        padding: 4px 22px 0;
       }
 
       .modal__poem {
-        font-size: 1rem;
+        font-size: 1.04rem;
+        line-height: 1.78;
       }
+
+      .modal__nav { display: none; }
 
       .modal__close {
         top: 12px;
@@ -883,14 +1012,32 @@
   </div>
 
   <main class="main">
-    <div class="grid" id="grid">
-      <div class="loading">Loading poems...</div>
-    </div>
+    <div class="grid" id="grid"></div>
   </main>
 
   <div class="modal" id="modal">
     <div class="modal__overlay"></div>
     <div class="modal__content">
+      <button class="modal__nav modal__nav--prev" id="modal-prev" aria-label="Previous poem">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M15 6l-6 6 6 6"/>
+        </svg>
+      </button>
+      <button class="modal__nav modal__nav--next" id="modal-next" aria-label="Next poem">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 6l6 6-6 6"/>
+        </svg>
+      </button>
+      <div class="modal__swipe modal__swipe--prev" id="modal-swipe-prev" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M15 6l-6 6 6 6"/>
+        </svg>
+      </div>
+      <div class="modal__swipe modal__swipe--next" id="modal-swipe-next" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 6l6 6-6 6"/>
+        </svg>
+      </div>
       <button class="modal__close" aria-label="Close">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -925,6 +1072,7 @@
                 <path d="M15.41 6.51l-6.82 3.98"></path>
               </svg>
             </button>
+            <button class="modal__action-btn favorite-button favorite-button--compact" id="favorite-poem" aria-label="Favorite" data-favorite-kind="poem" hidden></button>
             <span class="modal__feedback" id="action-feedback" aria-live="polite"></span>
           </div>
         </div>
@@ -942,6 +1090,7 @@
     </div>
   </div>
 
+  <script src="/js/favorites.js?v=1"></script>
   <script>
     const grid = document.getElementById('grid');
     const countEl = document.getElementById('count');
@@ -957,6 +1106,7 @@
     const modalPoem = document.getElementById('modal-poem');
     const copyButton = document.getElementById('copy-poem');
     const shareButton = document.getElementById('share-poem');
+    const favoriteButton = document.getElementById('favorite-poem');
     const actionFeedback = document.getElementById('action-feedback');
     const modalContent = modal.querySelector('.modal__content');
     const modalBody = modal.querySelector('.modal__body');
@@ -965,8 +1115,24 @@
     let memorizedSet = new Set();
     let currentFilter = 'all';
     let currentSlug = '';
+    let currentPoem = null;
     let feedbackTimeout;
     let truncateTimeout;
+    let isAnimatingNav = false;
+
+    const modalPrev = document.getElementById('modal-prev');
+    const modalNext = document.getElementById('modal-next');
+    const swipePrev = document.getElementById('modal-swipe-prev');
+    const swipeNext = document.getElementById('modal-swipe-next');
+
+    function renderSkeletonCards(count = 8) {
+      const html = Array.from({ length: count })
+        .map(() => '<div class="card card--skeleton" aria-hidden="true"></div>')
+        .join('');
+      grid.innerHTML = html;
+    }
+
+    renderSkeletonCards();
 
     // Show share button only if Web Share API is available
     if (navigator.share) {
@@ -1137,16 +1303,12 @@
 
       card.innerHTML = `
         ${poem.image ? `<img class="card__image" src="${escapeAttribute(poem.image)}" alt="" width="1024" height="1024" loading="lazy" decoding="async">` : ''}
+        <button class="favorite-button favorite-button--card" type="button" hidden data-favorite-kind="poem" data-favorite-poem-slug="${escapeAttribute(poem.slug || '')}" aria-label="Favorite"></button>
         <div class="card__scrim" aria-hidden="true"></div>
         <div class="card__front">
           <h2 class="card__title">${escapeHtml(poem.title)}</h2>
           <p class="card__author">${escapeHtml(poem.author)}</p>
         </div>
-        <span class="card__open" aria-hidden="true">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/>
-          </svg>
-        </span>
       `;
 
       card.addEventListener('click', () => {
@@ -1161,11 +1323,21 @@
       return card;
     }
 
+    function renderPoemStanzas(content) {
+      const stanzas = String(content || '')
+        .replace(/\r\n/g, '\n')
+        .trim()
+        .split(/\n[ \t]*\n+/);
+      return stanzas
+        .map((stanza) => `<span class="modal__stanza">${escapeHtml(stanza.replace(/^\n+|\n+$/g, ''))}</span>`)
+        .join('');
+    }
+
     // Open modal
     function openModal(poem, isMemorized, { historyMethod = 'push' } = {}) {
       modalTitle.textContent = poem.title;
       modalAuthor.textContent = poem.author;
-      modalPoem.textContent = poem.content;
+      modalPoem.innerHTML = renderPoemStanzas(poem.content);
       if (poem.image) {
         modalImage.src = poem.image;
         modalImage.alt = `Companion image for ${poem.title}`;
@@ -1179,6 +1351,11 @@
         modalBadge.style.display = isMemorized ? 'inline-flex' : 'none';
       }
       currentSlug = poem.slug || '';
+      currentPoem = poem;
+      if (favoriteButton) {
+        favoriteButton.dataset.favoritePoemSlug = currentSlug;
+        window.Favorites?.scheduleRefresh(modal);
+      }
       setPoemUrl(currentSlug, { method: historyMethod });
       resetFeedback();
       modalBody.scrollTop = 0;
@@ -1188,6 +1365,7 @@
       clearTimeout(truncateTimeout);
       modal.classList.add('is-open');
       document.body.style.overflow = 'hidden';
+      updateNavButtons();
     }
 
     // Close modal
@@ -1195,12 +1373,13 @@
       modal.classList.remove('is-open');
       document.body.style.overflow = '';
       currentSlug = '';
+      currentPoem = null;
       setPoemUrl('');
       resetFeedback();
     }
 
     async function copyPoemToClipboard() {
-      const poemText = modalPoem.textContent || '';
+      const poemText = currentPoem ? currentPoem.content : (modalPoem.textContent || '');
       try {
         await writeToClipboard(poemText);
         showFeedback('Copied poem');
@@ -1208,6 +1387,86 @@
         showFeedback('Unable to copy', true);
       }
     }
+
+    // Visible card order (after filter/search) — defines prev/next navigation set.
+    function getVisibleSlugs() {
+      return Array.from(grid.querySelectorAll('.card:not(.hidden):not(.card--skeleton)'))
+        .map((card) => card.dataset.slug)
+        .filter(Boolean);
+    }
+
+    function getNeighbourSlug(direction) {
+      const slugs = getVisibleSlugs();
+      if (!slugs.length) return '';
+      const index = slugs.indexOf(currentSlug);
+      if (index === -1) return '';
+      const nextIndex = direction === 'next' ? index + 1 : index - 1;
+      return slugs[nextIndex] || '';
+    }
+
+    function updateNavButtons() {
+      const slugs = getVisibleSlugs();
+      const index = slugs.indexOf(currentSlug);
+      const hasPrev = index > 0;
+      const hasNext = index !== -1 && index < slugs.length - 1;
+      modalPrev.toggleAttribute('disabled', !hasPrev);
+      modalNext.toggleAttribute('disabled', !hasNext);
+    }
+
+    function navigateToNeighbour(direction, { source = 'click' } = {}) {
+      if (isAnimatingNav) return;
+      const targetSlug = getNeighbourSlug(direction);
+      if (!targetSlug) return;
+      const targetPoem = allPoems.find((p) => p.slug === targetSlug);
+      if (!targetPoem) return;
+      const isMemorized = memorizedSet.has(targetSlug);
+
+      // Slide-out distance: full viewport for swipe commit, ~30% for click/keyboard.
+      const slideDistance = source === 'swipe'
+        ? Math.min(window.innerWidth, 720)
+        : Math.min(window.innerWidth * 0.18, 160);
+      const outX = direction === 'next' ? -slideDistance : slideDistance;
+      const inX = direction === 'next' ? slideDistance * 0.6 : -slideDistance * 0.6;
+
+      isAnimatingNav = true;
+      modalContent.classList.remove('is-dragging');
+      modalContent.classList.add('is-sliding');
+      modalContent.style.setProperty('--slide-x', `${outX}px`);
+      modalContent.style.setProperty('--slide-opacity', '0');
+
+      const swap = () => {
+        // Snap to the entry position with no transition…
+        modalContent.classList.remove('is-sliding');
+        modalContent.classList.add('is-dragging');
+        modalContent.style.setProperty('--slide-x', `${inX}px`);
+        modalContent.style.setProperty('--slide-opacity', '0');
+        // …then update the poem and animate in.
+        openModal(targetPoem, isMemorized, { historyMethod: 'push' });
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            modalContent.classList.remove('is-dragging');
+            modalContent.classList.add('is-sliding');
+            modalContent.style.setProperty('--slide-x', '0px');
+            modalContent.style.setProperty('--slide-opacity', '1');
+          });
+        });
+        setTimeout(() => {
+          modalContent.classList.remove('is-sliding');
+          isAnimatingNav = false;
+        }, 260);
+      };
+
+      setTimeout(swap, 220);
+    }
+
+    modalPrev.addEventListener('click', (e) => {
+      e.stopPropagation();
+      navigateToNeighbour('prev');
+    });
+    modalNext.addEventListener('click', (e) => {
+      e.stopPropagation();
+      navigateToNeighbour('next');
+    });
 
     async function sharePoemLink() {
       const url = getPoemUrl();
@@ -1248,8 +1507,162 @@
     modal.querySelector('.modal__overlay').addEventListener('click', closeModal);
     modal.querySelector('.modal__close').addEventListener('click', closeModal);
     document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') closeModal();
+      if (e.key === 'Escape') {
+        closeModal();
+        return;
+      }
+      if (!modal.classList.contains('is-open')) return;
+      const target = e.target;
+      const isEditable = target && (
+        target.tagName === 'INPUT' ||
+        target.tagName === 'TEXTAREA' ||
+        target.isContentEditable
+      );
+      if (isEditable) return;
+      if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        navigateToNeighbour('prev');
+      } else if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        navigateToNeighbour('next');
+      }
     });
+
+    // Touch swipe to switch poems (mobile gesture).
+    (function attachSwipeNav() {
+      const SWIPE_COMMIT = 80;       // px to commit
+      const SWIPE_ARM = 50;          // px to "arm" hint pop
+      const HORIZONTAL_DOM = 1.6;    // |dx| must dominate |dy| by this ratio
+      const START_THRESHOLD = 10;    // px before we claim the gesture
+      let startX = 0;
+      let startY = 0;
+      let active = false;
+      let claimed = false;
+      let direction = null;
+      let pointerId = null;
+
+      function reset(animateBack) {
+        active = false;
+        claimed = false;
+        direction = null;
+        pointerId = null;
+        swipePrev.classList.remove('is-armed');
+        swipeNext.classList.remove('is-armed');
+        swipePrev.style.opacity = '';
+        swipeNext.style.opacity = '';
+        swipePrev.style.transform = '';
+        swipeNext.style.transform = '';
+        if (animateBack) {
+          modalContent.classList.add('is-sliding');
+        }
+        modalContent.classList.remove('is-dragging');
+        modalContent.style.setProperty('--slide-x', '0px');
+        modalContent.style.setProperty('--slide-opacity', '1');
+        if (animateBack) {
+          setTimeout(() => modalContent.classList.remove('is-sliding'), 220);
+        } else {
+          modalContent.classList.remove('is-sliding');
+        }
+      }
+
+      function onPointerDown(e) {
+        if (!modal.classList.contains('is-open')) return;
+        if (isAnimatingNav) return;
+        if (e.pointerType !== 'touch') return;
+        // Ignore drags that begin on interactive elements that should swallow the gesture.
+        const t = e.target;
+        if (t.closest && t.closest('button, a, input, textarea, audio, video, [contenteditable]')) return;
+        startX = e.clientX;
+        startY = e.clientY;
+        active = true;
+        claimed = false;
+        direction = null;
+        pointerId = e.pointerId;
+        try { modalContent.setPointerCapture(e.pointerId); } catch {}
+      }
+
+      function onPointerMove(e) {
+        if (!active) return;
+        if (e.pointerId !== pointerId) return;
+        const dx = e.clientX - startX;
+        const dy = e.clientY - startY;
+
+        if (!claimed) {
+          if (Math.abs(dx) < START_THRESHOLD && Math.abs(dy) < START_THRESHOLD) return;
+          // Decide: is this a horizontal swipe?
+          if (Math.abs(dx) > Math.abs(dy) * HORIZONTAL_DOM) {
+            claimed = true;
+            modalContent.classList.add('is-dragging');
+          } else {
+            // Vertical scroll dominates → release the gesture.
+            reset(false);
+            return;
+          }
+        }
+
+        direction = dx < 0 ? 'next' : 'prev';
+        const hasNeighbour = !!getNeighbourSlug(direction);
+        const damp = hasNeighbour ? 1 : 0.28; // resistive feel at ends
+        const dragX = dx * damp;
+        modalContent.style.setProperty('--slide-x', `${dragX}px`);
+
+        // Subtle fade as you pull further.
+        const progress = Math.min(1, Math.abs(dragX) / 180);
+        modalContent.style.setProperty('--slide-opacity', `${1 - progress * 0.35}`);
+
+        // Swipe-hint indicators
+        const hint = direction === 'next' ? swipeNext : swipePrev;
+        const otherHint = direction === 'next' ? swipePrev : swipeNext;
+        otherHint.style.opacity = '0';
+
+        if (hasNeighbour) {
+          const hintProgress = Math.min(1, Math.abs(dragX) / SWIPE_COMMIT);
+          hint.style.opacity = String(hintProgress);
+          const baseX = direction === 'next' ? 40 : -40;
+          const offsetX = baseX * (1 - hintProgress);
+          hint.style.transform = `translate(${offsetX}px, -50%) scale(${0.6 + 0.4 * hintProgress})`;
+          hint.classList.toggle('is-armed', Math.abs(dragX) >= SWIPE_ARM);
+        } else {
+          hint.style.opacity = '0';
+        }
+      }
+
+      function onPointerUp(e) {
+        if (!active) return;
+        if (e.pointerId !== pointerId) return;
+        const dx = e.clientX - startX;
+        const dy = e.clientY - startY;
+
+        if (!claimed) { reset(false); return; }
+
+        const horizontal = Math.abs(dx) > Math.abs(dy) * HORIZONTAL_DOM;
+        const dir = dx < 0 ? 'next' : 'prev';
+        const target = getNeighbourSlug(dir);
+
+        if (horizontal && Math.abs(dx) >= SWIPE_COMMIT && target) {
+          // Commit: hide hints and trigger animated transition.
+          swipePrev.classList.remove('is-armed');
+          swipeNext.classList.remove('is-armed');
+          swipePrev.style.opacity = '';
+          swipeNext.style.opacity = '';
+          swipePrev.style.transform = '';
+          swipeNext.style.transform = '';
+          modalContent.classList.remove('is-dragging');
+          navigateToNeighbour(dir, { source: 'swipe' });
+          active = false;
+          claimed = false;
+          direction = null;
+          pointerId = null;
+        } else {
+          reset(true);
+        }
+      }
+
+      modalContent.addEventListener('pointerdown', onPointerDown);
+      modalContent.addEventListener('pointermove', onPointerMove);
+      modalContent.addEventListener('pointerup', onPointerUp);
+      modalContent.addEventListener('pointercancel', () => reset(true));
+    })();
     copyButton.addEventListener('click', (e) => {
       e.stopPropagation();
       copyPoemToClipboard();
@@ -1275,7 +1688,7 @@
       let visible = 0;
       let total = 0;
 
-      document.querySelectorAll('.card').forEach(card => {
+      document.querySelectorAll('.card:not(.card--skeleton)').forEach(card => {
         const title = card.dataset.title;
         const author = card.dataset.author;
         const content = card.dataset.content;
@@ -1304,6 +1717,10 @@
         countEl.textContent = `${visible} of ${total} poems`;
       } else {
         countEl.textContent = `${visible} poems`;
+      }
+
+      if (modal.classList.contains('is-open')) {
+        updateNavButtons();
       }
     }
 
@@ -1379,6 +1796,7 @@
           const isMemorized = memorizedSet.has(poem.slug);
           grid.appendChild(createCard(poem, isMemorized));
         });
+        window.Favorites?.scheduleRefresh(grid);
         countEl.textContent = `${validPoems.length} poems`;
 
         const initialSlug = getSlugFromLocation();
