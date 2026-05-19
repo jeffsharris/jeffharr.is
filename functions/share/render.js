@@ -23,6 +23,7 @@ const PLATFORM_NAMES = {
 };
 
 const PREVIEW_DESCRIPTION_MAX = 180;
+const VISIBLE_DESCRIPTION_MAX = 500;
 const X_DESCRIPTION_MAX = 220;
 
 export function renderSharePage(item, requestUrl) {
@@ -33,6 +34,7 @@ export function renderSharePage(item, requestUrl) {
   const shareUrl = new URL(`/share/${item.id}`, requestUrl).href;
   const title = item.title || 'Shared podcast';
   const description = cleanDisplayText(item.description || item.podcast?.description || 'A shared podcast link from jeffharr.is.');
+  const visibleDescription = splitDescription(description, VISIBLE_DESCRIPTION_MAX);
   const previewDescription = truncate(description, PREVIEW_DESCRIPTION_MAX);
   const imageUrl = item.imageUrl || item.podcast?.imageUrl || 'https://jeffharr.is/images/profile.jpg';
   const audioUrl = item.media?.audioUrl || '';
@@ -70,11 +72,11 @@ export function renderSharePage(item, requestUrl) {
                 <audio controls preload="metadata" src="${escapeAttribute(audioUrl)}"></audio>
               </div>
             ` : ''}
-            <p class="share-description">${escapeHtml(description)}</p>
+            ${renderExpandableDescription(visibleDescription)}
           </div>
         </article>
       </main>
-      <script src="/share-assets/share.js?v=6"></script>
+      <script src="/share-assets/share.js?v=7"></script>
     `
   });
 }
@@ -124,7 +126,7 @@ function renderXSharePage(item, requestUrl) {
           ${warnings.length ? `<p class="x-thread-note">${escapeHtml(warnings[0])}</p>` : ''}
         </article>
       </main>
-      <script src="/share-assets/share.js?v=6"></script>
+      <script src="/share-assets/share.js?v=7"></script>
     `
   });
 }
@@ -250,7 +252,7 @@ export function renderLoadingPage(sourceUrl, requestUrl) {
           </div>
         </section>
       </main>
-      <script src="/share-assets/share.js?v=6"></script>
+      <script src="/share-assets/share.js?v=7"></script>
     `
   });
 }
@@ -300,7 +302,7 @@ function htmlDocument({ title, description, imageUrl, url, body, noindex }) {
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="manifest" href="/share-assets/manifest.webmanifest">
-  <link rel="stylesheet" href="/share-assets/share.css?v=6">
+  <link rel="stylesheet" href="/share-assets/share.css?v=7">
 </head>
 <body>
   <div class="bg-gradient"></div>
@@ -338,6 +340,22 @@ function renderPlatformLinks(platforms) {
         <span class="platform-btn__chev" aria-hidden="true">${chevronIconSvg()}</span>
       </a>
     `).join('');
+}
+
+function renderExpandableDescription(description) {
+  if (!description.preview) return '';
+  if (!description.rest) {
+    return `<p class="share-description">${escapeHtml(description.preview)}</p>`;
+  }
+
+  return `
+    <p class="share-description share-description--collapsible" data-description-wrap>
+      <span data-description-preview>${escapeHtml(description.preview)}</span><span class="share-description__ellipsis" data-description-ellipsis aria-hidden="true">…</span><span class="share-description__rest" data-description-rest hidden> ${escapeHtml(description.rest)}</span>
+      <button class="description-toggle" type="button" data-description-toggle aria-expanded="false" aria-label="Show full description">
+        <span class="description-toggle__icon" aria-hidden="true">${chevronIconSvg()}</span>
+      </button>
+    </p>
+  `;
 }
 
 function platformIconSvg(key) {
@@ -580,6 +598,20 @@ function truncate(value, max) {
   const clean = cleanDisplayText(value);
   if (clean.length <= max) return clean;
   return `${clean.slice(0, max - 1).trim()}…`;
+}
+
+function splitDescription(value, max) {
+  const clean = cleanDisplayText(value);
+  if (clean.length <= max) {
+    return { preview: clean, rest: '' };
+  }
+
+  const firstPass = clean.slice(0, max + 1);
+  const lastSpace = firstPass.search(/\s\S*$/);
+  const splitAt = lastSpace >= Math.floor(max * 0.75) ? lastSpace : max;
+  const preview = clean.slice(0, splitAt).trimEnd();
+  const rest = clean.slice(splitAt).trimStart();
+  return { preview, rest };
 }
 
 function cleanDisplayText(value) {

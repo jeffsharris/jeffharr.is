@@ -2,11 +2,13 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { renderSharePage } from '../functions/share/render.js';
 
-test('renderSharePage shows full podcast descriptions but keeps preview metadata short', () => {
+test('renderSharePage collapses long podcast descriptions and keeps preview metadata short', () => {
   const description = [
     'This episode opens with a long setup about the paper and the central claim.',
     'It then follows the implications across selection pressure, agricultural societies, and the way old consensus positions can change.',
-    'The closing section returns to why the argument matters for listeners who are trying to understand human history in a less static way.'
+    'The closing section returns to why the argument matters for listeners who are trying to understand human history in a less static way.',
+    'A fourth section adds more context about the field, the disputed assumptions, and why the debate has become newly relevant.',
+    'A final section gives listeners enough detail to decide whether they want to read the original paper and follow the supporting evidence.'
   ].join(' ');
   const html = renderSharePage({
     id: 'p_long_description',
@@ -23,8 +25,15 @@ test('renderSharePage shows full podcast descriptions but keeps preview metadata
     media: {}
   }, 'https://jeffharr.is/share/p_long_description');
   const metaDescription = html.match(/<meta name="description" content="([^"]+)">/)?.[1] || '';
+  const preview = html.match(/<span data-description-preview>([^<]+)<\/span>/)?.[1] || '';
+  const rest = html.match(/<span class="share-description__rest" data-description-rest hidden> ([^<]+)<\/span>/)?.[1] || '';
 
-  assert.ok(html.includes(`<p class="share-description">${description}</p>`));
+  assert.ok(preview.length <= 500);
+  assert.ok(preview.length >= 375);
+  assert.ok(rest.length > 0);
+  assert.equal(`${preview} ${rest}`, description);
+  assert.match(html, /data-description-toggle aria-expanded="false" aria-label="Show full description"/);
+  assert.match(html, /share-description__ellipsis/);
   assert.ok(metaDescription.length <= 180);
   assert.match(metaDescription, /…$/);
   assert.doesNotMatch(html, /Copy RSS/);

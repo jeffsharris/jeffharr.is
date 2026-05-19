@@ -218,9 +218,29 @@
     createShare();
   }
 
+  function initDescriptionToggles() {
+    for (const button of document.querySelectorAll('[data-description-toggle]')) {
+      const wrap = button.closest('[data-description-wrap]');
+      if (!wrap) continue;
+      const rest = wrap.querySelector('[data-description-rest]');
+      const ellipsis = wrap.querySelector('[data-description-ellipsis]');
+      if (!rest) continue;
+
+      button.addEventListener('click', () => {
+        const expanded = button.getAttribute('aria-expanded') === 'true';
+        const nextExpanded = !expanded;
+        rest.hidden = !nextExpanded;
+        if (ellipsis) ellipsis.hidden = nextExpanded;
+        button.setAttribute('aria-expanded', String(nextExpanded));
+        button.setAttribute('aria-label', nextExpanded ? 'Collapse description' : 'Show full description');
+      });
+    }
+  }
+
   reorderPlatformLinks();
   initCopyButtons();
   initNativeShareButtons();
   initShareForm();
   initShareLoader();
+  initDescriptionToggles();
 })();

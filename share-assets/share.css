@@ -194,6 +194,62 @@ h2 {
   margin: 18px 0 0;
 }
 
+.share-description--collapsible {
+  line-height: 1.55;
+}
+
+.share-description__ellipsis {
+  color: var(--text-light);
+}
+
+.share-description__rest[hidden],
+.share-description__ellipsis[hidden] {
+  display: none;
+}
+
+.description-toggle {
+  display: inline-grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  margin-left: 8px;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--bg-card);
+  color: var(--text-muted);
+  vertical-align: -7px;
+  cursor: pointer;
+  transition: background var(--transition), border-color var(--transition), color var(--transition), transform var(--transition);
+}
+
+.description-toggle:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  transform: translateY(-1px);
+}
+
+.description-toggle:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--accent) 55%, transparent);
+  outline-offset: 2px;
+}
+
+.description-toggle__icon {
+  display: inline-grid;
+  place-items: center;
+  transition: transform var(--transition);
+}
+
+.description-toggle__icon svg {
+  width: 16px;
+  height: 16px;
+  transform: rotate(90deg);
+}
+
+.description-toggle[aria-expanded="true"] .description-toggle__icon {
+  transform: rotate(180deg);
+}
+
 .share-player {
   margin: 22px 0 0;
 }
