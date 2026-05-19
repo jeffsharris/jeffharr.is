@@ -319,6 +319,14 @@ async function buildReaderContent(url, fallbackTitle, browserBinding, options = 
     return xReader;
   }
 
+  const substackReader = await buildSubstackReaderFromUrl(url, fallbackTitle, {
+    log,
+    ...logContext
+  });
+  if (substackReader?.contentHtml && shouldCacheReader(substackReader)) {
+    return substackReader;
+  }
+
   let html;
   try {
     html = await fetchHtml(url);
@@ -350,6 +358,136 @@ async function buildReaderContent(url, fallbackTitle, browserBinding, options = 
   }
 
   return reader;
+}
+
+async function buildSubstackReaderFromUrl(url, fallbackTitle, options = {}) {
+  const postRef = parseSubstackPostRef(url);
+  if (!postRef) return null;
+
+  let response;
+  try {
+    response = await fetchWithTimeout(postRef.apiUrl, {
+      headers: {
+        'User-Agent': USER_AGENT,
+        'Accept': 'application/json'
+      }
+    }, FETCH_TIMEOUT_MS);
+  } catch (error) {
+    logSubstackReaderFallback(options, {
+      status: null,
+      error
+    });
+    return null;
+  }
+
+  if (!response.ok) {
+    logSubstackReaderFallback(options, {
+      status: response.status
+    });
+    return null;
+  }
+
+  let post;
+  try {
+    post = await response.json();
+  } catch (error) {
+    logSubstackReaderFallback(options, {
+      status: response.status,
+      error
+    });
+    return null;
+  }
+
+  const bodyHtml = typeof post?.body_html === 'string' ? post.body_html : '';
+  if (!bodyHtml) return null;
+
+  const canonicalUrl = typeof post?.canonical_url === 'string' && post.canonical_url
+    ? post.canonical_url
+    : postRef.canonicalUrl;
+  const contentHtml = sanitizeContent(bodyHtml, canonicalUrl);
+  if (!contentHtml) return null;
+
+  const { document } = parseHTML(`<article>${contentHtml}</article>`);
+  const wordCount = integerOrNull(post?.wordcount) || countWords(document.body?.textContent || '');
+
+  return {
+    title: normalizeReaderText(post?.title) || fallbackTitle || deriveTitleFromUrl(canonicalUrl),
+    byline: substackByline(post),
+    excerpt: normalizeReaderText(post?.subtitle || post?.description) || '',
+    siteName: postRef.siteName,
+    wordCount,
+    contentHtml,
+    retrievedAt: new Date().toISOString()
+  };
+}
+
+function parseSubstackPostRef(value) {
+  let parsed;
+  try {
+    parsed = new URL(value);
+  } catch {
+    return null;
+  }
+
+  const host = parsed.hostname.toLowerCase().replace(/^www\./, '');
+  const segments = parsed.pathname.split('/').filter(Boolean);
+  let publication = '';
+  let slug = '';
+
+  if (host === 'open.substack.com') {
+    if (segments[0] !== 'pub' || segments[2] !== 'p') return null;
+    publication = segments[1] || '';
+    slug = segments[3] || '';
+  } else if (host.endsWith('.substack.com')) {
+    if (segments[0] !== 'p') return null;
+    publication = host.slice(0, -'.substack.com'.length);
+    slug = segments[1] || '';
+  } else {
+    return null;
+  }
+
+  if (!publication || !slug) return null;
+  const safePublication = publication.toLowerCase().replace(/[^a-z0-9-]/g, '');
+  if (!safePublication) return null;
+  const safeSlug = encodeURIComponent(decodeURIComponent(slug));
+  const publicationHost = `${safePublication}.substack.com`;
+
+  return {
+    apiUrl: `https://${publicationHost}/api/v1/posts/${safeSlug}`,
+    canonicalUrl: `https://${publicationHost}/p/${safeSlug}`,
+    siteName: publicationHost
+  };
+}
+
+function substackByline(post) {
+  const bylines = Array.isArray(post?.publishedBylines) ? post.publishedBylines : [];
+  const names = bylines
+    .map((byline) => normalizeReaderText(byline?.name || byline?.handle))
+    .filter(Boolean);
+  if (names.length > 0) return [...new Set(names)].join(', ');
+  return '';
+}
+
+function normalizeReaderText(value) {
+  if (typeof value !== 'string') return '';
+  return value.replace(/\s+/g, ' ').trim();
+}
+
+function integerOrNull(value) {
+  const number = Number(value);
+  return Number.isInteger(number) ? number : null;
+}
+
+function logSubstackReaderFallback(options, details = {}) {
+  if (!options?.log) return;
+  options.log('warn', 'substack_reader_api_failed', {
+    stage: 'reader_fetch',
+    itemId: options.itemId || null,
+    url: options.url || null,
+    title: options.title || null,
+    status: details.status || null,
+    ...(details.error ? formatError(details.error) : {})
+  });
 }
 
 async function fetchAndCacheReader({
