@@ -7,21 +7,13 @@ import { createLogger, formatError } from '../lib/logger.js';
 import { getContentDb } from '../content-library/db.js';
 import { saveReadLaterProgress } from '../content-library/read-later-store.js';
 
-const KV_PREFIX = 'item:';
-const MIN_VIDEO_SECONDS = 300;
-
 export async function onRequest(context) {
   const { request, env } = context;
-  const kv = env.READ_LATER;
-  const contentDb = shouldUseContentLibrary(env) ? getContentDb(env) : null;
+  const db = getContentDb(env);
   const logger = createLogger({ request, source: 'read-later-progress' });
   const log = logger.log;
 
-  if (contentDb) {
-    return handleContentLibraryProgress(request, contentDb, log);
-  }
-
-  if (!kv) {
+  if (!db) {
     log('error', 'storage_unavailable', { stage: 'init' });
     return jsonResponse(
       { ok: false, error: 'Storage unavailable' },
@@ -29,104 +21,10 @@ export async function onRequest(context) {
     );
   }
 
-  if (!['PATCH', 'POST'].includes(request.method)) {
-    log('warn', 'method_not_allowed', { stage: 'request' });
-    return jsonResponse(
-      { ok: false, error: 'Method not allowed' },
-      { status: 405, cache: 'no-store' }
-    );
-  }
-
-  try {
-    const payload = await parseJson(request);
-    const id = typeof payload?.id === 'string' ? payload.id.trim() : '';
-    const scrollTop = Number(payload?.scrollTop);
-    const scrollRatio = Number(payload?.scrollRatio);
-    const incomingScrollUpdatedAt = normalizeIsoDate(payload?.updatedAt);
-    const videoCurrentTime = Number(payload?.videoCurrentTime);
-    const videoDuration = Number(payload?.videoDuration);
-
-    const hasScroll = Number.isFinite(scrollTop) && Number.isFinite(scrollRatio);
-    const hasVideo = Number.isFinite(videoCurrentTime) && Number.isFinite(videoDuration);
-
-    if (!id || (!hasScroll && !hasVideo)) {
-      log('warn', 'invalid_payload', {
-        stage: 'request',
-        itemId: id || null
-      });
-      return jsonResponse(
-        { ok: false, error: 'Invalid payload' },
-        { status: 400, cache: 'no-store' }
-      );
-    }
-
-    const key = `${KV_PREFIX}${id}`;
-    const item = await kv.get(key, { type: 'json' });
-
-    if (!item) {
-      log('warn', 'item_not_found', {
-        stage: 'lookup',
-        itemId: id
-      });
-      return jsonResponse(
-        { ok: false, error: 'Item not found' },
-        { status: 404, cache: 'no-store' }
-      );
-    }
-
-    const progress = item.progress && typeof item.progress === 'object'
-      ? { ...item.progress }
-      : {};
-    const serverNow = new Date().toISOString();
-
-    if (hasScroll) {
-      const nextScrollUpdatedAt = incomingScrollUpdatedAt || serverNow;
-      const existingScrollUpdatedAt = normalizeIsoDate(progress.updatedAt);
-      const canApplyScroll = isSameOrAfter(nextScrollUpdatedAt, existingScrollUpdatedAt);
-
-      if (canApplyScroll) {
-        progress.scrollTop = Math.max(0, scrollTop);
-        progress.scrollRatio = clamp(scrollRatio, 0, 1);
-        progress.updatedAt = nextScrollUpdatedAt;
-      }
-    }
-
-    if (hasVideo) {
-      if (videoDuration >= MIN_VIDEO_SECONDS) {
-        const safeDuration = Math.max(videoDuration, 0);
-        const safeTime = clamp(videoCurrentTime, 0, safeDuration || 0);
-        progress.video = {
-          currentTime: safeTime,
-          duration: safeDuration,
-          ratio: safeDuration ? clamp(safeTime / safeDuration, 0, 1) : 0,
-          updatedAt: serverNow
-        };
-      } else {
-        delete progress.video;
-      }
-    }
-
-    item.progress = Object.keys(progress).length > 0 ? progress : null;
-
-    await kv.put(key, JSON.stringify(item));
-
-    return jsonResponse(
-      { ok: true, progress: item.progress },
-      { status: 200, cache: 'no-store' }
-    );
-  } catch (error) {
-    log('error', 'progress_save_failed', {
-      stage: 'save',
-      ...formatError(error)
-    });
-    return jsonResponse(
-      { ok: false, error: 'Failed to save progress' },
-      { status: 200, cache: 'no-store' }
-    );
-  }
+  return handleReadLaterProgress(request, db, log);
 }
 
-async function handleContentLibraryProgress(request, db, log) {
+async function handleReadLaterProgress(request, db, log) {
   if (!['PATCH', 'POST'].includes(request.method)) {
     log('warn', 'method_not_allowed', { stage: 'request' });
     return jsonResponse(
@@ -148,7 +46,7 @@ async function handleContentLibraryProgress(request, db, log) {
       { status: 200, cache: 'no-store' }
     );
   } catch (error) {
-    log('error', 'content_library_progress_save_failed', {
+    log('error', 'progress_save_failed', {
       stage: 'save',
       ...formatError(error)
     });
@@ -167,26 +65,6 @@ async function parseJson(request) {
   }
 }
 
-function clamp(value, min, max) {
-  return Math.min(Math.max(value, min), max);
-}
-
-function normalizeIsoDate(value) {
-  if (typeof value !== 'string') return null;
-  const date = new Date(value);
-  if (Number.isNaN(date.getTime())) return null;
-  return date.toISOString();
-}
-
-function isSameOrAfter(nextIso, existingIso) {
-  if (!nextIso) return true;
-  if (!existingIso) return true;
-  const nextTime = new Date(nextIso).getTime();
-  const existingTime = new Date(existingIso).getTime();
-  if (Number.isNaN(nextTime) || Number.isNaN(existingTime)) return true;
-  return nextTime >= existingTime;
-}
-
 function jsonResponse(payload, { status = 200, cache = 'no-store' } = {}) {
   return new Response(JSON.stringify(payload), {
     status,
@@ -195,8 +73,4 @@ function jsonResponse(payload, { status = 200, cache = 'no-store' } = {}) {
       'Cache-Control': cache
     }
   });
-}
-
-function shouldUseContentLibrary(env) {
-  return Boolean(env?.CONTENT_DB && env?.CONTENT_LIBRARY_READ_LATER === '1');
 }

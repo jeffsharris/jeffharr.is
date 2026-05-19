@@ -1,15 +1,13 @@
 import { createLogger } from '../lib/logger.js';
-import { createReadLaterStorage } from '../content-library/kv-adapter.js';
-
-const KV_PREFIX = 'item:';
+import { createReadLaterRepository } from './repository.js';
 
 export async function onRequest(context) {
   const { request, env } = context;
-  const kv = createReadLaterStorage(env, { requireAssets: true });
+  const repository = createReadLaterRepository(env, { requireAssets: true });
   const logger = createLogger({ request, source: 'read-later-cover-sync' });
   const log = logger.log;
 
-  if (!kv) {
+  if (!repository) {
     log('error', 'storage_unavailable', { stage: 'init' });
     return jsonResponse(
       { ok: false, error: 'Storage unavailable' },
@@ -39,7 +37,7 @@ export async function onRequest(context) {
     );
   }
 
-  const item = await kv.get(`${KV_PREFIX}${id}`, { type: 'json' });
+  const item = await repository.getItem(id);
   if (!item) {
     return jsonResponse(
       { ok: false, error: 'Item not found' },

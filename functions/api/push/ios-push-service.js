@@ -1,9 +1,9 @@
 import { formatError } from '../lib/logger.js';
 import { getContentDb } from '../content-library/db.js';
+import { createReadLaterRepository } from '../read-later/repository.js';
 import { PUSH_NOTIFICATION_MESSAGE_TYPE, ensurePushChannels } from '../read-later/article-push-service.js';
 import { getOwnerId, listPushDevicesForOwner, removePushDeviceByRecord } from './device-store.js';
 
-const KV_ITEM_PREFIX = 'item:';
 const APNS_PRODUCTION_HOST = 'api.push.apple.com';
 const APNS_SANDBOX_HOST = 'api.sandbox.push.apple.com';
 const APNS_TOKEN_TTL_SECONDS = 50 * 60;
@@ -467,8 +467,8 @@ async function sendApnsNotification({ env, authToken, device, payload }) {
   };
 }
 
-async function saveItem(kv, item) {
-  await kv.put(`${KV_ITEM_PREFIX}${item.id}`, JSON.stringify(item));
+async function saveItem(repository, item) {
+  await repository.saveItem(item);
 }
 
 function isCurrentEvent(item, eventId) {
@@ -478,7 +478,7 @@ function isCurrentEvent(item, eventId) {
   return currentEventId === eventId;
 }
 
-async function updateIosChannel(kv, item, { status, eventId, lastError }) {
+async function updateIosChannel(repository, item, { status, eventId, lastError }) {
   const now = getNowIso();
   ensurePushChannels(item, now);
   item.pushChannels.ios = {
@@ -488,7 +488,7 @@ async function updateIosChannel(kv, item, { status, eventId, lastError }) {
     eventId: eventId || item.pushChannels.ios.eventId || null,
     lastError: lastError || null
   };
-  await saveItem(kv, item);
+  await saveItem(repository, item);
 }
 
 async function deliverIosPush({
@@ -715,9 +715,9 @@ async function processIosPushMessage(message, env, log) {
     return;
   }
 
-  const kv = env?.READ_LATER;
+  const repository = env?.READ_LATER_REPOSITORY || createReadLaterRepository(env);
   const deviceDb = getContentDb(env);
-  if (!kv) {
+  if (!repository) {
     if (log) {
       log('error', 'storage_unavailable', {
         stage: 'queue',
@@ -737,8 +737,7 @@ async function processIosPushMessage(message, env, log) {
     return;
   }
 
-  const key = `${KV_ITEM_PREFIX}${itemId}`;
-  const item = await kv.get(key, { type: 'json' });
+  const item = await repository.getItem(itemId);
   if (!item) {
     if (log) {
       log('warn', 'ios_push_item_missing', {
@@ -764,7 +763,7 @@ async function processIosPushMessage(message, env, log) {
   }
 
   if (item.pushChannels.readiness.status !== 'ready') {
-    await updateIosChannel(kv, item, {
+    await updateIosChannel(repository, item, {
       status: 'skipped',
       eventId,
       lastError: 'Article is not push-ready'
@@ -792,7 +791,7 @@ async function processIosPushMessage(message, env, log) {
   });
 
   if (delivery.reason === 'no_devices') {
-    await updateIosChannel(kv, item, {
+    await updateIosChannel(repository, item, {
       status: 'skipped',
       eventId,
       lastError: 'No registered iOS devices'
@@ -810,7 +809,7 @@ async function processIosPushMessage(message, env, log) {
   }
 
   if (delivery.reason === 'auth_failed') {
-    await updateIosChannel(kv, item, {
+    await updateIosChannel(repository, item, {
       status: 'failed',
       eventId,
       lastError: 'APNS credentials unavailable'
@@ -829,7 +828,7 @@ async function processIosPushMessage(message, env, log) {
   }
 
   if (delivery.ok) {
-    await updateIosChannel(kv, item, {
+    await updateIosChannel(repository, item, {
       status: 'sent',
       eventId,
       lastError: null
@@ -856,7 +855,7 @@ async function processIosPushMessage(message, env, log) {
     ? 'No valid registered iOS devices'
     : 'Failed to deliver iOS push';
 
-  await updateIosChannel(kv, item, {
+  await updateIosChannel(repository, item, {
     status,
     eventId,
     lastError: errorMessage

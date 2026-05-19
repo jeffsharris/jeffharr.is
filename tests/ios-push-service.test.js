@@ -5,41 +5,7 @@ import { createInitialPushChannels } from '../functions/api/read-later/article-p
 import { processIosPushBatch } from '../functions/api/push/ios-push-service.js';
 import { upsertPushDevice } from '../functions/api/push/device-store.js';
 import { createMockPushDb, listPushDeviceRows } from './mock-push-db.js';
-
-function createMockKv(initial = {}) {
-  const store = new Map(Object.entries(initial));
-
-  return {
-    store,
-    async get(key, options = {}) {
-      const value = store.get(key);
-      if (value == null) return null;
-      if (options.type === 'json') {
-        return JSON.parse(value);
-      }
-      return value;
-    },
-    async put(key, value) {
-      store.set(key, value);
-    },
-    async delete(key) {
-      store.delete(key);
-    },
-    async list({ prefix = '' } = {}) {
-      const keys = [];
-      for (const key of store.keys()) {
-        if (key.startsWith(prefix)) {
-          keys.push({ name: key });
-        }
-      }
-      return {
-        keys,
-        list_complete: true,
-        cursor: null
-      };
-    }
-  };
-}
+import { createMockReadLaterRepository } from './mock-read-later-repository.js';
 
 function createApnsPrivateKeyPem() {
   const { privateKey } = generateKeyPairSync('ec', { namedCurve: 'prime256v1' });
@@ -89,11 +55,10 @@ function buildMessage(item, ownerId, eventId) {
 }
 
 test('ios push prunes invalid APNs token and marks item as skipped', async (t) => {
-  const kv = createMockKv();
   const db = createMockPushDb();
   const ownerId = 'owner-1';
   const item = buildReadyItem('item-ios-1', 'event-1');
-  await kv.put(`item:${item.id}`, JSON.stringify(item));
+  const repository = createMockReadLaterRepository({ items: { [item.id]: item } });
 
   await upsertPushDevice({
     db,
@@ -123,7 +88,7 @@ test('ios push prunes invalid APNs token and marks item as skipped', async (t) =
   );
 
   const env = {
-    READ_LATER: kv,
+    READ_LATER_REPOSITORY: repository,
     CONTENT_DB: db,
     PUSH_DEFAULT_OWNER_ID: ownerId,
     APNS_TEAM_ID: 'TEAM123456',
@@ -140,17 +105,16 @@ test('ios push prunes invalid APNs token and marks item as skipped', async (t) =
 
   assert.equal(listPushDeviceRows(db).length, 0);
 
-  const updatedItem = await kv.get(`item:${item.id}`, { type: 'json' });
+  const updatedItem = await repository.getItem(item.id);
   assert.equal(updatedItem.pushChannels.ios.status, 'skipped');
   assert.equal(updatedItem.pushChannels.ios.lastError, 'No valid registered iOS devices');
 });
 
 test('ios push worker drops stale event messages without sending', async (t) => {
-  const kv = createMockKv();
   const db = createMockPushDb();
   const ownerId = 'owner-1';
   const item = buildReadyItem('item-ios-2', 'event-current');
-  await kv.put(`item:${item.id}`, JSON.stringify(item));
+  const repository = createMockReadLaterRepository({ items: { [item.id]: item } });
 
   await upsertPushDevice({
     db,
@@ -178,7 +142,7 @@ test('ios push worker drops stale event messages without sending', async (t) => 
   await processIosPushBatch(
     { messages: [buildMessage(item, ownerId, 'event-old')] },
     {
-      READ_LATER: kv,
+      READ_LATER_REPOSITORY: repository,
       CONTENT_DB: db,
       PUSH_DEFAULT_OWNER_ID: ownerId,
       APNS_TEAM_ID: 'TEAM123456',
@@ -190,13 +154,12 @@ test('ios push worker drops stale event messages without sending', async (t) => 
   );
 
   assert.equal(fetchCallCount, 0);
-  const storedItem = await kv.get(`item:${item.id}`, { type: 'json' });
+  const storedItem = await repository.getItem(item.id);
   assert.equal(storedItem.pushChannels.ios.eventId, 'event-current');
   assert.equal(storedItem.pushChannels.ios.status, 'queued');
 });
 
 test('ios push worker processes queued test push message without item lookup', async (t) => {
-  const kv = createMockKv();
   const db = createMockPushDb();
   const ownerId = 'owner-1';
 
@@ -254,7 +217,6 @@ test('ios push worker processes queued test push message without item lookup', a
       ]
     },
     {
-      READ_LATER: kv,
       CONTENT_DB: db,
       PUSH_DEFAULT_OWNER_ID: ownerId,
       APNS_TEAM_ID: 'TEAM123456',

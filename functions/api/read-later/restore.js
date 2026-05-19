@@ -1,28 +1,14 @@
-/**
- * Restore endpoint for read-later items (used by undo).
- * Recreates an item with its original metadata.
- */
-
-import { createItem, normalizeTitle, normalizeUrl } from '../read-later.js';
 import { createLogger, formatError } from '../lib/logger.js';
 import { getContentDb } from '../content-library/db.js';
 import { restoreReadLaterItem } from '../content-library/read-later-store.js';
 
-const KV_PREFIX = 'item:';
-const MIN_VIDEO_SECONDS = 300;
-
 export async function onRequest(context) {
   const { request, env } = context;
-  const kv = env.READ_LATER;
-  const contentDb = shouldUseContentLibrary(env) ? getContentDb(env) : null;
+  const db = getContentDb(env);
   const logger = createLogger({ request, source: 'read-later-restore' });
   const log = logger.log;
 
-  if (contentDb) {
-    return handleContentLibraryRestore(request, contentDb, log);
-  }
-
-  if (!kv) {
+  if (!db) {
     log('error', 'storage_unavailable', { stage: 'init' });
     return jsonResponse(
       { ok: false, error: 'Storage unavailable' },
@@ -30,74 +16,10 @@ export async function onRequest(context) {
     );
   }
 
-  if (request.method !== 'POST') {
-    log('warn', 'method_not_allowed', { stage: 'request' });
-    return jsonResponse(
-      { ok: false, error: 'Method not allowed' },
-      { status: 405, cache: 'no-store' }
-    );
-  }
-
-  try {
-    const payload = await parseJson(request);
-    const id = typeof payload?.id === 'string' ? payload.id.trim() : '';
-    const normalizedUrl = normalizeUrl(payload?.url);
-
-    if (!id || !normalizedUrl) {
-      log('warn', 'invalid_payload', {
-        stage: 'request',
-        itemId: id || null,
-        url: payload?.url || null,
-        title: payload?.title || null
-      });
-      return jsonResponse(
-        { ok: false, error: 'Invalid payload' },
-        { status: 400, cache: 'no-store' }
-      );
-    }
-
-    const title = normalizeTitle(payload?.title, normalizedUrl);
-    const read = typeof payload?.read === 'boolean' ? payload.read : false;
-    const savedAt = normalizeIsoDate(payload?.savedAt) || new Date().toISOString();
-    const readAt = normalizeIsoDate(payload?.readAt);
-    const progress = normalizeProgress(payload?.progress);
-
-    const item = createItem({
-      id,
-      url: normalizedUrl,
-      title,
-      savedAt,
-      read,
-      readAt,
-      progress
-    });
-
-    await kv.put(`${KV_PREFIX}${id}`, JSON.stringify(item));
-
-    log('info', 'restore_succeeded', {
-      stage: 'save',
-      itemId: id,
-      url: item.url,
-      title: item.title
-    });
-
-    return jsonResponse(
-      { ok: true, item },
-      { status: 200, cache: 'no-store' }
-    );
-  } catch (error) {
-    log('error', 'restore_failed', {
-      stage: 'save',
-      ...formatError(error)
-    });
-    return jsonResponse(
-      { ok: false, error: 'Failed to restore item' },
-      { status: 500, cache: 'no-store' }
-    );
-  }
+  return handleReadLaterRestore(request, db, log);
 }
 
-async function handleContentLibraryRestore(request, db, log) {
+async function handleReadLaterRestore(request, db, log) {
   if (request.method !== 'POST') {
     log('warn', 'method_not_allowed', { stage: 'request' });
     return jsonResponse(
@@ -119,7 +41,7 @@ async function handleContentLibraryRestore(request, db, log) {
       { status: 200, cache: 'no-store' }
     );
   } catch (error) {
-    log('error', 'content_library_restore_failed', {
+    log('error', 'restore_failed', {
       stage: 'save',
       ...formatError(error)
     });
@@ -138,50 +60,6 @@ async function parseJson(request) {
   }
 }
 
-function normalizeIsoDate(value) {
-  if (typeof value !== 'string') return null;
-  const date = new Date(value);
-  if (Number.isNaN(date.getTime())) return null;
-  return date.toISOString();
-}
-
-function normalizeProgress(progress) {
-  if (!progress || typeof progress !== 'object') return null;
-
-  const result = {};
-  const scrollTop = Number(progress.scrollTop);
-  const scrollRatio = Number(progress.scrollRatio);
-  const hasScroll = Number.isFinite(scrollTop) && Number.isFinite(scrollRatio);
-
-  if (hasScroll) {
-    result.scrollTop = Math.max(0, scrollTop);
-    result.scrollRatio = clamp(scrollRatio, 0, 1);
-    result.updatedAt = normalizeIsoDate(progress.updatedAt) || new Date().toISOString();
-  }
-
-  const video = progress.video;
-  if (video && typeof video === 'object') {
-    const currentTime = Number(video.currentTime);
-    const duration = Number(video.duration);
-    if (Number.isFinite(currentTime) && Number.isFinite(duration) && duration >= MIN_VIDEO_SECONDS) {
-      const safeDuration = Math.max(duration, 0);
-      const safeTime = clamp(currentTime, 0, safeDuration || 0);
-      result.video = {
-        currentTime: safeTime,
-        duration: safeDuration,
-        ratio: safeDuration ? clamp(safeTime / safeDuration, 0, 1) : 0,
-        updatedAt: normalizeIsoDate(video.updatedAt) || new Date().toISOString()
-      };
-    }
-  }
-
-  return Object.keys(result).length > 0 ? result : null;
-}
-
-function clamp(value, min, max) {
-  return Math.min(Math.max(value, min), max);
-}
-
 function jsonResponse(payload, { status = 200, cache = 'no-store' } = {}) {
   return new Response(JSON.stringify(payload), {
     status,
@@ -190,8 +68,4 @@ function jsonResponse(payload, { status = 200, cache = 'no-store' } = {}) {
       'Cache-Control': cache
     }
   });
-}
-
-function shouldUseContentLibrary(env) {
-  return Boolean(env?.CONTENT_DB && env?.CONTENT_LIBRARY_READ_LATER === '1');
 }

@@ -1,27 +1,10 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { enqueueKindleSync } from '../functions/api/read-later/sync-service.js';
-
-function createMockKv(initial = {}) {
-  const store = new Map(Object.entries(initial));
-  return {
-    store,
-    async get(key, options = {}) {
-      const value = store.get(key);
-      if (value == null) return null;
-      if (options.type === 'json') {
-        return JSON.parse(value);
-      }
-      return value;
-    },
-    async put(key, value) {
-      store.set(key, value);
-    }
-  };
-}
+import { createMockReadLaterRepository } from './mock-read-later-repository.js';
 
 test('enqueueKindleSync marks item pending and enqueues first attempt', async () => {
-  const kv = createMockKv();
+  const repository = createMockReadLaterRepository();
   const sent = [];
   const env = {
     READ_LATER_SYNC_QUEUE: {
@@ -37,13 +20,13 @@ test('enqueueKindleSync marks item pending and enqueues first attempt', async ()
     title: 'Example Post'
   };
 
-  const result = await enqueueKindleSync({ item, kv, env, reason: 'save' });
+  const result = await enqueueKindleSync({ item, repository, env, reason: 'save' });
   assert.equal(result.queued, true);
   assert.equal(item.kindle.status, 'pending');
   assert.equal(item.kindle.attempt, 0);
   assert.equal(item.kindle.maxAttempts, 3);
 
-  const stored = await kv.get('item:item-1', { type: 'json' });
+  const stored = await repository.getItem('item-1');
   assert.equal(stored.kindle.status, 'pending');
 
   assert.equal(sent.length, 1);
@@ -56,26 +39,26 @@ test('enqueueKindleSync marks item pending and enqueues first attempt', async ()
 });
 
 test('enqueueKindleSync persists terminal failed state when queue binding is missing', async () => {
-  const kv = createMockKv();
+  const repository = createMockReadLaterRepository();
   const item = {
     id: 'item-2',
     url: 'https://example.com/post',
     title: 'Missing Queue'
   };
 
-  const result = await enqueueKindleSync({ item, kv, env: {} });
+  const result = await enqueueKindleSync({ item, repository, env: {} });
   assert.equal(result.queued, false);
   assert.equal(result.queueMissing, true);
   assert.equal(item.kindle.status, 'failed');
   assert.equal(item.kindle.errorCode, 'sync_queue_unavailable');
 
-  const stored = await kv.get('item:item-2', { type: 'json' });
+  const stored = await repository.getItem('item-2');
   assert.equal(stored.kindle.status, 'failed');
   assert.equal(stored.kindle.errorCode, 'sync_queue_unavailable');
 });
 
 test('enqueueKindleSync skips already-synced items that have covers', async () => {
-  const kv = createMockKv();
+  const repository = createMockReadLaterRepository();
   let sendCount = 0;
   const env = {
     READ_LATER_SYNC_QUEUE: {
@@ -94,15 +77,15 @@ test('enqueueKindleSync skips already-synced items that have covers', async () =
     }
   };
 
-  const result = await enqueueKindleSync({ item, kv, env });
+  const result = await enqueueKindleSync({ item, repository, env });
   assert.equal(result.skipped, true);
   assert.equal(sendCount, 0);
-  assert.equal(kv.store.size, 0);
+  assert.equal(repository.items.size, 0);
 });
 
 
 test('enqueueKindleSync does not skip non-YouTube unsupported items', async () => {
-  const kv = createMockKv();
+  const repository = createMockReadLaterRepository();
   let sendCount = 0;
   const env = {
     READ_LATER_SYNC_QUEUE: {
@@ -120,7 +103,7 @@ test('enqueueKindleSync does not skip non-YouTube unsupported items', async () =
     }
   };
 
-  const result = await enqueueKindleSync({ item, kv, env });
+  const result = await enqueueKindleSync({ item, repository, env });
   assert.equal(result.queued, true);
   assert.equal(sendCount, 1);
 });

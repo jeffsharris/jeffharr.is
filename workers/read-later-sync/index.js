@@ -5,10 +5,6 @@ import {
   COVER_MESSAGE_TYPE,
   processCoverSyncBatch
 } from '../../functions/api/read-later/cover-sync-service.js';
-import {
-  createSyncStorage,
-  withReadLaterStorage
-} from '../../functions/api/content-library/kv-adapter.js';
 
 function parseQueueMessageBody(message) {
   if (!message) return null;
@@ -35,8 +31,6 @@ export default {
 
   async queue(batch, env) {
     const logger = createLogger({ source: 'read-later-sync-worker' });
-    const storage = createSyncStorage(env);
-    const syncEnv = withReadLaterStorage(env, storage);
     const kindleMessages = [];
     const coverMessages = [];
 
@@ -57,11 +51,11 @@ export default {
     }
 
     if (kindleMessages.length > 0) {
-      await processKindleSyncBatch({ messages: kindleMessages }, syncEnv, logger.log);
+      await processKindleSyncBatch({ messages: kindleMessages }, env, logger.log);
     }
 
     if (coverMessages.length > 0) {
-      await processCoverSyncBatch({ messages: coverMessages }, syncEnv, logger.log);
+      await processCoverSyncBatch({ messages: coverMessages }, env, logger.log);
     }
   }
 };

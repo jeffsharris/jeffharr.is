@@ -1,21 +1,17 @@
-import { getShareKv, loadShareItem } from '../api/share/store.js';
 import { renderNotFoundPage, renderSharePage } from './render.js';
 import { getContentDb } from '../api/content-library/db.js';
 import { loadShareItem as loadContentLibraryShareItem } from '../api/content-library/share-store.js';
 
 export async function onRequest(context) {
   const { request, env, params } = context;
-  const kv = getShareKv(env);
-  const contentDb = shouldUseContentLibrary(env) ? getContentDb(env) : null;
+  const db = getContentDb(env);
   const id = params.id;
 
-  if ((!contentDb && !kv) || !id) {
+  if (!db || !id) {
     return htmlResponse(renderNotFoundPage(request.url), { status: 404 });
   }
 
-  const item = contentDb
-    ? await loadContentLibraryShareItem(contentDb, id)
-    : await loadShareItem(kv, id);
+  const item = await loadContentLibraryShareItem(db, id);
   if (!item) {
     return htmlResponse(renderNotFoundPage(request.url), { status: 404 });
   }
@@ -24,10 +20,6 @@ export async function onRequest(context) {
     status: 200,
     cache: 'public, max-age=300'
   });
-}
-
-function shouldUseContentLibrary(env) {
-  return Boolean(env?.CONTENT_DB && env?.CONTENT_LIBRARY_SHARE === '1');
 }
 
 function htmlResponse(body, { status = 200, cache = 'no-store' } = {}) {

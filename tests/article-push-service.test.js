@@ -6,40 +6,7 @@ import {
   recordKindleChannelState,
   updateArticlePushReadiness
 } from '../functions/api/read-later/article-push-service.js';
-
-function createMockKv(initial = {}) {
-  const store = new Map(Object.entries(initial));
-  return {
-    store,
-    async get(key, options = {}) {
-      const value = store.get(key);
-      if (value == null) return null;
-      if (options.type === 'json') {
-        return JSON.parse(value);
-      }
-      return value;
-    },
-    async put(key, value) {
-      store.set(key, value);
-    },
-    async delete(key) {
-      store.delete(key);
-    },
-    async list({ prefix = '' } = {}) {
-      const keys = [];
-      for (const key of store.keys()) {
-        if (key.startsWith(prefix)) {
-          keys.push({ name: key });
-        }
-      }
-      return {
-        keys,
-        list_complete: true,
-        cursor: null
-      };
-    }
-  };
-}
+import { createMockReadLaterRepository } from './mock-read-later-repository.js';
 
 function buildReaderHtml(wordCount = 65) {
   const words = Array.from({ length: wordCount }, (_, index) => `word${index}`).join(' ');
@@ -55,30 +22,32 @@ test('article push readiness stays pending until both reader and cover are ready
     pushChannels: createInitialPushChannels('2026-02-22T00:00:00.000Z')
   };
 
-  const kv = createMockKv({
-    'item:item-1': JSON.stringify(item),
-    'reader:item-1': JSON.stringify({
-      title: 'Example A',
-      byline: 'Author',
-      excerpt: 'Excerpt',
-      siteName: 'Example',
-      wordCount: 200,
-      contentHtml: buildReaderHtml(),
-      retrievedAt: '2026-02-22T00:00:01.000Z'
-    })
+  const repository = createMockReadLaterRepository({
+    items: { 'item-1': item },
+    readers: {
+      'item-1': {
+        title: 'Example A',
+        byline: 'Author',
+        excerpt: 'Excerpt',
+        siteName: 'Example',
+        wordCount: 200,
+        contentHtml: buildReaderHtml(),
+        retrievedAt: '2026-02-22T00:00:01.000Z'
+      }
+    }
   });
 
-  const first = await updateArticlePushReadiness('item-1', kv, null);
+  const first = await updateArticlePushReadiness('item-1', repository, null);
   assert.equal(first.ready, false);
   assert.equal(first.readerReady, true);
   assert.equal(first.coverReady, false);
   assert.equal(first.reason, 'waiting_for_cover');
 
-  const stored = await kv.get('item:item-1', { type: 'json' });
+  const stored = await repository.getItem('item-1');
   stored.cover = { updatedAt: '2026-02-22T00:02:00.000Z' };
-  await kv.put('item:item-1', JSON.stringify(stored));
+  await repository.saveItem(stored);
 
-  const second = await updateArticlePushReadiness('item-1', kv, null);
+  const second = await updateArticlePushReadiness('item-1', repository, null);
   assert.equal(second.ready, true);
   assert.equal(second.reason, null);
   assert.equal(second.item.pushChannels.readiness.status, 'ready');
@@ -99,20 +68,22 @@ test('article push readiness becomes ready after terminal cover failure', async 
     pushChannels: createInitialPushChannels('2026-02-22T00:00:00.000Z')
   };
 
-  const kv = createMockKv({
-    'item:item-cover-failed': JSON.stringify(item),
-    'reader:item-cover-failed': JSON.stringify({
-      title: 'Example A',
-      byline: 'Author',
-      excerpt: 'Excerpt',
-      siteName: 'Example',
-      wordCount: 200,
-      contentHtml: buildReaderHtml(),
-      retrievedAt: '2026-02-22T00:00:01.000Z'
-    })
+  const repository = createMockReadLaterRepository({
+    items: { 'item-cover-failed': item },
+    readers: {
+      'item-cover-failed': {
+        title: 'Example A',
+        byline: 'Author',
+        excerpt: 'Excerpt',
+        siteName: 'Example',
+        wordCount: 200,
+        contentHtml: buildReaderHtml(),
+        retrievedAt: '2026-02-22T00:00:01.000Z'
+      }
+    }
   });
 
-  const result = await updateArticlePushReadiness('item-cover-failed', kv, null);
+  const result = await updateArticlePushReadiness('item-cover-failed', repository, null);
   assert.equal(result.ready, true);
   assert.equal(result.readerReady, true);
   assert.equal(result.coverReady, false);
@@ -158,11 +129,9 @@ test('maybeQueueIosPush enqueues exactly once after readiness is ready', async (
     }
   };
 
-  const kv = createMockKv({
-    'item:item-2': JSON.stringify(item)
-  });
+  const repository = createMockReadLaterRepository({ items: { 'item-2': item } });
 
-  const first = await maybeQueueIosPush({ item, env, kv, log: null, source: 'test' });
+  const first = await maybeQueueIosPush({ item, env, repository, log: null, source: 'test' });
   assert.equal(first.queued, true);
   assert.equal(sent.length, 1);
   assert.equal(sent[0].type, 'push.notification.requested');
@@ -180,7 +149,7 @@ test('maybeQueueIosPush enqueues exactly once after readiness is ready', async (
   assert.equal(sent[0].data.channel, 'read-later');
   assert.equal(sent[0].data.itemId, 'item-2');
 
-  const second = await maybeQueueIosPush({ item: first.item, env, kv, log: null, source: 'test' });
+  const second = await maybeQueueIosPush({ item: first.item, env, repository, log: null, source: 'test' });
   assert.equal(second.queued, false);
   assert.equal(second.reason, 'already_queued_or_sent');
   assert.equal(sent.length, 1);
@@ -221,11 +190,9 @@ test('maybeQueueIosPush sends text-only notification when no cover exists', asyn
     }
   };
 
-  const kv = createMockKv({
-    'item:item-no-cover': JSON.stringify(item)
-  });
+  const repository = createMockReadLaterRepository({ items: { 'item-no-cover': item } });
 
-  const result = await maybeQueueIosPush({ item, env, kv, log: null, source: 'test' });
+  const result = await maybeQueueIosPush({ item, env, repository, log: null, source: 'test' });
   assert.equal(result.queued, true);
   assert.equal(sent.length, 1);
   assert.equal(sent[0].notification.media.length, 0);

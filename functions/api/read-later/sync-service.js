@@ -5,12 +5,11 @@ import {
   updateArticlePushReadiness
 } from './article-push-service.js';
 import { enqueueCoverGeneration } from './cover-sync-service.js';
-import { cacheReader } from './reader.js';
 import { syncKindleForItem, shouldCacheKindleReader, KINDLE_STATUS } from './kindle.js';
 import { getYouTubeInfo } from './media-utils.js';
+import { createReadLaterRepository } from './repository.js';
 import { formatError } from '../lib/logger.js';
 
-const KV_PREFIX = 'item:';
 const SYNC_QUEUE_BINDING = 'READ_LATER_SYNC_QUEUE';
 const DEFAULT_MAX_ATTEMPTS = 3;
 const MAX_MAX_ATTEMPTS = 5;
@@ -171,12 +170,12 @@ function isCurrentSyncVersion(item, syncVersion) {
   return current === syncVersion;
 }
 
-async function saveItem(kv, item) {
-  await kv.put(`${KV_PREFIX}${item.id}`, JSON.stringify(item));
+async function saveItem(repository, item) {
+  await repository.saveItem(item);
 }
 
-async function reconcileArticlePushReadiness({ itemId, kv, env, log, source }) {
-  const readiness = await updateArticlePushReadiness(itemId, kv, log);
+async function reconcileArticlePushReadiness({ itemId, repository, env, log, source }) {
+  const readiness = await updateArticlePushReadiness(itemId, repository, log);
   if (!readiness?.ok || !readiness?.item) {
     return readiness;
   }
@@ -187,7 +186,7 @@ async function reconcileArticlePushReadiness({ itemId, kv, env, log, source }) {
     try {
       const enqueueResult = await enqueueCoverGeneration({
         item: latestItem,
-        kv,
+        repository,
         env,
         log,
         reason: 'push-readiness'
@@ -208,7 +207,7 @@ async function reconcileArticlePushReadiness({ itemId, kv, env, log, source }) {
     const queueResult = await maybeQueueIosPush({
       item: latestItem,
       env,
-      kv,
+      repository,
       log,
       source
     });
@@ -223,14 +222,14 @@ async function reconcileArticlePushReadiness({ itemId, kv, env, log, source }) {
 
 async function enqueueKindleSync({
   item,
-  kv,
+  repository,
   env,
   log,
   reason = 'save',
   force = false,
   maxAttempts = DEFAULT_MAX_ATTEMPTS
 }) {
-  if (!kv || !item?.id) {
+  if (!repository || !item?.id) {
     return { queued: false, item };
   }
 
@@ -248,7 +247,7 @@ async function enqueueKindleSync({
     syncVersion
   });
   recordKindleChannelState(item, item.kindle, now);
-  await saveItem(kv, item);
+  await saveItem(repository, item);
 
   const queue = getQueue(env);
   if (!queue) {
@@ -260,7 +259,7 @@ async function enqueueKindleSync({
       attemptLimit
     );
     recordKindleChannelState(item, item.kindle, now);
-    await saveItem(kv, item);
+    await saveItem(repository, item);
 
     if (log) {
       log('error', 'kindle_sync_queue_missing', {
@@ -308,7 +307,7 @@ async function enqueueKindleSync({
       attemptLimit
     );
     recordKindleChannelState(item, item.kindle, now);
-    await saveItem(kv, item);
+    await saveItem(repository, item);
 
     if (log) {
       log('error', 'kindle_sync_queue_failed', {
@@ -358,8 +357,8 @@ async function processKindleSyncMessage(message, env, log) {
     return;
   }
 
-  const kv = env?.READ_LATER;
-  if (!kv) {
+  const repository = getRepository(env);
+  if (!repository) {
     if (log) {
       log('error', 'storage_unavailable', {
         stage: 'queue',
@@ -369,8 +368,7 @@ async function processKindleSyncMessage(message, env, log) {
     return;
   }
 
-  const key = `${KV_PREFIX}${itemId}`;
-  const item = await kv.get(key, { type: 'json' });
+  const item = await repository.getItem(itemId);
   if (!item) {
     if (log) {
       log('warn', 'kindle_sync_item_missing', {
@@ -407,15 +405,15 @@ async function processKindleSyncMessage(message, env, log) {
     });
   }
 
-  const { reader, kindle, cover } = await syncKindleForItem(item, env, { kv, log });
+  const { reader, kindle, cover } = await syncKindleForItem(item, env, { repository, log });
 
   const resolvedTitle = preferReaderTitle(item.title, reader?.title, item.url);
 
   if (reader && shouldCacheKindleReader(reader)) {
-    await cacheReader(kv, itemId, reader);
+    await repository.saveReader(itemId, reader);
   }
 
-  const latestItem = await kv.get(key, { type: 'json' });
+  const latestItem = await repository.getItem(itemId);
   if (!latestItem) {
     if (log) {
       log('warn', 'kindle_sync_item_missing', {
@@ -464,7 +462,7 @@ async function processKindleSyncMessage(message, env, log) {
 
     latestItem.kindle = retryState;
     recordKindleChannelState(latestItem, latestItem.kindle, now);
-    await saveItem(kv, latestItem);
+    await saveItem(repository, latestItem);
 
     const queue = getQueue(env);
     if (!queue) {
@@ -478,7 +476,7 @@ async function processKindleSyncMessage(message, env, log) {
         updatedAt: now
       };
       recordKindleChannelState(latestItem, latestItem.kindle, now);
-      await saveItem(kv, latestItem);
+      await saveItem(repository, latestItem);
       if (log) {
         log('error', 'kindle_sync_retry_queue_missing', {
           stage: 'queue',
@@ -492,7 +490,7 @@ async function processKindleSyncMessage(message, env, log) {
       }
       await reconcileArticlePushReadiness({
         itemId,
-        kv,
+        repository,
         env,
         log,
         source: 'kindle-sync-retry-queue-missing'
@@ -527,7 +525,7 @@ async function processKindleSyncMessage(message, env, log) {
       }
       await reconcileArticlePushReadiness({
         itemId,
-        kv,
+        repository,
         env,
         log,
         source: 'kindle-sync-retry-scheduled'
@@ -544,7 +542,7 @@ async function processKindleSyncMessage(message, env, log) {
         updatedAt: now
       };
       recordKindleChannelState(latestItem, latestItem.kindle, now);
-      await saveItem(kv, latestItem);
+      await saveItem(repository, latestItem);
       if (log) {
         log('error', 'kindle_sync_retry_enqueue_failed', {
           stage: 'queue',
@@ -559,7 +557,7 @@ async function processKindleSyncMessage(message, env, log) {
       }
       await reconcileArticlePushReadiness({
         itemId,
-        kv,
+        repository,
         env,
         log,
         source: 'kindle-sync-retry-enqueue-failed'
@@ -578,7 +576,7 @@ async function processKindleSyncMessage(message, env, log) {
     nextRetryAt: null
   });
   recordKindleChannelState(latestItem, latestItem.kindle, now);
-  await saveItem(kv, latestItem);
+  await saveItem(repository, latestItem);
 
   if (log) {
     log('info', 'kindle_sync_attempt_complete', {
@@ -598,11 +596,15 @@ async function processKindleSyncMessage(message, env, log) {
 
   await reconcileArticlePushReadiness({
     itemId,
-    kv,
+    repository,
     env,
     log,
     source: 'kindle-sync-complete'
   });
+}
+
+function getRepository(env) {
+  return env?.READ_LATER_REPOSITORY || createReadLaterRepository(env, { requireAssets: true });
 }
 
 export {

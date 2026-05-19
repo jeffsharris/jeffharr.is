@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { classifyUrl, normalizeInputUrl, parsePodcastFeed, resolveShareUrl } from '../functions/api/share/podcast-resolver.js';
-import { hashText, saveShareItem } from '../functions/api/share/store.js';
+import { hashText } from '../functions/api/content-library/ids.js';
 import { getQueryParamPreservingPlus } from '../functions/share/new.js';
 import { renderLoadingPage, renderSharePage } from '../functions/share/render.js';
 
@@ -55,46 +55,6 @@ test('parsePodcastFeed extracts show and episode metadata', () => {
   assert.equal(feed.episodes[0].title, 'Episode One');
   assert.equal(feed.episodes[0].audioUrl, 'https://example.com/one.mp3');
   assert.deepEqual(feed.episodes[0].links, ['https://www.youtube.com/watch?v=abc123']);
-});
-
-test('saveShareItem uses stable podcast ids for the same identity', async () => {
-  const kv = new MemoryKV();
-  const item = {
-    type: 'podcast_episode',
-    sourceUrl: 'https://example.com/one',
-    canonicalUrl: 'https://example.com/one',
-    identityKey: 'podcast_episode:rss:https://example.com/feed.xml#episode-1',
-    title: 'Episode One',
-    platforms: {},
-    media: {},
-    resolution: { confidence: 'high', sources: ['test'], warnings: [] }
-  };
-
-  const first = await saveShareItem({ kv, item, sourceUrl: item.sourceUrl });
-  const second = await saveShareItem({ kv, item, sourceUrl: item.sourceUrl });
-  assert.equal(first.id, second.id);
-  assert.equal(second.shareCount, 2);
-  assert.match(first.id, /^p_[a-f0-9]{12}$/);
-});
-
-test('saveShareItem uses stable x ids for the same post identity', async () => {
-  const kv = new MemoryKV();
-  const item = {
-    type: 'x_post',
-    sourceUrl: 'https://x.com/alice/status/101',
-    canonicalUrl: 'https://x.com/alice/status/101',
-    identityKey: 'x_post:101',
-    title: 'Alice on X',
-    platforms: {},
-    media: {},
-    x: { tweetId: '101', posts: [] },
-    resolution: { confidence: 'high', sources: ['test'], warnings: [] }
-  };
-
-  const first = await saveShareItem({ kv, item, sourceUrl: item.sourceUrl });
-  const second = await saveShareItem({ kv, item, sourceUrl: item.sourceUrl });
-  assert.equal(first.id, second.id);
-  assert.match(first.id, /^x_[a-f0-9]{12}$/);
 });
 
 test('resolveShareUrl resolves a raw RSS feed URL', async () => {
@@ -669,26 +629,3 @@ test('resolveShareUrl matches YouTube podcast videos by title fragments and upgr
 test('hashText is deterministic', async () => {
   assert.equal(await hashText('same'), await hashText('same'));
 });
-
-class MemoryKV {
-  constructor() {
-    this.map = new Map();
-  }
-
-  async get(key, options = {}) {
-    const value = this.map.get(key) || null;
-    if (options.type === 'json' && value) return JSON.parse(value);
-    return value;
-  }
-
-  async put(key, value) {
-    this.map.set(key, value);
-  }
-
-  async list({ prefix = '' } = {}) {
-    const keys = [...this.map.keys()]
-      .filter((name) => name.startsWith(prefix))
-      .map((name) => ({ name }));
-    return { keys, list_complete: true };
-  }
-}

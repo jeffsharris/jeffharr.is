@@ -1,6 +1,6 @@
 /**
  * Reader extraction endpoint for read-later items.
- * Fetches remote content, extracts readable HTML, sanitizes, and caches in KV.
+ * Fetches remote content, extracts readable HTML, sanitizes, and stores it in R2.
  */
 
 import puppeteer from '@cloudflare/puppeteer';
@@ -17,16 +17,10 @@ import {
   looksClientRendered
 } from './reader-utils.js';
 import { buildXReaderFromUrl } from './x-adapter.js';
+import { createReadLaterRepository } from './repository.js';
 import { createLogger, formatError } from '../lib/logger.js';
-import { getAssetByRole, getContentAssets, getContentDb } from '../content-library/db.js';
-import { getJsonAsset, putJsonAsset } from '../content-library/assets.js';
-import {
-  getReadLaterRow,
-  readLaterRowToItem
-} from '../content-library/read-later-store.js';
+import { readLaterRowToItem } from '../content-library/read-later-store.js';
 
-const KV_PREFIX = 'item:';
-const READER_PREFIX = 'reader:';
 const FETCH_TIMEOUT_MS = 10000;
 const RENDER_TIMEOUT_MS = 15000;
 const RENDER_SETTLE_MS = 1200;
@@ -77,16 +71,11 @@ const ALLOWED_ATTRS = new Map([
 
 export async function onRequest(context) {
   const { request, env } = context;
-  const kv = env.READ_LATER;
-  const contentDb = shouldUseContentLibrary(env) ? getContentDb(env) : null;
+  const repository = createReadLaterRepository(env, { requireAssets: true });
   const logger = createLogger({ request, source: 'read-later-reader' });
   const log = logger.log;
 
-  if (contentDb) {
-    return handleContentLibraryReader({ request, env, db: contentDb, log });
-  }
-
-  if (!kv) {
+  if (!repository) {
     log('error', 'storage_unavailable', { stage: 'init' });
     return jsonResponse(
       { ok: false, reader: null, error: 'Storage unavailable' },
@@ -94,6 +83,10 @@ export async function onRequest(context) {
     );
   }
 
+  return handleReadLaterReader({ request, env, repository, log });
+}
+
+async function handleReadLaterReader({ request, env, repository, log }) {
   const url = new URL(request.url);
   const id = (url.searchParams.get('id') || '').trim();
   const forceRefresh = url.searchParams.get('refresh') === '1';
@@ -107,9 +100,8 @@ export async function onRequest(context) {
   }
 
   try {
-    const item = await kv.get(`${KV_PREFIX}${id}`, { type: 'json' });
-
-    if (!item) {
+    const row = await repository.getRow(id);
+    if (!row) {
       log('warn', 'reader_item_missing', {
         stage: 'lookup',
         itemId: id
@@ -120,8 +112,9 @@ export async function onRequest(context) {
       );
     }
 
+    const item = await readLaterRowToItem(repository.db, row);
     const reader = await fetchAndCacheReader({
-      kv,
+      repository,
       id,
       url: item.url,
       title: item.title,
@@ -148,7 +141,7 @@ export async function onRequest(context) {
       const resolvedTitle = preferReaderTitle(item.title, reader?.title, item.url);
       if (resolvedTitle && resolvedTitle !== item.title) {
         item.title = resolvedTitle;
-        await kv.put(`${KV_PREFIX}${id}`, JSON.stringify(item));
+        await repository.saveItem(item);
       }
     }
 
@@ -167,139 +160,6 @@ export async function onRequest(context) {
       { status: 200, cache: 'public, max-age=60' }
     );
   }
-}
-
-async function handleContentLibraryReader({ request, env, db, log }) {
-  const bucket = getContentAssets(env);
-  const url = new URL(request.url);
-  const id = (url.searchParams.get('id') || '').trim();
-  const forceRefresh = url.searchParams.get('refresh') === '1';
-
-  if (!bucket) {
-    log('error', 'asset_storage_unavailable', { stage: 'init' });
-    return jsonResponse(
-      { ok: false, reader: null, error: 'Storage unavailable' },
-      { status: 500, cache: 'no-store' }
-    );
-  }
-
-  if (!id) {
-    log('warn', 'reader_missing_id', { stage: 'request' });
-    return jsonResponse(
-      { ok: false, reader: null, error: 'Missing id' },
-      { status: 400, cache: 'no-store' }
-    );
-  }
-
-  try {
-    const row = await getReadLaterRow(db, id);
-    if (!row) {
-      log('warn', 'reader_item_missing', {
-        stage: 'lookup',
-        itemId: id
-      });
-      return jsonResponse(
-        { ok: false, reader: null, error: 'Item not found' },
-        { status: 404, cache: 'no-store' }
-      );
-    }
-
-    const item = await readLaterRowToItem(db, row);
-    const reader = await fetchAndCacheContentLibraryReader({
-      db,
-      bucket,
-      entryId: id,
-      itemId: row.item_id,
-      url: item.url,
-      title: item.title,
-      browser: env.BROWSER,
-      xBearerToken: env.X_API_BEARER_TOKEN,
-      forceRefresh,
-      log
-    });
-
-    if (!reader) {
-      log('warn', 'reader_unavailable', {
-        stage: 'reader_fetch',
-        itemId: id,
-        url: item.url,
-        title: item.title
-      });
-      return jsonResponse(
-        { ok: false, reader: null, error: 'Reader unavailable' },
-        { status: 200, cache: 'public, max-age=60' }
-      );
-    }
-
-    if (forceRefresh) {
-      const resolvedTitle = preferReaderTitle(item.title, reader?.title, item.url);
-      if (resolvedTitle && resolvedTitle !== item.title) {
-        await db.prepare(
-          `UPDATE items SET title = ?, updated_at = ? WHERE id = ?`
-        ).bind(resolvedTitle, new Date().toISOString(), row.item_id).run();
-        item.title = resolvedTitle;
-      }
-    }
-
-    return jsonResponse(
-      { ok: true, item: pickItem(item), reader },
-      { status: 200, cache: 'public, max-age=3600' }
-    );
-  } catch (error) {
-    log('error', 'content_library_reader_request_failed', {
-      stage: 'reader_fetch',
-      itemId: id,
-      ...formatError(error)
-    });
-    return jsonResponse(
-      { ok: false, reader: null, error: 'Reader unavailable' },
-      { status: 200, cache: 'public, max-age=60' }
-    );
-  }
-}
-
-async function fetchAndCacheContentLibraryReader({
-  db,
-  bucket,
-  entryId,
-  itemId,
-  url,
-  title,
-  browser,
-  xBearerToken,
-  forceRefresh = false,
-  log
-}) {
-  const cachedAsset = await getAssetByRole(db, itemId, 'reader_html');
-  if (!forceRefresh && cachedAsset?.r2_key) {
-    const cached = await getJsonAsset({ bucket, asset: cachedAsset });
-    if (cached?.contentHtml && shouldCacheReader(cached)) {
-      return cached;
-    }
-  }
-
-  const reader = await buildReaderContent(url, title, browser, {
-    log,
-    itemId: entryId,
-    xBearerToken
-  });
-  if (!reader?.contentHtml || !shouldCacheReader(reader)) {
-    if (cachedAsset?.r2_key) {
-      const cached = await getJsonAsset({ bucket, asset: cachedAsset });
-      if (cached?.contentHtml && shouldCacheReader(cached)) return cached;
-    }
-    return null;
-  }
-
-  await putJsonAsset({
-    db,
-    bucket,
-    itemId,
-    role: 'reader_html',
-    key: `items/${itemId}/reader.json`,
-    value: reader
-  });
-  return reader;
 }
 
 async function buildReaderContent(url, fallbackTitle, browserBinding, options = {}) {
@@ -491,7 +351,7 @@ function logSubstackReaderFallback(options, details = {}) {
 }
 
 async function fetchAndCacheReader({
-  kv,
+  repository,
   id,
   url,
   title,
@@ -500,15 +360,11 @@ async function fetchAndCacheReader({
   forceRefresh = false,
   log
 }) {
-  if (!kv || !id || !url) return null;
+  if (!repository || !id || !url) return null;
 
-  const cached = await kv.get(`${READER_PREFIX}${id}`, { type: 'json' });
+  const cached = await repository.getReader(id);
   if (!forceRefresh && cached?.contentHtml && shouldCacheReader(cached)) {
     return cached;
-  }
-
-  if (cached?.contentHtml && !shouldCacheReader(cached)) {
-    await kv.delete(`${READER_PREFIX}${id}`);
   }
 
   const reader = await buildReaderContent(url, title, browser, {
@@ -532,15 +388,8 @@ async function fetchAndCacheReader({
     return null;
   }
 
-  await kv.put(`${READER_PREFIX}${id}`, JSON.stringify(reader));
+  await repository.saveReader(id, reader);
   return reader;
-}
-
-async function cacheReader(kv, id, reader) {
-  if (!kv || !id || !reader) return false;
-  if (!shouldCacheReader(reader)) return false;
-  await kv.put(`${READER_PREFIX}${id}`, JSON.stringify(reader));
-  return true;
 }
 
 async function fetchHtml(url) {
@@ -1020,13 +869,8 @@ function jsonResponse(payload, { status = 200, cache = 'no-store' } = {}) {
   });
 }
 
-function shouldUseContentLibrary(env) {
-  return Boolean(env?.CONTENT_DB && env?.CONTENT_ASSETS && env?.CONTENT_LIBRARY_READ_LATER === '1');
-}
-
 export {
   sanitizeContent,
   fetchAndCacheReader,
-  buildReaderContent,
-  cacheReader
+  buildReaderContent
 };

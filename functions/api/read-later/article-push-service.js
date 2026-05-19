@@ -2,8 +2,6 @@ import { deriveTitleFromUrl, shouldCacheReader } from './reader-utils.js';
 import { formatError } from '../lib/logger.js';
 import { getOwnerId } from '../push/device-store.js';
 
-const KV_ITEM_PREFIX = 'item:';
-const KV_READER_PREFIX = 'reader:';
 const PUSH_QUEUE_BINDING = 'PUSH_DELIVERY_QUEUE';
 const PUSH_NOTIFICATION_MESSAGE_TYPE = 'push.notification.requested';
 const DEFAULT_PUBLIC_ORIGIN = 'https://jeffharr.is';
@@ -118,8 +116,8 @@ function buildReadinessReason({ readerReady, coverReady, coverTerminal }) {
   return 'waiting_for_cover';
 }
 
-async function saveItem(kv, item) {
-  await kv.put(`${KV_ITEM_PREFIX}${item.id}`, JSON.stringify(item));
+async function saveItem(repository, item) {
+  await repository.saveItem(item);
 }
 
 function mapKindleStatusToChannelStatus(kindleStatus) {
@@ -145,8 +143,8 @@ function recordKindleChannelState(item, kindleState, now = getNowIso()) {
   return item;
 }
 
-async function updateArticlePushReadiness(itemId, kv, log) {
-  if (!kv || !itemId) {
+async function updateArticlePushReadiness(itemId, repository, log) {
+  if (!repository || !itemId) {
     return {
       ok: false,
       item: null,
@@ -157,8 +155,7 @@ async function updateArticlePushReadiness(itemId, kv, log) {
     };
   }
 
-  const key = `${KV_ITEM_PREFIX}${itemId}`;
-  const item = await kv.get(key, { type: 'json' });
+  const item = await repository.getItem(itemId);
   if (!item) {
     return {
       ok: false,
@@ -173,7 +170,7 @@ async function updateArticlePushReadiness(itemId, kv, log) {
   const now = getNowIso();
   ensurePushChannels(item, now);
 
-  const reader = await kv.get(`${KV_READER_PREFIX}${itemId}`, { type: 'json' });
+  const reader = await repository.getReader(itemId);
   const readerReady = shouldCacheReader(reader);
   const coverReady = Boolean(item?.cover?.updatedAt);
   const coverTerminal = isTerminalCoverSyncFailure(item);
@@ -186,7 +183,7 @@ async function updateArticlePushReadiness(itemId, kv, log) {
     reason: ready ? null : reason
   };
 
-  await saveItem(kv, item);
+  await saveItem(repository, item);
 
   if (log) {
     log('info', 'article_push_readiness_updated', {
@@ -252,8 +249,8 @@ function buildIosPayload(item, env, eventId) {
   };
 }
 
-async function maybeQueueIosPush({ item, env, kv, log, source = 'unknown' }) {
-  if (!kv || !item?.id) {
+async function maybeQueueIosPush({ item, env, repository, log, source = 'unknown' }) {
+  if (!repository || !item?.id) {
     return { queued: false, item, reason: 'missing_context' };
   }
 
@@ -277,7 +274,7 @@ async function maybeQueueIosPush({ item, env, kv, log, source = 'unknown' }) {
       updatedAt: now,
       lastError: 'Background queue unavailable for iOS push'
     };
-    await saveItem(kv, item);
+    await saveItem(repository, item);
 
     if (log) {
       log('error', 'ios_push_queue_missing', {
@@ -303,7 +300,7 @@ async function maybeQueueIosPush({ item, env, kv, log, source = 'unknown' }) {
       eventId,
       lastError: null
     };
-    await saveItem(kv, item);
+    await saveItem(repository, item);
 
     if (log) {
       log('info', 'ios_push_queued', {
@@ -323,7 +320,7 @@ async function maybeQueueIosPush({ item, env, kv, log, source = 'unknown' }) {
       eventId,
       lastError: 'Failed to enqueue iOS push'
     };
-    await saveItem(kv, item);
+    await saveItem(repository, item);
 
     if (log) {
       log('error', 'ios_push_queue_failed', {

@@ -62,7 +62,7 @@ Notes:
   - `APNS_PRIVATE_KEY_P8`
   - `APNS_TOPIC`
   - D1 binding `CONTENT_DB` for registered push devices
-  - `READ_LATER`/`CONTENT_ASSETS` bindings for read-later item state and notification media
+  - D1 binding `CONTENT_DB` also supplies read-later item state for delivery status updates
 
 ## Secret access rule (important)
 - `PUSH_TEST_API_KEY` is a Cloudflare secret and is write-only.

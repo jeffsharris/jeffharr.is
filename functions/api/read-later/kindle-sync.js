@@ -1,20 +1,14 @@
 import { enqueueKindleSync } from './sync-service.js';
+import { createReadLaterRepository } from './repository.js';
 import { createLogger, formatError } from '../lib/logger.js';
-import {
-  createReadLaterStorage,
-  withReadLaterStorage
-} from '../content-library/kv-adapter.js';
-
-const KV_PREFIX = 'item:';
 
 export async function onRequest(context) {
   const { request, env } = context;
-  const kv = createReadLaterStorage(env, { requireAssets: true });
-  const storageEnv = withReadLaterStorage(env, kv);
+  const repository = createReadLaterRepository(env, { requireAssets: true });
   const logger = createLogger({ request, source: 'read-later-kindle-sync' });
   const log = logger.log;
 
-  if (!kv) {
+  if (!repository) {
     log('error', 'storage_unavailable', { stage: 'init' });
     return jsonResponse(
       { ok: false, error: 'Storage unavailable' },
@@ -46,8 +40,7 @@ export async function onRequest(context) {
   }
 
   try {
-    const key = `${KV_PREFIX}${id}`;
-    const item = await kv.get(key, { type: 'json' });
+    const item = await repository.getItem(id);
 
     if (!item) {
       log('warn', 'item_not_found', {
@@ -62,8 +55,8 @@ export async function onRequest(context) {
 
     await enqueueKindleSync({
       item,
-      kv,
-      env: storageEnv,
+      repository,
+      env,
       log,
       reason: 'manual-sync',
       force: true

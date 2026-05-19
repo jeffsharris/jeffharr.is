@@ -1,5 +1,4 @@
 import { resolveShareUrl, ShareResolveError } from '../api/share/podcast-resolver.js';
-import { getShareKv, saveShareItem } from '../api/share/store.js';
 import { renderLoadingPage, renderRedirectPage } from './render.js';
 import { getContentDb } from '../api/content-library/db.js';
 import { saveShareItemToContentLibrary } from '../api/content-library/share-store.js';
@@ -11,10 +10,9 @@ export async function onRequest(context) {
     url.searchParams.get('text') ||
     url.searchParams.get('title') ||
     '';
-  const kv = getShareKv(env);
-  const contentDb = shouldUseContentLibrary(env) ? getContentDb(env) : null;
+  const db = getContentDb(env);
 
-  if ((!contentDb && !kv) || !rawInput) {
+  if (!db || !rawInput) {
     return Response.redirect(new URL('/share?error=missing-url', request.url), 303);
   }
 
@@ -30,14 +28,12 @@ export async function onRequest(context) {
 
   try {
     const resolvedItem = await resolveShareUrl(rawInput, { env });
-    const item = contentDb
-      ? await saveShareItemToContentLibrary({
-        db: contentDb,
-        item: resolvedItem,
-        sourceUrl: rawInput,
-        requestUrl: request.url
-      })
-      : await saveShareItem({ kv, item: resolvedItem, sourceUrl: rawInput });
+    const item = await saveShareItemToContentLibrary({
+      db,
+      item: resolvedItem,
+      sourceUrl: rawInput,
+      requestUrl: request.url
+    });
     const shareUrl = new URL(`/share/${item.id}`, request.url).href;
 
     if ((request.headers.get('accept') || '').includes('text/html')) {
@@ -57,10 +53,6 @@ export async function onRequest(context) {
     redirectUrl.searchParams.set('error', message);
     return Response.redirect(redirectUrl, 303);
   }
-}
-
-function shouldUseContentLibrary(env) {
-  return Boolean(env?.CONTENT_DB && env?.CONTENT_LIBRARY_SHARE === '1');
 }
 
 export function getQueryParamPreservingPlus(url, name) {

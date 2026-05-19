@@ -3,15 +3,6 @@ compatibility_date = "2026-01-11"
 compatibility_flags = ["nodejs_compat"]
 pages_build_output_dir = "."
 
-[vars]
-CONTENT_LIBRARY_READ_LATER = "1"
-CONTENT_LIBRARY_SHARE = "1"
-CONTENT_LIBRARY_SYNC_ENABLED = "1"
-
-[[kv_namespaces]]
-binding = "READ_LATER"
-id = "1ab7a301e16e47f7a17651e89f7442b6"
-
 [[d1_databases]]
 binding = "CONTENT_DB"
 database_name = "jeffharr-is-content"

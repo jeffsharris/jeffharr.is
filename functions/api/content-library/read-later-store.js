@@ -249,6 +249,54 @@ async function updateReadLaterCompatibilityState(db, entryId, statePatch = {}) {
   return getReadLaterItem(db, entryId);
 }
 
+async function saveReadLaterRuntimeItem(db, item) {
+  if (!item?.id) return false;
+  const row = await getReadLaterRow(db, item.id);
+  if (!row) return false;
+
+  const now = getNowIso();
+  const readAt = item.read ? (item.readAt || now) : null;
+
+  await db.batch([
+    db.prepare(
+      `UPDATE list_entries
+       SET status = ?, added_at = COALESCE(?, added_at), updated_at = ?
+       WHERE id = ?`
+    ).bind(item.read ? 'done' : 'active', normalizeIsoDate(item.savedAt), now, item.id),
+    db.prepare(
+      `UPDATE items
+       SET title = COALESCE(NULLIF(?, ''), title),
+           canonical_url = COALESCE(?, canonical_url),
+           source_url = COALESCE(?, source_url),
+           summary = COALESCE(?, summary),
+           creator = COALESCE(?, creator),
+           publisher = COALESCE(?, publisher),
+           updated_at = ?
+       WHERE id = ?`
+    ).bind(
+      stringOrNull(item.title),
+      stringOrNull(item.canonicalUrl || item.url),
+      stringOrNull(item.url),
+      stringOrNull(item.description || item.summary),
+      stringOrNull(item.author || item.creator),
+      stringOrNull(item.publisher),
+      now,
+      row.item_id
+    )
+  ]);
+
+  await updateReadLaterCompatibilityState(db, item.id, {
+    readAt,
+    progress: item.progress || null,
+    kindle: item.kindle || null,
+    coverSync: item.coverSync || null,
+    pushChannels: item.pushChannels || null,
+    updatedAt: now
+  });
+
+  return true;
+}
+
 async function upsertReadState(db, entryId, {
   readAt = null,
   progress = null,
@@ -486,6 +534,10 @@ function normalizeProgress(progress) {
   return Object.keys(result).length > 0 ? result : null;
 }
 
+function stringOrNull(value) {
+  return typeof value === 'string' && value.trim() ? value.trim() : null;
+}
+
 function clamp(value, min, max) {
   return Math.min(Math.max(value, min), max);
 }
@@ -506,6 +558,7 @@ export {
   listReadLaterItems,
   readLaterRowToItem,
   restoreReadLaterItem,
+  saveReadLaterRuntimeItem,
   saveReadLaterItem,
   saveReadLaterProgress,
   updateReadLaterCompatibilityState,

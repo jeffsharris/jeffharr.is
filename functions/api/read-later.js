@@ -5,15 +5,10 @@
 
 import { deriveTitleFromUrl, preferReaderTitle } from './read-later/reader-utils.js';
 import { createInitialPushChannels } from './read-later/article-push-service.js';
+import { createReadLaterRepository } from './read-later/repository.js';
 import { enqueueKindleSync } from './read-later/sync-service.js';
 import { createLogger, formatError } from './lib/logger.js';
 import { getContentDb } from './content-library/db.js';
-import {
-  createSyncStorage,
-  shouldUseContentLibraryReadLater,
-  shouldUseContentLibrarySync,
-  withReadLaterStorage
-} from './content-library/kv-adapter.js';
 import {
   deleteReadLaterItem,
   listReadLaterItems,
@@ -21,22 +16,17 @@ import {
   updateReadLaterRead
 } from './content-library/read-later-store.js';
 
-const KV_PREFIX = 'item:';
 const MAX_TITLE_LENGTH = 220;
 const MAX_URL_LENGTH = 2048;
 
 export async function onRequest(context) {
   const { request, env } = context;
-  const kv = env.READ_LATER;
-  const contentDb = shouldUseContentLibraryReadLater(env) ? getContentDb(env) : null;
+  const db = getContentDb(env);
+  const repository = createReadLaterRepository(env, { requireAssets: true });
   const logger = createLogger({ request, source: 'read-later' });
   const log = logger.log;
 
-  if (contentDb) {
-    return handleContentLibraryRequest({ request, env, db: contentDb, log });
-  }
-
-  if (!kv) {
+  if (!db || !repository) {
     log('error', 'storage_unavailable', { stage: 'init' });
     return jsonResponse(
       { ok: false, error: 'Storage unavailable' },
@@ -44,43 +34,10 @@ export async function onRequest(context) {
     );
   }
 
-  try {
-    if (request.method === 'GET') {
-      return handleList(kv, log);
-    }
-
-    if (request.method === 'POST') {
-      if (shouldStreamResponse(request)) {
-        return handleSaveStream(request, kv, env, log);
-      }
-      return handleSave(request, kv, env, log);
-    }
-
-    if (request.method === 'PATCH') {
-      return handleUpdate(request, kv, log);
-    }
-
-    if (request.method === 'DELETE') {
-      return handleDelete(request, kv, log);
-    }
-
-    if (request.method === 'OPTIONS') {
-      return new Response(null, { status: 204 });
-    }
-  } catch (error) {
-    log('error', 'request_failed', {
-      stage: 'request',
-      ...formatError(error)
-    });
-  }
-
-  return jsonResponse(
-    { ok: false, error: 'Method not allowed' },
-    { status: 405, cache: 'no-store' }
-  );
+  return handleReadLaterRequest({ request, env, db, repository, log });
 }
 
-async function handleContentLibraryRequest({ request, env, db, log }) {
+async function handleReadLaterRequest({ request, env, db, repository, log }) {
   try {
     if (request.method === 'GET') {
       const items = await listReadLaterItems(db);
@@ -92,7 +49,7 @@ async function handleContentLibraryRequest({ request, env, db, log }) {
 
     if (request.method === 'POST') {
       if (shouldStreamResponse(request)) {
-        return handleContentLibrarySaveStream(request, db, env, log);
+        return handleReadLaterSaveStream(request, db, repository, env, log);
       }
 
       const result = await saveReadLaterItem(db, await parseJson(request));
@@ -102,16 +59,15 @@ async function handleContentLibraryRequest({ request, env, db, log }) {
           { status: result.status, cache: 'no-store' }
         );
       }
-      if (shouldUseContentLibrarySync(env)) {
-        const enqueueResult = await enqueueContentLibrarySync({
-          item: result.item,
-          env,
-          log,
-          reason: result.duplicate ? 'duplicate-save' : 'save',
-          force: result.duplicate
-        });
-        result.item = enqueueResult?.item || result.item;
-      }
+      const enqueueResult = await enqueueReadLaterSync({
+        item: result.item,
+        repository,
+        env,
+        log,
+        reason: result.duplicate ? 'duplicate-save' : 'save',
+        force: result.duplicate
+      });
+      result.item = enqueueResult?.item || result.item;
       return jsonResponse(
         {
           ok: true,
@@ -156,8 +112,8 @@ async function handleContentLibraryRequest({ request, env, db, log }) {
       return new Response(null, { status: 204 });
     }
   } catch (error) {
-    log('error', 'content_library_request_failed', {
-      stage: 'content-library',
+    log('error', 'request_failed', {
+      stage: 'request',
       ...formatError(error)
     });
   }
@@ -168,7 +124,7 @@ async function handleContentLibraryRequest({ request, env, db, log }) {
   );
 }
 
-async function handleContentLibrarySaveStream(request, db, env, log) {
+async function handleReadLaterSaveStream(request, db, repository, env, log) {
   const stream = createEventStream(log);
 
   (async () => {
@@ -183,21 +139,20 @@ async function handleContentLibrarySaveStream(request, db, env, log) {
       savedItem = result.item;
       await safeStreamSend(stream, 'saved', { ok: true, item: { ...result.item } });
 
-      if (shouldUseContentLibrarySync(env)) {
-        const enqueueResult = await enqueueContentLibrarySync({
-          item: result.item,
-          env,
-          log,
-          reason: result.duplicate ? 'duplicate-save' : 'save',
-          force: result.duplicate
-        });
-        result.item = enqueueResult?.item || result.item;
-        savedItem = result.item;
-        await safeStreamSend(stream, 'status', {
-          ok: true,
-          message: 'Queued Kindle sync'
-        });
-      }
+      const enqueueResult = await enqueueReadLaterSync({
+        item: result.item,
+        repository,
+        env,
+        log,
+        reason: result.duplicate ? 'duplicate-save' : 'save',
+        force: result.duplicate
+      });
+      result.item = enqueueResult?.item || result.item;
+      savedItem = result.item;
+      await safeStreamSend(stream, 'status', {
+        ok: true,
+        message: 'Queued Kindle sync'
+      });
 
       await safeStreamSend(stream, 'done', {
         ok: true,
@@ -229,247 +184,6 @@ async function handleContentLibrarySaveStream(request, db, env, log) {
       'Connection': 'keep-alive'
     }
   });
-}
-
-async function handleList(kv, log) {
-  try {
-    const items = await listAllItems(kv);
-    items.sort((a, b) => new Date(b.savedAt || 0) - new Date(a.savedAt || 0));
-
-    return jsonResponse(
-      { items, count: items.length },
-      { status: 200, cache: 'no-store' }
-    );
-  } catch (error) {
-    log('error', 'list_failed', {
-      stage: 'list',
-      ...formatError(error)
-    });
-    return jsonResponse(
-      { items: [], count: 0 },
-      { status: 200, cache: 'no-store' }
-    );
-  }
-}
-
-async function handleSave(request, kv, env, log) {
-  const payload = await parseJson(request);
-  const normalizedUrl = normalizeUrl(payload?.url);
-  const incomingRead = payload?.read;
-
-  if (!normalizedUrl) {
-    log('warn', 'save_invalid_url', {
-      stage: 'save',
-      url: payload?.url || null,
-      title: payload?.title || null
-    });
-    return jsonResponse(
-      { ok: false, error: 'Invalid URL' },
-      { status: 400, cache: 'no-store' }
-    );
-  }
-
-  const title = normalizeTitle(payload?.title, normalizedUrl);
-  const read = typeof incomingRead === 'boolean' ? incomingRead : false;
-
-  try {
-    // Check for existing item with same URL
-    const existingItem = await findItemByUrl(kv, normalizedUrl);
-
-    if (existingItem) {
-      // Item already exists - update it
-      const wasRead = existingItem.read;
-      existingItem.savedAt = new Date().toISOString();
-      existingItem.read = false;
-      existingItem.readAt = null;
-      // Update title if a new one was provided
-      if (payload?.title) {
-        existingItem.title = title;
-      }
-
-      await kv.put(`${KV_PREFIX}${existingItem.id}`, JSON.stringify(existingItem));
-      await enqueueKindleSync({
-        item: existingItem,
-        kv,
-        env,
-        log,
-        reason: 'duplicate-save',
-        force: true
-      });
-      log('info', 'save_duplicate', {
-        stage: 'save',
-        itemId: existingItem.id,
-        url: normalizedUrl,
-        title: existingItem.title,
-        unarchived: wasRead
-      });
-
-      return jsonResponse(
-        {
-          ok: true,
-          item: existingItem,
-          duplicate: true,
-          unarchived: wasRead
-        },
-        { status: 200, cache: 'no-store' }
-      );
-    }
-
-    // New item - save basic item FIRST before expensive operations
-    const item = createItem({ url: normalizedUrl, title, read });
-    await kv.put(`${KV_PREFIX}${item.id}`, JSON.stringify(item));
-    await enqueueKindleSync({
-      item,
-      kv,
-      env,
-      log,
-      reason: 'save'
-    });
-    log('info', 'save_persisted', {
-      stage: 'save',
-      itemId: item.id,
-      url: item.url,
-      title: item.title
-    });
-
-    return jsonResponse(
-      { ok: true, item },
-      { status: 201, cache: 'no-store' }
-    );
-  } catch (error) {
-    log('error', 'save_failed', {
-      stage: 'save',
-      url: normalizedUrl,
-      title,
-      ...formatError(error)
-    });
-    return jsonResponse(
-      { ok: false, error: 'Failed to save item' },
-      { status: 500, cache: 'no-store' }
-    );
-  }
-}
-
-async function handleUpdate(request, kv, log) {
-  const payload = await parseJson(request);
-  const id = typeof payload?.id === 'string' ? payload.id.trim() : '';
-  const read = payload?.read;
-
-  if (!id || typeof read !== 'boolean') {
-    log('warn', 'update_invalid_payload', {
-      stage: 'update',
-      itemId: id || null
-    });
-    return jsonResponse(
-      { ok: false, error: 'Invalid payload' },
-      { status: 400, cache: 'no-store' }
-    );
-  }
-
-  try {
-    const key = `${KV_PREFIX}${id}`;
-    const item = await kv.get(key, { type: 'json' });
-
-    if (!item) {
-      log('warn', 'update_item_missing', {
-        stage: 'update',
-        itemId: id
-      });
-      return jsonResponse(
-        { ok: false, error: 'Item not found' },
-        { status: 404, cache: 'no-store' }
-      );
-    }
-
-    item.read = read;
-    item.readAt = read ? new Date().toISOString() : null;
-    await kv.put(key, JSON.stringify(item));
-
-    return jsonResponse(
-      { ok: true, item },
-      { status: 200, cache: 'no-store' }
-    );
-  } catch (error) {
-    log('error', 'update_failed', {
-      stage: 'update',
-      itemId: id,
-      ...formatError(error)
-    });
-    return jsonResponse(
-      { ok: false, error: 'Failed to update item' },
-      { status: 500, cache: 'no-store' }
-    );
-  }
-}
-
-async function handleDelete(request, kv, log) {
-  const payload = await parseJson(request);
-  const idFromQuery = new URL(request.url).searchParams.get('id');
-  const id = typeof payload?.id === 'string' ? payload.id.trim() : (idFromQuery || '').trim();
-
-  if (!id) {
-    log('warn', 'delete_invalid_payload', {
-      stage: 'delete'
-    });
-    return jsonResponse(
-      { ok: false, error: 'Invalid payload' },
-      { status: 400, cache: 'no-store' }
-    );
-  }
-
-  try {
-    const key = `${KV_PREFIX}${id}`;
-    const item = await kv.get(key, { type: 'json' });
-
-    if (!item) {
-      log('warn', 'delete_item_missing', {
-        stage: 'delete',
-        itemId: id
-      });
-      return jsonResponse(
-        { ok: false, error: 'Item not found' },
-        { status: 404, cache: 'no-store' }
-      );
-    }
-
-    await kv.delete(key);
-    return jsonResponse(
-      { ok: true, item },
-      { status: 200, cache: 'no-store' }
-    );
-  } catch (error) {
-    log('error', 'delete_failed', {
-      stage: 'delete',
-      itemId: id,
-      ...formatError(error)
-    });
-    return jsonResponse(
-      { ok: false, error: 'Failed to delete item' },
-      { status: 500, cache: 'no-store' }
-    );
-  }
-}
-
-async function listAllItems(kv) {
-  const items = [];
-  let cursor = undefined;
-
-  do {
-    const response = await kv.list({ prefix: KV_PREFIX, cursor });
-    const values = await Promise.all(
-      response.keys.map((key) => kv.get(key.name, { type: 'json' }))
-    );
-
-    values.filter(Boolean).forEach((value) => items.push(value));
-    cursor = response.list_complete ? undefined : response.cursor;
-  } while (cursor);
-
-  return items;
-}
-
-async function findItemByUrl(kv, url) {
-  const items = await listAllItems(kv);
-  return items.find((item) => item.url === url) || null;
 }
 
 async function parseJson(request) {
@@ -593,13 +307,12 @@ function createEventStream(log) {
   return { readable, send, close };
 }
 
-async function enqueueContentLibrarySync({ item, env, log, reason, force = false }) {
-  const storage = createSyncStorage(env);
-  if (!storage || !item?.id) return { queued: false, item };
+async function enqueueReadLaterSync({ item, repository, env, log, reason, force = false }) {
+  if (!repository || !item?.id) return { queued: false, item };
   return enqueueKindleSync({
     item,
-    kv: storage,
-    env: withReadLaterStorage(env, storage),
+    repository,
+    env,
     log,
     reason,
     force
@@ -613,121 +326,6 @@ async function safeStreamSend(stream, event, data) {
   } catch {
     return false;
   }
-}
-
-async function handleSaveStream(request, kv, env, log) {
-  const stream = createEventStream(log);
-
-  (async () => {
-    let savedItem = null;
-
-    try {
-      const payload = await parseJson(request);
-      const normalizedUrl = normalizeUrl(payload?.url);
-      const incomingRead = payload?.read;
-
-      if (!normalizedUrl) {
-        log('warn', 'save_stream_invalid_url', {
-          stage: 'save',
-          url: payload?.url || null,
-          title: payload?.title || null
-        });
-        await safeStreamSend(stream, 'error', { ok: false, error: 'Invalid URL' });
-        return;
-      }
-
-      const title = normalizeTitle(payload?.title, normalizedUrl);
-      const read = typeof incomingRead === 'boolean' ? incomingRead : false;
-
-      const existingItem = await findItemByUrl(kv, normalizedUrl);
-      if (existingItem) {
-        const wasRead = existingItem.read;
-        existingItem.savedAt = new Date().toISOString();
-        existingItem.read = false;
-        existingItem.readAt = null;
-        if (payload?.title) {
-          existingItem.title = title;
-        }
-
-        await kv.put(`${KV_PREFIX}${existingItem.id}`, JSON.stringify(existingItem));
-        await enqueueKindleSync({
-          item: existingItem,
-          kv,
-          env,
-          log,
-          reason: 'duplicate-save',
-          force: true
-        });
-        log('info', 'save_stream_duplicate', {
-          stage: 'save',
-          itemId: existingItem.id,
-          url: normalizedUrl,
-          title: existingItem.title,
-          unarchived: wasRead
-        });
-        await safeStreamSend(stream, 'done', {
-          ok: true,
-          item: existingItem,
-          duplicate: true,
-          unarchived: wasRead
-        });
-        return;
-      }
-
-      // Save basic item FIRST - this ensures we never lose the URL/title
-      const item = createItem({ url: normalizedUrl, title, read });
-      await kv.put(`${KV_PREFIX}${item.id}`, JSON.stringify(item));
-      savedItem = item;
-      log('info', 'save_stream_persisted', {
-        stage: 'save',
-        itemId: item.id,
-        url: item.url,
-        title: item.title
-      });
-
-      // Notify client that item is safely saved
-      await safeStreamSend(stream, 'saved', { ok: true, item: { ...item } });
-
-      await enqueueKindleSync({
-        item,
-        kv,
-        env,
-        log,
-        reason: 'save'
-      });
-      await safeStreamSend(stream, 'status', {
-        ok: true,
-        message: 'Queued Kindle sync'
-      });
-
-      await safeStreamSend(stream, 'done', { ok: true, item });
-    } catch (error) {
-      log('error', 'save_stream_failed', {
-        stage: 'save',
-        itemId: savedItem?.id || null,
-        url: savedItem?.url || null,
-        title: savedItem?.title || null,
-        ...formatError(error)
-      });
-      // If we already saved the item, send it even though there was an error
-      if (savedItem) {
-        await safeStreamSend(stream, 'done', { ok: true, item: savedItem, syncFailed: true });
-      } else {
-        await safeStreamSend(stream, 'error', { ok: false, error: 'Failed to save item' });
-      }
-    } finally {
-      await stream.close();
-    }
-  })();
-
-  return new Response(stream.readable, {
-    status: 200,
-    headers: {
-      'Content-Type': 'text/event-stream',
-      'Cache-Control': 'no-store',
-      'Connection': 'keep-alive'
-    }
-  });
 }
 
 export {

@@ -6,9 +6,9 @@ import {
 import { buildReaderContent, fetchAndCacheReader } from './reader.js';
 import { getCoverImage, ensureCoverImage } from './covers.js';
 import { isXStatusUrl } from './x-adapter.js';
+import { createReadLaterRepository } from './repository.js';
 import { formatError } from '../lib/logger.js';
 
-const KV_PREFIX = 'item:';
 const SYNC_QUEUE_BINDING = 'READ_LATER_SYNC_QUEUE';
 const COVER_MESSAGE_TYPE = 'cover-sync';
 const DEFAULT_MAX_ATTEMPTS = 2;
@@ -203,20 +203,20 @@ async function sendCoverMessage(queue, payload, delaySeconds = 0) {
   await queue.send(body);
 }
 
-async function saveItem(kv, item) {
-  await kv.put(`${KV_PREFIX}${item.id}`, JSON.stringify(item));
+async function saveItem(repository, item) {
+  await repository.saveItem(item);
 }
 
 async function enqueueCoverGeneration({
   item,
-  kv,
+  repository,
   env,
   log,
   reason = 'manual-cover',
   force = false,
   maxAttempts = DEFAULT_MAX_ATTEMPTS
 }) {
-  if (!kv || !item?.id) {
+  if (!repository || !item?.id) {
     return { queued: false, item };
   }
 
@@ -237,7 +237,7 @@ async function enqueueCoverGeneration({
   }
 
   if (item?.cover?.updatedAt && !force) {
-    const existingCover = await getCoverImage(kv, item.id);
+    const existingCover = await getCoverImage(repository, item.id);
     if (existingCover?.base64) {
       return { queued: false, coverExists: true, item };
     }
@@ -252,7 +252,7 @@ async function enqueueCoverGeneration({
     jobId,
     maxAttempts: attemptLimit
   });
-  await saveItem(kv, item);
+  await saveItem(repository, item);
 
   const queue = getQueue(env);
   if (!queue) {
@@ -269,7 +269,7 @@ async function enqueueCoverGeneration({
       errorCode: 'cover_queue_unavailable',
       retryable: false
     });
-    await saveItem(kv, item);
+    await saveItem(repository, item);
 
     if (log) {
       log('error', 'cover_sync_queue_missing', {
@@ -322,7 +322,7 @@ async function enqueueCoverGeneration({
       errorCode: 'cover_queue_failed',
       retryable: false
     });
-    await saveItem(kv, item);
+    await saveItem(repository, item);
 
     if (log) {
       log('error', 'cover_sync_queue_failed', {
@@ -373,8 +373,8 @@ async function processCoverSyncMessage(message, env, log) {
     return;
   }
 
-  const kv = env?.READ_LATER;
-  if (!kv) {
+  const repository = getRepository(env);
+  if (!repository) {
     if (log) {
       log('error', 'storage_unavailable', {
         stage: 'queue',
@@ -384,8 +384,7 @@ async function processCoverSyncMessage(message, env, log) {
     return;
   }
 
-  const key = `${KV_PREFIX}${itemId}`;
-  const item = await kv.get(key, { type: 'json' });
+  const item = await repository.getItem(itemId);
   if (!item) {
     if (log) {
       log('warn', 'cover_sync_item_missing', {
@@ -422,11 +421,11 @@ async function processCoverSyncMessage(message, env, log) {
     errorCode: null,
     retryable: true
   });
-  await saveItem(kv, item);
+  await saveItem(repository, item);
 
   if (!env?.OPENAI_API_KEY) {
     await markCoverSyncFailure({
-      kv,
+      repository,
       env,
       itemId,
       jobId,
@@ -445,7 +444,7 @@ async function processCoverSyncMessage(message, env, log) {
   const forceReaderRefresh = isXStatusUrl(item.url);
   try {
     reader = await fetchAndCacheReader({
-      kv,
+      repository,
       id: itemId,
       url: item.url,
       title: item.title,
@@ -464,7 +463,7 @@ async function processCoverSyncMessage(message, env, log) {
   } catch (error) {
     const classified = classifyCoverError(error);
     await markCoverSyncFailure({
-      kv,
+      repository,
       env,
       itemId,
       jobId,
@@ -481,7 +480,7 @@ async function processCoverSyncMessage(message, env, log) {
 
   if (!reader?.contentHtml) {
     await markCoverSyncFailure({
-      kv,
+      repository,
       env,
       itemId,
       jobId,
@@ -498,11 +497,11 @@ async function processCoverSyncMessage(message, env, log) {
 
   let cover = null;
   try {
-    cover = await ensureCoverImage({ item, reader, env, kv, log });
+    cover = await ensureCoverImage({ item, reader, env, repository, log });
   } catch (error) {
     const classified = classifyCoverError(error);
     await markCoverSyncFailure({
-      kv,
+      repository,
       env,
       itemId,
       jobId,
@@ -519,7 +518,7 @@ async function processCoverSyncMessage(message, env, log) {
 
   if (!cover?.createdAt) {
     await markCoverSyncFailure({
-      kv,
+      repository,
       env,
       itemId,
       jobId,
@@ -534,7 +533,7 @@ async function processCoverSyncMessage(message, env, log) {
     return;
   }
 
-  const latestItem = await kv.get(key, { type: 'json' });
+  const latestItem = await repository.getItem(itemId);
   if (!latestItem) return;
   if (!isCurrentCoverJob(latestItem, jobId)) return;
 
@@ -558,7 +557,7 @@ async function processCoverSyncMessage(message, env, log) {
     errorCode: null,
     retryable: false
   });
-  await saveItem(kv, latestItem);
+  await saveItem(repository, latestItem);
 
   if (log) {
     log('info', 'cover_sync_complete', {
@@ -573,12 +572,12 @@ async function processCoverSyncMessage(message, env, log) {
     });
   }
 
-  const readiness = await updateArticlePushReadiness(itemId, kv, log);
+  const readiness = await updateArticlePushReadiness(itemId, repository, log);
   if (readiness?.ready && readiness?.item) {
     await maybeQueueIosPush({
       item: readiness.item,
       env,
-      kv,
+      repository,
       log,
       source: 'cover-sync-complete'
     });
@@ -586,7 +585,7 @@ async function processCoverSyncMessage(message, env, log) {
 }
 
 async function markCoverSyncFailure({
-  kv,
+  repository,
   env,
   itemId,
   jobId,
@@ -598,8 +597,7 @@ async function markCoverSyncFailure({
   retryable,
   log
 }) {
-  const key = `${KV_PREFIX}${itemId}`;
-  const latestItem = await kv.get(key, { type: 'json' });
+  const latestItem = await repository.getItem(itemId);
   if (!latestItem) return;
   if (!isCurrentCoverJob(latestItem, jobId)) return;
 
@@ -623,7 +621,7 @@ async function markCoverSyncFailure({
       errorCode,
       retryable: true
     });
-    await saveItem(kv, latestItem);
+    await saveItem(repository, latestItem);
 
     const queue = getQueue(env);
     if (!queue) {
@@ -641,7 +639,7 @@ async function markCoverSyncFailure({
         errorCode: 'cover_queue_unavailable',
         retryable: false
       });
-      await saveItem(kv, latestItem);
+      await saveItem(repository, latestItem);
       return;
     }
 
@@ -686,7 +684,7 @@ async function markCoverSyncFailure({
         errorCode: 'cover_retry_queue_failed',
         retryable: false
       });
-      await saveItem(kv, latestItem);
+      await saveItem(repository, latestItem);
       if (log) {
         log('error', 'cover_sync_retry_enqueue_failed', {
           stage: 'queue',
@@ -717,7 +715,7 @@ async function markCoverSyncFailure({
     errorCode,
     retryable: false
   });
-  await saveItem(kv, latestItem);
+  await saveItem(repository, latestItem);
 
   if (log) {
     log('warn', 'cover_sync_failed', {
@@ -733,16 +731,20 @@ async function markCoverSyncFailure({
     });
   }
 
-  const readiness = await updateArticlePushReadiness(itemId, kv, log);
+  const readiness = await updateArticlePushReadiness(itemId, repository, log);
   if (readiness?.ready && readiness?.item) {
     await maybeQueueIosPush({
       item: readiness.item,
       env,
-      kv,
+      repository,
       log,
       source: 'cover-sync-failed'
     });
   }
+}
+
+function getRepository(env) {
+  return env?.READ_LATER_REPOSITORY || createReadLaterRepository(env, { requireAssets: true });
 }
 
 export {
