@@ -22,6 +22,9 @@ const PLATFORM_NAMES = {
   website: 'Website'
 };
 
+const PREVIEW_DESCRIPTION_MAX = 180;
+const X_DESCRIPTION_MAX = 220;
+
 export function renderSharePage(item, requestUrl) {
   if (item.type === 'x_post') {
     return renderXSharePage(item, requestUrl);
@@ -29,7 +32,8 @@ export function renderSharePage(item, requestUrl) {
 
   const shareUrl = new URL(`/share/${item.id}`, requestUrl).href;
   const title = item.title || 'Shared podcast';
-  const description = truncate(item.description || item.podcast?.description || 'A shared podcast link from jeffharr.is.', 220);
+  const description = cleanDisplayText(item.description || item.podcast?.description || 'A shared podcast link from jeffharr.is.');
+  const previewDescription = truncate(description, PREVIEW_DESCRIPTION_MAX);
   const imageUrl = item.imageUrl || item.podcast?.imageUrl || 'https://jeffharr.is/images/profile.jpg';
   const audioUrl = item.media?.audioUrl || '';
   const isEpisode = item.type === 'podcast_episode';
@@ -37,7 +41,7 @@ export function renderSharePage(item, requestUrl) {
 
   return htmlDocument({
     title: `${title} | Jeff Harris`,
-    description,
+    description: previewDescription,
     imageUrl,
     url: shareUrl,
     noindex: false,
@@ -80,7 +84,7 @@ function renderXSharePage(item, requestUrl) {
   const posts = Array.isArray(item.x?.posts) ? item.x.posts : [];
   const sharedPost = posts.find((post) => post.id === item.x?.sharedTweetId) || posts[0] || null;
   const title = item.title || buildXPostTitle(sharedPost) || 'Shared X post';
-  const description = truncate(item.description || sharedPost?.text || 'A shared X post from jeffharr.is.', 220);
+  const description = truncate(item.description || sharedPost?.text || 'A shared X post from jeffharr.is.', X_DESCRIPTION_MAX);
   const imageUrl = item.imageUrl || firstXPostImage(sharedPost) || sharedPost?.author?.profileImageUrl || 'https://jeffharr.is/images/profile.jpg';
   const shareText = sharedPost?.author?.username
     ? `${sharedPost.author.name || `@${sharedPost.author.username}`} on X`
@@ -573,9 +577,13 @@ function formatDate(value) {
 }
 
 function truncate(value, max) {
-  const clean = String(value || '').replace(/\s+/g, ' ').trim();
+  const clean = cleanDisplayText(value);
   if (clean.length <= max) return clean;
   return `${clean.slice(0, max - 1).trim()}…`;
+}
+
+function cleanDisplayText(value) {
+  return String(value || '').replace(/\s+/g, ' ').trim();
 }
 
 function escapeHtml(value) {
