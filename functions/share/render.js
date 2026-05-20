@@ -138,17 +138,17 @@ export function renderHistoryPage(items, requestUrl) {
     const url = new URL(`/share/${item.id}`, requestUrl).href;
     const image = item.imageUrl || 'https://jeffharr.is/images/profile.jpg';
     return `
-      <div class="history-item-row">
-        <a class="history-item" href="/share/${escapeAttribute(item.id)}">
-          <img src="${escapeAttribute(image)}" alt="" width="72" height="72">
-          <span class="history-item__body">
+      <a class="history-item" href="/share/${escapeAttribute(item.id)}">
+        <img src="${escapeAttribute(image)}" alt="" width="72" height="72">
+        <span class="history-item__body">
+          <span class="history-item__heading">
             <strong>${escapeHtml(item.title || 'Untitled share')}</strong>
-            <span>${escapeHtml(formatHistoryMeta(item))}</span>
-            <small>${escapeHtml(url)}</small>
+            ${renderFavoriteIndicator(item.id)}
           </span>
-        </a>
-        ${renderFavoriteButton(item.id)}
-      </div>
+          <span>${escapeHtml(formatHistoryMeta(item))}</span>
+          <small>${escapeHtml(url)}</small>
+        </span>
+      </a>
     `;
   }).join('');
 
@@ -320,7 +320,11 @@ function htmlDocument({ title, description, imageUrl, url, body, noindex }) {
 }
 
 function renderFavoriteButton(shareSlug) {
-  return `<button class="favorite-button favorite-button--compact" type="button" hidden data-favorite-kind="share_page" data-favorite-share-slug="${escapeAttribute(shareSlug)}" aria-label="Favorite"></button>`;
+  return `<button class="favorite-button" type="button" hidden data-favorite-kind="share_page" data-favorite-share-slug="${escapeAttribute(shareSlug)}" aria-label="Favorite"></button>`;
+}
+
+function renderFavoriteIndicator(shareSlug) {
+  return `<span class="favorite-indicator" hidden data-favorite-kind="share_page" data-favorite-share-slug="${escapeAttribute(shareSlug)}" aria-hidden="true"></span>`;
 }
 
 function renderPlatformSection(platforms) {

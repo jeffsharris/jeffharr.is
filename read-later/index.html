@@ -68,7 +68,10 @@
           </button>
         </div>
         <div class="item__main">
-          <a class="item__title" href="#" target="_blank" rel="noopener"></a>
+          <div class="item__title-row">
+            <a class="item__title" href="#" target="_blank" rel="noopener"></a>
+            <span class="favorite-indicator item__favorite-indicator" hidden aria-hidden="true"></span>
+          </div>
           <div class="item__meta">
             <span class="item__domain"></span>
             <span class="item__dot"></span>
@@ -78,7 +81,6 @@
           </div>
         </div>
         <div class="item__actions">
-          <button class="icon-btn item__favorite favorite-button favorite-button--compact" type="button" aria-label="Favorite" hidden></button>
           <button class="icon-btn item__toggle" type="button" aria-label="Mark read"></button>
           <button class="icon-btn item__delete" type="button" aria-label="Delete"></button>
         </div>
@@ -90,7 +92,10 @@
             <h2 class="reader__title"></h2>
             <div class="reader__meta"></div>
           </div>
-          <button class="reader__refresh" type="button" aria-label="Refresh reader"></button>
+          <div class="reader__header-actions">
+            <button class="favorite-button item__favorite" type="button" aria-label="Favorite" data-favorite-kind="item" hidden></button>
+            <button class="reader__refresh" type="button" aria-label="Refresh reader"></button>
+          </div>
         </div>
         <div class="reader__status"></div>
         <div class="reader__media" hidden></div>

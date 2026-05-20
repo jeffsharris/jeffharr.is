@@ -1,69 +1,114 @@
+/* Favorites (admin only).
+   - .favorite-button is the togglable control, only rendered on detail surfaces.
+   - .favorite-indicator is a read-only display, shown on list/gallery surfaces
+     when an item is starred. */
+
 .favorite-button[hidden],
+.favorite-indicator[hidden],
 .admin-sign-in[hidden] {
   display: none !important;
 }
 
 .favorite-button {
-  --favorite-size: 38px;
+  --favorite-size: 32px;
   display: inline-grid;
   place-items: center;
   width: var(--favorite-size);
   min-width: var(--favorite-size);
   height: var(--favorite-size);
-  border: 1px solid color-mix(in srgb, currentColor 22%, transparent);
+  padding: 0;
+  border: 0;
+  background: transparent;
   border-radius: 999px;
-  background: color-mix(in srgb, Canvas 82%, transparent);
   color: inherit;
+  opacity: 0.55;
   cursor: pointer;
   line-height: 1;
+  transition: opacity 0.15s ease, color 0.15s ease, background-color 0.15s ease;
+  box-shadow: none;
 }
 
 .favorite-button:hover {
-  background: color-mix(in srgb, currentColor 9%, Canvas);
+  opacity: 1;
+  background: color-mix(in srgb, currentColor 8%, transparent);
 }
 
 .favorite-button:disabled {
   cursor: wait;
-  opacity: 0.62;
+  opacity: 0.35;
 }
 
 .favorite-button:focus-visible {
   outline: 2px solid currentColor;
-  outline-offset: 3px;
+  outline-offset: 2px;
 }
 
 .favorite-button svg {
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
   fill: none;
   stroke: currentColor;
-  stroke-width: 1.9;
+  stroke-width: 1.8;
   stroke-linejoin: round;
+}
+
+.favorite-button.is-favorited {
+  opacity: 1;
+  color: #c89211;
 }
 
 .favorite-button.is-favorited svg {
   fill: currentColor;
+  stroke: currentColor;
 }
 
-.favorite-button--compact {
-  --favorite-size: 34px;
+@media (prefers-color-scheme: dark) {
+  .favorite-button.is-favorited {
+    color: #e6b94a;
+  }
 }
 
-.favorite-button--card {
+/* Read-only indicator for list/gallery surfaces.
+   Only visible when an item is favorited. */
+.favorite-indicator {
+  display: inline-grid;
+  place-items: center;
+  width: 16px;
+  height: 16px;
+  color: #c89211;
+  pointer-events: none;
+  line-height: 1;
+}
+
+.favorite-indicator svg {
+  width: 14px;
+  height: 14px;
+  fill: currentColor;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linejoin: round;
+}
+
+@media (prefers-color-scheme: dark) {
+  .favorite-indicator { color: #e6b94a; }
+}
+
+/* Corner indicator used on poem gallery cards. */
+.favorite-indicator--corner {
   position: absolute;
-  top: 12px;
-  right: 12px;
+  top: 10px;
+  right: 10px;
   z-index: 3;
-  color: #fff;
-  background: rgba(0, 0, 0, 0.32);
-  border-color: rgba(255, 255, 255, 0.32);
-  backdrop-filter: blur(10px);
+  color: #f7d572;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.55));
 }
 
-.favorite-button--card:hover {
-  background: rgba(0, 0, 0, 0.46);
+.favorite-indicator--corner svg {
+  width: 16px;
+  height: 16px;
 }
 
+/* Tiny floating sign-in marker for admin access. */
 .admin-sign-in {
   position: fixed;
   right: 10px;

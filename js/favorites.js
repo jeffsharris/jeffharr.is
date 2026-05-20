@@ -4,7 +4,8 @@
   const SESSION_URL = '/api/admin/session';
   const STATE_URL = '/api/favorites/state';
   const FAVORITES_URL = '/api/favorites';
-  const STAR_ICON = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.2l2.74 5.55 6.12.89-4.43 4.32 1.05 6.09L12 17.17l-5.48 2.88 1.05-6.09-4.43-4.32 6.12-.89L12 3.2z"></path></svg>';
+  const STAR_OUTLINE_SVG = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.2l2.74 5.55 6.12.89-4.43 4.32 1.05 6.09L12 17.17l-5.48 2.88 1.05-6.09-4.43-4.32 6.12-.89L12 3.2z"></path></svg>';
+  const STAR_FILLED_SVG = STAR_OUTLINE_SVG;
   const stateByKey = new Map();
   const boundControls = new WeakSet();
   let sessionPromise = null;
@@ -82,14 +83,17 @@
     observeDharmaArchive();
     injectPoemControls();
     observePoems();
-
-    const controls = Array.from(root.querySelectorAll('.favorite-button'));
+    const buttons = Array.from(root.querySelectorAll('.favorite-button'));
+    const indicators = Array.from(root.querySelectorAll('.favorite-indicator'));
+    const controls = buttons.concat(indicators);
     if (!controls.length) {
       renderSignIn(false);
       return;
     }
 
-    controls.forEach(prepareControl);
+    buttons.forEach(prepareButton);
+    indicators.forEach(prepareIndicator);
+
     const session = await getSession();
     if (!session.authenticated) {
       controls.forEach((control) => {
@@ -121,8 +125,8 @@
     controls.forEach(updateControl);
   }
 
-  function prepareControl(control) {
-    if (!control.innerHTML.trim()) control.innerHTML = STAR_ICON;
+  function prepareButton(control) {
+    if (!control.innerHTML.trim()) control.innerHTML = STAR_OUTLINE_SVG;
     control.type = 'button';
     control.classList.add('favorite-button');
     if (!control.hasAttribute('aria-label')) control.setAttribute('aria-label', 'Favorite');
@@ -132,6 +136,11 @@
     }
   }
 
+  function prepareIndicator(control) {
+    if (!control.innerHTML.trim()) control.innerHTML = STAR_FILLED_SVG;
+    control.setAttribute('aria-hidden', 'true');
+  }
+
   function updateControl(control) {
     const ref = controlRef(control);
     if (!ref) {
@@ -139,6 +148,12 @@
       return;
     }
     const state = stateByKey.get(ref.key) || { favorited: false };
+
+    if (control.classList.contains('favorite-indicator')) {
+      control.hidden = !state.favorited;
+      return;
+    }
+
     control.hidden = false;
     control.disabled = false;
     control.classList.toggle('is-favorited', Boolean(state.favorited));
@@ -194,7 +209,7 @@
   }
 
   function updateMatchingControls(key) {
-    document.querySelectorAll('.favorite-button').forEach((control) => {
+    document.querySelectorAll('.favorite-button, .favorite-indicator').forEach((control) => {
       const ref = controlRef(control);
       if (ref?.key === key) updateControl(control);
     });
@@ -233,20 +248,19 @@
 
     const talkMatch = location.pathname.match(/^\/dharma\/([^/]+)\/talks\/([^/]+)\/?$/);
     if (talkMatch && !document.querySelector('[data-favorite-auto="dharma-detail"]')) {
-      const player = document.querySelector('.primary-player');
-      if (player) {
+      const meta = document.querySelector('.hero .meta') || document.querySelector('.meta');
+      if (meta) {
         const button = createFavoriteButton({
           kind: 'dharma_talk',
           corpus: talkMatch[1],
           id: talkMatch[2],
           auto: 'dharma-detail'
         });
-        button.classList.add('favorite-button--compact');
-        player.appendChild(button);
+        meta.appendChild(button);
       }
     }
 
-    document.querySelectorAll('.talk-card').forEach((card) => injectDharmaCardControl(card, context.corpus));
+    document.querySelectorAll('.talk-card').forEach((card) => injectDharmaCardIndicator(card, context.corpus));
   }
 
   function observeDharmaArchive() {
@@ -261,20 +275,18 @@
     archiveObserver.observe(list, { childList: true, subtree: true });
   }
 
-  function injectDharmaCardControl(card, corpus) {
-    if (card.querySelector('[data-favorite-kind="dharma_talk"]')) return;
+  function injectDharmaCardIndicator(card, corpus) {
+    if (card.querySelector('.favorite-indicator[data-favorite-kind="dharma_talk"]')) return;
     const link = card.querySelector('.archive-link[href], a[href*="/talks/"]');
     const id = dharmaIdFromHref(link?.getAttribute('href') || '');
-    const actions = card.querySelector('.talk-card-actions');
-    if (!id || !actions) return;
-    const button = createFavoriteButton({
-      kind: 'dharma_talk',
-      corpus,
-      id,
-      auto: 'dharma-card'
-    });
-    button.classList.add('favorite-button--compact');
-    actions.appendChild(button);
+    if (!id) return;
+    const heading = card.querySelector('h3 a') || card.querySelector('h3') || card.querySelector('h2');
+    if (!heading) return;
+    const indicator = createFavoriteIndicator({ kind: 'dharma_talk', corpus, id });
+    indicator.style.marginLeft = '6px';
+    indicator.style.verticalAlign = 'middle';
+    heading.appendChild(document.createTextNode(' '));
+    heading.appendChild(indicator);
   }
 
   function createFavoriteButton({ kind, corpus, id, auto }) {
@@ -288,9 +300,23 @@
     if (kind === 'poem') button.dataset.favoritePoemSlug = id;
     if (auto) button.dataset.favoriteAuto = auto;
     button.setAttribute('aria-label', 'Favorite');
-    button.innerHTML = STAR_ICON;
-    prepareControl(button);
+    button.innerHTML = STAR_OUTLINE_SVG;
+    prepareButton(button);
     return button;
+  }
+
+  function createFavoriteIndicator({ kind, corpus, id, variant }) {
+    const span = document.createElement('span');
+    span.className = 'favorite-indicator' + (variant ? ` favorite-indicator--${variant}` : '');
+    span.hidden = true;
+    span.dataset.favoriteKind = kind;
+    span.dataset.favoriteId = id;
+    if (corpus) span.dataset.favoriteCorpus = corpus;
+    if (kind === 'dharma_talk') span.dataset.favoriteDharmaId = id;
+    if (kind === 'poem') span.dataset.favoritePoemSlug = id;
+    span.innerHTML = STAR_FILLED_SVG;
+    prepareIndicator(span);
+    return span;
   }
 
   function dharmaIdFromHref(href) {
@@ -309,10 +335,10 @@
 
     document.querySelectorAll('.card[data-slug]').forEach((card) => {
       const slug = card.dataset.slug || '';
-      if (!slug || card.querySelector('[data-favorite-kind="poem"]')) return;
-      const button = createFavoriteButton({ kind: 'poem', id: slug, auto: 'poem-card' });
-      button.classList.add('favorite-button--card');
-      card.appendChild(button);
+      if (!slug) return;
+      if (card.querySelector('.favorite-indicator[data-favorite-kind="poem"]')) return;
+      const indicator = createFavoriteIndicator({ kind: 'poem', id: slug, variant: 'corner' });
+      card.appendChild(indicator);
     });
 
     const actions = document.querySelector('.modal__actions');
@@ -321,7 +347,6 @@
         actions.querySelector('[data-favorite-kind="poem"]');
       if (!button) {
         button = createFavoriteButton({ kind: 'poem', id: currentPoemSlug(), auto: 'poem-modal' });
-        button.classList.add('modal__action-btn', 'favorite-button--compact');
         actions.insertBefore(button, actions.querySelector('.modal__feedback') || null);
       }
       button.dataset.favoriteAuto = 'poem-modal';
