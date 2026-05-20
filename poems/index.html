@@ -416,8 +416,9 @@
       transform: scale(1) translateY(0);
     }
 
-    /* Inner card — holds the actual content. Slides on prev/next. */
-    .modal__inner {
+    /* Clipping viewport — holds the sliding panes and bounds them to the
+       card area, so chevrons (siblings outside this wrapper) stay visible. */
+    .modal__viewport {
       position: relative;
       display: flex;
       flex-direction: column;
@@ -429,6 +430,17 @@
       border-radius: 16px;
       box-shadow: var(--shadow-lg);
       overflow: hidden;
+    }
+
+    /* Inner pane — what slides during prev/next. */
+    .modal__inner {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      min-height: 0;
+      width: 100%;
+      background: var(--bg-card);
       will-change: transform;
     }
 
@@ -1065,6 +1077,7 @@
           <line x1="6" y1="6" x2="18" y2="18"></line>
         </svg>
       </button>
+      <div class="modal__viewport" id="modal-viewport">
       <div class="modal__inner" id="modal-inner">
       <div class="modal__header">
         <h2 class="modal__title" id="modal-title"></h2>
@@ -1110,6 +1123,7 @@
         </div>
       </div>
       </div><!-- /modal__inner -->
+      </div><!-- /modal__viewport -->
     </div>
   </div>
 
@@ -1132,6 +1146,7 @@
     const favoriteButton = document.getElementById('favorite-poem');
     const actionFeedback = document.getElementById('action-feedback');
     const modalContent = modal.querySelector('.modal__content');
+    const modalViewport = modal.querySelector('.modal__viewport');
     const modalInner = modal.querySelector('.modal__inner');
     const modalBody = modal.querySelector('.modal__body');
 
@@ -1455,7 +1470,7 @@
       ghost.classList.add('modal__inner--ghost');
       ghost.classList.remove('is-sliding', 'is-dragging');
       if (dragTransform) ghost.style.transform = dragTransform;
-      modalContent.insertBefore(ghost, modalInner);
+      modalViewport.insertBefore(ghost, modalInner);
       const ghostBody = ghost.querySelector('.modal__body');
       if (ghostBody) ghostBody.scrollTop = oldScrollTop;
 
