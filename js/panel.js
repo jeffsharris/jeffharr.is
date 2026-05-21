@@ -385,7 +385,7 @@
     panelContent.innerHTML = html;
   }
 
-  // Poems content - quick summary
+  // Poems content - image-led cards
   function renderPoems(data) {
     const poems = (data.poems || []).slice(0, 10);
 
@@ -397,14 +397,20 @@
     const html = `
       <div class="panel-section">
         <h4 class="panel-section__title">Random Picks</h4>
-        <div class="panel-list">
+        <div class="poem-card-list">
           ${poems.map(poem => `
-            <a href="/poems?poem=${encodeURIComponent(poem.slug || '')}" class="content-item content-item--poem">
-              <div class="content-item__header">
-                <h3 class="content-item__title">${escapeHtml(poem.title)}</h3>
-                ${poem.author ? `<span class="content-item__meta">${escapeHtml(poem.author)}</span>` : ''}
+            <a href="/poems?poem=${encodeURIComponent(poem.slug || '')}" class="poem-card">
+              <div class="poem-card__cover">
+                ${poem.image
+                  ? `<img src="${escapeAttr(poem.image)}" alt="" width="160" height="160" loading="lazy" decoding="async">`
+                  : ''}
+                <span class="poem-card__cover-shade" aria-hidden="true"></span>
               </div>
-              ${poem.excerpt ? `<p class="content-item__description">${escapeHtml(poem.excerpt)}</p>` : ''}
+              <div class="poem-card__body">
+                <h3 class="poem-card__title">${escapeHtml(poem.title)}</h3>
+                ${poem.author ? `<p class="poem-card__author">${escapeHtml(poem.author)}</p>` : ''}
+                ${poem.excerpt ? `<p class="poem-card__excerpt">${escapeHtml(poem.excerpt)}</p>` : ''}
+              </div>
             </a>
           `).join('')}
         </div>
@@ -412,6 +418,10 @@
     `;
 
     panelContent.innerHTML = html;
+  }
+
+  function escapeAttr(value) {
+    return escapeHtml(value).replace(/`/g, '&#096;');
   }
 
   // Read Later content - saved and read items

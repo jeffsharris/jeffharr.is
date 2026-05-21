@@ -712,6 +712,135 @@ body.panel-open .social-btn[data-platform]:focus {
   color: var(--text-muted);
 }
 
+/* Poems panel — image-led cards */
+.poem-card-list {
+  display: grid;
+  gap: 14px;
+}
+
+.poem-card {
+  display: grid;
+  grid-template-columns: 96px minmax(0, 1fr);
+  gap: 18px;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--bg-item);
+  color: inherit;
+  text-decoration: none;
+  align-items: center;
+  transition: transform var(--transition), border-color var(--transition), box-shadow var(--transition), background var(--transition);
+  position: relative;
+  isolation: isolate;
+}
+
+.poem-card:hover,
+.poem-card:focus-visible {
+  transform: translateY(-2px);
+  border-color: color-mix(in srgb, var(--accent) 55%, var(--border));
+  box-shadow: 0 8px 26px rgba(0, 0, 0, 0.08);
+  text-decoration: none;
+}
+
+.poem-card:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.poem-card__cover {
+  position: relative;
+  width: 96px;
+  height: 96px;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #16120f;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+  flex: none;
+}
+
+.poem-card__cover img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1);
+  transition: transform 0.5s ease, filter 0.4s ease;
+}
+
+.poem-card:hover .poem-card__cover img,
+.poem-card:focus-visible .poem-card__cover img {
+  transform: scale(1.06);
+  filter: saturate(1.05) contrast(1.03);
+}
+
+.poem-card__cover-shade {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(0, 0, 0, 0.04) 0%, rgba(0, 0, 0, 0.18) 100%);
+  pointer-events: none;
+}
+
+.poem-card__body {
+  min-width: 0;
+  display: grid;
+  gap: 4px;
+}
+
+.poem-card__title {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 1.18;
+  letter-spacing: 0.005em;
+  color: var(--text);
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.poem-card__author {
+  font-family: var(--font-display);
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin: 2px 0 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.poem-card__excerpt {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--text-muted);
+  margin: 6px 0 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+@media (max-width: 480px) {
+  .poem-card {
+    grid-template-columns: 76px minmax(0, 1fr);
+    gap: 14px;
+    padding: 10px;
+  }
+  .poem-card__cover {
+    width: 76px;
+    height: 76px;
+  }
+  .poem-card__title {
+    font-size: 19px;
+  }
+}
+
 /* Theme Toggle */
 .theme-toggle {
   position: fixed;

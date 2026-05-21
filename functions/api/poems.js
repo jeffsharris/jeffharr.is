@@ -10,12 +10,13 @@ export async function onRequest(context) {
     const manifest = await fetchManifest(context);
     const memorized = manifest.memorized || [];
     const learning = manifest.learning || [];
+    const images = manifest.images || {};
     const allSlugs = Array.from(new Set([...memorized, ...learning]));
 
     const data = {
       memorizedCount: memorized.length,
       learningCount: learning.length,
-      poems: await selectRandomPoems(allSlugs, context, 10),
+      poems: await selectRandomPoems(allSlugs, context, 10, images),
       profileUrl: '/poems'
     };
 
@@ -55,13 +56,13 @@ async function fetchManifest(context) {
   return assetResponse.json();
 }
 
-async function selectRandomPoems(slugs, context, count = 10) {
+async function selectRandomPoems(slugs, context, count = 10, images = {}) {
   const selected = shuffle(slugs).slice(0, count);
-  const poems = await Promise.all(selected.map((slug) => loadPoem(slug, context)));
+  const poems = await Promise.all(selected.map((slug) => loadPoem(slug, context, images[slug] || '')));
   return poems.filter(Boolean);
 }
 
-async function loadPoem(slug, context) {
+async function loadPoem(slug, context, image = '') {
   try {
     const poemUrl = new URL(`/poems/content/${slug}.md`, context.request.url);
     const response = await context.env.ASSETS.fetch(poemUrl, {
@@ -77,7 +78,8 @@ async function loadPoem(slug, context) {
       slug,
       title: title || slugToTitle(slug),
       author: author || 'Unknown',
-      excerpt
+      excerpt,
+      image
     };
   } catch (error) {
     console.error(`Failed to load poem ${slug}:`, error);
