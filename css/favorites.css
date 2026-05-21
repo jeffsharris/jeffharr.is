@@ -5,7 +5,8 @@
 
 .favorite-button[hidden],
 .favorite-indicator[hidden],
-.admin-sign-in[hidden] {
+.admin-sign-in[hidden],
+.admin-auth-toast[hidden] {
   display: none !important;
 }
 
@@ -122,13 +123,58 @@
   text-decoration: none;
   font: 13px/14px system-ui, sans-serif;
   text-align: center;
+  transition: opacity 0.16s ease, transform 0.16s ease;
 }
 
 .admin-sign-in:hover,
 .admin-sign-in:focus-visible {
   opacity: 0.38;
+  transform: scale(1.1);
 }
 
 .admin-sign-in::before {
   content: "*";
+}
+
+.admin-sign-in[data-admin-auth-action="sign-out"] {
+  opacity: 0.22;
+}
+
+.admin-sign-in[aria-busy="true"] {
+  cursor: wait;
+  opacity: 0.34;
+}
+
+.admin-auth-toast {
+  position: fixed;
+  right: 16px;
+  bottom: 34px;
+  z-index: 2147483646;
+  display: grid;
+  gap: 4px;
+  width: min(320px, calc(100vw - 32px));
+  padding: 12px 14px;
+  border: 1px solid color-mix(in srgb, currentColor 12%, transparent);
+  border-radius: 8px;
+  background: color-mix(in srgb, Canvas 94%, transparent);
+  color: CanvasText;
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.18);
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  backdrop-filter: blur(18px);
+}
+
+.admin-auth-toast.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.admin-auth-toast strong {
+  font: 600 13px/1.25 system-ui, sans-serif;
+}
+
+.admin-auth-toast span {
+  color: color-mix(in srgb, CanvasText 72%, transparent);
+  font: 12px/1.45 system-ui, sans-serif;
 }

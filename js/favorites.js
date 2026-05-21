@@ -2,8 +2,10 @@
   'use strict';
 
   const SESSION_URL = '/api/admin/session';
+  const LOGOUT_URL = '/cdn-cgi/access/logout';
   const STATE_URL = '/api/favorites/state';
   const FAVORITES_URL = '/api/favorites';
+  const SIGNED_OUT_NOTICE_KEY = 'jeffharr.adminSignedOut';
   const STAR_OUTLINE_SVG = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.2l2.74 5.55 6.12.89-4.43 4.32 1.05 6.09L12 17.17l-5.48 2.88 1.05-6.09-4.43-4.32 6.12-.89L12 3.2z"></path></svg>';
   const STAR_FILLED_SVG = STAR_OUTLINE_SVG;
   const stateByKey = new Map();
@@ -12,6 +14,7 @@
   let archiveObserver = null;
   let poemObserver = null;
   let refreshTimer = null;
+  let toastTimer = null;
 
   function ready(callback) {
     if (document.readyState === 'loading') {
@@ -25,7 +28,10 @@
     if (!sessionPromise) {
       sessionPromise = fetch(SESSION_URL, {
         credentials: 'include',
-        headers: { accept: 'application/json' }
+        headers: {
+          accept: 'application/json',
+          'x-requested-with': 'XMLHttpRequest'
+        }
       })
         .then(async (response) => {
           if (!response.ok) return { authenticated: false };
@@ -87,7 +93,8 @@
     const indicators = Array.from(root.querySelectorAll('.favorite-indicator'));
     const controls = buttons.concat(indicators);
     if (!controls.length) {
-      renderSignIn(false);
+      const session = await getSession();
+      renderAdminMarker(session.authenticated ? 'sign-out' : '');
       return;
     }
 
@@ -99,11 +106,11 @@
       controls.forEach((control) => {
         control.hidden = true;
       });
-      renderSignIn(true);
+      renderAdminMarker('sign-in');
       return;
     }
 
-    renderSignIn(false);
+    renderAdminMarker('sign-out');
     const refs = controls.map(controlRef).filter(Boolean);
     if (!refs.length) return;
 
@@ -112,7 +119,8 @@
       credentials: 'include',
       headers: {
         accept: 'application/json',
-        'content-type': 'application/json'
+        'content-type': 'application/json',
+        'x-requested-with': 'XMLHttpRequest'
       },
       body: JSON.stringify({ refs: refs.map((entry) => entry.payload) })
     }).catch(() => null);
@@ -181,7 +189,8 @@
       credentials: 'include',
       headers: {
         accept: 'application/json',
-        'content-type': 'application/json'
+        'content-type': 'application/json',
+        'x-requested-with': 'XMLHttpRequest'
       },
       body: JSON.stringify(ref.payload)
     }).catch(() => null);
@@ -215,21 +224,98 @@
     });
   }
 
-  function renderSignIn(show) {
+  function renderAdminMarker(mode) {
     let link = document.querySelector('.admin-sign-in');
-    if (!show) {
+    if (!mode) {
       if (link) link.hidden = true;
       return;
     }
     if (!link) {
       link = document.createElement('a');
       link.className = 'admin-sign-in';
-      link.setAttribute('aria-label', 'Sign in');
       document.body.appendChild(link);
     }
-    const redirect = `${location.pathname}${location.search}${location.hash}`;
-    link.href = `${SESSION_URL}?redirect=${encodeURIComponent(redirect)}`;
+    link.dataset.adminAuthAction = mode;
+    link.removeAttribute('aria-busy');
+    link.setAttribute('aria-label', mode === 'sign-out' ? 'Sign out' : 'Sign in');
+    link.title = mode === 'sign-out' ? 'Sign out' : 'Sign in';
+    link.onclick = mode === 'sign-out' ? onAdminSignOut : null;
+    link.href = mode === 'sign-out'
+      ? LOGOUT_URL
+      : `${SESSION_URL}?redirect=${encodeURIComponent(currentPath())}`;
     link.hidden = false;
+  }
+
+  function onAdminSignOut(event) {
+    event.preventDefault();
+    const link = event.currentTarget;
+    link.setAttribute('aria-busy', 'true');
+    link.hidden = false;
+    sessionPromise = Promise.resolve({ authenticated: false });
+    stateByKey.clear();
+    document.querySelectorAll('.favorite-button, .favorite-indicator').forEach((control) => {
+      control.hidden = true;
+    });
+    rememberSignedOutNotice();
+    showAdminToast(
+      'Signed out',
+      'Cloudflare is clearing your admin session. When you return, the site will be back in viewer mode.'
+    );
+    setTimeout(() => {
+      location.assign(LOGOUT_URL);
+    }, 950);
+  }
+
+  function currentPath() {
+    return `${location.pathname}${location.search}${location.hash}`;
+  }
+
+  function rememberSignedOutNotice() {
+    try {
+      sessionStorage.setItem(SIGNED_OUT_NOTICE_KEY, '1');
+    } catch {
+      // Ignore storage failures; logout still works.
+    }
+  }
+
+  function showStoredSignedOutNotice() {
+    let shouldShow = false;
+    try {
+      shouldShow = sessionStorage.getItem(SIGNED_OUT_NOTICE_KEY) === '1';
+      if (shouldShow) sessionStorage.removeItem(SIGNED_OUT_NOTICE_KEY);
+    } catch {
+      shouldShow = false;
+    }
+    if (!shouldShow) return;
+    showAdminToast(
+      'Signed out',
+      'You are browsing as a viewer. Cloudflare may take a few seconds to finish revoking old Access tokens.'
+    );
+  }
+
+  function showAdminToast(title, message) {
+    let toast = document.querySelector('.admin-auth-toast');
+    if (!toast) {
+      toast = document.createElement('div');
+      toast.className = 'admin-auth-toast';
+      toast.setAttribute('role', 'status');
+      toast.setAttribute('aria-live', 'polite');
+      toast.innerHTML = '<strong></strong><span></span>';
+      document.body.appendChild(toast);
+    }
+    toast.querySelector('strong').textContent = title;
+    toast.querySelector('span').textContent = message;
+    toast.hidden = false;
+    requestAnimationFrame(() => {
+      toast.classList.add('is-visible');
+    });
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => {
+      toast.classList.remove('is-visible');
+      setTimeout(() => {
+        if (!toast.classList.contains('is-visible')) toast.hidden = true;
+      }, 220);
+    }, 6200);
   }
 
   function scheduleRefresh(root = document) {
@@ -397,6 +483,7 @@
   };
 
   ready(() => {
+    showStoredSignedOutNotice();
     watchUrlChanges();
     refresh(document);
   });
