@@ -114,6 +114,13 @@
   margin-left: 6px;
 }
 
+.talk-card h2 .favorite-indicator--title-prefix,
+.talk-card h3 .favorite-indicator--title-prefix {
+  margin-right: 6px;
+  margin-left: 0;
+  vertical-align: -0.08em;
+}
+
 /* Corner indicator used on poem gallery cards. */
 .favorite-indicator--corner {
   position: absolute;

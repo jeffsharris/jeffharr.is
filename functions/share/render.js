@@ -307,14 +307,14 @@ function htmlDocument({ title, description, imageUrl, url, body, noindex }) {
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="manifest" href="/share-assets/manifest.webmanifest">
-  <link rel="stylesheet" href="/css/favorites.css?v=1">
+  <link rel="stylesheet" href="/css/favorites.css?v=2">
   <link rel="stylesheet" href="/share-assets/share.css?v=7">
 </head>
 <body>
   <div class="bg-gradient"></div>
   <div class="bg-noise"></div>
   ${body}
-  <script src="/js/favorites.js?v=1" defer></script>
+  <script src="/js/favorites.js?v=2" defer></script>
 </body>
 </html>`;
 }

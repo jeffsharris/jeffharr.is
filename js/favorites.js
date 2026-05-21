@@ -484,14 +484,22 @@
 
   function injectDharmaCardIndicator(card, corpus) {
     if (card.querySelector('.favorite-indicator[data-favorite-kind="dharma_talk"]')) return;
-    const link = card.querySelector('.archive-link[href], a[href*="/talks/"]');
+    const titleLink = card.querySelector('h3 a[href*="/talks/"], h2 a[href*="/talks/"]') ||
+      card.querySelector('h3 a, h2 a');
+    const link = titleLink || card.querySelector('.archive-link[href], a[href*="/talks/"]');
     const id = dharmaIdFromHref(link?.getAttribute('href') || '');
     if (!id) return;
-    const heading = card.querySelector('h3 a') || card.querySelector('h3') || card.querySelector('h2');
+    const heading = titleLink?.closest('h2, h3') || card.querySelector('h3') || card.querySelector('h2');
     if (!heading) return;
-    const indicator = createFavoriteIndicator({ kind: 'dharma_talk', corpus, id });
-    heading.appendChild(document.createTextNode(' '));
-    heading.appendChild(indicator);
+    const indicator = createFavoriteIndicator({
+      kind: 'dharma_talk',
+      corpus,
+      id,
+      variant: 'title-prefix'
+    });
+    const target = titleLink && heading.contains(titleLink) ? titleLink : heading.firstChild;
+    heading.insertBefore(indicator, target);
+    heading.insertBefore(document.createTextNode(' '), target);
   }
 
   function createFavoriteButton({ kind, corpus, id, auto }) {
