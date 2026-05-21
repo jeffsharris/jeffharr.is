@@ -25,6 +25,7 @@
   opacity: 0.55;
   cursor: pointer;
   line-height: 1;
+  vertical-align: -0.125em;
   transition: opacity 0.15s ease, color 0.15s ease, background-color 0.15s ease;
   box-shadow: none;
 }
@@ -45,6 +46,7 @@
 }
 
 .favorite-button svg {
+  display: block;
   width: 16px;
   height: 16px;
   fill: none;
@@ -69,6 +71,17 @@
   }
 }
 
+.favorite-button[data-favorite-auto="dharma-detail"] {
+  --favorite-size: 24px;
+  margin-left: 6px;
+  vertical-align: -0.18em;
+}
+
+.favorite-button[data-favorite-auto="dharma-detail"] svg {
+  width: 17px;
+  height: 17px;
+}
+
 /* Read-only indicator for list/gallery surfaces.
    Only visible when an item is favorited. */
 .favorite-indicator {
@@ -79,9 +92,11 @@
   color: #c89211;
   pointer-events: none;
   line-height: 1;
+  vertical-align: -0.125em;
 }
 
 .favorite-indicator svg {
+  display: block;
   width: 14px;
   height: 14px;
   fill: currentColor;
@@ -92,6 +107,11 @@
 
 @media (prefers-color-scheme: dark) {
   .favorite-indicator { color: #e6b94a; }
+}
+
+.talk-card h2 .favorite-indicator,
+.talk-card h3 .favorite-indicator {
+  margin-left: 6px;
 }
 
 /* Corner indicator used on poem gallery cards. */

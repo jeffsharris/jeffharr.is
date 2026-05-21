@@ -6,6 +6,10 @@
   const STATE_URL = '/api/favorites/state';
   const FAVORITES_URL = '/api/favorites';
   const SIGNED_OUT_NOTICE_KEY = 'jeffharr.adminSignedOut';
+  const ADMIN_SESSION_CACHE_KEY = 'jeffharr.adminSession.v1';
+  const FAVORITE_STATE_CACHE_KEY = 'jeffharr.favoriteStates.v1';
+  const ADMIN_SESSION_CACHE_TTL_MS = 12 * 60 * 60 * 1000;
+  const FAVORITE_STATE_CACHE_TTL_MS = 24 * 60 * 60 * 1000;
   const STAR_OUTLINE_SVG = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.2l2.74 5.55 6.12.89-4.43 4.32 1.05 6.09L12 17.17l-5.48 2.88 1.05-6.09-4.43-4.32 6.12-.89L12 3.2z"></path></svg>';
   const STAR_FILLED_SVG = STAR_OUTLINE_SVG;
   const stateByKey = new Map();
@@ -34,13 +38,114 @@
         }
       })
         .then(async (response) => {
-          if (!response.ok) return { authenticated: false };
+          if (!response.ok) {
+            clearWarmCaches();
+            return { authenticated: false };
+          }
           const body = await response.json();
-          return body?.authenticated ? body : { authenticated: false };
+          if (body?.authenticated) {
+            rememberAdminSession(body);
+            return body;
+          }
+          clearWarmCaches();
+          return { authenticated: false };
         })
-        .catch(() => ({ authenticated: false }));
+        .catch(() => cachedAdminSession() || { authenticated: false });
     }
     return sessionPromise;
+  }
+
+  function readLocalJson(key) {
+    try {
+      const value = localStorage.getItem(key);
+      return value ? JSON.parse(value) : null;
+    } catch {
+      return null;
+    }
+  }
+
+  function writeLocalJson(key, value) {
+    try {
+      localStorage.setItem(key, JSON.stringify(value));
+    } catch {
+      // Storage is only a warm-start hint; authenticated APIs remain authoritative.
+    }
+  }
+
+  function removeLocalValue(key) {
+    try {
+      localStorage.removeItem(key);
+    } catch {
+      // Ignore storage failures.
+    }
+  }
+
+  function cachedAdminSession() {
+    const cached = readLocalJson(ADMIN_SESSION_CACHE_KEY);
+    if (!cached?.authenticated || cached.expiresAt <= Date.now()) {
+      removeLocalValue(ADMIN_SESSION_CACHE_KEY);
+      return null;
+    }
+    return {
+      authenticated: true,
+      cached: true,
+      email: cached.email || null
+    };
+  }
+
+  function rememberAdminSession(session) {
+    writeLocalJson(ADMIN_SESSION_CACHE_KEY, {
+      authenticated: true,
+      email: session.email || session.user?.email || null,
+      expiresAt: Date.now() + ADMIN_SESSION_CACHE_TTL_MS
+    });
+  }
+
+  function clearWarmCaches() {
+    removeLocalValue(ADMIN_SESSION_CACHE_KEY);
+    removeLocalValue(FAVORITE_STATE_CACHE_KEY);
+  }
+
+  function cachedFavoriteStates() {
+    const cached = readLocalJson(FAVORITE_STATE_CACHE_KEY);
+    if (!cached?.states || cached.expiresAt <= Date.now()) {
+      removeLocalValue(FAVORITE_STATE_CACHE_KEY);
+      return {};
+    }
+    return cached.states;
+  }
+
+  function compactFavoriteState(state) {
+    return {
+      key: state.key,
+      itemId: state.itemId || null,
+      canonicalKey: state.canonicalKey || null,
+      favorited: Boolean(state.favorited),
+      entryId: state.entryId || null,
+      addedAt: state.addedAt || null,
+      updatedAt: state.updatedAt || null
+    };
+  }
+
+  function rememberFavoriteStates(states) {
+    if (!states?.length) return;
+    const next = cachedFavoriteStates();
+    for (const state of states) {
+      if (!state?.key) continue;
+      next[state.key] = compactFavoriteState(state);
+    }
+    writeLocalJson(FAVORITE_STATE_CACHE_KEY, {
+      expiresAt: Date.now() + FAVORITE_STATE_CACHE_TTL_MS,
+      states: next
+    });
+  }
+
+  function hydrateFavoriteStates(refs) {
+    const cached = cachedFavoriteStates();
+    for (const ref of refs) {
+      const state = cached[ref.key];
+      if (state) stateByKey.set(ref.key, state);
+    }
   }
 
   function controlRef(control) {
@@ -100,9 +205,17 @@
 
     buttons.forEach(prepareButton);
     indicators.forEach(prepareIndicator);
+    const refs = controls.map(controlRef).filter(Boolean);
+    const warmSession = cachedAdminSession();
+    if (warmSession) {
+      hydrateFavoriteStates(refs);
+      controls.forEach(updateControl);
+      renderAdminMarker('sign-out');
+    }
 
     const session = await getSession();
     if (!session.authenticated) {
+      clearWarmCaches();
       controls.forEach((control) => {
         control.hidden = true;
       });
@@ -111,7 +224,8 @@
     }
 
     renderAdminMarker('sign-out');
-    const refs = controls.map(controlRef).filter(Boolean);
+    hydrateFavoriteStates(refs);
+    controls.forEach(updateControl);
     if (!refs.length) return;
 
     const response = await fetch(STATE_URL, {
@@ -130,6 +244,7 @@
     for (const state of body?.states || []) {
       stateByKey.set(state.key, state);
     }
+    rememberFavoriteStates(body?.states || []);
     controls.forEach(updateControl);
   }
 
@@ -181,6 +296,7 @@
     const current = stateByKey.get(ref.key) || { favorited: false };
     const next = { ...current, key: ref.key, favorited: !current.favorited };
     stateByKey.set(ref.key, next);
+    rememberFavoriteStates([next]);
     control.disabled = true;
     updateMatchingControls(ref.key);
 
@@ -197,23 +313,27 @@
 
     if (!response?.ok) {
       stateByKey.set(ref.key, current);
+      rememberFavoriteStates([{ ...current, key: ref.key }]);
       updateMatchingControls(ref.key);
       return;
     }
 
+    let finalState = next;
     if (next.favorited) {
       const body = await response.json().catch(() => null);
       if (body?.entry) {
-        stateByKey.set(ref.key, {
+        finalState = {
           ...next,
           itemId: body.entry.item_id || body.item?.id || null,
           entryId: body.entry.id || null,
           addedAt: body.entry.added_at || null,
           updatedAt: body.entry.updated_at || null
-        });
+        };
+        stateByKey.set(ref.key, finalState);
       }
     }
 
+    rememberFavoriteStates([finalState]);
     updateMatchingControls(ref.key);
   }
 
@@ -253,6 +373,7 @@
     link.hidden = false;
     sessionPromise = Promise.resolve({ authenticated: false });
     stateByKey.clear();
+    clearWarmCaches();
     document.querySelectorAll('.favorite-button, .favorite-indicator').forEach((control) => {
       control.hidden = true;
     });
@@ -369,8 +490,6 @@
     const heading = card.querySelector('h3 a') || card.querySelector('h3') || card.querySelector('h2');
     if (!heading) return;
     const indicator = createFavoriteIndicator({ kind: 'dharma_talk', corpus, id });
-    indicator.style.marginLeft = '6px';
-    indicator.style.verticalAlign = 'middle';
     heading.appendChild(document.createTextNode(' '));
     heading.appendChild(indicator);
   }
