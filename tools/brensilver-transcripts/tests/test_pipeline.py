@@ -9,6 +9,7 @@ from brensilver_transcripts.pipeline import (
     build_feedback_viewer_data,
     fmt_ts,
     group_suppressed_segments,
+    merge_description_summary_metadata,
     normalize_references,
     parse_duration,
     person_is_supported,
@@ -17,6 +18,7 @@ from brensilver_transcripts.pipeline import (
     safe_talk_id,
     split_windows,
     suppress_transcript_artifacts,
+    talk_payload_for_description_summary,
     talk_payload_without_speaker,
     write_json,
 )
@@ -50,6 +52,43 @@ class PipelineTests(unittest.TestCase):
         payload = talk_payload_without_speaker(talk)
         self.assertNotIn("speaker", payload)
         self.assertEqual(payload["title"], "Test")
+
+    def test_description_summary_payload_scrubs_speaker_from_title(self):
+        talk = Talk(
+            id="dharmaseed:1",
+            source="Dharma Seed",
+            source_id="1",
+            title="Matthew Brensilver, Sylvia Boorstein: Closing Session",
+            speaker="Matthew Brensilver",
+            published_at="2026-01-01T00:00:00+00:00",
+            link="https://example.com",
+            audio_url="https://example.com/audio.mp3",
+            duration="01:00",
+            description="Matthew Brensilver and Sylvia discuss practice.",
+        )
+        payload = talk_payload_for_description_summary(talk)
+        self.assertNotIn("speaker", payload)
+        self.assertEqual(payload["title"], "Sylvia Boorstein: Closing Session")
+        self.assertEqual(payload["description"], "Sylvia discuss practice.")
+
+    def test_description_summary_merge_preserves_other_metadata(self):
+        metadata = {
+            "description": "Old description.",
+            "short_summary": "Old summary.",
+            "chapters": [{"title": "Keep"}],
+            "image_prompt": "Keep image prompt.",
+        }
+        updated = merge_description_summary_metadata(
+            metadata,
+            {
+                "description": "New description.",
+                "short_summary": "New summary.",
+            },
+        )
+        self.assertEqual(updated["description"], "New description.")
+        self.assertEqual(updated["short_summary"], "New summary.")
+        self.assertEqual(updated["chapters"], metadata["chapters"])
+        self.assertEqual(updated["image_prompt"], metadata["image_prompt"])
 
     def test_split_windows_keeps_segments(self):
         segments = [{"segment_id": i, "text": "x" * 30} for i in range(10)]

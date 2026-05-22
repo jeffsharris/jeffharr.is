@@ -39,6 +39,7 @@ PYTHONPATH=tools/brensilver-transcripts/src python3 -m brensilver_transcripts.pi
 PYTHONPATH=tools/brensilver-transcripts/src python3 -m brensilver_transcripts.pipeline extract-references --batch --config tools/brensilver-transcripts/config/twenty-talks.json --update-qmd
 PYTHONPATH=tools/brensilver-transcripts/src python3 -m brensilver_transcripts.pipeline metadata --batch --config tools/brensilver-transcripts/config/twenty-talks.json --build-feedback-viewer
 PYTHONPATH=tools/brensilver-transcripts/src python3 -m brensilver_transcripts.pipeline generate-artwork --batch --config tools/brensilver-transcripts/config/twenty-talks.json --image-model gpt-image-2 --image-quality low --build-feedback-viewer
+PYTHONPATH=tools/brensilver-transcripts/src python3 -m brensilver_transcripts.pipeline description-summary --jobs 4 --rebuild-feed --media-base-url https://jeffharr.is/dharma/brensilver/
 PYTHONPATH=tools/brensilver-transcripts/src python3 -m brensilver_transcripts.pipeline run-corpus --limit 20 --feed-every 20 --media-base-url https://jeffharr.is/dharma/brensilver/ --copy-artwork --update-qmd --build-feedback-viewer
 PYTHONPATH=tools/brensilver-transcripts/src python3 -m brensilver_transcripts.pipeline build-feedback-viewer --config tools/brensilver-transcripts/config/twenty-talks.json
 PYTHONPATH=tools/brensilver-transcripts/src python3 -m brensilver_transcripts.pipeline setup-qmd

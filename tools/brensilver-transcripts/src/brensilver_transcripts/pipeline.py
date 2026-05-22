@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import base64
+import concurrent.futures
 import contextlib
 import json
 import os
@@ -31,6 +32,7 @@ DEFAULT_FEED_MEDIA_BASE_URL = "https://jeffharr.is/dharma/brensilver/"
 DEFAULT_CORRECT_PROMPT = TOOLS_ROOT / "prompts" / "correct_transcript.md"
 DEFAULT_REFERENCES_PROMPT = TOOLS_ROOT / "prompts" / "extract_references.md"
 DEFAULT_EPISODE_METADATA_PROMPT = TOOLS_ROOT / "prompts" / "episode_metadata.md"
+DEFAULT_DESCRIPTION_SUMMARY_PROMPT = TOOLS_ROOT / "prompts" / "description_summary.md"
 DEFAULT_ENV_FILE = SITE_ROOT / ".env.local"
 OPENAI_BASE_URL = "https://api.openai.com/v1"
 MAX_UPLOAD_BYTES = 24 * 1024 * 1024
@@ -104,6 +106,7 @@ class CorpusConfig:
     correct_prompt: Path
     references_prompt: Path
     episode_metadata_prompt: Path
+    description_summary_prompt: Path
     qmd_index: str
     qmd_collection: str
     qmd_context: str
@@ -128,6 +131,7 @@ def default_corpus_config() -> CorpusConfig:
         correct_prompt=DEFAULT_CORRECT_PROMPT,
         references_prompt=DEFAULT_REFERENCES_PROMPT,
         episode_metadata_prompt=DEFAULT_EPISODE_METADATA_PROMPT,
+        description_summary_prompt=DEFAULT_DESCRIPTION_SUMMARY_PROMPT,
         qmd_index="dharma",
         qmd_collection="brensilver",
         qmd_context="Timestamped Matthew Brensilver Dharma talk transcripts.",
@@ -165,6 +169,32 @@ class Talk:
 def talk_payload_without_speaker(talk: Talk) -> dict[str, Any]:
     payload = dict(talk.__dict__)
     payload.pop("speaker", None)
+    return payload
+
+
+def speaker_names_for_talk(talk: Talk) -> list[str]:
+    names = [CORPUS.teacher, talk.speaker]
+    return [name for name in dict.fromkeys(names) if name]
+
+
+def scrub_speaker_names(value: str, talk: Talk) -> str:
+    text = value
+    for name in speaker_names_for_talk(talk):
+        text = re.sub(rf"\b{re.escape(name)}\b", "", text, flags=re.IGNORECASE)
+    text = re.sub(r"\s+,", ",", text)
+    text = re.sub(r",\s*,+", ",", text)
+    text = re.sub(r"^\s*[,;:]\s*", "", text)
+    text = re.sub(r"^\s*(?:and|&)\s+", "", text, flags=re.IGNORECASE)
+    text = re.sub(r"\s{2,}", " ", text)
+    return text.strip()
+
+
+def talk_payload_for_description_summary(talk: Talk) -> dict[str, Any]:
+    payload = talk_payload_without_speaker(talk)
+    for key in ["title", "description"]:
+        value = payload.get(key)
+        if isinstance(value, str):
+            payload[key] = scrub_speaker_names(value, talk)
     return payload
 
 
@@ -400,6 +430,11 @@ def load_corpus_config(path: Path | None) -> CorpusConfig:
             prompts.get("episode_metadata"),
             base_dir,
             defaults.episode_metadata_prompt,
+        ),
+        description_summary_prompt=resolve_config_path(
+            prompts.get("description_summary"),
+            base_dir,
+            defaults.description_summary_prompt,
         ),
         qmd_index=str(qmd.get("index") or defaults.qmd_index),
         qmd_collection=str(qmd.get("collection") or slug),
@@ -1539,6 +1574,88 @@ def compact_references_for_model(references: list[dict[str, Any]]) -> list[dict[
     return output
 
 
+def generate_description_summary(
+    talk: Talk,
+    paths: CorpusPaths,
+    api_key: str,
+    model: str,
+) -> dict[str, str]:
+    corrected = load_json(paths.corrected(talk), {})
+    segments = corrected.get("segments") or []
+    if not segments:
+        raise RuntimeError(f"No corrected transcript found for {talk.id}")
+    if not paths.episode_metadata(talk).exists():
+        raise RuntimeError(f"No episode metadata found for {talk.id}")
+
+    references_doc = load_json(paths.references(talk), {})
+    prompt = CORPUS.description_summary_prompt.read_text(encoding="utf-8")
+    payload = {
+        "talk": talk_payload_for_description_summary(talk),
+        "segments": compact_segments_for_model(segments),
+        "references": compact_references_for_model(references_doc.get("references", [])),
+        "uncertain_terms": corrected.get("uncertain_terms", [])[:25],
+        "suppressed_segments_count": len(corrected.get("suppressed_segments", [])),
+    }
+    response = json_request(
+        f"{OPENAI_BASE_URL}/chat/completions",
+        api_key,
+        {
+            "model": model,
+            "messages": [
+                {"role": "system", "content": prompt},
+                {
+                    "role": "user",
+                    "content": (
+                        "Create only the podcast description and short summary "
+                        "for this talk. Return valid JSON only.\n\n"
+                        f"{json.dumps(payload, ensure_ascii=False)}"
+                    ),
+                },
+            ],
+            "response_format": {"type": "json_object"},
+            "max_completion_tokens": 1200,
+        },
+    )
+    parsed = parse_json_object(extract_chat_content(response))
+    return normalize_description_summary(parsed, talk)
+
+
+def normalize_description_summary(raw: dict[str, Any], talk: Talk) -> dict[str, str]:
+    description = normalize_optional(raw.get("description")) or talk.description or talk.title
+    short_summary = normalize_optional(raw.get("short_summary")) or description.split(".")[0]
+    return {
+        "description": normalize_text(clean_space(description)),
+        "short_summary": normalize_text(clean_space(short_summary)),
+    }
+
+
+def merge_description_summary_metadata(
+    metadata: dict[str, Any],
+    generated: dict[str, str],
+) -> dict[str, Any]:
+    updated = dict(metadata)
+    updated["description"] = generated["description"]
+    updated["short_summary"] = generated["short_summary"]
+    return updated
+
+
+def select_description_summary_talks(
+    talks: dict[str, Talk],
+    paths: CorpusPaths,
+    talk_ids: list[str] | None,
+    limit: int | None,
+) -> list[Talk]:
+    selected: list[Talk] = []
+    candidates = select_talks(talks, paths, talk_ids, None, True) if talk_ids else list(talks.values())
+    for talk in candidates:
+        if not paths.corrected(talk).exists() or not paths.episode_metadata(talk).exists():
+            continue
+        selected.append(talk)
+        if limit and len(selected) >= limit:
+            break
+    return selected
+
+
 def normalize_episode_metadata(
     talk: Talk,
     raw: dict[str, Any],
@@ -2147,6 +2264,131 @@ def rebuild_public_feed(talks_json: Path, media_base_url: str, copy_artwork: boo
     if copy_artwork:
         command.append("--copy-artwork")
     subprocess.run(command, cwd=SITE_ROOT, check=True)
+
+
+def run_timestamp() -> str:
+    return datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+
+
+def run_description_summary_command(
+    args: argparse.Namespace,
+    talks: dict[str, Talk],
+    paths: CorpusPaths,
+) -> int:
+    talk_ids = load_pilot_ids(args.config) if args.batch else (args.talk_id or None)
+    selected = select_description_summary_talks(talks, paths, talk_ids, args.limit)
+    timestamp = run_timestamp()
+    report_path = (
+        args.report_path
+        if args.report_path
+        else paths.root / "description-summary-reports" / f"{timestamp}.json"
+    )
+    backup_dir = args.backup_dir if args.backup_dir else paths.root / "description-summary-backups" / timestamp
+    report: dict[str, Any] = {
+        "created_at": now_iso(),
+        "corpus": CORPUS.slug,
+        "model": args.metadata_model,
+        "dry_run": bool(args.dry_run),
+        "selected_count": len(selected),
+        "jobs": max(1, int(args.jobs or 1)),
+        "items": [],
+        "failures": [],
+    }
+    if not selected:
+        print("No talks selected for description/summary regeneration.")
+        write_json(report_path, report)
+        print(report_path)
+        return 0
+
+    print(
+        f"Selected {len(selected)} talks for description/summary regeneration "
+        f"({report['jobs']} job{'s' if report['jobs'] != 1 else ''})."
+    )
+    if args.dry_run:
+        for talk in selected:
+            report["items"].append(
+                {
+                    "talk_id": talk.id,
+                    "safe_id": talk.safe_id,
+                    "title": talk.title,
+                    "metadata_path": str(paths.episode_metadata(talk)),
+                    "status": "dry-run",
+                }
+            )
+            print(f"dry-run {talk.id} {talk.title}")
+        write_json(report_path, report)
+        print(report_path)
+        return 0
+
+    api_key = require_openai_key()
+
+    def process_one(talk: Talk) -> dict[str, Any]:
+        metadata_path = paths.episode_metadata(talk)
+        original = load_json(metadata_path, {})
+        if not isinstance(original, dict) or not original:
+            raise RuntimeError(f"No episode metadata found for {talk.id}")
+        generated = generate_description_summary(talk, paths, api_key, args.metadata_model)
+        backup_path = backup_dir / f"{talk.safe_id}.json"
+        write_json(backup_path, original)
+        write_json(metadata_path, merge_description_summary_metadata(original, generated))
+        return {
+            "talk_id": talk.id,
+            "safe_id": talk.safe_id,
+            "title": talk.title,
+            "metadata_path": str(metadata_path),
+            "backup_path": str(backup_path),
+            "old_description": original.get("description"),
+            "old_short_summary": original.get("short_summary"),
+            "new_description": generated["description"],
+            "new_short_summary": generated["short_summary"],
+            "status": "updated",
+        }
+
+    jobs = max(1, int(args.jobs or 1))
+    if jobs == 1:
+        for index, talk in enumerate(selected, start=1):
+            print(f"[{index}/{len(selected)}] description-summary {talk.id}")
+            try:
+                report["items"].append(process_one(talk))
+            except Exception as error:
+                failure = {"talk_id": talk.id, "safe_id": talk.safe_id, "error": str(error)}
+                report["failures"].append(failure)
+                print(f"failed {talk.id}: {error}", file=sys.stderr)
+                if args.stop_on_error:
+                    raise
+    else:
+        with concurrent.futures.ThreadPoolExecutor(max_workers=jobs) as executor:
+            future_to_talk = {executor.submit(process_one, talk): talk for talk in selected}
+            completed = 0
+            for future in concurrent.futures.as_completed(future_to_talk):
+                talk = future_to_talk[future]
+                completed += 1
+                try:
+                    row = future.result()
+                    report["items"].append(row)
+                    print(f"[{completed}/{len(selected)}] description-summary {talk.id}")
+                except Exception as error:
+                    failure = {"talk_id": talk.id, "safe_id": talk.safe_id, "error": str(error)}
+                    report["failures"].append(failure)
+                    print(f"failed {talk.id}: {error}", file=sys.stderr)
+                    if args.stop_on_error:
+                        raise
+
+    report["updated_count"] = len(report["items"])
+    report["failure_count"] = len(report["failures"])
+    write_json(report_path, report)
+    print(report_path)
+
+    if args.rebuild_feed:
+        rebuild_public_feed(
+            args.talks_json,
+            args.media_base_url,
+            args.copy_artwork,
+        )
+
+    failures = len(report["failures"])
+    print(f"Updated {len(report['items'])} talks. Failures: {failures}.")
+    return 1 if failures else 0
 
 
 def clear_lock_dir(lock_dir: Path) -> None:
@@ -3984,6 +4226,23 @@ def build_parser() -> argparse.ArgumentParser:
     metadata.add_argument("--update-qmd", action="store_true")
     metadata.add_argument("--build-feedback-viewer", action="store_true")
 
+    description_summary = subparsers.add_parser(
+        "description-summary",
+        help="Regenerate only podcast descriptions and short summaries",
+    )
+    description_summary.add_argument("--talk-id", action="append", default=[])
+    description_summary.add_argument("--config", type=Path, default=DEFAULT_PILOT_CONFIG)
+    description_summary.add_argument("--batch", action="store_true")
+    description_summary.add_argument("--limit", type=int)
+    description_summary.add_argument("--jobs", type=int, default=1)
+    description_summary.add_argument("--dry-run", action="store_true")
+    description_summary.add_argument("--stop-on-error", action="store_true")
+    description_summary.add_argument("--report-path", type=Path)
+    description_summary.add_argument("--backup-dir", type=Path)
+    description_summary.add_argument("--rebuild-feed", action="store_true")
+    description_summary.add_argument("--media-base-url", default=DEFAULT_FEED_MEDIA_BASE_URL)
+    description_summary.add_argument("--copy-artwork", action="store_true")
+
     artwork = subparsers.add_parser("generate-artwork", help="Generate episode artwork images")
     artwork.add_argument("--talk-id", action="append", default=[])
     artwork.add_argument("--config", type=Path, default=DEFAULT_PILOT_CONFIG)
@@ -4104,7 +4363,16 @@ def main(argv: list[str] | None = None) -> int:
         with corpus_run_lock(paths):
             return run_corpus_command(args, talks, paths, glossary)
 
-    if args.command not in {"correct", "extract-references", "metadata", "generate-artwork"}:
+    if args.command == "description-summary":
+        return run_description_summary_command(args, talks, paths)
+
+    if args.command not in {
+        "correct",
+        "extract-references",
+        "metadata",
+        "description-summary",
+        "generate-artwork",
+    }:
         require_executable("ffmpeg")
         require_executable("ffprobe")
     prepare_only = bool(getattr(args, "prepare_only", False))
