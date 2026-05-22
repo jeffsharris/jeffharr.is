@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd">
+  <channel>
+    <title>Alan Watts YouTube Sources</title>
+    <link>https://www.youtube.com/@BeHereNowNetwork</link>
+    <description>Alan Watts talks added from official Be Here Now Network YouTube sources.</description>
+    <language>en-us</language>
+    <itunes:author>Alan Watts</itunes:author>
+    <itunes:summary>Alan Watts talks added from official Be Here Now Network YouTube sources.</itunes:summary>
+    <itunes:explicit>no</itunes:explicit>
+    <item>
+      <title>Myth of Myself</title>
+      <link>https://www.youtube.com/watch?v=6rlrz1bcups</link>
+      <pubDate>Fri, 04 Aug 2023 00:00:00 GMT</pubDate>
+      <description><![CDATA[Alan Watts explores identity, purpose, myths of the self, floodlight consciousness, and how human beings grow out of the world. Source: YouTube / Being in the Way Podcast Ep. 24. This feed version begins at 01:15 of the source video.]]></description>
+      <enclosure url="https://drive.google.com/uc?export=download&amp;id=1ZKQFi9WBwFSlh4xd74Zj6rOI8Q4GO8Uv" length="40927513" type="audio/mpeg"/>
+      <guid>youtube-6rlrz1bcups</guid>
+      <itunes:duration>42:38</itunes:duration>
+      <itunes:summary>Alan Watts explores identity, purpose, myths of the self, floodlight consciousness, and how human beings grow out of the world. This feed version begins at 01:15 of the source video.</itunes:summary>
+      <itunes:explicit>no</itunes:explicit>
+    </item>
+  </channel>
+</rss>

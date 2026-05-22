@@ -1,6 +1,60 @@
 {
   "chapters": [
     {
+      "talk_id": "watts:drive-1djwstgws1fdb-rcdfb6rgqcbwpaiktno",
+      "key": "chapters/watts-drive-1djwstgws1fdb-rcdfb6rgqcbwpaiktno.json",
+      "source_path": "chapters/watts-drive-1djwstgws1fdb-rcdfb6rgqcbwpaiktno.json",
+      "url": "https://jeffharr.is/dharma/watts/chapters/watts-drive-1djwstgws1fdb-rcdfb6rgqcbwpaiktno.json"
+    },
+    {
+      "talk_id": "watts:drive-1zvasvfcsik-zj-r1tsqizw0us7ed0own",
+      "key": "chapters/watts-drive-1zvasvfcsik-zj-r1tsqizw0us7ed0own.json",
+      "source_path": "chapters/watts-drive-1zvasvfcsik-zj-r1tsqizw0us7ed0own.json",
+      "url": "https://jeffharr.is/dharma/watts/chapters/watts-drive-1zvasvfcsik-zj-r1tsqizw0us7ed0own.json"
+    },
+    {
+      "talk_id": "watts:drive-15fpuebzlxaner1rpynaw2iijwgi4wisc",
+      "key": "chapters/watts-drive-15fpuebzlxaner1rpynaw2iijwgi4wisc.json",
+      "source_path": "chapters/watts-drive-15fpuebzlxaner1rpynaw2iijwgi4wisc.json",
+      "url": "https://jeffharr.is/dharma/watts/chapters/watts-drive-15fpuebzlxaner1rpynaw2iijwgi4wisc.json"
+    },
+    {
+      "talk_id": "watts:drive-1fcxr4ptuc6qcuhueqem-z2ph8gilb9cf",
+      "key": "chapters/watts-drive-1fcxr4ptuc6qcuhueqem-z2ph8gilb9cf.json",
+      "source_path": "chapters/watts-drive-1fcxr4ptuc6qcuhueqem-z2ph8gilb9cf.json",
+      "url": "https://jeffharr.is/dharma/watts/chapters/watts-drive-1fcxr4ptuc6qcuhueqem-z2ph8gilb9cf.json"
+    },
+    {
+      "talk_id": "watts:drive-1yjoll8euwiutwm6tm-grcj2bkk-e8quq",
+      "key": "chapters/watts-drive-1yjoll8euwiutwm6tm-grcj2bkk-e8quq.json",
+      "source_path": "chapters/watts-drive-1yjoll8euwiutwm6tm-grcj2bkk-e8quq.json",
+      "url": "https://jeffharr.is/dharma/watts/chapters/watts-drive-1yjoll8euwiutwm6tm-grcj2bkk-e8quq.json"
+    },
+    {
+      "talk_id": "watts:drive-1j8ntjoclllcrvdiyhgl6ehs2zm5zrw05",
+      "key": "chapters/watts-drive-1j8ntjoclllcrvdiyhgl6ehs2zm5zrw05.json",
+      "source_path": "chapters/watts-drive-1j8ntjoclllcrvdiyhgl6ehs2zm5zrw05.json",
+      "url": "https://jeffharr.is/dharma/watts/chapters/watts-drive-1j8ntjoclllcrvdiyhgl6ehs2zm5zrw05.json"
+    },
+    {
+      "talk_id": "watts:drive-1gih1lin937p7s-u527mnj3z22odpzgxb",
+      "key": "chapters/watts-drive-1gih1lin937p7s-u527mnj3z22odpzgxb.json",
+      "source_path": "chapters/watts-drive-1gih1lin937p7s-u527mnj3z22odpzgxb.json",
+      "url": "https://jeffharr.is/dharma/watts/chapters/watts-drive-1gih1lin937p7s-u527mnj3z22odpzgxb.json"
+    },
+    {
+      "talk_id": "watts:drive-1by8mi3hjn7af9ejn4fprwba7nqj4qk9s",
+      "key": "chapters/watts-drive-1by8mi3hjn7af9ejn4fprwba7nqj4qk9s.json",
+      "source_path": "chapters/watts-drive-1by8mi3hjn7af9ejn4fprwba7nqj4qk9s.json",
+      "url": "https://jeffharr.is/dharma/watts/chapters/watts-drive-1by8mi3hjn7af9ejn4fprwba7nqj4qk9s.json"
+    },
+    {
+      "talk_id": "watts:youtube-6rlrz1bcups",
+      "key": "chapters/watts-youtube-6rlrz1bcups.json",
+      "source_path": "chapters/watts-youtube-6rlrz1bcups.json",
+      "url": "https://jeffharr.is/dharma/watts/chapters/watts-youtube-6rlrz1bcups.json"
+    },
+    {
       "talk_id": "watts:iz0342b",
       "key": "chapters/watts-iz0342b.json",
       "source_path": "chapters/watts-iz0342b.json",
@@ -302,6 +356,60 @@
     }
   ],
   "artwork": [
+    {
+      "talk_id": "watts:drive-1djwstgws1fdb-rcdfb6rgqcbwpaiktno",
+      "key": "artwork/watts-drive-1djwstgws1fdb-rcdfb6rgqcbwpaiktno.jpg",
+      "source_path": "artwork/watts-drive-1djwstgws1fdb-rcdfb6rgqcbwpaiktno.jpg",
+      "url": "https://jeffharr.is/dharma/watts/artwork/watts-drive-1djwstgws1fdb-rcdfb6rgqcbwpaiktno.jpg"
+    },
+    {
+      "talk_id": "watts:drive-1zvasvfcsik-zj-r1tsqizw0us7ed0own",
+      "key": "artwork/watts-drive-1zvasvfcsik-zj-r1tsqizw0us7ed0own.jpg",
+      "source_path": "artwork/watts-drive-1zvasvfcsik-zj-r1tsqizw0us7ed0own.jpg",
+      "url": "https://jeffharr.is/dharma/watts/artwork/watts-drive-1zvasvfcsik-zj-r1tsqizw0us7ed0own.jpg"
+    },
+    {
+      "talk_id": "watts:drive-15fpuebzlxaner1rpynaw2iijwgi4wisc",
+      "key": "artwork/watts-drive-15fpuebzlxaner1rpynaw2iijwgi4wisc.jpg",
+      "source_path": "artwork/watts-drive-15fpuebzlxaner1rpynaw2iijwgi4wisc.jpg",
+      "url": "https://jeffharr.is/dharma/watts/artwork/watts-drive-15fpuebzlxaner1rpynaw2iijwgi4wisc.jpg"
+    },
+    {
+      "talk_id": "watts:drive-1fcxr4ptuc6qcuhueqem-z2ph8gilb9cf",
+      "key": "artwork/watts-drive-1fcxr4ptuc6qcuhueqem-z2ph8gilb9cf.jpg",
+      "source_path": "artwork/watts-drive-1fcxr4ptuc6qcuhueqem-z2ph8gilb9cf.jpg",
+      "url": "https://jeffharr.is/dharma/watts/artwork/watts-drive-1fcxr4ptuc6qcuhueqem-z2ph8gilb9cf.jpg"
+    },
+    {
+      "talk_id": "watts:drive-1yjoll8euwiutwm6tm-grcj2bkk-e8quq",
+      "key": "artwork/watts-drive-1yjoll8euwiutwm6tm-grcj2bkk-e8quq.jpg",
+      "source_path": "artwork/watts-drive-1yjoll8euwiutwm6tm-grcj2bkk-e8quq.jpg",
+      "url": "https://jeffharr.is/dharma/watts/artwork/watts-drive-1yjoll8euwiutwm6tm-grcj2bkk-e8quq.jpg"
+    },
+    {
+      "talk_id": "watts:drive-1j8ntjoclllcrvdiyhgl6ehs2zm5zrw05",
+      "key": "artwork/watts-drive-1j8ntjoclllcrvdiyhgl6ehs2zm5zrw05.jpg",
+      "source_path": "artwork/watts-drive-1j8ntjoclllcrvdiyhgl6ehs2zm5zrw05.jpg",
+      "url": "https://jeffharr.is/dharma/watts/artwork/watts-drive-1j8ntjoclllcrvdiyhgl6ehs2zm5zrw05.jpg"
+    },
+    {
+      "talk_id": "watts:drive-1gih1lin937p7s-u527mnj3z22odpzgxb",
+      "key": "artwork/watts-drive-1gih1lin937p7s-u527mnj3z22odpzgxb.jpg",
+      "source_path": "artwork/watts-drive-1gih1lin937p7s-u527mnj3z22odpzgxb.jpg",
+      "url": "https://jeffharr.is/dharma/watts/artwork/watts-drive-1gih1lin937p7s-u527mnj3z22odpzgxb.jpg"
+    },
+    {
+      "talk_id": "watts:drive-1by8mi3hjn7af9ejn4fprwba7nqj4qk9s",
+      "key": "artwork/watts-drive-1by8mi3hjn7af9ejn4fprwba7nqj4qk9s.jpg",
+      "source_path": "artwork/watts-drive-1by8mi3hjn7af9ejn4fprwba7nqj4qk9s.jpg",
+      "url": "https://jeffharr.is/dharma/watts/artwork/watts-drive-1by8mi3hjn7af9ejn4fprwba7nqj4qk9s.jpg"
+    },
+    {
+      "talk_id": "watts:youtube-6rlrz1bcups",
+      "key": "artwork/watts-youtube-6rlrz1bcups.jpg",
+      "source_path": "artwork/watts-youtube-6rlrz1bcups.jpg",
+      "url": "https://jeffharr.is/dharma/watts/artwork/watts-youtube-6rlrz1bcups.jpg"
+    },
     {
       "talk_id": "watts:iz0342b",
       "key": "artwork/watts-iz0342b.jpg",

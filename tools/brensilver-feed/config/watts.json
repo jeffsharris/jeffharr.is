@@ -39,6 +39,20 @@
         "Tribute to C G Jung": "Tribute to C. G. Jung",
         "Varities Of Order": "Varieties of Order"
       }
+    },
+    {
+      "type": "podcast_rss",
+      "name": "YouTube / Being in the Way",
+      "id_prefix": "watts",
+      "speaker": "Alan Watts",
+      "feed_path": "tools/brensilver-feed/sources/watts-youtube.xml"
+    },
+    {
+      "type": "podcast_rss",
+      "name": "Google Drive Uploads",
+      "id_prefix": "watts",
+      "speaker": "Alan Watts",
+      "feed_path": "tools/brensilver-feed/sources/watts-drive.xml"
     }
   ],
   "feed": {
