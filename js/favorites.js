@@ -344,26 +344,9 @@
     });
   }
 
-  function renderAdminMarker(mode) {
-    let link = document.querySelector('.admin-sign-in');
-    if (!mode) {
-      if (link) link.hidden = true;
-      return;
-    }
-    if (!link) {
-      link = document.createElement('a');
-      link.className = 'admin-sign-in';
-      document.body.appendChild(link);
-    }
-    link.dataset.adminAuthAction = mode;
-    link.removeAttribute('aria-busy');
-    link.setAttribute('aria-label', mode === 'sign-out' ? 'Sign out' : 'Sign in');
-    link.title = mode === 'sign-out' ? 'Sign out' : 'Sign in';
-    link.onclick = mode === 'sign-out' ? onAdminSignOut : null;
-    link.href = mode === 'sign-out'
-      ? LOGOUT_URL
-      : `${SESSION_URL}?redirect=${encodeURIComponent(currentPath())}`;
-    link.hidden = false;
+  function renderAdminMarker() {
+    const link = document.querySelector('.admin-sign-in');
+    if (link) link.hidden = true;
   }
 
   function onAdminSignOut(event) {

@@ -17,10 +17,13 @@ export async function onRequest(context) {
   }
 
   if (!auth.authenticated) {
+    if (auth.error === 'not_authenticated') {
+      return Response.redirect(adminSessionUrl(url, returnTo), 302);
+    }
     return htmlResponse(renderSignedOut(returnTo, auth.error), auth.status || 401);
   }
 
-  return htmlResponse(renderSignedIn(returnTo, auth.email), 200);
+  return htmlResponse(renderSignedIn(returnTo), 200);
 }
 
 function safeReturnTo(value, currentUrl) {
@@ -34,6 +37,12 @@ function safeReturnTo(value, currentUrl) {
   }
 }
 
+function adminSessionUrl(currentUrl, returnTo) {
+  const target = new URL('/api/admin/session', currentUrl.origin);
+  target.searchParams.set('redirect', returnTo || '/');
+  return target.href;
+}
+
 function htmlResponse(body, status) {
   return new Response(body, {
     status,
@@ -45,16 +54,15 @@ function htmlResponse(body, status) {
   });
 }
 
-function renderSignedIn(returnTo, email) {
+function renderSignedIn(returnTo) {
   const destination = JSON.stringify(returnTo);
-  const safeEmail = escapeHtml(email);
   return documentShell({
     title: 'Admin Unlocked',
     body: `
       <main class="auth-card auth-card--ready">
         <p class="eyebrow">Admin</p>
         <h1>Signed in</h1>
-        <p class="copy">Admin UI is unlocked for <strong>${safeEmail}</strong>.</p>
+        <p class="copy">Admin UI is unlocked.</p>
         <a class="button" href="${escapeAttribute(returnTo)}">Return to site</a>
       </main>
       <script>
@@ -76,7 +84,7 @@ function renderSignedOut(returnTo, error) {
         <p class="eyebrow">Admin</p>
         <h1>Sign in unavailable</h1>
         <p class="copy">${escapeHtml(message)}</p>
-        <p class="note">Protect <code>/admin/*</code> and <code>/api/admin/*</code> with Cloudflare Access, then allow only <code>jeff.s.harris@gmail.com</code>.</p>
+        <p class="note">Cloudflare Access needs to be configured for the admin routes before admin features can unlock.</p>
         <a class="button" href="${escapeAttribute(returnTo)}">Return to site</a>
       </main>
     `,

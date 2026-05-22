@@ -722,7 +722,7 @@ def render_index(
     }});
   </script>
   <script src="archive-browser.js"></script>
-  <script src="/js/admin-presence.js?v=1"></script>
+  <script src="/js/admin-presence.js?v=2"></script>
 </body>
 </html>
 """
@@ -1461,7 +1461,7 @@ def render_talk_page(config: Dict, talk: Talk) -> str:
     </section>
   </main>
 {talk_seek_script()}
-  <script src="/js/admin-presence.js?v=1"></script>
+  <script src="/js/admin-presence.js?v=2"></script>
 </body>
 </html>
 """

@@ -315,7 +315,7 @@ function htmlDocument({ title, description, imageUrl, url, body, noindex }) {
   <div class="bg-noise"></div>
   ${body}
   <script src="/js/favorites.js?v=2" defer></script>
-  <script src="/js/admin-presence.js?v=1"></script>
+  <script src="/js/admin-presence.js?v=2"></script>
 </body>
 </html>`;
 }
