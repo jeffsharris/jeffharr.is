@@ -668,7 +668,7 @@ def curl_multipart_request(
         "1",
         "--write-out",
         (
-            "\\nopenai_multipart_transport=curl "
+            "%{stderr}\\nopenai_multipart_transport=curl "
             "http_version=%{http_version} "
             "http_code=%{http_code} "
             "time_total=%{time_total} "
@@ -695,7 +695,19 @@ def curl_multipart_request(
     if result.returncode != 0:
         detail = "\n".join(part for part in [result.stderr, result.stdout[:1000]] if part)
         raise RuntimeError(f"OpenAI multipart curl request failed: {detail}")
-    return json.loads(result.stdout)
+    return parse_curl_json_stdout(result.stdout)
+
+
+def parse_curl_json_stdout(stdout: str) -> dict[str, Any]:
+    lines = stdout.rstrip("\n").splitlines()
+    if lines and lines[-1].startswith("openai_multipart_transport="):
+        print(lines[-1], file=sys.stderr)
+        stdout = "\n".join(lines[:-1])
+    try:
+        return json.loads(stdout)
+    except json.JSONDecodeError as error:
+        detail = stdout[:1000]
+        raise RuntimeError(f"OpenAI multipart curl returned invalid JSON: {error}: {detail}") from error
 
 
 def json_request(url: str, api_key: str, payload: dict[str, Any]) -> dict[str, Any]:

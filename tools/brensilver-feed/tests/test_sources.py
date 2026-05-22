@@ -423,6 +423,11 @@ class PodcastMetadataTests(unittest.TestCase):
         self.assertIn("talk.chapters", js)
         self.assertIn("No talks match this search.", js)
 
+    def test_archive_browser_revalidates_talk_json(self):
+        js = archive_browser_js()
+
+        self.assertIn("fetch(feed.url, { cache: 'no-cache' })", js)
+
     def test_site_image_becomes_talk_fallback_image(self):
         talk = Talk(
             id="audiodharma:1",

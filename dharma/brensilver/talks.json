@@ -100,6 +100,68 @@
     "description": "AudioDharma talk by Matthew Brensilver.",
     "image_url": "https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
     "canonical_url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25499/",
+    "podcast_description": "What changes when meditation begins with the smallest possible turn toward experience? The talk keeps returning to a simple question: how little energy is needed to start, and what is already here that can be met without strain. From there it moves through soothing tension, widening attention, and resting with the present field instead of forcing the mind to grab an object.",
+    "short_summary": "A lightly guided meditation on beginning with minimal effort, soothing reactivity, and opening attention to what is already present.",
+    "episode_image_url": "https://jeffharr.is/dharma/brensilver/artwork/audiodharma-25499.jpg",
+    "chapters_url": "https://jeffharr.is/dharma/brensilver/chapters/audiodharma-25499.json",
+    "chapters": [
+      {
+        "start": 0.0,
+        "title": "Starting from here",
+        "description": "The talk opens by asking what actually shifts when it is time to begin meditating, and how little is needed to start.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25499/?t=0",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 78.68,
+        "title": "The least effort",
+        "description": "The speaker explores the smallest usable energy for practice and points toward the goodness already present in experience.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25499/?t=79",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 325.4,
+        "title": "Soothing the tension",
+        "description": "Attention turns to bodily and emotional bracing, with emphasis on softening rather than forcing urgency away.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25499/?t=325",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 534.4,
+        "title": "Feeding attention well",
+        "description": "The practice widens to breath, sound, darkness behind the eyes, and the full body field as stable places to rest attention.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25499/?t=534",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 881.4,
+        "title": "Wherever we look",
+        "description": "The talk returns to the sense that the Dharma is available in whatever is present, without needing to search far.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25499/?t=881",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1271.475,
+        "title": "Not leaning toward",
+        "description": "A final reflection asks what happens when the mind is not driven to seek an object or lean toward and away from experience.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25499/?t=1271",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1509.475,
+        "title": "Closing turn",
+        "description": "The talk ends with a brief, somewhat unclear closing phrase that appears to mark the final turn of the meditation.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25499/?t=1509",
+        "img": null,
+        "toc": true
+      }
+    ],
     "venue": null,
     "series": null,
     "tags": [],

@@ -16,6 +16,7 @@ from brensilver_transcripts.pipeline import (
     multipart_request,
     normalize_references,
     openai_json,
+    parse_curl_json_stdout,
     parse_duration,
     person_is_supported,
     prune_references_for_segments,
@@ -79,7 +80,15 @@ class PipelineTests(unittest.TestCase):
             curl_result = type(
                 "CurlResult",
                 (),
-                {"returncode": 0, "stdout": '{"ok": true}', "stderr": ""},
+                {
+                    "returncode": 0,
+                    "stdout": (
+                        '{"ok": true}\n'
+                        "openai_multipart_transport=curl http_version=2 "
+                        "http_code=200 time_total=1.0 size_upload=123\n"
+                    ),
+                    "stderr": "",
+                },
             )()
 
             with (
@@ -88,6 +97,7 @@ class PipelineTests(unittest.TestCase):
                     "brensilver_transcripts.pipeline.subprocess.run",
                     return_value=curl_result,
                 ) as run,
+                patch("brensilver_transcripts.pipeline.sys.stderr"),
             ):
                 result = multipart_request(
                     "https://api.example.test/audio/transcriptions",
@@ -100,11 +110,23 @@ class PipelineTests(unittest.TestCase):
         command = run.call_args.args[0]
         self.assertIn("curl", command[0])
         self.assertIn("--http2", command)
+        self.assertIn("%{stderr}", command[command.index("--write-out") + 1])
         self.assertNotIn("secret-key", command)
         self.assertIn(
             'header = "Authorization: Bearer secret-key"\n',
             run.call_args.kwargs["input"],
         )
+
+    def test_parse_curl_json_stdout_ignores_write_out_footer(self):
+        with patch("brensilver_transcripts.pipeline.sys.stderr"):
+            self.assertEqual(
+                parse_curl_json_stdout(
+                    '{"text": "ok"}\n'
+                    "openai_multipart_transport=curl http_version=2 "
+                    "http_code=200 time_total=1.0 size_upload=123\n"
+                ),
+                {"text": "ok"},
+            )
 
     def test_pipeline_state_clears_stale_failure_on_success(self):
         talk = Talk(

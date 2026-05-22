@@ -218,7 +218,7 @@
     try {
       if (!state.talks) {
         state.loading = true;
-        const response = await fetch(feed.url);
+        const response = await fetch(feed.url, { cache: 'no-cache' });
         if (!response.ok) throw new Error('Could not load talk archive');
         const talks = await response.json();
         state.talks = talks
