@@ -119,15 +119,16 @@
     /* Tiles grid */
     .tiles {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 32px;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 36px;
       max-width: 1080px;
       margin: 0 auto;
     }
 
     .tile {
       position: relative;
-      display: block;
+      display: flex;
+      flex-direction: column;
       isolation: isolate;
       border-radius: 18px;
       overflow: hidden;
@@ -145,12 +146,12 @@
     .tile::before {
       content: '';
       position: absolute;
-      inset: -28px;
+      inset: -32px;
       z-index: -1;
       border-radius: 28px;
       background: var(--tile-halo, transparent);
-      filter: blur(36px);
-      opacity: 0.55;
+      filter: blur(44px);
+      opacity: 0.5;
       transition: opacity 320ms ease, transform 320ms ease;
     }
 
@@ -174,7 +175,7 @@
 
     .tile__image-wrap {
       position: relative;
-      aspect-ratio: 1;
+      aspect-ratio: 2 / 3;
       overflow: hidden;
       background: var(--tile-bg, #16120f);
     }
@@ -191,53 +192,40 @@
 
     .tile:hover .tile__image,
     .tile:focus-visible .tile__image {
-      transform: scale(1.04);
+      transform: scale(1.025);
       filter: saturate(1.04);
     }
 
-    .tile__scrim {
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      background: linear-gradient(180deg,
-        transparent 0%,
-        transparent 56%,
-        rgba(0, 0, 0, 0.18) 80%,
-        rgba(0, 0, 0, 0.52) 100%);
-    }
-
     .tile__caption {
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      padding: 22px 22px 20px;
-      color: #fff;
-      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.65),
-                   0 2px 14px rgba(0, 0, 0, 0.45);
+      padding: 18px 20px 20px;
+      background: var(--panel);
+      border-top: 1px solid var(--line);
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
     }
 
     .tile__name {
       font-family: var(--font-display);
       font-weight: 600;
-      font-size: 1.95rem;
-      line-height: 1.1;
+      font-size: 1.55rem;
+      line-height: 1.12;
       margin: 0;
-      letter-spacing: 0;
+      letter-spacing: 0.005em;
+      color: var(--ink);
     }
 
     .tile__meta {
-      display: block;
-      margin-top: 6px;
-      font-size: 11.5px;
+      font-size: 11px;
       font-weight: 600;
       letter-spacing: 0.18em;
       text-transform: uppercase;
-      opacity: 0.92;
+      color: var(--muted);
     }
 
     .tile__meta-count {
       font-variant-numeric: tabular-nums;
+      color: var(--tile-accent, var(--accent));
     }
 
     /* Per-teacher palettes (drawn from the corpus image_style prompts) */
@@ -308,33 +296,30 @@
       <a class="tile tile--brensilver" href="/dharma/brensilver/" data-talks-src="/dharma/brensilver/talks.json">
         <div class="tile__image-wrap">
           <img class="tile__image" src="/dharma/brensilver/artwork/brensilver-tile.jpg" alt="" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg';">
-          <div class="tile__scrim" aria-hidden="true"></div>
-          <div class="tile__caption">
-            <h2 class="tile__name">Matthew Brensilver</h2>
-            <span class="tile__meta"><span class="tile__meta-count" data-talk-count>—</span> talks</span>
-          </div>
+        </div>
+        <div class="tile__caption">
+          <h2 class="tile__name">Matthew Brensilver</h2>
+          <span class="tile__meta"><span class="tile__meta-count" data-talk-count>—</span> talks</span>
         </div>
       </a>
 
       <a class="tile tile--burbea" href="/dharma/burbea/" data-talks-src="/dharma/burbea/talks.json">
         <div class="tile__image-wrap">
           <img class="tile__image" src="/dharma/burbea/artwork/burbea-tile.jpg" alt="" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='/dharma/burbea/artwork/rob-burbea-podcast-cover.jpg';">
-          <div class="tile__scrim" aria-hidden="true"></div>
-          <div class="tile__caption">
-            <h2 class="tile__name">Rob Burbea</h2>
-            <span class="tile__meta"><span class="tile__meta-count" data-talk-count>—</span> talks</span>
-          </div>
+        </div>
+        <div class="tile__caption">
+          <h2 class="tile__name">Rob Burbea</h2>
+          <span class="tile__meta"><span class="tile__meta-count" data-talk-count>—</span> talks</span>
         </div>
       </a>
 
       <a class="tile tile--watts" href="/dharma/watts/" data-talks-src="/dharma/watts/talks.json">
         <div class="tile__image-wrap">
           <img class="tile__image" src="/dharma/watts/artwork/watts-tile.jpg" alt="" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='/dharma/watts/artwork/alan-watts-podcast-cover.jpg';">
-          <div class="tile__scrim" aria-hidden="true"></div>
-          <div class="tile__caption">
-            <h2 class="tile__name">Alan Watts</h2>
-            <span class="tile__meta"><span class="tile__meta-count" data-talk-count>—</span> talks</span>
-          </div>
+        </div>
+        <div class="tile__caption">
+          <h2 class="tile__name">Alan Watts</h2>
+          <span class="tile__meta"><span class="tile__meta-count" data-talk-count>—</span> talks</span>
         </div>
       </a>
     </nav>
