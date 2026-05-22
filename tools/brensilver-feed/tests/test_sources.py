@@ -240,6 +240,47 @@ class SourceParsingTests(unittest.TestCase):
         self.assertEqual(talk.published_at.date().isoformat(), "1959-11-06")
         self.assertEqual(talk.image_url, "https://example.test/show.jpg")
 
+    def test_podcast_rss_parser_filters_speakers_and_extracts_link_id(self):
+        xml = """<?xml version="1.0" encoding="utf-8"?>
+        <rss version="2.0" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd">
+          <channel>
+            <item>
+              <title>Opening Session</title>
+              <link>https://irc.audiodharma.org/talks/23112</link>
+              <pubDate>Sat, 31 May 2025 20:16:11 -0700</pubDate>
+              <description>Retreat opening session.</description>
+              <enclosure url="https://example.test/23112.mp3" length="3461" type="audio/mp3" />
+              <itunes:author>Matthew Brensilver</itunes:author>
+              <itunes:duration>57:41</itunes:duration>
+            </item>
+            <item>
+              <title>Other Teacher</title>
+              <link>https://irc.audiodharma.org/talks/23113</link>
+              <pubDate>Sat, 31 May 2025 21:16:11 -0700</pubDate>
+              <enclosure url="https://example.test/23113.mp3" length="3000" type="audio/mp3" />
+              <itunes:author>Other Teacher</itunes:author>
+              <itunes:duration>50:00</itunes:duration>
+            </item>
+          </channel>
+        </rss>
+        """
+        talks = list(
+            parse_podcast_rss_feed(
+                xml,
+                {
+                    "name": "AudioDharma",
+                    "id_prefix": "audiodharma",
+                    "source_id_regex": "/talks/(\\d+)",
+                    "include_speakers": ["Matthew Brensilver"],
+                },
+            )
+        )
+
+        self.assertEqual(len(talks), 1)
+        self.assertEqual(talks[0].id, "audiodharma:23112")
+        self.assertEqual(talks[0].audio_type, "audio/mp3")
+        self.assertEqual(talks[0].duration, "57:41")
+
 
 class MergeTests(unittest.TestCase):
     def test_merge_prefers_dharmaseed_for_same_date_and_title(self):
@@ -509,6 +550,7 @@ class PodcastMetadataTests(unittest.TestCase):
             "Monday Night Meditation Talk",
             "Dharma Practice and the Cultivation of Power",
             "Practice Questions",
+            "True to Your Deepest Desires (Talk and Short Guided Meditation)",
         ]
 
         for title in guided_titles:

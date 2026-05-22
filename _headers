@@ -24,6 +24,14 @@
 /api/*
   Cache-Control: public, max-age=300
 
+/api/admin/*
+  Cache-Control: no-store
+  X-Robots-Tag: noindex
+
+/admin/*
+  Cache-Control: no-store
+  X-Robots-Tag: noindex
+
 /dharma/brensilver/feed.xml
   Content-Type: application/rss+xml; charset=utf-8
   Cache-Control: public, max-age=900

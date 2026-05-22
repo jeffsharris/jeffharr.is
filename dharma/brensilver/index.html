@@ -416,16 +416,16 @@
       <div class="feed-switch" role="tablist" aria-label="Choose a podcast feed">
         <button class="feed-tab is-active" type="button" role="tab" aria-selected="true" aria-controls="panel-dharma" data-feed-tab="dharma">
           <span>Dharma talks</span>
-          <strong>396</strong>
+          <strong>400</strong>
         </button>
         <button class="feed-tab" type="button" role="tab" aria-selected="false" aria-controls="panel-guided" data-feed-tab="guided">
           <span>Guided meditations</span>
-          <strong>261</strong>
+          <strong>263</strong>
         </button>
       </div>
       <div class="feed-panel" id="panel-dharma" data-feed-panel="dharma">
         <h2>Dharma talks</h2>
-        <p class="feed-count">396 episodes</p>
+        <p class="feed-count">400 episodes</p>
         <div class="listen-grid">
           <a class="listen-badge overcast" href="overcast://x-callback-url/add?url=https%3A%2F%2Fjeffharr.is%2Fdharma%2Fbrensilver%2Ffeed.xml">
             <img src="https://cdn.simpleicons.org/overcast/FFFFFF?viewbox=auto" alt="">
@@ -451,7 +451,7 @@
       </div>
       <div class="feed-panel" id="panel-guided" data-feed-panel="guided" hidden>
         <h2>Guided meditations</h2>
-        <p class="feed-count">261 episodes</p>
+        <p class="feed-count">263 episodes</p>
         <div class="listen-grid">
           <a class="listen-badge overcast" href="overcast://x-callback-url/add?url=https%3A%2F%2Fjeffharr.is%2Fdharma%2Fbrensilver%2Fguided-feed.xml">
             <img src="https://cdn.simpleicons.org/overcast/FFFFFF?viewbox=auto" alt="">
@@ -494,7 +494,7 @@
   </main>
   </div>
   <script>
-    window.TALK_ARCHIVE_CONFIG = {"defaultFeed": "dharma", "siteBaseUrl": "https://jeffharr.is/dharma/brensilver/", "talkPathPrefix": "talks/", "feeds": {"dharma": {"title": "Dharma talks", "url": "dharma-talks.json", "count": 396}, "guided": {"title": "Guided meditations", "url": "guided-talks.json", "count": 261}}};
+    window.TALK_ARCHIVE_CONFIG = {"defaultFeed": "dharma", "siteBaseUrl": "https://jeffharr.is/dharma/brensilver/", "talkPathPrefix": "talks/", "feeds": {"dharma": {"title": "Dharma talks", "url": "dharma-talks.json", "count": 400}, "guided": {"title": "Guided meditations", "url": "guided-talks.json", "count": 263}}};
   </script>
   <script>
     const feedUrls = {"dharma": "https://jeffharr.is/dharma/brensilver/feed.xml", "guided": "https://jeffharr.is/dharma/brensilver/guided-feed.xml"};
@@ -528,5 +528,6 @@
     });
   </script>
   <script src="archive-browser.js"></script>
+  <script src="/js/admin-presence.js?v=1"></script>
 </body>
 </html>

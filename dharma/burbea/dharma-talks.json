@@ -3012,6 +3012,108 @@
     }
   },
   {
+    "id": "dharmaseed:60889",
+    "source": "Dharma Seed",
+    "source_id": "60889",
+    "title": "True to Your Deepest Desires (Talk and Short Guided Meditation)",
+    "speaker": "Rob Burbea",
+    "published_at": "2019-12-26T17:00:00+00:00",
+    "link": "https://dharmaseed.org/talks/60889/",
+    "audio_url": "https://dharmaseed.org/talks/60889/20191226-Rob_Burbea-GAIA-true_to_your_deepest_desires_talk_and_short_guided_meditation-60889.mp3?rss=",
+    "audio_type": "audio/mpeg",
+    "audio_length": 52601077,
+    "duration": "1:12:58",
+    "description": "(Gaia House)",
+    "image_url": "https://jeffharr.is/dharma/burbea/artwork/rob-burbea-podcast-cover.jpg",
+    "canonical_url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-60889/",
+    "podcast_description": "Rob Burbea speaks about jhāna practice through the lens of desire, comparison, and self-view, asking what actually supports practice over time. He argues that the most important work may be learning how to relate to longing, frustration, and difficulty without turning them into a verdict about the self. The talk closes with a short guided meditation that turns toward the beauty of desire, patience, and the one who keeps showing up.",
+    "short_summary": "A talk on jhāna practice, desire, and self-view, ending with a brief guided meditation on honoring the heart’s longing.",
+    "episode_image_url": "https://jeffharr.is/dharma/burbea/artwork/dharmaseed-60889.jpg",
+    "chapters_url": "https://jeffharr.is/dharma/burbea/chapters/dharmaseed-60889.json",
+    "chapters": [
+      {
+        "start": 0.0,
+        "title": "Opening the Question",
+        "description": "He sets up the retreat context and the practical problem of questions, comparison, and psychological strain in a mixed group.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-60889/?t=0",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 294.1,
+        "title": "Culture and Self-View",
+        "description": "He widens the lens to cultural conditioning, the modern sense of self, and why practice can feel so charged now.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-60889/?t=294",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 537.3,
+        "title": "You Can Do This",
+        "description": "He reminds listeners that practice is possible, that dips do not mean failure, and that responsiveness matters more than panic.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-60889/?t=537",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 913.14,
+        "title": "View of Practice",
+        "description": "He emphasizes how the self is constructed around practice, the need for a larger view, and the value of showing up without overpressure.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-60889/?t=913",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1647.423,
+        "title": "Radical Intention",
+        "description": "He introduces exchanging self and other and then turns to the Four Bases of Power, reframing desire as part of liberation rather than a problem to hide.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-60889/?t=1647",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1933.423,
+        "title": "Desire and Frustration",
+        "description": "He explores desire in detail, arguing that what we learn about wanting, goals, and frustration may matter more than any particular jhāna result.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-60889/?t=1933",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 2393.423,
+        "title": "Sorting the Signals",
+        "description": "He unpacks motives behind retreat practice and calls for a structural sense of what teachings matter most, not just the most detailed tips.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-60889/?t=2393",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 2777.57,
+        "title": "A Life Shaped by Wanting",
+        "description": "Using his own life as a musician, he shows how deep desire can coexist with pain, humility, and long apprenticeship.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-60889/?t=2778",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 3535.17,
+        "title": "Desire Through Dukkha",
+        "description": "He distinguishes deep longing from negative self-view, then frames desire as a burning coal that must be related to skillfully.",
+        "url": "https://jeffharr.is/dharma/burbea/talks/dharmaseed-60889/?t=3535",
+        "img": null,
+        "toc": true
+      }
+    ],
+    "venue": "Gaia House",
+    "series": null,
+    "tags": [],
+    "transcript": {
+      "status": "pending",
+      "url": null,
+      "text_path": null
+    }
+  },
+  {
     "id": "dharmaseed:60880",
     "source": "Dharma Seed",
     "source_id": "60880",

@@ -1,5 +1,29 @@
 [
   {
+    "id": "audiodharma:25498",
+    "source": "AudioDharma",
+    "source_id": "25498",
+    "title": "Short Talk: Latent Self-View",
+    "speaker": "Matthew Brensilver",
+    "published_at": "2026-05-20T12:00:00+00:00",
+    "link": "https://www.audiodharma.org/talks/25498",
+    "audio_url": "https://audiodharma.us-east-1.linodeobjects.com/talks/25498/20260520-matthew_brensilver-imc-short_talk_latent_self-view.mp3",
+    "audio_type": "audio/mpeg",
+    "audio_length": null,
+    "duration": "14:18",
+    "description": "AudioDharma talk by Matthew Brensilver.",
+    "image_url": "https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+    "canonical_url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25498/",
+    "venue": null,
+    "series": null,
+    "tags": [],
+    "transcript": {
+      "status": "pending",
+      "url": null,
+      "text_path": null
+    }
+  },
+  {
     "id": "audiodharma:25456",
     "source": "AudioDharma",
     "source_id": "25456",
@@ -5746,18 +5770,120 @@
     }
   },
   {
+    "id": "audiodharma:23114",
+    "source": "AudioDharma",
+    "source_id": "23114",
+    "title": "Dialogue on What's Beyond Judging, Comparing, Fixing",
+    "speaker": "Matthew Brensilver",
+    "published_at": "2025-06-05T03:16:11+00:00",
+    "link": "https://irc.audiodharma.org/talks/23114",
+    "audio_url": "https://audiodharma.us-east-1.linodeobjects.com/talks/23114/20250604-Unknown-IRC-retreat_talk_6_4_2025_8_15_37_pm.mp3",
+    "audio_type": "audio/mp3",
+    "audio_length": 2638,
+    "duration": "43:58",
+    "description": "This talk was given by Matthew Brensilver and Dana DePalma, MA on 2025.06.04 at the Big Springs Retreat Center in Sierra City, CA. ******* Insight Meditation Retreat: Beyond Judging, Comparing and Fixing (2025-05-31 00:00:00 -0700) ******* For more talks like this, visit AudioDharma.org ******* If you have enjoyed this talk, please consider supporting AudioDharma with a donation at https://www.audiodharma.org/donate/. ******* This talk is licensed by a Creative Commons Attribution-Noncommercial-No Derivative Works 4.0 License",
+    "image_url": "https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+    "canonical_url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-23114/",
+    "podcast_description": "What happens when practice is no longer about perfecting the self, but about seeing judging, comparing, and fixing as conditioned habits? Matthew Brensilver and Dana DePalma move from Ajahn Sumedho’s language of natural joy and non-grasping into a quieter question: what becomes available when the personality is not treated as the whole story. The conversation then turns to the relationship between psychological healing and awakening, with an emphasis on sincerity, humility, and a trust that freedom is both ordinary and deeply personal.",
+    "short_summary": "A dialogue about moving beyond self-judgment into non-grasping, while still honoring psychological healing and the ordinary, personal shape of freedom.",
+    "episode_image_url": "https://jeffharr.is/dharma/brensilver/artwork/audiodharma-23114.jpg",
+    "chapters_url": "https://jeffharr.is/dharma/brensilver/chapters/audiodharma-23114.json",
+    "chapters": [
+      {
+        "start": 0.0,
+        "title": "Judging, Comparing, Fixing",
+        "description": "The talk opens by naming the three habits the retreat has been exploring and asking what lies beyond them.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-23114/?t=0",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 53.0,
+        "title": "Ajahn Sumedho's Doorway",
+        "description": "Quotes from Ajahn Sumedho and Ajahn Chah frame awakening as natural joy, non-grasping, and something beyond language and perception.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-23114/?t=53",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 190.0,
+        "title": "Not Perfecting the Self",
+        "description": "The speakers soften perfectionism by saying the personality does not get enlightened and by emphasizing ease, humor, and a lighter relationship to conditioned mind.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-23114/?t=190",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 466.605,
+        "title": "Sincere Practice",
+        "description": "The conversation shifts toward discernment, renunciation, inner dignity, and the movement from trying to be an ideal practitioner to being a sincere one.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-23114/?t=467",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 703.662,
+        "title": "Radical Inner Shift",
+        "description": "A Philip Moffitt passage is used to describe how the Four Noble Truths can reframe suffering without denying pain, disappointment, or uncertainty.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-23114/?t=704",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 851.422,
+        "title": "Trust Beyond Thought",
+        "description": "Dogen's teaching on the inconceivable realm of the Buddhas supports an invitation to trust what cannot be reached by intellect alone.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-23114/?t=851",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1111.467,
+        "title": "Psychology and Awakening",
+        "description": "Matthew and Dana explore how psychological integration and spiritual practice can complement each other, and why awakening must not be narrowed into a single map.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-23114/?t=1111",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1570.613,
+        "title": "Safety, Depth, and Breadth",
+        "description": "They discuss the need for inner safety, the dangers of unintegrated insight, and the way freedom can remain distinct from harm even after deep realization.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-23114/?t=1571",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 2046.112,
+        "title": "Ordinary Freedom",
+        "description": "The talk closes with reflections on self-love, forgiveness, the persistence of grooves and suffering, and a freedom that feels quiet, ordinary, and close to love.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-23114/?t=2046",
+        "img": null,
+        "toc": true
+      }
+    ],
+    "venue": null,
+    "series": null,
+    "tags": [],
+    "transcript": {
+      "status": "pending",
+      "url": null,
+      "text_path": null
+    }
+  },
+  {
     "id": "audiodharma:23104",
     "source": "AudioDharma",
     "source_id": "23104",
     "title": "Beyond Judging, Comparing and Fixing: Fixing",
     "speaker": "Matthew Brensilver",
-    "published_at": "2025-06-03T12:00:00+00:00",
-    "link": "https://www.audiodharma.org/talks/23104",
+    "published_at": "2025-06-04T03:17:28+00:00",
+    "link": "https://irc.audiodharma.org/talks/23104",
     "audio_url": "https://audiodharma.us-east-1.linodeobjects.com/talks/23104/20250603-Matthew_Brensilver--beyond_judging_comparing_and_fixing_fixing.mp3",
-    "audio_type": "audio/mpeg",
-    "audio_length": null,
+    "audio_type": "audio/mp3",
+    "audio_length": 2658,
     "duration": "44:18",
-    "description": "AudioDharma talk by Matthew Brensilver.",
+    "description": "This talk was given by Matthew Brensilver on 2025.06.03 at the Big Springs Retreat Center in Sierra City, CA. ******* Insight Meditation Retreat: Beyond Judging, Comparing and Fixing (2025-05-31 00:00:00 -0700) ******* For more talks like this, visit AudioDharma.org ******* If you have enjoyed this talk, please consider supporting AudioDharma with a donation at https://www.audiodharma.org/donate/. ******* This talk is licensed by a Creative Commons Attribution-Noncommercial-No Derivative Works 4.0 License",
     "image_url": "https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
     "canonical_url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-23104/",
     "podcast_description": "Matthew Brensilver explores the hidden drive to fix, improve, and become somebody better, and how that impulse shapes meditation, self-story, and even our relationship to pain. He distinguishes necessary practical adjustment from compulsive fixing, then slowly turns the talk toward receptivity, equanimity, and a non-gaining way of practicing. The talk closes by tying this stance to healing the past, meeting uncertainty, and letting life be enough as it is.",
@@ -5845,13 +5971,13 @@
     "source_id": "23094",
     "title": "Beyond Judging Comparing and Fixing: Judging",
     "speaker": "Matthew Brensilver",
-    "published_at": "2025-06-02T12:00:00+00:00",
-    "link": "https://www.audiodharma.org/talks/23094",
+    "published_at": "2025-06-03T04:29:39+00:00",
+    "link": "https://irc.audiodharma.org/talks/23094",
     "audio_url": "https://audiodharma.us-east-1.linodeobjects.com/talks/23094/20250602-Unknown-IRC-retreat_talk_6_1_2025_8_12_51_pm.mp3",
-    "audio_type": "audio/mpeg",
-    "audio_length": null,
+    "audio_type": "audio/mp3",
+    "audio_length": 2426,
     "duration": "40:26",
-    "description": "AudioDharma talk by Matthew Brensilver.",
+    "description": "This talk was given by Matthew Brensilver on 2025.06.02 at the Big Springs Retreat Center in Sierra City, CA. ******* Insight Meditation Retreat: Beyond Judging, Comparing and Fixing (2025-05-31 00:00:00 -0700) ******* For more talks like this, visit AudioDharma.org ******* If you have enjoyed this talk, please consider supporting AudioDharma with a donation at https://www.audiodharma.org/donate/. ******* This talk is licensed by a Creative Commons Attribution-Noncommercial-No Derivative Works 4.0 License",
     "image_url": "https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
     "canonical_url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-23094/",
     "podcast_description": "Matthew Brensilver examines the difference between judgment and discernment, beginning with mindfulness and the question of what it means to meet experience without extra defensiveness. He turns to the First Noble Truth, the two arrows, and the ways pain gets layered with aversion, self-protection, and story, then broadens the lens to anger, forgiveness, and self-judgment. The talk closes by reframing enlightenment as deep acceptance and self-love as a form of non-clinging rather than self-idealization.",
@@ -5928,6 +6054,194 @@
         "title": "Self-Love and Freedom",
         "description": "Matthew examines self-view, recounts a Nisargadatta story, and ends with Lao Tzu to frame self-love as radical acceptance and non-clinging.",
         "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-23094/?t=1907",
+        "img": null,
+        "toc": true
+      }
+    ],
+    "venue": null,
+    "series": null,
+    "tags": [],
+    "transcript": {
+      "status": "pending",
+      "url": null,
+      "text_path": null
+    }
+  },
+  {
+    "id": "audiodharma:23184",
+    "source": "AudioDharma",
+    "source_id": "23184",
+    "title": "Morning Reflection and Walking Instructions",
+    "speaker": "Matthew Brensilver",
+    "published_at": "2025-06-01T15:30:00+00:00",
+    "link": "https://irc.audiodharma.org/talks/23184",
+    "audio_url": "https://audiodharma.us-east-1.linodeobjects.com/talks/23184/20250601-Matthew_Brensilver--morning_reflections_and_walking_instructions.mp3",
+    "audio_type": "audio/mp3",
+    "audio_length": 738,
+    "duration": "12:18",
+    "description": "This talk was given by Matthew Brensilver on 2025.06.01 at the Big Springs Retreat Center in Sierra City, CA. ******* Insight Meditation Retreat: Beyond Judging, Comparing and Fixing (2025-05-31 00:00:00 -0700) ******* For more talks like this, visit AudioDharma.org ******* If you have enjoyed this talk, please consider supporting AudioDharma with a donation at https://www.audiodharma.org/donate/. ******* This talk is licensed by a Creative Commons Attribution-Noncommercial-No Derivative Works 4.0 License",
+    "image_url": "https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+    "canonical_url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-23184/",
+    "podcast_description": "What if the first task of the day is not to feel inspired, but to keep a little continuity of awareness while the mind is busy with fatigue, comparison, and fixing? Matthew Brensilver begins with the honesty of not knowing how the day will go, then offers a practical way to work with retreat conditions: balance sitting with walking, simplify the object when the mind is sticky, and keep practice awake without making it rigid. He closes with a walking-meditation sequence that varies the attention gently, including a Burmese-tradition experiment that moves from seeing to hearing to feet to whole body to loving-kindness.",
+    "short_summary": "A grounded morning talk on continuity of mindfulness, the use of walking practice, and simple ways to keep awareness fresh when the mind wants to scatter.",
+    "episode_image_url": "https://jeffharr.is/dharma/brensilver/artwork/audiodharma-23184.jpg",
+    "chapters_url": "https://jeffharr.is/dharma/brensilver/chapters/audiodharma-23184.json",
+    "chapters": [
+      {
+        "start": 0.0,
+        "title": "Beginning Without Certainty",
+        "description": "He opens by refusing easy optimism and naming the intensity that can come with the first days of retreat.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-23184/?t=0",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 70.0,
+        "title": "What Contact Reveals",
+        "description": "The talk turns to noticing what phenomena bump into in us, and how open awareness can be around sensation, feeling tone, and selfing.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-23184/?t=70",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 158.0,
+        "title": "Continuity Through the Day",
+        "description": "He frames the practice aim as keeping continuity by balancing sitting with movement and adjusting for the body’s needs.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-23184/?t=158",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 226.0,
+        "title": "Not Acquiescing to Delusion",
+        "description": "Matthew warns against giving up into distraction, while also allowing rest in a way that still preserves wakefulness.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-23184/?t=226",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 313.553,
+        "title": "Bell, Inventory, and Mountain",
+        "description": "He acknowledges the reflex to check energy and self-soothe at the bell, then points to the wider landscape as a reminder not to take the self too seriously.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-23184/?t=314",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 404.553,
+        "title": "How to Walk",
+        "description": "He gives practical walking instructions: choose a place and pace that supports mindfulness, and simplify the practice if the mind is sticky.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-23184/?t=405",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 492.553,
+        "title": "Planting Seeds Quietly",
+        "description": "The talk emphasizes that the goodness of practice may be invisible in the moment and only recognized much later.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-23184/?t=493",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 616.464,
+        "title": "A Fresh Walking Sequence",
+        "description": "He offers a concrete experiment for walking meditation, alternating attention through sensory layers and ending in loving-kindness.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-23184/?t=616",
+        "img": null,
+        "toc": true
+      }
+    ],
+    "venue": null,
+    "series": null,
+    "tags": [],
+    "transcript": {
+      "status": "pending",
+      "url": null,
+      "text_path": null
+    }
+  },
+  {
+    "id": "audiodharma:23112",
+    "source": "AudioDharma",
+    "source_id": "23112",
+    "title": "Beyond Judging, Comparing and Fixing: Opening Session",
+    "speaker": "Matthew Brensilver",
+    "published_at": "2025-05-31T23:12:38+00:00",
+    "link": "https://irc.audiodharma.org/talks/23112",
+    "audio_url": "https://audiodharma.us-east-1.linodeobjects.com/talks/23112/20250531-Matthew_Brensilver--beyond_judging_comparing_and_fixing_opening_session.mp3",
+    "audio_type": "audio/mp3",
+    "audio_length": 3461,
+    "duration": "57:41",
+    "description": "This talk was given by Matthew Brensilver and Dana DePalma, MA on 2025.05.31 at the Big Springs Retreat Center in Sierra City, CA. ******* Insight Meditation Retreat: Beyond Judging, Comparing and Fixing (2025-05-31 00:00:00 -0700) ******* For more talks like this, visit AudioDharma.org ******* If you have enjoyed this talk, please consider supporting AudioDharma with a donation at https://www.audiodharma.org/donate/. ******* This talk is licensed by a Creative Commons Attribution-Noncommercial-No Derivative Works 4.0 License",
+    "image_url": "https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+    "canonical_url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-23112/",
+    "podcast_description": "How do we meet the mind that judges, compares, and wants to fix everything before the retreat has even begun? Matthew Brensilver opens by framing retreat as an experiment in not knowing, then turns toward three supports for practice: attention, renunciation, and love. Dana DePalma then grounds the group in the retreat theme, clarifies the difference between reactive judgment and discernment, and introduces the refuges and five precepts as the ethical container for the days ahead.",
+    "short_summary": "An opening retreat talk on uncertainty, attention, renunciation, love, and the ethical ground of refuge and precepts.",
+    "episode_image_url": "https://jeffharr.is/dharma/brensilver/artwork/audiodharma-23112.jpg",
+    "chapters_url": "https://jeffharr.is/dharma/brensilver/chapters/audiodharma-23112.json",
+    "chapters": [
+      {
+        "start": 0.64,
+        "title": "Entering Not Knowing",
+        "description": "The talk opens with the retreat as an adventure in uncertainty and the invitation to begin with reassurance rather than control.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-23112/?t=1",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 147.62,
+        "title": "Reassurance and Faith",
+        "description": "Matthew recalls Michelle McDonald’s teaching that the first night of retreat is about reassurance and names faith in the many ways practice can unfold.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-23112/?t=148",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 303.098,
+        "title": "Attention as Prayer",
+        "description": "He develops attention as the first facet of retreat, drawing on Simone Weil to show how simple, unmixed attention can be a form of prayer.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-23112/?t=303",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 603.401,
+        "title": "What Is Enough",
+        "description": "Renunciation is presented as a direct answer to endless wanting, with Ajahn Sucitto and Albert King used to sharpen the question of enough.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-23112/?t=603",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 932.597,
+        "title": "Love in Hard Times",
+        "description": "The talk turns to love as a necessity for meeting the intensity of human life, and to a less naive loving-kindness shaped by difficult conditions.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-23112/?t=933",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1142.597,
+        "title": "Group Sharing and Themes",
+        "description": "Participants speak into the room, and the teachers listen closely to how judging, aversion, self-judgment, and the fear of being fundamentally wrong appear in practice.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-23112/?t=1143",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1594.3,
+        "title": "Judging and Comparing",
+        "description": "Dana reflects on the gift of arriving together, then names the retreat lineage and defines judging, comparing, and fixing as reactive habits rather than discernment.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-23112/?t=1594",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 2310.58,
+        "title": "Refuge and Precepts",
+        "description": "The opening ritual is explained through the Buddha, Dharma, Sangha, and the five precepts, with emphasis on belonging, sincerity, and creating a safe practice field.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-23112/?t=2311",
         "img": null,
         "toc": true
       }

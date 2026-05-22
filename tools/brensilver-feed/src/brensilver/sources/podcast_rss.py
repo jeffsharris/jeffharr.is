@@ -39,10 +39,13 @@ def parse_podcast_rss_feed(xml_text: str, source: Dict[str, Any]) -> Iterable[Ta
         if enclosure is None or not enclosure.get("url"):
             continue
 
+        speaker = _text(item, f"{{{ITUNES_NS}}}author") or source.get("speaker") or source.get("author")
+        if not _speaker_allowed(source, str(speaker or "")):
+            continue
+
         raw_title = _text(item, "title")
         source_id = _source_id(item, raw_title, source)
         title = _clean_title(raw_title, source)
-        speaker = _text(item, f"{{{ITUNES_NS}}}author") or source.get("speaker") or source.get("author")
         pub_date = parsedate_to_datetime(_text(item, "pubDate")).astimezone(timezone.utc)
         link = _text(item, "link") or enclosure.get("url", "")
 
@@ -70,6 +73,15 @@ def _source_id(item: ET.Element, raw_title: str, source: Dict[str, Any]) -> str:
     archive_id = _archive_id(raw_title, source)
     if archive_id:
         return _slug(archive_id)
+
+    pattern = source.get("source_id_regex")
+    if pattern:
+        enclosure = item.find("enclosure")
+        audio_url = enclosure.get("url", "") if enclosure is not None else ""
+        for value in [_text(item, "link"), _text(item, "guid"), audio_url]:
+            match = re.search(str(pattern), value)
+            if match:
+                return _slug(match.group(1))
 
     for value in [_text(item, "guid"), _text(item, "link")]:
         if value:
@@ -149,6 +161,28 @@ def _optional_int(value: Optional[str]) -> Optional[int]:
         return int(value)
     except ValueError:
         return None
+
+
+def _speaker_allowed(source: Dict[str, Any], speaker: str) -> bool:
+    allowed = source.get("include_speakers")
+    if not allowed:
+        return True
+    if isinstance(allowed, str):
+        allowed = [allowed]
+
+    normalized_speaker = _normalize_person_name(speaker)
+    if not normalized_speaker:
+        return False
+
+    return any(
+        normalized_allowed in normalized_speaker
+        for normalized_allowed in (_normalize_person_name(str(name)) for name in allowed)
+        if normalized_allowed
+    )
+
+
+def _normalize_person_name(value: str) -> str:
+    return " ".join(re.sub(r"[^a-z0-9]+", " ", value.lower()).split())
 
 
 def _slug(value: object) -> str:

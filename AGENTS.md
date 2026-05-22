@@ -4,6 +4,7 @@
 - Static site with Cloudflare Pages Functions under `functions/api`.
 - Preserve API response shapes; frontend expects the current JSON fields.
 - Avoid adding production dependencies without explicit approval.
+- Unless the user explicitly says not to publish, finish tasks by committing the completed work, rebasing onto the latest `origin/main`, and pushing to the remote so Cloudflare Pages deploys it.
 - Current content storage is documented in `notes/content-storage.md`. Start there before changing Read Later, shared items, Dharma talk shares, assets, lists, or push device storage.
 
 ## Brensilver Dharma project

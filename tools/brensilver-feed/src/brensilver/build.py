@@ -38,6 +38,13 @@ GUIDED_FEED_TITLE_PATTERNS = [
     ]
 ]
 
+DHARMA_FEED_TITLE_PATTERNS = [
+    re.compile(pattern, re.IGNORECASE)
+    for pattern in [
+        r"\btalk and short guided meditation\b",
+    ]
+]
+
 
 def main(argv: Iterable[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Build the merged Brensilver podcast feed.")
@@ -258,6 +265,8 @@ def split_talks_for_feeds(talks: List[Talk]) -> tuple[List[Talk], List[Talk]]:
 
 def is_guided_practice(talk: Talk) -> bool:
     title = " ".join(talk.title.split())
+    if any(pattern.search(title) for pattern in DHARMA_FEED_TITLE_PATTERNS):
+        return False
     return any(pattern.search(title) for pattern in GUIDED_FEED_TITLE_PATTERNS)
 
 
@@ -713,6 +722,7 @@ def render_index(
     }});
   </script>
   <script src="archive-browser.js"></script>
+  <script src="/js/admin-presence.js?v=1"></script>
 </body>
 </html>
 """
@@ -1451,6 +1461,7 @@ def render_talk_page(config: Dict, talk: Talk) -> str:
     </section>
   </main>
 {talk_seek_script()}
+  <script src="/js/admin-presence.js?v=1"></script>
 </body>
 </html>
 """

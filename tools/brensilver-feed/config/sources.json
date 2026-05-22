@@ -37,6 +37,14 @@
       "include_speakers": ["Matthew Brensilver"]
     },
     {
+      "type": "podcast_rss",
+      "name": "AudioDharma",
+      "id_prefix": "audiodharma",
+      "feed_url": "https://irc.audiodharma.org/feeds/retreat/482?code=CNCG",
+      "source_id_regex": "/talks/(\\d+)",
+      "include_speakers": ["Matthew Brensilver"]
+    },
+    {
       "type": "audiodharma",
       "name": "AudioDharma",
       "speaker_id": "231",

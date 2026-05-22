@@ -1,5 +1,29 @@
 [
   {
+    "id": "audiodharma:25499",
+    "source": "AudioDharma",
+    "source_id": "25499",
+    "title": "Lightly Guided Meditation",
+    "speaker": "Matthew Brensilver",
+    "published_at": "2026-05-20T12:00:00+00:00",
+    "link": "https://www.audiodharma.org/talks/25499",
+    "audio_url": "https://audiodharma.us-east-1.linodeobjects.com/talks/25499/20260520-matthew_brensilver-imc-lightly_guided_meditation.mp3",
+    "audio_type": "audio/mpeg",
+    "audio_length": null,
+    "duration": "25:53",
+    "description": "AudioDharma talk by Matthew Brensilver.",
+    "image_url": "https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+    "canonical_url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25499/",
+    "venue": null,
+    "series": null,
+    "tags": [],
+    "transcript": {
+      "status": "pending",
+      "url": null,
+      "text_path": null
+    }
+  },
+  {
     "id": "audiodharma:25455",
     "source": "AudioDharma",
     "source_id": "25455",
@@ -4668,18 +4692,104 @@
     }
   },
   {
+    "id": "audiodharma:23107",
+    "source": "AudioDharma",
+    "source_id": "23107",
+    "title": "Guided Meditation: Love and Dissolving Boundaries",
+    "speaker": "Matthew Brensilver",
+    "published_at": "2025-06-04T16:27:17+00:00",
+    "link": "https://irc.audiodharma.org/talks/23107",
+    "audio_url": "https://audiodharma.us-east-1.linodeobjects.com/talks/23107/20250604-Matthew_Brensilver--guided_meditation_love_and_dissolving_boundaries.mp3",
+    "audio_type": "audio/mp3",
+    "audio_length": 926,
+    "duration": "15:26",
+    "description": "This talk was given by Matthew Brensilver on 2025.06.04 at the Big Springs Retreat Center in Sierra City, CA. ******* Recording cut off due to technical issues ******* For more talks like this, visit AudioDharma.org ******* If you have enjoyed this talk, please consider supporting AudioDharma with a donation at https://www.audiodharma.org/donate/. ******* This talk is licensed by a Creative Commons Attribution-Noncommercial-No Derivative Works 4.0 License",
+    "image_url": "https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+    "canonical_url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-23107/",
+    "podcast_description": "What changes when practice starts from appreciation instead of fixing? Matthew Brensilver begins with the sense of how much had to go right for this life to be here, then turns toward dana, generosity, and the possibility that renunciation can be part of love rather than self-denial. The meditation gradually softens the impulse to manage everything, opening into a quiet, boundaryless kindness that meets experience without grasping.",
+    "short_summary": "A guided meditation on gratitude, generosity, and softening the need to fix, opening into a quiet, spacious love.",
+    "episode_image_url": "https://jeffharr.is/dharma/brensilver/artwork/audiodharma-23107.jpg",
+    "chapters_url": "https://jeffharr.is/dharma/brensilver/chapters/audiodharma-23107.json",
+    "chapters": [
+      {
+        "start": 0.0,
+        "title": "Appreciating good fortune",
+        "description": "The talk opens by noticing how easily we overlook the many conditions that support our lives and bodies.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-23107/?t=0",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 158.0,
+        "title": "Beginning with gratitude",
+        "description": "Practice starts by settling into appreciation for what has been given, including body, breath, and generosity.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-23107/?t=158",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 257.0,
+        "title": "Silent thanking",
+        "description": "The meditation moves into repeated silent gratitude, allowing appreciation to deepen beyond words.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-23107/?t=257",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 365.422,
+        "title": "Renunciation as love",
+        "description": "Matthew reframes renunciation as a dimension of love, where the urgency to fix begins to dissolve.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-23107/?t=365",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 502.942,
+        "title": "Quiet openheartedness",
+        "description": "Love is described less as intensity and more as a steady, quiet openness that lets nothing stick.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-23107/?t=503",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 702.008,
+        "title": "Softening the world",
+        "description": "The practice turns to softening wherever the world seems to need us, widening into a sustained instruction to soften.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-23107/?t=702",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 891.757,
+        "title": "Conditions well enough",
+        "description": "The meditation closes by resting in the sense that conditions are already well enough, ending in a quiet thank you.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-23107/?t=892",
+        "img": null,
+        "toc": true
+      }
+    ],
+    "venue": null,
+    "series": null,
+    "tags": [],
+    "transcript": {
+      "status": "pending",
+      "url": null,
+      "text_path": null
+    }
+  },
+  {
     "id": "audiodharma:23092",
     "source": "AudioDharma",
     "source_id": "23092",
     "title": "Guided Meditation: Embodiment and Allowing",
     "speaker": "Matthew Brensilver",
-    "published_at": "2025-06-02T12:00:00+00:00",
-    "link": "https://www.audiodharma.org/talks/23092",
+    "published_at": "2025-06-03T04:24:27+00:00",
+    "link": "https://irc.audiodharma.org/talks/23092",
     "audio_url": "https://audiodharma.us-east-1.linodeobjects.com/talks/23092/20250602-Matthew_Brensilver--guided_meditation_embodiment_and_allowing.mp3",
-    "audio_type": "audio/mpeg",
-    "audio_length": null,
+    "audio_type": "audio/mp3",
+    "audio_length": 2496,
     "duration": "41:36",
-    "description": "AudioDharma talk by Matthew Brensilver.",
+    "description": "This talk was given by Matthew Brensilver on 2025.06.02 at the Big Springs Retreat Center in Sierra City, CA. ******* Insight Meditation Retreat: Beyond Judging, Comparing and Fixing (2025-05-31 00:00:00 -0700) ******* For more talks like this, visit AudioDharma.org ******* If you have enjoyed this talk, please consider supporting AudioDharma with a donation at https://www.audiodharma.org/donate/. ******* This talk is licensed by a Creative Commons Attribution-Noncommercial-No Derivative Works 4.0 License",
     "image_url": "https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
     "canonical_url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-23092/",
     "podcast_description": "This guided meditation invites a quiet shift from efforting to willingness, using the breath and body as a way to become more available to experience. Matthew Brensilver repeatedly returns to themes of embodiment, softening, and allowing, especially when meditation feels difficult or impossible. The practice builds toward a spacious view of awareness that can hold pain, aversion, and uncertainty without tightening around them.",
