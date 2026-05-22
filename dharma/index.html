@@ -1,0 +1,369 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dharma · Voices Shaping My Practice</title>
+  <meta name="description" content="Talks and teachings from dharma teachers shaping my practice — Matthew Brensilver, Rob Burbea, Alan Watts.">
+  <meta property="og:title" content="Dharma · Voices Shaping My Practice">
+  <meta property="og:description" content="Talks and teachings from dharma teachers shaping my practice.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://jeffharr.is/dharma/">
+
+  <link rel="icon" href="/favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,400&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      color-scheme: light dark;
+      --bg: #f8f7f3;
+      --ink: #1f2933;
+      --muted: #52616b;
+      --line: #d8d2c4;
+      --accent: #226f63;
+      --accent-strong: #174f47;
+      --panel: #ffffff;
+      --shadow: rgba(31, 41, 51, 0.12);
+      --shadow-soft: rgba(31, 41, 51, 0.06);
+      --font-display: 'Cormorant Garamond', Georgia, serif;
+      --font-body: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #111816;
+        --ink: #eef2ed;
+        --muted: #b2beb6;
+        --line: #39443f;
+        --accent: #79b7aa;
+        --accent-strong: #9fd7cc;
+        --panel: #18211e;
+        --shadow: rgba(0, 0, 0, 0.36);
+        --shadow-soft: rgba(0, 0, 0, 0.18);
+      }
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--bg);
+      color: var(--ink);
+      min-height: 100vh;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .page-shell {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 56px 24px 96px;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      color: var(--muted);
+      text-decoration: none;
+      margin-bottom: 28px;
+      transition: color 180ms ease;
+    }
+
+    .back-link:hover {
+      color: var(--accent);
+    }
+
+    .back-link svg { width: 14px; height: 14px; }
+
+    .intro {
+      text-align: center;
+      max-width: 720px;
+      margin: 0 auto 56px;
+    }
+
+    .intro__eyebrow {
+      display: block;
+      font-size: 12px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 14px;
+    }
+
+    .intro__title {
+      font-family: var(--font-display);
+      font-weight: 500;
+      font-size: clamp(2.4rem, 5.4vw, 3.8rem);
+      line-height: 1.05;
+      margin: 0;
+      letter-spacing: 0.005em;
+    }
+
+    .intro__title em {
+      font-style: italic;
+      color: var(--accent-strong);
+    }
+
+    .intro__subtitle {
+      margin: 18px auto 0;
+      max-width: 520px;
+      color: var(--muted);
+      font-size: 15.5px;
+      line-height: 1.55;
+    }
+
+    /* Tiles grid */
+    .tiles {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 32px;
+      max-width: 1080px;
+      margin: 0 auto;
+    }
+
+    .tile {
+      position: relative;
+      display: block;
+      isolation: isolate;
+      border-radius: 18px;
+      overflow: hidden;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      box-shadow: 0 6px 28px var(--shadow-soft);
+      text-decoration: none;
+      color: inherit;
+      transition: transform 320ms cubic-bezier(0.22, 0.61, 0.36, 1),
+                  box-shadow 320ms ease,
+                  border-color 320ms ease;
+    }
+
+    /* Each teacher gets a soft palette-aware halo behind their tile. */
+    .tile::before {
+      content: '';
+      position: absolute;
+      inset: -28px;
+      z-index: -1;
+      border-radius: 28px;
+      background: var(--tile-halo, transparent);
+      filter: blur(36px);
+      opacity: 0.55;
+      transition: opacity 320ms ease, transform 320ms ease;
+    }
+
+    .tile:hover,
+    .tile:focus-visible {
+      transform: translateY(-4px);
+      border-color: var(--tile-accent, var(--accent));
+      box-shadow: 0 16px 40px var(--shadow);
+    }
+
+    .tile:hover::before,
+    .tile:focus-visible::before {
+      opacity: 0.85;
+      transform: scale(1.04);
+    }
+
+    .tile:focus-visible {
+      outline: 2px solid var(--tile-accent, var(--accent));
+      outline-offset: 4px;
+    }
+
+    .tile__image-wrap {
+      position: relative;
+      aspect-ratio: 1;
+      overflow: hidden;
+      background: var(--tile-bg, #16120f);
+    }
+
+    .tile__image {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transform: scale(1);
+      transition: transform 600ms ease, filter 500ms ease;
+    }
+
+    .tile:hover .tile__image,
+    .tile:focus-visible .tile__image {
+      transform: scale(1.04);
+      filter: saturate(1.04);
+    }
+
+    .tile__scrim {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: linear-gradient(180deg,
+        transparent 0%,
+        transparent 56%,
+        rgba(0, 0, 0, 0.18) 80%,
+        rgba(0, 0, 0, 0.52) 100%);
+    }
+
+    .tile__caption {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      padding: 22px 22px 20px;
+      color: #fff;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.65),
+                   0 2px 14px rgba(0, 0, 0, 0.45);
+    }
+
+    .tile__name {
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 1.95rem;
+      line-height: 1.1;
+      margin: 0;
+      letter-spacing: 0;
+    }
+
+    .tile__meta {
+      display: block;
+      margin-top: 6px;
+      font-size: 11.5px;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      opacity: 0.92;
+    }
+
+    .tile__meta-count {
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Per-teacher palettes (drawn from the corpus image_style prompts) */
+    .tile--brensilver {
+      --tile-halo: radial-gradient(circle at 30% 30%, rgba(108, 132, 92, 0.55), transparent 60%),
+                   radial-gradient(circle at 70% 70%, rgba(185, 137, 71, 0.45), transparent 60%);
+      --tile-accent: #6F8456;
+      --tile-bg: #6c845c;
+    }
+
+    .tile--burbea {
+      --tile-halo: radial-gradient(circle at 30% 30%, rgba(35, 38, 90, 0.65), transparent 62%),
+                   radial-gradient(circle at 72% 68%, rgba(168, 136, 64, 0.42), transparent 60%);
+      --tile-accent: #6A6FA5;
+      --tile-bg: #1c1f4a;
+    }
+
+    .tile--watts {
+      --tile-halo: radial-gradient(circle at 28% 28%, rgba(197, 64, 46, 0.45), transparent 58%),
+                   radial-gradient(circle at 72% 72%, rgba(107, 140, 122, 0.40), transparent 62%);
+      --tile-accent: #C5402E;
+      --tile-bg: #f4ecdc;
+    }
+
+    /* Footer note */
+    .credit {
+      margin: 84px auto 0;
+      max-width: 640px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .credit a {
+      color: var(--accent);
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+      transition: border-color 180ms ease;
+    }
+
+    .credit a:hover { border-bottom-color: var(--accent); }
+
+    @media (max-width: 640px) {
+      .page-shell { padding: 32px 18px 64px; }
+      .intro { margin-bottom: 36px; }
+      .tiles { gap: 20px; }
+      .tile__name { font-size: 1.7rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-shell">
+    <a class="back-link" href="/">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M19 12H5M12 19l-7-7 7-7"/>
+      </svg>
+      Home
+    </a>
+
+    <header class="intro">
+      <span class="intro__eyebrow">Dharma</span>
+      <h1 class="intro__title">Voices Shaping <em>My Practice</em></h1>
+      <p class="intro__subtitle">A small library of teachers whose talks I return to. Each page is a searchable archive of timestamped transcripts, an RSS feed, and the original audio.</p>
+    </header>
+
+    <nav class="tiles" aria-label="Dharma teachers">
+      <a class="tile tile--brensilver" href="/dharma/brensilver/" data-talks-src="/dharma/brensilver/talks.json">
+        <div class="tile__image-wrap">
+          <img class="tile__image" src="/dharma/brensilver/artwork/brensilver-tile.jpg" alt="" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg';">
+          <div class="tile__scrim" aria-hidden="true"></div>
+          <div class="tile__caption">
+            <h2 class="tile__name">Matthew Brensilver</h2>
+            <span class="tile__meta"><span class="tile__meta-count" data-talk-count>—</span> talks</span>
+          </div>
+        </div>
+      </a>
+
+      <a class="tile tile--burbea" href="/dharma/burbea/" data-talks-src="/dharma/burbea/talks.json">
+        <div class="tile__image-wrap">
+          <img class="tile__image" src="/dharma/burbea/artwork/burbea-tile.jpg" alt="" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='/dharma/burbea/artwork/rob-burbea-podcast-cover.jpg';">
+          <div class="tile__scrim" aria-hidden="true"></div>
+          <div class="tile__caption">
+            <h2 class="tile__name">Rob Burbea</h2>
+            <span class="tile__meta"><span class="tile__meta-count" data-talk-count>—</span> talks</span>
+          </div>
+        </div>
+      </a>
+
+      <a class="tile tile--watts" href="/dharma/watts/" data-talks-src="/dharma/watts/talks.json">
+        <div class="tile__image-wrap">
+          <img class="tile__image" src="/dharma/watts/artwork/watts-tile.jpg" alt="" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='/dharma/watts/artwork/alan-watts-podcast-cover.jpg';">
+          <div class="tile__scrim" aria-hidden="true"></div>
+          <div class="tile__caption">
+            <h2 class="tile__name">Alan Watts</h2>
+            <span class="tile__meta"><span class="tile__meta-count" data-talk-count>—</span> talks</span>
+          </div>
+        </div>
+      </a>
+    </nav>
+
+    <p class="credit">Transcripts and artwork generated by an in-house pipeline; tile portraits rendered in each teacher's signature palette. The site is an offering, not a substitute — supporting the source publishers and Dharma Seed is encouraged.</p>
+  </div>
+
+  <script>
+    // Fetch each teacher's talks.json once and replace the placeholder count.
+    (async () => {
+      const tiles = document.querySelectorAll('[data-talks-src]');
+      await Promise.all(Array.from(tiles).map(async (tile) => {
+        const src = tile.dataset.talksSrc;
+        const countEl = tile.querySelector('[data-talk-count]');
+        if (!countEl) return;
+        try {
+          const res = await fetch(src, { cache: 'force-cache' });
+          if (!res.ok) throw new Error(`status ${res.status}`);
+          const json = await res.json();
+          const list = Array.isArray(json) ? json : (json.talks || json.items || []);
+          countEl.textContent = list.length.toLocaleString();
+        } catch (err) {
+          countEl.textContent = '';
+          // hide the surrounding "— talks" line if we couldn't get a count
+          const meta = tile.querySelector('.tile__meta');
+          if (meta) meta.style.display = 'none';
+        }
+      }));
+    })();
+  </script>
+</body>
+</html>
