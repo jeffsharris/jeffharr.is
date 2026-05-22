@@ -11,6 +11,9 @@ Rules:
 - Use only supplied transcript and reference data.
 - Do not overstate certainty.
 - Do not mention the transcription pipeline.
+- Do not name the speaker in description, short_summary, chapter descriptions,
+  or image prompts unless the speaker's identity is itself the topic being
+  discussed. Prefer "the talk" or "the speaker" when a subject is needed.
 - Do not summarize only the title. Describe the actual movement of the talk.
 - Begin with the talk's central question, image, tension, practice movement, or
   insight so the description gets to the essence of the episode immediately.
