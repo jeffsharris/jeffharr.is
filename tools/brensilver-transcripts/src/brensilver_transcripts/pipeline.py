@@ -162,6 +162,12 @@ class Talk:
         return safe_talk_id(self.id)
 
 
+def talk_payload_without_speaker(talk: Talk) -> dict[str, Any]:
+    payload = dict(talk.__dict__)
+    payload.pop("speaker", None)
+    return payload
+
+
 def now_iso() -> str:
     return datetime.now(timezone.utc).isoformat(timespec="seconds")
 
@@ -1452,7 +1458,7 @@ def generate_episode_metadata(
     references_doc = load_json(paths.references(talk), {})
     prompt = CORPUS.episode_metadata_prompt.read_text(encoding="utf-8")
     payload = {
-        "talk": talk.__dict__,
+        "talk": talk_payload_without_speaker(talk),
         "shared_image_style": CORPUS.image_style,
         "segments": compact_segments_for_model(segments),
         "references": compact_references_for_model(references_doc.get("references", [])),

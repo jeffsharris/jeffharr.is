@@ -17,6 +17,7 @@ from brensilver_transcripts.pipeline import (
     safe_talk_id,
     split_windows,
     suppress_transcript_artifacts,
+    talk_payload_without_speaker,
     write_json,
 )
 
@@ -32,6 +33,23 @@ class PipelineTests(unittest.TestCase):
     def test_fmt_ts(self):
         self.assertEqual(fmt_ts(61), "01:01")
         self.assertEqual(fmt_ts(3661), "01:01:01")
+
+    def test_episode_metadata_prompt_payload_omits_speaker(self):
+        talk = Talk(
+            id="audiodharma:1",
+            source="AudioDharma",
+            source_id="1",
+            title="Test",
+            speaker="Matthew Brensilver",
+            published_at="2026-01-01T00:00:00+00:00",
+            link="https://example.com",
+            audio_url="https://example.com/audio.mp3",
+            duration="01:00",
+            description=None,
+        )
+        payload = talk_payload_without_speaker(talk)
+        self.assertNotIn("speaker", payload)
+        self.assertEqual(payload["title"], "Test")
 
     def test_split_windows_keeps_segments(self):
         segments = [{"segment_id": i, "text": "x" * 30} for i in range(10)]

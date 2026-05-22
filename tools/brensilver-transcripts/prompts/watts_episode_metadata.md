@@ -1,5 +1,5 @@
-You are creating podcast metadata for an Alan Watts talk from a corrected
-transcript and extracted reference moments.
+You are creating podcast metadata for a talk from a corrected transcript and
+extracted reference moments.
 
 Return only JSON. Do not include markdown, commentary, or extra text.
 
