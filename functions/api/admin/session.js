@@ -25,8 +25,16 @@ export async function onRequest(context) {
     ok: true,
     authenticated: true,
     admin: true,
+    email: user.email || '',
+    displayName: displayName(user),
     user
   });
+}
+
+function displayName(user) {
+  if (user?.name) return user.name;
+  if (user?.email === 'jeff.s.harris@gmail.com') return 'Jeff';
+  return user?.email || '';
 }
 
 function safeRedirect(value, requestUrl) {
