@@ -190,6 +190,7 @@ body.panel-open .main {
   border-radius: var(--radius);
   cursor: pointer;
   color: var(--text);
+  text-decoration: none;
   transition: all var(--transition);
   font-family: inherit;
 }
@@ -246,7 +247,7 @@ body.panel-open .social-btn[data-platform]:focus {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 16px;
+  gap: 12px;
   flex-wrap: wrap;
 }
 

@@ -65,7 +65,7 @@
 
   // Proactively fetch all platform data on page load
   function prefetchAll() {
-    const platforms = ['github', 'substack', 'goodreads', 'letterboxd', 'poems', 'read-later'];
+    const platforms = Array.from(socialButtons, button => button.dataset.platform).filter(Boolean);
     platforms.forEach(platform => {
       fetch(`/api/${platform}`)
         .then(response => response.ok ? response.json() : null)
