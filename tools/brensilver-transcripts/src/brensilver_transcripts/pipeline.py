@@ -14,7 +14,6 @@ import time
 import urllib.error
 import urllib.parse
 import urllib.request
-import uuid
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
@@ -350,6 +349,9 @@ class PipelineState:
     def mark(self, talk: Talk, **fields: Any) -> None:
         row = self.get(talk)
         row.update(fields)
+        if fields.get("status") and fields.get("status") != "failed":
+            row.pop("error", None)
+            row.pop("failed_at", None)
         row["talk_id"] = talk.id
         row["updated_at"] = now_iso()
         write_json(self.path, self.data)
@@ -637,35 +639,63 @@ def multipart_request(
     fields: list[tuple[str, str]],
     files: list[tuple[str, Path, str]],
 ) -> dict[str, Any]:
-    boundary = f"----{CORPUS.slug}-{uuid.uuid4().hex}"
-    body = bytearray()
+    return curl_multipart_request(url, api_key, fields, files)
+
+
+def curl_multipart_request(
+    url: str,
+    api_key: str,
+    fields: list[tuple[str, str]],
+    files: list[tuple[str, Path, str]],
+) -> dict[str, Any]:
+    if not shutil.which("curl"):
+        raise RuntimeError("Missing required executable on PATH: curl")
+
+    command = [
+        "curl",
+        "--config",
+        "-",
+        "--http2",
+        "--silent",
+        "--show-error",
+        "--fail-with-body",
+        "--max-time",
+        "300",
+        "--retry",
+        "3",
+        "--retry-all-errors",
+        "--retry-delay",
+        "1",
+        "--write-out",
+        (
+            "\\nopenai_multipart_transport=curl "
+            "http_version=%{http_version} "
+            "http_code=%{http_code} "
+            "time_total=%{time_total} "
+            "size_upload=%{size_upload}\\n"
+        ),
+    ]
     for name, value in fields:
-        body.extend(f"--{boundary}\r\n".encode())
-        body.extend(f'Content-Disposition: form-data; name="{name}"\r\n\r\n'.encode())
-        body.extend(value.encode())
-        body.extend(b"\r\n")
+        command.extend(["--form-string", f"{name}={value}"])
     for name, path, content_type in files:
-        body.extend(f"--{boundary}\r\n".encode())
-        body.extend(
-            (
-                f'Content-Disposition: form-data; name="{name}"; '
-                f'filename="{path.name}"\r\n'
-            ).encode()
-        )
-        body.extend(f"Content-Type: {content_type}\r\n\r\n".encode())
-        body.extend(path.read_bytes())
-        body.extend(b"\r\n")
-    body.extend(f"--{boundary}--\r\n".encode())
-    req = urllib.request.Request(
-        url,
-        data=bytes(body),
-        headers={
-            "Authorization": f"Bearer {api_key}",
-            "Content-Type": f"multipart/form-data; boundary={boundary}",
-        },
-        method="POST",
+        command.extend(["--form", f"{name}=@{path};type={content_type}"])
+    command.append(url)
+
+    curl_config = f'header = "Authorization: Bearer {api_key}"\n'
+    result = subprocess.run(
+        command,
+        input=curl_config,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True,
+        check=False,
     )
-    return openai_json(req)
+    if result.stderr.strip():
+        print(result.stderr.strip(), file=sys.stderr)
+    if result.returncode != 0:
+        detail = "\n".join(part for part in [result.stderr, result.stdout[:1000]] if part)
+        raise RuntimeError(f"OpenAI multipart curl request failed: {detail}")
+    return json.loads(result.stdout)
 
 
 def json_request(url: str, api_key: str, payload: dict[str, Any]) -> dict[str, Any]:
@@ -699,7 +729,7 @@ def openai_json(req: urllib.request.Request, retries: int = 4) -> dict[str, Any]
                 time.sleep(2**attempt)
                 continue
             raise RuntimeError(f"OpenAI API error {error.code}: {detail}") from error
-        except urllib.error.URLError as error:
+        except OSError as error:
             if attempt < retries - 1:
                 time.sleep(2**attempt)
                 continue

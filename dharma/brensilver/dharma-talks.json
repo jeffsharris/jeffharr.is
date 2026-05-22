@@ -14,6 +14,68 @@
     "description": "AudioDharma talk by Matthew Brensilver.",
     "image_url": "https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
     "canonical_url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25498/",
+    "podcast_description": "What happens when a subtle self-model is only revealed by the right conditions? This talk moves from everyday interpersonal friction to a close look at how self-view is represented, defended, and quietly held in place even when it is not obvious. A personal example of receiving care becomes the entry point for seeing that the deeper response is not to rewrite the story, but to loosen identification and let the charge drain out of it.",
+    "short_summary": "A talk on how latent self-view shows up under certain conditions and how practice helps loosen identification with it.",
+    "episode_image_url": "https://jeffharr.is/dharma/brensilver/artwork/audiodharma-25498.jpg",
+    "chapters_url": "https://jeffharr.is/dharma/brensilver/chapters/audiodharma-25498.json",
+    "chapters": [
+      {
+        "start": 12.0,
+        "title": "Practice and social mirrors",
+        "description": "The talk begins with the way practice and life reflect each other, and how social situations reveal different dimensions of mind.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25498/?t=12",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 132.0,
+        "title": "Play with self-conventions",
+        "description": "A light, playful relationship with teasing is used to show how shame and self-consciousness can be transformed rather than defended.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25498/?t=132",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 237.0,
+        "title": "Self as identification",
+        "description": "The talk shifts into a clear distinction between self as a thing and self as a momentary identification with a model of me.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25498/?t=237",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 310.0,
+        "title": "Seeing the hidden model",
+        "description": "Ordinary self-representation is described as transparent until it is seen through, with defensiveness and impermanence used as examples of how latent self-view emerges.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25498/?t=310",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 466.0,
+        "title": "When care causes friction",
+        "description": "A recent act of kindness becomes a case study in how appreciation can trigger an unexamined feeling of unworthiness and make a hidden self-model visible.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25498/?t=466",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 600.0,
+        "title": "Underbelly of identity",
+        "description": "The talk explores how self-harshness may also carry self-cherishing, and why simply rewriting the story is not the deepest response.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25498/?t=600",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 688.0,
+        "title": "Draining the charge",
+        "description": "The practice movement becomes staying with the pain of clinging, allowing the energy of the self-model to loosen until one can step out of the gridlock of self-view.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25498/?t=688",
+        "img": null,
+        "toc": true
+      }
+    ],
     "venue": null,
     "series": null,
     "tags": [],

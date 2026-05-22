@@ -1,16 +1,21 @@
 import tempfile
+import urllib.request
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 from brensilver_transcripts.pipeline import (
     CorpusPaths,
+    PipelineState,
     Talk,
     build_people_index,
     build_feedback_viewer_data,
     fmt_ts,
     group_suppressed_segments,
     merge_description_summary_metadata,
+    multipart_request,
     normalize_references,
+    openai_json,
     parse_duration,
     person_is_supported,
     prune_references_for_segments,
@@ -24,6 +29,20 @@ from brensilver_transcripts.pipeline import (
 )
 
 
+class _JsonResponse:
+    def __init__(self, payload: bytes):
+        self.payload = payload
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc, tb):
+        return False
+
+    def read(self):
+        return self.payload
+
+
 class PipelineTests(unittest.TestCase):
     def test_safe_talk_id(self):
         self.assertEqual(safe_talk_id("audiodharma:25235"), "audiodharma-25235")
@@ -35,6 +54,80 @@ class PipelineTests(unittest.TestCase):
     def test_fmt_ts(self):
         self.assertEqual(fmt_ts(61), "01:01")
         self.assertEqual(fmt_ts(3661), "01:01:01")
+
+    def test_openai_json_retries_connection_reset(self):
+        request = urllib.request.Request("https://api.example.test")
+        with (
+            patch(
+                "brensilver_transcripts.pipeline.urllib.request.urlopen",
+                side_effect=[
+                    ConnectionResetError(54, "Connection reset by peer"),
+                    _JsonResponse(b'{"ok": true}'),
+                ],
+            ) as urlopen,
+            patch("brensilver_transcripts.pipeline.time.sleep") as sleep,
+        ):
+            self.assertEqual(openai_json(request), {"ok": True})
+
+        self.assertEqual(urlopen.call_count, 2)
+        sleep.assert_called_once_with(1)
+
+    def test_multipart_request_uses_curl_http2_transport(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            audio = Path(tmp) / "chunk.mp3"
+            audio.write_bytes(b"audio")
+            curl_result = type(
+                "CurlResult",
+                (),
+                {"returncode": 0, "stdout": '{"ok": true}', "stderr": ""},
+            )()
+
+            with (
+                patch("brensilver_transcripts.pipeline.shutil.which", return_value="/usr/bin/curl"),
+                patch(
+                    "brensilver_transcripts.pipeline.subprocess.run",
+                    return_value=curl_result,
+                ) as run,
+            ):
+                result = multipart_request(
+                    "https://api.example.test/audio/transcriptions",
+                    "secret-key",
+                    [("model", "whisper-1")],
+                    [("file", audio, "audio/mpeg")],
+                )
+
+        self.assertEqual(result, {"ok": True})
+        command = run.call_args.args[0]
+        self.assertIn("curl", command[0])
+        self.assertIn("--http2", command)
+        self.assertNotIn("secret-key", command)
+        self.assertIn(
+            'header = "Authorization: Bearer secret-key"\n',
+            run.call_args.kwargs["input"],
+        )
+
+    def test_pipeline_state_clears_stale_failure_on_success(self):
+        talk = Talk(
+            id="audiodharma:1",
+            source="AudioDharma",
+            source_id="1",
+            title="Test",
+            speaker="Matthew Brensilver",
+            published_at="2026-01-01T00:00:00+00:00",
+            link="https://example.com",
+            audio_url="https://example.com/audio.mp3",
+            duration="01:00",
+            description=None,
+        )
+        with tempfile.TemporaryDirectory() as tmp:
+            state = PipelineState(Path(tmp) / "state.json")
+            state.mark(talk, status="failed", error="reset", failed_at="now")
+            state.mark(talk, status="enriched")
+            row = state.get(talk)
+
+        self.assertEqual(row["status"], "enriched")
+        self.assertNotIn("error", row)
+        self.assertNotIn("failed_at", row)
 
     def test_episode_metadata_prompt_payload_omits_speaker(self):
         talk = Talk(
