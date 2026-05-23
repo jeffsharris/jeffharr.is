@@ -89,55 +89,33 @@
     }
     .archive-query {
       display: grid;
-      gap: 14px;
-      margin: 20px 0 14px;
-    }
-    .scope-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .scope-switch {
-      display: inline-grid;
-      grid-auto-flow: column;
-      grid-auto-columns: minmax(118px, 1fr);
-      gap: 6px;
-      padding: 6px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: color-mix(in srgb, var(--panel) 72%, var(--bg));
+      margin: 20px 0 12px;
     }
     .scope-chip,
     .starred-toggle {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) auto;
+      display: inline-flex;
       align-items: center;
-      gap: 10px;
-      min-height: 46px;
-      padding: 0 12px;
+      justify-content: center;
+      min-height: 32px;
+      padding: 0 10px;
       border: 0;
-      border-radius: 6px;
+      border-radius: 999px;
       background: transparent;
       color: var(--muted);
       cursor: pointer;
       font: inherit;
-      font-weight: 800;
-      text-align: left;
-    }
-    .scope-chip strong {
-      color: inherit;
-      font-size: 0.95rem;
+      font-size: 0.78rem;
+      font-weight: 850;
+      line-height: 1;
+      white-space: nowrap;
     }
     .scope-chip.is-active,
     .starred-toggle.is-active {
       background: var(--accent-strong);
       color: #ffffff;
-      box-shadow: 0 8px 22px var(--shadow);
+      box-shadow: none;
     }
     .starred-toggle {
-      grid-template-columns: auto;
       border: 1px solid var(--line);
       background: color-mix(in srgb, var(--panel) 78%, var(--bg));
       color: var(--accent);
@@ -239,16 +217,18 @@
       white-space: nowrap;
       border: 0;
     }
-    .archive-tools {
-      display: grid;
-      grid-template-columns: minmax(240px, 520px) minmax(0, 1fr);
-      gap: 14px;
-      align-items: center;
-      margin: 10px 0 4px;
-    }
     .archive-search {
       position: relative;
-      display: block;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-height: 58px;
+      box-sizing: border-box;
+      padding: 9px 10px 9px 48px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: color-mix(in srgb, var(--panel) 88%, var(--bg));
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45);
     }
     .archive-search::before,
     .archive-search::after {
@@ -257,7 +237,7 @@
       pointer-events: none;
     }
     .archive-search::before {
-      top: 15px;
+      top: calc(50% - 10px);
       left: 17px;
       width: 13px;
       height: 13px;
@@ -266,7 +246,7 @@
       opacity: 0.86;
     }
     .archive-search::after {
-      top: 29px;
+      top: calc(50% + 4px);
       left: 30px;
       width: 9px;
       height: 2px;
@@ -277,24 +257,39 @@
       opacity: 0.86;
     }
     .archive-search input {
-      width: 100%;
-      min-height: 48px;
+      flex: 1 1 auto;
+      min-width: 72px;
+      min-height: 36px;
       box-sizing: border-box;
-      padding: 0 16px 0 47px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: color-mix(in srgb, var(--panel) 88%, var(--bg));
+      padding: 0;
+      border: 0;
+      background: transparent;
       color: var(--ink);
       font: inherit;
+      font-size: 1.02rem;
       outline: none;
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45);
     }
     .archive-search input::placeholder {
       color: color-mix(in srgb, var(--muted) 78%, transparent);
     }
-    .archive-search input:focus {
+    .archive-search:focus-within {
       border-color: var(--accent);
       box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent);
+    }
+    .archive-filter-pills {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      flex: 0 0 auto;
+    }
+    .scope-switch {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: color-mix(in srgb, var(--panel) 72%, var(--bg));
     }
     .archive-search-status {
       justify-self: end;
@@ -384,8 +379,30 @@
       color: var(--muted);
       font-size: 0.95rem;
     }
+    @media (max-width: 640px) {
+      .archive-search {
+        gap: 8px;
+        padding: 8px 8px 8px 42px;
+      }
+      .archive-search::before { left: 14px; }
+      .archive-search::after { left: 27px; }
+      .archive-search input {
+        min-width: 54px;
+        font-size: 0.96rem;
+      }
+      .archive-filter-pills { gap: 4px; }
+      .scope-switch {
+        gap: 2px;
+        padding: 2px;
+      }
+      .scope-chip,
+      .starred-toggle {
+        min-height: 30px;
+        padding: 0 7px;
+        font-size: 0.72rem;
+      }
+    }
     @media (max-width: 760px) {
-      .archive-tools { grid-template-columns: 1fr; }
       .archive-search-status { justify-self: start; min-height: 1.3em; }
       .talk-card-player { grid-template-columns: 1fr; }
     }
@@ -403,8 +420,6 @@
     }
     @media (max-width: 520px) {
       main { padding: 34px 18px 56px; }
-      .scope-row { display: grid; grid-template-columns: 1fr; }
-      .scope-switch { grid-auto-flow: row; grid-auto-columns: auto; grid-template-columns: 1fr; width: auto; }
       .listen-grid { grid-template-columns: 1fr; }
     }
   </style>
@@ -422,17 +437,16 @@
       <p class="archive-kicker">Archive</p>
       <h2 id="archive-heading">Browse and listen</h2>
       <div class="archive-query">
-        <label class="archive-search" for="archive-search">
-          <span class="sr-only">Search talks</span>
+        <div class="archive-search" role="search">
+          <label class="sr-only" for="archive-search">Search talks</label>
           <input id="archive-search" type="search" autocomplete="off" spellcheck="false" placeholder="Search titles, descriptions, chapters">
-        </label>
-        <div class="scope-row">
-
-          <button class="starred-toggle" type="button" aria-pressed="false" data-starred-toggle>Starred</button>
+          <div class="archive-filter-pills">
+            <button class="starred-toggle" type="button" aria-pressed="false" data-starred-toggle>Starred</button>
+          </div>
         </div>
       </div>
       <div class="result-bar">
-        <p id="archive-summary" class="archive-copy">Play talks here or download the audio.</p>
+        <p id="archive-summary" class="archive-copy">Loading talks...</p>
         <p id="archive-search-status" class="archive-search-status" aria-live="polite"></p>
       </div>
       <section class="subscribe-current" aria-labelledby="subscribe-current-heading">

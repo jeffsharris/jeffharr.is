@@ -7,10 +7,12 @@
   const archiveSearch = document.getElementById('archive-search');
   const archiveSearchStatus = document.getElementById('archive-search-status');
   const starredToggle = document.querySelector('[data-starred-toggle]');
+  const scopeOptionButtons = Array.from(document.querySelectorAll('[data-scope-option]'));
   const copyStatus = document.getElementById('copy-status');
   const feedCopy = document.getElementById('feed-copy');
   const siteBaseUrl = config.siteBaseUrl || '';
   const scopeKeys = Object.keys(scopes);
+  const selectableScopeKeys = ['dharma', 'guided'].filter(key => scopes[key]);
   const stateByScope = new Map();
   const favoriteStateByKey = new Map();
   const favoriteRequests = new Set();
@@ -28,6 +30,35 @@
       query: params.get('q') || '',
       starred: params.get('starred') === '1',
     };
+  }
+
+  function selectedScopeOptions() {
+    if (!selectableScopeKeys.length) return new Set();
+    if (currentScope === 'all') return new Set(selectableScopeKeys);
+    if (selectableScopeKeys.includes(currentScope)) return new Set([currentScope]);
+    return new Set([selectableScopeKeys[0]]);
+  }
+
+  function scopeForSelectedOptions(selected) {
+    const keys = selectableScopeKeys.filter(key => selected.has(key));
+    if (!keys.length) return currentScope;
+    if (keys.length === selectableScopeKeys.length && scopes.all) return 'all';
+    return keys[0];
+  }
+
+  function toggleScopeOption(option) {
+    if (!selectableScopeKeys.includes(option)) return false;
+    const selected = selectedScopeOptions();
+    if (selected.has(option)) {
+      if (selected.size === 1) return false;
+      selected.delete(option);
+    } else {
+      selected.add(option);
+    }
+    const nextScope = scopeForSelectedOptions(selected);
+    if (nextScope === currentScope) return false;
+    currentScope = nextScope;
+    return true;
   }
 
   function mediaUrl(url) {
@@ -150,28 +181,16 @@
 
   function updateSearchStatus(key) {
     if (!archiveSearchStatus) return;
-    const state = stateFor(key);
-    if (!state.talks) {
-      archiveSearchStatus.textContent = '';
-      return;
-    }
-    const matches = activeTalks(state).length;
-    const total = state.talks.length;
-    const noun = matches === 1 ? 'match' : 'matches';
-    archiveSearchStatus.textContent = (searchQuery.trim() || starredOnly)
-      ? `${matches} of ${total} ${noun}`
-      : '';
+    archiveSearchStatus.textContent = '';
   }
 
   function updateSummary(key) {
     if (!archiveSummary) return;
     const scope = scopes[key] || {};
     const state = stateFor(key);
-    const count = activeTalks(state).length || Number(scope.count || 0);
-    const noun = count === 1 ? 'recording' : 'recordings';
-    archiveSummary.textContent = count
-      ? `${count} ${noun}. Play talks here or download the audio.`
-      : 'Play talks here or download the audio.';
+    const count = state.talks ? activeTalks(state).length : Number(scope.count || 0);
+    const noun = count === 1 ? 'talk' : 'talks';
+    archiveSummary.textContent = `${count} ${noun}`;
     updateSearchStatus(key);
     updateSubscribeLinks();
   }
@@ -361,8 +380,8 @@
     });
     if (feedCopy) {
       const state = stateFor(currentScope);
-      const count = activeTalks(state).length || Number(scopes[currentScope]?.count || 0);
-      const noun = count === 1 ? 'recording' : 'recordings';
+      const count = state.talks ? activeTalks(state).length : Number(scopes[currentScope]?.count || 0);
+      const noun = count === 1 ? 'talk' : 'talks';
       feedCopy.textContent = `${count} ${noun} in this RSS feed.`;
     }
   }
@@ -378,10 +397,11 @@
   }
 
   function updateControls() {
-    document.querySelectorAll('[data-scope]').forEach(button => {
-      const selected = button.dataset.scope === currentScope;
+    const selectedOptions = selectedScopeOptions();
+    scopeOptionButtons.forEach(button => {
+      const selected = selectedOptions.has(button.dataset.scopeOption);
       button.classList.toggle('is-active', selected);
-      button.setAttribute('aria-selected', String(selected));
+      button.setAttribute('aria-pressed', String(selected));
     });
     if (starredToggle) {
       starredToggle.classList.toggle('is-active', starredOnly);
@@ -420,10 +440,9 @@
     loadTalkArchive(currentScope);
   });
 
-  document.querySelectorAll('[data-scope]').forEach(button => {
+  scopeOptionButtons.forEach(button => {
     button.addEventListener('click', () => {
-      if (!scopes[button.dataset.scope]) return;
-      currentScope = button.dataset.scope;
+      if (!toggleScopeOption(button.dataset.scopeOption)) return;
       writeUrl({ replace: false });
       loadTalkArchive(currentScope);
     });

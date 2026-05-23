@@ -416,12 +416,64 @@ class PodcastMetadataTests(unittest.TestCase):
         self.assertIn("Search titles, descriptions, chapters", html)
         self.assertIn('id="archive-search-status"', html)
 
+    def test_landing_page_embeds_compact_filter_pills_when_guided_feed_exists(self):
+        dharma_talk = Talk(
+            id="audiodharma:1",
+            source="AudioDharma",
+            source_id="1",
+            title="Practice",
+            speaker="Matthew Brensilver",
+            published_at=datetime(2026, 1, 1, tzinfo=timezone.utc),
+            link="https://example.test/source",
+            audio_url="https://example.test/audio.mp3",
+        )
+        guided_talk = Talk(
+            id="audiodharma:2",
+            source="AudioDharma",
+            source_id="2",
+            title="Guided Meditation",
+            speaker="Matthew Brensilver",
+            published_at=datetime(2026, 1, 2, tzinfo=timezone.utc),
+            link="https://example.test/guided",
+            audio_url="https://example.test/guided.mp3",
+        )
+
+        html = render_index(
+            {
+                "site": {
+                    "title": "Matthew Brensilver Dharma Talks",
+                    "base_url": "https://jeffharr.is/dharma/brensilver/",
+                    "feed_url": "https://jeffharr.is/dharma/brensilver/feed.xml",
+                    "description": "Merged talks.",
+                    "guided_title": "Matthew Brensilver Guided Meditations",
+                    "guided_feed_url": "https://jeffharr.is/dharma/brensilver/guided-feed.xml",
+                }
+            },
+            [dharma_talk, guided_talk],
+            [dharma_talk],
+            [guided_talk],
+            {"title": "Matthew Brensilver Guided Meditations"},
+        )
+
+        self.assertIn('"defaultScope": "dharma"', html)
+        self.assertIn('data-scope-option="dharma">Talks</button>', html)
+        self.assertIn('data-scope-option="guided">Guided</button>', html)
+        self.assertIn('data-starred-toggle>Starred</button>', html)
+        self.assertNotIn("<strong>1</strong>", html)
+
     def test_archive_browser_searches_chapter_text(self):
         js = archive_browser_js()
 
         self.assertIn("chapterSearchText", js)
         self.assertIn("talk.chapters", js)
         self.assertIn("No recordings match this search.", js)
+
+    def test_archive_browser_keeps_at_least_one_scope_selected(self):
+        js = archive_browser_js()
+
+        self.assertIn("function toggleScopeOption(option)", js)
+        self.assertIn("if (selected.size === 1) return false;", js)
+        self.assertIn("if (keys.length === selectableScopeKeys.length && scopes.all) return 'all';", js)
 
     def test_archive_browser_revalidates_talk_json(self):
         js = archive_browser_js()

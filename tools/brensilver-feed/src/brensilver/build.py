@@ -370,7 +370,8 @@ def render_index(
             "count": len(all_talks),
         }
     }
-    scope_switch = ""
+    filter_pills = render_filter_pills(has_guided_feed)
+    default_scope = "all"
     if guided_site:
         guided_alternate_link = (
             f'  <link rel="alternate" type="application/rss+xml" '
@@ -386,11 +387,11 @@ def render_index(
             "url": "guided-talks.json",
             "count": len(guided_feed_talks),
         }
-        scope_switch = render_scope_switch(archive_scopes)
+        default_scope = "dharma"
     archive_config_json = json.dumps(
         {
             "corpus": corpus_slug,
-            "defaultScope": "all",
+            "defaultScope": default_scope,
             "feedEndpoint": "/api/feeds/dharma.xml",
             "siteBaseUrl": str(site.get("base_url") or ""),
             "talkPathPrefix": "talks/",
@@ -493,55 +494,33 @@ def render_index(
     }}
     .archive-query {{
       display: grid;
-      gap: 14px;
-      margin: 20px 0 14px;
-    }}
-    .scope-row {{
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      align-items: center;
-      justify-content: space-between;
-    }}
-    .scope-switch {{
-      display: inline-grid;
-      grid-auto-flow: column;
-      grid-auto-columns: minmax(118px, 1fr);
-      gap: 6px;
-      padding: 6px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: color-mix(in srgb, var(--panel) 72%, var(--bg));
+      margin: 20px 0 12px;
     }}
     .scope-chip,
     .starred-toggle {{
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) auto;
+      display: inline-flex;
       align-items: center;
-      gap: 10px;
-      min-height: 46px;
-      padding: 0 12px;
+      justify-content: center;
+      min-height: 32px;
+      padding: 0 10px;
       border: 0;
-      border-radius: 6px;
+      border-radius: 999px;
       background: transparent;
       color: var(--muted);
       cursor: pointer;
       font: inherit;
-      font-weight: 800;
-      text-align: left;
-    }}
-    .scope-chip strong {{
-      color: inherit;
-      font-size: 0.95rem;
+      font-size: 0.78rem;
+      font-weight: 850;
+      line-height: 1;
+      white-space: nowrap;
     }}
     .scope-chip.is-active,
     .starred-toggle.is-active {{
       background: var(--accent-strong);
       color: #ffffff;
-      box-shadow: 0 8px 22px var(--shadow);
+      box-shadow: none;
     }}
     .starred-toggle {{
-      grid-template-columns: auto;
       border: 1px solid var(--line);
       background: color-mix(in srgb, var(--panel) 78%, var(--bg));
       color: var(--accent);
@@ -624,8 +603,6 @@ def render_index(
     }}
     @media (max-width: 520px) {{
       main {{ padding: 34px 18px 56px; }}
-      .scope-row {{ display: grid; grid-template-columns: 1fr; }}
-      .scope-switch {{ grid-auto-flow: row; grid-auto-columns: auto; grid-template-columns: 1fr; width: auto; }}
       .listen-grid {{ grid-template-columns: 1fr; }}
     }}
   </style>
@@ -643,17 +620,14 @@ def render_index(
       <p class="archive-kicker">Archive</p>
       <h2 id="archive-heading">Browse and listen</h2>
       <div class="archive-query">
-        <label class="archive-search" for="archive-search">
-          <span class="sr-only">Search talks</span>
+        <div class="archive-search" role="search">
+          <label class="sr-only" for="archive-search">Search talks</label>
           <input id="archive-search" type="search" autocomplete="off" spellcheck="false" placeholder="Search titles, descriptions, chapters">
-        </label>
-        <div class="scope-row">
-{scope_switch}
-          <button class="starred-toggle" type="button" aria-pressed="false" data-starred-toggle>Starred</button>
+{filter_pills}
         </div>
       </div>
       <div class="result-bar">
-        <p id="archive-summary" class="archive-copy">Play talks here or download the audio.</p>
+        <p id="archive-summary" class="archive-copy">Loading talks...</p>
         <p id="archive-search-status" class="archive-search-status" aria-live="polite"></p>
       </div>
       <section class="subscribe-current" aria-labelledby="subscribe-current-heading">
@@ -696,21 +670,16 @@ def render_index(
 """
 
 
-def render_scope_switch(scopes: Dict[str, Dict[str, object]]) -> str:
-    buttons = []
-    for key in ["all", "dharma", "guided"]:
-        if key not in scopes:
-            continue
-        scope = scopes[key]
-        active = key == "all"
-        buttons.append(
-            f"""          <button class="scope-chip{' is-active' if active else ''}" type="button" role="tab" aria-selected="{str(active).lower()}" data-scope="{_escape(key)}">
-            <span>{_escape(str(scope["title"]))}</span>
-            <strong>{int(scope["count"])}</strong>
-          </button>"""
-        )
-    return f"""          <div class="scope-switch" role="tablist" aria-label="Choose archive scope">
-{chr(10).join(buttons)}
+def render_filter_pills(has_guided_feed: bool) -> str:
+    scope_switch = ""
+    if has_guided_feed:
+        scope_switch = """          <div class="scope-switch" role="group" aria-label="Recording type">
+            <button class="scope-chip is-active" type="button" aria-pressed="true" data-scope-option="dharma">Talks</button>
+            <button class="scope-chip" type="button" aria-pressed="false" data-scope-option="guided">Guided</button>
+          </div>
+"""
+    return f"""          <div class="archive-filter-pills">
+{scope_switch}            <button class="starred-toggle" type="button" aria-pressed="false" data-starred-toggle>Starred</button>
           </div>"""
 
 
@@ -751,16 +720,18 @@ def landing_archive_css() -> str:
       white-space: nowrap;
       border: 0;
     }
-    .archive-tools {
-      display: grid;
-      grid-template-columns: minmax(240px, 520px) minmax(0, 1fr);
-      gap: 14px;
-      align-items: center;
-      margin: 10px 0 4px;
-    }
     .archive-search {
       position: relative;
-      display: block;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-height: 58px;
+      box-sizing: border-box;
+      padding: 9px 10px 9px 48px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: color-mix(in srgb, var(--panel) 88%, var(--bg));
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45);
     }
     .archive-search::before,
     .archive-search::after {
@@ -769,7 +740,7 @@ def landing_archive_css() -> str:
       pointer-events: none;
     }
     .archive-search::before {
-      top: 15px;
+      top: calc(50% - 10px);
       left: 17px;
       width: 13px;
       height: 13px;
@@ -778,7 +749,7 @@ def landing_archive_css() -> str:
       opacity: 0.86;
     }
     .archive-search::after {
-      top: 29px;
+      top: calc(50% + 4px);
       left: 30px;
       width: 9px;
       height: 2px;
@@ -789,24 +760,39 @@ def landing_archive_css() -> str:
       opacity: 0.86;
     }
     .archive-search input {
-      width: 100%;
-      min-height: 48px;
+      flex: 1 1 auto;
+      min-width: 72px;
+      min-height: 36px;
       box-sizing: border-box;
-      padding: 0 16px 0 47px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: color-mix(in srgb, var(--panel) 88%, var(--bg));
+      padding: 0;
+      border: 0;
+      background: transparent;
       color: var(--ink);
       font: inherit;
+      font-size: 1.02rem;
       outline: none;
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45);
     }
     .archive-search input::placeholder {
       color: color-mix(in srgb, var(--muted) 78%, transparent);
     }
-    .archive-search input:focus {
+    .archive-search:focus-within {
       border-color: var(--accent);
       box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent);
+    }
+    .archive-filter-pills {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      flex: 0 0 auto;
+    }
+    .scope-switch {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: color-mix(in srgb, var(--panel) 72%, var(--bg));
     }
     .archive-search-status {
       justify-self: end;
@@ -896,8 +882,30 @@ def landing_archive_css() -> str:
       color: var(--muted);
       font-size: 0.95rem;
     }
+    @media (max-width: 640px) {
+      .archive-search {
+        gap: 8px;
+        padding: 8px 8px 8px 42px;
+      }
+      .archive-search::before { left: 14px; }
+      .archive-search::after { left: 27px; }
+      .archive-search input {
+        min-width: 54px;
+        font-size: 0.96rem;
+      }
+      .archive-filter-pills { gap: 4px; }
+      .scope-switch {
+        gap: 2px;
+        padding: 2px;
+      }
+      .scope-chip,
+      .starred-toggle {
+        min-height: 30px;
+        padding: 0 7px;
+        font-size: 0.72rem;
+      }
+    }
     @media (max-width: 760px) {
-      .archive-tools { grid-template-columns: 1fr; }
       .archive-search-status { justify-self: start; min-height: 1.3em; }
       .talk-card-player { grid-template-columns: 1fr; }
     }
@@ -1012,10 +1020,12 @@ def archive_browser_js() -> str:
   const archiveSearch = document.getElementById('archive-search');
   const archiveSearchStatus = document.getElementById('archive-search-status');
   const starredToggle = document.querySelector('[data-starred-toggle]');
+  const scopeOptionButtons = Array.from(document.querySelectorAll('[data-scope-option]'));
   const copyStatus = document.getElementById('copy-status');
   const feedCopy = document.getElementById('feed-copy');
   const siteBaseUrl = config.siteBaseUrl || '';
   const scopeKeys = Object.keys(scopes);
+  const selectableScopeKeys = ['dharma', 'guided'].filter(key => scopes[key]);
   const stateByScope = new Map();
   const favoriteStateByKey = new Map();
   const favoriteRequests = new Set();
@@ -1033,6 +1043,35 @@ def archive_browser_js() -> str:
       query: params.get('q') || '',
       starred: params.get('starred') === '1',
     };
+  }
+
+  function selectedScopeOptions() {
+    if (!selectableScopeKeys.length) return new Set();
+    if (currentScope === 'all') return new Set(selectableScopeKeys);
+    if (selectableScopeKeys.includes(currentScope)) return new Set([currentScope]);
+    return new Set([selectableScopeKeys[0]]);
+  }
+
+  function scopeForSelectedOptions(selected) {
+    const keys = selectableScopeKeys.filter(key => selected.has(key));
+    if (!keys.length) return currentScope;
+    if (keys.length === selectableScopeKeys.length && scopes.all) return 'all';
+    return keys[0];
+  }
+
+  function toggleScopeOption(option) {
+    if (!selectableScopeKeys.includes(option)) return false;
+    const selected = selectedScopeOptions();
+    if (selected.has(option)) {
+      if (selected.size === 1) return false;
+      selected.delete(option);
+    } else {
+      selected.add(option);
+    }
+    const nextScope = scopeForSelectedOptions(selected);
+    if (nextScope === currentScope) return false;
+    currentScope = nextScope;
+    return true;
   }
 
   function mediaUrl(url) {
@@ -1155,28 +1194,16 @@ def archive_browser_js() -> str:
 
   function updateSearchStatus(key) {
     if (!archiveSearchStatus) return;
-    const state = stateFor(key);
-    if (!state.talks) {
-      archiveSearchStatus.textContent = '';
-      return;
-    }
-    const matches = activeTalks(state).length;
-    const total = state.talks.length;
-    const noun = matches === 1 ? 'match' : 'matches';
-    archiveSearchStatus.textContent = (searchQuery.trim() || starredOnly)
-      ? `${matches} of ${total} ${noun}`
-      : '';
+    archiveSearchStatus.textContent = '';
   }
 
   function updateSummary(key) {
     if (!archiveSummary) return;
     const scope = scopes[key] || {};
     const state = stateFor(key);
-    const count = activeTalks(state).length || Number(scope.count || 0);
-    const noun = count === 1 ? 'recording' : 'recordings';
-    archiveSummary.textContent = count
-      ? `${count} ${noun}. Play talks here or download the audio.`
-      : 'Play talks here or download the audio.';
+    const count = state.talks ? activeTalks(state).length : Number(scope.count || 0);
+    const noun = count === 1 ? 'talk' : 'talks';
+    archiveSummary.textContent = `${count} ${noun}`;
     updateSearchStatus(key);
     updateSubscribeLinks();
   }
@@ -1366,8 +1393,8 @@ def archive_browser_js() -> str:
     });
     if (feedCopy) {
       const state = stateFor(currentScope);
-      const count = activeTalks(state).length || Number(scopes[currentScope]?.count || 0);
-      const noun = count === 1 ? 'recording' : 'recordings';
+      const count = state.talks ? activeTalks(state).length : Number(scopes[currentScope]?.count || 0);
+      const noun = count === 1 ? 'talk' : 'talks';
       feedCopy.textContent = `${count} ${noun} in this RSS feed.`;
     }
   }
@@ -1383,10 +1410,11 @@ def archive_browser_js() -> str:
   }
 
   function updateControls() {
-    document.querySelectorAll('[data-scope]').forEach(button => {
-      const selected = button.dataset.scope === currentScope;
+    const selectedOptions = selectedScopeOptions();
+    scopeOptionButtons.forEach(button => {
+      const selected = selectedOptions.has(button.dataset.scopeOption);
       button.classList.toggle('is-active', selected);
-      button.setAttribute('aria-selected', String(selected));
+      button.setAttribute('aria-pressed', String(selected));
     });
     if (starredToggle) {
       starredToggle.classList.toggle('is-active', starredOnly);
@@ -1425,10 +1453,9 @@ def archive_browser_js() -> str:
     loadTalkArchive(currentScope);
   });
 
-  document.querySelectorAll('[data-scope]').forEach(button => {
+  scopeOptionButtons.forEach(button => {
     button.addEventListener('click', () => {
-      if (!scopes[button.dataset.scope]) return;
-      currentScope = button.dataset.scope;
+      if (!toggleScopeOption(button.dataset.scopeOption)) return;
       writeUrl({ replace: false });
       loadTalkArchive(currentScope);
     });
