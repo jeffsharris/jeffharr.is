@@ -1323,7 +1323,7 @@ def archive_browser_js() -> str:
     try {
       for (let index = 0; index < refs.length; index += 500) {
         const chunk = refs.slice(index, index + 500);
-        const response = await fetch('/api/favorites/state', {
+        const response = await fetch('/api/public/favorites/state', {
           method: 'POST',
           credentials: 'include',
           headers: {

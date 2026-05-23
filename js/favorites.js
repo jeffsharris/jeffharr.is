@@ -3,7 +3,7 @@
 
   const SESSION_URL = '/api/admin/session';
   const LOGOUT_URL = '/cdn-cgi/access/logout';
-  const STATE_URL = '/api/favorites/state';
+  const STATE_URL = '/api/public/favorites/state';
   const FAVORITES_URL = '/api/favorites';
   const SIGNED_OUT_NOTICE_KEY = 'jeffharr.adminSignedOut';
   const ADMIN_SESSION_CACHE_KEY = 'jeffharr.adminSession.v1';

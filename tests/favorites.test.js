@@ -6,6 +6,7 @@ import {
   removeFavorite
 } from '../functions/api/content-library/list-store.js';
 import { onRequest as favoriteStateRequest } from '../functions/api/favorites/state.js';
+import { onRequest as publicFavoriteStateRequest } from '../functions/api/public/favorites/state.js';
 import {
   poemCanonicalKey,
   sharePageCanonicalKey
@@ -85,6 +86,33 @@ test('favorite state API is public read-only', async () => {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({ refs: [{ key: 'example', itemId: 'itm_1' }] })
+    }),
+    env: { CONTENT_DB: db }
+  });
+  const body = await response.json();
+
+  assert.equal(response.status, 200);
+  assert.equal(body.authenticated, false);
+  assert.equal(body.states[0].favorited, true);
+  assert.equal(body.states[0].itemId, 'itm_1');
+});
+
+test('public favorite state alias returns read-only state outside protected favorites routes', async () => {
+  const db = createFavoritesDb();
+  await addFavorite({
+    db,
+    payload: { itemId: 'itm_1' },
+    env: {},
+    requestUrl: 'https://jeffharr.is/read-later/'
+  });
+
+  const response = await publicFavoriteStateRequest({
+    request: new Request('https://jeffharr.is/api/public/favorites/state', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({
+        refs: [{ key: 'example', itemId: 'itm_1' }]
+      })
     }),
     env: { CONTENT_DB: db }
   });
