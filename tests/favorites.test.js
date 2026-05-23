@@ -124,6 +124,52 @@ test('public favorite state alias returns read-only state outside protected favo
   assert.equal(body.states[0].itemId, 'itm_1');
 });
 
+test('public favorite state resolves Dharma refs in bulk without static talk lookup', async () => {
+  const db = createFavoritesDb();
+  db.items.set('itm_dharma_1', {
+    id: 'itm_dharma_1',
+    kind: 'dharma_talk',
+    canonical_key: 'dharma_talk:burbea:Dharma Seed:62457',
+    canonical_url: 'https://jeffharr.is/dharma/burbea/talks/dharmaseed-62457/',
+    source_url: 'https://dharmaseed.org/talks/62457/',
+    title: 'Perfection',
+    extra_json: JSON.stringify({ corpus: 'burbea', sourceId: '62457' })
+  });
+  db.entries.set('lst_starred:itm_dharma_1', {
+    id: 'fav_dharma_1',
+    list_id: 'lst_starred',
+    item_id: 'itm_dharma_1',
+    status: 'active',
+    added_at: '2026-01-01T00:00:00.000Z',
+    updated_at: '2026-01-01T00:00:00.000Z'
+  });
+
+  const response = await publicFavoriteStateRequest({
+    request: new Request('https://jeffharr.is/api/public/favorites/state', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({
+        refs: [
+          {
+            key: 'dharma_talk:burbea:dharmaseed-62457',
+            ref: { kind: 'dharma_talk', corpus: 'burbea', id: 'dharmaseed-62457' }
+          },
+          {
+            key: 'dharma_talk:burbea:dharmaseed-99999',
+            ref: { kind: 'dharma_talk', corpus: 'burbea', id: 'dharmaseed-99999' }
+          }
+        ]
+      })
+    }),
+    env: { CONTENT_DB: db }
+  });
+  const body = await response.json();
+
+  assert.equal(response.status, 200);
+  assert.equal(body.states[0].favorited, true);
+  assert.equal(body.states[1].favorited, false);
+});
+
 test('list index hides private starred list for anonymous visitors', async () => {
   const db = createListApiDb();
   const response = await listIndexRequest({
@@ -172,10 +218,11 @@ function createFavoritesDb() {
     entries: new Map(),
     prepare(sql) {
       return {
+        all: async () => allForSql(db, sql),
         bind: (...args) => ({
           first: async () => firstForSql(db, sql, args),
           run: async () => runForSql(db, sql, args),
-          all: async () => ({ results: [] })
+          all: async () => allForSql(db, sql)
         })
       };
     }
@@ -255,6 +302,26 @@ function firstForSql(db, sql, args) {
     return entry && item ? { ...entry, canonical_key: item.canonical_key } : null;
   }
   throw new Error(`Unhandled first SQL: ${sql}`);
+}
+
+function allForSql(db, sql) {
+  if (sql.includes("i.kind = 'dharma_talk'")) {
+    const results = [];
+    for (const entry of db.entries.values()) {
+      const item = db.items.get(entry.item_id);
+      if (entry.list_id !== 'lst_starred' || entry.status !== 'active' || item?.kind !== 'dharma_talk') {
+        continue;
+      }
+      results.push({
+        canonical_key: item.canonical_key,
+        canonical_url: item.canonical_url,
+        source_url: item.source_url,
+        extra_json: item.extra_json || '{}'
+      });
+    }
+    return { results };
+  }
+  return { results: [] };
 }
 
 function runForSql(db, sql, args) {
