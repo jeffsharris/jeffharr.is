@@ -357,6 +357,17 @@ def render_index(
         or re.sub(r"\s+(Dharma Talks|Talks|Podcast Feed|Podcast)$", "", str(site["title"]))
     ).strip()
     portrait_src = html_media_url(site, site.get("image_url"))
+    social_image_url = absolute_media_url(site, site.get("image_url"))
+    page_url = str(site.get("base_url") or "")
+    page_description = str(site.get("description") or f"Talks and teachings from {page_title}.")
+    social_image_meta = (
+        f"""  <meta property="og:image" content="{_escape(social_image_url)}">
+  <meta property="og:image:secure_url" content="{_escape(social_image_url)}">
+  <meta name="twitter:image" content="{_escape(social_image_url)}">
+"""
+        if social_image_url
+        else ""
+    )
     has_guided_feed = guided_site is not None
     corpus_slug = corpus_slug_from_site(site)
     guided_alternate_link = ""
@@ -409,6 +420,16 @@ def render_index(
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{_escape(page_title)}</title>
+  <meta name="description" content="{_escape(page_description)}">
+  <link rel="canonical" href="{_escape(page_url)}">
+  <meta property="og:title" content="{_escape(page_title)}">
+  <meta property="og:description" content="{_escape(page_description)}">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="{_escape(page_url)}">
+{social_image_meta.rstrip()}
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{_escape(page_title)}">
+  <meta name="twitter:description" content="{_escape(page_description)}">
   <link rel="alternate" type="application/rss+xml" title="{_escape(site["title"])}" href="feed.xml">
 {guided_alternate_link}  <style>
     :root {{
@@ -455,6 +476,20 @@ def render_index(
       margin: 0 auto;
       padding: 56px 22px 72px;
     }}
+    .collection-link {{
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      margin: 0 0 28px;
+      color: var(--muted);
+      font-size: 0.86rem;
+      font-weight: 750;
+      text-decoration: none;
+      transition: color 180ms ease;
+    }}
+    .collection-link:hover {{
+      color: var(--accent);
+    }}
     h1 {{
       margin: 0;
       font-size: clamp(2.7rem, 8vw, 5.6rem);
@@ -496,8 +531,7 @@ def render_index(
       display: grid;
       margin: 20px 0 12px;
     }}
-    .scope-chip,
-    .starred-toggle {{
+    .scope-chip {{
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -514,16 +548,10 @@ def render_index(
       line-height: 1;
       white-space: nowrap;
     }}
-    .scope-chip.is-active,
-    .starred-toggle.is-active {{
+    .scope-chip.is-active {{
       background: var(--accent-strong);
       color: #ffffff;
       box-shadow: none;
-    }}
-    .starred-toggle {{
-      border: 1px solid var(--line);
-      background: color-mix(in srgb, var(--panel) 78%, var(--bg));
-      color: var(--accent);
     }}
     .result-bar {{
       display: flex;
@@ -610,6 +638,7 @@ def render_index(
 <body>
   <div class="page-shell">
   <main>
+    <a class="collection-link" href="/dharma/" aria-label="Back to Dharma teachers">&larr; Dharma teachers</a>
     <section class="hero" aria-labelledby="page-title">
       <div>
         <h1 id="page-title">{_escape(page_title)}</h1>
@@ -663,7 +692,7 @@ def render_index(
   <script>
     window.TALK_ARCHIVE_CONFIG = {archive_config_json};
   </script>
-  <script src="archive-browser.js"></script>
+  <script src="archive-browser.js?v=2"></script>
   <script src="/js/admin-presence.js?v=2"></script>
 </body>
 </html>
@@ -671,15 +700,13 @@ def render_index(
 
 
 def render_filter_pills(has_guided_feed: bool) -> str:
-    scope_switch = ""
-    if has_guided_feed:
-        scope_switch = """          <div class="scope-switch" role="group" aria-label="Recording type">
+    if not has_guided_feed:
+        return ""
+    return """          <div class="archive-filter-pills">
+          <div class="scope-switch" role="group" aria-label="Recording type">
             <button class="scope-chip is-active" type="button" aria-pressed="true" data-scope-option="dharma">Talks</button>
             <button class="scope-chip" type="button" aria-pressed="false" data-scope-option="guided">Guided</button>
           </div>
-"""
-    return f"""          <div class="archive-filter-pills">
-{scope_switch}            <button class="starred-toggle" type="button" aria-pressed="false" data-starred-toggle>Starred</button>
           </div>"""
 
 
@@ -902,8 +929,7 @@ def landing_archive_css() -> str:
         gap: 2px;
         padding: 2px;
       }
-      .scope-chip,
-      .starred-toggle {
+      .scope-chip {
         min-height: 30px;
         padding: 0 7px;
         font-size: 0.72rem;
@@ -1025,7 +1051,6 @@ def archive_browser_js() -> str:
   const archiveSummary = document.getElementById('archive-summary');
   const archiveSearch = document.getElementById('archive-search');
   const archiveSearchStatus = document.getElementById('archive-search-status');
-  const starredToggle = document.querySelector('[data-starred-toggle]');
   const scopeOptionButtons = Array.from(document.querySelectorAll('[data-scope-option]'));
   const copyStatus = document.getElementById('copy-status');
   const feedCopy = document.getElementById('feed-copy');
@@ -1038,16 +1063,18 @@ def archive_browser_js() -> str:
   const talkBatchSize = 12;
   let currentScope = config.defaultScope || scopeKeys[0] || '';
   let searchQuery = '';
-  let starredOnly = false;
   let observer = null;
 
   function initialStateFromUrl() {
     const params = new URLSearchParams(location.search);
     const requestedScope = params.get('scope') || currentScope;
+    let query = params.get('q') || '';
+    if (params.get('starred') === '1' && !parseSearchDirectives(query).starred) {
+      query = `${query} is:starred`.trim();
+    }
     return {
       scope: scopes[requestedScope] ? requestedScope : currentScope,
-      query: params.get('q') || '',
-      starred: params.get('starred') === '1',
+      query,
     };
   }
 
@@ -1131,6 +1158,25 @@ def archive_browser_js() -> str:
       .toLowerCase();
   }
 
+  function parseSearchDirectives(value) {
+    const rawTokens = String(value || '').trim().split(/\\s+/).filter(Boolean);
+    const terms = [];
+    let starred = false;
+    for (const token of rawTokens) {
+      if (token.toLowerCase() === 'is:starred') {
+        starred = true;
+        continue;
+      }
+      terms.push(token);
+    }
+    const query = terms.join(' ').trim();
+    return {
+      query,
+      terms: normalizeSearch(query).split(/\\s+/).filter(Boolean),
+      starred,
+    };
+  }
+
   function chapterSearchText(talk) {
     const chapters = Array.isArray(talk.chapters) ? talk.chapters : [];
     return chapters
@@ -1184,11 +1230,12 @@ def archive_browser_js() -> str:
       state.nextIndex = 0;
       return;
     }
-    const terms = normalizeSearch(searchQuery).split(/\\s+/).filter(Boolean);
+    const search = parseSearchDirectives(searchQuery);
+    const terms = search.terms;
     let talks = terms.length
       ? state.talks.filter(talk => terms.every(term => talkSearchText(talk).includes(term)))
       : state.talks;
-    if (starredOnly) {
+    if (search.starred) {
       await ensureFavoriteStates(state.talks);
       talks = talks.filter(isTalkFavorited);
     } else {
@@ -1220,7 +1267,7 @@ def archive_browser_js() -> str:
     const fragment = document.createDocumentFragment();
     const talks = activeTalks(state);
     if (!talks.length) {
-      talkLoader.textContent = searchQuery.trim() || starredOnly ? 'No recordings match this search.' : 'No recordings are available yet.';
+      talkLoader.textContent = searchQuery.trim() ? 'No recordings match this search.' : 'No recordings are available yet.';
       updateSearchStatus(key);
       updateSubscribeLinks();
       return;
@@ -1280,7 +1327,7 @@ def archive_browser_js() -> str:
     state.nextIndex = end;
     talkList.appendChild(fragment);
     talkLoader.textContent = state.nextIndex >= talks.length
-      ? (searchQuery.trim() || starredOnly ? 'End of matches' : 'End of archive')
+      ? (searchQuery.trim() ? 'End of matches' : 'End of archive')
       : 'Loading more talks...';
     updateSearchStatus(key);
     updateSubscribeLinks();
@@ -1380,10 +1427,11 @@ def archive_browser_js() -> str:
   function currentFeedUrl() {
     const endpoint = config.feedEndpoint || '/api/feeds/dharma.xml';
     const url = new URL(endpoint, location.origin);
+    const search = parseSearchDirectives(searchQuery);
     url.searchParams.set('corpus', config.corpus || location.pathname.match(/^\\/dharma\\/([^/]+)/)?.[1] || '');
     url.searchParams.set('scope', currentScope || 'all');
-    if (searchQuery.trim()) url.searchParams.set('q', searchQuery.trim());
-    if (starredOnly) url.searchParams.set('starred', '1');
+    if (search.query) url.searchParams.set('q', search.query);
+    if (search.starred) url.searchParams.set('starred', '1');
     return url.href;
   }
 
@@ -1422,10 +1470,6 @@ def archive_browser_js() -> str:
       button.classList.toggle('is-active', selected);
       button.setAttribute('aria-pressed', String(selected));
     });
-    if (starredToggle) {
-      starredToggle.classList.toggle('is-active', starredOnly);
-      starredToggle.setAttribute('aria-pressed', String(starredOnly));
-    }
     if (archiveSearch && archiveSearch.value !== searchQuery) {
       archiveSearch.value = searchQuery;
     }
@@ -1445,11 +1489,7 @@ def archive_browser_js() -> str:
     } else {
       url.searchParams.delete('q');
     }
-    if (starredOnly) {
-      url.searchParams.set('starred', '1');
-    } else {
-      url.searchParams.delete('starred');
-    }
+    url.searchParams.delete('starred');
     history[replace ? 'replaceState' : 'pushState'](null, '', url);
   }
 
@@ -1467,12 +1507,6 @@ def archive_browser_js() -> str:
     });
   });
 
-  starredToggle?.addEventListener('click', () => {
-    starredOnly = !starredOnly;
-    writeUrl({ replace: false });
-    loadTalkArchive(currentScope);
-  });
-
   document.querySelectorAll('[data-copy-current-feed]').forEach(button => {
     button.addEventListener('click', () => copyCurrentFeed(button));
   });
@@ -1481,14 +1515,13 @@ def archive_browser_js() -> str:
     const state = initialStateFromUrl();
     currentScope = state.scope;
     searchQuery = state.query;
-    starredOnly = state.starred;
     loadTalkArchive(currentScope);
   });
 
   window.addEventListener('favorites:changed', event => {
     const state = event.detail?.state;
     if (event.detail?.key && state) favoriteStateByKey.set(event.detail.key, state);
-    if (starredOnly) loadTalkArchive(currentScope);
+    if (parseSearchDirectives(searchQuery).starred) loadTalkArchive(currentScope);
   });
 
   window.talkArchiveBrowser = {
@@ -1510,7 +1543,6 @@ def archive_browser_js() -> str:
   const initial = initialStateFromUrl();
   currentScope = initial.scope;
   searchQuery = initial.query;
-  starredOnly = initial.starred;
   updateControls();
   if (archiveSearch) archiveSearch.value = searchQuery;
 

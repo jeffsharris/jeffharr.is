@@ -6,7 +6,6 @@
   const archiveSummary = document.getElementById('archive-summary');
   const archiveSearch = document.getElementById('archive-search');
   const archiveSearchStatus = document.getElementById('archive-search-status');
-  const starredToggle = document.querySelector('[data-starred-toggle]');
   const scopeOptionButtons = Array.from(document.querySelectorAll('[data-scope-option]'));
   const copyStatus = document.getElementById('copy-status');
   const feedCopy = document.getElementById('feed-copy');
@@ -19,16 +18,18 @@
   const talkBatchSize = 12;
   let currentScope = config.defaultScope || scopeKeys[0] || '';
   let searchQuery = '';
-  let starredOnly = false;
   let observer = null;
 
   function initialStateFromUrl() {
     const params = new URLSearchParams(location.search);
     const requestedScope = params.get('scope') || currentScope;
+    let query = params.get('q') || '';
+    if (params.get('starred') === '1' && !parseSearchDirectives(query).starred) {
+      query = `${query} is:starred`.trim();
+    }
     return {
       scope: scopes[requestedScope] ? requestedScope : currentScope,
-      query: params.get('q') || '',
-      starred: params.get('starred') === '1',
+      query,
     };
   }
 
@@ -112,6 +113,25 @@
       .toLowerCase();
   }
 
+  function parseSearchDirectives(value) {
+    const rawTokens = String(value || '').trim().split(/\s+/).filter(Boolean);
+    const terms = [];
+    let starred = false;
+    for (const token of rawTokens) {
+      if (token.toLowerCase() === 'is:starred') {
+        starred = true;
+        continue;
+      }
+      terms.push(token);
+    }
+    const query = terms.join(' ').trim();
+    return {
+      query,
+      terms: normalizeSearch(query).split(/\s+/).filter(Boolean),
+      starred,
+    };
+  }
+
   function chapterSearchText(talk) {
     const chapters = Array.isArray(talk.chapters) ? talk.chapters : [];
     return chapters
@@ -165,11 +185,12 @@
       state.nextIndex = 0;
       return;
     }
-    const terms = normalizeSearch(searchQuery).split(/\s+/).filter(Boolean);
+    const search = parseSearchDirectives(searchQuery);
+    const terms = search.terms;
     let talks = terms.length
       ? state.talks.filter(talk => terms.every(term => talkSearchText(talk).includes(term)))
       : state.talks;
-    if (starredOnly) {
+    if (search.starred) {
       await ensureFavoriteStates(state.talks);
       talks = talks.filter(isTalkFavorited);
     } else {
@@ -201,7 +222,7 @@
     const fragment = document.createDocumentFragment();
     const talks = activeTalks(state);
     if (!talks.length) {
-      talkLoader.textContent = searchQuery.trim() || starredOnly ? 'No recordings match this search.' : 'No recordings are available yet.';
+      talkLoader.textContent = searchQuery.trim() ? 'No recordings match this search.' : 'No recordings are available yet.';
       updateSearchStatus(key);
       updateSubscribeLinks();
       return;
@@ -261,7 +282,7 @@
     state.nextIndex = end;
     talkList.appendChild(fragment);
     talkLoader.textContent = state.nextIndex >= talks.length
-      ? (searchQuery.trim() || starredOnly ? 'End of matches' : 'End of archive')
+      ? (searchQuery.trim() ? 'End of matches' : 'End of archive')
       : 'Loading more talks...';
     updateSearchStatus(key);
     updateSubscribeLinks();
@@ -361,10 +382,11 @@
   function currentFeedUrl() {
     const endpoint = config.feedEndpoint || '/api/feeds/dharma.xml';
     const url = new URL(endpoint, location.origin);
+    const search = parseSearchDirectives(searchQuery);
     url.searchParams.set('corpus', config.corpus || location.pathname.match(/^\/dharma\/([^/]+)/)?.[1] || '');
     url.searchParams.set('scope', currentScope || 'all');
-    if (searchQuery.trim()) url.searchParams.set('q', searchQuery.trim());
-    if (starredOnly) url.searchParams.set('starred', '1');
+    if (search.query) url.searchParams.set('q', search.query);
+    if (search.starred) url.searchParams.set('starred', '1');
     return url.href;
   }
 
@@ -403,10 +425,6 @@
       button.classList.toggle('is-active', selected);
       button.setAttribute('aria-pressed', String(selected));
     });
-    if (starredToggle) {
-      starredToggle.classList.toggle('is-active', starredOnly);
-      starredToggle.setAttribute('aria-pressed', String(starredOnly));
-    }
     if (archiveSearch && archiveSearch.value !== searchQuery) {
       archiveSearch.value = searchQuery;
     }
@@ -426,11 +444,7 @@
     } else {
       url.searchParams.delete('q');
     }
-    if (starredOnly) {
-      url.searchParams.set('starred', '1');
-    } else {
-      url.searchParams.delete('starred');
-    }
+    url.searchParams.delete('starred');
     history[replace ? 'replaceState' : 'pushState'](null, '', url);
   }
 
@@ -448,12 +462,6 @@
     });
   });
 
-  starredToggle?.addEventListener('click', () => {
-    starredOnly = !starredOnly;
-    writeUrl({ replace: false });
-    loadTalkArchive(currentScope);
-  });
-
   document.querySelectorAll('[data-copy-current-feed]').forEach(button => {
     button.addEventListener('click', () => copyCurrentFeed(button));
   });
@@ -462,14 +470,13 @@
     const state = initialStateFromUrl();
     currentScope = state.scope;
     searchQuery = state.query;
-    starredOnly = state.starred;
     loadTalkArchive(currentScope);
   });
 
   window.addEventListener('favorites:changed', event => {
     const state = event.detail?.state;
     if (event.detail?.key && state) favoriteStateByKey.set(event.detail.key, state);
-    if (starredOnly) loadTalkArchive(currentScope);
+    if (parseSearchDirectives(searchQuery).starred) loadTalkArchive(currentScope);
   });
 
   window.talkArchiveBrowser = {
@@ -491,7 +498,6 @@
   const initial = initialStateFromUrl();
   currentScope = initial.scope;
   searchQuery = initial.query;
-  starredOnly = initial.starred;
   updateControls();
   if (archiveSearch) archiveSearch.value = searchQuery;
 

@@ -458,7 +458,7 @@ class PodcastMetadataTests(unittest.TestCase):
         self.assertIn('"defaultScope": "dharma"', html)
         self.assertIn('data-scope-option="dharma">Talks</button>', html)
         self.assertIn('data-scope-option="guided">Guided</button>', html)
-        self.assertIn('data-starred-toggle>Starred</button>', html)
+        self.assertNotIn("data-starred-toggle", html)
         self.assertNotIn("<strong>1</strong>", html)
 
     def test_archive_browser_searches_chapter_text(self):

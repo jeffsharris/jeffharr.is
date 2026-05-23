@@ -50,6 +50,12 @@
       linkText: 'Poems',
       profileUrl: '/poems'
     },
+    dharma: {
+      title: 'Dharma',
+      icon: '/images/dharma.svg',
+      linkText: 'Dharma',
+      profileUrl: '/dharma/'
+    },
     'read-later': {
       title: 'Read Later',
       icon: '/images/read-later.svg',
@@ -197,11 +203,14 @@
     if (data && data.profileUrl) {
       panelLink.href = safeUrl(data.profileUrl);
     }
-    const isInlinePage = platform === 'poems' || platform === 'read-later';
+    const isInlinePage = platform === 'poems' || platform === 'read-later' || platform === 'dharma';
     panelLink.target = isInlinePage ? '_self' : '_blank';
     if (platform === 'poems') {
       panelLink.removeAttribute('rel');
       panelLink.innerHTML = 'Browse <span id="panel-link-text">Poems</span> \u2192';
+    } else if (platform === 'dharma') {
+      panelLink.removeAttribute('rel');
+      panelLink.innerHTML = 'Explore <span id="panel-link-text">Dharma Teachers</span> \u2192';
     } else if (platform === 'read-later') {
       panelLink.removeAttribute('rel');
       panelLink.innerHTML = 'View all <span id="panel-link-text">Read Later</span> \u2192';
@@ -233,6 +242,9 @@
         break;
       case 'poems':
         renderPoems(data);
+        break;
+      case 'dharma':
+        renderDharma(data);
         break;
       case 'read-later':
         renderReadLater(data);
@@ -420,6 +432,46 @@
     panelContent.innerHTML = html;
   }
 
+  // Dharma content - random talks across teachers
+  function renderDharma(data) {
+    const talks = (data.talks || []).slice(0, 10);
+
+    if (!talks.length) {
+      panelContent.innerHTML = '<div class="panel-empty">Dharma talks are loading, visit the teacher gallery to explore.</div>';
+      return;
+    }
+
+    const html = `
+      <div class="panel-section">
+        <h4 class="panel-section__title">Random Talks</h4>
+        <div class="poem-card-list">
+          ${talks.map(renderDharmaTalk).join('')}
+        </div>
+      </div>
+    `;
+
+    panelContent.innerHTML = html;
+  }
+
+  function renderDharmaTalk(talk) {
+    const href = safeUrl(talk.url, { fallback: '/dharma/' });
+    return `
+      <a href="${escapeAttr(href)}" class="poem-card dharma-card">
+        <div class="poem-card__cover dharma-card__cover">
+          ${talk.image
+            ? `<img src="${escapeAttr(talk.image)}" alt="" width="160" height="160" loading="lazy" decoding="async">`
+            : ''}
+          <span class="poem-card__cover-shade" aria-hidden="true"></span>
+        </div>
+        <div class="poem-card__body">
+          <p class="poem-card__author">${escapeHtml(talk.teacher || 'Dharma')}</p>
+          <h3 class="poem-card__title">${escapeHtml(talk.title || 'Untitled talk')}</h3>
+          ${talk.description ? `<p class="poem-card__excerpt">${escapeHtml(talk.description)}</p>` : ''}
+        </div>
+      </a>
+    `;
+  }
+
   function escapeAttr(value) {
     return escapeHtml(value).replace(/`/g, '&#096;');
   }
@@ -427,8 +479,8 @@
   // Read Later content - saved and read items
   function renderReadLater(data) {
     const items = data.items || [];
-    const unread = items.filter(item => !item.read).slice(0, 5);
-    const read = items.filter(item => item.read).slice(0, 5);
+    const unread = items.filter(item => !item.read).slice(0, 6);
+    const read = items.filter(item => item.read).slice(0, 4);
 
     if (!items.length) {
       panelContent.innerHTML = '<div class="panel-empty">Nothing saved yet. Share a link to start your list.</div>';
@@ -441,7 +493,7 @@
       html += `
         <div class="panel-section">
           <h4 class="panel-section__title">Recently Saved</h4>
-          <div class="panel-list">
+          <div class="poem-card-list">
             ${unread.map(item => renderReadLaterItem(item)).join('')}
           </div>
         </div>
@@ -452,7 +504,7 @@
       html += `
         <div class="panel-section">
           <h4 class="panel-section__title">Recently Read</h4>
-          <div class="panel-list">
+          <div class="poem-card-list">
             ${read.map(item => renderReadLaterItem(item)).join('')}
           </div>
         </div>
@@ -465,15 +517,44 @@
   function renderReadLaterItem(item) {
     const domain = formatDomain(item.url);
     const date = item.savedAt ? formatDate(item.savedAt) : '';
+    const image = readLaterImageUrl(item);
     return `
-      <a href="${safeUrl(item.url)}" target="_blank" rel="noopener" class="content-item content-item--read-later">
-        <div class="content-item__header">
-          <h3 class="content-item__title">${escapeHtml(item.title || domain)}</h3>
-          ${date ? `<span class="content-item__meta">${date}</span>` : ''}
+      <a href="${escapeAttr(safeUrl(item.url))}" target="_blank" rel="noopener" class="poem-card read-later-card">
+        <div class="poem-card__cover read-later-card__cover${image ? '' : ' read-later-card__cover--empty'}">
+          ${image
+            ? `<img src="${escapeAttr(image)}" alt="" loading="lazy" decoding="async">`
+            : `<span>${escapeHtml(domain.slice(0, 1).toUpperCase())}</span>`}
+          <span class="poem-card__cover-shade" aria-hidden="true"></span>
         </div>
-        <p class="content-item__description">${escapeHtml(domain)}</p>
+        <div class="poem-card__body">
+          <p class="poem-card__author">${escapeHtml(domain)}</p>
+          <h3 class="poem-card__title">${escapeHtml(item.title || domain)}</h3>
+          ${item.description ? `<p class="poem-card__excerpt">${escapeHtml(item.description)}</p>` : ''}
+          ${date ? `<p class="read-later-card__date">${escapeHtml(date)}</p>` : ''}
+        </div>
       </a>
     `;
+  }
+
+  function readLaterImageUrl(item) {
+    if (item?.coverPreview) return `data:image/png;base64,${item.coverPreview}`;
+    if (item?.cover?.updatedAt && item?.id) {
+      const url = new URL('/api/read-later/cover', window.location.origin);
+      url.searchParams.set('id', item.id);
+      url.searchParams.set('v', item.cover.updatedAt);
+      return url.toString();
+    }
+    const youtube = youtubeVideoId(item?.url);
+    return youtube ? `https://i.ytimg.com/vi/${youtube}/hqdefault.jpg` : '';
+  }
+
+  function youtubeVideoId(url) {
+    try {
+      const parsed = new URL(url);
+      if (parsed.hostname === 'youtu.be') return parsed.pathname.replace(/^\//, '').split('/')[0];
+      if (parsed.hostname.endsWith('youtube.com')) return parsed.searchParams.get('v') || '';
+    } catch {}
+    return '';
   }
 
   function formatDomain(url) {

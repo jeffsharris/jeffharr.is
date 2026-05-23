@@ -827,6 +827,57 @@ body.panel-open .social-btn[data-platform]:focus {
   overflow: hidden;
 }
 
+.dharma-card .poem-card__title,
+.read-later-card .poem-card__title {
+  font-family: var(--font-display);
+  font-size: 17px;
+  line-height: 1.28;
+  letter-spacing: 0;
+}
+
+.dharma-card__cover {
+  background: #17251f;
+}
+
+.read-later-card {
+  grid-template-columns: 108px minmax(0, 1fr);
+  align-items: stretch;
+}
+
+.read-later-card__cover {
+  width: 108px;
+  height: 82px;
+  align-self: start;
+  background: #16211f;
+}
+
+.read-later-card__cover img {
+  object-fit: contain;
+  background:
+    linear-gradient(135deg, rgba(34, 111, 99, 0.14), rgba(178, 138, 49, 0.12)),
+    #111816;
+}
+
+.read-later-card__cover--empty {
+  display: grid;
+  place-items: center;
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 600;
+  background:
+    radial-gradient(circle at 25% 20%, rgba(34, 111, 99, 0.65), transparent 48%),
+    radial-gradient(circle at 78% 80%, rgba(178, 138, 49, 0.42), transparent 52%),
+    #17211e;
+}
+
+.read-later-card__date {
+  margin: 3px 0 0;
+  color: var(--text-light);
+  font-size: 12px;
+  font-weight: 600;
+}
+
 @media (max-width: 480px) {
   .poem-card {
     grid-template-columns: 76px minmax(0, 1fr);
@@ -837,8 +888,19 @@ body.panel-open .social-btn[data-platform]:focus {
     width: 76px;
     height: 76px;
   }
+  .read-later-card {
+    grid-template-columns: 84px minmax(0, 1fr);
+  }
+  .read-later-card__cover {
+    width: 84px;
+    height: 68px;
+  }
   .poem-card__title {
     font-size: 19px;
+  }
+  .dharma-card .poem-card__title,
+  .read-later-card .poem-card__title {
+    font-size: 16px;
   }
 }
 

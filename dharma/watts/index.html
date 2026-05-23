@@ -4,6 +4,18 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Alan Watts</title>
+  <meta name="description" content="A growing archive of Alan Watts talks, enriched with transcript-derived summaries, chapters, and episode artwork.">
+  <link rel="canonical" href="https://jeffharr.is/dharma/watts/">
+  <meta property="og:title" content="Alan Watts">
+  <meta property="og:description" content="A growing archive of Alan Watts talks, enriched with transcript-derived summaries, chapters, and episode artwork.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://jeffharr.is/dharma/watts/">
+  <meta property="og:image" content="https://jeffharr.is/dharma/watts/artwork/alan-watts-podcast-cover.jpg">
+  <meta property="og:image:secure_url" content="https://jeffharr.is/dharma/watts/artwork/alan-watts-podcast-cover.jpg">
+  <meta name="twitter:image" content="https://jeffharr.is/dharma/watts/artwork/alan-watts-podcast-cover.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Alan Watts">
+  <meta name="twitter:description" content="A growing archive of Alan Watts talks, enriched with transcript-derived summaries, chapters, and episode artwork.">
   <link rel="alternate" type="application/rss+xml" title="Alan Watts" href="feed.xml">
   <style>
     :root {
@@ -50,6 +62,20 @@
       margin: 0 auto;
       padding: 56px 22px 72px;
     }
+    .collection-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      margin: 0 0 28px;
+      color: var(--muted);
+      font-size: 0.86rem;
+      font-weight: 750;
+      text-decoration: none;
+      transition: color 180ms ease;
+    }
+    .collection-link:hover {
+      color: var(--accent);
+    }
     h1 {
       margin: 0;
       font-size: clamp(2.7rem, 8vw, 5.6rem);
@@ -91,8 +117,7 @@
       display: grid;
       margin: 20px 0 12px;
     }
-    .scope-chip,
-    .starred-toggle {
+    .scope-chip {
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -109,16 +134,10 @@
       line-height: 1;
       white-space: nowrap;
     }
-    .scope-chip.is-active,
-    .starred-toggle.is-active {
+    .scope-chip.is-active {
       background: var(--accent-strong);
       color: #ffffff;
       box-shadow: none;
-    }
-    .starred-toggle {
-      border: 1px solid var(--line);
-      background: color-mix(in srgb, var(--panel) 78%, var(--bg));
-      color: var(--accent);
     }
     .result-bar {
       display: flex;
@@ -399,8 +418,7 @@
         gap: 2px;
         padding: 2px;
       }
-      .scope-chip,
-      .starred-toggle {
+      .scope-chip {
         min-height: 30px;
         padding: 0 7px;
         font-size: 0.72rem;
@@ -433,6 +451,7 @@
 <body>
   <div class="page-shell">
   <main>
+    <a class="collection-link" href="/dharma/" aria-label="Back to Dharma teachers">&larr; Dharma teachers</a>
     <section class="hero" aria-labelledby="page-title">
       <div>
         <h1 id="page-title">Alan Watts</h1>
@@ -446,9 +465,7 @@
         <div class="archive-search" role="search">
           <label class="sr-only" for="archive-search">Search talks</label>
           <input id="archive-search" type="search" autocomplete="off" spellcheck="false" placeholder="Search titles, descriptions, chapters">
-          <div class="archive-filter-pills">
-            <button class="starred-toggle" type="button" aria-pressed="false" data-starred-toggle>Starred</button>
-          </div>
+
         </div>
       </div>
       <div class="result-bar">
@@ -488,7 +505,7 @@
   <script>
     window.TALK_ARCHIVE_CONFIG = {"corpus": "watts", "defaultScope": "all", "feedEndpoint": "/api/feeds/dharma.xml", "siteBaseUrl": "https://jeffharr.is/dharma/watts/", "talkPathPrefix": "talks/", "scopes": {"all": {"title": "All", "url": "talks.json", "count": 59}}};
   </script>
-  <script src="archive-browser.js"></script>
+  <script src="archive-browser.js?v=2"></script>
   <script src="/js/admin-presence.js?v=2"></script>
 </body>
 </html>

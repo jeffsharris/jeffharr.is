@@ -1152,6 +1152,7 @@
 
     let allPoems = [];
     let memorizedSet = new Set();
+    let favoritePoemSlugs = new Set();
     let currentFilter = 'all';
     let currentSlug = '';
     let currentPoem = null;
@@ -1295,6 +1296,26 @@
 
     function escapeAttribute(value = '') {
       return escapeHtml(value).replace(/`/g, '&#096;');
+    }
+
+    function parseSearchDirectives(value = '') {
+      const terms = [];
+      let starred = false;
+      String(value || '')
+        .trim()
+        .split(/\s+/)
+        .filter(Boolean)
+        .forEach((token) => {
+          if (token.toLowerCase() === 'is:starred') {
+            starred = true;
+            return;
+          }
+          terms.push(token);
+        });
+      return {
+        query: terms.join(' ').toLowerCase().trim(),
+        starred
+      };
     }
 
     // Parse markdown frontmatter and content
@@ -1729,7 +1750,8 @@
 
     // Search/filter
     function filterPoems(query) {
-      const q = query.toLowerCase().trim();
+      const search = parseSearchDirectives(query);
+      const q = search.query;
       let visible = 0;
       let total = 0;
 
@@ -1738,10 +1760,12 @@
         const author = card.dataset.author;
         const content = card.dataset.content;
         const isMemorized = card.dataset.memorized === 'true';
+        const isStarred = favoritePoemSlugs.has(card.dataset.slug || '');
 
         // Check filter
         const passesFilter = currentFilter === 'all' ||
           (currentFilter === 'memorized' && isMemorized);
+        const passesStarred = !search.starred || isStarred;
 
         // Check search (title, author, or poem text)
         const matchesSearch = !q ||
@@ -1749,7 +1773,7 @@
           author.includes(q) ||
           content.includes(q);
 
-        const show = passesFilter && matchesSearch;
+        const show = passesFilter && passesStarred && matchesSearch;
         card.classList.toggle('hidden', !show);
 
         if (passesFilter) total++;
@@ -1757,8 +1781,7 @@
       });
 
       // Update count
-      const filterLabel = currentFilter === 'memorized' ? 'memorized' : 'total';
-      if (q) {
+      if (q || search.starred) {
         countEl.textContent = `${visible} of ${total} poems`;
       } else {
         countEl.textContent = `${visible} poems`;
@@ -1768,6 +1791,46 @@
         updateNavButtons();
       }
     }
+
+    async function loadFavoritePoemStates(poems) {
+      const refs = poems
+        .map((poem) => poem.slug || '')
+        .filter(Boolean)
+        .map((slug) => ({ key: `poem:${slug}`, ref: { kind: 'poem', slug } }));
+      if (!refs.length) return;
+
+      const response = await fetch('/api/public/favorites/state', {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          accept: 'application/json',
+          'content-type': 'application/json',
+          'x-requested-with': 'XMLHttpRequest'
+        },
+        body: JSON.stringify({ refs })
+      }).catch(() => null);
+
+      if (!response?.ok) return;
+      const body = await response.json().catch(() => null);
+      favoritePoemSlugs = new Set(
+        (body?.states || [])
+          .filter((state) => state?.favorited && state.key?.startsWith('poem:'))
+          .map((state) => state.key.slice('poem:'.length))
+      );
+      filterPoems(searchInput.value);
+    }
+
+    window.addEventListener('favorites:changed', (event) => {
+      const key = event.detail?.key || '';
+      if (!key.startsWith('poem:')) return;
+      const slug = key.slice('poem:'.length);
+      if (event.detail?.state?.favorited) {
+        favoritePoemSlugs.add(slug);
+      } else {
+        favoritePoemSlugs.delete(slug);
+      }
+      filterPoems(searchInput.value);
+    });
 
     searchInput.addEventListener('input', (e) => {
       filterPoems(e.target.value);
@@ -1842,6 +1905,7 @@
           grid.appendChild(createCard(poem, isMemorized));
         });
         window.Favorites?.scheduleRefresh(grid);
+        loadFavoritePoemStates(validPoems);
         countEl.textContent = `${validPoems.length} poems`;
 
         const initialSlug = getSlugFromLocation();

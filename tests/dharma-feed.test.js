@@ -65,6 +65,33 @@ test('dynamic Dharma feed filters by search query', async () => {
   assert.match(body, /matching &quot;metta&quot;/);
 });
 
+test('dynamic Dharma feed defaults to Dharma talks when scope is omitted', async () => {
+  const guidedTalk = {
+    ...BRENSILVER_TALKS[1],
+    id: 'audiodharma:guided',
+    source_id: 'guided',
+    title: 'Guided Body Scan',
+    canonical_url: 'https://jeffharr.is/dharma/brensilver/talks/audiodharma-guided/',
+    audio_url: 'https://media.example/guided.mp3'
+  };
+  const response = await onRequest({
+    request: new Request('https://jeffharr.is/api/feeds/dharma.xml?corpus=brensilver'),
+    env: {
+      ASSETS: createAssets({
+        '/dharma/brensilver/talks.json': [BRENSILVER_TALKS[0], guidedTalk],
+        '/dharma/brensilver/dharma-talks.json': [BRENSILVER_TALKS[0]]
+      }),
+      CONTENT_DB: createStarredDb([])
+    }
+  });
+  const body = await response.text();
+
+  assert.equal(response.status, 200);
+  assert.match(body, /Metta and Attention/);
+  assert.doesNotMatch(body, /Guided Body Scan/);
+  assert.match(body, /scope=dharma/);
+});
+
 test('dynamic Dharma feed can span corpora and filter to starred talks', async () => {
   const response = await onRequest({
     request: new Request('https://jeffharr.is/api/feeds/dharma.xml?corpus=brensilver,burbea&starred=1'),
@@ -95,7 +122,33 @@ test('dynamic Dharma feed can span corpora and filter to starred talks', async (
   assert.match(body, /Metta and Attention/);
   assert.match(body, /Imaginal Practice/);
   assert.doesNotMatch(body, /Equanimity/);
-  assert.match(body, /Dharma archive starred recordings/);
+  assert.match(body, /Dharma archive starred Dharma talks/);
+});
+
+test('dynamic Dharma feed treats is:starred search as starred filter', async () => {
+  const response = await onRequest({
+    request: new Request('https://jeffharr.is/api/feeds/dharma.xml?corpus=brensilver&q=is%3Astarred%20metta'),
+    env: {
+      ASSETS: createAssets({
+        '/dharma/brensilver/talks.json': BRENSILVER_TALKS
+      }),
+      CONTENT_DB: createStarredDb([
+        {
+          canonical_key: 'dharma_talk:brensilver:AudioDharma:1',
+          canonical_url: 'https://jeffharr.is/dharma/brensilver/talks/audiodharma-1/',
+          source_url: null,
+          extra_json: JSON.stringify({ sourceId: '1' })
+        }
+      ])
+    }
+  });
+  const body = await response.text();
+
+  assert.equal(response.status, 200);
+  assert.match(body, /Metta and Attention/);
+  assert.doesNotMatch(body, /Equanimity/);
+  assert.match(body, /matching &quot;metta&quot;/);
+  assert.match(body, /starred/);
 });
 
 function createAssets(files) {

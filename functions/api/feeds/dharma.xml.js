@@ -83,17 +83,18 @@ function parseFeedQuery(url) {
     .split(',')
     .map((value) => value.trim().toLowerCase())
     .filter((value) => /^[a-z0-9-]+$/.test(value));
-  const rawScope = (url.searchParams.get('scope') || 'all').trim().toLowerCase();
-  const scope = VALID_SCOPES.has(rawScope) ? rawScope : 'all';
+  const rawScope = (url.searchParams.get('scope') || 'dharma').trim().toLowerCase();
+  const scope = VALID_SCOPES.has(rawScope) ? rawScope : 'dharma';
   const limit = Math.min(
     MAX_FEED_ITEMS,
     Math.max(1, Number.parseInt(url.searchParams.get('limit') || String(DEFAULT_LIMIT), 10) || DEFAULT_LIMIT)
   );
+  const search = parseSearchDirectives(url.searchParams.get('q') || '');
   return {
     corpora: Array.from(new Set(corpora)),
     scope,
-    search: String(url.searchParams.get('q') || '').trim(),
-    starred: truthyParam(url.searchParams.get('starred')),
+    search: search.query,
+    starred: truthyParam(url.searchParams.get('starred')) || search.starred,
     limit
   };
 }
@@ -118,7 +119,7 @@ async function loadTalkJson(env, path) {
 }
 
 function matchesSearch(talk, search) {
-  const terms = normalizeSearch(search).split(/\s+/).filter(Boolean);
+  const terms = parseSearchDirectives(search).terms;
   if (!terms.length) return true;
   const haystack = normalizeSearch([
     talk.title,
@@ -135,6 +136,25 @@ function matchesSearch(talk, search) {
       : [])
   ].filter(Boolean).join(' '));
   return terms.every((term) => haystack.includes(term));
+}
+
+function parseSearchDirectives(value) {
+  const rawTokens = String(value || '').trim().split(/\s+/).filter(Boolean);
+  const terms = [];
+  let starred = false;
+  for (const token of rawTokens) {
+    if (token.toLowerCase() === 'is:starred') {
+      starred = true;
+      continue;
+    }
+    terms.push(token);
+  }
+  const query = terms.join(' ').trim();
+  return {
+    query,
+    terms: normalizeSearch(query).split(/\s+/).filter(Boolean),
+    starred
+  };
 }
 
 function normalizeSearch(value) {

@@ -97,9 +97,10 @@ def write_episode_media(
 
         if copy_artwork and talk.episode_image_url:
             source = corpus_dir / "artwork" / "images" / f"{safe}.jpg"
+            published = artwork_dir / f"{safe}.jpg"
             if source.exists():
                 artwork_dir.mkdir(parents=True, exist_ok=True)
-                artwork_path = artwork_dir / f"{safe}.jpg"
+                artwork_path = published
                 shutil.copyfile(source, artwork_path)
                 artwork_copied += 1
                 manifest["artwork"].append(
@@ -110,14 +111,33 @@ def write_episode_media(
                         "url": talk.episode_image_url,
                     }
                 )
+            elif published.exists():
+                manifest["artwork"].append(
+                    {
+                        "talk_id": talk.id,
+                        "key": f"artwork/{safe}.jpg",
+                        "source_path": str(published.relative_to(out_dir)),
+                        "url": talk.episode_image_url,
+                    }
+                )
         elif talk.episode_image_url:
             source = corpus_dir / "artwork" / "images" / f"{safe}.jpg"
+            published = artwork_dir / f"{safe}.jpg"
             if source.exists():
                 manifest["artwork"].append(
                     {
                         "talk_id": talk.id,
                         "key": f"artwork/{safe}.jpg",
                         "source_path": str(source),
+                        "url": talk.episode_image_url,
+                    }
+                )
+            elif published.exists():
+                manifest["artwork"].append(
+                    {
+                        "talk_id": talk.id,
+                        "key": f"artwork/{safe}.jpg",
+                        "source_path": str(published.relative_to(out_dir)),
                         "url": talk.episode_image_url,
                     }
                 )
