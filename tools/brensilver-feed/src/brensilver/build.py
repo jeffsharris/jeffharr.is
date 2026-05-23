@@ -857,12 +857,14 @@ def landing_archive_css() -> str:
       margin-top: 12px;
     }
     .talk-card-player audio {
+      width: 100%;
       min-width: 0;
     }
     .talk-card-actions {
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
+      min-width: 0;
     }
     .archive-link,
     .download-link {
@@ -915,6 +917,8 @@ def landing_archive_css() -> str:
       .talk-card { grid-template-columns: 82px minmax(0, 1fr); gap: 12px; padding: 12px; }
       .talk-card-description { -webkit-line-clamp: 4; }
       .talk-card-actions { display: grid; grid-template-columns: 1fr; }
+      .archive-link,
+      .download-link { width: 100%; box-sizing: border-box; }
     }
 """
 
