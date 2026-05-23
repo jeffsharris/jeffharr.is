@@ -1,0 +1,131 @@
+#!/bin/zsh
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+cd "$ROOT"
+
+timestamp() {
+  date -u +"%Y-%m-%dT%H:%M:%SZ"
+}
+
+usage() {
+  echo "Usage: $0 <brensilver|burbea|watts>" >&2
+}
+
+corpus="${1:-}"
+if [[ -z "$corpus" ]]; then
+  usage
+  exit 2
+fi
+shift
+
+if [[ $# -gt 0 ]]; then
+  echo "Unexpected arguments: $*" >&2
+  usage
+  exit 2
+fi
+
+case "$corpus" in
+  brensilver)
+    label="Brensilver"
+    env_prefix="BRENSILVER"
+    build_script="scripts/build-brensilver-feed.py"
+    corpus_config="tools/brensilver-transcripts/config/brensilver-corpus.json"
+    default_limit="20"
+    default_feed_every="20"
+    default_media_base_url="https://jeffharr.is/dharma/brensilver/"
+    ;;
+  burbea)
+    label="Burbea"
+    env_prefix="BURBEA"
+    build_script="scripts/build-burbea-feed.py"
+    corpus_config="tools/brensilver-transcripts/config/burbea-corpus.json"
+    default_limit="1000"
+    default_feed_every="20"
+    default_media_base_url="https://jeffharr.is/dharma/burbea/"
+    ;;
+  watts)
+    label="Watts"
+    env_prefix="WATTS"
+    build_script="scripts/build-watts-feed.py"
+    corpus_config="tools/brensilver-transcripts/config/watts-corpus.json"
+    default_limit="50"
+    default_feed_every="10"
+    default_media_base_url="https://jeffharr.is/dharma/watts/"
+    ;;
+  *)
+    echo "Unknown Dharma corpus: $corpus" >&2
+    usage
+    exit 2
+    ;;
+esac
+
+mkdir -p ".local-corpus/$corpus/logs"
+
+if [[ -f "$HOME/.zshrc" ]]; then
+  set +u
+  source "$HOME/.zshrc"
+  set -u
+fi
+
+if [[ -f ".env.local" ]]; then
+  set -a
+  source ".env.local"
+  set +a
+fi
+
+limit_name="${env_prefix}_INGEST_LIMIT"
+feed_every_name="${env_prefix}_FEED_EVERY"
+media_base_name="${env_prefix}_MEDIA_BASE_URL"
+auto_publish_name="${env_prefix}_AUTO_PUBLISH"
+
+limit="${(P)limit_name:-$default_limit}"
+feed_every="${(P)feed_every_name:-$default_feed_every}"
+media_base_url="${(P)media_base_name:-$default_media_base_url}"
+auto_publish="${(P)auto_publish_name:-0}"
+
+if [[ "$auto_publish" == "1" ]]; then
+  if [[ -n "$(git status --porcelain)" ]]; then
+    echo "Working tree is not clean; refusing unattended auto-publish." >&2
+    git status --short >&2
+    exit 1
+  fi
+
+  branch="$(git branch --show-current)"
+  if [[ -z "$branch" ]]; then
+    echo "Cannot auto-publish from a detached HEAD." >&2
+    exit 1
+  fi
+  git pull --ff-only origin "$branch"
+fi
+
+echo "[$(timestamp)] Refreshing $label source feeds"
+python3 "$build_script" --copy-artwork
+
+echo "[$(timestamp)] Running local $label transcript/artwork ingestion"
+PYTHONPATH=tools/brensilver-transcripts/src \
+  python3 -m brensilver_transcripts.pipeline \
+  --corpus-config "$corpus_config" \
+  run-corpus \
+  --limit "$limit" \
+  --feed-every "$feed_every" \
+  --media-base-url "$media_base_url" \
+  --copy-artwork \
+  --update-qmd \
+  --build-feedback-viewer
+
+if [[ "$auto_publish" == "1" ]]; then
+  echo "[$(timestamp)] Publishing generated $label artifacts"
+  git add "dharma/$corpus"
+  if git diff --cached --quiet -- "dharma/$corpus"; then
+    echo "No $label generated artifact changes to publish."
+    git pull --ff-only origin "$branch"
+  else
+    git commit -m "Update $label generated feed artifacts"
+    git fetch origin "$branch"
+    git rebase "origin/$branch"
+    git push origin "$branch"
+  fi
+fi
+
+echo "[$(timestamp)] $label ingestion complete"

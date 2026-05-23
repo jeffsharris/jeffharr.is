@@ -6,6 +6,7 @@
 import { createLogger, formatError } from '../lib/logger.js';
 import { getContentDb } from '../content-library/db.js';
 import { saveReadLaterProgress } from '../content-library/read-later-store.js';
+import { jsonResponse, parseJson } from '../content-library/serialize.js';
 
 export async function onRequest(context) {
   const { request, env } = context;
@@ -55,22 +56,4 @@ async function handleReadLaterProgress(request, db, log) {
       { status: 200, cache: 'no-store' }
     );
   }
-}
-
-async function parseJson(request) {
-  try {
-    return await request.json();
-  } catch {
-    return null;
-  }
-}
-
-function jsonResponse(payload, { status = 200, cache = 'no-store' } = {}) {
-  return new Response(JSON.stringify(payload), {
-    status,
-    headers: {
-      'Content-Type': 'application/json',
-      'Cache-Control': cache
-    }
-  });
 }

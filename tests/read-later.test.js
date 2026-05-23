@@ -1,45 +1,30 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { preferReaderTitle } from '../functions/api/read-later/reader-utils.js';
+import { normalizeHttpUrl } from '../functions/api/content-library/ids.js';
 import {
-  createItem,
-  normalizeTitle,
-  normalizeUrl,
-  preferReaderTitle
-} from '../functions/api/read-later.js';
-import { listReadLaterItems } from '../functions/api/content-library/read-later-store.js';
+  listReadLaterItems,
+  normalizeTitle
+} from '../functions/api/content-library/read-later-store.js';
 
-test('normalizeUrl accepts https URLs', () => {
-  const url = normalizeUrl('https://example.com/path');
+test('normalizeHttpUrl accepts https URLs', () => {
+  const url = normalizeHttpUrl('https://example.com/path');
   assert.equal(url, 'https://example.com/path');
 });
 
-test('normalizeUrl adds https scheme when missing', () => {
-  const url = normalizeUrl('example.com/path');
+test('normalizeHttpUrl adds https scheme when missing', () => {
+  const url = normalizeHttpUrl('example.com/path');
   assert.equal(url, 'https://example.com/path');
 });
 
-test('normalizeUrl rejects non-http schemes', () => {
-  const url = normalizeUrl('javascript:alert(1)');
+test('normalizeHttpUrl rejects non-http schemes', () => {
+  const url = normalizeHttpUrl('javascript:alert(1)');
   assert.equal(url, null);
 });
 
 test('normalizeTitle uses hostname when title is empty', () => {
   const title = normalizeTitle('', 'https://www.example.com/path');
   assert.equal(title, 'example.com');
-});
-
-test('createItem sets read defaults', () => {
-  const item = createItem({
-    id: 'test-id',
-    url: 'https://example.com',
-    title: 'Example',
-    savedAt: '2024-01-01T00:00:00.000Z'
-  });
-
-  assert.equal(item.id, 'test-id');
-  assert.equal(item.read, false);
-  assert.equal(item.readAt, null);
-  assert.equal(item.savedAt, '2024-01-01T00:00:00.000Z');
 });
 
 test('preferReaderTitle keeps the existing title when it is complete', () => {

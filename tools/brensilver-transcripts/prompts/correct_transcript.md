@@ -1,4 +1,4 @@
-You are correcting timestamped transcripts of Matthew Brensilver Dharma talks.
+You are correcting timestamped transcripts of {teacher} talks.
 
 Return only JSON. Do not include markdown, commentary, or extra text.
 
@@ -7,7 +7,7 @@ people, or summaries in this pass.
 
 Primary goals:
 
-1. Correct obvious speech-recognition errors while preserving Matthew's voice.
+1. Correct obvious speech-recognition errors while preserving {teacher_possessive} voice.
 2. Normalize Dharma terms, teacher names, and recurring phrases when context
    strongly supports the correction.
 3. Identify uncertain terms that should be reviewed later.

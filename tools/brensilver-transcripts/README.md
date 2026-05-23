@@ -300,7 +300,7 @@ pipeline can be rerun safely.
 The intended recurring job on the Mac Mini is the repo-root ingestion runner:
 
 ```sh
-cd /Users/embergpt/code/flipper/brensilver/site
+cd <repo-root>
 scripts/run-brensilver-ingestion.sh
 ```
 

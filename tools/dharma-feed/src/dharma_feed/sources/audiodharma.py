@@ -115,6 +115,10 @@ def _talks_from_entries(
     entries: List[Dict[str, str]], source: Dict[str, str], probe_lengths: bool
 ) -> Iterable[Talk]:
     talks = []
+    speaker = " ".join((source.get("speaker") or "").split())
+    description = source.get("description") or (
+        f"AudioDharma talk by {speaker}." if speaker else "AudioDharma talk."
+    )
     for entry in entries:
         published_at = _parse_date(entry.get("date", ""))
         source_id = entry["source_id"]
@@ -127,14 +131,14 @@ def _talks_from_entries(
                 source=source.get("name", "AudioDharma"),
                 source_id=source_id,
                 title=entry.get("title", "").strip(),
-                speaker="Matthew Brensilver",
+                speaker=speaker,
                 published_at=published_at,
                 link=urljoin(BASE_URL, entry.get("link", f"/talks/{source_id}")),
                 audio_url=audio_url,
                 audio_type=entry.get("audio_type") or "audio/mpeg",
                 audio_length=audio_length,
                 duration=entry.get("duration") or None,
-                description="AudioDharma talk by Matthew Brensilver.",
+                description=description,
                 image_url=None,
             )
         )

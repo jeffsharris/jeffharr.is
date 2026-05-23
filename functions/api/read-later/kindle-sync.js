@@ -1,6 +1,7 @@
 import { enqueueKindleSync } from './sync-service.js';
 import { createReadLaterRepository } from './repository.js';
 import { createLogger, formatError } from '../lib/logger.js';
+import { jsonResponse, parseJson } from '../content-library/serialize.js';
 
 export async function onRequest(context) {
   const { request, env } = context;
@@ -85,22 +86,4 @@ export async function onRequest(context) {
       { status: 500, cache: 'no-store' }
     );
   }
-}
-
-async function parseJson(request) {
-  try {
-    return await request.json();
-  } catch {
-    return null;
-  }
-}
-
-function jsonResponse(payload, { status = 200, cache = 'no-store' } = {}) {
-  return new Response(JSON.stringify(payload), {
-    status,
-    headers: {
-      'Content-Type': 'application/json',
-      'Cache-Control': cache
-    }
-  });
 }

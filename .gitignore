@@ -9,6 +9,5 @@ notes/poem-image-iteration-handoff.json
 notes/poem-image-publish-plan.json
 .wrangler/
 .pycache-check/
-node_modules/.cache/
-node_modules/.mf/
+node_modules/
 .local-corpus/

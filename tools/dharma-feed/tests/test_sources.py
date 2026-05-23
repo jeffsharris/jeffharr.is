@@ -51,6 +51,7 @@ class SourceParsingTests(unittest.TestCase):
                 html,
                 {
                     "name": "AudioDharma",
+                    "speaker": "Matthew Brensilver",
                     "listing_url": "https://www.audiodharma.org/speakers/231",
                 },
             )
@@ -194,6 +195,7 @@ class SourceParsingTests(unittest.TestCase):
                 html,
                 {
                     "name": "AudioDharma",
+                    "speaker": "Matthew Brensilver",
                     "listing_url": "https://www.audiodharma.org/speakers/231",
                 },
             )
@@ -298,6 +300,7 @@ class MergeTests(unittest.TestCase):
                 html,
                 {
                     "name": "AudioDharma",
+                    "speaker": "Matthew Brensilver",
                     "listing_url": "https://www.audiodharma.org/speakers/231",
                 },
             )

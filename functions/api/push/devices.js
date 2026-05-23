@@ -1,5 +1,6 @@
 import { createLogger, formatError } from '../lib/logger.js';
 import { getContentDb } from '../content-library/db.js';
+import { jsonResponse, parseJson } from '../content-library/serialize.js';
 import {
   getOwnerId,
   normalizeDeviceId,
@@ -7,24 +8,6 @@ import {
   upsertPushDevice,
   removePushDevice
 } from './device-store.js';
-
-function jsonResponse(payload, { status = 200, cache = 'no-store' } = {}) {
-  return new Response(JSON.stringify(payload), {
-    status,
-    headers: {
-      'Content-Type': 'application/json',
-      'Cache-Control': cache
-    }
-  });
-}
-
-async function parseJson(request) {
-  try {
-    return await request.json();
-  } catch {
-    return null;
-  }
-}
 
 function tokenSuffix(tokenHash) {
   if (typeof tokenHash !== 'string') return null;

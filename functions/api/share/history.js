@@ -1,5 +1,6 @@
 import { getContentDb } from '../content-library/db.js';
 import { listShareHistoryFromContentLibrary } from '../content-library/share-store.js';
+import { jsonResponse } from '../content-library/serialize.js';
 
 export async function onRequest(context) {
   const db = getContentDb(context.env);
@@ -11,16 +12,6 @@ export async function onRequest(context) {
   const limit = clamp(Number.parseInt(url.searchParams.get('limit') || '100', 10), 1, 250);
   const items = await listShareHistoryFromContentLibrary(db, { limit });
   return jsonResponse({ items, count: items.length }, { status: 200 });
-}
-
-function jsonResponse(body, { status = 200 } = {}) {
-  return new Response(JSON.stringify(body), {
-    status,
-    headers: {
-      'content-type': 'application/json; charset=utf-8',
-      'cache-control': 'no-store'
-    }
-  });
 }
 
 function clamp(value, min, max) {

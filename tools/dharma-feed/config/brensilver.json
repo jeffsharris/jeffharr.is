@@ -1,0 +1,59 @@
+{
+  "site": {
+    "title": "Matthew Brensilver Dharma Talks",
+    "base_url": "https://jeffharr.is/dharma/brensilver/",
+    "feed_url": "https://jeffharr.is/dharma/brensilver/feed.xml",
+    "author": "Matthew Brensilver",
+    "description": "A merged podcast feed of Matthew Brensilver Dharma talks from AudioDharma and Dharma Seed.",
+    "language": "en",
+    "image_url": "https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+    "guided_title": "Matthew Brensilver Guided Meditations",
+    "guided_description": "A companion feed of Matthew Brensilver guided meditations, guided practice sessions, and retreat instructions from AudioDharma and Dharma Seed.",
+    "guided_feed_url": "https://jeffharr.is/dharma/brensilver/guided-feed.xml",
+    "category": "Religion & Spirituality",
+    "subcategory": "Buddhism"
+  },
+  "sources": [
+    {
+      "type": "dharmaseed",
+      "name": "Dharma Seed",
+      "teacher_id": "496",
+      "feed_url": "https://dharmaseed.org/feeds/teacher/496/?max-entries=all"
+    },
+    {
+      "type": "dharmaseed",
+      "name": "Dharma Seed",
+      "retreat_id": "6753",
+      "feed_url": "https://dharmaseed.org/feeds/retreat/6753/",
+      "access_key_env": "DHARMASEED_RETREAT_6753_ACCESS_KEY",
+      "include_speakers": ["Matthew Brensilver"]
+    },
+    {
+      "type": "dharmaseed_player",
+      "name": "Dharma Seed",
+      "talk_id": "96948",
+      "player_url": "https://dharmaseed.org/talks/player/96948.html",
+      "access_key_env": "DHARMASEED_RETREAT_6753_ACCESS_KEY",
+      "include_speakers": ["Matthew Brensilver"]
+    },
+    {
+      "type": "podcast_rss",
+      "name": "AudioDharma",
+      "id_prefix": "audiodharma",
+      "feed_url": "https://irc.audiodharma.org/feeds/retreat/482?code=CNCG",
+      "source_id_regex": "/talks/(\\d+)",
+      "include_speakers": ["Matthew Brensilver"]
+    },
+    {
+      "type": "audiodharma",
+      "name": "AudioDharma",
+      "speaker": "Matthew Brensilver",
+      "description": "AudioDharma talk by Matthew Brensilver.",
+      "speaker_id": "231",
+      "listing_url": "https://www.audiodharma.org/speakers/231"
+    }
+  ],
+  "feed": {
+    "max_items": 1000
+  }
+}

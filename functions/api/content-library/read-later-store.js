@@ -556,6 +556,7 @@ export {
   getReadLaterItem,
   getReadLaterRow,
   listReadLaterItems,
+  normalizeTitle,
   readLaterRowToItem,
   restoreReadLaterItem,
   saveReadLaterRuntimeItem,

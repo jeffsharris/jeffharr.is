@@ -5,7 +5,11 @@
   "scripts": {
     "poem-images:review": "node scripts/poem-image-review-server.mjs",
     "poem-images:publish": "node scripts/publish-poem-images.mjs",
-    "test": "node --test tests/*.test.js"
+    "test": "npm run test:js",
+    "test:js": "node --test tests/*.test.js",
+    "test:dharma-feed": "PYTHONPATH=tools/dharma-feed/src python3 -m unittest discover tools/dharma-feed/tests",
+    "test:transcripts": "PYTHONPATH=tools/brensilver-transcripts/src python3 -m unittest discover tools/brensilver-transcripts/tests",
+    "test:all": "npm run test:js && npm run test:dharma-feed && npm run test:transcripts"
   },
   "dependencies": {
     "@cloudflare/puppeteer": "^1.0.4",

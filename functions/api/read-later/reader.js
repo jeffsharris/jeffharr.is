@@ -20,6 +20,7 @@ import { buildXReaderFromUrl } from './x-adapter.js';
 import { createReadLaterRepository } from './repository.js';
 import { createLogger, formatError } from '../lib/logger.js';
 import { readLaterRowToItem } from '../content-library/read-later-store.js';
+import { jsonResponse } from '../content-library/serialize.js';
 
 const FETCH_TIMEOUT_MS = 10000;
 const RENDER_TIMEOUT_MS = 15000;
@@ -856,17 +857,6 @@ async function waitForDelay(page, ms) {
     return;
   }
   await new Promise((resolve) => setTimeout(resolve, ms));
-}
-
-
-function jsonResponse(payload, { status = 200, cache = 'no-store' } = {}) {
-  return new Response(JSON.stringify(payload), {
-    status,
-    headers: {
-      'Content-Type': 'application/json',
-      'Cache-Control': cache
-    }
-  });
 }
 
 export {

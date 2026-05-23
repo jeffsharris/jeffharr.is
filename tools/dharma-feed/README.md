@@ -15,6 +15,8 @@ For each corpus, the builder writes:
 - `/dharma/{corpus}/talks/{safe_id}/index.html`
 - `/dharma/{corpus}/chapters/{safe_id}.json` when local episode metadata exists
 - `/dharma/{corpus}/artwork/{safe_id}.jpg` when `--copy-artwork` is used
+- shared browser assets at `/dharma/archive-browser.js` and
+  `/dharma/talk-page.css`
 
 ## Entry Points
 

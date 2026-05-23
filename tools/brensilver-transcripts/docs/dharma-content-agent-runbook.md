@@ -13,7 +13,7 @@ markdown, and QMD embeddings.
 
 ## Current Brensilver Architecture
 
-- Source config: `tools/dharma-feed/config/sources.json`
+- Source config: `tools/dharma-feed/config/brensilver.json`
 - Feed builder wrapper: `scripts/build-brensilver-feed.py`
 - Local ingestion runner: `scripts/run-brensilver-ingestion.sh`
 - Generated public artifacts: `dharma/brensilver/`
@@ -33,7 +33,7 @@ enrichment artifacts.
 The Mac Mini should run this every six hours:
 
 ```sh
-cd /Users/embergpt/code/flipper/brensilver/site
+cd <repo-root>
 scripts/run-brensilver-ingestion.sh
 ```
 
@@ -41,7 +41,7 @@ The installed launchd job should use:
 
 - label: `com.jeffharris.brensilver-transcripts`
 - interval: `21600` seconds
-- script: `/Users/embergpt/code/flipper/brensilver/site/scripts/run-brensilver-ingestion.sh`
+- script: `<repo-root>/scripts/run-brensilver-ingestion.sh`
 
 For unattended publishing, the environment sets:
 
@@ -67,7 +67,7 @@ ingestion run.
 
 ## Adding More Matthew Brensilver Sources
 
-1. Add the source to `tools/dharma-feed/config/sources.json`.
+1. Add the source to `tools/dharma-feed/config/brensilver.json`.
 2. Add or update parser tests in `tools/dharma-feed/tests/test_sources.py`.
 3. Run:
 
@@ -104,8 +104,8 @@ ingestion run.
 
 ## Private Dharma Seed Sources
 
-Private Dharma Seed RSS/player sources should use `access_key_env` in
-`sources.json`. Do not hard-code private keys in the source config.
+Private Dharma Seed RSS/player sources should use `access_key_env` in the
+corpus feed config. Do not hard-code private keys in the source config.
 
 Example:
 
@@ -183,8 +183,8 @@ Use this plan:
 9. Add an agent note for the new teacher explaining their source feeds, private
    keys, QMD collection name, and public feed URLs.
 
-If this project grows beyond the current manually named wrappers, consider a
-single generic feed-build CLI that takes a corpus config path.
+The corpus-specific ingestion runners are compatibility wrappers around
+`scripts/run-dharma-ingestion.sh <corpus>`.
 
 ## Rob Burbea Corpus
 

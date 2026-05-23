@@ -469,6 +469,25 @@ def set_current_corpus(corpus: CorpusConfig) -> None:
     CORPUS = corpus
 
 
+def render_prompt(path: Path) -> str:
+    text = path.read_text(encoding="utf-8")
+    replacements = {
+        "teacher": CORPUS.teacher,
+        "teacher_possessive": possessive(CORPUS.teacher),
+        "corpus_title": CORPUS.title,
+    }
+    for key, value in replacements.items():
+        text = text.replace(f"{{{key}}}", value)
+    return text
+
+
+def possessive(name: str) -> str:
+    name = name.strip()
+    if not name:
+        return "the speaker's"
+    return f"{name}'" if name.endswith("s") else f"{name}'s"
+
+
 def url_basename(url: str) -> str:
     path = urllib.parse.urlparse(url).path
     name = Path(path).name
@@ -1042,7 +1061,7 @@ def correct_segments(
     if not segments:
         raise RuntimeError(f"No transcript segments found for {talk.id}")
 
-    system_prompt = CORPUS.correct_prompt.read_text(encoding="utf-8")
+    system_prompt = render_prompt(CORPUS.correct_prompt)
     windows = split_windows(segments)
     corrected_by_id: dict[int, str] = {}
     annotations: dict[str, list[dict[str, Any]]] = {
@@ -1152,7 +1171,7 @@ def extract_references(
     if not segments:
         raise RuntimeError(f"No corrected transcript segments found for {talk.id}")
 
-    system_prompt = CORPUS.references_prompt.read_text(encoding="utf-8")
+    system_prompt = render_prompt(CORPUS.references_prompt)
     windows = split_windows(segments, max_chars=32000)
     collected: dict[str, list[dict[str, Any]]] = {
         "references": [],
@@ -1533,7 +1552,7 @@ def generate_episode_metadata(
     if not segments:
         raise RuntimeError(f"No corrected transcript found for {talk.id}")
     references_doc = load_json(paths.references(talk), {})
-    prompt = CORPUS.episode_metadata_prompt.read_text(encoding="utf-8")
+    prompt = render_prompt(CORPUS.episode_metadata_prompt)
     payload = {
         "talk": talk_payload_without_speaker(talk),
         "shared_image_style": CORPUS.image_style,
@@ -1630,7 +1649,7 @@ def generate_description_summary(
         raise RuntimeError(f"No episode metadata found for {talk.id}")
 
     references_doc = load_json(paths.references(talk), {})
-    prompt = CORPUS.description_summary_prompt.read_text(encoding="utf-8")
+    prompt = render_prompt(CORPUS.description_summary_prompt)
     payload = {
         "talk": talk_payload_for_description_summary(talk),
         "segments": compact_segments_for_model(segments),

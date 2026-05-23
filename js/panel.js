@@ -340,21 +340,6 @@
       `;
     }
 
-    // Fallback for old API format
-    if (!html && data.books && data.books.length > 0) {
-      html = `
-        <div class="panel-section">
-          <h4 class="panel-section__title">${escapeHtml(data.shelf || 'Reading')}</h4>
-          ${data.books.map(book => `
-            <div class="content-item content-item--book">
-              <h3 class="content-item__title">${escapeHtml(book.title)}</h3>
-              ${book.author ? `<p class="content-item__author">by ${escapeHtml(book.author)}</p>` : ''}
-            </div>
-          `).join('')}
-        </div>
-      `;
-    }
-
     if (!html) {
       html = '<div class="panel-empty">No books found</div>';
     }
@@ -544,17 +529,7 @@
       url.searchParams.set('v', item.cover.updatedAt);
       return url.toString();
     }
-    const youtube = youtubeVideoId(item?.url);
-    return youtube ? `https://i.ytimg.com/vi/${youtube}/hqdefault.jpg` : '';
-  }
-
-  function youtubeVideoId(url) {
-    try {
-      const parsed = new URL(url);
-      if (parsed.hostname === 'youtu.be') return parsed.pathname.replace(/^\//, '').split('/')[0];
-      if (parsed.hostname.endsWith('youtube.com')) return parsed.searchParams.get('v') || '';
-    } catch {}
-    return '';
+    return window.JeffMedia?.getYouTubeThumbnailUrl(item?.url) || '';
   }
 
   function formatDomain(url) {

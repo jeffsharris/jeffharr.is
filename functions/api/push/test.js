@@ -1,21 +1,12 @@
 import { createLogger, formatError } from '../lib/logger.js';
 import { getContentDb } from '../content-library/db.js';
+import { jsonResponse, parseJson } from '../content-library/serialize.js';
 import { getOwnerId, normalizeDeviceId, normalizeMetadataValue } from './device-store.js';
 
 const DEFAULT_ALERT_TITLE = 'Sukha Test Push';
 const DEFAULT_ALERT_SUBTITLE = 'Sukha';
 const ALLOWED_INTERRUPTION_LEVELS = new Set(['passive', 'active', 'time-sensitive', 'critical']);
 const ALLOWED_MEDIA_TYPES = new Set(['image', 'gif', 'video', 'audio', 'file']);
-
-function jsonResponse(payload, { status = 200 } = {}) {
-  return new Response(JSON.stringify(payload), {
-    status,
-    headers: {
-      'Content-Type': 'application/json',
-      'Cache-Control': 'no-store'
-    }
-  });
-}
 
 function generateEventId() {
   if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
@@ -117,14 +108,6 @@ function readApiKey(request) {
   if (!auth) return '';
   const match = auth.match(/^Bearer\s+(.+)$/i);
   return match?.[1]?.trim() || '';
-}
-
-async function parseJson(request) {
-  try {
-    return await request.json();
-  } catch {
-    return null;
-  }
 }
 
 export async function onRequest(context) {

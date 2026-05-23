@@ -119,7 +119,8 @@ test('public favorite state alias returns read-only state outside protected favo
   const body = await response.json();
 
   assert.equal(response.status, 200);
-  assert.equal(body.authenticated, false);
+  assert.equal('authenticated' in body, false);
+  assert.equal('user' in body, false);
   assert.equal(body.states[0].favorited, true);
   assert.equal(body.states[0].itemId, 'itm_1');
 });

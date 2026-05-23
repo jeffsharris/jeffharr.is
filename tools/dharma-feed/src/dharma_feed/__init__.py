@@ -1,4 +1,4 @@
-"""Tools for building the Matthew Brensilver merged podcast feed."""
+"""Tools for building configured Dharma podcast feeds."""
 
 __all__ = ["__version__"]
 

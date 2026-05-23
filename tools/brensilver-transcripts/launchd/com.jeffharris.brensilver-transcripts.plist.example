@@ -7,11 +7,11 @@
   <string>com.jeffharris.brensilver-transcripts</string>
 
   <key>WorkingDirectory</key>
-  <string>/Users/embergpt/code/flipper/brensilver/site</string>
+  <string>/path/to/jeffharr.is</string>
 
   <key>ProgramArguments</key>
   <array>
-    <string>/Users/embergpt/code/flipper/brensilver/site/scripts/run-brensilver-ingestion.sh</string>
+    <string>/path/to/jeffharr.is/scripts/run-brensilver-ingestion.sh</string>
   </array>
 
   <key>EnvironmentVariables</key>
@@ -30,9 +30,9 @@
   <integer>21600</integer>
 
   <key>StandardOutPath</key>
-  <string>/Users/embergpt/code/flipper/brensilver/site/.local-corpus/brensilver/logs/launchd.out.log</string>
+  <string>/path/to/jeffharr.is/.local-corpus/brensilver/logs/launchd.out.log</string>
 
   <key>StandardErrorPath</key>
-  <string>/Users/embergpt/code/flipper/brensilver/site/.local-corpus/brensilver/logs/launchd.err.log</string>
+  <string>/path/to/jeffharr.is/.local-corpus/brensilver/logs/launchd.err.log</string>
 </dict>
 </plist>

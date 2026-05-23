@@ -58,4 +58,12 @@ function jsonResponse(body, { status = 200, cache = 'no-store' } = {}) {
   });
 }
 
-export { jsonResponse, serializeList, serializeListEntryRow };
+async function parseJson(request, fallback = null) {
+  try {
+    return await request.json();
+  } catch {
+    return fallback;
+  }
+}
+
+export { jsonResponse, parseJson, serializeList, serializeListEntryRow };

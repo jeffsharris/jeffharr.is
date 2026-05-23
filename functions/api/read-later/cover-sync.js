@@ -1,5 +1,6 @@
 import { createLogger } from '../lib/logger.js';
 import { createReadLaterRepository } from './repository.js';
+import { jsonResponse } from '../content-library/serialize.js';
 
 export async function onRequest(context) {
   const { request, env } = context;
@@ -57,14 +58,4 @@ export async function onRequest(context) {
     },
     { status: 200, cache: 'no-store' }
   );
-}
-
-function jsonResponse(payload, { status = 200, cache = 'no-store' } = {}) {
-  return new Response(JSON.stringify(payload), {
-    status,
-    headers: {
-      'Content-Type': 'application/json',
-      'Cache-Control': cache
-    }
-  });
 }

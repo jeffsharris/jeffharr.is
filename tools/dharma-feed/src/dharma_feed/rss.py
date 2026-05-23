@@ -74,7 +74,7 @@ def build_rss(talks: Iterable[Talk], site: Dict[str, str]) -> str:
         _text(image, "title", site["title"])
         _text(image, "link", site["base_url"])
 
-    _text(channel, f"{{{ITUNES_NS}}}author", site.get("author", "Matthew Brensilver"))
+    _text(channel, f"{{{ITUNES_NS}}}author", site.get("author") or site.get("title"))
     _text(channel, f"{{{ITUNES_NS}}}summary", site["description"])
     _text(channel, f"{{{ITUNES_NS}}}explicit", "no")
     if image_url:
@@ -214,8 +214,7 @@ def _dedupe_key(talk: Talk) -> str:
 
 
 def _normalize_title(title: str) -> str:
-    title = re.sub(r"^matthew brensilver:\s*", "", title, flags=re.IGNORECASE)
-    title = re.sub(r"^rob burbea:\s*", "", title, flags=re.IGNORECASE)
+    title = re.sub(r"^[a-z][a-z .'-]{2,60}:\s*", "", title, flags=re.IGNORECASE)
     title = re.sub(r"\s*\((?:retreat at|online retreat at)[^)]+\)\s*", " ", title, flags=re.I)
     title = re.sub(r"[^a-z0-9]+", " ", title.lower())
     return " ".join(title.split())

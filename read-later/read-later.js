@@ -74,9 +74,6 @@
   const VIDEO_PROGRESS_DEBOUNCE_MS = 1500;
   const VIDEO_PROGRESS_INTERVAL_MS = 8000;
   const VIDEO_PROGRESS_MIN_SECONDS = 300;
-  const YOUTUBE_THUMB_BASE = 'https://i.ytimg.com/vi/';
-  const YOUTUBE_VIDEO_ID_PATTERN = /^[a-zA-Z0-9_-]{11}$/;
-
   let toastTimeout = null;
   let undoAction = null;
   let toastRayId = null;
@@ -1294,58 +1291,11 @@
 
   function getYouTubeInfoFromItem(item) {
     if (!item?.url) return null;
-    return getYouTubeInfo(item.url);
-  }
-
-  function getYouTubeInfo(url) {
-    if (typeof url !== 'string') return null;
-    const parsed = tryParseUrl(url) || tryParseUrl(`https://${url}`);
-    if (!parsed) return null;
-
-    const hostname = parsed.hostname.toLowerCase().replace(/^www\./, '');
-    if (!['youtube.com', 'm.youtube.com', 'youtu.be', 'youtube-nocookie.com'].includes(hostname)) {
-      return null;
-    }
-
-    const segments = parsed.pathname.split('/').filter(Boolean);
-    let videoId = null;
-    let isShort = false;
-
-    if (hostname === 'youtu.be') {
-      videoId = extractYouTubeId(segments[0]);
-    } else {
-      const first = segments[0] || '';
-      if (first === 'shorts') {
-        isShort = true;
-        videoId = extractYouTubeId(segments[1]);
-      } else if (first === 'embed' || first === 'v' || first === 'live') {
-        videoId = extractYouTubeId(segments[1]);
-      } else {
-        videoId = extractYouTubeId(parsed.searchParams.get('v'));
-      }
-    }
-
-    if (!videoId) return null;
-    return { type: 'youtube', videoId, isShort };
-  }
-
-  function tryParseUrl(value) {
-    try {
-      return new URL(value);
-    } catch {
-      return null;
-    }
-  }
-
-  function extractYouTubeId(value) {
-    if (!value) return null;
-    const candidate = String(value).split(/[?#&/]/)[0];
-    return YOUTUBE_VIDEO_ID_PATTERN.test(candidate) ? candidate : null;
+    return window.JeffMedia?.getYouTubeInfo(item.url) || null;
   }
 
   function getYouTubeThumbnailUrl(info) {
-    if (!info?.videoId) return null;
-    return `${YOUTUBE_THUMB_BASE}${info.videoId}/hqdefault.jpg`;
+    return window.JeffMedia?.getYouTubeThumbnailUrl(info) || null;
   }
 
   function formatReaderMeta(reader) {
@@ -1855,14 +1805,6 @@
         if (event.event === 'saved') {
           // Item is now safely persisted - track it
           savedItem = payload.item;
-          return;
-        }
-
-        if (event.event === 'partial_image') {
-          if (state.savingItem) {
-            state.savingItem.coverPreview = payload.image;
-            render();
-          }
           return;
         }
 

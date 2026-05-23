@@ -60,6 +60,8 @@ artwork, or update QMD. Use the relevant corpus runner, for example:
 scripts/run-brensilver-ingestion.sh
 ```
 
+The corpus-specific runners delegate to `scripts/run-dharma-ingestion.sh`.
+
 Publishing should go through Git, not a direct Pages upload. Cloudflare Pages
 deploys `main` automatically, so fetch and fast-forward or rebase before pushing
 generated feed artifacts.

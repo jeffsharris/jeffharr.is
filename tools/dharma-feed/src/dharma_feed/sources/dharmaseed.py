@@ -48,7 +48,7 @@ def parse_dharmaseed_feed(xml_text: str, source: Dict[str, Any]) -> Iterable[Tal
 
         link = _source_url_value(source, _text(item, "link"))
         source_id = _talk_id_from_link(link) or _text(item, "guid") or enclosure.get("url", "")
-        speaker = _text(item, f"{{{ITUNES_NS}}}author")
+        speaker = _text(item, f"{{{ITUNES_NS}}}author") or _source_speaker(source)
         title = _clean_title(_text(item, "title"), speaker=speaker)
         if not _speaker_allowed(source, speaker):
             continue
@@ -67,7 +67,7 @@ def parse_dharmaseed_feed(xml_text: str, source: Dict[str, Any]) -> Iterable[Tal
                 source=source.get("name", "Dharma Seed"),
                 source_id=source_id,
                 title=title,
-                speaker=speaker or "Matthew Brensilver",
+                speaker=speaker,
                 published_at=pub_date,
                 link=link,
                 audio_url=audio_url,
@@ -95,7 +95,7 @@ def parse_dharmaseed_player(
     if not source_id:
         return None
 
-    speaker = _player_field(html_text, "artist") or "Matthew Brensilver"
+    speaker = _player_field(html_text, "artist") or _source_speaker(source)
     if not _speaker_allowed(source, speaker):
         return None
 
@@ -160,7 +160,7 @@ def _clean_title(title: str, speaker: str | None = None) -> str:
     title = " ".join(title.split())
     if speaker:
         title = re.sub(rf"^{re.escape(speaker)}\s*:\s*", "", title, flags=re.IGNORECASE)
-    return re.sub(r"^Matthew Brensilver:\s*", "", title, flags=re.IGNORECASE).strip()
+    return title.strip()
 
 
 def _clean_player_title(title: str, speaker: str | None = None) -> str:
@@ -244,6 +244,19 @@ def _speaker_allowed(source: Dict[str, Any], speaker: str) -> bool:
         for normalized_allowed in (_normalize_person_name(str(name)) for name in allowed)
         if normalized_allowed
     )
+
+
+def _source_speaker(source: Dict[str, Any]) -> str:
+    speaker = source.get("speaker")
+    if isinstance(speaker, str) and speaker.strip():
+        return " ".join(speaker.split())
+
+    allowed = source.get("include_speakers")
+    if isinstance(allowed, str):
+        return " ".join(allowed.split())
+    if isinstance(allowed, list) and len(allowed) == 1:
+        return " ".join(str(allowed[0]).split())
+    return ""
 
 
 def _normalize_person_name(value: str) -> str:

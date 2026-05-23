@@ -48,11 +48,11 @@ DHARMA_FEED_TITLE_PATTERNS = [
 
 def main(argv: Iterable[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Build configured Dharma podcast feeds.")
-    parser.add_argument("--config", default="config/sources.json")
-    parser.add_argument("--out-dir", default="public/brensilver")
+    parser.add_argument("--config", default="config/brensilver.json")
+    parser.add_argument("--out-dir", default="public/dharma")
     parser.add_argument("--talks-json")
     parser.add_argument("--seed-talks-json", action="append", default=[])
-    parser.add_argument("--corpus-dir", default=".local-corpus/brensilver")
+    parser.add_argument("--corpus-dir")
     parser.add_argument("--media-base-url")
     parser.add_argument("--copy-artwork", action="store_true")
     parser.add_argument("--no-enrich", action="store_true")
@@ -70,7 +70,8 @@ def main(argv: Iterable[str] | None = None) -> int:
     talks = merge_talks(talks)
     talks = apply_source_metadata(talks)
     talks = apply_site_image(talks, config["site"].get("image_url"))
-    corpus_dir = Path(args.corpus_dir)
+    corpus_slug = config.get("corpus") or corpus_slug_from_site(config["site"])
+    corpus_dir = Path(args.corpus_dir or f".local-corpus/{corpus_slug}")
     media_base_url = (
         args.media_base_url
         or config["site"].get("media_base_url")
@@ -134,7 +135,8 @@ def main(argv: Iterable[str] | None = None) -> int:
         corpus_dir=corpus_dir,
         copy_artwork=args.copy_artwork,
     )
-    write_site_assets(out_dir)
+    shared_assets_dir = out_dir.parent if out_dir.name == corpus_slug else out_dir
+    write_site_assets(shared_assets_dir)
     write_talk_pages(out_dir, config, talks)
     (out_dir / "index.html").write_text(
         render_index(config, talks, feed_talks, guided_feed_talks, guided_site),
@@ -195,7 +197,7 @@ def apply_source_metadata(talks: List[Talk]) -> List[Talk]:
             talk,
             venue=talk.venue or venue_from_description(talk.description),
             series=talk.series or series_from_title(talk.title),
-            co_teachers=talk.co_teachers or co_teachers_from_title(talk.title),
+            co_teachers=talk.co_teachers or co_teachers_from_title(talk.title, talk.speaker),
         )
         for talk in talks
     ]
@@ -219,26 +221,45 @@ def series_from_title(title: str) -> str | None:
     return None
 
 
-def co_teachers_from_title(title: str) -> List[str]:
+def co_teachers_from_title(title: str, speaker: str) -> List[str]:
     prefix = title.split(":", 1)[0]
-    if "," not in prefix or not re.search(r"\bBrensilver\b", prefix, re.IGNORECASE):
+    if "," not in prefix or not _speaker_in_prefix(prefix, speaker):
         return []
 
     names = []
     for raw_name in prefix.split(","):
         name = " ".join(raw_name.split())
-        if not name or re.search(r"\bMatthew\s+Brensilver\b", name, re.IGNORECASE):
+        if not name or _same_person_name(name, speaker):
             continue
         names.append(name)
     return names
 
 
+def _speaker_in_prefix(prefix: str, speaker: str) -> bool:
+    normalized_prefix = _normalize_person_name(prefix)
+    normalized_speaker = _normalize_person_name(speaker)
+    if not normalized_prefix or not normalized_speaker:
+        return False
+    speaker_parts = normalized_speaker.split()
+    surname = speaker_parts[-1] if speaker_parts else ""
+    return normalized_speaker in normalized_prefix or bool(surname and surname in normalized_prefix)
+
+
+def _same_person_name(left: str, right: str) -> bool:
+    return _normalize_person_name(left) == _normalize_person_name(right)
+
+
+def _normalize_person_name(value: str) -> str:
+    return " ".join(re.sub(r"[^a-z0-9]+", " ", value.lower()).split())
+
+
 def build_guided_site(site: Dict) -> Dict:
     guided = dict(site)
-    guided["title"] = site.get("guided_title", "Matthew Brensilver Guided Meditations")
+    author = site.get("author") or site.get("title") or "Dharma"
+    guided["title"] = site.get("guided_title", f"{author} Guided Meditations")
     guided["description"] = site.get(
         "guided_description",
-        "A companion feed of Matthew Brensilver guided meditations and practice instructions.",
+        f"A companion feed of {author} guided meditations and practice instructions.",
     )
     guided["feed_url"] = site.get("guided_feed_url", site["base_url"] + "guided-feed.xml")
     return guided
@@ -282,7 +303,7 @@ def load_talks_json(path: Path) -> List[Talk]:
                 source=str(item["source"]),
                 source_id=str(item["source_id"]),
                 title=str(item["title"]),
-                speaker=str(item.get("speaker") or "Matthew Brensilver"),
+                speaker=str(item.get("speaker") or ""),
                 published_at=datetime.fromisoformat(str(item["published_at"])),
                 link=str(item["link"]),
                 audio_url=str(item["audio_url"]),
@@ -692,7 +713,7 @@ def render_index(
   <script>
     window.TALK_ARCHIVE_CONFIG = {archive_config_json};
   </script>
-  <script src="archive-browser.js?v=2"></script>
+  <script src="/dharma/archive-browser.js?v=3"></script>
   <script src="/js/admin-presence.js?v=2"></script>
 </body>
 </html>
@@ -950,6 +971,7 @@ def landing_archive_css() -> str:
 
 
 def write_site_assets(out_dir: Path) -> None:
+    out_dir.mkdir(parents=True, exist_ok=True)
     (out_dir / "talk-page.css").write_text(talk_page_css(), encoding="utf-8")
     (out_dir / "archive-browser.js").write_text(archive_browser_js(), encoding="utf-8")
 
@@ -1524,14 +1546,6 @@ def archive_browser_js() -> str:
     if (parseSearchDirectives(searchQuery).starred) loadTalkArchive(currentScope);
   });
 
-  window.talkArchiveBrowser = {
-    selectScope(key) {
-      if (scopes[key]) {
-        loadTalkArchive(key);
-      }
-    },
-  };
-
   document.addEventListener('play', event => {
     if (event.target instanceof HTMLAudioElement) {
       document.querySelectorAll('audio').forEach(player => {
@@ -1645,7 +1659,7 @@ def render_talk_page(config: Dict, talk: Talk) -> str:
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="{_escape(talk.title)}">
   <meta name="twitter:description" content="{_escape(social_description)}">
-  <link rel="stylesheet" href="../../talk-page.css">
+  <link rel="stylesheet" href="/dharma/talk-page.css?v=3">
 </head>
 <body>
   <main>

@@ -14,7 +14,7 @@ if __name__ == "__main__":
     raise SystemExit(
         run_feed_builder(
             corpus="brensilver",
-            config_name="sources.json",
+            config_name="brensilver.json",
             argv=sys.argv[1:],
         )
     )
