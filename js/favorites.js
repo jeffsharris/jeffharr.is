@@ -19,6 +19,7 @@
   let poemObserver = null;
   let refreshTimer = null;
   let toastTimer = null;
+  let favoriteEditAuthorized = false;
 
   function ready(callback) {
     if (document.readyState === 'loading') {
@@ -206,28 +207,23 @@
     buttons.forEach(prepareButton);
     indicators.forEach(prepareIndicator);
     const refs = controls.map(controlRef).filter(Boolean);
-    const warmSession = cachedAdminSession();
-    if (warmSession) {
-      hydrateFavoriteStates(refs);
-      controls.forEach(updateControl);
-      renderAdminMarker('sign-out');
-    }
-
-    const session = await getSession();
-    if (!session.authenticated) {
-      clearWarmCaches();
-      controls.forEach((control) => {
-        control.hidden = true;
-      });
-      renderAdminMarker('sign-in');
-      return;
-    }
-
-    renderAdminMarker('sign-out');
     hydrateFavoriteStates(refs);
     controls.forEach(updateControl);
-    if (!refs.length) return;
+    if (cachedAdminSession()) renderAdminMarker('sign-out');
+    if (refs.length) await refreshFavoriteStates(refs, controls);
 
+    const session = await getSession();
+    favoriteEditAuthorized = Boolean(session.authenticated);
+    if (favoriteEditAuthorized) {
+      renderAdminMarker('sign-out');
+    } else {
+      clearWarmCaches();
+      renderAdminMarker('sign-in');
+    }
+    controls.forEach(updateControl);
+  }
+
+  async function refreshFavoriteStates(refs, controls) {
     const response = await fetch(STATE_URL, {
       method: 'POST',
       credentials: 'include',
@@ -277,6 +273,18 @@
       return;
     }
 
+    if (!favoriteEditAuthorized) {
+      control.hidden = !state.favorited;
+      control.disabled = true;
+      control.dataset.favoriteReadOnly = 'true';
+      control.classList.toggle('is-favorited', Boolean(state.favorited));
+      control.setAttribute('aria-pressed', String(Boolean(state.favorited)));
+      control.setAttribute('aria-label', state.favorited ? 'Favorited' : 'Favorite');
+      control.title = state.favorited ? 'Favorited' : 'Favorite';
+      return;
+    }
+
+    delete control.dataset.favoriteReadOnly;
     control.hidden = false;
     control.disabled = false;
     control.classList.toggle('is-favorited', Boolean(state.favorited));
@@ -291,7 +299,7 @@
 
     const control = event.currentTarget;
     const ref = controlRef(control);
-    if (!ref || control.disabled) return;
+    if (!ref || control.disabled || !favoriteEditAuthorized) return;
 
     const current = stateByKey.get(ref.key) || { favorited: false };
     const next = { ...current, key: ref.key, favorited: !current.favorited };
@@ -335,6 +343,9 @@
 
     rememberFavoriteStates([finalState]);
     updateMatchingControls(ref.key);
+    window.dispatchEvent(new CustomEvent('favorites:changed', {
+      detail: { key: ref.key, state: finalState }
+    }));
   }
 
   function updateMatchingControls(key) {
@@ -355,6 +366,7 @@
     link.setAttribute('aria-busy', 'true');
     link.hidden = false;
     sessionPromise = Promise.resolve({ authenticated: false });
+    favoriteEditAuthorized = false;
     stateByKey.clear();
     clearWarmCaches();
     document.querySelectorAll('.favorite-button, .favorite-indicator').forEach((control) => {

@@ -5,6 +5,7 @@ import {
   listFavoriteStates,
   removeFavorite
 } from '../functions/api/content-library/list-store.js';
+import { onRequest as favoriteStateRequest } from '../functions/api/favorites/state.js';
 import {
   poemCanonicalKey,
   sharePageCanonicalKey
@@ -68,6 +69,31 @@ test('favorite state and removal leave the underlying item intact', async () => 
   assert.equal(removed.ok, true);
   assert.equal(db.entries.size, 0);
   assert.equal(db.items.has('itm_1'), true);
+});
+
+test('favorite state API is public read-only', async () => {
+  const db = createFavoritesDb();
+  await addFavorite({
+    db,
+    payload: { itemId: 'itm_1' },
+    env: {},
+    requestUrl: 'https://jeffharr.is/read-later/'
+  });
+
+  const response = await favoriteStateRequest({
+    request: new Request('https://jeffharr.is/api/favorites/state', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ refs: [{ key: 'example', itemId: 'itm_1' }] })
+    }),
+    env: { CONTENT_DB: db }
+  });
+  const body = await response.json();
+
+  assert.equal(response.status, 200);
+  assert.equal(body.authenticated, false);
+  assert.equal(body.states[0].favorited, true);
+  assert.equal(body.states[0].itemId, 'itm_1');
 });
 
 test('list index hides private starred list for anonymous visitors', async () => {

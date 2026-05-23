@@ -88,21 +88,30 @@
       border: 1px solid var(--line);
       box-shadow: 0 18px 48px var(--shadow);
     }
-    .subscribe {
-      border-top: 1px solid var(--line);
-      padding-top: 30px;
+    .archive-query {
+      display: grid;
+      gap: 14px;
+      margin: 20px 0 14px;
     }
-    .feed-switch {
+    .scope-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .scope-switch {
       display: inline-grid;
-      grid-template-columns: repeat(2, minmax(150px, 1fr));
+      grid-auto-flow: column;
+      grid-auto-columns: minmax(118px, 1fr);
       gap: 6px;
       padding: 6px;
       border: 1px solid var(--line);
       border-radius: 8px;
       background: color-mix(in srgb, var(--panel) 72%, var(--bg));
-      margin-bottom: 24px;
     }
-    .feed-tab {
+    .scope-chip,
+    .starred-toggle {
       display: grid;
       grid-template-columns: minmax(0, 1fr) auto;
       align-items: center;
@@ -118,31 +127,58 @@
       font-weight: 800;
       text-align: left;
     }
-    .feed-tab strong {
+    .scope-chip strong {
       color: inherit;
       font-size: 0.95rem;
     }
-    .feed-tab.is-active {
+    .scope-chip.is-active,
+    .starred-toggle.is-active {
       background: var(--accent-strong);
       color: #ffffff;
       box-shadow: 0 8px 22px var(--shadow);
     }
-    .feed-panel[hidden] {
-      display: none;
+    .starred-toggle {
+      grid-template-columns: auto;
+      border: 1px solid var(--line);
+      background: color-mix(in srgb, var(--panel) 78%, var(--bg));
+      color: var(--accent);
     }
-    .feed-panel {
-      max-width: 760px;
+    .result-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 18px;
+      align-items: baseline;
+      justify-content: space-between;
+      margin: 4px 0 12px;
     }
-    .feed-count {
-      margin: 0 0 18px;
+    .result-bar p {
+      margin: 0;
+    }
+    .subscribe-current {
+      display: grid;
+      grid-template-columns: minmax(180px, 1fr) minmax(320px, 2fr);
+      gap: 18px;
+      align-items: center;
+      margin: 22px 0 24px;
+      padding: 18px 0;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+    .subscribe-current h3 {
+      margin: 0;
+      font-size: 1.08rem;
+      line-height: 1.2;
+      letter-spacing: 0;
+    }
+    .subscribe-copy {
+      margin: 5px 0 0;
       color: var(--muted);
-      font-weight: 700;
+      font-size: 0.95rem;
     }
     .listen-grid {
       display: grid;
       grid-template-columns: repeat(4, minmax(140px, 1fr));
       gap: 12px;
-      margin: 20px 0 14px;
     }
     .listen-badge {
       display: inline-flex;
@@ -169,42 +205,12 @@
     .listen-badge.pocket { background: #d9443f; }
     .listen-badge.apple { background: #872ec4; }
     .listen-badge.youtube { background: #c4302b; }
-    .feed-copy {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) auto;
-      gap: 10px;
-      align-items: stretch;
-      max-width: 760px;
-    }
-    .copy-link {
-      min-height: 44px;
-      padding: 0 14px;
-      border: 1px solid var(--line);
-      border-radius: 6px;
-      background: color-mix(in srgb, var(--panel) 70%, var(--bg));
-      color: var(--accent);
-      cursor: pointer;
-      font: inherit;
-      font-weight: 800;
-    }
     .copy-status {
       min-height: 1.4em;
       margin: 8px 0 0;
       color: var(--accent);
       font-size: 0.95rem;
       font-weight: 700;
-    }
-    .feed-url {
-      display: block;
-      max-width: 100%;
-      padding: 12px 14px;
-      border: 1px solid var(--line);
-      border-radius: 6px;
-      background: color-mix(in srgb, var(--panel) 82%, var(--bg));
-      overflow-wrap: anywhere;
-    }
-    code {
-      overflow-wrap: anywhere;
     }
     .archive {
       border-top: 1px solid var(--line);
@@ -393,13 +399,14 @@
     @media (max-width: 880px) {
       .hero { grid-template-columns: 1fr; gap: 26px; }
       .portrait { justify-self: start; max-width: 240px; }
+      .subscribe-current { grid-template-columns: 1fr; align-items: start; }
       .listen-grid { grid-template-columns: repeat(2, minmax(140px, 1fr)); }
     }
     @media (max-width: 520px) {
       main { padding: 34px 18px 56px; }
-      .feed-switch { display: grid; grid-template-columns: 1fr; width: 100%; }
+      .scope-row { display: grid; grid-template-columns: 1fr; }
+      .scope-switch { grid-auto-flow: row; grid-auto-columns: auto; grid-template-columns: 1fr; width: auto; }
       .listen-grid { grid-template-columns: 1fr; }
-      .feed-copy { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -412,120 +419,68 @@
       </div>
       <img class="portrait" src="/dharma/burbea/artwork/rob-burbea-podcast-cover.jpg" alt="Rob Burbea">
     </section>
-    <section class="subscribe">
-      <div class="feed-switch" role="tablist" aria-label="Choose a podcast feed">
-        <button class="feed-tab is-active" type="button" role="tab" aria-selected="true" aria-controls="panel-dharma" data-feed-tab="dharma">
-          <span>Dharma talks</span>
-          <strong>453</strong>
-        </button>
-        <button class="feed-tab" type="button" role="tab" aria-selected="false" aria-controls="panel-guided" data-feed-tab="guided">
-          <span>Guided meditations</span>
-          <strong>45</strong>
-        </button>
-      </div>
-      <div class="feed-panel" id="panel-dharma" data-feed-panel="dharma">
-        <h2>Dharma talks</h2>
-        <p class="feed-count">453 episodes</p>
-        <div class="listen-grid">
-          <a class="listen-badge overcast" href="overcast://x-callback-url/add?url=https%3A%2F%2Fjeffharr.is%2Fdharma%2Fburbea%2Ffeed.xml">
-            <img src="https://cdn.simpleicons.org/overcast/FFFFFF?viewbox=auto" alt="">
-            <span>Overcast</span>
-          </a>
-          <a class="listen-badge pocket" href="pktc://subscribe/jeffharr.is/dharma/burbea/feed.xml">
-            <img src="https://cdn.simpleicons.org/pocketcasts/FFFFFF?viewbox=auto" alt="">
-            <span>Pocket Casts</span>
-          </a>
-          <button class="listen-badge apple" type="button" data-copy-feed="dharma" data-copy-message="RSS URL copied. In Apple Podcasts, choose Library, then Add a Show by URL.">
-            <img src="https://cdn.simpleicons.org/applepodcasts/FFFFFF?viewbox=auto" alt="">
-            <span>Apple Podcasts</span>
-          </button>
-          <button class="listen-badge youtube" type="button" data-copy-feed="dharma" data-copy-message="RSS URL copied. In YouTube Music, choose Library, Podcasts, then Add podcast by RSS feed.">
-            <img src="https://cdn.simpleicons.org/youtubemusic/FFFFFF?viewbox=auto" alt="">
-            <span>YouTube Music</span>
-          </button>
-        </div>
-        <div class="feed-copy">
-          <code class="feed-url">https://jeffharr.is/dharma/burbea/feed.xml</code>
-          <button class="copy-link" type="button" data-copy-feed="dharma">Copy RSS</button>
-        </div>
-      </div>
-      <div class="feed-panel" id="panel-guided" data-feed-panel="guided" hidden>
-        <h2>Guided meditations</h2>
-        <p class="feed-count">45 episodes</p>
-        <div class="listen-grid">
-          <a class="listen-badge overcast" href="overcast://x-callback-url/add?url=https%3A%2F%2Fjeffharr.is%2Fdharma%2Fburbea%2Fguided-feed.xml">
-            <img src="https://cdn.simpleicons.org/overcast/FFFFFF?viewbox=auto" alt="">
-            <span>Overcast</span>
-          </a>
-          <a class="listen-badge pocket" href="pktc://subscribe/jeffharr.is/dharma/burbea/guided-feed.xml">
-            <img src="https://cdn.simpleicons.org/pocketcasts/FFFFFF?viewbox=auto" alt="">
-            <span>Pocket Casts</span>
-          </a>
-          <button class="listen-badge apple" type="button" data-copy-feed="guided" data-copy-message="RSS URL copied. In Apple Podcasts, choose Library, then Add a Show by URL.">
-            <img src="https://cdn.simpleicons.org/applepodcasts/FFFFFF?viewbox=auto" alt="">
-            <span>Apple Podcasts</span>
-          </button>
-          <button class="listen-badge youtube" type="button" data-copy-feed="guided" data-copy-message="RSS URL copied. In YouTube Music, choose Library, Podcasts, then Add podcast by RSS feed.">
-            <img src="https://cdn.simpleicons.org/youtubemusic/FFFFFF?viewbox=auto" alt="">
-            <span>YouTube Music</span>
-          </button>
-        </div>
-        <div class="feed-copy">
-          <code class="feed-url">https://jeffharr.is/dharma/burbea/guided-feed.xml</code>
-          <button class="copy-link" type="button" data-copy-feed="guided">Copy RSS</button>
-        </div>
-      </div>
-      <p id="copy-status" class="copy-status" aria-live="polite"></p>
-    </section>
     <section class="archive" aria-labelledby="archive-heading">
       <p class="archive-kicker">Archive</p>
       <h2 id="archive-heading">Browse and listen</h2>
-      <p id="archive-summary" class="archive-copy">Play talks here or download the audio.</p>
-      <div class="archive-tools">
+      <div class="archive-query">
         <label class="archive-search" for="archive-search">
           <span class="sr-only">Search talks</span>
           <input id="archive-search" type="search" autocomplete="off" spellcheck="false" placeholder="Search titles, descriptions, chapters">
         </label>
+        <div class="scope-row">
+          <div class="scope-switch" role="tablist" aria-label="Choose archive scope">
+          <button class="scope-chip is-active" type="button" role="tab" aria-selected="true" data-scope="all">
+            <span>All</span>
+            <strong>498</strong>
+          </button>
+          <button class="scope-chip" type="button" role="tab" aria-selected="false" data-scope="dharma">
+            <span>Dharma talks</span>
+            <strong>453</strong>
+          </button>
+          <button class="scope-chip" type="button" role="tab" aria-selected="false" data-scope="guided">
+            <span>Guided meditations</span>
+            <strong>45</strong>
+          </button>
+          </div>
+          <button class="starred-toggle" type="button" aria-pressed="false" data-starred-toggle>Starred</button>
+        </div>
+      </div>
+      <div class="result-bar">
+        <p id="archive-summary" class="archive-copy">Play talks here or download the audio.</p>
         <p id="archive-search-status" class="archive-search-status" aria-live="polite"></p>
       </div>
+      <section class="subscribe-current" aria-labelledby="subscribe-current-heading">
+        <div>
+          <h3 id="subscribe-current-heading">Subscribe to results</h3>
+          <p id="feed-copy" class="subscribe-copy">RSS reflects the current search.</p>
+          <p id="copy-status" class="copy-status" aria-live="polite"></p>
+        </div>
+        <div class="listen-grid">
+          <a class="listen-badge overcast" href="#" data-subscribe-target="overcast">
+            <img src="https://cdn.simpleicons.org/overcast/FFFFFF?viewbox=auto" alt="">
+            <span>Overcast</span>
+          </a>
+          <a class="listen-badge pocket" href="#" data-subscribe-target="pocket">
+            <img src="https://cdn.simpleicons.org/pocketcasts/FFFFFF?viewbox=auto" alt="">
+            <span>Pocket Casts</span>
+          </a>
+          <button class="listen-badge apple" type="button" data-copy-current-feed data-copy-message="RSS URL copied. In Apple Podcasts, choose Library, then Add a Show by URL.">
+            <img src="https://cdn.simpleicons.org/applepodcasts/FFFFFF?viewbox=auto" alt="">
+            <span>Apple Podcasts</span>
+          </button>
+          <button class="listen-badge youtube" type="button" data-copy-current-feed data-copy-message="RSS URL copied. In YouTube Music, choose Library, Podcasts, then Add podcast by RSS feed.">
+            <img src="https://cdn.simpleicons.org/youtubemusic/FFFFFF?viewbox=auto" alt="">
+            <span>YouTube Music</span>
+          </button>
+        </div>
+      </section>
       <div id="talk-list" class="talk-list"></div>
       <div id="talk-loader" class="talk-loader" aria-live="polite">Loading talks...</div>
     </section>
   </main>
   </div>
   <script>
-    window.TALK_ARCHIVE_CONFIG = {"defaultFeed": "dharma", "siteBaseUrl": "https://jeffharr.is/dharma/burbea/", "talkPathPrefix": "talks/", "feeds": {"dharma": {"title": "Dharma talks", "url": "dharma-talks.json", "count": 453}, "guided": {"title": "Guided meditations", "url": "guided-talks.json", "count": 45}}};
-  </script>
-  <script>
-    const feedUrls = {"dharma": "https://jeffharr.is/dharma/burbea/feed.xml", "guided": "https://jeffharr.is/dharma/burbea/guided-feed.xml"};
-    const status = document.getElementById('copy-status');
-    function selectFeed(key) {
-      document.querySelectorAll('[data-feed-panel]').forEach(panel => {
-        panel.hidden = panel.dataset.feedPanel !== key;
-      });
-      document.querySelectorAll('[data-feed-tab]').forEach(tab => {
-        const selected = tab.dataset.feedTab === key;
-        tab.classList.toggle('is-active', selected);
-        tab.setAttribute('aria-selected', String(selected));
-      });
-      window.talkArchiveBrowser?.selectFeed(key);
-      status.textContent = '';
-    }
-    async function copyFeedUrl(key) {
-      const feedUrl = feedUrls[key] || feedUrls.dharma || feedUrls.main;
-      try {
-        await navigator.clipboard.writeText(feedUrl);
-        status.textContent = this?.dataset?.copyMessage || 'RSS URL copied.';
-      } catch (error) {
-        status.textContent = feedUrl;
-      }
-    }
-    document.querySelectorAll('[data-copy-feed]').forEach(button => {
-      button.addEventListener('click', () => copyFeedUrl.call(button, button.dataset.copyFeed));
-    });
-    document.querySelectorAll('[data-feed-tab]').forEach(button => {
-      button.addEventListener('click', () => selectFeed(button.dataset.feedTab));
-    });
+    window.TALK_ARCHIVE_CONFIG = {"corpus": "burbea", "defaultScope": "all", "feedEndpoint": "/api/feeds/dharma.xml", "siteBaseUrl": "https://jeffharr.is/dharma/burbea/", "talkPathPrefix": "talks/", "scopes": {"all": {"title": "All", "url": "talks.json", "count": 498}, "dharma": {"title": "Dharma talks", "url": "dharma-talks.json", "count": 453}, "guided": {"title": "Guided meditations", "url": "guided-talks.json", "count": 45}}};
   </script>
   <script src="archive-browser.js"></script>
   <script src="/js/admin-presence.js?v=2"></script>

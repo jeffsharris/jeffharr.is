@@ -1,5 +1,5 @@
-/* Favorites (admin only).
-   - .favorite-button is the togglable control, only rendered on detail surfaces.
+/* Favorites.
+   - .favorite-button is the admin-only togglable control on detail surfaces.
    - .favorite-indicator is a read-only display, shown on list/gallery surfaces
      when an item is starred. */
 
@@ -38,6 +38,11 @@
 .favorite-button:disabled {
   cursor: wait;
   opacity: 0.35;
+}
+
+.favorite-button[data-favorite-read-only="true"]:disabled {
+  cursor: default;
+  opacity: 1;
 }
 
 .favorite-button:focus-visible {

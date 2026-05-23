@@ -1,4 +1,4 @@
-import { getAdminUser, unauthorizedResponse } from '../content-library/auth.js';
+import { getAdminUser } from '../content-library/auth.js';
 import { getContentDb } from '../content-library/db.js';
 import { listFavoriteStates } from '../content-library/list-store.js';
 import { jsonResponse } from '../content-library/serialize.js';
@@ -19,7 +19,6 @@ export async function onRequest(context) {
   }
 
   const user = await getAdminUser(request, env);
-  if (!user) return unauthorizedResponse();
 
   const payload = await readPayload(request);
   const refs = Array.isArray(payload?.refs) ? payload.refs.slice(0, 1000) : [];
@@ -27,8 +26,8 @@ export async function onRequest(context) {
 
   return jsonResponse({
     ok: true,
-    authenticated: true,
-    user,
+    authenticated: Boolean(user),
+    user: user || null,
     states
   });
 }

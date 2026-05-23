@@ -65,12 +65,7 @@ function createDharmaFavoritesDb(rows) {
     prepare(sql) {
       assert.match(sql, /FROM list_entries le/);
       return {
-        bind: (prefix) => ({
-          all: async () => {
-            assert.equal(prefix, 'dharma_talk:watts:%');
-            return { results: rows };
-          }
-        })
+        all: async () => ({ results: rows })
       };
     }
   };

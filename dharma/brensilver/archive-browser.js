@@ -1,18 +1,34 @@
 (() => {
   const config = window.TALK_ARCHIVE_CONFIG || {};
-  const feeds = config.feeds || {};
+  const scopes = config.scopes || {};
   const talkList = document.getElementById('talk-list');
   const talkLoader = document.getElementById('talk-loader');
   const archiveSummary = document.getElementById('archive-summary');
   const archiveSearch = document.getElementById('archive-search');
   const archiveSearchStatus = document.getElementById('archive-search-status');
+  const starredToggle = document.querySelector('[data-starred-toggle]');
+  const copyStatus = document.getElementById('copy-status');
+  const feedCopy = document.getElementById('feed-copy');
   const siteBaseUrl = config.siteBaseUrl || '';
-  const feedKeys = Object.keys(feeds);
-  const stateByFeed = new Map();
+  const scopeKeys = Object.keys(scopes);
+  const stateByScope = new Map();
+  const favoriteStateByKey = new Map();
+  const favoriteRequests = new Set();
   const talkBatchSize = 12;
-  let currentFeed = config.defaultFeed || feedKeys[0] || '';
+  let currentScope = config.defaultScope || scopeKeys[0] || '';
   let searchQuery = '';
+  let starredOnly = false;
   let observer = null;
+
+  function initialStateFromUrl() {
+    const params = new URLSearchParams(location.search);
+    const requestedScope = params.get('scope') || currentScope;
+    return {
+      scope: scopes[requestedScope] ? requestedScope : currentScope,
+      query: params.get('q') || '',
+      starred: params.get('starred') === '1',
+    };
+  }
 
   function mediaUrl(url) {
     if (!url) return '';
@@ -36,6 +52,16 @@
       }
     }
     return url || (config.talkPathPrefix || 'talks/') + String(talk.id || '').replace(/[^a-z0-9]+/gi, '-').toLowerCase() + '/';
+  }
+
+  function talkSafeId(talk) {
+    const href = talkHref(talk);
+    try {
+      const parsed = new URL(href, location.href);
+      return parsed.pathname.match(/\/talks\/([^/]+)\/?$/)?.[1] || '';
+    } catch (error) {
+      return String(href || '').match(/\/?talks\/([^/]+)\/?$/)?.[1] || '';
+    }
   }
 
   function talkDescription(talk) {
@@ -68,6 +94,11 @@
         talk.title,
         talkDescription(talk),
         chapterSearchText(talk),
+        talk.speaker,
+        talk.source,
+        talk.venue,
+        talk.series,
+        ...(Array.isArray(talk.tags) ? talk.tags : []),
       ].filter(Boolean).join(' '));
     }
     return talk.__archiveSearchText;
@@ -82,67 +113,78 @@
   }
 
   function stateFor(key) {
-    if (!stateByFeed.has(key)) {
-      stateByFeed.set(key, {
+    if (!stateByScope.has(key)) {
+      stateByScope.set(key, {
         talks: null,
         filteredTalks: null,
         nextIndex: 0,
         loading: false,
       });
     }
-    return stateByFeed.get(key);
+    return stateByScope.get(key);
   }
 
   function activeTalks(state) {
     return state.filteredTalks || state.talks || [];
   }
 
-  function applySearch(state) {
+  async function applyFilters(state) {
     if (!state.talks) {
       state.filteredTalks = null;
       state.nextIndex = 0;
       return;
     }
-    const query = normalizeSearch(searchQuery);
-    state.filteredTalks = query
-      ? state.talks.filter(talk => talkSearchText(talk).includes(query))
+    const terms = normalizeSearch(searchQuery).split(/\s+/).filter(Boolean);
+    let talks = terms.length
+      ? state.talks.filter(talk => terms.every(term => talkSearchText(talk).includes(term)))
       : state.talks;
+    if (starredOnly) {
+      await ensureFavoriteStates(state.talks);
+      talks = talks.filter(isTalkFavorited);
+    } else {
+      ensureFavoriteStates(state.talks).catch(() => {});
+    }
+    state.filteredTalks = talks;
     state.nextIndex = 0;
   }
 
   function updateSearchStatus(key) {
     if (!archiveSearchStatus) return;
     const state = stateFor(key);
-    const query = searchQuery.trim();
-    if (!query || !state.talks) {
+    if (!state.talks) {
       archiveSearchStatus.textContent = '';
       return;
     }
     const matches = activeTalks(state).length;
     const total = state.talks.length;
     const noun = matches === 1 ? 'match' : 'matches';
-    archiveSearchStatus.textContent = `${matches} of ${total} ${noun}`;
+    archiveSearchStatus.textContent = (searchQuery.trim() || starredOnly)
+      ? `${matches} of ${total} ${noun}`
+      : '';
   }
 
   function updateSummary(key) {
     if (!archiveSummary) return;
-    const feed = feeds[key] || {};
-    const count = Number(feed.count || 0);
-    const noun = count === 1 ? 'talk' : 'talks';
+    const scope = scopes[key] || {};
+    const state = stateFor(key);
+    const count = activeTalks(state).length || Number(scope.count || 0);
+    const noun = count === 1 ? 'recording' : 'recordings';
     archiveSummary.textContent = count
       ? `${count} ${noun}. Play talks here or download the audio.`
       : 'Play talks here or download the audio.';
     updateSearchStatus(key);
+    updateSubscribeLinks();
   }
 
-  function renderTalkBatch(key = currentFeed) {
+  function renderTalkBatch(key = currentScope) {
     const state = stateFor(key);
-    if (!state.talks || !talkList || !talkLoader || key !== currentFeed) return;
+    if (!state.talks || !talkList || !talkLoader || key !== currentScope) return;
     const fragment = document.createDocumentFragment();
     const talks = activeTalks(state);
     if (!talks.length) {
-      talkLoader.textContent = searchQuery.trim() ? 'No talks match this search.' : 'No talks are available yet.';
+      talkLoader.textContent = searchQuery.trim() || starredOnly ? 'No recordings match this search.' : 'No recordings are available yet.';
       updateSearchStatus(key);
+      updateSubscribeLinks();
       return;
     }
     const end = Math.min(state.nextIndex + talkBatchSize, talks.length);
@@ -200,25 +242,27 @@
     state.nextIndex = end;
     talkList.appendChild(fragment);
     talkLoader.textContent = state.nextIndex >= talks.length
-      ? (searchQuery.trim() ? 'End of matches' : 'End of archive')
+      ? (searchQuery.trim() || starredOnly ? 'End of matches' : 'End of archive')
       : 'Loading more talks...';
     updateSearchStatus(key);
+    updateSubscribeLinks();
   }
 
-  async function loadTalkArchive(key = currentFeed) {
+  async function loadTalkArchive(key = currentScope) {
     if (!talkList || !talkLoader) return;
-    const feed = feeds[key];
-    if (!feed) return;
-    currentFeed = key;
+    const scope = scopes[key];
+    if (!scope) return;
+    currentScope = key;
+    updateControls();
     updateSummary(key);
     const state = stateFor(key);
     talkList.replaceChildren();
     state.nextIndex = 0;
-    talkLoader.textContent = state.loading ? 'Loading talks...' : 'Loading talks...';
+    talkLoader.textContent = 'Loading talks...';
     try {
       if (!state.talks) {
         state.loading = true;
-        const response = await fetch(feed.url, { cache: 'no-cache' });
+        const response = await fetch(scope.url, { cache: 'no-cache' });
         if (!response.ok) throw new Error('Could not load talk archive');
         const talks = await response.json();
         state.talks = talks
@@ -226,7 +270,8 @@
           .sort((a, b) => String(b.published_at || '').localeCompare(String(a.published_at || '')));
       }
       state.loading = false;
-      applySearch(state);
+      await applyFilters(state);
+      updateSummary(key);
       renderTalkBatch(key);
       if (!observer) {
         observer = new IntersectionObserver(entries => {
@@ -238,31 +283,179 @@
       }
     } catch (error) {
       state.loading = false;
-      if (key === currentFeed) {
+      if (key === currentScope) {
         talkLoader.textContent = 'Talks could not be loaded right now.';
       }
     }
   }
 
+  function favoriteKeyForTalk(talk) {
+    const corpus = config.corpus || location.pathname.match(/^\/dharma\/([^/]+)/)?.[1] || '';
+    const id = talkSafeId(talk);
+    return corpus && id ? `dharma_talk:${corpus}:${id}` : '';
+  }
+
+  function favoritePayloadForTalk(talk) {
+    const corpus = config.corpus || location.pathname.match(/^\/dharma\/([^/]+)/)?.[1] || '';
+    const id = talkSafeId(talk);
+    if (!corpus || !id) return null;
+    const key = `dharma_talk:${corpus}:${id}`;
+    return { key, ref: { kind: 'dharma_talk', corpus, id } };
+  }
+
+  function isTalkFavorited(talk) {
+    const key = favoriteKeyForTalk(talk);
+    return Boolean(key && favoriteStateByKey.get(key)?.favorited);
+  }
+
+  async function ensureFavoriteStates(talks) {
+    const refs = talks
+      .map(favoritePayloadForTalk)
+      .filter(Boolean)
+      .filter(ref => !favoriteStateByKey.has(ref.key) && !favoriteRequests.has(ref.key));
+    if (!refs.length) return;
+    refs.forEach(ref => favoriteRequests.add(ref.key));
+    try {
+      for (let index = 0; index < refs.length; index += 500) {
+        const chunk = refs.slice(index, index + 500);
+        const response = await fetch('/api/favorites/state', {
+          method: 'POST',
+          credentials: 'include',
+          headers: {
+            accept: 'application/json',
+            'content-type': 'application/json',
+            'x-requested-with': 'XMLHttpRequest'
+          },
+          body: JSON.stringify({ refs: chunk })
+        });
+        if (!response.ok) continue;
+        const body = await response.json().catch(() => null);
+        for (const state of body?.states || []) {
+          if (state?.key) favoriteStateByKey.set(state.key, state);
+        }
+      }
+    } finally {
+      refs.forEach(ref => favoriteRequests.delete(ref.key));
+    }
+  }
+
+  function currentFeedUrl() {
+    const endpoint = config.feedEndpoint || '/api/feeds/dharma.xml';
+    const url = new URL(endpoint, location.origin);
+    url.searchParams.set('corpus', config.corpus || location.pathname.match(/^\/dharma\/([^/]+)/)?.[1] || '');
+    url.searchParams.set('scope', currentScope || 'all');
+    if (searchQuery.trim()) url.searchParams.set('q', searchQuery.trim());
+    if (starredOnly) url.searchParams.set('starred', '1');
+    return url.href;
+  }
+
+  function updateSubscribeLinks() {
+    const feedUrl = currentFeedUrl();
+    document.querySelectorAll('[data-subscribe-target]').forEach(link => {
+      if (link.dataset.subscribeTarget === 'overcast') {
+        link.href = `overcast://x-callback-url/add?url=${encodeURIComponent(feedUrl)}`;
+      }
+      if (link.dataset.subscribeTarget === 'pocket') {
+        link.href = `pktc://subscribe/${feedUrl.replace(/^https?:\/\//, '')}`;
+      }
+    });
+    if (feedCopy) {
+      const state = stateFor(currentScope);
+      const count = activeTalks(state).length || Number(scopes[currentScope]?.count || 0);
+      const noun = count === 1 ? 'recording' : 'recordings';
+      feedCopy.textContent = `${count} ${noun} in this RSS feed.`;
+    }
+  }
+
+  async function copyCurrentFeed(button) {
+    const feedUrl = currentFeedUrl();
+    try {
+      await navigator.clipboard.writeText(feedUrl);
+      if (copyStatus) copyStatus.textContent = button?.dataset?.copyMessage || 'RSS URL copied.';
+    } catch (error) {
+      if (copyStatus) copyStatus.textContent = feedUrl;
+    }
+  }
+
+  function updateControls() {
+    document.querySelectorAll('[data-scope]').forEach(button => {
+      const selected = button.dataset.scope === currentScope;
+      button.classList.toggle('is-active', selected);
+      button.setAttribute('aria-selected', String(selected));
+    });
+    if (starredToggle) {
+      starredToggle.classList.toggle('is-active', starredOnly);
+      starredToggle.setAttribute('aria-pressed', String(starredOnly));
+    }
+    if (archiveSearch && archiveSearch.value !== searchQuery) {
+      archiveSearch.value = searchQuery;
+    }
+    if (copyStatus) copyStatus.textContent = '';
+    updateSubscribeLinks();
+  }
+
+  function writeUrl({ replace = true } = {}) {
+    const url = new URL(location.href);
+    if (currentScope && currentScope !== (config.defaultScope || 'all')) {
+      url.searchParams.set('scope', currentScope);
+    } else {
+      url.searchParams.delete('scope');
+    }
+    if (searchQuery.trim()) {
+      url.searchParams.set('q', searchQuery.trim());
+    } else {
+      url.searchParams.delete('q');
+    }
+    if (starredOnly) {
+      url.searchParams.set('starred', '1');
+    } else {
+      url.searchParams.delete('starred');
+    }
+    history[replace ? 'replaceState' : 'pushState'](null, '', url);
+  }
+
   archiveSearch?.addEventListener('input', () => {
     searchQuery = archiveSearch.value || '';
-    const state = stateFor(currentFeed);
-    talkList?.replaceChildren();
-    if (state.talks) {
-      applySearch(state);
-      updateSummary(currentFeed);
-      renderTalkBatch(currentFeed);
-    } else {
-      updateSearchStatus(currentFeed);
-      if (currentFeed && !state.loading) {
-        loadTalkArchive(currentFeed);
-      }
-    }
+    writeUrl({ replace: true });
+    loadTalkArchive(currentScope);
+  });
+
+  document.querySelectorAll('[data-scope]').forEach(button => {
+    button.addEventListener('click', () => {
+      if (!scopes[button.dataset.scope]) return;
+      currentScope = button.dataset.scope;
+      writeUrl({ replace: false });
+      loadTalkArchive(currentScope);
+    });
+  });
+
+  starredToggle?.addEventListener('click', () => {
+    starredOnly = !starredOnly;
+    writeUrl({ replace: false });
+    loadTalkArchive(currentScope);
+  });
+
+  document.querySelectorAll('[data-copy-current-feed]').forEach(button => {
+    button.addEventListener('click', () => copyCurrentFeed(button));
+  });
+
+  window.addEventListener('popstate', () => {
+    const state = initialStateFromUrl();
+    currentScope = state.scope;
+    searchQuery = state.query;
+    starredOnly = state.starred;
+    loadTalkArchive(currentScope);
+  });
+
+  window.addEventListener('favorites:changed', event => {
+    const state = event.detail?.state;
+    if (event.detail?.key && state) favoriteStateByKey.set(event.detail.key, state);
+    if (starredOnly) loadTalkArchive(currentScope);
   });
 
   window.talkArchiveBrowser = {
-    selectFeed(key) {
-      if (feeds[key]) {
+    selectScope(key) {
+      if (scopes[key]) {
         loadTalkArchive(key);
       }
     },
@@ -276,9 +469,16 @@
     }
   }, true);
 
-  if (currentFeed) {
-    loadTalkArchive(currentFeed);
+  const initial = initialStateFromUrl();
+  currentScope = initial.scope;
+  searchQuery = initial.query;
+  starredOnly = initial.starred;
+  updateControls();
+  if (archiveSearch) archiveSearch.value = searchQuery;
+
+  if (currentScope) {
+    loadTalkArchive(currentScope);
   } else if (talkLoader) {
-    talkLoader.textContent = 'No talks are available yet.';
+    talkLoader.textContent = 'No recordings are available yet.';
   }
 })();

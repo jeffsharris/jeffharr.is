@@ -357,77 +357,44 @@ def render_index(
         or re.sub(r"\s+(Dharma Talks|Talks|Podcast Feed|Podcast)$", "", str(site["title"]))
     ).strip()
     portrait_src = html_media_url(site, site.get("image_url"))
-    overcast_url = (
-        "overcast://x-callback-url/add?url="
-        + urllib.parse.quote(str(site["feed_url"]), safe="")
-    )
     has_guided_feed = guided_site is not None
-    feed_key = "dharma" if has_guided_feed else "main"
-    feed_urls = {feed_key: site["feed_url"]}
+    corpus_slug = corpus_slug_from_site(site)
     guided_alternate_link = ""
     main_feed_label = site.get("feed_label") or (
         "Dharma talks" if has_guided_feed else "Podcast feed"
     )
-    main_feed_panel = render_subscribe_panel(
-        key=feed_key,
-        title=main_feed_label,
-        count=len(feed_talks),
-        feed_url=str(site["feed_url"]),
-        feed_href="feed.xml",
-        overcast_url=overcast_url,
-        active=True,
-    )
-    guided_feed_panel = ""
-    feed_switch = ""
+    archive_scopes = {
+        "all": {
+            "title": "All",
+            "url": "talks.json",
+            "count": len(all_talks),
+        }
+    }
+    scope_switch = ""
     if guided_site:
-        guided_overcast_url = (
-            "overcast://x-callback-url/add?url="
-            + urllib.parse.quote(str(guided_site["feed_url"]), safe="")
-        )
-        feed_urls["guided"] = guided_site["feed_url"]
         guided_alternate_link = (
             f'  <link rel="alternate" type="application/rss+xml" '
             f'title="{_escape(guided_site["title"])}" href="guided-feed.xml">\n'
         )
-        guided_feed_panel = render_subscribe_panel(
-            key="guided",
-            title="Guided meditations",
-            count=len(guided_feed_talks),
-            feed_url=str(guided_site["feed_url"]),
-            feed_href="guided-feed.xml",
-            overcast_url=guided_overcast_url,
-            active=False,
-        )
-        feed_switch = f"""      <div class="feed-switch" role="tablist" aria-label="Choose a podcast feed">
-        <button class="feed-tab is-active" type="button" role="tab" aria-selected="true" aria-controls="panel-{feed_key}" data-feed-tab="{feed_key}">
-          <span>{_escape(main_feed_label)}</span>
-          <strong>{len(feed_talks)}</strong>
-        </button>
-        <button class="feed-tab" type="button" role="tab" aria-selected="false" aria-controls="panel-guided" data-feed-tab="guided">
-          <span>Guided meditations</span>
-          <strong>{len(guided_feed_talks)}</strong>
-        </button>
-      </div>"""
-    feed_urls_json = json.dumps(feed_urls)
-    archive_feeds = {
-        feed_key: {
+        archive_scopes["dharma"] = {
             "title": main_feed_label,
             "url": "dharma-talks.json" if has_guided_feed else "talks.json",
             "count": len(feed_talks),
         }
-    }
-    if guided_site:
-        archive_feeds["guided"] = {
+        archive_scopes["guided"] = {
             "title": "Guided meditations",
             "url": "guided-talks.json",
             "count": len(guided_feed_talks),
         }
+        scope_switch = render_scope_switch(archive_scopes)
     archive_config_json = json.dumps(
         {
-            "defaultFeed": feed_key,
+            "corpus": corpus_slug,
+            "defaultScope": "all",
+            "feedEndpoint": "/api/feeds/dharma.xml",
             "siteBaseUrl": str(site.get("base_url") or ""),
             "talkPathPrefix": "talks/",
-            "feeds": archive_feeds,
+            "scopes": archive_scopes,
         }
     )
     portrait_html = (
@@ -524,21 +491,30 @@ def render_index(
       border: 1px solid var(--line);
       box-shadow: 0 18px 48px var(--shadow);
     }}
-    .subscribe {{
-      border-top: 1px solid var(--line);
-      padding-top: 30px;
+    .archive-query {{
+      display: grid;
+      gap: 14px;
+      margin: 20px 0 14px;
     }}
-    .feed-switch {{
+    .scope-row {{
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      justify-content: space-between;
+    }}
+    .scope-switch {{
       display: inline-grid;
-      grid-template-columns: repeat(2, minmax(150px, 1fr));
+      grid-auto-flow: column;
+      grid-auto-columns: minmax(118px, 1fr);
       gap: 6px;
       padding: 6px;
       border: 1px solid var(--line);
       border-radius: 8px;
       background: color-mix(in srgb, var(--panel) 72%, var(--bg));
-      margin-bottom: 24px;
     }}
-    .feed-tab {{
+    .scope-chip,
+    .starred-toggle {{
       display: grid;
       grid-template-columns: minmax(0, 1fr) auto;
       align-items: center;
@@ -554,31 +530,58 @@ def render_index(
       font-weight: 800;
       text-align: left;
     }}
-    .feed-tab strong {{
+    .scope-chip strong {{
       color: inherit;
       font-size: 0.95rem;
     }}
-    .feed-tab.is-active {{
+    .scope-chip.is-active,
+    .starred-toggle.is-active {{
       background: var(--accent-strong);
       color: #ffffff;
       box-shadow: 0 8px 22px var(--shadow);
     }}
-    .feed-panel[hidden] {{
-      display: none;
+    .starred-toggle {{
+      grid-template-columns: auto;
+      border: 1px solid var(--line);
+      background: color-mix(in srgb, var(--panel) 78%, var(--bg));
+      color: var(--accent);
     }}
-    .feed-panel {{
-      max-width: 760px;
+    .result-bar {{
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 18px;
+      align-items: baseline;
+      justify-content: space-between;
+      margin: 4px 0 12px;
     }}
-    .feed-count {{
-      margin: 0 0 18px;
+    .result-bar p {{
+      margin: 0;
+    }}
+    .subscribe-current {{
+      display: grid;
+      grid-template-columns: minmax(180px, 1fr) minmax(320px, 2fr);
+      gap: 18px;
+      align-items: center;
+      margin: 22px 0 24px;
+      padding: 18px 0;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }}
+    .subscribe-current h3 {{
+      margin: 0;
+      font-size: 1.08rem;
+      line-height: 1.2;
+      letter-spacing: 0;
+    }}
+    .subscribe-copy {{
+      margin: 5px 0 0;
       color: var(--muted);
-      font-weight: 700;
+      font-size: 0.95rem;
     }}
     .listen-grid {{
       display: grid;
       grid-template-columns: repeat(4, minmax(140px, 1fr));
       gap: 12px;
-      margin: 20px 0 14px;
     }}
     .listen-badge {{
       display: inline-flex;
@@ -605,24 +608,6 @@ def render_index(
     .listen-badge.pocket {{ background: #d9443f; }}
     .listen-badge.apple {{ background: #872ec4; }}
     .listen-badge.youtube {{ background: #c4302b; }}
-    .feed-copy {{
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) auto;
-      gap: 10px;
-      align-items: stretch;
-      max-width: 760px;
-    }}
-    .copy-link {{
-      min-height: 44px;
-      padding: 0 14px;
-      border: 1px solid var(--line);
-      border-radius: 6px;
-      background: color-mix(in srgb, var(--panel) 70%, var(--bg));
-      color: var(--accent);
-      cursor: pointer;
-      font: inherit;
-      font-weight: 800;
-    }}
     .copy-status {{
       min-height: 1.4em;
       margin: 8px 0 0;
@@ -630,29 +615,18 @@ def render_index(
       font-size: 0.95rem;
       font-weight: 700;
     }}
-    .feed-url {{
-      display: block;
-      max-width: 100%;
-      padding: 12px 14px;
-      border: 1px solid var(--line);
-      border-radius: 6px;
-      background: color-mix(in srgb, var(--panel) 82%, var(--bg));
-      overflow-wrap: anywhere;
-    }}
-    code {{
-      overflow-wrap: anywhere;
-    }}
 {landing_archive_css()}
     @media (max-width: 880px) {{
       .hero {{ grid-template-columns: 1fr; gap: 26px; }}
       .portrait {{ justify-self: start; max-width: 240px; }}
+      .subscribe-current {{ grid-template-columns: 1fr; align-items: start; }}
       .listen-grid {{ grid-template-columns: repeat(2, minmax(140px, 1fr)); }}
     }}
     @media (max-width: 520px) {{
       main {{ padding: 34px 18px 56px; }}
-      .feed-switch {{ display: grid; grid-template-columns: 1fr; width: 100%; }}
+      .scope-row {{ display: grid; grid-template-columns: 1fr; }}
+      .scope-switch {{ grid-auto-flow: row; grid-auto-columns: auto; grid-template-columns: 1fr; width: auto; }}
       .listen-grid {{ grid-template-columns: 1fr; }}
-      .feed-copy {{ grid-template-columns: 1fr; }}
     }}
   </style>
 </head>
@@ -665,23 +639,48 @@ def render_index(
       </div>
       {portrait_html}
     </section>
-    <section class="subscribe">
-{feed_switch}
-{main_feed_panel}
-{guided_feed_panel}
-      <p id="copy-status" class="copy-status" aria-live="polite"></p>
-    </section>
     <section class="archive" aria-labelledby="archive-heading">
       <p class="archive-kicker">Archive</p>
       <h2 id="archive-heading">Browse and listen</h2>
-      <p id="archive-summary" class="archive-copy">Play talks here or download the audio.</p>
-      <div class="archive-tools">
+      <div class="archive-query">
         <label class="archive-search" for="archive-search">
           <span class="sr-only">Search talks</span>
           <input id="archive-search" type="search" autocomplete="off" spellcheck="false" placeholder="Search titles, descriptions, chapters">
         </label>
+        <div class="scope-row">
+{scope_switch}
+          <button class="starred-toggle" type="button" aria-pressed="false" data-starred-toggle>Starred</button>
+        </div>
+      </div>
+      <div class="result-bar">
+        <p id="archive-summary" class="archive-copy">Play talks here or download the audio.</p>
         <p id="archive-search-status" class="archive-search-status" aria-live="polite"></p>
       </div>
+      <section class="subscribe-current" aria-labelledby="subscribe-current-heading">
+        <div>
+          <h3 id="subscribe-current-heading">Subscribe to results</h3>
+          <p id="feed-copy" class="subscribe-copy">RSS reflects the current search.</p>
+          <p id="copy-status" class="copy-status" aria-live="polite"></p>
+        </div>
+        <div class="listen-grid">
+          <a class="listen-badge overcast" href="#" data-subscribe-target="overcast">
+            <img src="https://cdn.simpleicons.org/overcast/FFFFFF?viewbox=auto" alt="">
+            <span>Overcast</span>
+          </a>
+          <a class="listen-badge pocket" href="#" data-subscribe-target="pocket">
+            <img src="https://cdn.simpleicons.org/pocketcasts/FFFFFF?viewbox=auto" alt="">
+            <span>Pocket Casts</span>
+          </a>
+          <button class="listen-badge apple" type="button" data-copy-current-feed data-copy-message="RSS URL copied. In Apple Podcasts, choose Library, then Add a Show by URL.">
+            <img src="https://cdn.simpleicons.org/applepodcasts/FFFFFF?viewbox=auto" alt="">
+            <span>Apple Podcasts</span>
+          </button>
+          <button class="listen-badge youtube" type="button" data-copy-current-feed data-copy-message="RSS URL copied. In YouTube Music, choose Library, Podcasts, then Add podcast by RSS feed.">
+            <img src="https://cdn.simpleicons.org/youtubemusic/FFFFFF?viewbox=auto" alt="">
+            <span>YouTube Music</span>
+          </button>
+        </div>
+      </section>
       <div id="talk-list" class="talk-list"></div>
       <div id="talk-loader" class="talk-loader" aria-live="polite">Loading talks...</div>
     </section>
@@ -690,37 +689,6 @@ def render_index(
   <script>
     window.TALK_ARCHIVE_CONFIG = {archive_config_json};
   </script>
-  <script>
-    const feedUrls = {feed_urls_json};
-    const status = document.getElementById('copy-status');
-    function selectFeed(key) {{
-      document.querySelectorAll('[data-feed-panel]').forEach(panel => {{
-        panel.hidden = panel.dataset.feedPanel !== key;
-      }});
-      document.querySelectorAll('[data-feed-tab]').forEach(tab => {{
-        const selected = tab.dataset.feedTab === key;
-        tab.classList.toggle('is-active', selected);
-        tab.setAttribute('aria-selected', String(selected));
-      }});
-      window.talkArchiveBrowser?.selectFeed(key);
-      status.textContent = '';
-    }}
-    async function copyFeedUrl(key) {{
-      const feedUrl = feedUrls[key] || feedUrls.dharma || feedUrls.main;
-      try {{
-        await navigator.clipboard.writeText(feedUrl);
-        status.textContent = this?.dataset?.copyMessage || 'RSS URL copied.';
-      }} catch (error) {{
-        status.textContent = feedUrl;
-      }}
-    }}
-    document.querySelectorAll('[data-copy-feed]').forEach(button => {{
-      button.addEventListener('click', () => copyFeedUrl.call(button, button.dataset.copyFeed));
-    }});
-    document.querySelectorAll('[data-feed-tab]').forEach(button => {{
-      button.addEventListener('click', () => selectFeed(button.dataset.feedTab));
-    }});
-  </script>
   <script src="archive-browser.js"></script>
   <script src="/js/admin-presence.js?v=2"></script>
 </body>
@@ -728,51 +696,30 @@ def render_index(
 """
 
 
-def render_subscribe_panel(
-    key: str,
-    title: str,
-    count: int,
-    feed_url: str,
-    feed_href: str,
-    overcast_url: str,
-    active: bool,
-) -> str:
-    hidden = "" if active else " hidden"
-    noun = "episode" if count == 1 else "episodes"
-    pocket_feed_path = re.sub(r"^https?://", "", feed_url)
-    pocket_casts_url = "pktc://subscribe/" + pocket_feed_path
-    apple_message = (
-        "RSS URL copied. In Apple Podcasts, choose Library, then Add a Show by URL."
-    )
-    youtube_message = (
-        "RSS URL copied. In YouTube Music, choose Library, Podcasts, then Add podcast by RSS feed."
-    )
-    return f"""      <div class="feed-panel" id="panel-{_escape(key)}" data-feed-panel="{_escape(key)}"{hidden}>
-        <h2>{_escape(title)}</h2>
-        <p class="feed-count">{count} {noun}</p>
-        <div class="listen-grid">
-          <a class="listen-badge overcast" href="{_escape(overcast_url)}">
-            <img src="https://cdn.simpleicons.org/overcast/FFFFFF?viewbox=auto" alt="">
-            <span>Overcast</span>
-          </a>
-          <a class="listen-badge pocket" href="{_escape(pocket_casts_url)}">
-            <img src="https://cdn.simpleicons.org/pocketcasts/FFFFFF?viewbox=auto" alt="">
-            <span>Pocket Casts</span>
-          </a>
-          <button class="listen-badge apple" type="button" data-copy-feed="{_escape(key)}" data-copy-message="{_escape(apple_message)}">
-            <img src="https://cdn.simpleicons.org/applepodcasts/FFFFFF?viewbox=auto" alt="">
-            <span>Apple Podcasts</span>
-          </button>
-          <button class="listen-badge youtube" type="button" data-copy-feed="{_escape(key)}" data-copy-message="{_escape(youtube_message)}">
-            <img src="https://cdn.simpleicons.org/youtubemusic/FFFFFF?viewbox=auto" alt="">
-            <span>YouTube Music</span>
-          </button>
-        </div>
-        <div class="feed-copy">
-          <code class="feed-url">{_escape(feed_url)}</code>
-          <button class="copy-link" type="button" data-copy-feed="{_escape(key)}">Copy RSS</button>
-        </div>
-      </div>"""
+def render_scope_switch(scopes: Dict[str, Dict[str, object]]) -> str:
+    buttons = []
+    for key in ["all", "dharma", "guided"]:
+        if key not in scopes:
+            continue
+        scope = scopes[key]
+        active = key == "all"
+        buttons.append(
+            f"""          <button class="scope-chip{' is-active' if active else ''}" type="button" role="tab" aria-selected="{str(active).lower()}" data-scope="{_escape(key)}">
+            <span>{_escape(str(scope["title"]))}</span>
+            <strong>{int(scope["count"])}</strong>
+          </button>"""
+        )
+    return f"""          <div class="scope-switch" role="tablist" aria-label="Choose archive scope">
+{chr(10).join(buttons)}
+          </div>"""
+
+
+def corpus_slug_from_site(site: Dict) -> str:
+    base_url = str(site.get("base_url") or "")
+    match = re.search(r"/dharma/([^/]+)/?", base_url)
+    if match:
+        return match.group(1)
+    return re.sub(r"[^a-z0-9]+", "-", str(site.get("author") or site.get("title") or "dharma").lower()).strip("-")
 
 
 def landing_archive_css() -> str:
@@ -1058,19 +1005,35 @@ def talk_page_css() -> str:
 def archive_browser_js() -> str:
     return """(() => {
   const config = window.TALK_ARCHIVE_CONFIG || {};
-  const feeds = config.feeds || {};
+  const scopes = config.scopes || {};
   const talkList = document.getElementById('talk-list');
   const talkLoader = document.getElementById('talk-loader');
   const archiveSummary = document.getElementById('archive-summary');
   const archiveSearch = document.getElementById('archive-search');
   const archiveSearchStatus = document.getElementById('archive-search-status');
+  const starredToggle = document.querySelector('[data-starred-toggle]');
+  const copyStatus = document.getElementById('copy-status');
+  const feedCopy = document.getElementById('feed-copy');
   const siteBaseUrl = config.siteBaseUrl || '';
-  const feedKeys = Object.keys(feeds);
-  const stateByFeed = new Map();
+  const scopeKeys = Object.keys(scopes);
+  const stateByScope = new Map();
+  const favoriteStateByKey = new Map();
+  const favoriteRequests = new Set();
   const talkBatchSize = 12;
-  let currentFeed = config.defaultFeed || feedKeys[0] || '';
+  let currentScope = config.defaultScope || scopeKeys[0] || '';
   let searchQuery = '';
+  let starredOnly = false;
   let observer = null;
+
+  function initialStateFromUrl() {
+    const params = new URLSearchParams(location.search);
+    const requestedScope = params.get('scope') || currentScope;
+    return {
+      scope: scopes[requestedScope] ? requestedScope : currentScope,
+      query: params.get('q') || '',
+      starred: params.get('starred') === '1',
+    };
+  }
 
   function mediaUrl(url) {
     if (!url) return '';
@@ -1094,6 +1057,16 @@ def archive_browser_js() -> str:
       }
     }
     return url || (config.talkPathPrefix || 'talks/') + String(talk.id || '').replace(/[^a-z0-9]+/gi, '-').toLowerCase() + '/';
+  }
+
+  function talkSafeId(talk) {
+    const href = talkHref(talk);
+    try {
+      const parsed = new URL(href, location.href);
+      return parsed.pathname.match(/\\/talks\\/([^/]+)\\/?$/)?.[1] || '';
+    } catch (error) {
+      return String(href || '').match(/\\/?talks\\/([^/]+)\\/?$/)?.[1] || '';
+    }
   }
 
   function talkDescription(talk) {
@@ -1126,6 +1099,11 @@ def archive_browser_js() -> str:
         talk.title,
         talkDescription(talk),
         chapterSearchText(talk),
+        talk.speaker,
+        talk.source,
+        talk.venue,
+        talk.series,
+        ...(Array.isArray(talk.tags) ? talk.tags : []),
       ].filter(Boolean).join(' '));
     }
     return talk.__archiveSearchText;
@@ -1140,67 +1118,78 @@ def archive_browser_js() -> str:
   }
 
   function stateFor(key) {
-    if (!stateByFeed.has(key)) {
-      stateByFeed.set(key, {
+    if (!stateByScope.has(key)) {
+      stateByScope.set(key, {
         talks: null,
         filteredTalks: null,
         nextIndex: 0,
         loading: false,
       });
     }
-    return stateByFeed.get(key);
+    return stateByScope.get(key);
   }
 
   function activeTalks(state) {
     return state.filteredTalks || state.talks || [];
   }
 
-  function applySearch(state) {
+  async function applyFilters(state) {
     if (!state.talks) {
       state.filteredTalks = null;
       state.nextIndex = 0;
       return;
     }
-    const query = normalizeSearch(searchQuery);
-    state.filteredTalks = query
-      ? state.talks.filter(talk => talkSearchText(talk).includes(query))
+    const terms = normalizeSearch(searchQuery).split(/\\s+/).filter(Boolean);
+    let talks = terms.length
+      ? state.talks.filter(talk => terms.every(term => talkSearchText(talk).includes(term)))
       : state.talks;
+    if (starredOnly) {
+      await ensureFavoriteStates(state.talks);
+      talks = talks.filter(isTalkFavorited);
+    } else {
+      ensureFavoriteStates(state.talks).catch(() => {});
+    }
+    state.filteredTalks = talks;
     state.nextIndex = 0;
   }
 
   function updateSearchStatus(key) {
     if (!archiveSearchStatus) return;
     const state = stateFor(key);
-    const query = searchQuery.trim();
-    if (!query || !state.talks) {
+    if (!state.talks) {
       archiveSearchStatus.textContent = '';
       return;
     }
     const matches = activeTalks(state).length;
     const total = state.talks.length;
     const noun = matches === 1 ? 'match' : 'matches';
-    archiveSearchStatus.textContent = `${matches} of ${total} ${noun}`;
+    archiveSearchStatus.textContent = (searchQuery.trim() || starredOnly)
+      ? `${matches} of ${total} ${noun}`
+      : '';
   }
 
   function updateSummary(key) {
     if (!archiveSummary) return;
-    const feed = feeds[key] || {};
-    const count = Number(feed.count || 0);
-    const noun = count === 1 ? 'talk' : 'talks';
+    const scope = scopes[key] || {};
+    const state = stateFor(key);
+    const count = activeTalks(state).length || Number(scope.count || 0);
+    const noun = count === 1 ? 'recording' : 'recordings';
     archiveSummary.textContent = count
       ? `${count} ${noun}. Play talks here or download the audio.`
       : 'Play talks here or download the audio.';
     updateSearchStatus(key);
+    updateSubscribeLinks();
   }
 
-  function renderTalkBatch(key = currentFeed) {
+  function renderTalkBatch(key = currentScope) {
     const state = stateFor(key);
-    if (!state.talks || !talkList || !talkLoader || key !== currentFeed) return;
+    if (!state.talks || !talkList || !talkLoader || key !== currentScope) return;
     const fragment = document.createDocumentFragment();
     const talks = activeTalks(state);
     if (!talks.length) {
-      talkLoader.textContent = searchQuery.trim() ? 'No talks match this search.' : 'No talks are available yet.';
+      talkLoader.textContent = searchQuery.trim() || starredOnly ? 'No recordings match this search.' : 'No recordings are available yet.';
       updateSearchStatus(key);
+      updateSubscribeLinks();
       return;
     }
     const end = Math.min(state.nextIndex + talkBatchSize, talks.length);
@@ -1258,25 +1247,27 @@ def archive_browser_js() -> str:
     state.nextIndex = end;
     talkList.appendChild(fragment);
     talkLoader.textContent = state.nextIndex >= talks.length
-      ? (searchQuery.trim() ? 'End of matches' : 'End of archive')
+      ? (searchQuery.trim() || starredOnly ? 'End of matches' : 'End of archive')
       : 'Loading more talks...';
     updateSearchStatus(key);
+    updateSubscribeLinks();
   }
 
-  async function loadTalkArchive(key = currentFeed) {
+  async function loadTalkArchive(key = currentScope) {
     if (!talkList || !talkLoader) return;
-    const feed = feeds[key];
-    if (!feed) return;
-    currentFeed = key;
+    const scope = scopes[key];
+    if (!scope) return;
+    currentScope = key;
+    updateControls();
     updateSummary(key);
     const state = stateFor(key);
     talkList.replaceChildren();
     state.nextIndex = 0;
-    talkLoader.textContent = state.loading ? 'Loading talks...' : 'Loading talks...';
+    talkLoader.textContent = 'Loading talks...';
     try {
       if (!state.talks) {
         state.loading = true;
-        const response = await fetch(feed.url, { cache: 'no-cache' });
+        const response = await fetch(scope.url, { cache: 'no-cache' });
         if (!response.ok) throw new Error('Could not load talk archive');
         const talks = await response.json();
         state.talks = talks
@@ -1284,7 +1275,8 @@ def archive_browser_js() -> str:
           .sort((a, b) => String(b.published_at || '').localeCompare(String(a.published_at || '')));
       }
       state.loading = false;
-      applySearch(state);
+      await applyFilters(state);
+      updateSummary(key);
       renderTalkBatch(key);
       if (!observer) {
         observer = new IntersectionObserver(entries => {
@@ -1296,31 +1288,179 @@ def archive_browser_js() -> str:
       }
     } catch (error) {
       state.loading = false;
-      if (key === currentFeed) {
+      if (key === currentScope) {
         talkLoader.textContent = 'Talks could not be loaded right now.';
       }
     }
   }
 
+  function favoriteKeyForTalk(talk) {
+    const corpus = config.corpus || location.pathname.match(/^\\/dharma\\/([^/]+)/)?.[1] || '';
+    const id = talkSafeId(talk);
+    return corpus && id ? `dharma_talk:${corpus}:${id}` : '';
+  }
+
+  function favoritePayloadForTalk(talk) {
+    const corpus = config.corpus || location.pathname.match(/^\\/dharma\\/([^/]+)/)?.[1] || '';
+    const id = talkSafeId(talk);
+    if (!corpus || !id) return null;
+    const key = `dharma_talk:${corpus}:${id}`;
+    return { key, ref: { kind: 'dharma_talk', corpus, id } };
+  }
+
+  function isTalkFavorited(talk) {
+    const key = favoriteKeyForTalk(talk);
+    return Boolean(key && favoriteStateByKey.get(key)?.favorited);
+  }
+
+  async function ensureFavoriteStates(talks) {
+    const refs = talks
+      .map(favoritePayloadForTalk)
+      .filter(Boolean)
+      .filter(ref => !favoriteStateByKey.has(ref.key) && !favoriteRequests.has(ref.key));
+    if (!refs.length) return;
+    refs.forEach(ref => favoriteRequests.add(ref.key));
+    try {
+      for (let index = 0; index < refs.length; index += 500) {
+        const chunk = refs.slice(index, index + 500);
+        const response = await fetch('/api/favorites/state', {
+          method: 'POST',
+          credentials: 'include',
+          headers: {
+            accept: 'application/json',
+            'content-type': 'application/json',
+            'x-requested-with': 'XMLHttpRequest'
+          },
+          body: JSON.stringify({ refs: chunk })
+        });
+        if (!response.ok) continue;
+        const body = await response.json().catch(() => null);
+        for (const state of body?.states || []) {
+          if (state?.key) favoriteStateByKey.set(state.key, state);
+        }
+      }
+    } finally {
+      refs.forEach(ref => favoriteRequests.delete(ref.key));
+    }
+  }
+
+  function currentFeedUrl() {
+    const endpoint = config.feedEndpoint || '/api/feeds/dharma.xml';
+    const url = new URL(endpoint, location.origin);
+    url.searchParams.set('corpus', config.corpus || location.pathname.match(/^\\/dharma\\/([^/]+)/)?.[1] || '');
+    url.searchParams.set('scope', currentScope || 'all');
+    if (searchQuery.trim()) url.searchParams.set('q', searchQuery.trim());
+    if (starredOnly) url.searchParams.set('starred', '1');
+    return url.href;
+  }
+
+  function updateSubscribeLinks() {
+    const feedUrl = currentFeedUrl();
+    document.querySelectorAll('[data-subscribe-target]').forEach(link => {
+      if (link.dataset.subscribeTarget === 'overcast') {
+        link.href = `overcast://x-callback-url/add?url=${encodeURIComponent(feedUrl)}`;
+      }
+      if (link.dataset.subscribeTarget === 'pocket') {
+        link.href = `pktc://subscribe/${feedUrl.replace(/^https?:\\/\\//, '')}`;
+      }
+    });
+    if (feedCopy) {
+      const state = stateFor(currentScope);
+      const count = activeTalks(state).length || Number(scopes[currentScope]?.count || 0);
+      const noun = count === 1 ? 'recording' : 'recordings';
+      feedCopy.textContent = `${count} ${noun} in this RSS feed.`;
+    }
+  }
+
+  async function copyCurrentFeed(button) {
+    const feedUrl = currentFeedUrl();
+    try {
+      await navigator.clipboard.writeText(feedUrl);
+      if (copyStatus) copyStatus.textContent = button?.dataset?.copyMessage || 'RSS URL copied.';
+    } catch (error) {
+      if (copyStatus) copyStatus.textContent = feedUrl;
+    }
+  }
+
+  function updateControls() {
+    document.querySelectorAll('[data-scope]').forEach(button => {
+      const selected = button.dataset.scope === currentScope;
+      button.classList.toggle('is-active', selected);
+      button.setAttribute('aria-selected', String(selected));
+    });
+    if (starredToggle) {
+      starredToggle.classList.toggle('is-active', starredOnly);
+      starredToggle.setAttribute('aria-pressed', String(starredOnly));
+    }
+    if (archiveSearch && archiveSearch.value !== searchQuery) {
+      archiveSearch.value = searchQuery;
+    }
+    if (copyStatus) copyStatus.textContent = '';
+    updateSubscribeLinks();
+  }
+
+  function writeUrl({ replace = true } = {}) {
+    const url = new URL(location.href);
+    if (currentScope && currentScope !== (config.defaultScope || 'all')) {
+      url.searchParams.set('scope', currentScope);
+    } else {
+      url.searchParams.delete('scope');
+    }
+    if (searchQuery.trim()) {
+      url.searchParams.set('q', searchQuery.trim());
+    } else {
+      url.searchParams.delete('q');
+    }
+    if (starredOnly) {
+      url.searchParams.set('starred', '1');
+    } else {
+      url.searchParams.delete('starred');
+    }
+    history[replace ? 'replaceState' : 'pushState'](null, '', url);
+  }
+
   archiveSearch?.addEventListener('input', () => {
     searchQuery = archiveSearch.value || '';
-    const state = stateFor(currentFeed);
-    talkList?.replaceChildren();
-    if (state.talks) {
-      applySearch(state);
-      updateSummary(currentFeed);
-      renderTalkBatch(currentFeed);
-    } else {
-      updateSearchStatus(currentFeed);
-      if (currentFeed && !state.loading) {
-        loadTalkArchive(currentFeed);
-      }
-    }
+    writeUrl({ replace: true });
+    loadTalkArchive(currentScope);
+  });
+
+  document.querySelectorAll('[data-scope]').forEach(button => {
+    button.addEventListener('click', () => {
+      if (!scopes[button.dataset.scope]) return;
+      currentScope = button.dataset.scope;
+      writeUrl({ replace: false });
+      loadTalkArchive(currentScope);
+    });
+  });
+
+  starredToggle?.addEventListener('click', () => {
+    starredOnly = !starredOnly;
+    writeUrl({ replace: false });
+    loadTalkArchive(currentScope);
+  });
+
+  document.querySelectorAll('[data-copy-current-feed]').forEach(button => {
+    button.addEventListener('click', () => copyCurrentFeed(button));
+  });
+
+  window.addEventListener('popstate', () => {
+    const state = initialStateFromUrl();
+    currentScope = state.scope;
+    searchQuery = state.query;
+    starredOnly = state.starred;
+    loadTalkArchive(currentScope);
+  });
+
+  window.addEventListener('favorites:changed', event => {
+    const state = event.detail?.state;
+    if (event.detail?.key && state) favoriteStateByKey.set(event.detail.key, state);
+    if (starredOnly) loadTalkArchive(currentScope);
   });
 
   window.talkArchiveBrowser = {
-    selectFeed(key) {
-      if (feeds[key]) {
+    selectScope(key) {
+      if (scopes[key]) {
         loadTalkArchive(key);
       }
     },
@@ -1334,10 +1474,17 @@ def archive_browser_js() -> str:
     }
   }, true);
 
-  if (currentFeed) {
-    loadTalkArchive(currentFeed);
+  const initial = initialStateFromUrl();
+  currentScope = initial.scope;
+  searchQuery = initial.query;
+  starredOnly = initial.starred;
+  updateControls();
+  if (archiveSearch) archiveSearch.value = searchQuery;
+
+  if (currentScope) {
+    loadTalkArchive(currentScope);
   } else if (talkLoader) {
-    talkLoader.textContent = 'No talks are available yet.';
+    talkLoader.textContent = 'No recordings are available yet.';
   }
 })();
 """

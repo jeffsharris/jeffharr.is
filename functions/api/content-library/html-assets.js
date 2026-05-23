@@ -4,7 +4,7 @@ function injectFavoritesAssets(html) {
   if (!output.includes('/css/favorites.css')) {
     output = output.replace(
       /<\/head>/i,
-      '  <link rel="stylesheet" href="/css/favorites.css?v=2">\n</head>'
+      '  <link rel="stylesheet" href="/css/favorites.css?v=3">\n</head>'
     );
   }
   if (!output.includes('/js/admin-presence.js')) {
@@ -16,7 +16,7 @@ function injectFavoritesAssets(html) {
   if (!output.includes('/js/favorites.js')) {
     output = output.replace(
       /<\/body>/i,
-      '  <script src="/js/favorites.js?v=2" defer></script>\n</body>'
+      '  <script src="/js/favorites.js?v=3" defer></script>\n</body>'
     );
   }
   return output;
