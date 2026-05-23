@@ -763,6 +763,7 @@ def landing_archive_css() -> str:
     }
     .archive-search input {
       flex: 1 1 0;
+      width: 0;
       min-width: 0;
       min-height: 36px;
       box-sizing: border-box;
