@@ -7,7 +7,7 @@ from dataclasses import replace
 from pathlib import Path
 from typing import Iterable, List, Optional
 
-from brensilver.models import PodcastChapter, Talk
+from dharma_feed.models import PodcastChapter, Talk
 
 
 def enrich_talks(

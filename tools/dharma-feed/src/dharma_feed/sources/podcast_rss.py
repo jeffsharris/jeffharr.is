@@ -9,8 +9,8 @@ from pathlib import Path
 from typing import Any, Dict, Iterable, Optional
 from urllib.parse import parse_qs, urlparse
 
-from brensilver.fetch import fetch_text
-from brensilver.models import Talk
+from dharma_feed.fetch import fetch_text
+from dharma_feed.models import Talk
 
 ITUNES_NS = "http://www.itunes.com/dtds/podcast-1.0.dtd"
 

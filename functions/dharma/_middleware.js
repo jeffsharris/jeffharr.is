@@ -5,8 +5,7 @@ import {
   hasStarredRefs,
   loadStarredDharmaRefs
 } from '../api/dharma/starred.js';
-
-const FAVORITE_TITLE_PREFIX = '⭐️ ';
+import { FAVORITE_TITLE_PREFIX } from '../api/dharma/feed-constants.js';
 
 export async function onRequest(context) {
   const response = await context.next();

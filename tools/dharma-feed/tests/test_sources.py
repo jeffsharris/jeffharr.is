@@ -5,7 +5,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from xml.etree import ElementTree as ET
 
-from brensilver.build import (
+from dharma_feed.build import (
     apply_site_image,
     apply_source_metadata,
     archive_browser_js,
@@ -15,13 +15,13 @@ from brensilver.build import (
     render_talk_page,
     split_talks_for_feeds,
 )
-from brensilver.metadata import enrich_talks, write_episode_media
-from brensilver.models import PodcastChapter, Talk
-from brensilver.rss import build_rss
-from brensilver.rss import merge_talks
-from brensilver.sources.audiodharma import parse_audiodharma_listing
-from brensilver.sources.dharmaseed import parse_dharmaseed_feed, parse_dharmaseed_player
-from brensilver.sources.podcast_rss import parse_podcast_rss_feed
+from dharma_feed.metadata import enrich_talks, write_episode_media
+from dharma_feed.models import PodcastChapter, Talk
+from dharma_feed.rss import build_rss
+from dharma_feed.rss import merge_talks
+from dharma_feed.sources.audiodharma import parse_audiodharma_listing
+from dharma_feed.sources.dharmaseed import parse_dharmaseed_feed, parse_dharmaseed_player
+from dharma_feed.sources.podcast_rss import parse_podcast_rss_feed
 
 
 class SourceParsingTests(unittest.TestCase):

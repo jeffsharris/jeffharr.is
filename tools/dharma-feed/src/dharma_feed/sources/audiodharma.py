@@ -6,8 +6,8 @@ from html.parser import HTMLParser
 from typing import Dict, Iterable, List, Optional
 from urllib.parse import urljoin
 
-from brensilver.fetch import fetch_text, probe_content_length
-from brensilver.models import Talk
+from dharma_feed.fetch import fetch_text, probe_content_length
+from dharma_feed.models import Talk
 
 BASE_URL = "https://www.audiodharma.org"
 DATE_RE = re.compile(r"^\d{4}\.\d{2}\.\d{2}$")

@@ -100,7 +100,7 @@ bloats repo history and makes Pages deploys carry media churn.
 
 ## Feed Integration
 
-Extend `tools/brensilver-feed` so each RSS item can merge optional metadata:
+Extend `tools/dharma-feed` so each RSS item can merge optional metadata:
 
 - `<description>` / `<itunes:summary>` from `description_with_timestamps`
 - `<itunes:image href="...">` from the published artwork URL

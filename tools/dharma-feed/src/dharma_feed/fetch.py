@@ -5,7 +5,7 @@ from urllib.error import HTTPError
 from urllib.request import Request, urlopen
 
 USER_AGENT = (
-    "brensilver-feed/0.1 "
+    "dharma-feed/0.1 "
     "(https://jeffharr.is/dharma/brensilver/; podcast feed merger for personal archive)"
 )
 

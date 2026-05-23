@@ -9,10 +9,10 @@ from datetime import datetime
 from pathlib import Path
 from typing import Dict, Iterable, List
 
-from brensilver.metadata import enrich_talks, safe_id, write_episode_media
-from brensilver.models import PodcastChapter, Talk, TranscriptRef
-from brensilver.rss import build_rss, merge_talks
-from brensilver.sources import (
+from dharma_feed.metadata import enrich_talks, safe_id, write_episode_media
+from dharma_feed.models import PodcastChapter, Talk, TranscriptRef
+from dharma_feed.rss import build_rss, merge_talks
+from dharma_feed.sources import (
     fetch_audiodharma_talks,
     fetch_dharmaseed_player_talks,
     fetch_dharmaseed_talks,
@@ -47,7 +47,7 @@ DHARMA_FEED_TITLE_PATTERNS = [
 
 
 def main(argv: Iterable[str] | None = None) -> int:
-    parser = argparse.ArgumentParser(description="Build the merged Brensilver podcast feed.")
+    parser = argparse.ArgumentParser(description="Build configured Dharma podcast feeds.")
     parser.add_argument("--config", default="config/sources.json")
     parser.add_argument("--out-dir", default="public/brensilver")
     parser.add_argument("--talks-json")

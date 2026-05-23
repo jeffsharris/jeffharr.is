@@ -4,10 +4,10 @@ import {
   loadStarredDharmaRefs,
   talkIsStarred
 } from '../dharma/starred.js';
+import { FAVORITE_TITLE_PREFIX } from '../dharma/feed-constants.js';
 
 const MAX_FEED_ITEMS = 500;
 const DEFAULT_LIMIT = 200;
-const FAVORITE_TITLE_PREFIX = '\u2b50\ufe0f ';
 const VALID_SCOPES = new Set(['all', 'dharma', 'guided']);
 const SCOPE_FILES = {
   all: 'talks.json',

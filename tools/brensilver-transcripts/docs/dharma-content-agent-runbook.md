@@ -2,7 +2,7 @@
 
 This project has two related but distinct layers:
 
-1. Public podcast/static-site feed generation in `tools/brensilver-feed/`.
+1. Public podcast/static-site feed generation in `tools/dharma-feed/`.
 2. Local transcript, reference, artwork, and QMD indexing in
    `tools/brensilver-transcripts/`.
 
@@ -13,7 +13,7 @@ markdown, and QMD embeddings.
 
 ## Current Brensilver Architecture
 
-- Source config: `tools/brensilver-feed/config/sources.json`
+- Source config: `tools/dharma-feed/config/sources.json`
 - Feed builder wrapper: `scripts/build-brensilver-feed.py`
 - Local ingestion runner: `scripts/run-brensilver-ingestion.sh`
 - Generated public artifacts: `dharma/brensilver/`
@@ -67,12 +67,12 @@ ingestion run.
 
 ## Adding More Matthew Brensilver Sources
 
-1. Add the source to `tools/brensilver-feed/config/sources.json`.
-2. Add or update parser tests in `tools/brensilver-feed/tests/test_sources.py`.
+1. Add the source to `tools/dharma-feed/config/sources.json`.
+2. Add or update parser tests in `tools/dharma-feed/tests/test_sources.py`.
 3. Run:
 
    ```sh
-   PYTHONPATH=tools/brensilver-feed/src python3 -m unittest tools/brensilver-feed/tests/test_sources.py
+   PYTHONPATH=tools/dharma-feed/src python3 -m unittest tools/dharma-feed/tests/test_sources.py
    scripts/run-brensilver-ingestion.sh
    ```
 
@@ -141,16 +141,15 @@ for example `goldstein`, `boorstein`, or another stable teacher slug.
 
 ## Adding A New Dharma Teacher
 
-The Brensilver code is still partially teacher-specific: output paths, site URL,
-QMD collection, generated teacher image, and some source config all assume
-Matthew Brensilver. For another teacher, do not dump their talks into the
-`brensilver` collection or feeds.
+The public feed builder is corpus-configurable, but each corpus still needs its
+own output path, site URL, local corpus directory, QMD collection, wrapper, and
+source config. The transcript package name is historical; do not treat the
+`brensilver` collection or feeds as generic defaults.
 
 Use this plan:
 
 1. Choose a teacher slug, e.g. `goldstein`.
-2. Create a new public route/feed root, e.g. `brensilver/` becomes
-   `dharma/{teacher_slug}/` or another agreed URL.
+2. Create a new public route/feed root, usually `dharma/{teacher_slug}/`.
 3. Create a separate local corpus root:
    `.local-corpus/{teacher_slug}/`.
 4. Use the shared QMD index `dharma`, but create a separate collection:
@@ -161,11 +160,14 @@ Use this plan:
      --name {teacher_slug}
    ```
 
-5. Copy or refactor the feed config so `site.title`, `site.feed_url`,
-   `site.image_url`, source IDs, and teacher names are teacher-specific.
-6. Generate a teacher-level podcast image and per-episode artwork for that
+5. Add a feed config under `tools/dharma-feed/config/` so `site.title`,
+   `site.feed_url`, `site.image_url`, source IDs, and teacher names are
+   teacher-specific.
+6. Add a small wrapper under `scripts/build-*-feed.py` that delegates to
+   `scripts/lib/dharma_feed_runner.py`.
+7. Generate a teacher-level podcast image and per-episode artwork for that
    teacher.
-7. Run the same ingestion sequence:
+8. Run the same ingestion sequence:
 
    ```sh
    python3 scripts/build-...-feed.py --copy-artwork
@@ -178,15 +180,15 @@ Use this plan:
      --build-feedback-viewer
    ```
 
-8. Add an agent note for the new teacher explaining their source feeds, private
+9. Add an agent note for the new teacher explaining their source feeds, private
    keys, QMD collection name, and public feed URLs.
 
-If this project grows beyond two teachers, refactor the tooling around a
-teacher config file instead of cloning Brensilver-specific constants.
+If this project grows beyond the current manually named wrappers, consider a
+single generic feed-build CLI that takes a corpus config path.
 
 ## Rob Burbea Corpus
 
-- Source config: `tools/brensilver-feed/config/burbea.json`
+- Source config: `tools/dharma-feed/config/burbea.json`
 - Feed builder wrapper: `scripts/build-burbea-feed.py`
 - Local ingestion runner: `scripts/run-burbea-ingestion.sh`
 - Generated public artifacts: `dharma/burbea/`

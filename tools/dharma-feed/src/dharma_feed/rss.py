@@ -7,7 +7,7 @@ from datetime import datetime, timezone
 from email.utils import format_datetime
 from typing import Dict, Iterable, List, Optional
 
-from brensilver.models import Talk
+from dharma_feed.models import Talk
 
 ATOM_NS = "http://www.w3.org/2005/Atom"
 ITUNES_NS = "http://www.itunes.com/dtds/podcast-1.0.dtd"

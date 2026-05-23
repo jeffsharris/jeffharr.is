@@ -9,8 +9,8 @@ from datetime import datetime, timezone
 from email.utils import parsedate_to_datetime
 from typing import Any, Dict, Iterable, Optional
 
-from brensilver.fetch import fetch_text, probe_content_length
-from brensilver.models import Talk
+from dharma_feed.fetch import fetch_text, probe_content_length
+from dharma_feed.models import Talk
 
 ITUNES_NS = "http://www.itunes.com/dtds/podcast-1.0.dtd"
 TALK_ID_RE = re.compile(r"/talks/(\d+)/")

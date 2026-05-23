@@ -18,7 +18,7 @@
       "name": "KPFA Archive",
       "id_prefix": "watts",
       "speaker": "Alan Watts",
-      "feed_path": "tools/brensilver-feed/sources/watts.xml",
+      "feed_path": "tools/dharma-feed/sources/watts.xml",
       "archive_id_regex": "^([A-Z]{2}\\d{4}[A-Za-z]?(?:_\\d+)?)\\s+",
       "strip_title_prefix": true,
       "title_replacements": {
@@ -45,14 +45,14 @@
       "name": "YouTube / Being in the Way",
       "id_prefix": "watts",
       "speaker": "Alan Watts",
-      "feed_path": "tools/brensilver-feed/sources/watts-youtube.xml"
+      "feed_path": "tools/dharma-feed/sources/watts-youtube.xml"
     },
     {
       "type": "podcast_rss",
       "name": "Google Drive Uploads",
       "id_prefix": "watts",
       "speaker": "Alan Watts",
-      "feed_path": "tools/brensilver-feed/sources/watts-drive.xml"
+      "feed_path": "tools/dharma-feed/sources/watts-drive.xml"
     }
   ],
   "feed": {
