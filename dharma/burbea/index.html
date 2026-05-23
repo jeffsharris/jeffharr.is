@@ -223,6 +223,8 @@
       display: flex;
       align-items: center;
       gap: 12px;
+      width: 100%;
+      max-width: 100%;
       min-height: 58px;
       box-sizing: border-box;
       padding: 9px 10px 9px 48px;
@@ -258,8 +260,8 @@
       opacity: 0.86;
     }
     .archive-search input {
-      flex: 1 1 auto;
-      min-width: 72px;
+      flex: 1 1 0;
+      min-width: 0;
       min-height: 36px;
       box-sizing: border-box;
       padding: 0;
@@ -388,7 +390,6 @@
       .archive-search::before { left: 14px; }
       .archive-search::after { left: 27px; }
       .archive-search input {
-        min-width: 54px;
         font-size: 0.96rem;
       }
       .archive-filter-pills { gap: 4px; }
