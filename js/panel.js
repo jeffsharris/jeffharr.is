@@ -432,7 +432,7 @@
     panelContent.innerHTML = html;
   }
 
-  // Dharma content - random talks across teachers
+  // Dharma content - random favorite talks across teachers
   function renderDharma(data) {
     const talks = (data.talks || []).slice(0, 10);
 
@@ -443,7 +443,7 @@
 
     const html = `
       <div class="panel-section">
-        <h4 class="panel-section__title">Random Talks</h4>
+        <h4 class="panel-section__title">Some Favorite Talks</h4>
         <div class="poem-card-list">
           ${talks.map(renderDharmaTalk).join('')}
         </div>

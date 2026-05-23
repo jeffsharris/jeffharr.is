@@ -1,3 +1,9 @@
+import { getContentDb } from './content-library/db.js';
+import {
+  loadStarredDharmaRefs,
+  talkIsStarred
+} from './dharma/starred.js';
+
 const CORPORA = [
   { slug: 'brensilver', name: 'Matthew Brensilver' },
   { slug: 'burbea', name: 'Rob Burbea' },
@@ -6,8 +12,20 @@ const CORPORA = [
 
 export async function onRequest(context) {
   try {
+    const db = getContentDb(context.env);
+    const corpusSlugs = CORPORA.map((corpus) => corpus.slug);
+    const starredRefs = db
+      ? await loadStarredDharmaRefs(db, corpusSlugs)
+      : { byCorpus: new Map() };
     const groups = await Promise.all(CORPORA.map((corpus) => loadCorpusTalks(context, corpus)));
-    const talks = groups.flat().filter((talk) => talk.audioUrl && talk.url);
+    const talks = groups.flat()
+      .filter(({ raw, corpus }) => (
+        raw.audio_url
+        && raw.canonical_url
+        && talkIsStarred(raw, corpus.slug, starredRefs)
+      ))
+      .map(({ raw, corpus }) => normalizeTalk(raw, corpus))
+      .filter(Boolean);
     return jsonResponse({
       talks: shuffle(talks).slice(0, 10),
       profileUrl: '/dharma/'
@@ -27,7 +45,7 @@ async function loadCorpusTalks(context, corpus) {
   if (!response.ok) return [];
   const talks = await response.json().catch(() => []);
   if (!Array.isArray(talks)) return [];
-  return talks.map((talk) => normalizeTalk(talk, corpus)).filter(Boolean);
+  return talks.map((raw) => ({ raw, corpus })).filter(({ raw }) => raw);
 }
 
 function normalizeTalk(talk, corpus) {
