@@ -1,7 +1,8 @@
 import { formatError } from '../lib/logger.js';
 import { getContentDb } from '../content-library/db.js';
-import { createReadLaterRepository } from '../read-later/repository.js';
-import { PUSH_NOTIFICATION_MESSAGE_TYPE, ensurePushChannels } from '../read-later/article-push-service.js';
+import { createReadLaterStores } from '../read-later/stores.js';
+import { PUSH_NOTIFICATION_MESSAGE_TYPE } from '../read-later/article-push-service.js';
+import { ensurePushChannels } from '../read-later/state.js';
 import { getOwnerId, listPushDevicesForOwner, removePushDeviceByRecord } from './device-store.js';
 
 const APNS_PRODUCTION_HOST = 'api.push.apple.com';
@@ -467,8 +468,8 @@ async function sendApnsNotification({ env, authToken, device, payload }) {
   };
 }
 
-async function saveItem(repository, item) {
-  await repository.saveItem(item);
+async function saveItem(readLaterStore, item) {
+  await readLaterStore.saveItem(item);
 }
 
 function isCurrentEvent(item, eventId) {
@@ -478,7 +479,7 @@ function isCurrentEvent(item, eventId) {
   return currentEventId === eventId;
 }
 
-async function updateIosChannel(repository, item, { status, eventId, lastError }) {
+async function updateIosChannel(readLaterStore, item, { status, eventId, lastError }) {
   const now = getNowIso();
   ensurePushChannels(item, now);
   item.pushChannels.ios = {
@@ -488,7 +489,7 @@ async function updateIosChannel(repository, item, { status, eventId, lastError }
     eventId: eventId || item.pushChannels.ios.eventId || null,
     lastError: lastError || null
   };
-  await saveItem(repository, item);
+  await saveItem(readLaterStore, item);
 }
 
 async function deliverIosPush({
@@ -715,9 +716,9 @@ async function processIosPushMessage(message, env, log) {
     return;
   }
 
-  const repository = env?.READ_LATER_REPOSITORY || createReadLaterRepository(env);
+  const stores = createReadLaterStores(env);
   const deviceDb = getContentDb(env);
-  if (!repository) {
+  if (!stores) {
     if (log) {
       log('error', 'storage_unavailable', {
         stage: 'queue',
@@ -726,6 +727,7 @@ async function processIosPushMessage(message, env, log) {
     }
     return;
   }
+  const { readLaterStore } = stores;
 
   if (!deviceDb) {
     if (log) {
@@ -737,7 +739,7 @@ async function processIosPushMessage(message, env, log) {
     return;
   }
 
-  const item = await repository.getItem(itemId);
+  const item = await readLaterStore.getItem(itemId);
   if (!item) {
     if (log) {
       log('warn', 'ios_push_item_missing', {
@@ -763,7 +765,7 @@ async function processIosPushMessage(message, env, log) {
   }
 
   if (item.pushChannels.readiness.status !== 'ready') {
-    await updateIosChannel(repository, item, {
+    await updateIosChannel(readLaterStore, item, {
       status: 'skipped',
       eventId,
       lastError: 'Article is not push-ready'
@@ -791,7 +793,7 @@ async function processIosPushMessage(message, env, log) {
   });
 
   if (delivery.reason === 'no_devices') {
-    await updateIosChannel(repository, item, {
+    await updateIosChannel(readLaterStore, item, {
       status: 'skipped',
       eventId,
       lastError: 'No registered iOS devices'
@@ -809,7 +811,7 @@ async function processIosPushMessage(message, env, log) {
   }
 
   if (delivery.reason === 'auth_failed') {
-    await updateIosChannel(repository, item, {
+    await updateIosChannel(readLaterStore, item, {
       status: 'failed',
       eventId,
       lastError: 'APNS credentials unavailable'
@@ -828,7 +830,7 @@ async function processIosPushMessage(message, env, log) {
   }
 
   if (delivery.ok) {
-    await updateIosChannel(repository, item, {
+    await updateIosChannel(readLaterStore, item, {
       status: 'sent',
       eventId,
       lastError: null
@@ -855,7 +857,7 @@ async function processIosPushMessage(message, env, log) {
     ? 'No valid registered iOS devices'
     : 'Failed to deliver iOS push';
 
-  await updateIosChannel(repository, item, {
+  await updateIosChannel(readLaterStore, item, {
     status,
     eventId,
     lastError: errorMessage

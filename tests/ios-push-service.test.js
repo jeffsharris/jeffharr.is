@@ -1,11 +1,11 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { generateKeyPairSync } from 'node:crypto';
-import { createInitialPushChannels } from '../functions/api/read-later/article-push-service.js';
+import { createInitialPushChannels } from '../functions/api/read-later/state.js';
 import { processIosPushBatch } from '../functions/api/push/ios-push-service.js';
 import { upsertPushDevice } from '../functions/api/push/device-store.js';
 import { createMockPushDb, listPushDeviceRows } from './mock-push-db.js';
-import { createMockReadLaterRepository } from './mock-read-later-repository.js';
+import { createMockReadLaterStores } from './mock-read-later-stores.js';
 
 function createApnsPrivateKeyPem() {
   const { privateKey } = generateKeyPairSync('ec', { namedCurve: 'prime256v1' });
@@ -58,7 +58,7 @@ test('ios push prunes invalid APNs token and marks item as skipped', async (t) =
   const db = createMockPushDb();
   const ownerId = 'owner-1';
   const item = buildReadyItem('item-ios-1', 'event-1');
-  const repository = createMockReadLaterRepository({ items: { [item.id]: item } });
+  const { readLaterStore } = createMockReadLaterStores({ items: { [item.id]: item } });
 
   await upsertPushDevice({
     db,
@@ -88,7 +88,7 @@ test('ios push prunes invalid APNs token and marks item as skipped', async (t) =
   );
 
   const env = {
-    READ_LATER_REPOSITORY: repository,
+    READ_LATER_ITEM_STORE: readLaterStore,
     CONTENT_DB: db,
     PUSH_DEFAULT_OWNER_ID: ownerId,
     APNS_TEAM_ID: 'TEAM123456',
@@ -105,7 +105,7 @@ test('ios push prunes invalid APNs token and marks item as skipped', async (t) =
 
   assert.equal(listPushDeviceRows(db).length, 0);
 
-  const updatedItem = await repository.getItem(item.id);
+  const updatedItem = await readLaterStore.getItem(item.id);
   assert.equal(updatedItem.pushChannels.ios.status, 'skipped');
   assert.equal(updatedItem.pushChannels.ios.lastError, 'No valid registered iOS devices');
 });
@@ -114,7 +114,7 @@ test('ios push worker drops stale event messages without sending', async (t) => 
   const db = createMockPushDb();
   const ownerId = 'owner-1';
   const item = buildReadyItem('item-ios-2', 'event-current');
-  const repository = createMockReadLaterRepository({ items: { [item.id]: item } });
+  const { readLaterStore } = createMockReadLaterStores({ items: { [item.id]: item } });
 
   await upsertPushDevice({
     db,
@@ -142,7 +142,7 @@ test('ios push worker drops stale event messages without sending', async (t) => 
   await processIosPushBatch(
     { messages: [buildMessage(item, ownerId, 'event-old')] },
     {
-      READ_LATER_REPOSITORY: repository,
+      READ_LATER_ITEM_STORE: readLaterStore,
       CONTENT_DB: db,
       PUSH_DEFAULT_OWNER_ID: ownerId,
       APNS_TEAM_ID: 'TEAM123456',
@@ -154,7 +154,7 @@ test('ios push worker drops stale event messages without sending', async (t) => 
   );
 
   assert.equal(fetchCallCount, 0);
-  const storedItem = await repository.getItem(item.id);
+  const storedItem = await readLaterStore.getItem(item.id);
   assert.equal(storedItem.pushChannels.ios.eventId, 'event-current');
   assert.equal(storedItem.pushChannels.ios.status, 'queued');
 });

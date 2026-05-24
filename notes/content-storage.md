@@ -27,7 +27,8 @@ Current schema lives in `migrations/`. Apply all migrations; `0004_drop_migratio
 - Stable ids and URL keys: `functions/api/content-library/ids.js`
 - Generic item resolution, including Dharma talks: `functions/api/content-library/resolve.js`
 - Read Later list/state: `functions/api/content-library/read-later-store.js`
-- Read Later D1/R2 repository: `functions/api/read-later/repository.js`
+- Read Later reader/cover R2 assets: `functions/api/read-later/asset-store.js`
+- Read Later async storage assembly: `functions/api/read-later/stores.js`
 - Shared item storage: `functions/api/content-library/share-store.js`
 - Push device storage: `functions/api/push/device-store.js`
 

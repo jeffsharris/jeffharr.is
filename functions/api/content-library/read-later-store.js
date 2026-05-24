@@ -1,4 +1,4 @@
-import { createInitialPushChannels } from '../read-later/article-push-service.js';
+import { createInitialPushChannels } from '../read-later/state.js';
 import { deriveTitleFromUrl } from '../read-later/reader-utils.js';
 import {
   READ_LATER_LIST_ID,
@@ -23,6 +23,19 @@ const MIN_VIDEO_SECONDS = 300;
 async function listReadLaterItems(db) {
   const rows = await listReadLaterRows(db, { limit: 1000 });
   return Promise.all(rows.map((row) => readLaterRowToItem(null, row)));
+}
+
+function createReadLaterItemStore(db) {
+  if (!db) return null;
+  return {
+    async getItem(entryId) {
+      return getReadLaterItem(db, entryId);
+    },
+
+    async saveItem(item) {
+      return saveReadLaterRuntimeItem(db, item);
+    }
+  };
 }
 
 async function getReadLaterItem(db, entryId) {
@@ -552,6 +565,7 @@ function isSameOrAfter(nextIso, existingIso) {
 }
 
 export {
+  createReadLaterItemStore,
   deleteReadLaterItem,
   getReadLaterItem,
   getReadLaterRow,

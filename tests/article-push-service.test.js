@@ -1,12 +1,14 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {
-  createInitialPushChannels,
   maybeQueueIosPush,
-  recordKindleChannelState,
   updateArticlePushReadiness
 } from '../functions/api/read-later/article-push-service.js';
-import { createMockReadLaterRepository } from './mock-read-later-repository.js';
+import {
+  createInitialPushChannels,
+  recordKindleChannelState
+} from '../functions/api/read-later/state.js';
+import { createMockReadLaterStores } from './mock-read-later-stores.js';
 
 function buildReaderHtml(wordCount = 65) {
   const words = Array.from({ length: wordCount }, (_, index) => `word${index}`).join(' ');
@@ -22,7 +24,7 @@ test('article push readiness stays pending until both reader and cover are ready
     pushChannels: createInitialPushChannels('2026-02-22T00:00:00.000Z')
   };
 
-  const repository = createMockReadLaterRepository({
+  const { readLaterStore, assetStore } = createMockReadLaterStores({
     items: { 'item-1': item },
     readers: {
       'item-1': {
@@ -37,17 +39,17 @@ test('article push readiness stays pending until both reader and cover are ready
     }
   });
 
-  const first = await updateArticlePushReadiness('item-1', repository, null);
+  const first = await updateArticlePushReadiness('item-1', { readLaterStore, assetStore }, null);
   assert.equal(first.ready, false);
   assert.equal(first.readerReady, true);
   assert.equal(first.coverReady, false);
   assert.equal(first.reason, 'waiting_for_cover');
 
-  const stored = await repository.getItem('item-1');
+  const stored = await readLaterStore.getItem('item-1');
   stored.cover = { updatedAt: '2026-02-22T00:02:00.000Z' };
-  await repository.saveItem(stored);
+  await readLaterStore.saveItem(stored);
 
-  const second = await updateArticlePushReadiness('item-1', repository, null);
+  const second = await updateArticlePushReadiness('item-1', { readLaterStore, assetStore }, null);
   assert.equal(second.ready, true);
   assert.equal(second.reason, null);
   assert.equal(second.item.pushChannels.readiness.status, 'ready');
@@ -68,7 +70,7 @@ test('article push readiness becomes ready after terminal cover failure', async 
     pushChannels: createInitialPushChannels('2026-02-22T00:00:00.000Z')
   };
 
-  const repository = createMockReadLaterRepository({
+  const { readLaterStore, assetStore } = createMockReadLaterStores({
     items: { 'item-cover-failed': item },
     readers: {
       'item-cover-failed': {
@@ -83,7 +85,11 @@ test('article push readiness becomes ready after terminal cover failure', async 
     }
   });
 
-  const result = await updateArticlePushReadiness('item-cover-failed', repository, null);
+  const result = await updateArticlePushReadiness(
+    'item-cover-failed',
+    { readLaterStore, assetStore },
+    null
+  );
   assert.equal(result.ready, true);
   assert.equal(result.readerReady, true);
   assert.equal(result.coverReady, false);
@@ -129,9 +135,9 @@ test('maybeQueueIosPush enqueues exactly once after readiness is ready', async (
     }
   };
 
-  const repository = createMockReadLaterRepository({ items: { 'item-2': item } });
+  const { readLaterStore } = createMockReadLaterStores({ items: { 'item-2': item } });
 
-  const first = await maybeQueueIosPush({ item, env, repository, log: null, source: 'test' });
+  const first = await maybeQueueIosPush({ item, env, readLaterStore, log: null, source: 'test' });
   assert.equal(first.queued, true);
   assert.equal(sent.length, 1);
   assert.equal(sent[0].type, 'push.notification.requested');
@@ -149,7 +155,13 @@ test('maybeQueueIosPush enqueues exactly once after readiness is ready', async (
   assert.equal(sent[0].data.channel, 'read-later');
   assert.equal(sent[0].data.itemId, 'item-2');
 
-  const second = await maybeQueueIosPush({ item: first.item, env, repository, log: null, source: 'test' });
+  const second = await maybeQueueIosPush({
+    item: first.item,
+    env,
+    readLaterStore,
+    log: null,
+    source: 'test'
+  });
   assert.equal(second.queued, false);
   assert.equal(second.reason, 'already_queued_or_sent');
   assert.equal(sent.length, 1);
@@ -190,9 +202,9 @@ test('maybeQueueIosPush sends text-only notification when no cover exists', asyn
     }
   };
 
-  const repository = createMockReadLaterRepository({ items: { 'item-no-cover': item } });
+  const { readLaterStore } = createMockReadLaterStores({ items: { 'item-no-cover': item } });
 
-  const result = await maybeQueueIosPush({ item, env, repository, log: null, source: 'test' });
+  const result = await maybeQueueIosPush({ item, env, readLaterStore, log: null, source: 'test' });
   assert.equal(result.queued, true);
   assert.equal(sent.length, 1);
   assert.equal(sent[0].notification.media.length, 0);

@@ -1,5 +1,6 @@
 import { parseHTML } from 'linkedom';
 import { deriveTitleFromUrl } from './reader-utils.js';
+import { getReadLaterAssetItemId } from './asset-store.js';
 import { formatError, truncateString } from '../lib/logger.js';
 
 const MAX_SNIPPET_WORDS = 1000;
@@ -7,10 +8,11 @@ const MIN_SNIPPET_WORDS = 40;
 const OPENAI_TIMEOUT_MS = 150000;
 const OPENAI_ENDPOINT = 'https://api.openai.com/v1/responses';
 
-async function getCoverImage(repository, id) {
-  if (!repository || !id) return null;
+async function getCoverImage(assetStore, itemOrId) {
+  const itemId = getReadLaterAssetItemId(itemOrId);
+  if (!assetStore || !itemId) return null;
   try {
-    const payload = await repository.getCover(id);
+    const payload = await assetStore.getCover(itemId);
     if (!payload?.base64) return null;
     return payload;
   } catch (error) {
@@ -19,8 +21,9 @@ async function getCoverImage(repository, id) {
   }
 }
 
-async function saveCoverImage(repository, id, cover) {
-  if (!repository || !id || !cover?.base64) return null;
+async function saveCoverImage(assetStore, itemOrId, cover) {
+  const itemId = getReadLaterAssetItemId(itemOrId);
+  if (!assetStore || !itemId || !cover?.base64) return null;
 
   const payload = {
     base64: cover.base64,
@@ -28,7 +31,7 @@ async function saveCoverImage(repository, id, cover) {
     createdAt: cover.createdAt || new Date().toISOString()
   };
 
-  return repository.saveCover(id, payload);
+  return assetStore.saveCover(itemId, payload);
 }
 
 function extractSnippetFromHtml(html, maxWords = MAX_SNIPPET_WORDS) {
@@ -342,10 +345,10 @@ async function generateCoverImageStream({
   };
 }
 
-async function ensureCoverImage({ item, reader, env, repository, onPartial, log }) {
-  if (!repository || !item?.id || !reader?.contentHtml) return null;
+async function ensureCoverImage({ item, reader, env, assetStore, onPartial, log }) {
+  if (!assetStore || !item?.id || !reader?.contentHtml) return null;
 
-  const existing = await getCoverImage(repository, item.id);
+  const existing = await getCoverImage(assetStore, item);
   if (existing) return existing;
 
   const snippetInfo = extractSnippetFromHtml(reader.contentHtml);
@@ -396,7 +399,7 @@ async function ensureCoverImage({ item, reader, env, repository, onPartial, log 
   }
 
   try {
-    return saveCoverImage(repository, item.id, cover);
+    return saveCoverImage(assetStore, item, cover);
   } catch (error) {
     if (log) {
       log('error', 'cover_save_failed', {

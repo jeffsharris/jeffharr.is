@@ -4,10 +4,10 @@ import {
   COVER_MESSAGE_TYPE,
   enqueueCoverGeneration
 } from '../functions/api/read-later/cover-sync-service.js';
-import { createMockReadLaterRepository } from './mock-read-later-repository.js';
+import { createMockReadLaterStores } from './mock-read-later-stores.js';
 
 test('enqueueCoverGeneration marks item pending and enqueues first attempt', async () => {
-  const repository = createMockReadLaterRepository();
+  const { readLaterStore, assetStore } = createMockReadLaterStores();
   const sent = [];
   const env = {
     READ_LATER_SYNC_QUEUE: {
@@ -23,13 +23,13 @@ test('enqueueCoverGeneration marks item pending and enqueues first attempt', asy
     title: 'Example article'
   };
 
-  const result = await enqueueCoverGeneration({ item, repository, env });
+  const result = await enqueueCoverGeneration({ item, readLaterStore, assetStore, env });
   assert.equal(result.queued, true);
   assert.equal(item.coverSync.status, 'pending');
   assert.equal(item.coverSync.attempt, 0);
   assert.equal(item.coverSync.maxAttempts, 2);
 
-  const stored = await repository.getItem('cover-item-1');
+  const stored = await readLaterStore.getItem('cover-item-1');
   assert.equal(stored.coverSync.status, 'pending');
 
   assert.equal(sent.length, 1);
@@ -43,26 +43,26 @@ test('enqueueCoverGeneration marks item pending and enqueues first attempt', asy
 });
 
 test('enqueueCoverGeneration persists failed state when queue binding is missing', async () => {
-  const repository = createMockReadLaterRepository();
+  const { readLaterStore, assetStore } = createMockReadLaterStores();
   const item = {
     id: 'cover-item-2',
     url: 'https://example.com/article',
     title: 'Missing queue'
   };
 
-  const result = await enqueueCoverGeneration({ item, repository, env: {} });
+  const result = await enqueueCoverGeneration({ item, readLaterStore, assetStore, env: {} });
   assert.equal(result.queued, false);
   assert.equal(result.queueMissing, true);
   assert.equal(item.coverSync.status, 'failed');
   assert.equal(item.coverSync.errorCode, 'cover_queue_unavailable');
 
-  const stored = await repository.getItem('cover-item-2');
+  const stored = await readLaterStore.getItem('cover-item-2');
   assert.equal(stored.coverSync.status, 'failed');
   assert.equal(stored.coverSync.errorCode, 'cover_queue_unavailable');
 });
 
 test('enqueueCoverGeneration does not enqueue while a job is already active', async () => {
-  const repository = createMockReadLaterRepository();
+  const { readLaterStore, assetStore, itemStore } = createMockReadLaterStores();
   let sendCount = 0;
   const env = {
     READ_LATER_SYNC_QUEUE: {
@@ -82,15 +82,15 @@ test('enqueueCoverGeneration does not enqueue while a job is already active', as
     }
   };
 
-  const result = await enqueueCoverGeneration({ item, repository, env });
+  const result = await enqueueCoverGeneration({ item, readLaterStore, assetStore, env });
   assert.equal(result.queued, false);
   assert.equal(result.inProgress, true);
   assert.equal(sendCount, 0);
-  assert.equal(repository.items.size, 0);
+  assert.equal(itemStore.size, 0);
 });
 
 test('enqueueCoverGeneration requeues stale active jobs', async () => {
-  const repository = createMockReadLaterRepository();
+  const { readLaterStore, assetStore } = createMockReadLaterStores();
   let sendCount = 0;
   const env = {
     READ_LATER_SYNC_QUEUE: {
@@ -112,17 +112,17 @@ test('enqueueCoverGeneration requeues stale active jobs', async () => {
     }
   };
 
-  const result = await enqueueCoverGeneration({ item, repository, env });
+  const result = await enqueueCoverGeneration({ item, readLaterStore, assetStore, env });
   assert.equal(result.queued, true);
   assert.equal(sendCount, 1);
 
-  const stored = await repository.getItem('cover-item-stale');
+  const stored = await readLaterStore.getItem('cover-item-stale');
   assert.equal(stored.coverSync.status, 'pending');
   assert.notEqual(stored.coverSync.jobId, 'job-stale');
 });
 
 test('enqueueCoverGeneration requeues when cover metadata exists but image payload is missing', async () => {
-  const repository = createMockReadLaterRepository();
+  const { readLaterStore, assetStore } = createMockReadLaterStores();
   const sent = [];
   const env = {
     READ_LATER_SYNC_QUEUE: {
@@ -141,13 +141,13 @@ test('enqueueCoverGeneration requeues when cover metadata exists but image paylo
     }
   };
 
-  const result = await enqueueCoverGeneration({ item, repository, env });
+  const result = await enqueueCoverGeneration({ item, readLaterStore, assetStore, env });
   assert.equal(result.queued, true);
   assert.equal(sent.length, 1);
 });
 
 test('enqueueCoverGeneration skips when cover image payload exists', async () => {
-  const repository = createMockReadLaterRepository({
+  const { readLaterStore, assetStore } = createMockReadLaterStores({
     covers: {
       'cover-item-5': {
         base64: 'Zm9v',
@@ -174,7 +174,7 @@ test('enqueueCoverGeneration skips when cover image payload exists', async () =>
     }
   };
 
-  const result = await enqueueCoverGeneration({ item, repository, env });
+  const result = await enqueueCoverGeneration({ item, readLaterStore, assetStore, env });
   assert.equal(result.queued, false);
   assert.equal(result.coverExists, true);
   assert.equal(sendCount, 0);

@@ -170,7 +170,7 @@ async function buildKindleAttachmentWithFallback(item, reader, cover, log) {
 
 async function syncKindleForItem(item, env, options = {}) {
   const attemptedAt = new Date().toISOString();
-  const repository = options.repository;
+  const assetStore = options.assetStore;
   const onCoverPartial = options.onCoverPartial;
   const log = options.log;
   const logContext = {
@@ -258,13 +258,13 @@ async function syncKindleForItem(item, env, options = {}) {
   }
 
   let cover = null;
-  if (repository) {
+  if (assetStore) {
     try {
       cover = await ensureCoverImage({
         item,
         reader,
         env,
-        repository,
+        assetStore,
         onPartial: onCoverPartial,
         log
       });

@@ -1,87 +1,70 @@
 import {
   getAssetByRole,
   getContentAssets,
-  getContentDb,
-  upsertAsset
+  getContentDb
 } from '../content-library/db.js';
 import {
   getBinaryAsset,
   getJsonAsset,
+  putBinaryAsset,
   putJsonAsset
 } from '../content-library/assets.js';
-import {
-  getReadLaterItem,
-  getReadLaterRow,
-  saveReadLaterRuntimeItem
-} from '../content-library/read-later-store.js';
-import {
-  createStableId,
-  getNowIso
-} from '../content-library/ids.js';
+import { getNowIso } from '../content-library/ids.js';
 
-function createReadLaterRepository(env, { requireAssets = false } = {}) {
+function createReadLaterAssetStore(env, { requireAssets = true } = {}) {
   const db = getContentDb(env);
   const bucket = getContentAssets(env);
   if (!db) return null;
   if (requireAssets && !bucket) return null;
-  return createD1ReadLaterRepository({ db, bucket });
+  return createD1ReadLaterAssetStore({ db, bucket });
 }
 
-function createD1ReadLaterRepository({ db, bucket }) {
+function createD1ReadLaterAssetStore({ db, bucket }) {
+  if (!db || !bucket) return null;
   return {
-    db,
-    bucket,
-
-    async getItem(entryId) {
-      return getReadLaterItem(db, entryId);
+    async getReader(itemId) {
+      return getReaderAsset({ db, bucket, itemId });
     },
 
-    async getRow(entryId) {
-      return getReadLaterRow(db, entryId);
+    async saveReader(itemId, reader) {
+      return putReaderAsset({ db, bucket, itemId, reader });
     },
 
-    async saveItem(item) {
-      return saveReadLaterRuntimeItem(db, item);
+    async getCover(itemId) {
+      return getCoverAsset({ db, bucket, itemId });
     },
 
-    async getReader(entryId) {
-      return getReaderAsset({ db, bucket, entryId });
+    async getCoverBytes(itemId) {
+      return getCoverBytesAsset({ db, bucket, itemId });
     },
 
-    async saveReader(entryId, reader) {
-      return putReaderAsset({ db, bucket, entryId, reader });
-    },
-
-    async getCover(entryId) {
-      return getCoverAsset({ db, bucket, entryId });
-    },
-
-    async saveCover(entryId, cover) {
-      return putCoverAsset({ db, bucket, entryId, cover });
+    async saveCover(itemId, cover) {
+      return putCoverAsset({ db, bucket, itemId, cover });
     }
   };
 }
 
-async function getReaderAsset({ db, bucket, entryId }) {
-  if (!db || !bucket || !entryId) return null;
-  const row = await getReadLaterRow(db, entryId);
-  if (!row) return null;
-  const asset = await getAssetByRole(db, row.item_id, 'reader_html');
+function getReadLaterAssetItemId(itemOrId) {
+  if (typeof itemOrId === 'string') return itemOrId;
+  return itemOrId?.itemId || itemOrId?.id || null;
+}
+
+async function getReaderAsset({ db, bucket, itemId }) {
+  if (!db || !bucket || !itemId) return null;
+  const asset = await getAssetByRole(db, itemId, 'reader_html');
   if (!asset?.r2_key) return null;
   return getJsonAsset({ bucket, asset });
 }
 
-async function putReaderAsset({ db, bucket, entryId, reader }) {
-  if (!db || !bucket || !entryId || !reader?.contentHtml) return false;
-  const row = await getReadLaterRow(db, entryId);
-  if (!row) return false;
+async function putReaderAsset({ db, bucket, itemId, reader }) {
+  if (!db || !bucket || !itemId || !reader?.contentHtml) return false;
 
   const asset = await putJsonAsset({
     db,
     bucket,
-    itemId: row.item_id,
+    itemId,
     role: 'reader_html',
-    key: `items/${row.item_id}/reader.json`,
+    key: `items/${itemId}/reader.json`,
     value: reader
   });
 
@@ -99,7 +82,7 @@ async function putReaderAsset({ db, bucket, entryId, reader }) {
       excerpt = excluded.excerpt,
       updated_at = excluded.updated_at`
   ).bind(
-    row.item_id,
+    itemId,
     wordCount,
     wordCount ? Math.max(1, Math.round(wordCount / 230)) : null,
     asset.id,
@@ -112,50 +95,46 @@ async function putReaderAsset({ db, bucket, entryId, reader }) {
   return true;
 }
 
-async function getCoverAsset({ db, bucket, entryId }) {
-  if (!db || !bucket || !entryId) return null;
-  const row = await getReadLaterRow(db, entryId);
-  if (!row) return null;
-  const asset = await getAssetByRole(db, row.item_id, 'generated_cover');
+async function getCoverAsset({ db, bucket, itemId }) {
+  const stored = await getCoverBytesAsset({ db, bucket, itemId });
+  if (!stored?.bytes) return null;
+  return {
+    base64: arrayBufferToBase64(stored.bytes),
+    contentType: stored.contentType || 'image/png',
+    createdAt: stored.createdAt
+  };
+}
+
+async function getCoverBytesAsset({ db, bucket, itemId }) {
+  if (!db || !bucket || !itemId) return null;
+  const asset = await getAssetByRole(db, itemId, 'generated_cover');
   if (!asset?.r2_key) return null;
   const stored = await getBinaryAsset({ bucket, asset });
   if (!stored?.bytes) return null;
   return {
-    base64: arrayBufferToBase64(stored.bytes),
+    bytes: stored.bytes,
     contentType: stored.contentType || 'image/png',
     createdAt: asset.updated_at || asset.created_at || getNowIso()
   };
 }
 
-async function putCoverAsset({ db, bucket, entryId, cover }) {
-  if (!db || !bucket || !entryId || !cover?.base64) return null;
-  const row = await getReadLaterRow(db, entryId);
-  if (!row) return null;
+async function putCoverAsset({ db, bucket, itemId, cover }) {
+  if (!db || !bucket || !itemId || !cover?.base64) return null;
 
   const contentType = cover.contentType || 'image/png';
   const ext = contentType.includes('jpeg') ? 'jpg' : contentType.includes('webp') ? 'webp' : 'png';
-  const key = `items/${row.item_id}/generated-cover.${ext}`;
-  const bytes = base64ToBytes(cover.base64);
   const createdAt = cover.createdAt || getNowIso();
+  const bytes = base64ToBytes(cover.base64);
 
-  await bucket.put(key, bytes, {
-    httpMetadata: { contentType },
-    customMetadata: {
-      itemId: row.item_id,
-      role: 'generated_cover',
-      createdAt
-    }
-  });
-
-  await upsertAsset(db, {
-    id: await createStableId('ast', `${row.item_id}:generated_cover:${key}`),
-    itemId: row.item_id,
+  await putBinaryAsset({
+    db,
+    bucket,
+    itemId,
     role: 'generated_cover',
     kind: 'image',
-    r2Key: key,
-    mimeType: contentType,
-    byteSize: bytes.byteLength,
-    contentSha256: await hashBytes(bytes),
+    key: `items/${itemId}/generated-cover.${ext}`,
+    bytes,
+    contentType,
     createdAt,
     updatedAt: createdAt
   });
@@ -200,15 +179,8 @@ function arrayBufferToBinaryString(buffer) {
   return binary;
 }
 
-async function hashBytes(bytes) {
-  const source = bytes instanceof Uint8Array ? bytes : new Uint8Array(bytes);
-  const digest = await globalThis.crypto.subtle.digest('SHA-256', source);
-  return [...new Uint8Array(digest)]
-    .map((byte) => byte.toString(16).padStart(2, '0'))
-    .join('');
-}
-
 export {
-  createD1ReadLaterRepository,
-  createReadLaterRepository
+  createD1ReadLaterAssetStore,
+  createReadLaterAssetStore,
+  getReadLaterAssetItemId
 };

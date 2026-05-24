@@ -17,9 +17,9 @@ import {
   looksClientRendered
 } from './reader-utils.js';
 import { buildXReaderFromUrl } from './x-adapter.js';
-import { createReadLaterRepository } from './repository.js';
+import { createReadLaterStores } from './stores.js';
+import { getReadLaterAssetItemId } from './asset-store.js';
 import { createLogger, formatError } from '../lib/logger.js';
-import { readLaterRowToItem } from '../content-library/read-later-store.js';
 import { jsonResponse } from '../content-library/serialize.js';
 
 const FETCH_TIMEOUT_MS = 10000;
@@ -72,11 +72,11 @@ const ALLOWED_ATTRS = new Map([
 
 export async function onRequest(context) {
   const { request, env } = context;
-  const repository = createReadLaterRepository(env, { requireAssets: true });
+  const stores = createReadLaterStores(env, { requireAssets: true });
   const logger = createLogger({ request, source: 'read-later-reader' });
   const log = logger.log;
 
-  if (!repository) {
+  if (!stores) {
     log('error', 'storage_unavailable', { stage: 'init' });
     return jsonResponse(
       { ok: false, reader: null, error: 'Storage unavailable' },
@@ -84,10 +84,10 @@ export async function onRequest(context) {
     );
   }
 
-  return handleReadLaterReader({ request, env, repository, log });
+  return handleReadLaterReader({ request, env, ...stores, log });
 }
 
-async function handleReadLaterReader({ request, env, repository, log }) {
+async function handleReadLaterReader({ request, env, readLaterStore, assetStore, log }) {
   const url = new URL(request.url);
   const id = (url.searchParams.get('id') || '').trim();
   const forceRefresh = url.searchParams.get('refresh') === '1';
@@ -101,8 +101,8 @@ async function handleReadLaterReader({ request, env, repository, log }) {
   }
 
   try {
-    const row = await repository.getRow(id);
-    if (!row) {
+    const item = await readLaterStore.getItem(id);
+    if (!item) {
       log('warn', 'reader_item_missing', {
         stage: 'lookup',
         itemId: id
@@ -113,10 +113,10 @@ async function handleReadLaterReader({ request, env, repository, log }) {
       );
     }
 
-    const item = await readLaterRowToItem(repository.db, row);
     const reader = await fetchAndCacheReader({
-      repository,
-      id,
+      assetStore,
+      entryId: id,
+      itemId: getReadLaterAssetItemId(item),
       url: item.url,
       title: item.title,
       browser: env.BROWSER,
@@ -142,7 +142,7 @@ async function handleReadLaterReader({ request, env, repository, log }) {
       const resolvedTitle = preferReaderTitle(item.title, reader?.title, item.url);
       if (resolvedTitle && resolvedTitle !== item.title) {
         item.title = resolvedTitle;
-        await repository.saveItem(item);
+        await readLaterStore.saveItem(item);
       }
     }
 
@@ -352,8 +352,9 @@ function logSubstackReaderFallback(options, details = {}) {
 }
 
 async function fetchAndCacheReader({
-  repository,
-  id,
+  assetStore,
+  entryId,
+  itemId,
   url,
   title,
   browser,
@@ -361,16 +362,18 @@ async function fetchAndCacheReader({
   forceRefresh = false,
   log
 }) {
-  if (!repository || !id || !url) return null;
+  const assetItemId = itemId || null;
+  const logItemId = entryId || assetItemId || null;
+  if (!assetStore || !assetItemId || !url) return null;
 
-  const cached = await repository.getReader(id);
+  const cached = await assetStore.getReader(assetItemId);
   if (!forceRefresh && cached?.contentHtml && shouldCacheReader(cached)) {
     return cached;
   }
 
   const reader = await buildReaderContent(url, title, browser, {
     log,
-    itemId: id,
+    itemId: logItemId,
     xBearerToken
   });
   if (!reader?.contentHtml || !shouldCacheReader(reader)) {
@@ -380,7 +383,7 @@ async function fetchAndCacheReader({
     if (log) {
       log('warn', 'reader_parse_failed', {
         stage: 'reader_parse',
-        itemId: id,
+        itemId: logItemId,
         url,
         title,
         wordCount: reader?.wordCount || 0
@@ -389,7 +392,7 @@ async function fetchAndCacheReader({
     return null;
   }
 
-  await repository.saveReader(id, reader);
+  await assetStore.saveReader(assetItemId, reader);
   return reader;
 }
 

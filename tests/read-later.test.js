@@ -1,5 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { onRequest as readLaterOnRequest } from '../functions/api/read-later.js';
 import { preferReaderTitle } from '../functions/api/read-later/reader-utils.js';
 import { normalizeHttpUrl } from '../functions/api/content-library/ids.js';
 import {
@@ -133,6 +134,51 @@ test('listReadLaterItems uses one D1 query and preserves read state fields', asy
   assert.deepEqual(items[0].pushChannels, { readiness: { status: 'ready' } });
   assert.deepEqual(items[0].cover, { updatedAt: '2026-01-04T00:00:00.000Z' });
   assert.equal(items[1].read, false);
+});
+
+test('read later list endpoint only requires D1 storage', async () => {
+  const db = createFakeD1([
+    {
+      entry_id: 'rli_endpoint_1',
+      entry_status: 'active',
+      position: null,
+      note: null,
+      added_at: '2026-01-01T00:00:00.000Z',
+      entry_updated_at: '2026-01-01T00:00:00.000Z',
+      entry_extra_json: null,
+      item_id: 'itm_endpoint_1',
+      item_kind: 'article',
+      canonical_key: 'url:https://example.com/endpoint',
+      canonical_url: 'https://example.com/endpoint',
+      source_url: 'https://example.com/endpoint',
+      title: 'Endpoint item',
+      subtitle: null,
+      summary: null,
+      creator: null,
+      publisher: 'example.com',
+      published_at: null,
+      language: null,
+      thumbnail_asset_id: null,
+      primary_asset_id: null,
+      item_extra_json: null,
+      read_at: null,
+      progress_json: null,
+      kindle_json: null,
+      cover_sync_json: null,
+      push_channels_json: null,
+      cover_updated_at: null
+    }
+  ]);
+
+  const response = await readLaterOnRequest({
+    request: new Request('https://example.com/api/read-later'),
+    env: { CONTENT_DB: db }
+  });
+
+  assert.equal(response.status, 200);
+  const payload = await response.json();
+  assert.equal(payload.count, 1);
+  assert.equal(payload.items[0].id, 'rli_endpoint_1');
 });
 
 function createFakeD1(rows) {

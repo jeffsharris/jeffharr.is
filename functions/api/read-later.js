@@ -3,12 +3,12 @@
  * Supports listing, saving, and updating read status for saved links.
  */
 
-import { createReadLaterRepository } from './read-later/repository.js';
 import { enqueueKindleSync } from './read-later/sync-service.js';
 import { createLogger, formatError } from './lib/logger.js';
 import { getContentDb } from './content-library/db.js';
 import { jsonResponse, parseJson } from './content-library/serialize.js';
 import {
+  createReadLaterItemStore,
   deleteReadLaterItem,
   listReadLaterItems,
   saveReadLaterItem,
@@ -18,11 +18,11 @@ import {
 export async function onRequest(context) {
   const { request, env } = context;
   const db = getContentDb(env);
-  const repository = createReadLaterRepository(env, { requireAssets: true });
+  const readLaterStore = createReadLaterItemStore(db);
   const logger = createLogger({ request, source: 'read-later' });
   const log = logger.log;
 
-  if (!db || !repository) {
+  if (!db || !readLaterStore) {
     log('error', 'storage_unavailable', { stage: 'init' });
     return jsonResponse(
       { ok: false, error: 'Storage unavailable' },
@@ -30,10 +30,10 @@ export async function onRequest(context) {
     );
   }
 
-  return handleReadLaterRequest({ request, env, db, repository, log });
+  return handleReadLaterRequest({ request, env, db, readLaterStore, log });
 }
 
-async function handleReadLaterRequest({ request, env, db, repository, log }) {
+async function handleReadLaterRequest({ request, env, db, readLaterStore, log }) {
   try {
     if (request.method === 'GET') {
       const items = await listReadLaterItems(db);
@@ -45,7 +45,7 @@ async function handleReadLaterRequest({ request, env, db, repository, log }) {
 
     if (request.method === 'POST') {
       if (shouldStreamResponse(request)) {
-        return handleReadLaterSaveStream(request, db, repository, env, log);
+        return handleReadLaterSaveStream(request, db, readLaterStore, env, log);
       }
 
       const result = await saveReadLaterItem(db, await parseJson(request));
@@ -57,7 +57,7 @@ async function handleReadLaterRequest({ request, env, db, repository, log }) {
       }
       const enqueueResult = await enqueueReadLaterSync({
         item: result.item,
-        repository,
+        readLaterStore,
         env,
         log,
         reason: result.duplicate ? 'duplicate-save' : 'save',
@@ -120,7 +120,7 @@ async function handleReadLaterRequest({ request, env, db, repository, log }) {
   );
 }
 
-async function handleReadLaterSaveStream(request, db, repository, env, log) {
+async function handleReadLaterSaveStream(request, db, readLaterStore, env, log) {
   const stream = createEventStream(log);
 
   (async () => {
@@ -137,7 +137,7 @@ async function handleReadLaterSaveStream(request, db, repository, env, log) {
 
       const enqueueResult = await enqueueReadLaterSync({
         item: result.item,
-        repository,
+        readLaterStore,
         env,
         log,
         reason: result.duplicate ? 'duplicate-save' : 'save',
@@ -221,11 +221,11 @@ function createEventStream(log) {
   return { readable, send, close };
 }
 
-async function enqueueReadLaterSync({ item, repository, env, log, reason, force = false }) {
-  if (!repository || !item?.id) return { queued: false, item };
+async function enqueueReadLaterSync({ item, readLaterStore, env, log, reason, force = false }) {
+  if (!readLaterStore || !item?.id) return { queued: false, item };
   return enqueueKindleSync({
     item,
-    repository,
+    readLaterStore,
     env,
     log,
     reason,

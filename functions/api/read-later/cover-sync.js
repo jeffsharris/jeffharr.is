@@ -1,20 +1,21 @@
 import { createLogger } from '../lib/logger.js';
-import { createReadLaterRepository } from './repository.js';
+import { createReadLaterStores } from './stores.js';
 import { jsonResponse } from '../content-library/serialize.js';
 
 export async function onRequest(context) {
   const { request, env } = context;
-  const repository = createReadLaterRepository(env, { requireAssets: true });
+  const stores = createReadLaterStores(env);
   const logger = createLogger({ request, source: 'read-later-cover-sync' });
   const log = logger.log;
 
-  if (!repository) {
+  if (!stores) {
     log('error', 'storage_unavailable', { stage: 'init' });
     return jsonResponse(
       { ok: false, error: 'Storage unavailable' },
       { status: 500, cache: 'no-store' }
     );
   }
+  const { readLaterStore } = stores;
 
   if (request.method === 'OPTIONS') {
     return new Response(null, { status: 204 });
@@ -38,7 +39,7 @@ export async function onRequest(context) {
     );
   }
 
-  const item = await repository.getItem(id);
+  const item = await readLaterStore.getItem(id);
   if (!item) {
     return jsonResponse(
       { ok: false, error: 'Item not found' },

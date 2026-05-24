@@ -1,22 +1,23 @@
 import { getCoverImage } from './covers.js';
 import { enqueueCoverGeneration } from './cover-sync-service.js';
-import { createReadLaterRepository } from './repository.js';
+import { createReadLaterStores } from './stores.js';
 import { createLogger, formatError } from '../lib/logger.js';
 import { jsonResponse, parseJson } from '../content-library/serialize.js';
 
 export async function onRequest(context) {
   const { request, env } = context;
-  const repository = createReadLaterRepository(env, { requireAssets: true });
+  const stores = createReadLaterStores(env, { requireAssets: true });
   const logger = createLogger({ request, source: 'read-later-cover' });
   const log = logger.log;
 
-  if (!repository) {
+  if (!stores) {
     log('error', 'storage_unavailable', { stage: 'init' });
     return jsonResponse(
       { ok: false, error: 'Storage unavailable' },
       { status: 500, cache: 'no-store' }
     );
   }
+  const { readLaterStore, assetStore } = stores;
 
   if (request.method === 'OPTIONS') {
     return new Response(null, { status: 204 });
@@ -42,7 +43,7 @@ export async function onRequest(context) {
   }
 
   try {
-    const item = await repository.getItem(id);
+    const item = await readLaterStore.getItem(id);
 
     if (!item) {
       log('warn', 'item_not_found', {
@@ -56,7 +57,7 @@ export async function onRequest(context) {
     }
 
     // Check if cover already exists
-    const existingCover = await getCoverImage(repository, id);
+    const existingCover = await getCoverImage(assetStore, item);
     if (existingCover?.base64) {
       log('info', 'cover_exists', {
         stage: 'cover_generation',
@@ -72,7 +73,8 @@ export async function onRequest(context) {
 
     const enqueueResult = await enqueueCoverGeneration({
       item,
-      repository,
+      readLaterStore,
+      assetStore,
       env,
       log,
       reason: 'manual-regenerate'

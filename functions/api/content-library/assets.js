@@ -39,15 +39,18 @@ async function putBinaryAsset({
   key,
   bytes,
   contentType,
-  extra = {}
+  extra = {},
+  createdAt = null,
+  updatedAt = null
 }) {
   if (!bucket) throw new Error('Content asset bucket unavailable');
+  const resolvedCreatedAt = createdAt || getNowIso();
   await bucket.put(key, bytes, {
     httpMetadata: { contentType },
     customMetadata: {
       itemId,
       role,
-      createdAt: getNowIso()
+      createdAt: resolvedCreatedAt
     }
   });
   return upsertAsset(db, {
@@ -58,7 +61,9 @@ async function putBinaryAsset({
     mimeType: contentType,
     byteSize: bytes?.byteLength || bytes?.length || null,
     contentSha256: await hashBytes(bytes),
-    extra
+    extra,
+    createdAt: resolvedCreatedAt,
+    updatedAt: updatedAt || resolvedCreatedAt
   });
 }
 

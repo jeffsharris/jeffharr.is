@@ -1,14 +1,16 @@
-import { createReadLaterRepository } from './repository.js';
+import { createReadLaterStores } from './stores.js';
+import { getReadLaterAssetItemId } from './asset-store.js';
 
 const CACHE_HIT = 'public, max-age=86400';
 const CACHE_MISS = 'public, max-age=300';
 
 export async function onRequest(context) {
   const { request, env } = context;
-  const repository = createReadLaterRepository(env, { requireAssets: true });
-  if (!repository) {
+  const stores = createReadLaterStores(env, { requireAssets: true });
+  if (!stores) {
     return new Response(null, { status: 404, headers: { 'Cache-Control': 'no-store' } });
   }
+  const { readLaterStore, assetStore } = stores;
 
   const url = new URL(request.url);
   const id = (url.searchParams.get('id') || '').trim();
@@ -18,10 +20,10 @@ export async function onRequest(context) {
   }
 
   try {
-    const cover = await repository.getCover(id);
-    if (cover?.base64) {
-      const bytes = decodeBase64(cover.base64);
-      return new Response(bytes, {
+    const item = await readLaterStore.getItem(id);
+    const cover = item ? await assetStore.getCoverBytes(getReadLaterAssetItemId(item)) : null;
+    if (cover?.bytes) {
+      return new Response(cover.bytes, {
         status: 200,
         headers: {
           'Content-Type': cover.contentType || 'image/png',
@@ -35,17 +37,4 @@ export async function onRequest(context) {
     console.error('Read later cover error:', error);
     return new Response(null, { status: 404, headers: { 'Cache-Control': CACHE_MISS } });
   }
-}
-
-function decodeBase64(base64) {
-  if (typeof Buffer !== 'undefined') {
-    return Uint8Array.from(Buffer.from(base64, 'base64'));
-  }
-
-  const binary = atob(base64);
-  const bytes = new Uint8Array(binary.length);
-  for (let i = 0; i < binary.length; i += 1) {
-    bytes[i] = binary.charCodeAt(i);
-  }
-  return bytes;
 }

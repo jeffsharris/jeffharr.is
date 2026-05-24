@@ -1,4 +1,6 @@
 import { deriveTitleFromUrl, shouldCacheReader } from './reader-utils.js';
+import { getReadLaterAssetItemId } from './asset-store.js';
+import { ensurePushChannels } from './state.js';
 import { formatError } from '../lib/logger.js';
 import { getOwnerId } from '../push/device-store.js';
 
@@ -33,77 +35,6 @@ function parseDomain(url) {
   }
 }
 
-function normalizePushChannels(item, now = getNowIso()) {
-  const base = item?.pushChannels && typeof item.pushChannels === 'object' ? item.pushChannels : {};
-
-  const readiness = base.readiness && typeof base.readiness === 'object'
-    ? base.readiness
-    : {};
-  const kindle = base.kindle && typeof base.kindle === 'object'
-    ? base.kindle
-    : {};
-  const ios = base.ios && typeof base.ios === 'object'
-    ? base.ios
-    : {};
-
-  return {
-    readiness: {
-      status: readiness.status === 'ready' ? 'ready' : 'pending',
-      readyAt: readiness.readyAt || null,
-      reason: readiness.status === 'ready'
-        ? null
-        : (readiness.reason || 'waiting_for_reader_and_cover')
-    },
-    kindle: {
-      status: normalizeChannelStatus(kindle.status),
-      updatedAt: kindle.updatedAt || now,
-      lastError: kindle.lastError || null
-    },
-    ios: {
-      status: normalizeChannelStatus(ios.status),
-      updatedAt: ios.updatedAt || now,
-      eventId: ios.eventId || null,
-      lastError: ios.lastError || null
-    }
-  };
-}
-
-function normalizeChannelStatus(status) {
-  if (status === 'sent' || status === 'failed' || status === 'skipped' || status === 'queued') {
-    return status;
-  }
-  return 'pending';
-}
-
-function createInitialPushChannels(now = getNowIso()) {
-  return {
-    readiness: {
-      status: 'pending',
-      readyAt: null,
-      reason: 'waiting_for_reader_and_cover'
-    },
-    kindle: {
-      status: 'pending',
-      updatedAt: now,
-      lastError: null
-    },
-    ios: {
-      status: 'pending',
-      updatedAt: now,
-      eventId: null,
-      lastError: null
-    }
-  };
-}
-
-function ensurePushChannels(item, now = getNowIso()) {
-  const channels = normalizePushChannels(item, now);
-  if (item && typeof item === 'object') {
-    item.pushChannels = channels;
-  }
-  return channels;
-}
-
 function isTerminalCoverSyncFailure(item) {
   return item?.coverSync?.status === 'failed';
 }
@@ -116,35 +47,13 @@ function buildReadinessReason({ readerReady, coverReady, coverTerminal }) {
   return 'waiting_for_cover';
 }
 
-async function saveItem(repository, item) {
-  await repository.saveItem(item);
+async function saveItem(readLaterStore, item) {
+  await readLaterStore.saveItem(item);
 }
 
-function mapKindleStatusToChannelStatus(kindleStatus) {
-  if (kindleStatus === 'synced') return 'sent';
-  if (kindleStatus === 'failed') return 'failed';
-  if (kindleStatus === 'unsupported' || kindleStatus === 'needs-content') return 'skipped';
-  return 'pending';
-}
-
-function recordKindleChannelState(item, kindleState, now = getNowIso()) {
-  if (!item || typeof item !== 'object') return item;
-  ensurePushChannels(item, now);
-
-  const mappedStatus = mapKindleStatusToChannelStatus(kindleState?.status || null);
-  item.pushChannels.kindle = {
-    status: mappedStatus,
-    updatedAt: now,
-    lastError: mappedStatus === 'failed'
-      ? (kindleState?.lastError || 'Kindle sync failed')
-      : null
-  };
-
-  return item;
-}
-
-async function updateArticlePushReadiness(itemId, repository, log) {
-  if (!repository || !itemId) {
+async function updateArticlePushReadiness(itemId, stores = {}, log) {
+  const { readLaterStore, assetStore } = stores || {};
+  if (!readLaterStore || !assetStore || !itemId) {
     return {
       ok: false,
       item: null,
@@ -155,7 +64,7 @@ async function updateArticlePushReadiness(itemId, repository, log) {
     };
   }
 
-  const item = await repository.getItem(itemId);
+  const item = await readLaterStore.getItem(itemId);
   if (!item) {
     return {
       ok: false,
@@ -170,7 +79,7 @@ async function updateArticlePushReadiness(itemId, repository, log) {
   const now = getNowIso();
   ensurePushChannels(item, now);
 
-  const reader = await repository.getReader(itemId);
+  const reader = await assetStore.getReader(getReadLaterAssetItemId(item));
   const readerReady = shouldCacheReader(reader);
   const coverReady = Boolean(item?.cover?.updatedAt);
   const coverTerminal = isTerminalCoverSyncFailure(item);
@@ -183,7 +92,7 @@ async function updateArticlePushReadiness(itemId, repository, log) {
     reason: ready ? null : reason
   };
 
-  await saveItem(repository, item);
+  await saveItem(readLaterStore, item);
 
   if (log) {
     log('info', 'article_push_readiness_updated', {
@@ -249,8 +158,8 @@ function buildIosPayload(item, env, eventId) {
   };
 }
 
-async function maybeQueueIosPush({ item, env, repository, log, source = 'unknown' }) {
-  if (!repository || !item?.id) {
+async function maybeQueueIosPush({ item, env, readLaterStore, log, source = 'unknown' }) {
+  if (!readLaterStore || !item?.id) {
     return { queued: false, item, reason: 'missing_context' };
   }
 
@@ -274,7 +183,7 @@ async function maybeQueueIosPush({ item, env, repository, log, source = 'unknown
       updatedAt: now,
       lastError: 'Background queue unavailable for iOS push'
     };
-    await saveItem(repository, item);
+    await saveItem(readLaterStore, item);
 
     if (log) {
       log('error', 'ios_push_queue_missing', {
@@ -300,7 +209,7 @@ async function maybeQueueIosPush({ item, env, repository, log, source = 'unknown
       eventId,
       lastError: null
     };
-    await saveItem(repository, item);
+    await saveItem(readLaterStore, item);
 
     if (log) {
       log('info', 'ios_push_queued', {
@@ -320,7 +229,7 @@ async function maybeQueueIosPush({ item, env, repository, log, source = 'unknown
       eventId,
       lastError: 'Failed to enqueue iOS push'
     };
-    await saveItem(repository, item);
+    await saveItem(readLaterStore, item);
 
     if (log) {
       log('error', 'ios_push_queue_failed', {
@@ -338,9 +247,6 @@ async function maybeQueueIosPush({ item, env, repository, log, source = 'unknown
 
 export {
   PUSH_NOTIFICATION_MESSAGE_TYPE,
-  createInitialPushChannels,
-  ensurePushChannels,
-  recordKindleChannelState,
   updateArticlePushReadiness,
   maybeQueueIosPush
 };
