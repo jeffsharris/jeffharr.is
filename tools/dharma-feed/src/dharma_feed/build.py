@@ -706,7 +706,7 @@ def render_index(
       <div class="archive-query">
         <div class="archive-search" role="search">
           <label class="sr-only" for="archive-search">Search talks</label>
-          <input id="archive-search" type="search" autocomplete="off" spellcheck="false" placeholder="Search titles, descriptions, chapters">
+          <input id="archive-search" type="search" autocomplete="off" spellcheck="false" placeholder="Search" data-desktop-placeholder="Search titles, descriptions, chapters" data-mobile-placeholder="Search">
 {filter_pills}
         </div>
       </div>
@@ -747,7 +747,7 @@ def render_index(
   <script>
     window.TALK_ARCHIVE_CONFIG = {archive_config_json};
   </script>
-  <script src="/dharma/archive-browser.js?v=3"></script>
+  <script src="/dharma/archive-browser.js?v=4"></script>
   <script src="/js/admin-presence.js?v=2"></script>
 </body>
 </html>
@@ -1120,6 +1120,17 @@ def archive_browser_js() -> str:
   let currentScope = config.defaultScope || scopeKeys[0] || '';
   let searchQuery = '';
   let observer = null;
+
+  function updateSearchPlaceholder() {
+    if (!archiveSearch) return;
+    const desktopPlaceholder = archiveSearch.dataset.desktopPlaceholder || 'Search titles, descriptions, chapters';
+    const mobilePlaceholder = archiveSearch.dataset.mobilePlaceholder || 'Search';
+    const isMobile = typeof window.matchMedia === 'function'
+      && window.matchMedia('(max-width: 640px)').matches;
+    archiveSearch.placeholder = isMobile
+      ? mobilePlaceholder
+      : desktopPlaceholder;
+  }
 
   function initialStateFromUrl() {
     const params = new URLSearchParams(location.search);
@@ -1677,6 +1688,7 @@ def archive_browser_js() -> str:
     searchQuery = state.query;
     loadTalkArchive(currentScope);
   });
+  window.addEventListener('resize', updateSearchPlaceholder);
 
   window.addEventListener('favorites:changed', event => {
     const state = event.detail?.state;
@@ -1695,6 +1707,7 @@ def archive_browser_js() -> str:
   const initial = initialStateFromUrl();
   currentScope = initial.scope;
   searchQuery = initial.query;
+  updateSearchPlaceholder();
   updateControls();
   if (archiveSearch) archiveSearch.value = searchQuery;
 

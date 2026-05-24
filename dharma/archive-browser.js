@@ -20,6 +20,17 @@
   let searchQuery = '';
   let observer = null;
 
+  function updateSearchPlaceholder() {
+    if (!archiveSearch) return;
+    const desktopPlaceholder = archiveSearch.dataset.desktopPlaceholder || 'Search titles, descriptions, chapters';
+    const mobilePlaceholder = archiveSearch.dataset.mobilePlaceholder || 'Search';
+    const isMobile = typeof window.matchMedia === 'function'
+      && window.matchMedia('(max-width: 640px)').matches;
+    archiveSearch.placeholder = isMobile
+      ? mobilePlaceholder
+      : desktopPlaceholder;
+  }
+
   function initialStateFromUrl() {
     const params = new URLSearchParams(location.search);
     const requestedScope = params.get('scope') || currentScope;
@@ -576,6 +587,7 @@
     searchQuery = state.query;
     loadTalkArchive(currentScope);
   });
+  window.addEventListener('resize', updateSearchPlaceholder);
 
   window.addEventListener('favorites:changed', event => {
     const state = event.detail?.state;
@@ -594,6 +606,7 @@
   const initial = initialStateFromUrl();
   currentScope = initial.scope;
   searchQuery = initial.query;
+  updateSearchPlaceholder();
   updateControls();
   if (archiveSearch) archiveSearch.value = searchQuery;
 

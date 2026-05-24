@@ -417,7 +417,9 @@ class PodcastMetadataTests(unittest.TestCase):
 
         self.assertIn('id="archive-search"', html)
         self.assertIn('type="search"', html)
+        self.assertIn('placeholder="Search"', html)
         self.assertIn("Search titles, descriptions, chapters", html)
+        self.assertIn('data-mobile-placeholder="Search"', html)
         self.assertIn('id="archive-search-status"', html)
 
     def test_landing_page_embeds_compact_filter_pills_when_guided_feed_exists(self):
@@ -483,6 +485,13 @@ class PodcastMetadataTests(unittest.TestCase):
         js = archive_browser_js()
 
         self.assertIn("fetch(scope.url, { cache: 'no-cache' })", js)
+
+    def test_archive_browser_uses_short_mobile_search_placeholder(self):
+        js = archive_browser_js()
+
+        self.assertIn("function updateSearchPlaceholder()", js)
+        self.assertIn("window.matchMedia('(max-width: 640px)')", js)
+        self.assertIn("archiveSearch.dataset.mobilePlaceholder || 'Search'", js)
 
     def test_site_image_becomes_talk_fallback_image(self):
         talk = Talk(

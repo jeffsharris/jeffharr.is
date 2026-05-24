@@ -465,7 +465,7 @@
       <div class="archive-query">
         <div class="archive-search" role="search">
           <label class="sr-only" for="archive-search">Search talks</label>
-          <input id="archive-search" type="search" autocomplete="off" spellcheck="false" placeholder="Search titles, descriptions, chapters">
+          <input id="archive-search" type="search" autocomplete="off" spellcheck="false" placeholder="Search" data-desktop-placeholder="Search titles, descriptions, chapters" data-mobile-placeholder="Search">
           <div class="archive-filter-pills">
           <div class="scope-switch" role="group" aria-label="Recording type">
             <button class="scope-chip is-active" type="button" aria-pressed="true" data-scope-option="dharma">Talks</button>
@@ -511,7 +511,7 @@
   <script>
     window.TALK_ARCHIVE_CONFIG = {"corpus": "brensilver", "defaultScope": "dharma", "feedEndpoint": "/api/feeds/dharma.xml", "siteBaseUrl": "https://jeffharr.is/dharma/brensilver/", "talkPathPrefix": "talks/", "scopes": {"all": {"title": "All", "url": "talks.json", "count": 664}, "dharma": {"title": "Dharma talks", "url": "dharma-talks.json", "count": 400}, "guided": {"title": "Guided meditations", "url": "guided-talks.json", "count": 264}}};
   </script>
-  <script src="/dharma/archive-browser.js?v=3"></script>
+  <script src="/dharma/archive-browser.js?v=4"></script>
   <script src="/js/admin-presence.js?v=2"></script>
 </body>
 </html>
