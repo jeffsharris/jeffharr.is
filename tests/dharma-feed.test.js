@@ -27,7 +27,8 @@ const BRENSILVER_TALKS = [
     canonical_url: 'https://jeffharr.is/dharma/brensilver/talks/audiodharma-2/',
     link: 'https://example.com/talks/2',
     audio_url: 'https://media.example/equanimity.mp3',
-    audio_type: 'audio/mpeg'
+    audio_type: 'audio/mpeg',
+    duration: '1:10:00'
   }
 ];
 
@@ -42,7 +43,8 @@ const BURBEA_TALKS = [
     canonical_url: 'https://jeffharr.is/dharma/burbea/talks/dharmaseed-10/',
     link: 'https://example.com/talks/10',
     audio_url: 'https://media.example/imaginal.mp3',
-    audio_type: 'audio/mpeg'
+    audio_type: 'audio/mpeg',
+    duration: '50:00'
   }
 ];
 
@@ -63,6 +65,61 @@ test('dynamic Dharma feed filters by search query', async () => {
   assert.match(body, /Metta and Attention/);
   assert.doesNotMatch(body, /Equanimity/);
   assert.match(body, /matching &quot;metta&quot;/);
+});
+
+test('dynamic Dharma feed filters by maximum duration', async () => {
+  const response = await onRequest({
+    request: new Request('https://jeffharr.is/api/feeds/dharma.xml?corpus=brensilver&q=duration:%3C45m'),
+    env: {
+      ASSETS: createAssets({
+        '/dharma/brensilver/talks.json': BRENSILVER_TALKS
+      }),
+      CONTENT_DB: createStarredDb([])
+    }
+  });
+  const body = await response.text();
+
+  assert.equal(response.status, 200);
+  assert.match(body, /Metta and Attention/);
+  assert.doesNotMatch(body, /Equanimity/);
+  assert.match(body, /duration:&lt;45m/);
+});
+
+test('dynamic Dharma feed combines text and duration range filters', async () => {
+  const response = await onRequest({
+    request: new Request('https://jeffharr.is/api/feeds/dharma.xml?corpus=brensilver&q=metta%20duration:20m..40m'),
+    env: {
+      ASSETS: createAssets({
+        '/dharma/brensilver/talks.json': BRENSILVER_TALKS
+      }),
+      CONTENT_DB: createStarredDb([])
+    }
+  });
+  const body = await response.text();
+
+  assert.equal(response.status, 200);
+  assert.match(body, /Metta and Attention/);
+  assert.doesNotMatch(body, /Equanimity/);
+  assert.match(body, /matching &quot;metta&quot;/);
+  assert.match(body, /duration:20m\.\.40m/);
+});
+
+test('dynamic Dharma feed supports length alias for duration filters', async () => {
+  const response = await onRequest({
+    request: new Request('https://jeffharr.is/api/feeds/dharma.xml?corpus=brensilver&q=length:%3E1h'),
+    env: {
+      ASSETS: createAssets({
+        '/dharma/brensilver/talks.json': BRENSILVER_TALKS
+      }),
+      CONTENT_DB: createStarredDb([])
+    }
+  });
+  const body = await response.text();
+
+  assert.equal(response.status, 200);
+  assert.doesNotMatch(body, /Metta and Attention/);
+  assert.match(body, /Equanimity/);
+  assert.match(body, /duration:&gt;1h/);
 });
 
 test('dynamic Dharma feed defaults to Dharma talks when scope is omitted', async () => {

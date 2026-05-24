@@ -54,8 +54,8 @@ async function buildDharmaFeed({ env, requestUrl, query }) {
     talks.map((talk) => ({ ...talk, __corpus: corpus }))
   ));
 
-  if (query.search) {
-    talks = talks.filter((talk) => matchesSearch(talk, query.search));
+  if (query.searchTerms.length || query.durationFilters.length) {
+    talks = talks.filter((talk) => matchesSearch(talk, query));
   }
   if (query.starred) {
     talks = talks.filter((talk) => talkIsStarred(talk, talk.__corpus, starredRefs));
@@ -94,6 +94,9 @@ function parseFeedQuery(url) {
     corpora: Array.from(new Set(corpora)),
     scope,
     search: search.query,
+    searchTerms: search.terms,
+    durationFilters: search.durationFilters,
+    durationLabels: search.durationLabels,
     starred: truthyParam(url.searchParams.get('starred')) || search.starred,
     limit
   };
@@ -119,33 +122,35 @@ async function loadTalkJson(env, path) {
 }
 
 function matchesSearch(talk, search) {
-  const terms = parseSearchDirectives(search).terms;
+  const parsed = typeof search === 'string' ? parseSearchDirectives(search) : search;
+  const terms = parsed?.terms || parsed?.searchTerms || [];
+  const durationFilters = parsed?.durationFilters || [];
+  if (durationFilters.length && !durationFilters.every((filter) => matchesDurationFilter(talk, filter))) {
+    return false;
+  }
   if (!terms.length) return true;
-  const haystack = normalizeSearch([
-    talk.title,
-    talk.podcast_description,
-    talk.short_summary,
-    talk.description,
-    talk.speaker,
-    talk.source,
-    talk.venue,
-    talk.series,
-    ...(Array.isArray(talk.tags) ? talk.tags : []),
-    ...(Array.isArray(talk.chapters)
-      ? talk.chapters.flatMap((chapter) => [chapter.title, chapter.description])
-      : [])
-  ].filter(Boolean).join(' '));
-  return terms.every((term) => haystack.includes(term));
+  return terms.every((term) => talkSearchText(talk).includes(term));
 }
 
 function parseSearchDirectives(value) {
   const rawTokens = String(value || '').trim().split(/\s+/).filter(Boolean);
   const terms = [];
+  const durationFilters = [];
+  const durationLabels = [];
   let starred = false;
   for (const token of rawTokens) {
     if (token.toLowerCase() === 'is:starred') {
       starred = true;
       continue;
+    }
+    const durationMatch = token.match(/^(?:duration|length):(.+)$/i);
+    if (durationMatch) {
+      const filter = parseDurationDirective(durationMatch[1]);
+      if (filter) {
+        durationFilters.push(filter);
+        durationLabels.push(filter.label);
+        continue;
+      }
     }
     terms.push(token);
   }
@@ -153,8 +158,115 @@ function parseSearchDirectives(value) {
   return {
     query,
     terms: normalizeSearch(query).split(/\s+/).filter(Boolean),
+    durationFilters,
+    durationLabels,
     starred
   };
+}
+
+function talkSearchText(talk) {
+  if (!talk.__feedSearchText) {
+    talk.__feedSearchText = normalizeSearch([
+      talk.title,
+      talk.podcast_description,
+      talk.short_summary,
+      talk.description,
+      talk.speaker,
+      talk.source,
+      talk.venue,
+      talk.series,
+      ...(Array.isArray(talk.tags) ? talk.tags : []),
+      ...(Array.isArray(talk.chapters)
+        ? talk.chapters.flatMap((chapter) => [chapter.title, chapter.description])
+        : [])
+    ].filter(Boolean).join(' '));
+  }
+  return talk.__feedSearchText;
+}
+
+function parseDurationDirective(value) {
+  const raw = String(value || '').trim().toLowerCase();
+  if (!raw) return null;
+  if (raw.includes('..')) {
+    const [minValue, maxValue] = raw.split('..', 2);
+    const min = minValue ? parseDurationSeconds(minValue, { bareUnit: 'minutes' }) : null;
+    const max = maxValue ? parseDurationSeconds(maxValue, { bareUnit: 'minutes' }) : null;
+    if (minValue && min == null) return null;
+    if (maxValue && max == null) return null;
+    if (min == null && max == null) return null;
+    return {
+      min,
+      max,
+      minInclusive: true,
+      maxInclusive: true,
+      label: `duration:${raw}`
+    };
+  }
+
+  const match = raw.match(/^(<=|>=|<|>|=)?(.+)$/);
+  if (!match) return null;
+  const operator = match[1] || '=';
+  const seconds = parseDurationSeconds(match[2], { bareUnit: 'minutes' });
+  if (seconds == null) return null;
+  const filter = { label: `duration:${raw}` };
+  if (operator === '<' || operator === '<=') {
+    filter.max = seconds;
+    filter.maxInclusive = operator === '<=';
+    return filter;
+  }
+  if (operator === '>' || operator === '>=') {
+    filter.min = seconds;
+    filter.minInclusive = operator === '>=';
+    return filter;
+  }
+  filter.min = seconds;
+  filter.max = seconds;
+  filter.minInclusive = true;
+  filter.maxInclusive = true;
+  return filter;
+}
+
+function matchesDurationFilter(talk, filter) {
+  const seconds = parseDurationSeconds(talk.duration, { bareUnit: 'seconds' });
+  if (seconds == null) return false;
+  if (filter.min != null) {
+    if (filter.minInclusive === false ? seconds <= filter.min : seconds < filter.min) return false;
+  }
+  if (filter.max != null) {
+    if (filter.maxInclusive === false ? seconds >= filter.max : seconds > filter.max) return false;
+  }
+  return true;
+}
+
+function parseDurationSeconds(value, { bareUnit } = { bareUnit: 'seconds' }) {
+  if (typeof value === 'number' && Number.isFinite(value)) return value;
+  const raw = String(value || '').trim().toLowerCase();
+  if (!raw) return null;
+  if (/^\d+(?::\d+){1,2}(?:\.\d+)?$/.test(raw)) {
+    const parts = raw.split(':').map(Number);
+    if (parts.some((part) => !Number.isFinite(part))) return null;
+    if (parts.length === 3) return parts[0] * 3600 + parts[1] * 60 + parts[2];
+    return parts[0] * 60 + parts[1];
+  }
+  if (/^\d+(?:\.\d+)?$/.test(raw)) {
+    const number = Number(raw);
+    return bareUnit === 'minutes' ? number * 60 : number;
+  }
+  const unitPattern = /(\d+(?:\.\d+)?)\s*(hours?|hrs?|h|minutes?|mins?|min|m|seconds?|secs?|sec|s)/g;
+  let total = 0;
+  let matched = false;
+  let consumed = raw;
+  for (const match of raw.matchAll(unitPattern)) {
+    matched = true;
+    const amount = Number(match[1]);
+    const unit = match[2][0];
+    if (!Number.isFinite(amount)) return null;
+    if (unit === 'h') total += amount * 3600;
+    else if (unit === 'm') total += amount * 60;
+    else total += amount;
+    consumed = consumed.replace(match[0], '');
+  }
+  return matched && !consumed.trim() ? total : null;
 }
 
 function normalizeSearch(value) {
@@ -223,6 +335,7 @@ function feedTitle(query, talks) {
   if (query.starred) parts.push('starred');
   parts.push(SCOPE_LABELS[query.scope] || 'recordings');
   if (query.search) parts.push(`matching "${query.search}"`);
+  if (query.durationLabels?.length) parts.push(query.durationLabels.join(' '));
   return parts.join(' ');
 }
 
@@ -232,6 +345,7 @@ function feedDescription(query, count) {
   if (query.scope !== 'all') terms.push(`scope=${query.scope}`);
   if (query.starred) terms.push('starred');
   if (query.search) terms.push(`search="${query.search}"`);
+  if (query.durationLabels?.length) terms.push(query.durationLabels.join(', '));
   const suffix = terms.length ? ` for ${terms.join(', ')}` : '';
   const noun = count === 1 ? 'recording' : 'recordings';
   return `${count} ${noun}${suffix}.`;

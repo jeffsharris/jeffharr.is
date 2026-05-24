@@ -116,11 +116,22 @@
   function parseSearchDirectives(value) {
     const rawTokens = String(value || '').trim().split(/\s+/).filter(Boolean);
     const terms = [];
+    const durationFilters = [];
+    const durationLabels = [];
     let starred = false;
     for (const token of rawTokens) {
       if (token.toLowerCase() === 'is:starred') {
         starred = true;
         continue;
+      }
+      const durationMatch = token.match(/^(?:duration|length):(.+)$/i);
+      if (durationMatch) {
+        const filter = parseDurationDirective(durationMatch[1]);
+        if (filter) {
+          durationFilters.push(filter);
+          durationLabels.push(filter.label);
+          continue;
+        }
       }
       terms.push(token);
     }
@@ -128,8 +139,96 @@
     return {
       query,
       terms: normalizeSearch(query).split(/\s+/).filter(Boolean),
+      durationFilters,
+      durationLabels,
+      urlQuery: [...terms, ...durationLabels].join(' ').trim(),
       starred,
     };
+  }
+
+  function parseDurationDirective(value) {
+    const raw = String(value || '').trim().toLowerCase();
+    if (!raw) return null;
+    if (raw.includes('..')) {
+      const [minValue, maxValue] = raw.split('..', 2);
+      const min = minValue ? parseDurationSeconds(minValue, { bareUnit: 'minutes' }) : null;
+      const max = maxValue ? parseDurationSeconds(maxValue, { bareUnit: 'minutes' }) : null;
+      if (minValue && min == null) return null;
+      if (maxValue && max == null) return null;
+      if (min == null && max == null) return null;
+      return {
+        min,
+        max,
+        minInclusive: true,
+        maxInclusive: true,
+        label: `duration:${raw}`,
+      };
+    }
+
+    const match = raw.match(/^(<=|>=|<|>|=)?(.+)$/);
+    if (!match) return null;
+    const operator = match[1] || '=';
+    const seconds = parseDurationSeconds(match[2], { bareUnit: 'minutes' });
+    if (seconds == null) return null;
+    const filter = { label: `duration:${raw}` };
+    if (operator === '<' || operator === '<=') {
+      filter.max = seconds;
+      filter.maxInclusive = operator === '<=';
+      return filter;
+    }
+    if (operator === '>' || operator === '>=') {
+      filter.min = seconds;
+      filter.minInclusive = operator === '>=';
+      return filter;
+    }
+    filter.min = seconds;
+    filter.max = seconds;
+    filter.minInclusive = true;
+    filter.maxInclusive = true;
+    return filter;
+  }
+
+  function matchesDurationFilter(talk, filter) {
+    const seconds = parseDurationSeconds(talk.duration, { bareUnit: 'seconds' });
+    if (seconds == null) return false;
+    if (filter.min != null) {
+      if (filter.minInclusive === false ? seconds <= filter.min : seconds < filter.min) return false;
+    }
+    if (filter.max != null) {
+      if (filter.maxInclusive === false ? seconds >= filter.max : seconds > filter.max) return false;
+    }
+    return true;
+  }
+
+  function parseDurationSeconds(value, { bareUnit } = { bareUnit: 'seconds' }) {
+    if (typeof value === 'number' && Number.isFinite(value)) return value;
+    const raw = String(value || '').trim().toLowerCase();
+    if (!raw) return null;
+    if (/^\d+(?::\d+){1,2}(?:\.\d+)?$/.test(raw)) {
+      const parts = raw.split(':').map(Number);
+      if (parts.some((part) => !Number.isFinite(part))) return null;
+      if (parts.length === 3) return parts[0] * 3600 + parts[1] * 60 + parts[2];
+      return parts[0] * 60 + parts[1];
+    }
+    if (/^\d+(?:\.\d+)?$/.test(raw)) {
+      const number = Number(raw);
+      return bareUnit === 'minutes' ? number * 60 : number;
+    }
+    const unitPattern = /(\d+(?:\.\d+)?)\s*(hours?|hrs?|h|minutes?|mins?|min|m|seconds?|secs?|sec|s)/g;
+    let total = 0;
+    let matched = false;
+    let consumed = raw;
+    for (const match of raw.matchAll(unitPattern)) {
+      matched = true;
+      const amount = Number(match[1]);
+      const unit = match[2][0];
+      if (!Number.isFinite(amount)) return null;
+      if (unit === 'h') total += amount * 3600;
+      else if (unit === 'm') total += amount * 60;
+      else total += amount;
+      consumed = consumed.replace(match[0], '');
+    }
+    return matched && !consumed.trim() ? total : null;
   }
 
   function chapterSearchText(talk) {
@@ -187,8 +286,13 @@
     }
     const search = parseSearchDirectives(searchQuery);
     const terms = search.terms;
-    let talks = terms.length
-      ? state.talks.filter(talk => terms.every(term => talkSearchText(talk).includes(term)))
+    const durationFilters = search.durationFilters;
+    let talks = terms.length || durationFilters.length
+      ? state.talks.filter(talk => {
+        const textMatch = !terms.length || terms.every(term => talkSearchText(talk).includes(term));
+        const durationMatch = !durationFilters.length || durationFilters.every(filter => matchesDurationFilter(talk, filter));
+        return textMatch && durationMatch;
+      })
       : state.talks;
     if (search.starred) {
       await ensureFavoriteStates(state.talks);
@@ -385,7 +489,7 @@
     const search = parseSearchDirectives(searchQuery);
     url.searchParams.set('corpus', config.corpus || location.pathname.match(/^\/dharma\/([^/]+)/)?.[1] || '');
     url.searchParams.set('scope', currentScope || 'all');
-    if (search.query) url.searchParams.set('q', search.query);
+    if (search.urlQuery) url.searchParams.set('q', search.urlQuery);
     if (search.starred) url.searchParams.set('starred', '1');
     return url.href;
   }
