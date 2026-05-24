@@ -13,6 +13,11 @@ import {
   getNowIso,
   normalizeHttpUrl
 } from './ids.js';
+import {
+  dharmaTalkCanonicalKey,
+  dharmaTalkMatchesId,
+  dharmaTalkSourceId
+} from '../dharma/ref.js';
 
 const DHARMA_TALKS_CACHE = new Map();
 const DHARMA_TALKS_CACHE_MS = 5 * 60 * 1000;
@@ -351,7 +356,7 @@ async function upsertPoemRef({ db, ref, env, requestUrl }) {
 
 async function upsertDharmaTalk({ db, corpus, talk }) {
   const source = talk.source || '';
-  const sourceId = talk.source_id || String(talk.id || '').split(':').at(-1) || '';
+  const sourceId = dharmaTalkSourceId(talk);
   const canonicalKey = dharmaTalkCanonicalKey(corpus, talk);
   let item = await upsertItem(db, {
     kind: 'dharma_talk',
@@ -482,10 +487,7 @@ async function upsertDharmaTalk({ db, corpus, talk }) {
 async function loadDharmaTalk({ corpus, id, env }) {
   const talks = await loadDharmaTalks({ corpus, env });
   if (!Array.isArray(talks)) return null;
-  return talks.find((talk) => {
-    const safeId = String(talk.canonical_url || '').split('/talks/')[1]?.split('/')[0];
-    return String(talk.id || '') === id || String(talk.source_id || '') === id || safeId === id;
-  }) || null;
+  return talks.find((talk) => dharmaTalkMatchesId(talk, id)) || null;
 }
 
 async function loadDharmaTalks({ corpus, env }) {
@@ -508,12 +510,6 @@ async function loadDharmaTalkFromRef({ ref, env }) {
   const id = String(ref?.id || ref?.sourceId || ref?.slug || '').trim();
   if (!corpus || !id) return null;
   return loadDharmaTalk({ corpus, id, env });
-}
-
-function dharmaTalkCanonicalKey(corpus, talk) {
-  const source = talk.source || '';
-  const sourceId = talk.source_id || String(talk.id || '').split(':').at(-1) || '';
-  return `dharma_talk:${corpus}:${source}:${sourceId}`;
 }
 
 async function loadSharePageForFavorite(db, slug) {

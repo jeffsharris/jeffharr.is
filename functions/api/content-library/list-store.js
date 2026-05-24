@@ -6,10 +6,12 @@ import {
 } from './db.js';
 import { createRandomId, getNowIso } from './ids.js';
 import { resolveContentInput, resolveContentLookup } from './resolve.js';
+import { loadStarredDharmaRefs } from '../dharma/starred.js';
 import {
-  loadStarredDharmaRefs,
-  normalizeRef
-} from '../dharma/starred.js';
+  dharmaFavoriteStateKey,
+  dharmaIdentityIsStarred,
+  dharmaRefIdentity
+} from '../dharma/ref.js';
 
 const STARRED_SLUG = 'starred';
 
@@ -129,54 +131,14 @@ function isDharmaTalkStateRef(ref) {
 
 function serializeDharmaFavoriteState(ref, starredRefs) {
   return {
-    key: ref?.key || dharmaStateKey(ref.ref),
+    key: ref?.key || dharmaFavoriteStateKey(ref.ref),
     itemId: null,
     canonicalKey: null,
-    favorited: dharmaStateRefIsStarred(ref.ref, starredRefs),
+    favorited: dharmaIdentityIsStarred(dharmaRefIdentity(ref.ref), starredRefs),
     entryId: null,
     addedAt: null,
     updatedAt: null
   };
-}
-
-function dharmaStateKey(ref) {
-  const corpus = normalizeRef(ref?.corpus);
-  const id = normalizeRef(ref?.id || ref?.sourceId || ref?.slug);
-  return corpus && id ? `dharma_talk:${corpus}:${id}` : '';
-}
-
-function dharmaStateRefIsStarred(ref, starredRefs) {
-  const bucket = starredRefs?.byCorpus?.get(normalizeRef(ref?.corpus));
-  if (!bucket) return false;
-
-  for (const id of dharmaStateIdCandidates(ref)) {
-    if (bucket.safeIds.has(id) || bucket.sourceIds.has(id)) return true;
-  }
-
-  for (const url of dharmaStateUrlCandidates(ref)) {
-    if (bucket.urls.has(url)) return true;
-  }
-
-  return false;
-}
-
-function dharmaStateIdCandidates(ref) {
-  const values = new Set();
-  for (const value of [ref?.id, ref?.sourceId, ref?.slug]) {
-    const normalized = normalizeRef(value);
-    if (!normalized) continue;
-    values.add(normalized);
-    if (normalized.includes(':')) {
-      values.add(normalizeRef(normalized.split(':').slice(1).join(':')));
-    }
-  }
-  return values;
-}
-
-function dharmaStateUrlCandidates(ref) {
-  return [ref?.url, ref?.canonicalUrl, ref?.sourceUrl]
-    .map((value) => String(value || '').trim())
-    .filter(Boolean);
 }
 
 export {
