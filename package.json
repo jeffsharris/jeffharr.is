@@ -8,7 +8,7 @@
     "test": "npm run test:js",
     "test:js": "node --test tests/*.test.js",
     "test:dharma-feed": "PYTHONPATH=tools/dharma-feed/src python3 -m unittest discover tools/dharma-feed/tests",
-    "test:transcripts": "PYTHONPATH=tools/brensilver-transcripts/src python3 -m unittest discover tools/brensilver-transcripts/tests",
+    "test:transcripts": "PYTHONPATH=tools/dharma-transcripts/src python3 -m unittest discover tools/dharma-transcripts/tests",
     "test:all": "npm run test:js && npm run test:dharma-feed && npm run test:transcripts"
   },
   "dependencies": {

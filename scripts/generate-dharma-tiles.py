@@ -3,7 +3,7 @@
 
 Each tile is a portrait-orientation backdrop rendered by gpt-image-2 in the
 teacher's signature visual vocabulary (drawn from the corpus image_style
-prompts in tools/brensilver-transcripts/config/). The teacher's existing
+prompts in tools/dharma-transcripts/config/). The teacher's existing
 square podcast-cover is then composited into the bottom-right corner as a
 thoughtfully framed inset, so the literal cover sits inside a larger scene
 in its own style.

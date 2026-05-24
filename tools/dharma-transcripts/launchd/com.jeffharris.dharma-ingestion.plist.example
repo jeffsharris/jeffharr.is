@@ -4,14 +4,15 @@
 <plist version="1.0">
 <dict>
   <key>Label</key>
-  <string>com.jeffharris.brensilver-transcripts</string>
+  <string>com.jeffharris.dharma-ingestion</string>
 
   <key>WorkingDirectory</key>
   <string>/path/to/jeffharr.is</string>
 
   <key>ProgramArguments</key>
   <array>
-    <string>/path/to/jeffharr.is/scripts/run-brensilver-ingestion.sh</string>
+    <string>/path/to/jeffharr.is/scripts/run-dharma-ingestion.sh</string>
+    <string>brensilver</string>
   </array>
 
   <key>EnvironmentVariables</key>

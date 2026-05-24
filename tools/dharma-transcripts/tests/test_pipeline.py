@@ -4,7 +4,7 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
-from brensilver_transcripts.pipeline import (
+from dharma_transcripts.pipeline import (
     CorpusPaths,
     PipelineState,
     Talk,
@@ -60,13 +60,13 @@ class PipelineTests(unittest.TestCase):
         request = urllib.request.Request("https://api.example.test")
         with (
             patch(
-                "brensilver_transcripts.pipeline.urllib.request.urlopen",
+                "dharma_transcripts.pipeline.urllib.request.urlopen",
                 side_effect=[
                     ConnectionResetError(54, "Connection reset by peer"),
                     _JsonResponse(b'{"ok": true}'),
                 ],
             ) as urlopen,
-            patch("brensilver_transcripts.pipeline.time.sleep") as sleep,
+            patch("dharma_transcripts.pipeline.time.sleep") as sleep,
         ):
             self.assertEqual(openai_json(request), {"ok": True})
 
@@ -92,12 +92,12 @@ class PipelineTests(unittest.TestCase):
             )()
 
             with (
-                patch("brensilver_transcripts.pipeline.shutil.which", return_value="/usr/bin/curl"),
+                patch("dharma_transcripts.pipeline.shutil.which", return_value="/usr/bin/curl"),
                 patch(
-                    "brensilver_transcripts.pipeline.subprocess.run",
+                    "dharma_transcripts.pipeline.subprocess.run",
                     return_value=curl_result,
                 ) as run,
-                patch("brensilver_transcripts.pipeline.sys.stderr"),
+                patch("dharma_transcripts.pipeline.sys.stderr"),
             ):
                 result = multipart_request(
                     "https://api.example.test/audio/transcriptions",
@@ -118,7 +118,7 @@ class PipelineTests(unittest.TestCase):
         )
 
     def test_parse_curl_json_stdout_ignores_write_out_footer(self):
-        with patch("brensilver_transcripts.pipeline.sys.stderr"):
+        with patch("dharma_transcripts.pipeline.sys.stderr"):
             self.assertEqual(
                 parse_curl_json_stdout(
                     '{"text": "ok"}\n'

@@ -45,7 +45,7 @@ builds should prefer R2/media URLs once an upload/sync step exists.
 Use explicit media bases for new workflows:
 
 ```sh
-python3 scripts/build-burbea-feed.py \
+python3 scripts/build-dharma-feed.py burbea \
   --artwork-base-url https://media.jeffharr.is/burbea/ \
   --chapters-base-url https://jeffharr.is/dharma/burbea/
 ```
@@ -59,7 +59,7 @@ to print a dry-run report for stale talk pages, chapter JSON files, and
 per-episode artwork:
 
 ```sh
-python3 scripts/build-burbea-feed.py \
+python3 scripts/build-dharma-feed.py burbea \
   --talks-json dharma/burbea/talks.json \
   --copy-artwork \
   --prune-generated=report
@@ -70,19 +70,19 @@ The report deliberately protects corpus-level artwork whose filenames end in
 
 ## Entry Points
 
-Run wrapper scripts from the repo root:
+Run the generic builder from the repo root:
 
 ```sh
-python3 scripts/build-brensilver-feed.py
-python3 scripts/build-burbea-feed.py
-python3 scripts/build-watts-feed.py
+python3 scripts/build-dharma-feed.py brensilver
+python3 scripts/build-dharma-feed.py burbea
+python3 scripts/build-dharma-feed.py watts
 ```
 
-The wrappers are intentionally small and delegate shared argument construction
-to `scripts/lib/dharma_feed_runner.py`. Keep the existing wrapper names stable:
-the transcript pipeline configs call them directly.
+`scripts/build-dharma-feed.py` delegates shared argument construction to
+`scripts/lib/dharma_feed_runner.py`. Transcript pipeline configs call the same
+generic entry point with their corpus slug.
 
-Each wrapper points at one config file in `tools/dharma-feed/config/`, writes to
+Each corpus maps to one config file in `tools/dharma-feed/config/`, writes to
 `dharma/{corpus}/`, and seeds from the existing `dharma/{corpus}/talks.json`
 when it is present. That seed preserves the archive when upstream feeds shrink
 or stop listing older talks. Live source records are loaded first and win on
@@ -112,7 +112,7 @@ When changing a source:
 
 1. Update the relevant config file in `tools/dharma-feed/config/`.
 2. Update parser/classifier tests in `tools/dharma-feed/tests/test_sources.py`.
-3. Rebuild through the corpus wrapper.
+3. Rebuild through `scripts/build-dharma-feed.py <corpus>`.
 4. Audit `dharma/{corpus}/dharma-talks.json` and
    `dharma/{corpus}/guided-talks.json` before committing generated artifacts.
 
@@ -122,15 +122,15 @@ When `.local-corpus/{corpus}/` exists, the builder can merge locally generated
 episode metadata into RSS, talk pages, chapters, and copied artwork:
 
 ```sh
-python3 scripts/build-brensilver-feed.py \
+python3 scripts/build-dharma-feed.py brensilver \
   --talks-json dharma/brensilver/talks.json \
   --artwork-base-url https://jeffharr.is/dharma/brensilver/ \
   --chapters-base-url https://jeffharr.is/dharma/brensilver/ \
   --copy-artwork
 ```
 
-Use the same pattern for `burbea` or `watts` with their wrapper script and
-public path. Same-site preview URLs are useful while reviewing generated
+Use the same pattern for `burbea` or `watts` with the corpus argument and public
+path. Same-site preview URLs are useful while reviewing generated
 artifacts. For production artwork at scale, prefer an R2 media base such as
 `https://media.jeffharr.is/brensilver/` for `--artwork-base-url` while keeping
 `--chapters-base-url` on `https://jeffharr.is/dharma/brensilver/`.
@@ -156,5 +156,4 @@ focused pattern and a classifier test.
 
 This tool only discovers talks and builds public feed/archive artifacts. Local
 transcripts, reference extraction, artwork generation, markdown, QMD indexing,
-and batch rebuild orchestration live in `tools/brensilver-transcripts/`. That
-package name is historical, but the pipeline is corpus-configurable.
+and batch rebuild orchestration live in `tools/dharma-transcripts/`.

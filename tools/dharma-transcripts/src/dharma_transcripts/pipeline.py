@@ -35,7 +35,7 @@ DEFAULT_DESCRIPTION_SUMMARY_PROMPT = TOOLS_ROOT / "prompts" / "description_summa
 DEFAULT_ENV_FILE = SITE_ROOT / ".env.local"
 OPENAI_BASE_URL = "https://api.openai.com/v1"
 MAX_UPLOAD_BYTES = 24 * 1024 * 1024
-CHUNK_SECONDS = int(os.environ.get("BRENSILVER_CHUNK_SECONDS", 20 * 60))
+CHUNK_SECONDS = int(os.environ.get("DHARMA_CHUNK_SECONDS", 20 * 60))
 CHUNK_OVERLAP_SECONDS = 3
 RUN_CORPUS_LOCK_STALE_SECONDS = 12 * 60 * 60
 TEXT_NORMALIZATIONS = {
@@ -124,7 +124,7 @@ def default_corpus_config() -> CorpusConfig:
         talks_json=DEFAULT_TALKS_JSON,
         corpus_dir=DEFAULT_CORPUS_DIR,
         feed_media_base_url=DEFAULT_FEED_MEDIA_BASE_URL,
-        feed_build_script=SITE_ROOT / "scripts" / "build-brensilver-feed.py",
+        feed_build_script=SITE_ROOT / "scripts" / "build-dharma-feed.py",
         glossary=DEFAULT_GLOSSARY,
         env_file=DEFAULT_ENV_FILE,
         correct_prompt=DEFAULT_CORRECT_PROMPT,
@@ -140,7 +140,7 @@ def default_corpus_config() -> CorpusConfig:
             "{teacher} Dharma talk: {title}. Use Buddhist terms and names accurately. "
             "Terms: {terms}. Names: {people}."
         ),
-        user_agent="brensilver-transcripts/0.1 (+https://jeffharr.is/dharma/brensilver/)",
+        user_agent="dharma-transcripts/0.1 (+https://jeffharr.is/dharma/brensilver/)",
     )
 
 
@@ -2323,6 +2323,7 @@ def rebuild_public_feed(
     command = [
         sys.executable,
         str(CORPUS.feed_build_script),
+        CORPUS.slug,
         "--talks-json",
         str(talks_json),
         "--media-base-url",

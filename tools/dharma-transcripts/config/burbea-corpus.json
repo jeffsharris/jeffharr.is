@@ -6,13 +6,13 @@
   "talks_json": "dharma/burbea/talks.json",
   "corpus_dir": ".local-corpus/burbea",
   "feed_media_base_url": "https://jeffharr.is/dharma/burbea/",
-  "feed_build_script": "scripts/build-burbea-feed.py",
-  "glossary": "tools/brensilver-transcripts/config/burbea-glossary.json",
+  "feed_build_script": "scripts/build-dharma-feed.py",
+  "glossary": "tools/dharma-transcripts/config/burbea-glossary.json",
   "env_file": ".env.local",
   "prompts": {
-    "correct": "tools/brensilver-transcripts/prompts/correct_transcript.md",
-    "references": "tools/brensilver-transcripts/prompts/extract_references.md",
-    "episode_metadata": "tools/brensilver-transcripts/prompts/episode_metadata.md"
+    "correct": "tools/dharma-transcripts/prompts/correct_transcript.md",
+    "references": "tools/dharma-transcripts/prompts/extract_references.md",
+    "episode_metadata": "tools/dharma-transcripts/prompts/episode_metadata.md"
   },
   "qmd": {
     "index": "dharma",

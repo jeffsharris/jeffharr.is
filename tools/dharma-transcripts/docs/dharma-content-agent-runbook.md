@@ -4,7 +4,7 @@ This project has two related but distinct layers:
 
 1. Public podcast/static-site feed generation in `tools/dharma-feed/`.
 2. Local transcript, reference, artwork, and QMD indexing in
-   `tools/brensilver-transcripts/`.
+   `tools/dharma-transcripts/`.
 
 Do not treat a new source as complete after it appears in `feed.xml`. New talks
 must also pass through local ingestion so they get corrected transcripts,
@@ -14,8 +14,8 @@ markdown, and QMD embeddings.
 ## Current Brensilver Architecture
 
 - Source config: `tools/dharma-feed/config/brensilver.json`
-- Feed builder wrapper: `scripts/build-brensilver-feed.py`
-- Local ingestion runner: `scripts/run-brensilver-ingestion.sh`
+- Feed builder: `scripts/build-dharma-feed.py brensilver`
+- Local ingestion runner: `scripts/run-dharma-ingestion.sh brensilver`
 - Generated public artifacts: `dharma/brensilver/`
 - Local private corpus: `.local-corpus/brensilver/`
 - QMD index: `dharma`
@@ -34,14 +34,14 @@ The Mac Mini should run this every six hours:
 
 ```sh
 cd <repo-root>
-scripts/run-brensilver-ingestion.sh
+scripts/run-dharma-ingestion.sh brensilver
 ```
 
 The installed launchd job should use:
 
-- label: `com.jeffharris.brensilver-transcripts`
+- label: `com.jeffharris.dharma-ingestion`
 - interval: `21600` seconds
-- script: `<repo-root>/scripts/run-brensilver-ingestion.sh`
+- script: `<repo-root>/scripts/run-dharma-ingestion.sh brensilver`
 
 For unattended publishing, the environment sets:
 
@@ -79,7 +79,7 @@ ingestion run.
 
    ```sh
    PYTHONPATH=tools/dharma-feed/src python3 -m unittest tools/dharma-feed/tests/test_sources.py
-   scripts/run-brensilver-ingestion.sh
+   scripts/run-dharma-ingestion.sh brensilver
    ```
 
 4. Verify:
@@ -148,9 +148,9 @@ for example `goldstein`, `boorstein`, or another stable teacher slug.
 ## Adding A New Dharma Teacher
 
 The public feed builder is corpus-configurable, but each corpus still needs its
-own output path, site URL, local corpus directory, QMD collection, wrapper, and
-source config. The transcript package name is historical; do not treat the
-`brensilver` collection or feeds as generic defaults.
+own output path, site URL, local corpus directory, QMD collection, source config,
+and corpus-specific invocation of the generic feed/ingestion scripts. Do not
+treat the `brensilver` collection or feeds as generic defaults.
 
 Use this plan:
 
@@ -169,8 +169,8 @@ Use this plan:
 5. Add a feed config under `tools/dharma-feed/config/` so `site.title`,
    `site.feed_url`, `site.image_url`, source IDs, and teacher names are
    teacher-specific.
-6. Add a small wrapper under `scripts/build-*-feed.py` that delegates to
-   `scripts/lib/dharma_feed_runner.py`.
+6. Add the corpus to `scripts/build-dharma-feed.py` so it maps to the new feed
+   config.
 7. Generate a teacher-level podcast image and per-episode artwork for that
    teacher.
 8. Run the same ingestion sequence:
@@ -190,14 +190,11 @@ Use this plan:
 9. Add an agent note for the new teacher explaining their source feeds, private
    keys, QMD collection name, and public feed URLs.
 
-The corpus-specific ingestion runners are compatibility wrappers around
-`scripts/run-dharma-ingestion.sh <corpus>`.
-
 ## Rob Burbea Corpus
 
 - Source config: `tools/dharma-feed/config/burbea.json`
-- Feed builder wrapper: `scripts/build-burbea-feed.py`
-- Local ingestion runner: `scripts/run-burbea-ingestion.sh`
+- Feed builder: `scripts/build-dharma-feed.py burbea`
+- Local ingestion runner: `scripts/run-dharma-ingestion.sh burbea`
 - Generated public artifacts: `dharma/burbea/`
 - Local private corpus: `.local-corpus/burbea/`
 - QMD collection: `burbea`

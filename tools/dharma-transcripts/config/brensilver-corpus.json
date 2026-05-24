@@ -6,13 +6,13 @@
   "talks_json": "dharma/brensilver/talks.json",
   "corpus_dir": ".local-corpus/brensilver",
   "feed_media_base_url": "https://jeffharr.is/dharma/brensilver/",
-  "feed_build_script": "scripts/build-brensilver-feed.py",
-  "glossary": "tools/brensilver-transcripts/config/glossary.json",
+  "feed_build_script": "scripts/build-dharma-feed.py",
+  "glossary": "tools/dharma-transcripts/config/glossary.json",
   "env_file": ".env.local",
   "prompts": {
-    "correct": "tools/brensilver-transcripts/prompts/correct_transcript.md",
-    "references": "tools/brensilver-transcripts/prompts/extract_references.md",
-    "episode_metadata": "tools/brensilver-transcripts/prompts/episode_metadata.md"
+    "correct": "tools/dharma-transcripts/prompts/correct_transcript.md",
+    "references": "tools/dharma-transcripts/prompts/extract_references.md",
+    "episode_metadata": "tools/dharma-transcripts/prompts/episode_metadata.md"
   },
   "qmd": {
     "index": "dharma",
@@ -22,5 +22,5 @@
   "image_style": "Square editorial illustration for a contemplative Dharma podcast. Simple symbolic composition, quiet natural forms, soft paper texture, restrained palette of moss green, warm ochre, charcoal, muted blue, and bone white. No text, no logos, no literal teacher portrait, no ornate religious iconography. Clear at small podcast thumbnail size.",
   "fallback_artwork_prompt": "Square editorial illustration for a contemplative Dharma podcast. A quiet open gate at the edge of a meadow at dawn, with a simple winding path, scattered leaves, and a clear spacious sky. The image should evoke trust, release, and calm awareness through natural forms only. Soft paper texture, restrained palette of moss green, warm ochre, charcoal, muted blue, and bone white. No text, no logos, no portrait, no ornate religious iconography. Clear at small podcast thumbnail size.",
   "whisper_prompt": "{teacher} Dharma talk: {title}. Use Buddhist terms and names accurately. Terms: {terms}. Names: {people}.",
-  "user_agent": "brensilver-transcripts/0.1 (+https://jeffharr.is/dharma/brensilver/)"
+  "user_agent": "dharma-transcripts/0.1 (+https://jeffharr.is/dharma/brensilver/)"
 }

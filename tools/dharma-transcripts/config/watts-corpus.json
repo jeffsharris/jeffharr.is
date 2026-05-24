@@ -6,14 +6,14 @@
   "talks_json": "dharma/watts/talks.json",
   "corpus_dir": ".local-corpus/watts",
   "feed_media_base_url": "https://jeffharr.is/dharma/watts/",
-  "feed_build_script": "scripts/build-watts-feed.py",
-  "glossary": "tools/brensilver-transcripts/config/watts-glossary.json",
+  "feed_build_script": "scripts/build-dharma-feed.py",
+  "glossary": "tools/dharma-transcripts/config/watts-glossary.json",
   "env_file": ".env.local",
   "prompts": {
-    "correct": "tools/brensilver-transcripts/prompts/watts_correct_transcript.md",
-    "references": "tools/brensilver-transcripts/prompts/watts_extract_references.md",
-    "episode_metadata": "tools/brensilver-transcripts/prompts/watts_episode_metadata.md",
-    "description_summary": "tools/brensilver-transcripts/prompts/watts_description_summary.md"
+    "correct": "tools/dharma-transcripts/prompts/watts_correct_transcript.md",
+    "references": "tools/dharma-transcripts/prompts/watts_extract_references.md",
+    "episode_metadata": "tools/dharma-transcripts/prompts/watts_episode_metadata.md",
+    "description_summary": "tools/dharma-transcripts/prompts/watts_description_summary.md"
   },
   "qmd": {
     "index": "dharma",

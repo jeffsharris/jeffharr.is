@@ -7,8 +7,7 @@ favorites, and arbitrary feed generation.
 
 - Public static Dharma archive/feed generation lives in `tools/dharma-feed/`.
 - Local transcript, metadata, artwork, markdown, and QMD orchestration lives in
-  `tools/brensilver-transcripts/`. The package name is historical; configs make
-  the pipeline corpus-aware.
+  `tools/dharma-transcripts/`.
 - Public archive pages and canonical corpus feeds are generated static files
   under `dharma/{corpus}/`.
 - Arbitrary user-facing podcast feeds are served dynamically by
@@ -22,9 +21,8 @@ favorites, and arbitrary feed generation.
 - Renamed the generic public feed tool from `tools/brensilver-feed/` to
   `tools/dharma-feed/`.
 - Renamed its Python package from `brensilver` to `dharma_feed`.
-- Kept existing wrapper script names such as `scripts/build-brensilver-feed.py`
-  because the transcript pipeline configs call them directly.
-- Consolidated duplicated build-wrapper logic into
+- Replaced per-corpus build wrappers with `scripts/build-dharma-feed.py <corpus>`.
+- Consolidated shared build argument logic into
   `scripts/lib/dharma_feed_runner.py`.
 - Moved the shared starred-feed title prefix into
   `functions/api/dharma/feed-constants.js`.
@@ -33,8 +31,9 @@ favorites, and arbitrary feed generation.
 ## Useful Invariants
 
 - Public URLs stay under `/dharma/{corpus}/`.
-- Existing wrapper scripts stay stable unless all transcript configs are updated
-  in the same change.
+- Feed and ingestion entry points stay corpus-generic:
+  `scripts/build-dharma-feed.py <corpus>` and
+  `scripts/run-dharma-ingestion.sh <corpus>`.
 - Static corpus feeds are build artifacts; do not hand-edit generated files in
   `dharma/{corpus}/`.
 - Dynamic feeds should continue to accept `corpus`, `scope`, `q`, `starred`, and
@@ -79,14 +78,7 @@ favorites, and arbitrary feed generation.
    route, and it already centralizes the arbitrary feed query model. Extract
    shared modules only when another route needs the same parsing or rendering.
 
-4. Consider a generic transcript package rename later.
-
-   Renaming `tools/brensilver-transcripts/` and the `brensilver_transcripts`
-   module would make the system more semantically consistent, but it touches
-   many runbooks, launchd files, scripts, and operator muscle memory. The public
-   feed-tool rename was lower-risk and handles the most visible mismatch first.
-
-5. Add generated artifact smoke tests.
+4. Add generated artifact smoke tests.
 
    A small test that builds from committed `talks.json` fixtures and checks for
    expected feed links, archive filter controls, favorite data attributes, and

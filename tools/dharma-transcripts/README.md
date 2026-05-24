@@ -1,19 +1,20 @@
-# Brensilver Transcript Pipeline
+# Dharma Transcript Pipeline
 
 Local transcription, correction, reference extraction, viewer generation, and
-QMD indexing for Matthew Brensilver talks.
+QMD indexing for Dharma audio corpora. The pipeline uses corpus configs so the
+same code can process Brensilver, Burbea, Watts, or another configured archive.
 
 This tool is intentionally local-first. It writes generated audio, raw transcript
 JSON, corrected transcript JSON, reference JSON, markdown, viewer files, and
-review files under:
+review files under each corpus directory:
 
 ```txt
-site/.local-corpus/brensilver/
+site/.local-corpus/{corpus}/
 ```
 
-That directory is gitignored so full transcripts are not accidentally deployed or
-committed. The checked-in files here are the repeatable pipeline, prompts,
-sample selection, and agent documentation.
+Those directories are gitignored so full transcripts are not accidentally
+deployed or committed. The checked-in files here are the repeatable pipeline,
+prompts, sample selection, and agent documentation.
 
 ## Requirements
 
@@ -35,8 +36,8 @@ OPENAI_API_KEY=sk-...
 Run from `site/`:
 
 ```sh
-PYTHONPATH=tools/brensilver-transcripts/src \
-  python3 -m brensilver_transcripts.pipeline pilot
+PYTHONPATH=tools/dharma-transcripts/src \
+  python3 -m dharma_transcripts.pipeline pilot
 ```
 
 The pilot processes the five talks listed in `config/pilot-talks.json`.
@@ -44,22 +45,22 @@ The pilot processes the five talks listed in `config/pilot-talks.json`.
 To validate download and chunking without spending API calls:
 
 ```sh
-PYTHONPATH=tools/brensilver-transcripts/src \
-  python3 -m brensilver_transcripts.pipeline pilot --prepare-only
+PYTHONPATH=tools/dharma-transcripts/src \
+  python3 -m dharma_transcripts.pipeline pilot --prepare-only
 ```
 
 To process a specific talk:
 
 ```sh
-PYTHONPATH=tools/brensilver-transcripts/src \
-  python3 -m brensilver_transcripts.pipeline sync --talk-id audiodharma:25235
+PYTHONPATH=tools/dharma-transcripts/src \
+  python3 -m dharma_transcripts.pipeline sync --talk-id audiodharma:25235
 ```
 
 To process new talks on an ongoing schedule:
 
 ```sh
-PYTHONPATH=tools/brensilver-transcripts/src \
-  python3 -m brensilver_transcripts.pipeline sync --limit 3 --update-qmd
+PYTHONPATH=tools/dharma-transcripts/src \
+  python3 -m dharma_transcripts.pipeline sync --limit 3 --update-qmd
 ```
 
 The `sync` command skips completed talks unless `--force` is passed.
@@ -69,9 +70,9 @@ The `sync` command skips completed talks unless `--force` is passed.
 The first broader validation batch is listed in `config/twenty-talks.json`.
 
 ```sh
-PYTHONPATH=tools/brensilver-transcripts/src \
-  python3 -m brensilver_transcripts.pipeline batch \
-  --config tools/brensilver-transcripts/config/twenty-talks.json \
+PYTHONPATH=tools/dharma-transcripts/src \
+  python3 -m dharma_transcripts.pipeline batch \
+  --config tools/dharma-transcripts/config/twenty-talks.json \
   --update-qmd
 ```
 
@@ -103,20 +104,20 @@ review, but they are not written into markdown, QMD, or the viewer.
 To rerun only transcript correction from existing raw segments:
 
 ```sh
-PYTHONPATH=tools/brensilver-transcripts/src \
-  python3 -m brensilver_transcripts.pipeline correct \
+PYTHONPATH=tools/dharma-transcripts/src \
+  python3 -m dharma_transcripts.pipeline correct \
   --batch \
-  --config tools/brensilver-transcripts/config/twenty-talks.json \
+  --config tools/dharma-transcripts/config/twenty-talks.json \
   --update-qmd
 ```
 
 To rerun only reference extraction from existing corrected transcripts:
 
 ```sh
-PYTHONPATH=tools/brensilver-transcripts/src \
-  python3 -m brensilver_transcripts.pipeline extract-references \
+PYTHONPATH=tools/dharma-transcripts/src \
+  python3 -m dharma_transcripts.pipeline extract-references \
   --batch \
-  --config tools/brensilver-transcripts/config/twenty-talks.json \
+  --config tools/dharma-transcripts/config/twenty-talks.json \
   --update-qmd
 ```
 
@@ -124,20 +125,20 @@ To generate podcast metadata, chapters, and image prompts from corrected
 transcripts plus references:
 
 ```sh
-PYTHONPATH=tools/brensilver-transcripts/src \
-  python3 -m brensilver_transcripts.pipeline metadata \
+PYTHONPATH=tools/dharma-transcripts/src \
+  python3 -m dharma_transcripts.pipeline metadata \
   --batch \
-  --config tools/brensilver-transcripts/config/twenty-talks.json \
+  --config tools/dharma-transcripts/config/twenty-talks.json \
   --build-feedback-viewer
 ```
 
 To generate episode artwork after metadata exists:
 
 ```sh
-PYTHONPATH=tools/brensilver-transcripts/src \
-  python3 -m brensilver_transcripts.pipeline generate-artwork \
+PYTHONPATH=tools/dharma-transcripts/src \
+  python3 -m dharma_transcripts.pipeline generate-artwork \
   --batch \
-  --config tools/brensilver-transcripts/config/twenty-talks.json \
+  --config tools/dharma-transcripts/config/twenty-talks.json \
   --image-model gpt-image-2 \
   --image-quality low \
   --build-feedback-viewer
@@ -150,8 +151,8 @@ that do not yet have corrected transcripts, references, episode metadata,
 markdown, and artwork, then rebuilds the public feed every `--feed-every` talks.
 
 ```sh
-PYTHONPATH=tools/brensilver-transcripts/src \
-  python3 -m brensilver_transcripts.pipeline run-corpus \
+PYTHONPATH=tools/dharma-transcripts/src \
+  python3 -m dharma_transcripts.pipeline run-corpus \
   --limit 20 \
   --feed-every 20 \
   --artwork-base-url https://jeffharr.is/dharma/brensilver/ \
@@ -172,8 +173,8 @@ Once Cloudflare R2 media hosting is wired, use the R2 origin for artwork and
 keep chapters on the canonical site:
 
 ```sh
-PYTHONPATH=tools/brensilver-transcripts/src \
-  python3 -m brensilver_transcripts.pipeline run-corpus \
+PYTHONPATH=tools/dharma-transcripts/src \
+  python3 -m dharma_transcripts.pipeline run-corpus \
   --limit 20 \
   --feed-every 20 \
   --artwork-base-url https://media.jeffharr.is/brensilver/ \
@@ -189,8 +190,8 @@ To apply only local cleanup to an already corrected talk, without another API
 call:
 
 ```sh
-PYTHONPATH=tools/brensilver-transcripts/src \
-  python3 -m brensilver_transcripts.pipeline clean \
+PYTHONPATH=tools/dharma-transcripts/src \
+  python3 -m dharma_transcripts.pipeline clean \
   --talk-id audiodharma:18176 \
   --update-qmd
 ```
@@ -200,9 +201,9 @@ PYTHONPATH=tools/brensilver-transcripts/src \
 Build the standalone local viewer after transcripts have been corrected:
 
 ```sh
-PYTHONPATH=tools/brensilver-transcripts/src \
-  python3 -m brensilver_transcripts.pipeline build-viewer \
-  --config tools/brensilver-transcripts/config/twenty-talks.json
+PYTHONPATH=tools/dharma-transcripts/src \
+  python3 -m dharma_transcripts.pipeline build-viewer \
+  --config tools/dharma-transcripts/config/twenty-talks.json
 ```
 
 The viewer is written to:
@@ -220,9 +221,9 @@ reference seeks the audio player to that timestamp.
 Build the review queue for transcript, reference, metadata, and artwork QA:
 
 ```sh
-PYTHONPATH=tools/brensilver-transcripts/src \
-  python3 -m brensilver_transcripts.pipeline build-feedback-viewer \
-  --config tools/brensilver-transcripts/config/twenty-talks.json
+PYTHONPATH=tools/dharma-transcripts/src \
+  python3 -m dharma_transcripts.pipeline build-feedback-viewer \
+  --config tools/dharma-transcripts/config/twenty-talks.json
 ```
 
 The feedback viewer is written to:
@@ -250,8 +251,8 @@ QMD should use a dedicated Dharma index, separate from any personal or work
 notes:
 
 ```sh
-PYTHONPATH=tools/brensilver-transcripts/src \
-  python3 -m brensilver_transcripts.pipeline setup-qmd
+PYTHONPATH=tools/dharma-transcripts/src \
+  python3 -m dharma_transcripts.pipeline setup-qmd
 ```
 
 That runs the equivalent of:
@@ -301,22 +302,23 @@ pipeline can be rerun safely.
 
 ## Ongoing Operation
 
-The intended recurring job on the Mac Mini is the repo-root ingestion runner:
+The intended recurring job on the Mac Mini is the repo-root Dharma ingestion
+runner with an explicit corpus argument:
 
 ```sh
 cd <repo-root>
-scripts/run-brensilver-ingestion.sh
+scripts/run-dharma-ingestion.sh brensilver
 ```
 
-That script first runs `scripts/build-brensilver-feed.py --copy-artwork` with
-the configured artwork/chapter bases to refresh all configured source feeds into
-`dharma/brensilver/talks.json`, then runs `run-corpus` so any pending talks get
+That script first runs the corpus feed builder with the configured
+artwork/chapter bases to refresh all configured source feeds into
+`dharma/{corpus}/talks.json`, then runs `run-corpus` so any pending talks get
 transcripts, correction, reference extraction, episode metadata, artwork,
 markdown, QMD indexing, and rebuilt feeds. This order matters: `run-corpus`
-consumes `dharma/brensilver/talks.json`; it does not discover new upstream
-source items by itself.
+consumes `dharma/{corpus}/talks.json`; it does not discover new upstream source
+items by itself.
 
-Useful environment variables:
+Useful Brensilver environment variables:
 
 ```sh
 BRENSILVER_INGEST_LIMIT=20
@@ -335,22 +337,25 @@ that upload path exists.
 Use `launchd` or a Codex automation for the actual schedule on macOS. A limit of
 20 gives the feed a useful new batch while keeping a transient API or network
 issue from turning one run into a large failure surface. Set
-`BRENSILVER_AUTO_PUBLISH=1` only for the unattended job that should commit and
-push generated `dharma/brensilver/` artifacts after a successful run.
+`BRENSILVER_AUTO_PUBLISH=1` only for the unattended Brensilver job that should
+commit and push generated `dharma/brensilver/` artifacts after a successful run.
 
-A launchd template lives at `launchd/com.jeffharris.brensilver-transcripts.plist.example`.
-Install it only after `.env.local` exists and the pilot has been reviewed.
+A launchd template lives at
+`launchd/com.jeffharris.dharma-ingestion.plist.example`. Install it only after
+`.env.local` exists and the pilot has been reviewed. For another corpus, copy
+the template and change the corpus argument, environment variable prefix, and
+log paths together.
 
 ## Notes For Future Agents
 
 - Start with `docs/dharma-content-agent-runbook.md` when adding a source, using
   QMD, touching automation, or extending this pattern to another teacher.
 - Public podcast feed generation still lives in `tools/dharma-feed/`.
-- `run-corpus` consumes `dharma/brensilver/talks.json` and calls the feed builder after
-  each batch; it does not fetch new source listings by itself.
+- `run-corpus` consumes `dharma/{corpus}/talks.json` and calls the feed builder
+  after each batch; it does not fetch new source listings by itself.
 - If an agent adds a new Dharma Seed or AudioDharma source, they must run
-  `scripts/run-brensilver-ingestion.sh` before publishing so new talks are not
-  left with only feed entries and no transcript/artwork/index artifacts.
+  `scripts/run-dharma-ingestion.sh <corpus>` before publishing so new talks are
+  not left with only feed entries and no transcript/artwork/index artifacts.
 - Full transcripts are local until Jeff explicitly decides what should be
   published.
 - QMD isolation depends on always passing `--index dharma`.

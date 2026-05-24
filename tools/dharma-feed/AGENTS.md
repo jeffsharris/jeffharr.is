@@ -6,17 +6,14 @@ Brensilver artifacts live at `/dharma/brensilver/`, Rob Burbea artifacts at
 
 For the whole content system, including local ingestion, QMD, recurring
 automation, private Dharma Seed keys, and adding another teacher, read
-`../brensilver-transcripts/docs/dharma-content-agent-runbook.md`.
+`../dharma-transcripts/docs/dharma-content-agent-runbook.md`.
 
 ## Edit Here, Generate There
 
 - Hand-edit source code, tests, and config in `tools/dharma-feed/`.
 - Do not hand-edit generated files under `dharma/{corpus}/`; regenerate them
-  through the matching wrapper.
-- Matthew wrapper: `scripts/build-brensilver-feed.py`
-- Rob Burbea wrapper: `scripts/build-burbea-feed.py`
-- Alan Watts wrapper: `scripts/build-watts-feed.py`
-- Shared wrapper logic: `scripts/lib/dharma_feed_runner.py`
+  through `scripts/build-dharma-feed.py <corpus>`.
+- Shared build argument logic lives in `scripts/lib/dharma_feed_runner.py`.
 - Generated artifact policy lives in `README.md`. Git/Pages owns feed XML, JSON
   indexes, HTML pages, chapter JSON, and stable corpus-level images.
   Per-episode artwork can be same-site for preview builds, but production should
@@ -25,8 +22,8 @@ automation, private Dharma Seed keys, and adding another teacher, read
 - Use `--prune-generated=report` to dry-run stale generated talk pages, chapter
   JSON, and per-episode artwork. It reports only; it does not delete files.
 
-The wrappers seed from existing `dharma/{corpus}/talks.json` so archived talks
-survive when an upstream source stops listing them.
+The generic builder seeds from existing `dharma/{corpus}/talks.json` so archived
+talks survive when an upstream source stops listing them.
 
 ## Source Merging
 
@@ -54,20 +51,18 @@ Run from repo root:
 
 ```sh
 PYTHONPATH=tools/dharma-feed/src python3 -m unittest tools/dharma-feed/tests/test_sources.py
-python3 scripts/build-brensilver-feed.py --copy-artwork
-python3 scripts/build-burbea-feed.py --copy-artwork
-python3 scripts/build-watts-feed.py --copy-artwork
+python3 scripts/build-dharma-feed.py brensilver --copy-artwork
+python3 scripts/build-dharma-feed.py burbea --copy-artwork
+python3 scripts/build-dharma-feed.py watts --copy-artwork
 ```
 
 After adding or changing a source, continue into local ingestion. The feed
 builder does not transcribe, correct, extract references, create episode
-artwork, or update QMD. Use the relevant corpus runner, for example:
+artwork, or update QMD. Use the generic corpus runner, for example:
 
 ```sh
-scripts/run-brensilver-ingestion.sh
+scripts/run-dharma-ingestion.sh brensilver
 ```
-
-The corpus-specific runners delegate to `scripts/run-dharma-ingestion.sh`.
 
 Publishing should go through Git, not a direct Pages upload. Cloudflare Pages
 deploys `main` automatically, so fetch and fast-forward or rebase before pushing

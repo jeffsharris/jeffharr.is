@@ -29,8 +29,7 @@ case "$corpus" in
   brensilver)
     label="Brensilver"
     env_prefix="BRENSILVER"
-    build_script="scripts/build-brensilver-feed.py"
-    corpus_config="tools/brensilver-transcripts/config/brensilver-corpus.json"
+    corpus_config="tools/dharma-transcripts/config/brensilver-corpus.json"
     default_limit="20"
     default_feed_every="20"
     default_media_base_url="https://jeffharr.is/dharma/brensilver/"
@@ -38,8 +37,7 @@ case "$corpus" in
   burbea)
     label="Burbea"
     env_prefix="BURBEA"
-    build_script="scripts/build-burbea-feed.py"
-    corpus_config="tools/brensilver-transcripts/config/burbea-corpus.json"
+    corpus_config="tools/dharma-transcripts/config/burbea-corpus.json"
     default_limit="1000"
     default_feed_every="20"
     default_media_base_url="https://jeffharr.is/dharma/burbea/"
@@ -47,8 +45,7 @@ case "$corpus" in
   watts)
     label="Watts"
     env_prefix="WATTS"
-    build_script="scripts/build-watts-feed.py"
-    corpus_config="tools/brensilver-transcripts/config/watts-corpus.json"
+    corpus_config="tools/dharma-transcripts/config/watts-corpus.json"
     default_limit="50"
     default_feed_every="10"
     default_media_base_url="https://jeffharr.is/dharma/watts/"
@@ -59,6 +56,8 @@ case "$corpus" in
     exit 2
     ;;
 esac
+
+build_script="scripts/build-dharma-feed.py"
 
 mkdir -p ".local-corpus/$corpus/logs"
 
@@ -104,14 +103,14 @@ if [[ "$auto_publish" == "1" ]]; then
 fi
 
 echo "[$(timestamp)] Refreshing $label source feeds"
-python3 "$build_script" \
+python3 "$build_script" "$corpus" \
   --artwork-base-url "$artwork_base_url" \
   --chapters-base-url "$chapters_base_url" \
   --copy-artwork
 
 echo "[$(timestamp)] Running local $label transcript/artwork ingestion"
-PYTHONPATH=tools/brensilver-transcripts/src \
-  python3 -m brensilver_transcripts.pipeline \
+PYTHONPATH=tools/dharma-transcripts/src \
+  python3 -m dharma_transcripts.pipeline \
   --corpus-config "$corpus_config" \
   run-corpus \
   --limit "$limit" \
