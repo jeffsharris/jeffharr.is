@@ -2137,6 +2137,12 @@
       "url": "https://jeffharr.is/dharma/brensilver/chapters/dharmaseed-77000.json"
     },
     {
+      "talk_id": "audiodharma:17995",
+      "key": "chapters/audiodharma-17995.json",
+      "source_path": "chapters/audiodharma-17995.json",
+      "url": "https://jeffharr.is/dharma/brensilver/chapters/audiodharma-17995.json"
+    },
+    {
       "talk_id": "audiodharma:17989",
       "key": "chapters/audiodharma-17989.json",
       "source_path": "chapters/audiodharma-17989.json",
@@ -6115,6 +6121,12 @@
       "key": "artwork/dharmaseed-77000.jpg",
       "source_path": "artwork/dharmaseed-77000.jpg",
       "url": "https://jeffharr.is/dharma/brensilver/artwork/dharmaseed-77000.jpg"
+    },
+    {
+      "talk_id": "audiodharma:17995",
+      "key": "artwork/audiodharma-17995.jpg",
+      "source_path": "artwork/audiodharma-17995.jpg",
+      "url": "https://jeffharr.is/dharma/brensilver/artwork/audiodharma-17995.jpg"
     },
     {
       "talk_id": "audiodharma:17989",

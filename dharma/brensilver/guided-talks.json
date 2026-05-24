@@ -14566,6 +14566,100 @@
     }
   },
   {
+    "id": "audiodharma:17995",
+    "source": "AudioDharma",
+    "source_id": "17995",
+    "title": "Guided Meditation_Not reading the tea leaves of the body",
+    "speaker": "Matthew Brensilver",
+    "published_at": "2023-03-18T12:00:00+00:00",
+    "link": "https://www.audiodharma.org/talks/17995",
+    "audio_url": "https://audiodharma.us-east-1.linodeobjects.com/talks/17995/20230318-Matthew_Brensilver-IRC-guided_meditation_not_reading_the_tea_leaves_of_the_body.mp3",
+    "audio_type": "audio/mpeg",
+    "audio_length": null,
+    "duration": "37:13",
+    "description": "AudioDharma talk by Matthew Brensilver.",
+    "image_url": "https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+    "canonical_url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-17995/",
+    "podcast_description": "The talk asks what happens if we stop trying to read a hidden message in the body and instead meet each sensation as an invitation to let go. It moves from the ways the mind builds a life story out of hope, fear, and prediction into a simpler practice of receiving bodily experience without turning it into a problem to solve. A brief reference to the Mula Sutta frames liberation as the core of Dharma, and the meditation returns again and again to the same quiet instruction: let go.",
+    "short_summary": "A guided meditation on receiving bodily experience directly and releasing the urge to interpret it as a story, warning against “reading the tea leaves” of the body.",
+    "episode_image_url": "https://jeffharr.is/dharma/brensilver/artwork/audiodharma-17995.jpg",
+    "chapters_url": "https://jeffharr.is/dharma/brensilver/chapters/audiodharma-17995.json",
+    "chapters": [
+      {
+        "start": 0.0,
+        "title": "Opening into many worlds",
+        "description": "The talk begins by describing the shifting inner worlds we inhabit through hope, fear, and self-centered story.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-17995/?t=0",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 281.0,
+        "title": "Receiving the body",
+        "description": "The practice turns toward simply receiving the data of the body rather than trying to solve life’s problems.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-17995/?t=281",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 713.0,
+        "title": "Autobiography and prediction",
+        "description": "The speaker explores how each moment becomes another chapter in the mind’s autobiography and a forecast of the future.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-17995/?t=713",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1022.0,
+        "title": "Safety and false alarms",
+        "description": "Within the safety of the setting, alarm signals from body and mind are treated for now as false alarms.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-17995/?t=1022",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1325.64,
+        "title": "Reading tea leaves",
+        "description": "The meditation names the habit of interpreting aches, fatigue, pleasure, and pain as messages about what will happen next.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-17995/?t=1326",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1732.64,
+        "title": "Liberation as the core",
+        "description": "A brief reference to the Mula Sutta supports the teaching that the core of phenomena is liberation.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-17995/?t=1733",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1799.64,
+        "title": "Doorways of perception",
+        "description": "The practice broadens into seeing walls, doors, and ordinary experience itself as doorway to Dharma.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-17995/?t=1800",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 2022.64,
+        "title": "Renouncing words",
+        "description": "The talk closes by renouncing the urge to build the world out of words and resting in intimate, repeated letting go.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-17995/?t=2023",
+        "img": null,
+        "toc": true
+      }
+    ],
+    "venue": null,
+    "series": null,
+    "tags": [],
+    "transcript": {
+      "status": "pending",
+      "url": null,
+      "text_path": null
+    }
+  },
+  {
     "id": "audiodharma:17989",
     "source": "AudioDharma",
     "source_id": "17989",
