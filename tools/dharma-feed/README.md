@@ -18,6 +18,56 @@ For each corpus, the builder writes:
 - shared browser assets at `/dharma/archive-browser.js` and
   `/dharma/talk-page.css`
 
+## Generated Artifact Policy
+
+The public Dharma archive has two storage modes:
+
+- Preview / same-site mode keeps generated pages, chapter JSON, and per-episode
+  artwork under `dharma/{corpus}/`. Use this when reviewing generated artifacts
+  directly from the repo or from a Pages deployment.
+- Production media mode keeps generated pages and chapter JSON in Git/Pages, but
+  lets per-episode artwork point at a media host such as
+  `https://media.jeffharr.is/{corpus}/`. This keeps the canonical archive
+  inspectable while avoiding large image churn in Git.
+
+Git/Pages is the canonical home for:
+
+- feed XML files
+- `talks.json`, `dharma-talks.json`, and `guided-talks.json`
+- corpus and talk HTML pages
+- Podcasting 2.0 chapter JSON files
+- stable corpus-level images such as podcast covers, tile images, tile
+  backdrops, and `dharma/dharma-preview.jpg`
+
+Per-episode artwork can be copied into Git for preview builds, but production
+builds should prefer R2/media URLs once an upload/sync step exists.
+
+Use explicit media bases for new workflows:
+
+```sh
+python3 scripts/build-burbea-feed.py \
+  --artwork-base-url https://media.jeffharr.is/burbea/ \
+  --chapters-base-url https://jeffharr.is/dharma/burbea/
+```
+
+`--media-base-url` still works as a legacy alias for both artwork and chapters,
+so existing ingestion jobs continue to run. Prefer the explicit flags when
+changing automation.
+
+Generated stale files are reported, not removed. Add `--prune-generated=report`
+to print a dry-run report for stale talk pages, chapter JSON files, and
+per-episode artwork:
+
+```sh
+python3 scripts/build-burbea-feed.py \
+  --talks-json dharma/burbea/talks.json \
+  --copy-artwork \
+  --prune-generated=report
+```
+
+The report deliberately protects corpus-level artwork whose filenames end in
+`-podcast-cover.jpg`, `-tile.jpg`, or `-tile-backdrop.jpg`.
+
 ## Entry Points
 
 Run wrapper scripts from the repo root:
@@ -74,14 +124,16 @@ episode metadata into RSS, talk pages, chapters, and copied artwork:
 ```sh
 python3 scripts/build-brensilver-feed.py \
   --talks-json dharma/brensilver/talks.json \
-  --media-base-url https://jeffharr.is/dharma/brensilver/ \
+  --artwork-base-url https://jeffharr.is/dharma/brensilver/ \
+  --chapters-base-url https://jeffharr.is/dharma/brensilver/ \
   --copy-artwork
 ```
 
 Use the same pattern for `burbea` or `watts` with their wrapper script and
 public path. Same-site preview URLs are useful while reviewing generated
 artifacts. For production artwork at scale, prefer an R2 media base such as
-`https://media.jeffharr.is/brensilver/`.
+`https://media.jeffharr.is/brensilver/` for `--artwork-base-url` while keeping
+`--chapters-base-url` on `https://jeffharr.is/dharma/brensilver/`.
 
 Each enriched RSS item can include:
 

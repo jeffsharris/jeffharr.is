@@ -50,7 +50,13 @@ BRENSILVER_AUTO_PUBLISH=1
 BRENSILVER_INGEST_LIMIT=20
 BRENSILVER_FEED_EVERY=20
 BRENSILVER_MEDIA_BASE_URL=https://jeffharr.is/dharma/brensilver/
+BRENSILVER_ARTWORK_BASE_URL=https://jeffharr.is/dharma/brensilver/
+BRENSILVER_CHAPTERS_BASE_URL=https://jeffharr.is/dharma/brensilver/
 ```
+
+`BRENSILVER_MEDIA_BASE_URL` is retained for existing jobs. Prefer explicit
+artwork/chapter bases for new automation; keep both same-site for preview mode,
+or move only artwork to media/R2 once that upload path exists.
 
 The runner refuses to auto-publish from a dirty worktree. That is intentional:
 scheduled jobs should not accidentally commit an agent's unrelated edits.
@@ -174,7 +180,8 @@ Use this plan:
    PYTHONPATH=tools/.../src python3 -m ... run-corpus \
      --limit 20 \
      --feed-every 20 \
-     --media-base-url https://jeffharr.is/dharma/{teacher_slug}/ \
+     --artwork-base-url https://jeffharr.is/dharma/{teacher_slug}/ \
+     --chapters-base-url https://jeffharr.is/dharma/{teacher_slug}/ \
      --copy-artwork \
      --update-qmd \
      --build-feedback-viewer

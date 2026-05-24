@@ -77,11 +77,15 @@ fi
 limit_name="${env_prefix}_INGEST_LIMIT"
 feed_every_name="${env_prefix}_FEED_EVERY"
 media_base_name="${env_prefix}_MEDIA_BASE_URL"
+artwork_base_name="${env_prefix}_ARTWORK_BASE_URL"
+chapters_base_name="${env_prefix}_CHAPTERS_BASE_URL"
 auto_publish_name="${env_prefix}_AUTO_PUBLISH"
 
 limit="${(P)limit_name:-$default_limit}"
 feed_every="${(P)feed_every_name:-$default_feed_every}"
 media_base_url="${(P)media_base_name:-$default_media_base_url}"
+artwork_base_url="${(P)artwork_base_name:-$media_base_url}"
+chapters_base_url="${(P)chapters_base_name:-$media_base_url}"
 auto_publish="${(P)auto_publish_name:-0}"
 
 if [[ "$auto_publish" == "1" ]]; then
@@ -100,7 +104,10 @@ if [[ "$auto_publish" == "1" ]]; then
 fi
 
 echo "[$(timestamp)] Refreshing $label source feeds"
-python3 "$build_script" --copy-artwork
+python3 "$build_script" \
+  --artwork-base-url "$artwork_base_url" \
+  --chapters-base-url "$chapters_base_url" \
+  --copy-artwork
 
 echo "[$(timestamp)] Running local $label transcript/artwork ingestion"
 PYTHONPATH=tools/brensilver-transcripts/src \
@@ -110,6 +117,8 @@ PYTHONPATH=tools/brensilver-transcripts/src \
   --limit "$limit" \
   --feed-every "$feed_every" \
   --media-base-url "$media_base_url" \
+  --artwork-base-url "$artwork_base_url" \
+  --chapters-base-url "$chapters_base_url" \
   --copy-artwork \
   --update-qmd \
   --build-feedback-viewer

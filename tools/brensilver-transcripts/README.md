@@ -154,26 +154,30 @@ PYTHONPATH=tools/brensilver-transcripts/src \
   python3 -m brensilver_transcripts.pipeline run-corpus \
   --limit 20 \
   --feed-every 20 \
-  --media-base-url https://jeffharr.is/dharma/brensilver/ \
+  --artwork-base-url https://jeffharr.is/dharma/brensilver/ \
+  --chapters-base-url https://jeffharr.is/dharma/brensilver/ \
   --copy-artwork \
   --update-qmd \
   --build-feedback-viewer
 ```
 
-The same-site `--media-base-url` plus `--copy-artwork` path is the simple
-preview/deploy mode: generated artwork is copied into `dharma/brensilver/artwork/`,
-chapter JSON is written into `dharma/brensilver/chapters/`, and the RSS feed points at
-`https://jeffharr.is/dharma/brensilver/`.
+The same-site `--artwork-base-url` plus `--chapters-base-url` path is the simple
+preview/deploy mode: generated artwork is copied into
+`dharma/brensilver/artwork/`, chapter JSON is written into
+`dharma/brensilver/chapters/`, and the RSS feed points at
+`https://jeffharr.is/dharma/brensilver/`. `--media-base-url` still works as a
+legacy alias for both generated artwork and chapter JSON.
 
-Once Cloudflare R2 media hosting is wired, use the R2 origin instead and omit
-`--copy-artwork`:
+Once Cloudflare R2 media hosting is wired, use the R2 origin for artwork and
+keep chapters on the canonical site:
 
 ```sh
 PYTHONPATH=tools/brensilver-transcripts/src \
   python3 -m brensilver_transcripts.pipeline run-corpus \
   --limit 20 \
   --feed-every 20 \
-  --media-base-url https://media.jeffharr.is/brensilver/ \
+  --artwork-base-url https://media.jeffharr.is/brensilver/ \
+  --chapters-base-url https://jeffharr.is/dharma/brensilver/ \
   --update-qmd
 ```
 
@@ -304,12 +308,13 @@ cd <repo-root>
 scripts/run-brensilver-ingestion.sh
 ```
 
-That script first runs `scripts/build-brensilver-feed.py --copy-artwork` to
-refresh all configured source feeds into `dharma/brensilver/talks.json`, then runs
-`run-corpus` so any pending talks get transcripts, correction, reference
-extraction, episode metadata, artwork, markdown, QMD indexing, and rebuilt
-feeds. This order matters: `run-corpus` consumes `dharma/brensilver/talks.json`; it
-does not discover new upstream source items by itself.
+That script first runs `scripts/build-brensilver-feed.py --copy-artwork` with
+the configured artwork/chapter bases to refresh all configured source feeds into
+`dharma/brensilver/talks.json`, then runs `run-corpus` so any pending talks get
+transcripts, correction, reference extraction, episode metadata, artwork,
+markdown, QMD indexing, and rebuilt feeds. This order matters: `run-corpus`
+consumes `dharma/brensilver/talks.json`; it does not discover new upstream
+source items by itself.
 
 Useful environment variables:
 
@@ -317,8 +322,15 @@ Useful environment variables:
 BRENSILVER_INGEST_LIMIT=20
 BRENSILVER_FEED_EVERY=20
 BRENSILVER_MEDIA_BASE_URL=https://jeffharr.is/dharma/brensilver/
+BRENSILVER_ARTWORK_BASE_URL=https://jeffharr.is/dharma/brensilver/
+BRENSILVER_CHAPTERS_BASE_URL=https://jeffharr.is/dharma/brensilver/
 BRENSILVER_AUTO_PUBLISH=1
 ```
+
+`BRENSILVER_MEDIA_BASE_URL` is retained for older jobs. For new jobs, set
+`BRENSILVER_ARTWORK_BASE_URL` and `BRENSILVER_CHAPTERS_BASE_URL` explicitly;
+leave both same-site for preview mode, or point only artwork at R2/media once
+that upload path exists.
 
 Use `launchd` or a Codex automation for the actual schedule on macOS. A limit of
 20 gives the feed a useful new batch while keeping a transient API or network

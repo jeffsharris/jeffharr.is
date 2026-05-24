@@ -9,6 +9,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Dict, Iterable, List
 
+from dharma_feed.artifacts import format_prune_report, plan_generated_artifact_prune
 from dharma_feed.metadata import enrich_talks, safe_id, write_episode_media
 from dharma_feed.models import PodcastChapter, Talk, TranscriptRef
 from dharma_feed.rss import build_rss, merge_talks
@@ -53,10 +54,23 @@ def main(argv: Iterable[str] | None = None) -> int:
     parser.add_argument("--talks-json")
     parser.add_argument("--seed-talks-json", action="append", default=[])
     parser.add_argument("--corpus-dir")
-    parser.add_argument("--media-base-url")
+    parser.add_argument(
+        "--media-base-url",
+        help=(
+            "Legacy base URL for both generated artwork and chapter JSON. "
+            "Prefer --artwork-base-url and --chapters-base-url for new workflows."
+        ),
+    )
+    parser.add_argument("--artwork-base-url")
+    parser.add_argument("--chapters-base-url")
     parser.add_argument("--copy-artwork", action="store_true")
     parser.add_argument("--no-enrich", action="store_true")
     parser.add_argument("--probe-lengths", action="store_true")
+    parser.add_argument(
+        "--prune-generated",
+        choices=["report"],
+        help="Dry-run stale generated artifact pruning and print a report.",
+    )
     args = parser.parse_args(list(argv) if argv is not None else None)
 
     config = json.loads(Path(args.config).read_text(encoding="utf-8"))
@@ -72,17 +86,30 @@ def main(argv: Iterable[str] | None = None) -> int:
     talks = apply_site_image(talks, config["site"].get("image_url"))
     corpus_slug = config.get("corpus") or corpus_slug_from_site(config["site"])
     corpus_dir = Path(args.corpus_dir or f".local-corpus/{corpus_slug}")
-    media_base_url = (
+    legacy_media_base_url = (
         args.media_base_url
         or config["site"].get("media_base_url")
+        or None
+    )
+    artwork_base_url = (
+        args.artwork_base_url
+        or config["site"].get("artwork_base_url")
+        or legacy_media_base_url
+        or config["site"]["base_url"]
+    )
+    chapters_base_url = (
+        args.chapters_base_url
+        or config["site"].get("chapters_base_url")
+        or legacy_media_base_url
         or config["site"]["base_url"]
     )
     if not args.no_enrich and corpus_dir.exists():
         talks = enrich_talks(
             talks,
             corpus_dir=corpus_dir,
-            media_base_url=media_base_url,
             site_base_url=config["site"]["base_url"],
+            artwork_base_url=artwork_base_url,
+            chapters_base_url=chapters_base_url,
         )
     max_items = int(config.get("feed", {}).get("max_items", len(talks)))
     if guided_feed_enabled(config["site"]):
@@ -142,6 +169,13 @@ def main(argv: Iterable[str] | None = None) -> int:
         render_index(config, talks, feed_talks, guided_feed_talks, guided_site),
         encoding="utf-8",
     )
+    if args.prune_generated == "report":
+        report = plan_generated_artifact_prune(
+            talks,
+            out_dir=out_dir,
+            copy_artwork=args.copy_artwork,
+        )
+        print(format_prune_report(report))
 
     if guided_site:
         print(

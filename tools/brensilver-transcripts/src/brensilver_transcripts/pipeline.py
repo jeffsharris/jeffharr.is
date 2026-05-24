@@ -2313,7 +2313,13 @@ def select_enrichment_talks(
     return selected
 
 
-def rebuild_public_feed(talks_json: Path, media_base_url: str, copy_artwork: bool) -> None:
+def rebuild_public_feed(
+    talks_json: Path,
+    media_base_url: str,
+    copy_artwork: bool,
+    artwork_base_url: str | None = None,
+    chapters_base_url: str | None = None,
+) -> None:
     command = [
         sys.executable,
         str(CORPUS.feed_build_script),
@@ -2322,6 +2328,10 @@ def rebuild_public_feed(talks_json: Path, media_base_url: str, copy_artwork: boo
         "--media-base-url",
         media_base_url,
     ]
+    if artwork_base_url:
+        command.extend(["--artwork-base-url", artwork_base_url])
+    if chapters_base_url:
+        command.extend(["--chapters-base-url", chapters_base_url])
     if copy_artwork:
         command.append("--copy-artwork")
     subprocess.run(command, cwd=SITE_ROOT, check=True)
@@ -2445,6 +2455,8 @@ def run_description_summary_command(
             args.talks_json,
             args.media_base_url,
             args.copy_artwork,
+            artwork_base_url=args.artwork_base_url,
+            chapters_base_url=args.chapters_base_url,
         )
 
     failures = len(report["failures"])
@@ -2504,6 +2516,8 @@ def run_corpus_command(
             args.talks_json,
             args.media_base_url,
             args.copy_artwork and not args.skip_artwork,
+            artwork_base_url=args.artwork_base_url,
+            chapters_base_url=args.chapters_base_url,
         )
         return 0
 
@@ -2556,6 +2570,8 @@ def run_corpus_command(
                 args.talks_json,
                 args.media_base_url,
                 args.copy_artwork and not args.skip_artwork,
+                artwork_base_url=args.artwork_base_url,
+                chapters_base_url=args.chapters_base_url,
             )
             processed_since_feed = 0
 
@@ -2566,6 +2582,8 @@ def run_corpus_command(
             args.talks_json,
             args.media_base_url,
             args.copy_artwork and not args.skip_artwork,
+            artwork_base_url=args.artwork_base_url,
+            chapters_base_url=args.chapters_base_url,
         )
     if args.build_feedback_viewer and processed:
         print(write_feedback_viewer(processed, paths))
@@ -4302,6 +4320,8 @@ def build_parser() -> argparse.ArgumentParser:
     description_summary.add_argument("--backup-dir", type=Path)
     description_summary.add_argument("--rebuild-feed", action="store_true")
     description_summary.add_argument("--media-base-url", default=DEFAULT_FEED_MEDIA_BASE_URL)
+    description_summary.add_argument("--artwork-base-url")
+    description_summary.add_argument("--chapters-base-url")
     description_summary.add_argument("--copy-artwork", action="store_true")
 
     artwork = subparsers.add_parser("generate-artwork", help="Generate episode artwork images")
@@ -4320,6 +4340,8 @@ def build_parser() -> argparse.ArgumentParser:
     corpus.add_argument("--limit", type=int)
     corpus.add_argument("--feed-every", type=int, default=20)
     corpus.add_argument("--media-base-url", default=DEFAULT_FEED_MEDIA_BASE_URL)
+    corpus.add_argument("--artwork-base-url")
+    corpus.add_argument("--chapters-base-url")
     corpus.add_argument("--copy-artwork", action="store_true")
     corpus.add_argument("--skip-artwork", action="store_true")
     corpus.add_argument("--update-qmd", action="store_true")

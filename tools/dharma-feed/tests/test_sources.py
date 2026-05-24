@@ -5,6 +5,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from xml.etree import ElementTree as ET
 
+from dharma_feed.artifacts import format_prune_report, plan_generated_artifact_prune
 from dharma_feed.build import (
     apply_site_image,
     apply_source_metadata,
@@ -698,6 +699,106 @@ class PodcastMetadataTests(unittest.TestCase):
             self.assertEqual(chapters["chapters"][0]["startTime"], 12.4)
             self.assertEqual(chapters["chapters"][0]["title"], "Settling")
             self.assertTrue((out_dir / "artwork" / "audiodharma-1.jpg").exists())
+
+    def test_metadata_enrichment_can_split_artwork_and_chapter_urls(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            corpus = root / "corpus"
+            (corpus / "episode-metadata").mkdir(parents=True)
+            (corpus / "artwork" / "images").mkdir(parents=True)
+            (corpus / "episode-metadata" / "audiodharma-1.json").write_text(
+                json.dumps(
+                    {
+                        "chapters": [
+                            {
+                                "start": 0,
+                                "title": "Opening",
+                            }
+                        ],
+                    }
+                ),
+                encoding="utf-8",
+            )
+            (corpus / "artwork" / "images" / "audiodharma-1.jpg").write_bytes(b"jpg")
+            talk = Talk(
+                id="audiodharma:1",
+                source="AudioDharma",
+                source_id="1",
+                title="Practice",
+                speaker="Matthew Brensilver",
+                published_at=datetime(2026, 1, 1, tzinfo=timezone.utc),
+                link="https://example.test/source",
+                audio_url="https://example.test/audio.mp3",
+            )
+
+            enriched = enrich_talks(
+                [talk],
+                corpus_dir=corpus,
+                site_base_url="https://jeffharr.is/dharma/brensilver/",
+                artwork_base_url="https://media.jeffharr.is/brensilver/",
+                chapters_base_url="https://jeffharr.is/dharma/brensilver/",
+            )[0]
+
+            self.assertEqual(
+                enriched.episode_image_url,
+                "https://media.jeffharr.is/brensilver/artwork/audiodharma-1.jpg",
+            )
+            self.assertEqual(
+                enriched.chapters_url,
+                "https://jeffharr.is/dharma/brensilver/chapters/audiodharma-1.json",
+            )
+
+    def test_generated_artifact_prune_report_is_dry_run(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            out_dir = Path(tmp) / "out"
+            (out_dir / "talks" / "audiodharma-1").mkdir(parents=True)
+            (out_dir / "talks" / "audiodharma-1" / "index.html").write_text("keep")
+            (out_dir / "talks" / "audiodharma-2").mkdir(parents=True)
+            (out_dir / "talks" / "audiodharma-2" / "index.html").write_text("stale")
+            (out_dir / "chapters").mkdir()
+            (out_dir / "chapters" / "audiodharma-1.json").write_text("{}")
+            (out_dir / "chapters" / "audiodharma-2.json").write_text("{}")
+            (out_dir / "artwork").mkdir()
+            (out_dir / "artwork" / "audiodharma-1.jpg").write_bytes(b"keep")
+            (out_dir / "artwork" / "audiodharma-2.jpg").write_bytes(b"stale")
+            (out_dir / "artwork" / "teacher-podcast-cover.jpg").write_bytes(b"protected")
+            talk = Talk(
+                id="audiodharma:1",
+                source="AudioDharma",
+                source_id="1",
+                title="Practice",
+                speaker="Matthew Brensilver",
+                published_at=datetime(2026, 1, 1, tzinfo=timezone.utc),
+                link="https://example.test/source",
+                audio_url="https://example.test/audio.mp3",
+                episode_image_url="https://jeffharr.is/dharma/brensilver/artwork/audiodharma-1.jpg",
+                chapters=[
+                    PodcastChapter(
+                        start=0,
+                        title="Opening",
+                        url="https://jeffharr.is/dharma/brensilver/talks/audiodharma-1/?t=0",
+                    )
+                ],
+            )
+
+            report = plan_generated_artifact_prune([talk], out_dir, copy_artwork=True)
+            formatted = format_prune_report(report)
+
+            self.assertEqual(
+                [path.relative_to(out_dir).as_posix() for path in report.stale_talk_pages],
+                ["talks/audiodharma-2/index.html"],
+            )
+            self.assertEqual(
+                [path.relative_to(out_dir).as_posix() for path in report.stale_chapters],
+                ["chapters/audiodharma-2.json"],
+            )
+            self.assertEqual(
+                [path.relative_to(out_dir).as_posix() for path in report.stale_artwork],
+                ["artwork/audiodharma-2.jpg"],
+            )
+            self.assertEqual(len(report.protected_artwork), 1)
+            self.assertIn("stale talk pages: 1", formatted)
+            self.assertTrue((out_dir / "talks" / "audiodharma-2" / "index.html").exists())
 
     def test_rss_includes_episode_metadata_tags(self):
         talk = Talk(

@@ -13,15 +13,21 @@ from dharma_feed.models import PodcastChapter, Talk
 def enrich_talks(
     talks: Iterable[Talk],
     corpus_dir: Path,
-    media_base_url: str,
     site_base_url: str,
+    media_base_url: str | None = None,
+    artwork_base_url: str | None = None,
+    chapters_base_url: str | None = None,
 ) -> List[Talk]:
+    legacy_media_base_url = media_base_url or site_base_url
+    resolved_artwork_base_url = artwork_base_url or legacy_media_base_url
+    resolved_chapters_base_url = chapters_base_url or legacy_media_base_url
     return [
         enrich_talk(
             talk,
             corpus_dir=corpus_dir,
-            media_base_url=media_base_url,
             site_base_url=site_base_url,
+            artwork_base_url=resolved_artwork_base_url,
+            chapters_base_url=resolved_chapters_base_url,
         )
         for talk in talks
     ]
@@ -30,20 +36,25 @@ def enrich_talks(
 def enrich_talk(
     talk: Talk,
     corpus_dir: Path,
-    media_base_url: str,
     site_base_url: str,
+    media_base_url: str | None = None,
+    artwork_base_url: str | None = None,
+    chapters_base_url: str | None = None,
 ) -> Talk:
+    legacy_media_base_url = media_base_url or site_base_url
+    resolved_artwork_base_url = artwork_base_url or legacy_media_base_url
+    resolved_chapters_base_url = chapters_base_url or legacy_media_base_url
     safe = safe_id(talk.id)
     canonical_url = join_url(site_base_url, f"talks/{safe}/")
     metadata = load_json(corpus_dir / "episode-metadata" / f"{safe}.json")
     image_path = corpus_dir / "artwork" / "images" / f"{safe}.jpg"
     chapters = build_podcast_chapters(metadata.get("chapters", []), canonical_url)
     episode_image_url = (
-        join_url(media_base_url, f"artwork/{safe}.jpg")
+        join_url(resolved_artwork_base_url, f"artwork/{safe}.jpg")
         if image_path.exists()
         else None
     )
-    chapters_url = join_url(media_base_url, f"chapters/{safe}.json") if chapters else None
+    chapters_url = join_url(resolved_chapters_base_url, f"chapters/{safe}.json") if chapters else None
 
     return replace(
         talk,

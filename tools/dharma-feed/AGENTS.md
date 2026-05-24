@@ -17,6 +17,13 @@ automation, private Dharma Seed keys, and adding another teacher, read
 - Rob Burbea wrapper: `scripts/build-burbea-feed.py`
 - Alan Watts wrapper: `scripts/build-watts-feed.py`
 - Shared wrapper logic: `scripts/lib/dharma_feed_runner.py`
+- Generated artifact policy lives in `README.md`. Git/Pages owns feed XML, JSON
+  indexes, HTML pages, chapter JSON, and stable corpus-level images.
+  Per-episode artwork can be same-site for preview builds, but production should
+  prefer explicit `--artwork-base-url` media/R2 URLs while keeping
+  `--chapters-base-url` on the canonical site.
+- Use `--prune-generated=report` to dry-run stale generated talk pages, chapter
+  JSON, and per-episode artwork. It reports only; it does not delete files.
 
 The wrappers seed from existing `dharma/{corpus}/talks.json` so archived talks
 survive when an upstream source stops listing them.

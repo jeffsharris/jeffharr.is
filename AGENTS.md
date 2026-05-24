@@ -20,7 +20,9 @@
 - Corrected transcripts also pass through local silence-hallucination cleanup; removed rows are preserved as `suppressed_segments` in corrected JSON.
 - Reference extraction writes `references/{talk_id}.json`; references are holistic jumpable moments, not exact quote spans. Low-confidence or unsupported attributions should stay marked `needs_review` rather than being promoted into indexes.
 - Episode metadata writes `episode-metadata/{talk_id}.json` and `chapters/{talk_id}.json`; generated artwork writes `artwork/prompts`, `artwork/images`, and `artwork/manifests`.
-- The public feed builder can merge local episode metadata into `dharma/{corpus}/feed.xml`, write `dharma/{corpus}/chapters/{safe_id}.json`, and generate canonical `dharma/{corpus}/talks/{safe_id}/` pages. Use `--media-base-url` to choose same-site preview URLs or R2 production URLs.
+- The public feed builder can merge local episode metadata into `dharma/{corpus}/feed.xml`, write `dharma/{corpus}/chapters/{safe_id}.json`, and generate canonical `dharma/{corpus}/talks/{safe_id}/` pages. Use explicit `--artwork-base-url` and `--chapters-base-url` for new workflows; `--media-base-url` remains a legacy alias for both.
+- Generated Dharma artifact policy lives in `tools/dharma-feed/README.md`. Git/Pages owns feed XML, JSON indexes, HTML pages, chapter JSON, and stable corpus images. Per-episode artwork can be same-site for preview builds, but production should prefer media/R2 artwork URLs.
+- Use `--prune-generated=report` to dry-run stale generated talk pages, chapter JSON, and per-episode artwork. It reports only; it does not delete files.
 - The wrapper scripts in `scripts/build-*-feed.py` seed from existing `dharma/{corpus}/talks.json` when present, so historical archived talks are preserved if an upstream source feed shrinks.
 - When adding or changing a feed source, do not stop after a feed rebuild. Run local ingestion next so newly discovered talks get transcripts, references, episode metadata, artwork, QMD indexing, and regenerated public feed artifacts.
 - Preferred one-command local ingestion: `scripts/run-dharma-ingestion.sh <corpus>` or the compatibility wrappers such as `scripts/run-brensilver-ingestion.sh`. It refreshes source feeds first, then runs `run-corpus`. Set `<CORPUS>_AUTO_PUBLISH=1` only for a scheduled job that should commit and push generated `dharma/{corpus}/` artifacts automatically.
@@ -39,15 +41,15 @@ PYTHONPATH=tools/brensilver-transcripts/src python3 -m brensilver_transcripts.pi
 PYTHONPATH=tools/brensilver-transcripts/src python3 -m brensilver_transcripts.pipeline extract-references --batch --config tools/brensilver-transcripts/config/twenty-talks.json --update-qmd
 PYTHONPATH=tools/brensilver-transcripts/src python3 -m brensilver_transcripts.pipeline metadata --batch --config tools/brensilver-transcripts/config/twenty-talks.json --build-feedback-viewer
 PYTHONPATH=tools/brensilver-transcripts/src python3 -m brensilver_transcripts.pipeline generate-artwork --batch --config tools/brensilver-transcripts/config/twenty-talks.json --image-model gpt-image-2 --image-quality low --build-feedback-viewer
-PYTHONPATH=tools/brensilver-transcripts/src python3 -m brensilver_transcripts.pipeline description-summary --jobs 4 --rebuild-feed --media-base-url https://jeffharr.is/dharma/brensilver/
-PYTHONPATH=tools/brensilver-transcripts/src python3 -m brensilver_transcripts.pipeline run-corpus --limit 20 --feed-every 20 --media-base-url https://jeffharr.is/dharma/brensilver/ --copy-artwork --update-qmd --build-feedback-viewer
+PYTHONPATH=tools/brensilver-transcripts/src python3 -m brensilver_transcripts.pipeline description-summary --jobs 4 --rebuild-feed --artwork-base-url https://jeffharr.is/dharma/brensilver/ --chapters-base-url https://jeffharr.is/dharma/brensilver/
+PYTHONPATH=tools/brensilver-transcripts/src python3 -m brensilver_transcripts.pipeline run-corpus --limit 20 --feed-every 20 --artwork-base-url https://jeffharr.is/dharma/brensilver/ --chapters-base-url https://jeffharr.is/dharma/brensilver/ --copy-artwork --update-qmd --build-feedback-viewer
 PYTHONPATH=tools/brensilver-transcripts/src python3 -m brensilver_transcripts.pipeline build-feedback-viewer --config tools/brensilver-transcripts/config/twenty-talks.json
 PYTHONPATH=tools/brensilver-transcripts/src python3 -m brensilver_transcripts.pipeline setup-qmd
-python3 scripts/build-brensilver-feed.py --talks-json dharma/brensilver/talks.json --media-base-url https://media.jeffharr.is/brensilver/
+python3 scripts/build-brensilver-feed.py --talks-json dharma/brensilver/talks.json --artwork-base-url https://media.jeffharr.is/brensilver/ --chapters-base-url https://jeffharr.is/dharma/brensilver/
 python3 scripts/build-watts-feed.py --copy-artwork
-PYTHONPATH=tools/brensilver-transcripts/src python3 -m brensilver_transcripts.pipeline --corpus-config tools/brensilver-transcripts/config/watts-corpus.json run-corpus --limit 50 --feed-every 10 --media-base-url https://jeffharr.is/dharma/watts/ --copy-artwork --update-qmd --build-feedback-viewer
+PYTHONPATH=tools/brensilver-transcripts/src python3 -m brensilver_transcripts.pipeline --corpus-config tools/brensilver-transcripts/config/watts-corpus.json run-corpus --limit 50 --feed-every 10 --artwork-base-url https://jeffharr.is/dharma/watts/ --chapters-base-url https://jeffharr.is/dharma/watts/ --copy-artwork --update-qmd --build-feedback-viewer
 python3 scripts/build-burbea-feed.py --copy-artwork
-PYTHONPATH=tools/brensilver-transcripts/src python3 -m brensilver_transcripts.pipeline --corpus-config tools/brensilver-transcripts/config/burbea-corpus.json run-corpus --limit 1000 --feed-every 20 --media-base-url https://jeffharr.is/dharma/burbea/ --copy-artwork --update-qmd --build-feedback-viewer
+PYTHONPATH=tools/brensilver-transcripts/src python3 -m brensilver_transcripts.pipeline --corpus-config tools/brensilver-transcripts/config/burbea-corpus.json run-corpus --limit 1000 --feed-every 20 --artwork-base-url https://jeffharr.is/dharma/burbea/ --chapters-base-url https://jeffharr.is/dharma/burbea/ --copy-artwork --update-qmd --build-feedback-viewer
 ```
 
 ## Read Later architecture (critical)
