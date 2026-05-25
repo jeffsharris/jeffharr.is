@@ -41,13 +41,23 @@ export async function onRequest(context) {
         const authorMatch = itemXml.match(/<author_name>(.*?)<\/author_name>/);
         const linkMatch = itemXml.match(/<link>(.*?)<\/link>/);
         const ratingMatch = itemXml.match(/<user_rating>(\d+)<\/user_rating>/);
+        const image =
+          extractTag(itemXml, 'book_large_image_url') ||
+          extractTag(itemXml, 'book_medium_image_url') ||
+          extractTag(itemXml, 'book_image_url') ||
+          extractTag(itemXml, 'image_url');
+        const publishedAt =
+          extractTag(itemXml, 'user_read_at') ||
+          extractTag(itemXml, 'pubDate');
 
         if (titleMatch) {
           books.push({
             title: decodeXmlEntities(titleMatch[1].trim()),
             author: authorMatch ? decodeXmlEntities(authorMatch[1].trim()) : null,
             url: linkMatch ? linkMatch[1].trim() : null,
-            rating: ratingMatch ? parseInt(ratingMatch[1]) : null
+            rating: ratingMatch ? parseInt(ratingMatch[1]) : null,
+            image,
+            publishedAt
           });
         }
       }
@@ -91,6 +101,14 @@ function decodeXmlEntities(text = '') {
     .replace(/&quot;/g, '"')
     .replace(/&#39;/g, "'")
     .replace(/&apos;/g, "'");
+}
+
+function extractTag(xml = '', tagName = '') {
+  const escaped = tagName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const cdataMatch = xml.match(new RegExp(`<${escaped}><!\\[CDATA\\[([\\s\\S]*?)\\]\\]><\\/${escaped}>`));
+  if (cdataMatch) return decodeXmlEntities(cdataMatch[1].trim());
+  const match = xml.match(new RegExp(`<${escaped}>([\\s\\S]*?)<\\/${escaped}>`));
+  return match ? decodeXmlEntities(match[1].trim()) : null;
 }
 
 async function fetchWithTimeout(url, options = {}, timeoutMs = 8000) {

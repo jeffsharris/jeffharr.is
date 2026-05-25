@@ -1,0 +1,37 @@
+{
+  "tiles": [
+    {
+      "slug": "poems",
+      "name": "Poems",
+      "output": "images/collections/poems-tile.jpg",
+      "size": "1024x1536",
+      "model": "gpt-image-2",
+      "prompt": "Editorial illustration. Portrait orientation, 2:3 aspect ratio, 1024x1536. Hand-painted feel with soft paper texture; gentle gradients; no harsh outlines. Restrained, palette-aware composition that leaves the bottom-right quarter visually quiet and uncluttered, a soft empty area suitable for hosting a small square inset. No text, no logos, no human figures, no captions, no brand marks. Avoid AI-generic fantasy art gloss, lens flares, or chromatic aberration; aim for a printed magazine cover sensibility. A warm interior at the blue hour: an open book on a wooden table, a slender glass of water catching the last light, a single pressed flower between the pages, an open window with linen curtains stirring. Outside, an indistinct landscape with hills and a small road. Palette: warm rose-amber, soft umber, parchment cream, with one breath of dusty blue from the window. The mood is intimate, contemplative, the moment just before a poem is read aloud."
+    },
+    {
+      "slug": "dharma",
+      "name": "Dharma",
+      "output": "images/collections/dharma-tile.jpg",
+      "size": "1024x1536",
+      "model": "gpt-image-2",
+      "prompt": "Editorial illustration. Portrait orientation, 2:3 aspect ratio, 1024x1536. Hand-painted feel with soft paper texture; gentle gradients; no harsh outlines. Restrained, palette-aware composition that leaves the bottom-right quarter visually quiet and uncluttered, a soft empty area suitable for hosting a small square inset. No text, no logos, no human figures, no captions, no brand marks. Avoid AI-generic fantasy art gloss, lens flares, or chromatic aberration; aim for a printed magazine cover sensibility. A simple wooden seat at the edge of a temple veranda overlooking an imaginal night garden: distant indigo hills, white star-flowers near the foreground, a faint luminous path winding into the distance, a half-moon held high. No figure on the seat. Palette: deep indigo, black-green, pearl white, muted gold. The mood is reverent and spacious, the seat seems to be saved for the listener."
+    },
+    {
+      "slug": "read-later",
+      "name": "Read Later",
+      "output": "images/collections/read-later-tile.jpg",
+      "size": "1024x1536",
+      "model": "gpt-image-2",
+      "prompt": "Editorial illustration. Portrait orientation, 2:3 aspect ratio, 1024x1536. Hand-painted feel with soft paper texture; gentle gradients; no harsh outlines. Restrained, palette-aware composition that leaves the bottom-right quarter visually quiet and uncluttered, a soft empty area suitable for hosting a small square inset. No text, no logos, no human figures, no captions, no brand marks. Avoid AI-generic fantasy art gloss, lens flares, or chromatic aberration; aim for a printed magazine cover sensibility. A quiet still life on a sea-green linen surface: a small stack of folded periodicals and a paperback with a ribbon bookmark, an enameled cup half full of tea, a fountain pen resting beside a notepad with one loose gestural mark but no legible writing, and a small jar holding a sprig of rosemary. Soft afternoon light from the left. Palette: sea-green, oat-cream, warm ochre, charcoal. The mood is unhurried, the feeling of I'll come back to this. Ensure there is no readable text anywhere."
+    },
+    {
+      "slug": "jeff-editorial-portrait",
+      "name": "Jeff Harris editorial portrait",
+      "output": "images/jeff-editorial-portrait.png",
+      "size": "1024x1024",
+      "model": "gpt-image-2",
+      "source": "attached headshot from the implementation chat",
+      "prompt": "Reimagine the provided headshot as a softly painted editorial portrait in the same visual family as warm literary magazine illustration. Preserve the subject's likeness clearly: facial structure, eye shape, hairline, gentle smile, and direct gaze. Keep the pose as a simple front-facing head-and-shoulders portrait with enough padding for a circular crop. Replace photographic detail with confident hand-painted brushwork, subtle paper texture, warm umber and cream skin tones, muted charcoal shirt, and one quiet warm brass accent in the atmospheric warm-paper background. The portrait should read clearly at small sizes on a homepage. No text, no logos, no captions, no glossy AI-fantasy aesthetic, no anime styling, no harsh outlines, no lens flares."
+    }
+  ]
+}

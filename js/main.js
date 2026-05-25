@@ -1,12 +1,11 @@
 /**
  * Main JavaScript for jeffharr.is
- * Handles theme toggle and core interactions
+ * Handles theme toggle and small homepage enhancements.
  */
 
 (function() {
   'use strict';
 
-  // Theme Toggle
   const themeToggle = document.getElementById('theme-toggle');
   const STORAGE_KEY = 'theme-preference';
 
@@ -88,10 +87,50 @@
     }
   }
 
-  // Run on DOM ready
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initTheme);
-  } else {
+  function initCollectionCounts() {
+    document.querySelectorAll('[data-count-src]').forEach(tile => {
+      const meta = tile.querySelector('.collection-tile__meta');
+      const countEl = tile.querySelector('[data-count]');
+      if (!meta || !countEl) return;
+
+      fetch(tile.dataset.countSrc, { headers: { accept: 'application/json' } })
+        .then(response => response.ok ? response.json() : null)
+        .then(data => {
+          const count = collectionCount(tile.dataset.countKind, data);
+          if (count == null) {
+            meta.hidden = true;
+            return;
+          }
+          countEl.textContent = String(count);
+        })
+        .catch(() => {
+          meta.hidden = true;
+        });
+    });
+  }
+
+  function collectionCount(kind, data) {
+    if (!data) return null;
+    if (kind === 'poems') {
+      const memorized = Array.isArray(data.memorized) ? data.memorized.length : 0;
+      const learning = Array.isArray(data.learning) ? data.learning.length : 0;
+      return memorized + learning || null;
+    }
+    if (kind === 'read-later') {
+      if (Number.isFinite(data.count)) return data.count;
+      if (Array.isArray(data.items)) return data.items.length;
+    }
+    return null;
+  }
+
+  function init() {
     initTheme();
+    initCollectionCounts();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
   }
 })();
