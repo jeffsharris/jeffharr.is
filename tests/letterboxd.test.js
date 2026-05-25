@@ -39,3 +39,26 @@ test('parseFilmsHtml extracts film data and ratings', () => {
   assert.ok(items[0].poster.includes('123456-bad-santa-0-125-0-187-crop.jpg'));
   assert.ok(items[0].link.startsWith('https://letterboxd.com/film/bad-santa-2003/'));
 });
+
+test('parseFilmsHtml builds posters from current LazyPoster metadata', () => {
+  const html = `
+    <section>
+      <div
+        data-component-class="LazyPoster"
+        data-item-name="The Scent of Green Papaya (1993)"
+        data-item-slug="the-scent-of-green-papaya"
+        data-item-link="/film/the-scent-of-green-papaya/"
+        data-target-link="/"
+        data-postered-identifier='{&quot;lid&quot;:&quot;1EWq&quot;,&quot;uid&quot;:&quot;film:39571&quot;,&quot;type&quot;:&quot;film&quot;}'
+        data-resolvable-poster-path='{&quot;postered&quot;:{&quot;uid&quot;:&quot;film:39571&quot;},&quot;cacheBustingKey&quot;:&quot;0ee21293&quot;}'
+      ></div>
+    </section>
+  `;
+
+  const items = parseFilmsHtml(html);
+  assert.equal(items.length, 1);
+  assert.equal(items[0].title, 'The Scent of Green Papaya');
+  assert.equal(items[0].year, '1993');
+  assert.equal(items[0].link, 'https://letterboxd.com/film/the-scent-of-green-papaya/');
+  assert.ok(items[0].poster.includes('39571-the-scent-of-green-papaya-0-125-0-187-crop.jpg'));
+});

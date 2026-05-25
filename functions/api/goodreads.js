@@ -36,11 +36,10 @@ export async function onRequest(context) {
       while ((match = itemRegex.exec(xml)) !== null) {
         const itemXml = match[1];
 
-        const titleMatch = itemXml.match(/<title><!\[CDATA\[(.*?)\]\]><\/title>/) ||
-                          itemXml.match(/<title>(.*?)<\/title>/);
-        const authorMatch = itemXml.match(/<author_name>(.*?)<\/author_name>/);
-        const linkMatch = itemXml.match(/<link>(.*?)<\/link>/);
-        const ratingMatch = itemXml.match(/<user_rating>(\d+)<\/user_rating>/);
+        const title = extractTag(itemXml, 'title');
+        const author = extractTag(itemXml, 'author_name');
+        const url = extractTag(itemXml, 'link');
+        const rating = extractTag(itemXml, 'user_rating');
         const image =
           extractTag(itemXml, 'book_large_image_url') ||
           extractTag(itemXml, 'book_medium_image_url') ||
@@ -50,12 +49,12 @@ export async function onRequest(context) {
           extractTag(itemXml, 'user_read_at') ||
           extractTag(itemXml, 'pubDate');
 
-        if (titleMatch) {
+        if (title) {
           books.push({
-            title: decodeXmlEntities(titleMatch[1].trim()),
-            author: authorMatch ? decodeXmlEntities(authorMatch[1].trim()) : null,
-            url: linkMatch ? linkMatch[1].trim() : null,
-            rating: ratingMatch ? parseInt(ratingMatch[1]) : null,
+            title,
+            author,
+            url,
+            rating: rating ? parseInt(rating, 10) : null,
             image,
             publishedAt
           });
@@ -120,3 +119,5 @@ async function fetchWithTimeout(url, options = {}, timeoutMs = 8000) {
     clearTimeout(timeoutId);
   }
 }
+
+export { decodeXmlEntities, extractTag };

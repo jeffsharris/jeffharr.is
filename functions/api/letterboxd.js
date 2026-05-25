@@ -124,28 +124,29 @@ function parseFilmsHtml(html, { includeRating = false } = {}) {
   const items = [];
   const seen = new Set();
 
-  // Match the LazyPoster react components that contain film data
-  // The HTML structure includes: data-item-name, data-item-slug, data-target-link, data-film-id, and poster path info
-  const filmBlocks = html.split('data-component-class="LazyPoster"');
+  const filmBlocks = html.split(/data-component-class=["']LazyPoster["']/);
 
   for (let i = 1; i < filmBlocks.length && items.length < MAX_ITEMS; i++) {
     const block = filmBlocks[i];
 
-    // Extract film data from attributes
-    const nameMatch = block.match(/data-item-name="([^"]+)"/);
-    const slugMatch = block.match(/data-item-slug="([^"]+)"/);
-    const linkMatch = block.match(/data-target-link="([^"]+)"/);
-    const filmIdMatch = block.match(/data-film-id="(\d+)"/);
+    const fullName = getAttribute(block, 'data-item-name') ||
+      getAttribute(block, 'data-item-full-display-name');
+    const targetLink = getAttribute(block, 'data-target-link');
+    const itemLink = getAttribute(block, 'data-item-link');
+    const linkCandidate = targetLink && targetLink !== '/'
+      ? targetLink
+      : itemLink && itemLink !== '/'
+        ? itemLink
+        : targetLink || itemLink;
+    const slug = getAttribute(block, 'data-item-slug') || slugFromFilmLink(linkCandidate);
 
-    if (!nameMatch || !slugMatch) continue;
+    if (!fullName || !slug) continue;
 
-    const slug = slugMatch[1];
-    if (seen.has(slug)) continue;
-    seen.add(slug);
+    const dedupeKey = linkCandidate || slug;
+    if (seen.has(dedupeKey)) continue;
+    seen.add(dedupeKey);
 
-    const fullName = decodeHtmlEntities(nameMatch[1]);
-    const link = linkMatch ? linkMatch[1] : `/film/${slug}/`;
-    const filmId = filmIdMatch ? filmIdMatch[1] : null;
+    const link = linkCandidate || `/film/${slug}/`;
 
     // Parse year from name (e.g., "Bad Santa (2003)")
     const yearMatch = fullName.match(/\((\d{4})\)$/);
@@ -163,13 +164,9 @@ function parseFilmsHtml(html, { includeRating = false } = {}) {
       }
     }
 
-    // Extract cache busting key for poster URL
-    let posterUrl = null;
-    if (filmId) {
-      const cacheKeyMatch = block.match(/cacheBustingKey":"([^"]+)"/);
-      const cacheKey = cacheKeyMatch ? cacheKeyMatch[1] : null;
-      posterUrl = buildPosterUrl(filmId, slug, cacheKey);
-    }
+    const posterData = extractPosterData(block);
+    const posterUrl = posterData.posterUrl ||
+      (posterData.filmId ? buildPosterUrl(posterData.filmId, slug, posterData.cacheKey) : null);
 
     items.push({
       title,
@@ -182,6 +179,79 @@ function parseFilmsHtml(html, { includeRating = false } = {}) {
   }
 
   return items;
+}
+
+function extractPosterData(block) {
+  const directFilmId = getAttribute(block, 'data-film-id');
+  const posteredIdentifier = parseJsonAttribute(getAttribute(block, 'data-postered-identifier'));
+  const resolvablePosterPath = parseJsonAttribute(getAttribute(block, 'data-resolvable-poster-path'));
+  const filmId =
+    directFilmId ||
+    filmIdFromIdentifier(posteredIdentifier) ||
+    filmIdFromIdentifier(resolvablePosterPath?.postered) ||
+    filmIdFromText(block);
+  const cacheKey = resolvablePosterPath?.cacheBustingKey || cacheKeyFromText(block);
+
+  return {
+    filmId,
+    cacheKey,
+    posterUrl: directPosterUrl(block)
+  };
+}
+
+function filmIdFromIdentifier(identifier) {
+  const uid = identifier?.uid;
+  const match = typeof uid === 'string' ? uid.match(/^film:(\d+)$/) : null;
+  return match ? match[1] : null;
+}
+
+function filmIdFromText(text) {
+  const match = decodeHtmlEntities(text || '').match(/"uid"\s*:\s*"film:(\d+)"/);
+  return match ? match[1] : null;
+}
+
+function cacheKeyFromText(text) {
+  const match = decodeHtmlEntities(text || '').match(/"cacheBustingKey"\s*:\s*"([^"]+)"/);
+  return match ? match[1] : null;
+}
+
+function directPosterUrl(block) {
+  const candidates = [
+    getAttribute(block, 'data-image-url'),
+    getAttribute(block, 'data-src'),
+    getAttribute(block, 'src')
+  ];
+
+  for (const candidate of candidates) {
+    if (!candidate) continue;
+    const normalized = candidate.startsWith('//') ? `https:${candidate}` : candidate;
+    if (/^https?:\/\/.+\.(?:jpe?g|png|webp)(?:[?#].*)?$/i.test(normalized) &&
+        !normalized.includes('/empty-poster-')) {
+      return normalized;
+    }
+  }
+
+  return null;
+}
+
+function getAttribute(html, name) {
+  const escaped = name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const match = html.match(new RegExp(`${escaped}=(["'])([\\s\\S]*?)\\1`));
+  return match ? decodeHtmlEntities(match[2].trim()) : null;
+}
+
+function parseJsonAttribute(value) {
+  if (!value) return null;
+  try {
+    return JSON.parse(value);
+  } catch {
+    return null;
+  }
+}
+
+function slugFromFilmLink(link) {
+  const match = String(link || '').match(/\/film\/([^/]+)\//);
+  return match ? match[1] : null;
 }
 
 /**
@@ -225,6 +295,7 @@ function decodeHtmlEntities(text) {
     .replace(/&lt;/g, '<')
     .replace(/&gt;/g, '>')
     .replace(/&quot;/g, '"')
+    .replace(/&#(\d+);/g, (_, value) => String.fromCharCode(parseInt(value, 10)))
     .replace(/&#39;/g, "'")
     .replace(/&apos;/g, "'");
 }
