@@ -886,7 +886,8 @@ a {
   }
 
   .lately-card--media,
-  .lately-card--text {
+  .lately-card--text,
+  .lately-card--github-summary {
     grid-column: span 1;
   }
 
