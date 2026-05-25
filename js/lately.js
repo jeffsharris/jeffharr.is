@@ -157,7 +157,7 @@
     const days = hasHeatmap ? alignHeatmapDays(contributions.days, HEATMAP_WEEKS) : [];
     const total = contributions?.totalContributions;
     const caption = total
-      ? `${total.toLocaleString()} contributions · last year`
+      ? `${total.toLocaleString()} contributions in the last year`
       : hasHeatmap ? 'Recent contributions' : '';
 
     return {
