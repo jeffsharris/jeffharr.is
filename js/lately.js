@@ -62,7 +62,7 @@
     const books = Array.isArray(data?.recentlyRead) ? data.recentlyRead : [];
     return books.map(book => ({
       type: 'book',
-      label: 'Finished book',
+      label: 'Read',
       source: 'goodreads',
       sourceLabel: 'Goodreads',
       title: book.title || 'Untitled book',
@@ -93,7 +93,7 @@
     const films = Array.isArray(data?.entries) ? data.entries : [];
     return films.map(film => ({
       type: 'film',
-      label: 'Watched film',
+      label: 'Watched',
       source: 'letterboxd',
       sourceLabel: 'Letterboxd',
       title: film.title || 'Untitled film',
@@ -265,8 +265,6 @@
     return `
       <div class="lately-card__label">
         <span>${escapeHtml(item.label)}</span>
-        <span aria-hidden="true">·</span>
-        <span>${escapeHtml(item.sourceLabel)}</span>
       </div>
     `;
   }
@@ -275,16 +273,15 @@
     let nav = section?.querySelector('[data-lately-links]');
     if (!nav) {
       nav = document.createElement('nav');
-      nav.className = 'lately-links';
+      nav.className = 'elsewhere lately-links';
       nav.dataset.latelyLinks = '';
       nav.setAttribute('aria-label', 'More recent activity');
       grid.after(nav);
     }
 
     nav.innerHTML = `
-      <span class="lately-links__label">More on</span>
       ${PROFILE_LINKS.map(([label, url], index) => `
-        ${index ? '<span class="lately-links__dot" aria-hidden="true"></span>' : ''}
+        ${index ? '<span class="elsewhere__dot" aria-hidden="true"></span>' : ''}
         <a href="${escapeAttr(url)}" target="_blank" rel="noopener">${escapeHtml(label)}</a>
       `).join('')}
     `;
