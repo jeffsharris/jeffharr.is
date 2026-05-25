@@ -1,22 +1,43 @@
 /**
  * GitHub API endpoint for Cloudflare Pages Functions
- * Fetches recent commits across all public repositories
+ * Fetches recent commits and the public contributions calendar.
  */
 
 import { createLogger, formatError } from './lib/logger.js';
+
+const FETCH_TIMEOUT_MS = 8000;
 
 export async function onRequest(context) {
   const logger = createLogger({ request: context.request, source: 'github' });
   const log = logger.log;
   const username = 'jeffsharris';
-  const headers = {
+  const apiHeaders = {
     'Accept': 'application/vnd.github.v3+json',
     'User-Agent': 'jeffharr.is'
   };
-  const FETCH_TIMEOUT_MS = 8000;
 
+  const [commitsResult, contributionsResult] = await Promise.allSettled([
+    fetchRecentCommits(username, apiHeaders, log),
+    fetchContributions(username, log)
+  ]);
+
+  const commits = commitsResult.status === 'fulfilled' ? commitsResult.value : [];
+  const contributions = contributionsResult.status === 'fulfilled' ? contributionsResult.value : null;
+
+  return new Response(JSON.stringify({
+    commits,
+    contributions,
+    profileUrl: `https://github.com/${username}`
+  }), {
+    headers: {
+      'Content-Type': 'application/json',
+      'Cache-Control': 'public, max-age=300'
+    }
+  });
+}
+
+async function fetchRecentCommits(username, headers, log) {
   try {
-    // First, get user's recently updated repos
     const reposResponse = await fetchWithTimeout(
       `https://api.github.com/users/${username}/repos?sort=pushed&per_page=10`,
       { headers },
@@ -29,12 +50,11 @@ export async function onRequest(context) {
         username,
         status: reposResponse.status
       });
-      throw new Error('GitHub API error fetching repos');
+      return [];
     }
 
     const repos = await reposResponse.json();
 
-    // Fetch commits from each repo in parallel
     const commitPromises = repos.slice(0, 5).map(async (repo) => {
       try {
         const commitsResponse = await fetchWithTimeout(
@@ -75,37 +95,77 @@ export async function onRequest(context) {
     const allCommitArrays = await Promise.all(commitPromises);
     const allCommits = allCommitArrays.flat();
 
-    // Sort by date (newest first) and take top 20
     allCommits.sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
-    const recentCommits = allCommits.slice(0, 20);
-
-    return new Response(JSON.stringify({
-      commits: recentCommits,
-      profileUrl: `https://github.com/${username}`
-    }), {
-      headers: {
-        'Content-Type': 'application/json',
-        'Cache-Control': 'public, max-age=300'
-      }
-    });
-
+    return allCommits.slice(0, 20);
   } catch (error) {
-    log('error', 'github_request_failed', {
-      stage: 'request',
+    log('error', 'github_commits_request_failed', {
+      stage: 'commits_request',
       username,
       ...formatError(error)
     });
-
-    return new Response(JSON.stringify({
-      commits: [],
-      profileUrl: `https://github.com/${username}`
-    }), {
-      headers: {
-        'Content-Type': 'application/json',
-        'Cache-Control': 'public, max-age=60'
-      }
-    });
+    return [];
   }
+}
+
+async function fetchContributions(username, log) {
+  try {
+    const response = await fetchWithTimeout(
+      `https://github.com/users/${encodeURIComponent(username)}/contributions`,
+      {
+        headers: {
+          'Accept': 'text/html',
+          'User-Agent': 'jeffharr.is'
+        }
+      },
+      FETCH_TIMEOUT_MS
+    );
+
+    if (!response.ok) {
+      log('warn', 'github_contributions_failed', {
+        stage: 'contributions_fetch',
+        username,
+        status: response.status
+      });
+      return null;
+    }
+
+    const html = await response.text();
+    return parseContributionsHtml(html);
+  } catch (error) {
+    log('error', 'github_contributions_error', {
+      stage: 'contributions_fetch',
+      username,
+      ...formatError(error)
+    });
+    return null;
+  }
+}
+
+function parseContributionsHtml(html) {
+  const days = [];
+  const dayRegex = /data-date="(\d{4}-\d{2}-\d{2})"[^>]*data-level="(\d+)"/g;
+  let match;
+  while ((match = dayRegex.exec(html)) !== null) {
+    days.push({ date: match[1], level: Number(match[2]) });
+  }
+
+  if (!days.length) return null;
+
+  days.sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : 0));
+
+  let totalContributions = null;
+  const totalMatch = html.match(/contribution-activity-description[^>]*>\s*([\d,]+)\s*contributions?/i);
+  if (totalMatch) {
+    const parsed = Number(totalMatch[1].replace(/,/g, ''));
+    if (Number.isFinite(parsed)) totalContributions = parsed;
+  }
+
+  return {
+    days,
+    totalContributions,
+    rangeStart: days[0].date,
+    rangeEnd: days[days.length - 1].date
+  };
 }
 
 async function fetchWithTimeout(url, options = {}, timeoutMs = 8000) {
@@ -117,3 +177,5 @@ async function fetchWithTimeout(url, options = {}, timeoutMs = 8000) {
     clearTimeout(timeoutId);
   }
 }
+
+export { parseContributionsHtml };

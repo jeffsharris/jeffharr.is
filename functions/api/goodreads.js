@@ -104,10 +104,15 @@ function decodeXmlEntities(text = '') {
 
 function extractTag(xml = '', tagName = '') {
   const escaped = tagName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  const cdataMatch = xml.match(new RegExp(`<${escaped}><!\\[CDATA\\[([\\s\\S]*?)\\]\\]><\\/${escaped}>`));
+  const cdataMatch = xml.match(new RegExp(`<${escaped}>\\s*<!\\[CDATA\\[([\\s\\S]*?)\\]\\]>\\s*<\\/${escaped}>`));
   if (cdataMatch) return decodeXmlEntities(cdataMatch[1].trim());
   const match = xml.match(new RegExp(`<${escaped}>([\\s\\S]*?)<\\/${escaped}>`));
-  return match ? decodeXmlEntities(match[1].trim()) : null;
+  if (!match) return null;
+  const inner = match[1]
+    .replace(/^\s*<!\[CDATA\[/, '')
+    .replace(/\]\]>\s*$/, '')
+    .trim();
+  return decodeXmlEntities(inner);
 }
 
 async function fetchWithTimeout(url, options = {}, timeoutMs = 8000) {

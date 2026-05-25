@@ -7,6 +7,7 @@
 
   const MAX_ITEMS = 12;
   const MAX_PER_BUCKET = 2;
+  const HEATMAP_WEEKS = 26;
 
   const SOURCES = {
     goodreads: '/api/goodreads',
@@ -32,13 +33,14 @@
       fetchJson(SOURCES.x)
     ]);
 
+    const githubItem = normalizeGithubSummary(github);
     const buckets = [
       normalizeFinishedBooks(goodreads),
       normalizeReadingBooks(goodreads),
       normalizeWatchedFilms(letterboxd),
       normalizeWatchlistFilms(letterboxd),
       normalizeSavedItems(readLater),
-      normalizeCommits(github),
+      githubItem ? [githubItem] : [],
       normalizeTweets(x)
     ];
 
@@ -137,19 +139,34 @@
     }));
   }
 
-  function normalizeCommits(data) {
+  function normalizeGithubSummary(data) {
+    const contributions = data?.contributions;
     const commits = Array.isArray(data?.commits) ? data.commits : [];
-    return commits.map(commit => ({
-      type: 'commit',
-      label: 'Commit',
+    const latestCommit = commits[0] || null;
+    const hasHeatmap = contributions && Array.isArray(contributions.days) && contributions.days.length;
+    if (!hasHeatmap && !latestCommit) return null;
+
+    const days = hasHeatmap ? alignHeatmapDays(contributions.days, HEATMAP_WEEKS) : [];
+    const total = contributions?.totalContributions;
+    const caption = total
+      ? `${total.toLocaleString()} contributions · last year`
+      : hasHeatmap ? 'Recent contributions' : '';
+
+    return {
+      type: 'github',
+      label: 'Building',
       source: 'github',
       sourceLabel: 'GitHub',
-      repo: commit.repo || 'jeffsharris',
-      title: commit.message || 'Recent commit',
-      detail: [commit.sha, relativeTime(commit.date)].filter(Boolean).join(' · '),
-      url: commit.url || data?.profileUrl || PROFILE_LINKS[0][1],
-      publishedAt: commit.date || ''
-    }));
+      title: latestCommit?.message || 'GitHub activity',
+      repo: latestCommit?.repo || 'jeffsharris',
+      detail: latestCommit
+        ? [latestCommit.sha, relativeTime(latestCommit.date)].filter(Boolean).join(' · ')
+        : '',
+      days,
+      caption,
+      url: latestCommit?.url || data?.profileUrl || PROFILE_LINKS[0][1],
+      publishedAt: latestCommit?.date || contributions?.rangeEnd || ''
+    };
   }
 
   function normalizeTweets(data) {
@@ -204,9 +221,11 @@
     const fragment = document.createDocumentFragment();
     items.forEach(item => {
       const template = document.createElement('template');
-      template.innerHTML = item.type === 'commit' || item.type === 'tweet'
-        ? renderTextCard(item)
-        : renderMediaCard(item);
+      let html;
+      if (item.type === 'github') html = renderGithubCard(item);
+      else if (item.type === 'tweet') html = renderTextCard(item);
+      else html = renderMediaCard(item);
+      template.innerHTML = html;
       fragment.append(template.content.firstElementChild);
     });
     grid.replaceChildren(fragment);
@@ -215,6 +234,7 @@
 
   function renderMediaCard(item) {
     const imageUrl = safeImageUrl(item.image);
+    const credit = [item.label, item.byline].filter(Boolean).join(' · ');
     return `
       <a class="lately-card lately-card--media lately-card--${escapeAttr(item.source)}" data-lately-type="${escapeAttr(item.type)}" href="${escapeAttr(safeUrl(item.url))}" target="_blank" rel="noopener">
         <div class="lately-card__media">
@@ -223,9 +243,8 @@
             : `<span class="lately-card__placeholder" aria-hidden="true">${escapeHtml(initials(item.title))}</span>`}
         </div>
         <div class="lately-card__body">
-          ${renderItemLabel(item)}
           <h3 class="lately-card__title">${escapeHtml(item.title)}</h3>
-          ${item.byline ? `<div class="lately-card__byline">${escapeHtml(item.byline)}</div>` : ''}
+          ${credit ? `<div class="lately-card__credit">${escapeHtml(credit)}</div>` : ''}
           ${item.rating ? `<div class="lately-card__rating" aria-label="${escapeAttr(`${item.rating} out of 5`)}">${escapeHtml(formatRating(item.rating))}</div>` : ''}
         </div>
       </a>
@@ -233,39 +252,48 @@
   }
 
   function renderTextCard(item) {
-    if (item.type === 'tweet') {
-      return `
-        <a class="lately-card lately-card--text lately-card--x" data-lately-type="tweet" href="${escapeAttr(safeUrl(item.url, { fallback: PROFILE_LINKS[3][1] }))}" target="_blank" rel="noopener">
-          <article class="lately-text-card">
-            <div class="lately-text-card__topline">
-              ${renderItemLabel(item)}
-              <span class="lately-text-card__detail">${escapeHtml(item.detail || '')}</span>
-            </div>
-            <p class="lately-text-card__body">${escapeHtml(item.body)}</p>
-          </article>
-        </a>
-      `;
-    }
-
+    // tweets only — github now uses renderGithubCard
     return `
-      <a class="lately-card lately-card--text lately-card--github" data-lately-type="commit" href="${escapeAttr(safeUrl(item.url, { fallback: PROFILE_LINKS[0][1] }))}" target="_blank" rel="noopener">
+      <a class="lately-card lately-card--text lately-card--x" data-lately-type="tweet" href="${escapeAttr(safeUrl(item.url, { fallback: PROFILE_LINKS[3][1] }))}" target="_blank" rel="noopener">
         <article class="lately-text-card">
           <div class="lately-text-card__topline">
-            ${renderItemLabel(item)}
+            <span class="lately-text-card__handle">${escapeHtml(item.handle)}</span>
+            ${item.detail ? `<span class="lately-text-card__detail">${escapeHtml(item.detail)}</span>` : ''}
           </div>
-          <div class="lately-text-card__repo">${escapeHtml(item.repo)}</div>
-          <h3 class="lately-text-card__title">${escapeHtml(item.title)}</h3>
-          ${item.detail ? `<div class="lately-text-card__detail">${escapeHtml(item.detail)}</div>` : ''}
+          <p class="lately-text-card__body">${escapeHtml(item.body)}</p>
         </article>
       </a>
     `;
   }
 
-  function renderItemLabel(item) {
+  function renderGithubCard(item) {
+    const cells = item.days.length
+      ? `<div class="lately-heatmap" role="img" aria-label="${escapeAttr(item.caption || 'GitHub contributions')}">${
+          item.days
+            .map(day => day.blank
+              ? '<span class="lately-heatmap__cell lately-heatmap__cell--blank" aria-hidden="true"></span>'
+              : `<span class="lately-heatmap__cell" data-level="${escapeAttr(String(day.level))}" title="${escapeAttr(day.date)}"></span>`)
+            .join('')
+        }</div>`
+      : '';
+    const repoLine = item.repo
+      ? `<div class="lately-github__repo">${escapeHtml(item.repo)}</div>`
+      : '';
+    const commitLine = item.title
+      ? `<div class="lately-github__commit"><span class="lately-github__commit-message">${escapeHtml(item.title)}</span>${item.detail ? `<span class="lately-github__commit-meta">${escapeHtml(item.detail)}</span>` : ''}</div>`
+      : '';
+    const caption = item.caption
+      ? `<div class="lately-github__caption">${escapeHtml(item.caption)}</div>`
+      : '';
     return `
-      <div class="lately-card__label">
-        <span>${escapeHtml(item.label)}</span>
-      </div>
+      <a class="lately-card lately-card--github lately-card--github-summary" data-lately-type="github" href="${escapeAttr(safeUrl(item.url, { fallback: PROFILE_LINKS[0][1] }))}" target="_blank" rel="noopener">
+        <article class="lately-github-card">
+          ${repoLine}
+          ${cells}
+          ${caption}
+          ${commitLine}
+        </article>
+      </a>
     `;
   }
 
@@ -300,6 +328,25 @@
     url.searchParams.set('id', item.id);
     url.searchParams.set('v', item.cover.updatedAt);
     return url.toString();
+  }
+
+  function alignHeatmapDays(allDays, weeks) {
+    if (!Array.isArray(allDays) || !allDays.length) return [];
+    const totalCells = weeks * 7;
+    const lastDate = new Date(`${allDays[allDays.length - 1].date}T00:00:00Z`);
+    if (Number.isNaN(lastDate.getTime())) return allDays.slice(-totalCells);
+    // Pad trailing days so the last column ends on Saturday
+    const trailingPad = 6 - lastDate.getUTCDay();
+    const recent = allDays.slice(-(totalCells - trailingPad));
+    // Pad leading days so the first column starts on Sunday
+    const firstDate = new Date(`${recent[0].date}T00:00:00Z`);
+    const leadingPad = Number.isNaN(firstDate.getTime()) ? 0 : firstDate.getUTCDay();
+    const blanks = (n) => Array.from({ length: Math.max(0, n) }, () => ({ date: '', level: 0, blank: true }));
+    const padded = [...blanks(leadingPad), ...recent, ...blanks(trailingPad)];
+    // Trim or extend to exactly weeks*7
+    if (padded.length > totalCells) return padded.slice(padded.length - totalCells);
+    if (padded.length < totalCells) return [...blanks(totalCells - padded.length), ...padded];
+    return padded;
   }
 
   function sortByPublishedAt(a, b) {

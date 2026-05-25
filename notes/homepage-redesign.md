@@ -1168,3 +1168,122 @@ real misses are (a) X never wired up and (b) Letterboxd posters
 broken — both are mechanical fixes, not design problems. Once those
 land, the page is essentially done and can sit untouched for a long
 time.
+
+---
+
+## 11. Addendum — UX polish pass (2026-05-25)
+
+Follow-up after the implemented redesign expanded Lately to ~12 items
+across seven buckets and added `Read` / `Reading` / `Watched` /
+`Watchlist` / `Saved` / `Commit` / `Post` labels on every card. Three
+issues called out: (1) GitHub commit cards too big and undifferentiated,
+(2) `lately-links` footer felt misaligned, (3) labels competed with
+titles for visual weight.
+
+### 11.1 What this pass changed
+
+- **GitHub gets a single, distinct heatmap-summary card** (replaces the
+  per-commit text cards in the rotation). `functions/api/github.js` now
+  scrapes `github.com/users/<u>/contributions` and returns `{ days,
+  totalContributions, rangeStart, rangeEnd }` alongside commits.
+  `js/lately.js` synthesizes one `type: 'github'` item that combines a
+  26-week heatmap with the latest commit message + sha · time line.
+  Cells are tinted in warm umber (light) / brass (dark) to match the
+  site palette rather than GitHub's neon green — the `h` monogram still
+  identifies the source. Days padded so columns start on Sunday and end
+  on Saturday (GitHub convention). Card spans 2 columns at desktop;
+  collapses to full width on mobile.
+- **Labels merged into a quieter `lately-card__credit` line** on media
+  cards. Was: a separate uppercase tracked `lately-card__label` element
+  reading "WATCHED" / "READ" / etc. above the title. Now: combined with
+  the byline into one italic Cormorant line — "Read · Adyashanti",
+  "Watched · 2025", "Saved · personfamiliar.com". Tertiary in the
+  hierarchy; title is now unambiguously the dominant element.
+- **Tweet cards drop the `Post` label** entirely (the handle
+  `@jeffintime` + monogram badge `x` already convey source). Topline is
+  now just `@handle · relative time` baseline-aligned.
+- **Text card sizing freed.** Removed `min-height: 208px` from
+  `.lately-card--text` and the `margin-top: auto` + `padding-top: 18px`
+  from `.lately-card--github .lately-text-card__detail`. Cards now size
+  to their content; no more huge empty cards with detail line floating
+  at the bottom.
+- **`.lately-links` differentiated from `.elsewhere`.** Added a `MORE
+  ON` eyebrow-style prefix in tracked uppercase Inter, dropped link size
+  to 12px and color to `--ink-light`, shrunk the dots to 2px. Visually
+  reads as a footer for the Lately section rather than a second
+  Elsewhere row.
+- **Goodreads CDATA leakage fixed.** `extractTag()` regex now tolerates
+  whitespace around `<![CDATA[ … ]]>` boundaries, and the fallback path
+  strips lingering markers from matched content. Book card click URLs
+  will now route to the real Goodreads review pages instead of getting
+  swallowed by `safeUrl()`.
+- **OG / portrait already addressed by the implementer:**
+  `images/jeff-editorial-portrait.png` was re-encoded as `.jpg` and the
+  `og:image` meta updated. (Still square; landscape OG card remains a
+  follow-up.)
+
+### 11.2 Heatmap card data shape
+
+```js
+// what the renderer expects
+{
+  type: 'github',
+  source: 'github',
+  label: 'Building',
+  title: 'Refine Lately footer links',   // latest commit message
+  repo: 'jeffharr.is',                    // latest commit's repo
+  detail: 'df62764 · today',              // sha · relative time
+  days: [{ date: '2025-11-27', level: 0 }, { date: '', level: 0, blank: true }, …],
+  caption: '936 contributions · last year',
+  url: 'https://github.com/jeffsharris/jeffharr.is/commit/df62764…',
+  publishedAt: '2026-05-25T01:50:19Z'
+}
+```
+
+The `blank: true` cells are padding so the leftmost column always starts
+on Sunday and the rightmost column always ends on Saturday. They render
+as transparent — the heatmap visually "begins" mid-column where the data
+actually starts.
+
+### 11.3 Still pending
+
+- **Letterboxd posters.** Verified locally: scraping the films page now
+  returns a Cloudflare interstitial (the `Just a moment…` challenge
+  page) for non-browser User-Agents. From a Cloudflare Worker IP it
+  appears to pass through to the actual HTML but the poster attributes
+  the scraper looks for (`data-image-url`, `data-film-id`,
+  `data-postered-identifier`) aren't reliably present in the new
+  markup — title / year / rating still parse, but `poster: null` for
+  most entries. The RSS feed (`/jeffharris/rss/`) doesn't help: it's
+  empty for this user (only diary entries appear there). Two reasonable
+  paths: (a) re-derive the scraper against current Letterboxd HTML by
+  inspecting what attributes survive, (b) switch to TMDB API (with a
+  film-name search) for poster lookup, decoupling from Letterboxd's
+  markup entirely.
+- **OG image landscape variant.** §10.3 item 3 stands. Square portrait
+  will still crop awkwardly on Twitter / iMessage.
+- **Tile-image script generalization** (§7) still pending — homepage
+  tiles remain ad-hoc regenerable.
+- **Tweet thumbnails** — `lately.js` extracts `media[0].url` but the
+  renderer doesn't show it. Add a small (40×40) thumbnail inset to
+  `.lately-card--x` when present (§10.5).
+
+### 11.4 What I'd recommend looking at after deploy
+
+1. **Heatmap card on mobile.** At ~340px column width on desktop the
+   heatmap cells are ~11px each; at full mobile width (~340–390px) the
+   cells get a touch chunkier and the card reads beautifully. Verify
+   nothing wraps or overflows at the 4-col tablet breakpoint where the
+   card is at its narrowest.
+2. **Credit line truncation.** "Saved · christian-gonzales-eponymous-…"
+   uses `white-space: nowrap` + `text-overflow: ellipsis`. If publisher
+   strings are long, they'll truncate to a single line rather than wrap;
+   verify that looks intentional rather than broken.
+3. **Heatmap dark mode contrast.** The level-0 (no contributions) cells
+   are `rgba(236, 229, 217, 0.06)` — very faint against `#14110E`. Verify
+   the inactive grid is visible enough to read as "the empty days" rather
+   than disappearing into the card background. If invisible, bump opacity
+   to ~0.10.
+4. **The 'MORE ON' lately-links prefix** is a small typographic choice;
+   if it reads as fussy or labels-y, an alternative is to drop the
+   prefix and just rely on size/color differentiation from `.elsewhere`.
