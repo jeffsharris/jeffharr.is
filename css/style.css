@@ -426,10 +426,12 @@ a {
 
 .lately-card--text {
   grid-column: span 2;
+  align-self: start;
 }
 
 .lately-card--github-summary {
   grid-column: span 2;
+  align-self: start;
 }
 
 .lately-card--goodreads {

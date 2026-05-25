@@ -11,10 +11,12 @@ export async function onRequest(context) {
   const logger = createLogger({ request: context.request, source: 'github' });
   const log = logger.log;
   const username = 'jeffsharris';
+  const token = context.env?.GITHUB_TOKEN || '';
   const apiHeaders = {
     'Accept': 'application/vnd.github.v3+json',
     'User-Agent': 'jeffharr.is'
   };
+  if (token) apiHeaders.Authorization = `Bearer ${token}`;
 
   const [commitsResult, contributionsResult] = await Promise.allSettled([
     fetchRecentCommits(username, apiHeaders, log),
