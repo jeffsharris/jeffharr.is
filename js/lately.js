@@ -141,8 +141,16 @@
 
   function normalizeGithubSummary(data) {
     const contributions = data?.contributions;
-    const commits = Array.isArray(data?.commits) ? data.commits : [];
-    const latestCommit = commits[0] || null;
+    const rawCommits = Array.isArray(data?.commits) ? data.commits : [];
+    const recentCommits = rawCommits.slice(0, 2).map(commit => ({
+      message: commit.message || 'Recent commit',
+      repo: commit.repo || 'jeffsharris',
+      sha: commit.sha || '',
+      meta: [commit.repo, commit.sha, relativeTime(commit.date)].filter(Boolean).join(' · '),
+      url: commit.url || data?.profileUrl || PROFILE_LINKS[0][1],
+      publishedAt: commit.date || ''
+    }));
+    const latestCommit = recentCommits[0] || null;
     const hasHeatmap = contributions && Array.isArray(contributions.days) && contributions.days.length;
     if (!hasHeatmap && !latestCommit) return null;
 
@@ -158,14 +166,11 @@
       source: 'github',
       sourceLabel: 'GitHub',
       title: latestCommit?.message || 'GitHub activity',
-      repo: latestCommit?.repo || 'jeffsharris',
-      detail: latestCommit
-        ? [latestCommit.sha, relativeTime(latestCommit.date)].filter(Boolean).join(' · ')
-        : '',
+      commits: recentCommits,
       days,
       caption,
       url: latestCommit?.url || data?.profileUrl || PROFILE_LINKS[0][1],
-      publishedAt: latestCommit?.date || contributions?.rangeEnd || ''
+      publishedAt: latestCommit?.publishedAt || contributions?.rangeEnd || ''
     };
   }
 
@@ -276,22 +281,25 @@
             .join('')
         }</div>`
       : '';
-    const repoLine = item.repo
-      ? `<div class="lately-github__repo">${escapeHtml(item.repo)}</div>`
-      : '';
-    const commitLine = item.title
-      ? `<div class="lately-github__commit"><span class="lately-github__commit-message">${escapeHtml(item.title)}</span>${item.detail ? `<span class="lately-github__commit-meta">${escapeHtml(item.detail)}</span>` : ''}</div>`
-      : '';
     const caption = item.caption
       ? `<div class="lately-github__caption">${escapeHtml(item.caption)}</div>`
+      : '';
+    const commitsList = Array.isArray(item.commits) && item.commits.length
+      ? `<ul class="lately-github__commits">${
+          item.commits.map(commit => `
+            <li class="lately-github__commit">
+              <span class="lately-github__commit-message">${escapeHtml(commit.message)}</span>
+              ${commit.meta ? `<span class="lately-github__commit-meta">${escapeHtml(commit.meta)}</span>` : ''}
+            </li>
+          `).join('')
+        }</ul>`
       : '';
     return `
       <a class="lately-card lately-card--github lately-card--github-summary" data-lately-type="github" href="${escapeAttr(safeUrl(item.url, { fallback: PROFILE_LINKS[0][1] }))}" target="_blank" rel="noopener">
         <article class="lately-github-card">
-          ${repoLine}
           ${cells}
           ${caption}
-          ${commitLine}
+          ${commitsList}
         </article>
       </a>
     `;
