@@ -115,7 +115,8 @@ test('listReadLaterItems uses one D1 query and preserves read state fields', asy
       kindle_json: null,
       cover_sync_json: null,
       push_channels_json: null,
-      cover_updated_at: null
+      cover_updated_at: null,
+      thumbnail_url: 'https://substackcdn.com/image/fetch/example-cover.png'
     }
   ];
   const db = createFakeD1(rows);
@@ -134,6 +135,7 @@ test('listReadLaterItems uses one D1 query and preserves read state fields', asy
   assert.deepEqual(items[0].pushChannels, { readiness: { status: 'ready' } });
   assert.deepEqual(items[0].cover, { updatedAt: '2026-01-04T00:00:00.000Z' });
   assert.equal(items[1].read, false);
+  assert.equal(items[1].thumbnailUrl, 'https://substackcdn.com/image/fetch/example-cover.png');
 });
 
 test('read later list endpoint only requires D1 storage', async () => {

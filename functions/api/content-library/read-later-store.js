@@ -383,7 +383,8 @@ async function listReadLaterRows(db, { limit = 1000 } = {}) {
       rs.kindle_json,
       rs.cover_sync_json,
       rs.push_channels_json,
-      cover.updated_at AS cover_updated_at
+      cover.updated_at AS cover_updated_at,
+      COALESCE(thumbnail_by_role.url, thumbnail_by_id.url) AS thumbnail_url
      FROM list_entries le
      JOIN items i ON i.id = le.item_id
      LEFT JOIN read_state rs ON rs.entry_id = le.id
@@ -391,6 +392,14 @@ async function listReadLaterRows(db, { limit = 1000 } = {}) {
        SELECT a.id
        FROM assets a
        WHERE a.item_id = i.id AND a.role = 'generated_cover'
+       ORDER BY a.updated_at DESC
+       LIMIT 1
+     )
+     LEFT JOIN assets thumbnail_by_id ON thumbnail_by_id.id = i.thumbnail_asset_id
+     LEFT JOIN assets thumbnail_by_role ON thumbnail_by_role.id = (
+       SELECT a.id
+       FROM assets a
+       WHERE a.item_id = i.id AND a.role = 'thumbnail'
        ORDER BY a.updated_at DESC
        LIMIT 1
      )
@@ -473,6 +482,7 @@ async function readLaterRowToItem(db, row) {
   if (row.summary) item.description = row.summary;
   if (row.creator) item.author = row.creator;
   if (row.publisher) item.publisher = row.publisher;
+  if (row.thumbnail_url) item.thumbnailUrl = row.thumbnail_url;
   if (kindle) item.kindle = kindle;
   if (coverSync) item.coverSync = coverSync;
   const resolvedCoverUpdatedAt = coverUpdatedAt || coverAsset?.updated_at || null;

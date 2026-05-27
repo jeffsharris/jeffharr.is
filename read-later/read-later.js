@@ -397,13 +397,17 @@
     }
 
     const updatedAt = item?.cover?.updatedAt;
-    if (!updatedAt || !item?.id) {
-      return;
+    let imageUrl = '';
+    if (updatedAt && item?.id) {
+      const url = new URL('/api/read-later/cover', window.location.origin);
+      url.searchParams.set('id', item.id);
+      url.searchParams.set('v', updatedAt);
+      imageUrl = url.toString();
+    } else if (item?.thumbnailUrl) {
+      imageUrl = item.thumbnailUrl;
     }
 
-    const url = new URL('/api/read-later/cover', window.location.origin);
-    url.searchParams.set('id', item.id);
-    url.searchParams.set('v', updatedAt);
+    if (!imageUrl) return;
 
     imgEl.onload = () => {
       thumbEl.classList.remove('is-empty');
@@ -415,7 +419,7 @@
       imgEl.removeAttribute('src');
     };
 
-    imgEl.src = url.toString();
+    imgEl.src = imageUrl;
   }
 
   function getKindleStatus(item) {

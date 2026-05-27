@@ -1,7 +1,8 @@
 import {
   getAssetByRole,
   getContentAssets,
-  getContentDb
+  getContentDb,
+  upsertAsset
 } from '../content-library/db.js';
 import {
   getBinaryAsset,
@@ -92,7 +93,31 @@ async function putReaderAsset({ db, bucket, itemId, reader }) {
     getNowIso()
   ).run();
 
+  await putReaderThumbnailAsset({ db, itemId, reader });
+
   return true;
+}
+
+async function putReaderThumbnailAsset({ db, itemId, reader }) {
+  const imageUrl = stringOrNull(reader?.coverImageUrl || reader?.imageUrl);
+  if (!db || !itemId || !imageUrl) return null;
+
+  const asset = await upsertAsset(db, {
+    itemId,
+    role: 'thumbnail',
+    kind: 'image',
+    url: imageUrl,
+    mimeType: inferImageMimeType(imageUrl)
+  });
+
+  await db.prepare(
+    `UPDATE items
+     SET thumbnail_asset_id = COALESCE(thumbnail_asset_id, ?),
+         updated_at = ?
+     WHERE id = ?`
+  ).bind(asset.id, getNowIso(), itemId).run();
+
+  return asset;
 }
 
 async function getCoverAsset({ db, bucket, itemId }) {
@@ -153,6 +178,20 @@ function stringOrNull(value) {
 function integerOrNull(value) {
   const number = Number(value);
   return Number.isInteger(number) ? number : null;
+}
+
+function inferImageMimeType(url) {
+  let path = '';
+  try {
+    path = new URL(url).pathname.toLowerCase();
+  } catch {
+    path = String(url || '').toLowerCase();
+  }
+
+  if (path.endsWith('.jpg') || path.endsWith('.jpeg')) return 'image/jpeg';
+  if (path.endsWith('.webp')) return 'image/webp';
+  if (path.endsWith('.gif')) return 'image/gif';
+  return 'image/png';
 }
 
 function base64ToBytes(base64) {

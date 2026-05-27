@@ -17,6 +17,7 @@ test('buildReaderContent uses Substack post API for open.substack article URLs',
       title: 'learning how to fuck',
       subtitle: 'and still searching for love in the modern dating age',
       canonical_url: 'https://smalldweeb.substack.com/p/learning-how-to-fuck',
+      cover_image: 'https://substackcdn.com/image/fetch/example-cover.png',
       body_html: `<p>${bodyText}</p>`,
       wordcount: 70,
       publishedBylines: [{ name: 'azul' }]
@@ -36,6 +37,7 @@ test('buildReaderContent uses Substack post API for open.substack article URLs',
     assert.equal(reader.title, 'learning how to fuck');
     assert.equal(reader.byline, 'azul');
     assert.equal(reader.siteName, 'smalldweeb.substack.com');
+    assert.equal(reader.coverImageUrl, 'https://substackcdn.com/image/fetch/example-cover.png');
     assert.equal(reader.wordCount, 70);
     assert.match(reader.contentHtml, /word70/);
     assert.equal(calls.length, 1);

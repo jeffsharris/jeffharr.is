@@ -276,6 +276,7 @@ async function buildSubstackReaderFromUrl(url, fallbackTitle, options = {}) {
     byline: substackByline(post),
     excerpt: normalizeReaderText(post?.subtitle || post?.description) || '',
     siteName: postRef.siteName,
+    coverImageUrl: absolutizeUrl(post?.cover_image, canonicalUrl) || null,
     wordCount,
     contentHtml,
     retrievedAt: new Date().toISOString()
