@@ -6,6 +6,7 @@
 - Avoid adding production dependencies without explicit approval.
 - Unless the user explicitly says not to publish, finish tasks by committing the completed work, rebasing onto the latest `origin/main`, and pushing to the remote so Cloudflare Pages deploys it.
 - Current content storage is documented in `notes/content-storage.md`. Start there before changing Read Later, shared items, Dharma talk shares, assets, lists, or push device storage.
+- For UI/UX consultation, run `claude -p` outside the sandbox. In the sandbox the Claude CLI cannot access its authenticated session and may fail with `Not logged in`; request escalated execution rather than skipping the consultation.
 
 ## Dharma audio project
 - Public feed merge lives in `tools/dharma-feed/` and publishes static files under `dharma/{corpus}/`.

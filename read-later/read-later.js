@@ -49,6 +49,14 @@
     </svg>
   `;
 
+  const ICON_CLOSE = `
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+      stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M18 6 6 18"></path>
+      <path d="m6 6 12 12"></path>
+    </svg>
+  `;
+
   const ICON_LOADING = `
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
       stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -202,6 +210,7 @@
     const readerMedia = node.querySelector('.reader__media');
     const readerBody = node.querySelector('.reader__body');
     const readerRefresh = node.querySelector('.reader__refresh');
+    const readerClose = node.querySelector('.reader__close');
 
     if (item.read) {
       article.classList.add('is-read');
@@ -274,6 +283,12 @@
     remove.classList.add('is-danger');
     remove.title = 'Delete';
     remove.addEventListener('click', () => deleteItem(item.id));
+
+    if (readerClose) {
+      readerClose.innerHTML = ICON_CLOSE;
+      readerClose.title = 'Close reader';
+      readerClose.addEventListener('click', () => toggleReader(item.id));
+    }
 
     if (isOpen) {
       readerPane.hidden = false;
@@ -666,15 +681,28 @@
   }
 
   function toggleReader(id) {
-    state.openId = state.openId === id ? null : id;
+    const willOpen = state.openId !== id;
+    state.openId = willOpen ? id : null;
     render();
+    if (!willOpen) return;
+    requestAnimationFrame(() => {
+      const article = Array.from(listEl.querySelectorAll('.item'))
+        .find(node => node.dataset.itemId === id);
+      if (!article) return;
+      const prefersReducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+      const top = Math.max(0, article.getBoundingClientRect().top + window.scrollY - 24);
+      window.scrollTo({
+        top,
+        behavior: prefersReducedMotion ? 'auto' : 'smooth'
+      });
+    });
   }
 
   function shouldToggleReader(event, summary) {
     if (!event || !summary) return false;
     const target = event.target;
     if (!(target instanceof Element)) return false;
-    if (target.closest('button')) return false;
+    if (target.closest('a, button')) return false;
 
     if (event.type === 'keydown') {
       return !target.closest('.item__title');
