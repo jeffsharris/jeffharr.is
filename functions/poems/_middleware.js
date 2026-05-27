@@ -100,7 +100,7 @@ function injectPoemPreviewMetadata(html, metadata) {
     description
   });
 
-  let output = html.replace(
+  let output = stripStaticPreviewMetadata(html).replace(
     /<title>[\s\S]*?<\/title>/i,
     `<title>${escapeHtml(documentTitle)}</title>`
   );
@@ -120,6 +120,13 @@ function injectPoemPreviewMetadata(html, metadata) {
   }
 
   return output;
+}
+
+function stripStaticPreviewMetadata(html) {
+  return html
+    .replace(/^[ \t]*<meta\s+property=["']og:[^"']+["'][^>]*>[ \t]*$/gim, '')
+    .replace(/^[ \t]*<meta\s+name=["']twitter:[^"']+["'][^>]*>[ \t]*$/gim, '')
+    .replace(/^[ \t]*<link\s+rel=["']canonical["'][^>]*>[ \t]*$/gim, '');
 }
 
 function renderPreviewTags({ title, description, imageUrl, url }) {

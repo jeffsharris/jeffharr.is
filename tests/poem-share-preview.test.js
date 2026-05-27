@@ -31,6 +31,7 @@ test('poem middleware injects per-poem share preview metadata', async () => {
   assert.match(html, /<meta property="og:image:width" content="1024">/);
   assert.match(html, /<meta name="twitter:card" content="summary_large_image">/);
   assert.match(html, /<link rel="canonical" href="https:\/\/jeffharr\.is\/poems\/\?poem=kubla-kahn">/);
+  assert.doesNotMatch(html, /images\/social\/poems-card\.jpg/);
 });
 
 test('poem middleware passes through non-poem requests', async () => {
