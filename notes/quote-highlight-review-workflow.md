@@ -1,6 +1,6 @@
-# Quote Highlight Review Workflow
+# Quote Review Workflow
 
-Use the local review server for Kindle highlight selection:
+Use the local quote manager for collection triage and source imports:
 
 ```sh
 npm run quotes:review
@@ -12,23 +12,42 @@ Open the URL it prints, usually:
 http://127.0.0.1:8767/notes/quote-highlight-review.html
 ```
 
-Paste the contents of a Kindle `My Clippings.txt` export into the import box.
-The tool imports highlights only; Kindle notes and bookmarks are ignored.
+## Categories
 
-Review state is saved to:
+- `Inbox`: uncategorized quotes from import sources.
+- `Needs refinement`: quotes Jeff wants to keep, but which need attribution,
+  source cleanup, or wording review.
+- `Accepted`: quotes ready to appear in the curated collection.
+- `Rejected`: quotes intentionally excluded, kept locally for undo/recovery.
 
-- `notes/kindle-highlights-state.json`
+On first load, the local state is seeded from `notes/quotes-collection.md`:
+the current `Quotes` section becomes `Accepted`, and the review section becomes
+`Needs refinement`.
 
-That file is gitignored because Kindle highlights can contain private reading
-history and notes. Re-importing the same clipping export merges by stable
-highlight identity and preserves include/skip/edit decisions.
+The working database is saved to:
 
-When ready, use **Export selected** in the UI. It writes generated Kindle
-highlight sections to `notes/quotes-collection.md`:
+- `notes/quote-review-state.json`
 
-- confirmed selections go under `Kindle Highlight Selections`
-- selected items without confirmed attribution go under
-  `Kindle Highlights Needing Attribution Review`
+That file is gitignored because imported quote candidates can contain private
+reading history. The tracked export remains:
 
-The hand-maintained quotes and the existing `Needs Attribution Review` list are
-left intact.
+- `notes/quotes-collection.md`
+
+Use **Export collection** in the UI to rewrite the tracked collection from the
+local state. Only `Accepted` and `Needs refinement` quotes are exported.
+
+## Kindle Importer Scope
+
+The first importer supports pasted Kindle `My Clippings.txt` content.
+
+- Imports Kindle highlights only.
+- Ignores Kindle notes and bookmarks.
+- De-duplicates by book title, author, location/page, and highlight text.
+- Preserves previous category decisions and edits when the same clipping file is
+  imported again.
+- Adds new highlights to `Inbox`.
+- The `Keep` action moves an Inbox highlight to `Needs refinement`; it does not
+  mark the quote as accepted.
+
+Future importers should write candidate items into the same local state shape
+and default new candidates to `Inbox`.

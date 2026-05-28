@@ -3,33 +3,49 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Quote Highlight Review</title>
+  <title>Quote Manager</title>
   <style>
     :root {
       color-scheme: light;
-      --bg: #f7f4ef;
-      --panel: #fffdf8;
-      --panel-strong: #f0ebe2;
-      --ink: #1d1a16;
-      --muted: #766c5f;
-      --line: #ddd4c6;
-      --accent: #1f6f68;
-      --accent-soft: #d7ebe7;
-      --warn: #9a5a16;
-      --warn-soft: #f3dfbf;
-      --danger: #9e3c32;
-      --shadow: 0 12px 36px rgba(45, 35, 24, 0.12);
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --bg: #f5f1ea;
+      --surface: #fffdf8;
+      --surface-soft: #f3ece2;
+      --ink: #1f1c18;
+      --muted: #756b5e;
+      --faint: #9b9083;
+      --line: rgba(54, 45, 35, 0.16);
+      --line-strong: rgba(54, 45, 35, 0.32);
+      --green: #2f6d5c;
+      --green-soft: #dcece6;
+      --gold: #9b6722;
+      --gold-soft: #f1dfbf;
+      --red: #9a4038;
+      --red-soft: #f1dedb;
+      --blue: #345f8f;
+      --blue-soft: #dce8f5;
+      --shadow: 0 18px 48px rgba(43, 35, 26, 0.11);
+      --font-sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --font-serif: Georgia, "Times New Roman", serif;
     }
 
     * {
       box-sizing: border-box;
     }
 
-    body {
-      margin: 0;
+    html {
+      min-height: 100%;
       background: var(--bg);
       color: var(--ink);
+      font-family: var(--font-sans);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      min-height: 100%;
+      margin: 0;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.74), rgba(255, 255, 255, 0) 300px),
+        var(--bg);
     }
 
     button,
@@ -40,195 +56,406 @@
     }
 
     button {
+      border: 0;
+    }
+
+    .shell {
+      width: min(1320px, calc(100% - 36px));
+      margin: 0 auto;
+      padding: 28px 0 58px;
+    }
+
+    .masthead {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 18px;
+      align-items: end;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    h1,
+    h2,
+    h3,
+    blockquote,
+    p {
+      margin: 0;
+    }
+
+    h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(38px, 5vw, 64px);
+      font-weight: 500;
+      line-height: 1;
+      letter-spacing: 0;
+    }
+
+    .masthead__meta {
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 720;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 9px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 38px;
+      padding: 0 13px;
       border: 1px solid var(--line);
-      border-radius: 6px;
-      background: var(--panel);
+      border-radius: 8px;
+      background: var(--surface);
       color: var(--ink);
       cursor: pointer;
-      min-height: 36px;
-      padding: 0 12px;
+      font-size: 13px;
+      font-weight: 780;
+      transition: background 0.18s ease, border-color 0.18s ease, transform 0.18s ease;
+      white-space: nowrap;
     }
 
-    button:hover {
-      border-color: #b9ad9b;
+    .button:hover {
+      border-color: var(--line-strong);
+      background: #fff8ee;
+      transform: translateY(-1px);
     }
 
-    button:disabled {
+    .button:disabled {
       cursor: not-allowed;
-      opacity: 0.55;
+      opacity: 0.54;
+      transform: none;
+    }
+
+    .button--primary {
+      border-color: transparent;
+      background: var(--ink);
+      color: #fff;
+    }
+
+    .button--primary:hover {
+      border-color: transparent;
+      background: #38322c;
+    }
+
+    .button--green {
+      border-color: transparent;
+      background: var(--green);
+      color: #fff;
+    }
+
+    .button--red {
+      color: var(--red);
+    }
+
+    .button--ghost {
+      background: transparent;
+    }
+
+    .button:focus-visible,
+    input:focus-visible,
+    select:focus-visible,
+    textarea:focus-visible {
+      outline: 3px solid rgba(47, 109, 92, 0.25);
+      outline-offset: 2px;
+    }
+
+    .sync {
+      flex-basis: 100%;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 740;
+      line-height: 1.35;
+      text-align: right;
+    }
+
+    .sync.is-saving {
+      color: var(--gold);
+    }
+
+    .sync.is-error {
+      color: var(--red);
+    }
+
+    .importer {
+      display: none;
+      margin-top: 18px;
+      padding: 15px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--surface);
+      box-shadow: var(--shadow);
+    }
+
+    .importer.is-open {
+      display: grid;
+      gap: 12px;
+    }
+
+    .importer__head {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .label-title {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 840;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
     }
 
     textarea,
     input,
     select {
       border: 1px solid var(--line);
-      border-radius: 6px;
-      background: #fff;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.78);
       color: var(--ink);
     }
 
-    .app {
-      max-width: 1180px;
-      margin: 0 auto;
-      padding: 28px 18px 48px;
+    textarea {
+      width: 100%;
+      min-height: 168px;
+      padding: 11px;
+      line-height: 1.48;
+      resize: vertical;
     }
 
-    .topbar {
-      display: flex;
-      justify-content: space-between;
-      gap: 24px;
-      align-items: flex-start;
-      margin-bottom: 20px;
+    .tabs {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin: 20px 0 16px;
     }
 
-    h1 {
-      margin: 0 0 6px;
-      font-family: Georgia, "Times New Roman", serif;
-      font-size: clamp(2rem, 4vw, 3.35rem);
-      font-weight: 500;
-      letter-spacing: 0;
-    }
-
-    .lede {
-      margin: 0;
-      max-width: 720px;
-      color: var(--muted);
-      line-height: 1.55;
-    }
-
-    .actions {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      justify-content: flex-end;
-    }
-
-    .primary {
-      background: var(--accent);
-      border-color: var(--accent);
-      color: #fff;
-    }
-
-    .importer,
-    .toolbar,
-    .stats,
-    .list {
-      background: var(--panel);
+    .tab {
+      display: grid;
+      gap: 5px;
+      min-height: 70px;
+      padding: 12px;
       border: 1px solid var(--line);
       border-radius: 8px;
+      background: rgba(255, 253, 248, 0.74);
+      color: var(--muted);
+      cursor: pointer;
+      text-align: left;
+      box-shadow: 0 10px 30px rgba(43, 35, 26, 0.05);
+    }
+
+    .tab.is-active {
+      border-color: rgba(31, 28, 24, 0.46);
+      background: var(--surface);
+      color: var(--ink);
       box-shadow: var(--shadow);
     }
 
-    .importer {
-      padding: 16px;
-      margin-bottom: 14px;
+    .tab__label {
+      font-size: 13px;
+      font-weight: 830;
     }
 
-    .importer__summary {
-      display: flex;
-      justify-content: space-between;
-      gap: 16px;
-      align-items: center;
-    }
-
-    .importer__title {
-      font-weight: 650;
-    }
-
-    .importer__body {
-      display: grid;
-      gap: 10px;
-      margin-top: 12px;
-    }
-
-    .importer textarea {
-      width: 100%;
-      min-height: 180px;
-      padding: 12px;
-      line-height: 1.45;
-      resize: vertical;
+    .tab__count {
+      font-size: 27px;
+      font-weight: 760;
+      line-height: 1;
     }
 
     .toolbar {
       display: grid;
-      grid-template-columns: minmax(220px, 1fr) 160px 180px 160px;
+      grid-template-columns: minmax(240px, 1fr) minmax(170px, 240px) minmax(150px, 190px);
       gap: 10px;
-      padding: 12px;
-      margin-bottom: 14px;
       align-items: end;
+      margin-bottom: 12px;
     }
 
     .field {
       display: grid;
-      gap: 5px;
+      gap: 6px;
       color: var(--muted);
-      font-size: 0.78rem;
-      font-weight: 650;
-      letter-spacing: 0.04em;
+      font-size: 12px;
+      font-weight: 830;
+      letter-spacing: 0.06em;
       text-transform: uppercase;
     }
 
     .field input,
     .field select {
       width: 100%;
-      min-height: 38px;
-      padding: 0 10px;
+      min-height: 40px;
+      padding: 0 11px;
       color: var(--ink);
-      font-size: 0.94rem;
-      font-weight: 450;
+      font-size: 14px;
+      font-weight: 480;
       letter-spacing: 0;
       text-transform: none;
     }
 
-    .stats {
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 1px;
-      overflow: hidden;
-      margin-bottom: 14px;
+    .workspace {
+      min-height: 420px;
     }
 
-    .stat {
-      background: var(--panel);
-      padding: 12px;
-    }
-
-    .stat__value {
-      display: block;
-      font-size: 1.45rem;
-      font-weight: 700;
-    }
-
-    .stat__label {
+    .empty {
+      padding: 34px;
+      border: 1px dashed var(--line-strong);
+      border-radius: 8px;
+      background: rgba(255, 253, 248, 0.62);
       color: var(--muted);
-      font-size: 0.78rem;
+      font-size: 15px;
+      font-weight: 640;
+      line-height: 1.5;
+      text-align: center;
+    }
+
+    .inbox-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 280px;
+      gap: 16px;
+      align-items: start;
+    }
+
+    .quote-card {
+      display: grid;
+      gap: 20px;
+      min-height: 420px;
+      padding: clamp(22px, 4vw, 42px);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--surface);
+      box-shadow: var(--shadow);
+    }
+
+    .quote-card__progress {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 820;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .quote-card__quote {
+      max-width: 900px;
+      font-family: var(--font-serif);
+      font-size: clamp(27px, 4.5vw, 54px);
+      line-height: 1.12;
+      overflow-wrap: anywhere;
+    }
+
+    .quote-card__meta,
+    .row__meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      color: var(--muted);
+      font-size: 13px;
       font-weight: 650;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      min-height: 25px;
+      padding: 0 9px;
+      border-radius: 999px;
+      background: var(--surface-soft);
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 840;
       letter-spacing: 0.04em;
       text-transform: uppercase;
     }
 
-    .status {
-      min-height: 22px;
-      margin: 8px 0 12px;
+    .pill--accepted {
+      background: var(--green-soft);
+      color: var(--green);
+    }
+
+    .pill--needs_details {
+      background: var(--gold-soft);
+      color: var(--gold);
+    }
+
+    .pill--rejected {
+      background: var(--red-soft);
+      color: var(--red);
+    }
+
+    .pill--uncategorized {
+      background: var(--blue-soft);
+      color: var(--blue);
+    }
+
+    .quote-card__actions,
+    .side-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      align-self: end;
+    }
+
+    .side-panel {
+      display: grid;
+      gap: 12px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255, 253, 248, 0.74);
+    }
+
+    .side-panel h2 {
+      font-size: 15px;
+      font-weight: 820;
+    }
+
+    .queue {
+      display: grid;
+      gap: 7px;
+      max-height: 352px;
+      overflow: auto;
+    }
+
+    .queue button {
+      padding: 9px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--surface);
       color: var(--muted);
-      font-size: 0.92rem;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 680;
+      line-height: 1.3;
+      text-align: left;
+    }
+
+    .queue button.is-active {
+      border-color: rgba(31, 28, 24, 0.48);
+      color: var(--ink);
+      box-shadow: 0 8px 24px rgba(43, 35, 26, 0.08);
     }
 
     .list {
       overflow: hidden;
-    }
-
-    .empty {
-      padding: 28px;
-      color: var(--muted);
-      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--surface);
+      box-shadow: var(--shadow);
     }
 
     .row {
       display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 12px;
-      padding: 14px;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 14px;
+      padding: 15px;
       border-top: 1px solid var(--line);
     }
 
@@ -236,72 +463,17 @@
       border-top: 0;
     }
 
-    .row.is-included {
-      background: var(--accent-soft);
-    }
-
-    .row.is-skipped {
-      background: #f1eee8;
-      opacity: 0.78;
-    }
-
-    .quote {
-      margin: 0 0 10px;
-      font-family: Georgia, "Times New Roman", serif;
-      font-size: 1.02rem;
-      line-height: 1.48;
-    }
-
-    .meta {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      align-items: center;
-      color: var(--muted);
-      font-size: 0.88rem;
-    }
-
-    .pill {
-      display: inline-flex;
-      align-items: center;
-      min-height: 24px;
-      padding: 0 8px;
-      border-radius: 999px;
-      background: var(--panel-strong);
-      color: var(--muted);
-      font-size: 0.76rem;
-      font-weight: 700;
-      letter-spacing: 0.03em;
-      text-transform: uppercase;
-    }
-
-    .pill.status-included {
-      background: var(--accent);
-      color: #fff;
-    }
-
-    .pill.status-skipped {
-      background: #d7d1c7;
-      color: #5e554b;
-    }
-
-    .pill.status-unreviewed {
-      background: #e7e1d8;
-      color: #62594f;
-    }
-
-    .pill.warn {
-      background: var(--warn-soft);
-      color: var(--warn);
-    }
-
-    .meta__details {
-      color: var(--muted);
+    .row__quote {
+      margin-bottom: 10px;
+      font-family: var(--font-serif);
+      font-size: 19px;
+      line-height: 1.42;
+      overflow-wrap: anywhere;
     }
 
     .row__actions {
       display: grid;
-      grid-template-columns: repeat(2, minmax(92px, auto));
+      grid-template-columns: repeat(2, minmax(86px, auto));
       gap: 8px;
       align-content: start;
     }
@@ -313,223 +485,262 @@
     .editor {
       display: none;
       grid-column: 1 / -1;
-      gap: 8px;
-      margin-top: 2px;
+      gap: 10px;
       padding: 12px;
       border: 1px solid var(--line);
       border-radius: 8px;
-      background: rgba(255, 255, 255, 0.6);
+      background: rgba(255, 255, 255, 0.62);
     }
 
-    .row.is-editing .editor {
+    .row.is-editing .editor,
+    .quote-card.is-editing .editor {
       display: grid;
-    }
-
-    .editor textarea {
-      min-height: 90px;
-      padding: 10px;
-      line-height: 1.45;
-      resize: vertical;
     }
 
     .editor__grid {
       display: grid;
-      grid-template-columns: 1fr 1fr auto;
-      gap: 8px;
-      align-items: end;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
     }
 
-    .checkbox {
-      display: flex;
-      gap: 8px;
-      align-items: center;
-      min-height: 38px;
-      color: var(--muted);
-      font-size: 0.9rem;
+    .editor textarea {
+      min-height: 110px;
     }
 
-    .checkbox input {
-      width: 16px;
-      height: 16px;
+    .toast {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      z-index: 20;
+      max-width: min(420px, calc(100vw - 40px));
+      padding: 12px 14px;
+      border-radius: 8px;
+      background: rgba(31, 28, 24, 0.94);
+      color: #fff;
+      box-shadow: var(--shadow);
+      opacity: 0;
+      transform: translateY(12px);
+      pointer-events: none;
+      transition: opacity 0.18s ease, transform 0.18s ease;
+      font-size: 13px;
+      font-weight: 740;
     }
 
-    @media (max-width: 820px) {
-      .topbar,
-      .importer__summary {
-        display: grid;
+    .toast.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 920px) {
+      .masthead,
+      .importer__head,
+      .inbox-layout {
+        grid-template-columns: 1fr;
       }
 
       .actions {
         justify-content: flex-start;
       }
 
-      .toolbar,
-      .stats {
-        grid-template-columns: 1fr;
+      .sync {
+        text-align: left;
       }
 
+      .tabs {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .toolbar,
       .row,
       .editor__grid {
         grid-template-columns: 1fr;
       }
 
       .row__actions {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 560px) {
+      .shell {
+        width: min(100% - 22px, 1320px);
+        padding-top: 18px;
+      }
+
+      .tabs {
+        grid-template-columns: 1fr;
+      }
+
+      .quote-card {
+        min-height: 340px;
+        padding: 18px;
       }
     }
   </style>
 </head>
 <body>
-  <main class="app">
-    <header class="topbar">
+  <main class="shell">
+    <header class="masthead">
       <div>
-        <h1>Quote Highlight Review</h1>
-        <p class="lede">Paste a Kindle clipping export, review highlights, and export selected passages into the quotes collection.</p>
+        <h1>Quote Manager</h1>
+        <p class="masthead__meta" id="collection-meta">Loading collection...</p>
       </div>
       <div class="actions">
-        <button id="toggle-import" type="button">Import</button>
-        <button id="export-quotes" class="primary" type="button">Export selected</button>
+        <button id="toggle-import" class="button" type="button">Kindle import</button>
+        <button id="export-quotes" class="button button--primary" type="button">Export collection</button>
+        <div class="sync" id="sync-status" aria-live="polite">Loading...</div>
       </div>
     </header>
 
-    <section class="importer" id="importer" hidden>
-      <div class="importer__summary">
-        <div>
-          <div class="importer__title">Paste Kindle My Clippings.txt</div>
-          <div class="lede">Only highlights are imported. Notes and bookmarks are ignored.</div>
-        </div>
-        <button id="import-highlights" class="primary" type="button">Import highlights</button>
-      </div>
-      <div class="importer__body">
-        <textarea id="import-text" spellcheck="false" placeholder="Book Title (Author)&#10;- Your Highlight at Location 123-124 | Added on Monday, January 1, 2024 8:00:00 PM&#10;&#10;Highlighted text...&#10;=========="></textarea>
+    <section class="importer" id="importer">
+      <div class="importer__head">
+        <label class="field">
+          Kindle My Clippings.txt
+          <textarea id="import-text" spellcheck="false" placeholder="Book Title (Author)&#10;- Your Highlight at Location 123-124 | Added on Monday, January 1, 2024 8:00:00 PM&#10;&#10;Highlighted text...&#10;=========="></textarea>
+        </label>
+        <button id="import-highlights" class="button button--primary" type="button">Import highlights</button>
       </div>
     </section>
 
-    <section class="stats" aria-label="Highlight review counts">
-      <div class="stat"><span class="stat__value" id="stat-total">0</span><span class="stat__label">Total</span></div>
-      <div class="stat"><span class="stat__value" id="stat-unreviewed">0</span><span class="stat__label">Unreviewed</span></div>
-      <div class="stat"><span class="stat__value" id="stat-included">0</span><span class="stat__label">Included</span></div>
-      <div class="stat"><span class="stat__value" id="stat-skipped">0</span><span class="stat__label">Skipped</span></div>
-      <div class="stat"><span class="stat__value" id="stat-review">0</span><span class="stat__label">Needs Source</span></div>
-    </section>
+    <nav class="tabs" id="tabs" aria-label="Quote categories"></nav>
 
-    <section class="toolbar" aria-label="Highlight filters">
+    <section class="toolbar" id="toolbar" aria-label="Quote filters">
       <label class="field">
         Search
-        <input id="search" type="search" placeholder="Quote, book, or author">
+        <input id="search" type="search" placeholder="Quote, author, or source">
       </label>
       <label class="field">
-        Status
-        <select id="status-filter">
-          <option value="all">All</option>
-          <option value="unreviewed">Unreviewed</option>
-          <option value="included">Included</option>
-          <option value="skipped">Skipped</option>
-          <option value="needs-review">Needs source</option>
-        </select>
-      </label>
-      <label class="field">
-        Book
-        <select id="book-filter">
-          <option value="all">All books</option>
+        Source
+        <select id="source-filter">
+          <option value="all">All sources</option>
         </select>
       </label>
       <label class="field">
         Sort
         <select id="sort">
-          <option value="book">Book order</option>
-          <option value="newest">Newest import</option>
+          <option value="order">Collection order</option>
           <option value="author">Author</option>
+          <option value="source">Source</option>
+          <option value="updated">Recently updated</option>
         </select>
       </label>
     </section>
 
-    <div class="status" id="status" aria-live="polite"></div>
-    <section class="list" id="list" aria-live="polite"></section>
+    <section class="workspace" id="workspace" aria-live="polite"></section>
   </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <script>
     (() => {
       'use strict';
 
+      const CATEGORIES = [
+        { id: 'uncategorized', label: 'Inbox' },
+        { id: 'needs_details', label: 'Needs refinement' },
+        { id: 'accepted', label: 'Accepted' },
+        { id: 'rejected', label: 'Rejected' }
+      ];
+      const CATEGORY_LABELS = Object.fromEntries(CATEGORIES.map((category) => [category.id, category.label]));
+      const STORAGE_KEYS = {
+        tab: 'quote-manager-tab',
+        index: 'quote-manager-inbox-index'
+      };
+
       const state = {
         items: {},
         order: [],
+        activeCategory: 'accepted',
+        inboxIndex: 0,
         filters: {
-          search: new URLSearchParams(window.location.search).get('q') || '',
-          status: new URLSearchParams(window.location.search).get('status') || 'all',
-          book: new URLSearchParams(window.location.search).get('book') || 'all',
-          sort: new URLSearchParams(window.location.search).get('sort') || 'book'
+          search: '',
+          source: 'all',
+          sort: 'order'
         },
         editingId: null,
-        saving: false
+        undo: null,
+        saving: false,
+        savedAt: '',
+        toastTimer: null
       };
 
       const els = {
-        importer: document.getElementById('importer'),
+        collectionMeta: document.getElementById('collection-meta'),
+        sync: document.getElementById('sync-status'),
         toggleImport: document.getElementById('toggle-import'),
+        importer: document.getElementById('importer'),
         importText: document.getElementById('import-text'),
         importHighlights: document.getElementById('import-highlights'),
         exportQuotes: document.getElementById('export-quotes'),
+        tabs: document.getElementById('tabs'),
+        toolbar: document.getElementById('toolbar'),
         search: document.getElementById('search'),
-        statusFilter: document.getElementById('status-filter'),
-        bookFilter: document.getElementById('book-filter'),
+        sourceFilter: document.getElementById('source-filter'),
         sort: document.getElementById('sort'),
-        status: document.getElementById('status'),
-        list: document.getElementById('list'),
-        total: document.getElementById('stat-total'),
-        unreviewed: document.getElementById('stat-unreviewed'),
-        included: document.getElementById('stat-included'),
-        skipped: document.getElementById('stat-skipped'),
-        review: document.getElementById('stat-review')
+        workspace: document.getElementById('workspace'),
+        toast: document.getElementById('toast')
       };
 
-      init();
+      init().catch((error) => {
+        setSync(error.message || 'Failed to load quotes.', 'error');
+      });
 
       async function init() {
-        els.search.value = state.filters.search;
-        els.statusFilter.value = state.filters.status;
-        els.sort.value = state.filters.sort;
         bindEvents();
+        state.activeCategory = categoryFromUrl() || localStorage.getItem(STORAGE_KEYS.tab) || 'accepted';
+        state.inboxIndex = Number(localStorage.getItem(STORAGE_KEYS.index) || 0);
         await loadState();
       }
 
       function bindEvents() {
         els.toggleImport.addEventListener('click', () => {
-          els.importer.hidden = !els.importer.hidden;
-          if (!els.importer.hidden) els.importText.focus();
+          els.importer.classList.toggle('is-open');
+          if (els.importer.classList.contains('is-open')) els.importText.focus();
         });
         els.importHighlights.addEventListener('click', importHighlights);
         els.exportQuotes.addEventListener('click', exportQuotes);
-        els.search.addEventListener('input', () => updateFilter('search', els.search.value));
-        els.statusFilter.addEventListener('change', () => updateFilter('status', els.statusFilter.value));
-        els.bookFilter.addEventListener('change', () => updateFilter('book', els.bookFilter.value));
-        els.sort.addEventListener('change', () => updateFilter('sort', els.sort.value));
+        els.search.addEventListener('input', () => {
+          state.filters.search = els.search.value;
+          renderWorkspace();
+        });
+        els.sourceFilter.addEventListener('change', () => {
+          state.filters.source = els.sourceFilter.value;
+          renderWorkspace();
+        });
+        els.sort.addEventListener('change', () => {
+          state.filters.sort = els.sort.value;
+          renderWorkspace();
+        });
         window.addEventListener('keydown', handleKeyboard);
       }
 
       async function loadState() {
-        setStatus('Loading highlights...');
+        setSync('Loading...');
         const response = await fetch('/api/quote-highlights/state');
         const payload = await response.json();
+        if (!response.ok) throw new Error(payload.error || 'Failed to load quotes');
         applyState(payload.state);
-        setStatus('');
+        if (!categoryItems(state.activeCategory).length) {
+          state.activeCategory = categoryItems('uncategorized').length ? 'uncategorized' : 'accepted';
+        }
+        render();
+        setSync('Loaded');
       }
 
       function applyState(next) {
         state.items = next?.items || {};
         state.order = Array.isArray(next?.order) ? next.order : Object.keys(state.items);
-        render();
+        state.savedAt = next?.updatedAt || '';
       }
 
       async function importHighlights() {
         const text = els.importText.value.trim();
         if (!text) {
-          setStatus('Paste a Kindle clipping export first.');
+          showToast('Paste Kindle clipping text first.');
           return;
         }
         setBusy(true);
-        setStatus('Importing highlights...');
+        setSync('Importing...', 'saving');
         try {
           const response = await fetch('/api/quote-highlights/import', {
             method: 'POST',
@@ -540,139 +751,262 @@
           if (!response.ok || !payload.ok) throw new Error(payload.error || 'Import failed');
           applyState(payload.state);
           els.importText.value = '';
-          els.importer.hidden = true;
-          setStatus(`Imported ${payload.imported} highlights. Ignored ${payload.skipped} malformed entries.`);
+          els.importer.classList.remove('is-open');
+          setCategory('uncategorized');
+          state.inboxIndex = 0;
+          render();
+          setSync('Saved', 'saved');
+          showToast(`Imported ${payload.imported} highlights. Added ${payload.added}.`);
         } catch (error) {
-          setStatus(error.message || 'Import failed.');
+          setSync(error.message || 'Import failed.', 'error');
         } finally {
           setBusy(false);
         }
       }
 
       async function exportQuotes() {
-        await saveState();
         setBusy(true);
-        setStatus('Exporting selected quotes...');
+        setSync('Saving...', 'saving');
         try {
+          await saveState();
           const response = await fetch('/api/quote-highlights/export', { method: 'POST' });
           const payload = await response.json();
           if (!response.ok || !payload.ok) throw new Error(payload.error || 'Export failed');
-          setStatus(`Exported ${payload.confirmedCount} confirmed quotes and ${payload.needsReviewCount} needing attribution review.`);
+          setSync('Exported', 'saved');
+          showToast(`Exported ${payload.acceptedCount} accepted and ${payload.needsDetailsCount} needing refinement.`);
         } catch (error) {
-          setStatus(error.message || 'Export failed.');
+          setSync(error.message || 'Export failed.', 'error');
         } finally {
           setBusy(false);
         }
       }
 
       async function saveState() {
-        const body = {
-          state: {
-            version: 1,
-            items: state.items,
-            order: state.order
-          }
-        };
+        state.saving = true;
+        setSync('Saving...', 'saving');
         const response = await fetch('/api/quote-highlights/state', {
           method: 'PUT',
           headers: { 'content-type': 'application/json' },
-          body: JSON.stringify(body)
+          body: JSON.stringify({
+            state: {
+              version: 2,
+              items: state.items,
+              order: state.order,
+              updatedAt: state.savedAt
+            }
+          })
         });
         const payload = await response.json();
         if (!response.ok || !payload.ok) throw new Error(payload.error || 'Save failed');
         applyState(payload.state);
+        state.saving = false;
+        setSync('Saved', 'saved');
         return payload.state;
       }
 
       function render() {
-        renderStats();
-        renderBookFilter();
-        renderList();
+        renderMeta();
+        renderTabs();
+        renderSourceFilter();
+        renderWorkspace();
+        syncInputs();
         updateUrl();
       }
 
-      function renderStats() {
-        const items = allItems();
-        els.total.textContent = items.length;
-        els.unreviewed.textContent = items.filter((item) => item.status === 'unreviewed').length;
-        els.included.textContent = items.filter((item) => item.status === 'included').length;
-        els.skipped.textContent = items.filter((item) => item.status === 'skipped').length;
-        els.review.textContent = items.filter(needsAttribution).length;
+      function renderMeta() {
+        const counts = countsByCategory();
+        const total = state.order.length;
+        els.collectionMeta.textContent = `${total} total / ${counts.accepted} accepted / ${counts.needs_details} need refinement / ${counts.uncategorized} in inbox`;
       }
 
-      function renderBookFilter() {
-        const current = els.bookFilter.value || state.filters.book;
-        const books = Array.from(new Set(allItems().map((item) => item.bookTitle).filter(Boolean))).sort((a, b) => a.localeCompare(b));
-        els.bookFilter.innerHTML = '<option value="all">All books</option>';
-        for (const book of books) {
-          const option = document.createElement('option');
-          option.value = book;
-          option.textContent = book;
-          els.bookFilter.append(option);
+      function renderTabs() {
+        const counts = countsByCategory();
+        els.tabs.innerHTML = '';
+        for (const category of CATEGORIES) {
+          const button = document.createElement('button');
+          button.type = 'button';
+          button.className = `tab${category.id === state.activeCategory ? ' is-active' : ''}`;
+          button.dataset.category = category.id;
+          button.innerHTML = `<span class="tab__label">${escapeHtml(category.label)}</span><span class="tab__count">${counts[category.id] || 0}</span>`;
+          button.addEventListener('click', () => setCategory(category.id));
+          els.tabs.append(button);
         }
-        els.bookFilter.value = books.includes(current) ? current : 'all';
-        state.filters.book = els.bookFilter.value;
+      }
+
+      function renderSourceFilter() {
+        const current = state.filters.source;
+        const sources = Array.from(new Set(categoryItems(state.activeCategory)
+          .map((item) => sourceName(item))
+          .filter(Boolean)))
+          .sort((a, b) => a.localeCompare(b));
+
+        els.sourceFilter.innerHTML = '<option value="all">All sources</option>';
+        for (const source of sources) {
+          const option = document.createElement('option');
+          option.value = source;
+          option.textContent = source;
+          els.sourceFilter.append(option);
+        }
+        state.filters.source = current === 'all' || sources.includes(current) ? current : 'all';
+      }
+
+      function renderWorkspace() {
+        renderMeta();
+        renderTabs();
+        renderSourceFilter();
+        updateUrl();
+        localStorage.setItem(STORAGE_KEYS.tab, state.activeCategory);
+        localStorage.setItem(STORAGE_KEYS.index, String(state.inboxIndex));
+
+        if (state.activeCategory === 'uncategorized') {
+          els.toolbar.hidden = true;
+          renderInbox();
+          return;
+        }
+
+        els.toolbar.hidden = false;
+        renderList();
+      }
+
+      function renderInbox() {
+        const items = categoryItems('uncategorized');
+        els.workspace.innerHTML = '';
+
+        if (!items.length) {
+          els.workspace.innerHTML = '<div class="empty">Inbox is empty.</div>';
+          return;
+        }
+
+        state.inboxIndex = clamp(state.inboxIndex, 0, items.length - 1);
+        const item = items[state.inboxIndex];
+        const layout = document.createElement('div');
+        layout.className = 'inbox-layout';
+
+        const card = document.createElement('article');
+        card.className = `quote-card${state.editingId === item.id ? ' is-editing' : ''}`;
+        card.append(
+          el('div', 'quote-card__progress', `Inbox ${state.inboxIndex + 1} of ${items.length}`),
+          el('blockquote', 'quote-card__quote', item.quote || item.originalQuote || ''),
+          renderMetaLine(item),
+          renderInboxActions(item),
+          renderEditor(item)
+        );
+
+        const side = document.createElement('aside');
+        side.className = 'side-panel';
+        side.append(el('h2', '', 'Queue'));
+        const queue = document.createElement('div');
+        queue.className = 'queue';
+        items.slice(0, 80).forEach((queueItem, index) => {
+          const button = document.createElement('button');
+          button.type = 'button';
+          button.className = index === state.inboxIndex ? 'is-active' : '';
+          button.textContent = truncate(queueItem.quote || queueItem.originalQuote || '', 118);
+          button.addEventListener('click', () => {
+            state.inboxIndex = index;
+            state.editingId = null;
+            renderWorkspace();
+          });
+          queue.append(button);
+        });
+        side.append(queue);
+
+        layout.append(card, side);
+        els.workspace.append(layout);
+      }
+
+      function renderInboxActions(item) {
+        const wrap = document.createElement('div');
+        wrap.className = 'quote-card__actions';
+        wrap.append(
+          actionButton('Keep', () => moveItem(item.id, 'needs_details'), 'button button--green', 'Move to Needs refinement'),
+          actionButton('Accept', () => moveItem(item.id, 'accepted'), 'button', 'Accept'),
+          actionButton('Reject', () => moveItem(item.id, 'rejected'), 'button button--red', 'Reject'),
+          actionButton('Edit', () => toggleEdit(item.id), 'button button--ghost', 'Edit')
+        );
+        if (state.undo) {
+          wrap.append(actionButton('Undo', undoLastMove, 'button', 'Undo last move'));
+        }
+        return wrap;
       }
 
       function renderList() {
-        const items = filteredItems();
-        els.list.innerHTML = '';
+        const items = filteredListItems();
+        els.workspace.innerHTML = '';
 
-        if (!state.order.length) {
-          els.list.innerHTML = '<div class="empty">Import Kindle highlights to start reviewing.</div>';
+        if (!categoryItems(state.activeCategory).length) {
+          els.workspace.innerHTML = `<div class="empty">${escapeHtml(CATEGORY_LABELS[state.activeCategory])} is empty.</div>`;
           return;
         }
 
         if (!items.length) {
-          els.list.innerHTML = '<div class="empty">No highlights match these filters.</div>';
+          els.workspace.innerHTML = '<div class="empty">No quotes match these filters.</div>';
           return;
         }
 
-        const fragment = document.createDocumentFragment();
+        const list = document.createElement('div');
+        list.className = 'list';
         for (const item of items) {
-          fragment.append(renderRow(item));
+          list.append(renderRow(item));
         }
-        els.list.append(fragment);
+        els.workspace.append(list);
       }
 
       function renderRow(item) {
         const row = document.createElement('article');
-        row.className = `row is-${item.status || 'unreviewed'}`;
-        if (state.editingId === item.id) row.classList.add('is-editing');
-        row.dataset.id = item.id;
+        row.className = `row${state.editingId === item.id ? ' is-editing' : ''}`;
 
         const main = document.createElement('div');
-        const quote = document.createElement('p');
-        quote.className = 'quote';
-        quote.textContent = item.quote || item.originalQuote || '';
-        const meta = document.createElement('div');
-        meta.className = 'meta';
-        const status = item.status || 'unreviewed';
-        meta.append(pill(status, `status-${status}`));
-        if (needsAttribution(item)) meta.append(pill('needs source', 'warn'));
-        const details = document.createElement('span');
-        details.className = 'meta__details';
-        details.textContent = [
-          item.bookTitle || 'Unknown book',
-          item.author ? `by ${item.author}` : 'unknown author',
-          item.location ? `Location ${item.location}` : ''
-        ].filter(Boolean).join(' · ');
-        meta.append(details);
-        main.append(quote, meta);
+        main.append(
+          el('p', 'row__quote', item.quote || item.originalQuote || ''),
+          renderMetaLine(item)
+        );
 
         const actions = document.createElement('div');
         actions.className = 'row__actions';
-        actions.append(
-          actionButton(item.status === 'included' ? 'Included' : 'Include', () => updateItem(item.id, { status: 'included' }), item.status === 'included'),
-          actionButton('Skip', () => updateItem(item.id, { status: 'skipped' }), item.status === 'skipped'),
-          actionButton('Edit', () => {
-            state.editingId = state.editingId === item.id ? null : item.id;
-            renderList();
-          }, false, 'wide')
-        );
+        for (const action of rowActions(item)) {
+          actions.append(actionButton(action.label, action.run, action.className || 'button', action.title || action.label));
+        }
+        actions.append(actionButton('Edit', () => toggleEdit(item.id), 'button wide', 'Edit'));
 
         row.append(main, actions, renderEditor(item));
         return row;
+      }
+
+      function rowActions(item) {
+        if (item.status === 'accepted') {
+          return [
+            { label: 'Refine', run: () => moveItem(item.id, 'needs_details'), className: 'button' },
+            { label: 'Reject', run: () => moveItem(item.id, 'rejected'), className: 'button button--red' }
+          ];
+        }
+        if (item.status === 'needs_details') {
+          return [
+            { label: 'Accept', run: () => moveItem(item.id, 'accepted'), className: 'button button--green' },
+            { label: 'Reject', run: () => moveItem(item.id, 'rejected'), className: 'button button--red' }
+          ];
+        }
+        if (item.status === 'rejected') {
+          return [
+            { label: 'Inbox', run: () => moveItem(item.id, 'uncategorized'), className: 'button' },
+            { label: 'Refine', run: () => moveItem(item.id, 'needs_details'), className: 'button button--green' }
+          ];
+        }
+        return [
+          { label: 'Keep', run: () => moveItem(item.id, 'needs_details'), className: 'button button--green' },
+          { label: 'Reject', run: () => moveItem(item.id, 'rejected'), className: 'button button--red' }
+        ];
+      }
+
+      function renderMetaLine(item) {
+        const meta = document.createElement('div');
+        meta.className = state.activeCategory === 'uncategorized' ? 'quote-card__meta' : 'row__meta';
+        meta.append(pill(CATEGORY_LABELS[item.status] || item.status, item.status));
+        if (item.author) meta.append(document.createTextNode(item.author));
+        if (sourceName(item)) meta.append(document.createTextNode(sourceName(item)));
+        const locator = [item.page ? `Page ${item.page}` : '', item.location ? `Location ${item.location}` : ''].filter(Boolean).join(' / ');
+        if (locator) meta.append(document.createTextNode(locator));
+        return meta;
       }
 
       function renderEditor(item) {
@@ -689,39 +1023,72 @@
 
         const grid = document.createElement('div');
         grid.className = 'editor__grid';
+        grid.append(
+          textField('Author', item.author || '', (value) => updateItem(item.id, { author: value })),
+          textField('Source', item.sourceLabel || item.bookTitle || '', (value) => updateItem(item.id, { sourceLabel: value, bookTitle: item.bookTitle || value })),
+          textField('Notes', item.notes || '', (value) => updateItem(item.id, { notes: value }))
+        );
 
-        const authorLabel = document.createElement('label');
-        authorLabel.className = 'field';
-        authorLabel.textContent = 'Author';
-        const authorInput = document.createElement('input');
-        authorInput.value = item.author || '';
-        authorInput.addEventListener('change', () => updateItem(item.id, { author: authorInput.value, attributionConfirmed: false }));
-        authorLabel.append(authorInput);
-
-        const bookLabel = document.createElement('label');
-        bookLabel.className = 'field';
-        bookLabel.textContent = 'Book';
-        const bookInput = document.createElement('input');
-        bookInput.value = item.bookTitle || '';
-        bookInput.addEventListener('change', () => updateItem(item.id, { bookTitle: bookInput.value }));
-        bookLabel.append(bookInput);
-
-        const confirm = document.createElement('label');
-        confirm.className = 'checkbox';
-        const checkbox = document.createElement('input');
-        checkbox.type = 'checkbox';
-        checkbox.checked = Boolean(item.attributionConfirmed);
-        checkbox.addEventListener('change', () => updateItem(item.id, { attributionConfirmed: checkbox.checked }));
-        confirm.append(checkbox, document.createTextNode('Source confirmed'));
-
-        grid.append(authorLabel, bookLabel, confirm);
         editor.append(quoteLabel, grid);
         return editor;
       }
 
-      function updateFilter(key, value) {
-        state.filters[key] = value;
+      function textField(label, value, onChange) {
+        const field = document.createElement('label');
+        field.className = 'field';
+        field.textContent = label;
+        const input = document.createElement('input');
+        input.value = value;
+        input.addEventListener('change', () => onChange(input.value));
+        field.append(input);
+        return field;
+      }
+
+      function setCategory(category) {
+        state.activeCategory = category;
+        state.editingId = null;
+        state.filters.search = '';
+        state.filters.source = 'all';
+        state.filters.sort = 'order';
+        if (category === 'uncategorized') {
+          state.inboxIndex = clamp(state.inboxIndex, 0, Math.max(0, categoryItems('uncategorized').length - 1));
+        }
         render();
+      }
+
+      function moveItem(id, nextStatus) {
+        const existing = state.items[id];
+        if (!existing || existing.status === nextStatus) return;
+        state.undo = {
+          id,
+          previous: { ...existing },
+          from: existing.status,
+          to: nextStatus
+        };
+        state.items[id] = {
+          ...existing,
+          status: nextStatus,
+          updatedAt: new Date().toISOString()
+        };
+        state.editingId = null;
+        if (existing.status === 'uncategorized') {
+          const remaining = categoryItems('uncategorized');
+          state.inboxIndex = clamp(state.inboxIndex, 0, Math.max(0, remaining.length - 1));
+        }
+        render();
+        saveState().catch((error) => setSync(error.message || 'Save failed.', 'error'));
+        showToast(`${CATEGORY_LABELS[nextStatus]}: ${truncate(existing.quote, 72)}`);
+      }
+
+      function undoLastMove() {
+        if (!state.undo) return;
+        const { id, previous } = state.undo;
+        state.items[id] = previous;
+        state.activeCategory = previous.status;
+        state.undo = null;
+        render();
+        saveState().catch((error) => setSync(error.message || 'Save failed.', 'error'));
+        showToast('Restored previous category.');
       }
 
       function updateItem(id, patch) {
@@ -733,54 +1100,67 @@
           updatedAt: new Date().toISOString()
         };
         render();
-        saveState().catch((error) => setStatus(error.message || 'Save failed.'));
+        saveState().catch((error) => setSync(error.message || 'Save failed.', 'error'));
       }
 
-      function filteredItems() {
+      function toggleEdit(id) {
+        state.editingId = state.editingId === id ? null : id;
+        renderWorkspace();
+      }
+
+      function filteredListItems() {
         const query = state.filters.search.trim().toLowerCase();
-        return sortItems(allItems().filter((item) => {
-          if (state.filters.status === 'needs-review' && !needsAttribution(item)) return false;
-          if (!['all', 'needs-review'].includes(state.filters.status) && item.status !== state.filters.status) return false;
-          if (state.filters.book !== 'all' && item.bookTitle !== state.filters.book) return false;
+        const source = state.filters.source;
+        const items = categoryItems(state.activeCategory).filter((item) => {
+          if (source !== 'all' && sourceName(item) !== source) return false;
           if (!query) return true;
-          return [item.quote, item.bookTitle, item.author, item.location].join(' ').toLowerCase().includes(query);
-        }));
+          return [
+            item.quote,
+            item.originalQuote,
+            item.author,
+            item.sourceLabel,
+            item.bookTitle,
+            item.notes
+          ].join(' ').toLowerCase().includes(query);
+        });
+        return sortItems(items);
       }
 
       function sortItems(items) {
-        if (state.filters.sort === 'newest') {
-          return [...items].sort((a, b) => String(b.firstImportedAt || '').localeCompare(String(a.firstImportedAt || '')));
-        }
         if (state.filters.sort === 'author') {
-          return [...items].sort((a, b) => [a.author || '', a.bookTitle || ''].join('|').localeCompare([b.author || '', b.bookTitle || ''].join('|')));
+          return [...items].sort((a, b) => [a.author || '', sourceName(a), a.quote || ''].join('|').localeCompare([b.author || '', sourceName(b), b.quote || ''].join('|')));
+        }
+        if (state.filters.sort === 'source') {
+          return [...items].sort((a, b) => [sourceName(a), a.author || '', a.quote || ''].join('|').localeCompare([sourceName(b), b.author || '', b.quote || ''].join('|')));
+        }
+        if (state.filters.sort === 'updated') {
+          return [...items].sort((a, b) => String(b.updatedAt || b.firstImportedAt || '').localeCompare(String(a.updatedAt || a.firstImportedAt || '')));
         }
         const order = new Map(state.order.map((id, index) => [id, index]));
         return [...items].sort((a, b) => (order.get(a.id) || 0) - (order.get(b.id) || 0));
       }
 
-      function allItems() {
-        return state.order.map((id) => state.items[id]).filter(Boolean);
+      function categoryItems(category) {
+        return state.order
+          .map((id) => state.items[id])
+          .filter((item) => item && item.status === category);
       }
 
-      function needsAttribution(item) {
-        return item.status === 'included' && (!item.author || !item.attributionConfirmed);
+      function countsByCategory() {
+        return CATEGORIES.reduce((counts, category) => {
+          counts[category.id] = categoryItems(category.id).length;
+          return counts;
+        }, {});
       }
 
-      function actionButton(label, handler, active = false, className = '') {
-        const button = document.createElement('button');
-        button.type = 'button';
-        button.textContent = label;
-        button.className = className;
-        if (active) button.classList.add('primary');
-        button.addEventListener('click', handler);
-        return button;
+      function sourceName(item) {
+        return item.sourceLabel || item.bookTitle || '';
       }
 
-      function pill(label, className) {
-        const span = document.createElement('span');
-        span.className = `pill ${className || ''}`.trim();
-        span.textContent = label;
-        return span;
+      function syncInputs() {
+        els.search.value = state.filters.search;
+        els.sourceFilter.value = state.filters.source;
+        els.sort.value = state.filters.sort;
       }
 
       function setBusy(value) {
@@ -789,24 +1169,115 @@
         els.exportQuotes.disabled = value;
       }
 
-      function setStatus(message) {
-        els.status.textContent = message || '';
+      function setSync(message, mode = '') {
+        els.sync.className = `sync${mode === 'saving' ? ' is-saving' : ''}${mode === 'error' ? ' is-error' : ''}`;
+        els.sync.textContent = message || '';
+      }
+
+      function showToast(message) {
+        clearTimeout(state.toastTimer);
+        els.toast.textContent = message;
+        els.toast.classList.add('is-visible');
+        state.toastTimer = setTimeout(() => els.toast.classList.remove('is-visible'), 3200);
       }
 
       function updateUrl() {
         const params = new URLSearchParams();
-        if (state.filters.search) params.set('q', state.filters.search);
-        if (state.filters.status !== 'all') params.set('status', state.filters.status);
-        if (state.filters.book !== 'all') params.set('book', state.filters.book);
-        if (state.filters.sort !== 'book') params.set('sort', state.filters.sort);
-        const next = `${window.location.pathname}${params.toString() ? `?${params}` : ''}`;
+        params.set('category', state.activeCategory);
+        const next = `${window.location.pathname}?${params.toString()}`;
         window.history.replaceState(null, '', next);
       }
 
+      function categoryFromUrl() {
+        const value = new URLSearchParams(window.location.search).get('category');
+        return CATEGORIES.some((category) => category.id === value) ? value : '';
+      }
+
       function handleKeyboard(event) {
-        if (event.key !== '/' || event.target.matches('input, textarea, select')) return;
-        event.preventDefault();
-        els.search.focus();
+        if (event.target.matches('input, textarea, select')) return;
+        const key = event.key.toLowerCase();
+        if (key === '/') {
+          event.preventDefault();
+          if (state.activeCategory !== 'uncategorized') els.search.focus();
+          return;
+        }
+        if (key === 'u') {
+          event.preventDefault();
+          undoLastMove();
+          return;
+        }
+        if (state.activeCategory !== 'uncategorized') return;
+        const items = categoryItems('uncategorized');
+        const item = items[state.inboxIndex];
+        if (!item) return;
+        if (key === 'arrowright' || key === 'j') {
+          event.preventDefault();
+          state.inboxIndex = clamp(state.inboxIndex + 1, 0, items.length - 1);
+          renderWorkspace();
+        }
+        if (key === 'arrowleft' || key === 'k') {
+          event.preventDefault();
+          state.inboxIndex = clamp(state.inboxIndex - 1, 0, items.length - 1);
+          renderWorkspace();
+        }
+        if (key === 'n') {
+          event.preventDefault();
+          moveItem(item.id, 'needs_details');
+        }
+        if (key === 'a') {
+          event.preventDefault();
+          moveItem(item.id, 'accepted');
+        }
+        if (key === 'r') {
+          event.preventDefault();
+          moveItem(item.id, 'rejected');
+        }
+        if (key === 'e') {
+          event.preventDefault();
+          toggleEdit(item.id);
+        }
+      }
+
+      function actionButton(label, handler, className = 'button', title = '') {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = className;
+        button.textContent = label;
+        if (title) button.title = title;
+        button.addEventListener('click', handler);
+        return button;
+      }
+
+      function pill(label, category) {
+        const span = document.createElement('span');
+        span.className = `pill pill--${category || ''}`;
+        span.textContent = label;
+        return span;
+      }
+
+      function el(tag, className, text) {
+        const node = document.createElement(tag);
+        if (className) node.className = className;
+        node.textContent = text;
+        return node;
+      }
+
+      function truncate(value, length) {
+        const text = String(value || '').trim();
+        return text.length <= length ? text : `${text.slice(0, Math.max(0, length - 1))}...`;
+      }
+
+      function clamp(value, min, max) {
+        return Math.min(Math.max(Number.isFinite(value) ? value : min, min), max);
+      }
+
+      function escapeHtml(value) {
+        return String(value || '')
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#39;');
       }
     })();
   </script>

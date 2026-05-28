@@ -6,23 +6,22 @@ import { mkdir, readFile, rename, stat, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import {
+  buildQuotesCollectionMarkdown,
   mergeImportedHighlights,
   normalizeState,
   parseKindleClippings,
+  parseQuotesMarkdown,
   serializeQuotesMarkdown
 } from './lib/kindle-highlights.mjs';
 
 const DEFAULT_HOST = '127.0.0.1';
 const DEFAULT_PORT = 8767;
-const MAX_BODY_BYTES = 12 * 1024 * 1024;
+const MAX_BODY_BYTES = 24 * 1024 * 1024;
 
-const STATE_FILE = 'notes/kindle-highlights-state.json';
+const STATE_FILE = 'notes/quote-review-state.json';
+const LEGACY_STATE_FILE = 'notes/kindle-highlights-state.json';
 const QUOTES_FILE = 'notes/quotes-collection.md';
 const REVIEW_PAGE = '/notes/quote-highlight-review.html';
-const SELECTED_START = '<!-- kindle-highlights:selected:start -->';
-const SELECTED_END = '<!-- kindle-highlights:selected:end -->';
-const REVIEW_START = '<!-- kindle-highlights:review:start -->';
-const REVIEW_END = '<!-- kindle-highlights:review:end -->';
 
 const MIME_TYPES = new Map([
   ['.css', 'text/css; charset=utf-8'],
@@ -42,11 +41,13 @@ const MIME_TYPES = new Map([
 export function createQuoteHighlightReviewServer({
   root = process.cwd(),
   stateFile = STATE_FILE,
+  legacyStateFile = LEGACY_STATE_FILE,
   quotesFile = QUOTES_FILE
 } = {}) {
   const repoRoot = path.resolve(root);
   const files = {
     state: path.join(repoRoot, stateFile),
+    legacyState: path.join(repoRoot, legacyStateFile),
     quotes: path.join(repoRoot, quotesFile)
   };
 
@@ -90,7 +91,7 @@ export function createQuoteHighlightReviewServer({
 
 async function handleStateApi(request, response, files) {
   if (request.method === 'GET') {
-    const state = normalizeState(await readJsonIfPresent(files.state));
+    const state = await loadState(files);
     sendJson(response, 200, { state, files });
     return;
   }
@@ -116,13 +117,15 @@ async function handleImportApi(request, response, files) {
   const payload = await readJsonBody(request);
   const parsed = parseKindleClippings(payload.text || '');
   const now = new Date().toISOString();
-  const previous = normalizeState(await readJsonIfPresent(files.state));
+  const previous = await loadState(files);
+  const beforeCount = previous.order.length;
   const next = mergeImportedHighlights(previous, parsed.items, now);
   await writeJsonAtomic(files.state, next);
 
   sendJson(response, 200, {
     ok: true,
     imported: parsed.items.length,
+    added: Math.max(0, next.order.length - beforeCount),
     skipped: parsed.skipped.length,
     state: next,
     files
@@ -135,59 +138,35 @@ async function handleExportApi(request, response, files) {
     return;
   }
 
-  const state = normalizeState(await readJsonIfPresent(files.state));
+  const state = await loadState(files);
   const markdown = serializeQuotesMarkdown(state);
-  const source = await readTextIfPresent(files.quotes, '# Quotes Collection\n');
-  const next = updateQuotesCollection(source, markdown);
-  await writeTextAtomic(files.quotes, next);
+  await writeTextAtomic(files.quotes, buildQuotesCollectionMarkdown(state));
 
   sendJson(response, 200, {
     ok: true,
-    confirmedCount: countQuoteBlocks(markdown.confirmed),
-    needsReviewCount: countQuoteBlocks(markdown.needsReview),
+    acceptedCount: markdown.acceptedCount,
+    needsDetailsCount: markdown.needsDetailsCount,
     files
   });
 }
 
-function updateQuotesCollection(source, markdown) {
-  let next = replaceGeneratedSection(
-    source,
-    SELECTED_START,
-    SELECTED_END,
-    [
-      '## Kindle Highlight Selections',
-      '',
-      SELECTED_START,
-      markdown.confirmed || '_No confirmed Kindle highlights selected yet._',
-      SELECTED_END
-    ].join('\n\n')
-  );
-
-  next = replaceGeneratedSection(
-    next,
-    REVIEW_START,
-    REVIEW_END,
-    [
-      '## Kindle Highlights Needing Attribution Review',
-      '',
-      REVIEW_START,
-      markdown.needsReview || '_No selected Kindle highlights need attribution review._',
-      REVIEW_END
-    ].join('\n\n')
-  );
-
-  return `${next.trim()}\n`;
-}
-
-function replaceGeneratedSection(source, startMarker, endMarker, replacement) {
-  const start = source.indexOf(startMarker);
-  const end = source.indexOf(endMarker);
-  if (start !== -1 && end !== -1 && end > start) {
-    const beforeHeading = source.lastIndexOf('\n## ', start);
-    const replaceStart = beforeHeading === -1 ? start : beforeHeading + 1;
-    return `${source.slice(0, replaceStart).trimEnd()}\n\n${replacement}\n\n${source.slice(end + endMarker.length).trimStart()}`;
+async function loadState(files, { seedIfMissing = true } = {}) {
+  const stored = await readJsonIfPresent(files.state);
+  if (stored) {
+    const normalized = normalizeState(stored);
+    if (normalized.order.length || !seedIfMissing) return normalized;
   }
-  return `${source.trimEnd()}\n\n${replacement}\n`;
+
+  const legacy = await readJsonIfPresent(files.legacyState);
+  if (legacy) {
+    const normalized = normalizeState(legacy);
+    if (normalized.order.length || !seedIfMissing) return normalized;
+  }
+
+  if (!seedIfMissing) return normalizeState(null);
+
+  const quotes = await readTextIfPresent(files.quotes, '');
+  return normalizeState(null, { seedItems: parseQuotesMarkdown(quotes) });
 }
 
 async function serveStatic(request, response, repoRoot, requestPath) {
@@ -275,11 +254,6 @@ async function writeTextAtomic(filePath, text) {
   await rename(tempPath, filePath);
 }
 
-function countQuoteBlocks(markdown) {
-  if (!markdown) return 0;
-  return markdown.split(/\n\n(?=> )/).filter(Boolean).length;
-}
-
 function sendJson(response, statusCode, payload) {
   response.writeHead(statusCode, {
     'Content-Type': 'application/json; charset=utf-8',
@@ -309,8 +283,9 @@ if (import.meta.url === pathToFileURL(fileURLToPath(import.meta.url)).href && pr
   const options = parseArgs(process.argv.slice(2));
   const server = createQuoteHighlightReviewServer({ root: options.root });
   server.listen(options.port, options.host, () => {
-    console.log(`Quote highlight review server: http://${options.host}:${options.port}${REVIEW_PAGE}`);
+    console.log(`Quote review server: http://${options.host}:${options.port}${REVIEW_PAGE}`);
     console.log(`State file: ${path.resolve(options.root, STATE_FILE)}`);
+    console.log(`Legacy state file: ${path.resolve(options.root, LEGACY_STATE_FILE)}`);
     console.log(`Quotes file: ${path.resolve(options.root, QUOTES_FILE)}`);
   });
 }

@@ -105,7 +105,7 @@ Author: Eckhart Tolle
 
 Author: Richard Powers
 
-## Needs Attribution Review
+## Needs Additional Details
 
 > Computer science is no more about computers than astronomy is about telescopes.
 
