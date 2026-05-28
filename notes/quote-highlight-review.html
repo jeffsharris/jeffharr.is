@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quote Highlight Review</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f7f4ef;
+      --panel: #fffdf8;
+      --panel-strong: #f0ebe2;
+      --ink: #1d1a16;
+      --muted: #766c5f;
+      --line: #ddd4c6;
+      --accent: #1f6f68;
+      --accent-soft: #d7ebe7;
+      --warn: #9a5a16;
+      --warn-soft: #f3dfbf;
+      --danger: #9e3c32;
+      --shadow: 0 12px 36px rgba(45, 35, 24, 0.12);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+      font: inherit;
+    }
+
+    button {
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: var(--panel);
+      color: var(--ink);
+      cursor: pointer;
+      min-height: 36px;
+      padding: 0 12px;
+    }
+
+    button:hover {
+      border-color: #b9ad9b;
+    }
+
+    button:disabled {
+      cursor: not-allowed;
+      opacity: 0.55;
+    }
+
+    textarea,
+    input,
+    select {
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: #fff;
+      color: var(--ink);
+    }
+
+    .app {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 28px 18px 48px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      gap: 24px;
+      align-items: flex-start;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      margin: 0 0 6px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(2rem, 4vw, 3.35rem);
+      font-weight: 500;
+      letter-spacing: 0;
+    }
+
+    .lede {
+      margin: 0;
+      max-width: 720px;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .primary {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+    }
+
+    .importer,
+    .toolbar,
+    .stats,
+    .list {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+    }
+
+    .importer {
+      padding: 16px;
+      margin-bottom: 14px;
+    }
+
+    .importer__summary {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .importer__title {
+      font-weight: 650;
+    }
+
+    .importer__body {
+      display: grid;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .importer textarea {
+      width: 100%;
+      min-height: 180px;
+      padding: 12px;
+      line-height: 1.45;
+      resize: vertical;
+    }
+
+    .toolbar {
+      display: grid;
+      grid-template-columns: minmax(220px, 1fr) 160px 180px 160px;
+      gap: 10px;
+      padding: 12px;
+      margin-bottom: 14px;
+      align-items: end;
+    }
+
+    .field {
+      display: grid;
+      gap: 5px;
+      color: var(--muted);
+      font-size: 0.78rem;
+      font-weight: 650;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .field input,
+    .field select {
+      width: 100%;
+      min-height: 38px;
+      padding: 0 10px;
+      color: var(--ink);
+      font-size: 0.94rem;
+      font-weight: 450;
+      letter-spacing: 0;
+      text-transform: none;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 1px;
+      overflow: hidden;
+      margin-bottom: 14px;
+    }
+
+    .stat {
+      background: var(--panel);
+      padding: 12px;
+    }
+
+    .stat__value {
+      display: block;
+      font-size: 1.45rem;
+      font-weight: 700;
+    }
+
+    .stat__label {
+      color: var(--muted);
+      font-size: 0.78rem;
+      font-weight: 650;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .status {
+      min-height: 22px;
+      margin: 8px 0 12px;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .list {
+      overflow: hidden;
+    }
+
+    .empty {
+      padding: 28px;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      padding: 14px;
+      border-top: 1px solid var(--line);
+    }
+
+    .row:first-child {
+      border-top: 0;
+    }
+
+    .row.is-included {
+      background: var(--accent-soft);
+    }
+
+    .row.is-skipped {
+      background: #f1eee8;
+      opacity: 0.78;
+    }
+
+    .quote {
+      margin: 0 0 10px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 1.02rem;
+      line-height: 1.48;
+    }
+
+    .meta {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      min-height: 24px;
+      padding: 0 8px;
+      border-radius: 999px;
+      background: var(--panel-strong);
+      color: var(--muted);
+      font-size: 0.76rem;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+    }
+
+    .pill.status-included {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .pill.status-skipped {
+      background: #d7d1c7;
+      color: #5e554b;
+    }
+
+    .pill.status-unreviewed {
+      background: #e7e1d8;
+      color: #62594f;
+    }
+
+    .pill.warn {
+      background: var(--warn-soft);
+      color: var(--warn);
+    }
+
+    .meta__details {
+      color: var(--muted);
+    }
+
+    .row__actions {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(92px, auto));
+      gap: 8px;
+      align-content: start;
+    }
+
+    .row__actions .wide {
+      grid-column: 1 / -1;
+    }
+
+    .editor {
+      display: none;
+      grid-column: 1 / -1;
+      gap: 8px;
+      margin-top: 2px;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.6);
+    }
+
+    .row.is-editing .editor {
+      display: grid;
+    }
+
+    .editor textarea {
+      min-height: 90px;
+      padding: 10px;
+      line-height: 1.45;
+      resize: vertical;
+    }
+
+    .editor__grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr auto;
+      gap: 8px;
+      align-items: end;
+    }
+
+    .checkbox {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      min-height: 38px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .checkbox input {
+      width: 16px;
+      height: 16px;
+    }
+
+    @media (max-width: 820px) {
+      .topbar,
+      .importer__summary {
+        display: grid;
+      }
+
+      .actions {
+        justify-content: flex-start;
+      }
+
+      .toolbar,
+      .stats {
+        grid-template-columns: 1fr;
+      }
+
+      .row,
+      .editor__grid {
+        grid-template-columns: 1fr;
+      }
+
+      .row__actions {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <header class="topbar">
+      <div>
+        <h1>Quote Highlight Review</h1>
+        <p class="lede">Paste a Kindle clipping export, review highlights, and export selected passages into the quotes collection.</p>
+      </div>
+      <div class="actions">
+        <button id="toggle-import" type="button">Import</button>
+        <button id="export-quotes" class="primary" type="button">Export selected</button>
+      </div>
+    </header>
+
+    <section class="importer" id="importer" hidden>
+      <div class="importer__summary">
+        <div>
+          <div class="importer__title">Paste Kindle My Clippings.txt</div>
+          <div class="lede">Only highlights are imported. Notes and bookmarks are ignored.</div>
+        </div>
+        <button id="import-highlights" class="primary" type="button">Import highlights</button>
+      </div>
+      <div class="importer__body">
+        <textarea id="import-text" spellcheck="false" placeholder="Book Title (Author)&#10;- Your Highlight at Location 123-124 | Added on Monday, January 1, 2024 8:00:00 PM&#10;&#10;Highlighted text...&#10;=========="></textarea>
+      </div>
+    </section>
+
+    <section class="stats" aria-label="Highlight review counts">
+      <div class="stat"><span class="stat__value" id="stat-total">0</span><span class="stat__label">Total</span></div>
+      <div class="stat"><span class="stat__value" id="stat-unreviewed">0</span><span class="stat__label">Unreviewed</span></div>
+      <div class="stat"><span class="stat__value" id="stat-included">0</span><span class="stat__label">Included</span></div>
+      <div class="stat"><span class="stat__value" id="stat-skipped">0</span><span class="stat__label">Skipped</span></div>
+      <div class="stat"><span class="stat__value" id="stat-review">0</span><span class="stat__label">Needs Source</span></div>
+    </section>
+
+    <section class="toolbar" aria-label="Highlight filters">
+      <label class="field">
+        Search
+        <input id="search" type="search" placeholder="Quote, book, or author">
+      </label>
+      <label class="field">
+        Status
+        <select id="status-filter">
+          <option value="all">All</option>
+          <option value="unreviewed">Unreviewed</option>
+          <option value="included">Included</option>
+          <option value="skipped">Skipped</option>
+          <option value="needs-review">Needs source</option>
+        </select>
+      </label>
+      <label class="field">
+        Book
+        <select id="book-filter">
+          <option value="all">All books</option>
+        </select>
+      </label>
+      <label class="field">
+        Sort
+        <select id="sort">
+          <option value="book">Book order</option>
+          <option value="newest">Newest import</option>
+          <option value="author">Author</option>
+        </select>
+      </label>
+    </section>
+
+    <div class="status" id="status" aria-live="polite"></div>
+    <section class="list" id="list" aria-live="polite"></section>
+  </main>
+
+  <script>
+    (() => {
+      'use strict';
+
+      const state = {
+        items: {},
+        order: [],
+        filters: {
+          search: new URLSearchParams(window.location.search).get('q') || '',
+          status: new URLSearchParams(window.location.search).get('status') || 'all',
+          book: new URLSearchParams(window.location.search).get('book') || 'all',
+          sort: new URLSearchParams(window.location.search).get('sort') || 'book'
+        },
+        editingId: null,
+        saving: false
+      };
+
+      const els = {
+        importer: document.getElementById('importer'),
+        toggleImport: document.getElementById('toggle-import'),
+        importText: document.getElementById('import-text'),
+        importHighlights: document.getElementById('import-highlights'),
+        exportQuotes: document.getElementById('export-quotes'),
+        search: document.getElementById('search'),
+        statusFilter: document.getElementById('status-filter'),
+        bookFilter: document.getElementById('book-filter'),
+        sort: document.getElementById('sort'),
+        status: document.getElementById('status'),
+        list: document.getElementById('list'),
+        total: document.getElementById('stat-total'),
+        unreviewed: document.getElementById('stat-unreviewed'),
+        included: document.getElementById('stat-included'),
+        skipped: document.getElementById('stat-skipped'),
+        review: document.getElementById('stat-review')
+      };
+
+      init();
+
+      async function init() {
+        els.search.value = state.filters.search;
+        els.statusFilter.value = state.filters.status;
+        els.sort.value = state.filters.sort;
+        bindEvents();
+        await loadState();
+      }
+
+      function bindEvents() {
+        els.toggleImport.addEventListener('click', () => {
+          els.importer.hidden = !els.importer.hidden;
+          if (!els.importer.hidden) els.importText.focus();
+        });
+        els.importHighlights.addEventListener('click', importHighlights);
+        els.exportQuotes.addEventListener('click', exportQuotes);
+        els.search.addEventListener('input', () => updateFilter('search', els.search.value));
+        els.statusFilter.addEventListener('change', () => updateFilter('status', els.statusFilter.value));
+        els.bookFilter.addEventListener('change', () => updateFilter('book', els.bookFilter.value));
+        els.sort.addEventListener('change', () => updateFilter('sort', els.sort.value));
+        window.addEventListener('keydown', handleKeyboard);
+      }
+
+      async function loadState() {
+        setStatus('Loading highlights...');
+        const response = await fetch('/api/quote-highlights/state');
+        const payload = await response.json();
+        applyState(payload.state);
+        setStatus('');
+      }
+
+      function applyState(next) {
+        state.items = next?.items || {};
+        state.order = Array.isArray(next?.order) ? next.order : Object.keys(state.items);
+        render();
+      }
+
+      async function importHighlights() {
+        const text = els.importText.value.trim();
+        if (!text) {
+          setStatus('Paste a Kindle clipping export first.');
+          return;
+        }
+        setBusy(true);
+        setStatus('Importing highlights...');
+        try {
+          const response = await fetch('/api/quote-highlights/import', {
+            method: 'POST',
+            headers: { 'content-type': 'application/json' },
+            body: JSON.stringify({ text })
+          });
+          const payload = await response.json();
+          if (!response.ok || !payload.ok) throw new Error(payload.error || 'Import failed');
+          applyState(payload.state);
+          els.importText.value = '';
+          els.importer.hidden = true;
+          setStatus(`Imported ${payload.imported} highlights. Ignored ${payload.skipped} malformed entries.`);
+        } catch (error) {
+          setStatus(error.message || 'Import failed.');
+        } finally {
+          setBusy(false);
+        }
+      }
+
+      async function exportQuotes() {
+        await saveState();
+        setBusy(true);
+        setStatus('Exporting selected quotes...');
+        try {
+          const response = await fetch('/api/quote-highlights/export', { method: 'POST' });
+          const payload = await response.json();
+          if (!response.ok || !payload.ok) throw new Error(payload.error || 'Export failed');
+          setStatus(`Exported ${payload.confirmedCount} confirmed quotes and ${payload.needsReviewCount} needing attribution review.`);
+        } catch (error) {
+          setStatus(error.message || 'Export failed.');
+        } finally {
+          setBusy(false);
+        }
+      }
+
+      async function saveState() {
+        const body = {
+          state: {
+            version: 1,
+            items: state.items,
+            order: state.order
+          }
+        };
+        const response = await fetch('/api/quote-highlights/state', {
+          method: 'PUT',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify(body)
+        });
+        const payload = await response.json();
+        if (!response.ok || !payload.ok) throw new Error(payload.error || 'Save failed');
+        applyState(payload.state);
+        return payload.state;
+      }
+
+      function render() {
+        renderStats();
+        renderBookFilter();
+        renderList();
+        updateUrl();
+      }
+
+      function renderStats() {
+        const items = allItems();
+        els.total.textContent = items.length;
+        els.unreviewed.textContent = items.filter((item) => item.status === 'unreviewed').length;
+        els.included.textContent = items.filter((item) => item.status === 'included').length;
+        els.skipped.textContent = items.filter((item) => item.status === 'skipped').length;
+        els.review.textContent = items.filter(needsAttribution).length;
+      }
+
+      function renderBookFilter() {
+        const current = els.bookFilter.value || state.filters.book;
+        const books = Array.from(new Set(allItems().map((item) => item.bookTitle).filter(Boolean))).sort((a, b) => a.localeCompare(b));
+        els.bookFilter.innerHTML = '<option value="all">All books</option>';
+        for (const book of books) {
+          const option = document.createElement('option');
+          option.value = book;
+          option.textContent = book;
+          els.bookFilter.append(option);
+        }
+        els.bookFilter.value = books.includes(current) ? current : 'all';
+        state.filters.book = els.bookFilter.value;
+      }
+
+      function renderList() {
+        const items = filteredItems();
+        els.list.innerHTML = '';
+
+        if (!state.order.length) {
+          els.list.innerHTML = '<div class="empty">Import Kindle highlights to start reviewing.</div>';
+          return;
+        }
+
+        if (!items.length) {
+          els.list.innerHTML = '<div class="empty">No highlights match these filters.</div>';
+          return;
+        }
+
+        const fragment = document.createDocumentFragment();
+        for (const item of items) {
+          fragment.append(renderRow(item));
+        }
+        els.list.append(fragment);
+      }
+
+      function renderRow(item) {
+        const row = document.createElement('article');
+        row.className = `row is-${item.status || 'unreviewed'}`;
+        if (state.editingId === item.id) row.classList.add('is-editing');
+        row.dataset.id = item.id;
+
+        const main = document.createElement('div');
+        const quote = document.createElement('p');
+        quote.className = 'quote';
+        quote.textContent = item.quote || item.originalQuote || '';
+        const meta = document.createElement('div');
+        meta.className = 'meta';
+        const status = item.status || 'unreviewed';
+        meta.append(pill(status, `status-${status}`));
+        if (needsAttribution(item)) meta.append(pill('needs source', 'warn'));
+        const details = document.createElement('span');
+        details.className = 'meta__details';
+        details.textContent = [
+          item.bookTitle || 'Unknown book',
+          item.author ? `by ${item.author}` : 'unknown author',
+          item.location ? `Location ${item.location}` : ''
+        ].filter(Boolean).join(' · ');
+        meta.append(details);
+        main.append(quote, meta);
+
+        const actions = document.createElement('div');
+        actions.className = 'row__actions';
+        actions.append(
+          actionButton(item.status === 'included' ? 'Included' : 'Include', () => updateItem(item.id, { status: 'included' }), item.status === 'included'),
+          actionButton('Skip', () => updateItem(item.id, { status: 'skipped' }), item.status === 'skipped'),
+          actionButton('Edit', () => {
+            state.editingId = state.editingId === item.id ? null : item.id;
+            renderList();
+          }, false, 'wide')
+        );
+
+        row.append(main, actions, renderEditor(item));
+        return row;
+      }
+
+      function renderEditor(item) {
+        const editor = document.createElement('div');
+        editor.className = 'editor';
+
+        const quoteLabel = document.createElement('label');
+        quoteLabel.className = 'field';
+        quoteLabel.textContent = 'Quote';
+        const quoteInput = document.createElement('textarea');
+        quoteInput.value = item.quote || '';
+        quoteInput.addEventListener('change', () => updateItem(item.id, { quote: quoteInput.value }));
+        quoteLabel.append(quoteInput);
+
+        const grid = document.createElement('div');
+        grid.className = 'editor__grid';
+
+        const authorLabel = document.createElement('label');
+        authorLabel.className = 'field';
+        authorLabel.textContent = 'Author';
+        const authorInput = document.createElement('input');
+        authorInput.value = item.author || '';
+        authorInput.addEventListener('change', () => updateItem(item.id, { author: authorInput.value, attributionConfirmed: false }));
+        authorLabel.append(authorInput);
+
+        const bookLabel = document.createElement('label');
+        bookLabel.className = 'field';
+        bookLabel.textContent = 'Book';
+        const bookInput = document.createElement('input');
+        bookInput.value = item.bookTitle || '';
+        bookInput.addEventListener('change', () => updateItem(item.id, { bookTitle: bookInput.value }));
+        bookLabel.append(bookInput);
+
+        const confirm = document.createElement('label');
+        confirm.className = 'checkbox';
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.checked = Boolean(item.attributionConfirmed);
+        checkbox.addEventListener('change', () => updateItem(item.id, { attributionConfirmed: checkbox.checked }));
+        confirm.append(checkbox, document.createTextNode('Source confirmed'));
+
+        grid.append(authorLabel, bookLabel, confirm);
+        editor.append(quoteLabel, grid);
+        return editor;
+      }
+
+      function updateFilter(key, value) {
+        state.filters[key] = value;
+        render();
+      }
+
+      function updateItem(id, patch) {
+        const existing = state.items[id];
+        if (!existing) return;
+        state.items[id] = {
+          ...existing,
+          ...patch,
+          updatedAt: new Date().toISOString()
+        };
+        render();
+        saveState().catch((error) => setStatus(error.message || 'Save failed.'));
+      }
+
+      function filteredItems() {
+        const query = state.filters.search.trim().toLowerCase();
+        return sortItems(allItems().filter((item) => {
+          if (state.filters.status === 'needs-review' && !needsAttribution(item)) return false;
+          if (!['all', 'needs-review'].includes(state.filters.status) && item.status !== state.filters.status) return false;
+          if (state.filters.book !== 'all' && item.bookTitle !== state.filters.book) return false;
+          if (!query) return true;
+          return [item.quote, item.bookTitle, item.author, item.location].join(' ').toLowerCase().includes(query);
+        }));
+      }
+
+      function sortItems(items) {
+        if (state.filters.sort === 'newest') {
+          return [...items].sort((a, b) => String(b.firstImportedAt || '').localeCompare(String(a.firstImportedAt || '')));
+        }
+        if (state.filters.sort === 'author') {
+          return [...items].sort((a, b) => [a.author || '', a.bookTitle || ''].join('|').localeCompare([b.author || '', b.bookTitle || ''].join('|')));
+        }
+        const order = new Map(state.order.map((id, index) => [id, index]));
+        return [...items].sort((a, b) => (order.get(a.id) || 0) - (order.get(b.id) || 0));
+      }
+
+      function allItems() {
+        return state.order.map((id) => state.items[id]).filter(Boolean);
+      }
+
+      function needsAttribution(item) {
+        return item.status === 'included' && (!item.author || !item.attributionConfirmed);
+      }
+
+      function actionButton(label, handler, active = false, className = '') {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.textContent = label;
+        button.className = className;
+        if (active) button.classList.add('primary');
+        button.addEventListener('click', handler);
+        return button;
+      }
+
+      function pill(label, className) {
+        const span = document.createElement('span');
+        span.className = `pill ${className || ''}`.trim();
+        span.textContent = label;
+        return span;
+      }
+
+      function setBusy(value) {
+        state.saving = value;
+        els.importHighlights.disabled = value;
+        els.exportQuotes.disabled = value;
+      }
+
+      function setStatus(message) {
+        els.status.textContent = message || '';
+      }
+
+      function updateUrl() {
+        const params = new URLSearchParams();
+        if (state.filters.search) params.set('q', state.filters.search);
+        if (state.filters.status !== 'all') params.set('status', state.filters.status);
+        if (state.filters.book !== 'all') params.set('book', state.filters.book);
+        if (state.filters.sort !== 'book') params.set('sort', state.filters.sort);
+        const next = `${window.location.pathname}${params.toString() ? `?${params}` : ''}`;
+        window.history.replaceState(null, '', next);
+      }
+
+      function handleKeyboard(event) {
+        if (event.key !== '/' || event.target.matches('input, textarea, select')) return;
+        event.preventDefault();
+        els.search.focus();
+      }
+    })();
+  </script>
+</body>
+</html>
