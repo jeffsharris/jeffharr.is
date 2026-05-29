@@ -30,8 +30,11 @@ test('poem middleware injects per-poem share preview metadata', async () => {
   assert.match(html, /<meta property="og:image" content="https:\/\/jeffharr\.is\/poems\/images\/kubla-kahn\.jpg">/);
   assert.match(html, /<meta property="og:image:width" content="1024">/);
   assert.match(html, /<meta name="twitter:card" content="summary_large_image">/);
+  assert.match(html, /<link rel="apple-touch-icon" sizes="180x180" href="https:\/\/jeffharr\.is\/poems\/images\/kubla-kahn\.jpg">/);
+  assert.match(html, /<meta name="apple-mobile-web-app-title" content="Kubla Kahn by Samuel Taylor Coleridge">/);
   assert.match(html, /<link rel="canonical" href="https:\/\/jeffharr\.is\/poems\/\?poem=kubla-kahn">/);
   assert.doesNotMatch(html, /images\/social\/poems-card\.jpg/);
+  assert.doesNotMatch(html, /href="\/poems\/apple-touch-icon\.png"/);
 });
 
 test('poem middleware passes through non-poem requests', async () => {

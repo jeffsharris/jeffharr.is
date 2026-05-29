@@ -421,6 +421,14 @@ class PodcastMetadataTests(unittest.TestCase):
         self.assertIn("Search titles, descriptions, chapters", html)
         self.assertIn('data-mobile-placeholder="Search"', html)
         self.assertIn('id="archive-search-status"', html)
+        self.assertIn(
+            '<link rel="apple-touch-icon" sizes="180x180" href="/dharma/brensilver/apple-touch-icon.png">',
+            html,
+        )
+        self.assertIn(
+            '<meta name="apple-mobile-web-app-title" content="Matthew Brensilver">',
+            html,
+        )
 
     def test_landing_page_embeds_compact_filter_pills_when_guided_feed_exists(self):
         dharma_talk = Talk(
@@ -915,6 +923,14 @@ class PodcastMetadataTests(unittest.TestCase):
         )
         self.assertIn(
             '<meta name="twitter:image" content="https://jeffharr.is/dharma/brensilver/artwork/audiodharma-1.jpg">',
+            html,
+        )
+        self.assertIn(
+            '<link rel="apple-touch-icon" sizes="180x180" href="/dharma/brensilver/artwork/audiodharma-1.jpg">',
+            html,
+        )
+        self.assertIn(
+            '<meta name="apple-mobile-web-app-title" content="Practice &amp; Release">',
             html,
         )
         self.assertIn('<img class="art" src="/dharma/brensilver/artwork/audiodharma-1.jpg"', html)

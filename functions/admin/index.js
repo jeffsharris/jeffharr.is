@@ -99,6 +99,8 @@ function documentShell({ title, body }) {
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex, nofollow">
   <title>${escapeHtml(title)} | Jeff Harris</title>
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-title" content="Jeff Harris">
   <style>
     :root {
       color-scheme: light dark;

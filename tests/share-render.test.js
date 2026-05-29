@@ -37,4 +37,6 @@ test('renderSharePage collapses long podcast descriptions and keeps preview meta
   assert.ok(metaDescription.length <= 180);
   assert.match(metaDescription, /…$/);
   assert.doesNotMatch(html, /Copy RSS/);
+  assert.match(html, /<link rel="apple-touch-icon" sizes="180x180" href="\/share-assets\/apple-touch-icon\.png">/);
+  assert.match(html, /<meta name="apple-mobile-web-app-title" content="Share">/);
 });

@@ -19,6 +19,8 @@ function buildHtml({ code, state, error, errorDescription, redirectUri }) {
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Schwab OAuth Callback</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-title" content="Jeff Harris" />
     <style>
       :root {
         color-scheme: light;

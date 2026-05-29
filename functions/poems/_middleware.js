@@ -126,10 +126,12 @@ function stripStaticPreviewMetadata(html) {
   return html
     .replace(/^[ \t]*<meta\s+property=["']og:[^"']+["'][^>]*>[ \t]*$/gim, '')
     .replace(/^[ \t]*<meta\s+name=["']twitter:[^"']+["'][^>]*>[ \t]*$/gim, '')
+    .replace(/^[ \t]*<meta\s+name=["']apple-mobile-web-app-title["'][^>]*>[ \t]*$/gim, '')
+    .replace(/^[ \t]*<link\s+rel=["']apple-touch-icon["'][^>]*>[ \t]*$/gim, '')
     .replace(/^[ \t]*<link\s+rel=["']canonical["'][^>]*>[ \t]*$/gim, '');
 }
 
-function renderPreviewTags({ title, description, imageUrl, url }) {
+function renderPreviewTags({ title, description, imageUrl, iconUrl, url }) {
   return `  <meta property="og:title" content="${escapeAttribute(title)}">
   <meta property="og:description" content="${escapeAttribute(description)}">
   <meta property="og:type" content="article">
@@ -145,6 +147,8 @@ function renderPreviewTags({ title, description, imageUrl, url }) {
   <meta name="twitter:title" content="${escapeAttribute(title)}">
   <meta name="twitter:description" content="${escapeAttribute(description)}">
   <meta name="twitter:image" content="${escapeAttribute(imageUrl)}">
+  <link rel="apple-touch-icon" sizes="180x180" href="${escapeAttribute(iconUrl || imageUrl)}">
+  <meta name="apple-mobile-web-app-title" content="${escapeAttribute(title)}">
   <link rel="canonical" href="${escapeAttribute(url)}">`;
 }
 

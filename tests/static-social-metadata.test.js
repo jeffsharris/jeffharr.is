@@ -8,35 +8,45 @@ const PAGES = [
     canonical: 'https://jeffharr.is/',
     title: 'Jeff Harris',
     description: 'Building things, raising humans, tending my inner and outer worlds.',
-    image: 'https://jeffharr.is/images/jeff-editorial-portrait.jpg'
+    image: 'https://jeffharr.is/images/jeff-editorial-portrait.jpg',
+    icon: '/apple-touch-icon.png',
+    appTitle: 'Jeff Harris'
   },
   {
     file: 'poems/index.html',
     canonical: 'https://jeffharr.is/poems/',
     title: 'Poems | Jeff Harris',
     description: 'Poems I love',
-    image: 'https://jeffharr.is/images/social/poems-card.jpg'
+    image: 'https://jeffharr.is/images/social/poems-card.jpg',
+    icon: '/poems/apple-touch-icon.png',
+    appTitle: 'Poems'
   },
   {
     file: 'read-later/index.html',
     canonical: 'https://jeffharr.is/read-later/',
     title: 'Read Later | Jeff Harris',
     description: 'My queue',
-    image: 'https://jeffharr.is/images/social/read-later-card.jpg'
+    image: 'https://jeffharr.is/images/social/read-later-card.jpg',
+    icon: '/read-later/apple-touch-icon.png',
+    appTitle: 'Read Later'
   },
   {
     file: 'share/index.html',
     canonical: 'https://jeffharr.is/share/',
     title: 'Share | Jeff Harris',
     description: 'Create rich, app-friendly share pages for podcasts, X posts, and links.',
-    image: 'https://jeffharr.is/images/social/share-card.jpg'
+    image: 'https://jeffharr.is/images/social/share-card.jpg',
+    icon: '/share-assets/apple-touch-icon.png',
+    appTitle: 'Share'
   },
   {
     file: 'dharma/index.html',
     canonical: 'https://jeffharr.is/dharma/',
     title: 'Dharma · Voices Shaping My Practice',
     description: 'Talks and teachings from dharma teachers shaping my practice.',
-    image: 'https://jeffharr.is/dharma/dharma-preview.jpg'
+    image: 'https://jeffharr.is/dharma/dharma-preview.jpg',
+    icon: '/dharma/apple-touch-icon.png',
+    appTitle: 'Dharma'
   }
 ];
 
@@ -50,9 +60,12 @@ test('static consumable pages expose social preview metadata', () => {
     assert.match(html, new RegExp(`<meta property="og:url" content="${escapeRegExp(page.canonical)}">`), page.file);
     assert.match(html, new RegExp(`<meta property="og:image" content="${escapeRegExp(page.image)}">`), page.file);
     assert.match(html, /<meta name="twitter:card" content="summary_large_image">/, page.file);
+    assert.match(html, new RegExp(`<link rel="apple-touch-icon" sizes="180x180" href="${escapeRegExp(page.icon)}">`), page.file);
+    assert.match(html, new RegExp(`<meta name="apple-mobile-web-app-title" content="${escapeRegExp(page.appTitle)}">`), page.file);
 
     const localImagePath = page.image.replace('https://jeffharr.is/', '');
     assert.ok(existsSync(localImagePath), `${page.file} image should exist at ${localImagePath}`);
+    assert.ok(existsSync(page.icon.replace(/^\//, '')), `${page.file} icon should exist at ${page.icon}`);
   }
 });
 

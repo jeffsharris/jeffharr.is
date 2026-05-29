@@ -301,6 +301,8 @@ function htmlDocument({ title, description, imageUrl, url, body, noindex }) {
   <meta name="twitter:title" content="${escapeAttribute(title)}">
   <meta name="twitter:description" content="${escapeAttribute(description)}">
   <meta name="twitter:image" content="${escapeAttribute(imageUrl)}">
+  <link rel="apple-touch-icon" sizes="180x180" href="/share-assets/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-title" content="Share">
   <link rel="canonical" href="${escapeAttribute(url)}">
   <link rel="icon" href="/share-assets/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">

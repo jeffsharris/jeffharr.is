@@ -425,6 +425,10 @@ def render_index(
     )
     has_guided_feed = guided_site is not None
     corpus_slug = corpus_slug_from_site(site)
+    apple_touch_icon_tags = render_apple_touch_icon_tags(
+        f"/dharma/{corpus_slug}/apple-touch-icon.png",
+        page_title,
+    )
     guided_alternate_link = ""
     main_feed_label = site.get("feed_label") or (
         "Dharma talks" if has_guided_feed else "Podcast feed"
@@ -485,6 +489,7 @@ def render_index(
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="{_escape(page_title)}">
   <meta name="twitter:description" content="{_escape(page_description)}">
+{apple_touch_icon_tags}
   <link rel="alternate" type="application/rss+xml" title="{_escape(site["title"])}" href="feed.xml">
 {guided_alternate_link}  <style>
     :root {{
@@ -1755,6 +1760,7 @@ def write_talk_pages(out_dir: Path, config: Dict, talks: List[Talk]) -> None:
 
 def render_talk_page(config: Dict, talk: Talk) -> str:
     site = config["site"]
+    corpus_slug = corpus_slug_from_site(site)
     image_url = talk.episode_image_url or talk.image_url
     image_src = html_media_url(site, image_url)
     description = talk.podcast_description or talk.description or site["description"]
@@ -1773,6 +1779,10 @@ def render_talk_page(config: Dict, talk: Talk) -> str:
   <meta name="twitter:image" content="{_escape(social_image_url)}">"""
         if social_image_url
         else ""
+    )
+    apple_touch_icon_tags = render_apple_touch_icon_tags(
+        image_src,
+        talk.title,
     )
     chapters = "\n".join(
         f"""<li><a href="?t={int(round(chapter.start))}" data-start="{chapter.start}">{_escape(format_timestamp(chapter.start))}</a> <strong>{_escape(chapter.title)}</strong>{chapter_description(chapter.description)}</li>"""
@@ -1810,6 +1820,7 @@ def render_talk_page(config: Dict, talk: Talk) -> str:
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="{_escape(talk.title)}">
   <meta name="twitter:description" content="{_escape(social_description)}">
+{apple_touch_icon_tags}
   <link rel="stylesheet" href="/dharma/talk-page.css?v=3">
 </head>
 <body>
@@ -1868,6 +1879,20 @@ def html_media_url(site: Dict, url: str | None) -> str | None:
         if parsed.path:
             return parsed.path
     return url
+
+
+def render_apple_touch_icon_tags(icon_url: str | None, title: str | None) -> str:
+    if not icon_url:
+        return ""
+    title_tag = (
+        f'\n  <meta name="apple-mobile-web-app-title" content="{_escape(title)}">'
+        if title
+        else ""
+    )
+    return (
+        f'  <link rel="apple-touch-icon" sizes="180x180" href="{_escape(icon_url)}">'
+        f"{title_tag}"
+    )
 
 
 def absolute_media_url(site: Dict, url: str | None) -> str | None:
