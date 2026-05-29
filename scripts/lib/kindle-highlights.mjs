@@ -12,6 +12,57 @@ const ENTRY_SEPARATOR = /^={8,}\s*$/m;
 const KINDLE_META_PATTERN = /^-\s+Your\s+(.+?)\s+(?:on\s+page\s+([^|]+?)\s+\|\s+)?(?:at\s+)?(?:Location|location)\s+([^|]+?)(?:\s+\|\s+Added\s+on\s+(.+))?$/i;
 const KINDLE_META_WITHOUT_LOCATION_PATTERN = /^-\s+Your\s+(.+?)(?:\s+\|\s+Added\s+on\s+(.+))?$/i;
 
+function parseKindleNotebookExport(payload) {
+  const source = payload && typeof payload === 'object' ? payload : {};
+  const items = [];
+  const skipped = [];
+
+  for (const book of source.books || []) {
+    const title = cleanOptional(book.title);
+    const author = normalizeAuthor(book.author);
+    const asin = cleanOptional(book.asin);
+
+    for (const highlight of book.highlights || []) {
+      const quote = normalizeQuoteText(highlight.quote);
+      if (!quote) {
+        skipped.push({ asin, title, reason: 'empty quote' });
+        continue;
+      }
+
+      const annotationId = cleanOptional(highlight.annotationId);
+      const canonical = [
+        asin,
+        annotationId,
+        cleanOptional(highlight.location),
+        cleanOptional(highlight.page),
+        quote
+      ].map(normalizeForIdentity).join('|');
+
+      items.push({
+        id: `kh_web_${hashValue(canonical).slice(0, 16)}`,
+        quote,
+        originalQuote: quote,
+        bookTitle: title,
+        sourceLabel: title,
+        author,
+        originalAuthor: author,
+        page: cleanOptional(highlight.page),
+        location: cleanOptional(highlight.location),
+        addedAt: cleanOptional(book.annotatedDate),
+        source: 'kindle-notebook',
+        notes: cleanOptional(highlight.note)
+      });
+    }
+  }
+
+  return {
+    items,
+    skipped,
+    count: items.length,
+    source: 'kindle-notebook'
+  };
+}
+
 function parseKindleClippings(text) {
   const rawEntries = String(text || '')
     .split(ENTRY_SEPARATOR)
@@ -148,7 +199,7 @@ function mergeImportedHighlights(state, importedItems, now = new Date().toISOStr
       addedAt: item.addedAt || existing?.addedAt || '',
       source: item.source || existing?.source || 'kindle-clippings',
       status: existing?.status || CATEGORY.UNCATEGORIZED,
-      notes: existing?.notes || '',
+      notes: existing?.notes || item.notes || '',
       attributionConfirmed: Boolean(existing?.attributionConfirmed),
       firstImportedAt: existing?.firstImportedAt || now,
       updatedAt: existing?.updatedAt || now
@@ -368,6 +419,7 @@ export {
   normalizeState,
   parseKindleClippings,
   parseKindleEntry,
+  parseKindleNotebookExport,
   parseQuotesMarkdown,
   serializeQuotesMarkdown
 };

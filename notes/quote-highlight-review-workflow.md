@@ -38,7 +38,7 @@ local state. Only `Accepted` and `Needs refinement` quotes are exported.
 
 ## Kindle Importer Scope
 
-The first importer supports pasted Kindle `My Clippings.txt` content.
+The review UI supports pasted Kindle `My Clippings.txt` content.
 
 - Imports Kindle highlights only.
 - Ignores Kindle notes and bookmarks.
@@ -48,6 +48,16 @@ The first importer supports pasted Kindle `My Clippings.txt` content.
 - Adds new highlights to `Inbox`.
 - The `Keep` action moves an Inbox highlight to `Needs refinement`; it does not
   mark the quote as accepted.
+
+Kindle Notebook web exports captured from the signed-in Notebook page can be
+merged with:
+
+```sh
+npm run quotes:import-kindle-notebook -- /private/tmp/kindle-notebook-export.json
+```
+
+Notebook imports preserve attached Kindle notes in the local review state and
+also default new highlights to `Inbox`.
 
 Future importers should write candidate items into the same local state shape
 and default new candidates to `Inbox`.

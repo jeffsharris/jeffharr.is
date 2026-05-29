@@ -5,6 +5,7 @@ import {
   mergeImportedHighlights,
   normalizeState,
   parseKindleClippings,
+  parseKindleNotebookExport,
   parseQuotesMarkdown,
   serializeQuotesMarkdown
 } from '../scripts/lib/kindle-highlights.mjs';
@@ -40,6 +41,32 @@ Author: Anne Lamott
 Author: Unknown; often attributed to Edsger W. Dijkstra
 `;
 
+const SAMPLE_NOTEBOOK_EXPORT = {
+  source: 'kindle-notebook',
+  books: [
+    {
+      asin: 'B000TEST01',
+      title: 'Notebook Book',
+      author: 'Notebook Author',
+      annotatedDate: 'Wednesday, May 27, 2026',
+      highlights: [
+        {
+          annotationId: 'stable-row-id',
+          quote: 'A web notebook highlight.',
+          note: 'Worth keeping.',
+          header: 'Yellow highlight | Page: 12 | Location: 120',
+          page: '12',
+          location: '120'
+        },
+        {
+          annotationId: 'empty-row',
+          quote: ''
+        }
+      ]
+    }
+  ]
+};
+
 test('parseKindleClippings imports highlights and ignores notes', () => {
   const result = parseKindleClippings(SAMPLE_CLIPPINGS);
 
@@ -51,6 +78,32 @@ test('parseKindleClippings imports highlights and ignores notes', () => {
   assert.equal(result.items[0].quote, "The object isn't to make art, it's to be in that wonderful state which makes art inevitable.");
   assert.equal(result.items[1].bookTitle, 'Letters to a Young Poet');
   assert.equal(result.items[1].author, 'Rainer Maria Rilke');
+});
+
+test('parseKindleNotebookExport imports Chrome Notebook highlights', () => {
+  const result = parseKindleNotebookExport(SAMPLE_NOTEBOOK_EXPORT);
+
+  assert.equal(result.source, 'kindle-notebook');
+  assert.equal(result.count, 1);
+  assert.equal(result.skipped.length, 1);
+  assert.match(result.items[0].id, /^kh_web_/);
+  assert.equal(result.items[0].quote, 'A web notebook highlight.');
+  assert.equal(result.items[0].bookTitle, 'Notebook Book');
+  assert.equal(result.items[0].author, 'Notebook Author');
+  assert.equal(result.items[0].page, '12');
+  assert.equal(result.items[0].location, '120');
+  assert.equal(result.items[0].addedAt, 'Wednesday, May 27, 2026');
+  assert.equal(result.items[0].notes, 'Worth keeping.');
+});
+
+test('mergeImportedHighlights preserves imported Notebook notes for new items', () => {
+  const parsed = parseKindleNotebookExport(SAMPLE_NOTEBOOK_EXPORT);
+  const state = mergeImportedHighlights(null, parsed.items, '2026-05-28T00:00:00.000Z');
+  const item = state.items[parsed.items[0].id];
+
+  assert.equal(item.status, 'uncategorized');
+  assert.equal(item.source, 'kindle-notebook');
+  assert.equal(item.notes, 'Worth keeping.');
 });
 
 test('mergeImportedHighlights places new Kindle highlights in Inbox and preserves decisions', () => {
