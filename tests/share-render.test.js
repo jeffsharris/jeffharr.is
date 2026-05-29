@@ -38,5 +38,20 @@ test('renderSharePage collapses long podcast descriptions and keeps preview meta
   assert.match(metaDescription, /…$/);
   assert.doesNotMatch(html, /Copy RSS/);
   assert.match(html, /<link rel="apple-touch-icon" sizes="180x180" href="\/share-assets\/apple-touch-icon\.png">/);
-  assert.match(html, /<meta name="apple-mobile-web-app-title" content="Share">/);
+  assert.match(html, /<meta name="apple-mobile-web-app-title" content="A Long Episode">/);
+});
+
+test('renderSharePage uses resolved artwork for share detail home screen metadata', () => {
+  const html = renderSharePage({
+    id: 'p_with_artwork',
+    type: 'podcast_episode',
+    title: 'Episode With Artwork',
+    description: 'A shared episode with specific artwork.',
+    imageUrl: 'https://cdn.example.com/episode.png',
+    platforms: {},
+    media: {}
+  }, 'https://jeffharr.is/share/p_with_artwork');
+
+  assert.match(html, /<link rel="apple-touch-icon" sizes="180x180" href="https:\/\/cdn\.example\.com\/episode\.png">/);
+  assert.match(html, /<meta name="apple-mobile-web-app-title" content="Episode With Artwork">/);
 });

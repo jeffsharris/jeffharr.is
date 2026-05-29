@@ -201,6 +201,8 @@ test('renderSharePage renders X posts with native share and rich media', () => {
   assert.match(html, /Share thread/);
   assert.match(html, /x-post--shared/);
   assert.match(html, /https:\/\/pbs\.twimg\.com\/media\/pic\.jpg/);
+  assert.match(html, /<link rel="apple-touch-icon" sizes="180x180" href="https:\/\/pbs\.twimg\.com\/media\/pic\.jpg">/);
+  assert.match(html, /<meta name="apple-mobile-web-app-title" content="Alice Example: Second post">/);
   assert.match(html, /Open on X/);
 });
 

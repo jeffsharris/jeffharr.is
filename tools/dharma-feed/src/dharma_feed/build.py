@@ -1781,7 +1781,7 @@ def render_talk_page(config: Dict, talk: Talk) -> str:
         else ""
     )
     apple_touch_icon_tags = render_apple_touch_icon_tags(
-        image_src,
+        f"/dharma/{corpus_slug}/touch-icons/{safe_id(talk.id)}.png",
         talk.title,
     )
     chapters = "\n".join(

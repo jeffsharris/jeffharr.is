@@ -926,7 +926,7 @@ class PodcastMetadataTests(unittest.TestCase):
             html,
         )
         self.assertIn(
-            '<link rel="apple-touch-icon" sizes="180x180" href="/dharma/brensilver/artwork/audiodharma-1.jpg">',
+            '<link rel="apple-touch-icon" sizes="180x180" href="/dharma/brensilver/touch-icons/audiodharma-1.png">',
             html,
         )
         self.assertIn(

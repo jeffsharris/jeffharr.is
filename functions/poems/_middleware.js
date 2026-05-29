@@ -37,6 +37,7 @@ export async function onRequest(context) {
       author,
       description,
       imageUrl: new URL(imagePath, context.request.url).href,
+      iconUrl: new URL(`/poems/touch-icons/${slug}.png`, context.request.url).href,
       url: previewUrl.href
     }));
 

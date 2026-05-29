@@ -36,7 +36,8 @@ export function renderSharePage(item, requestUrl) {
   const description = cleanDisplayText(item.description || item.podcast?.description || 'A shared podcast link from jeffharr.is.');
   const visibleDescription = splitDescription(description, VISIBLE_DESCRIPTION_MAX);
   const previewDescription = truncate(description, PREVIEW_DESCRIPTION_MAX);
-  const imageUrl = item.imageUrl || item.podcast?.imageUrl || 'https://jeffharr.is/images/profile.jpg';
+  const sourceImageUrl = item.imageUrl || item.podcast?.imageUrl || '';
+  const imageUrl = sourceImageUrl || 'https://jeffharr.is/images/profile.jpg';
   const audioUrl = item.media?.audioUrl || '';
   const isEpisode = item.type === 'podcast_episode';
   const shareText = buildShareText(item, title);
@@ -45,6 +46,8 @@ export function renderSharePage(item, requestUrl) {
     title: `${title} | Jeff Harris`,
     description: previewDescription,
     imageUrl,
+    touchIconUrl: sourceImageUrl,
+    appTitle: title,
     url: shareUrl,
     noindex: false,
     body: `
@@ -88,7 +91,8 @@ function renderXSharePage(item, requestUrl) {
   const sharedPost = posts.find((post) => post.id === item.x?.sharedTweetId) || posts[0] || null;
   const title = item.title || buildXPostTitle(sharedPost) || 'Shared X post';
   const description = truncate(item.description || sharedPost?.text || 'A shared X post from jeffharr.is.', X_DESCRIPTION_MAX);
-  const imageUrl = item.imageUrl || firstXPostImage(sharedPost) || sharedPost?.author?.profileImageUrl || 'https://jeffharr.is/images/profile.jpg';
+  const sourceImageUrl = item.imageUrl || firstXPostImage(sharedPost) || sharedPost?.author?.profileImageUrl || '';
+  const imageUrl = sourceImageUrl || 'https://jeffharr.is/images/profile.jpg';
   const shareText = sharedPost?.author?.username
     ? `${sharedPost.author.name || `@${sharedPost.author.username}`} on X`
     : title;
@@ -99,6 +103,8 @@ function renderXSharePage(item, requestUrl) {
     title: `${title} | Jeff Harris`,
     description,
     imageUrl,
+    touchIconUrl: sourceImageUrl,
+    appTitle: title,
     url: shareUrl,
     noindex: false,
     body: `
@@ -283,7 +289,9 @@ export function renderRedirectPage(shareUrl) {
   });
 }
 
-function htmlDocument({ title, description, imageUrl, url, body, noindex }) {
+function htmlDocument({ title, description, imageUrl, touchIconUrl, appTitle, url, body, noindex }) {
+  const appleTouchIconUrl = touchIconUrl || '/share-assets/apple-touch-icon.png';
+  const mobileAppTitle = appTitle || 'Share';
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -301,8 +309,8 @@ function htmlDocument({ title, description, imageUrl, url, body, noindex }) {
   <meta name="twitter:title" content="${escapeAttribute(title)}">
   <meta name="twitter:description" content="${escapeAttribute(description)}">
   <meta name="twitter:image" content="${escapeAttribute(imageUrl)}">
-  <link rel="apple-touch-icon" sizes="180x180" href="/share-assets/apple-touch-icon.png">
-  <meta name="apple-mobile-web-app-title" content="Share">
+  <link rel="apple-touch-icon" sizes="180x180" href="${escapeAttribute(appleTouchIconUrl)}">
+  <meta name="apple-mobile-web-app-title" content="${escapeAttribute(mobileAppTitle)}">
   <link rel="canonical" href="${escapeAttribute(url)}">
   <link rel="icon" href="/share-assets/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
