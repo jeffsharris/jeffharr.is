@@ -1,5 +1,6 @@
 import { deriveTitleFromUrl, shouldCacheReader } from './reader-utils.js';
 import { getReadLaterAssetItemId } from './asset-store.js';
+import { isLikelyPdfUrl } from './pdf-utils.js';
 import { ensurePushChannels } from './state.js';
 import { formatError } from '../lib/logger.js';
 import { getOwnerId } from '../push/device-store.js';
@@ -79,8 +80,9 @@ async function updateArticlePushReadiness(itemId, stores = {}, log) {
   const now = getNowIso();
   ensurePushChannels(item, now);
 
-  const reader = await assetStore.getReader(getReadLaterAssetItemId(item));
-  const readerReady = shouldCacheReader(reader);
+  const isPdf = isLikelyPdfUrl(item.url);
+  const reader = isPdf ? null : await assetStore.getReader(getReadLaterAssetItemId(item));
+  const readerReady = isPdf || shouldCacheReader(reader);
   const coverReady = Boolean(item?.cover?.updatedAt);
   const coverTerminal = isTerminalCoverSyncFailure(item);
   const ready = readerReady && (coverReady || coverTerminal);
@@ -101,6 +103,7 @@ async function updateArticlePushReadiness(itemId, stores = {}, log) {
       ready,
       readerReady,
       coverReady,
+      isPdf,
       reason
     });
   }
@@ -112,6 +115,7 @@ async function updateArticlePushReadiness(itemId, stores = {}, log) {
     readerReady,
     coverReady,
     coverTerminal,
+    isPdf,
     reason
   };
 }

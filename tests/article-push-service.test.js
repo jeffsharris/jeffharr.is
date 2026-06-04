@@ -98,6 +98,31 @@ test('article push readiness becomes ready after terminal cover failure', async 
   assert.equal(result.item.pushChannels.readiness.status, 'ready');
 });
 
+test('PDF push readiness becomes ready when generated cover is available', async () => {
+  const item = {
+    id: 'pdf-item-1',
+    url: 'https://example.com/report.pdf',
+    title: 'Report PDF',
+    savedAt: '2026-02-22T00:00:00.000Z',
+    cover: {
+      updatedAt: '2026-02-22T00:02:00.000Z'
+    },
+    pushChannels: createInitialPushChannels('2026-02-22T00:00:00.000Z')
+  };
+
+  const { readLaterStore, assetStore } = createMockReadLaterStores({
+    items: { 'pdf-item-1': item }
+  });
+
+  const result = await updateArticlePushReadiness('pdf-item-1', { readLaterStore, assetStore }, null);
+  assert.equal(result.ready, true);
+  assert.equal(result.isPdf, true);
+  assert.equal(result.readerReady, true);
+  assert.equal(result.coverReady, true);
+  assert.equal(result.reason, null);
+  assert.equal(result.item.pushChannels.readiness.status, 'ready');
+});
+
 test('maybeQueueIosPush enqueues exactly once after readiness is ready', async () => {
   const sent = [];
   const env = {

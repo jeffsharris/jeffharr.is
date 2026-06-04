@@ -1,13 +1,18 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { PDFDocument } from 'pdf-lib';
 import {
   buildKindleHtml,
   buildKindleAttachment,
+  buildPdfAttachmentResult,
   formatFilename,
   syncKindleForItem
 } from '../functions/api/read-later/kindle.js';
 import { buildEpubAttachment } from '../functions/api/read-later/epub.js';
+import { createMockReadLaterStores } from './mock-read-later-stores.js';
 import { unzipSync } from 'fflate';
+
+const COVER_PNG_BASE64 = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGNgYAAAAAMAASsJTYQAAAAASUVORK5CYII=';
 
 test('formatFilename slugifies titles', () => {
   assert.equal(formatFilename('Hello World!'), 'hello-world');
@@ -129,6 +134,131 @@ test('syncKindleForItem rejects PDF URLs that do not return PDF bytes', async (t
   assert.equal(resendCalled, false);
 });
 
+test('syncKindleForItem generates PDF cover and prepends it to Kindle attachment', async (t) => {
+  const originalFetch = globalThis.fetch;
+  t.after(() => {
+    globalThis.fetch = originalFetch;
+  });
+
+  const sourceDocument = await PDFDocument.create();
+  sourceDocument.addPage([300, 400]);
+  const pdfBytes = new Uint8Array(await sourceDocument.save());
+  const { assetStore, coverStore } = createMockReadLaterStores();
+  const resendPayloads = [];
+  const openAiPayloads = [];
+
+  globalThis.fetch = async (url, options = {}) => {
+    if (String(url) === 'https://example.com/covered.pdf') {
+      return new Response(pdfBytes, {
+        status: 200,
+        headers: {
+          'content-type': 'application/pdf',
+          'content-length': String(pdfBytes.length)
+        }
+      });
+    }
+
+    if (String(url) === 'https://api.openai.com/v1/responses') {
+      openAiPayloads.push(JSON.parse(options.body));
+      return new Response(JSON.stringify({
+        output: [
+          {
+            type: 'image_generation_call',
+            result: COVER_PNG_BASE64
+          }
+        ]
+      }), {
+        status: 200,
+        headers: { 'content-type': 'application/json' }
+      });
+    }
+
+    if (String(url) === 'https://api.resend.com/emails') {
+      resendPayloads.push(JSON.parse(options.body));
+      return new Response(JSON.stringify({ id: 'email-1' }), {
+        status: 200,
+        headers: { 'content-type': 'application/json' }
+      });
+    }
+
+    throw new Error(`Unexpected fetch ${url}`);
+  };
+
+  const result = await syncKindleForItem(
+    { id: 'pdf-covered', url: 'https://example.com/covered.pdf', title: 'Covered PDF' },
+    {
+      OPENAI_API_KEY: 'openai-key',
+      RESEND_API_KEY: 'test-key',
+      KINDLE_TO_EMAIL: 'kindle@example.com',
+      KINDLE_FROM_EMAIL: 'sender@example.com'
+    },
+    { assetStore }
+  );
+
+  assert.equal(result.kindle.status, 'synced');
+  assert.equal(result.reader, null);
+  assert.equal(Boolean(result.cover?.createdAt), true);
+  assert.equal(coverStore.get('pdf-covered')?.base64, COVER_PNG_BASE64);
+  assert.equal(openAiPayloads.length, 1);
+  assert.equal(openAiPayloads[0].model, 'gpt-5.5');
+  assert.equal(openAiPayloads[0].tools[0].type, 'image_generation');
+  assert.equal(openAiPayloads[0].tools[0].model, 'gpt-image-2');
+  assert.equal(openAiPayloads[0].tools[0].size, '1024x1536');
+  assert.equal(openAiPayloads[0].input[0].content[0].type, 'input_file');
+  assert.equal(openAiPayloads[0].input[0].content[0].file_url, 'https://example.com/covered.pdf');
+  assert.equal(openAiPayloads[0].input[0].content[1].type, 'input_text');
+  assert.match(openAiPayloads[0].input[0].content[1].text, /attached PDF/);
+
+  assert.equal(resendPayloads.length, 1);
+  const [attachment] = resendPayloads[0].attachments;
+  assert.equal(attachment.filename, 'covered-pdf.pdf');
+  assert.equal(attachment.contentType, 'application/pdf');
+  const sentBytes = Buffer.from(attachment.content, 'base64');
+  assert.notDeepEqual(sentBytes, Buffer.from(pdfBytes));
+  const sentDocument = await PDFDocument.load(sentBytes);
+  assert.equal(sentDocument.getPageCount(), 2);
+});
+
+test('buildPdfAttachmentResult reuses existing cover without calling OpenAI', async (t) => {
+  const originalFetch = globalThis.fetch;
+  t.after(() => {
+    globalThis.fetch = originalFetch;
+  });
+
+  const sourceDocument = await PDFDocument.create();
+  sourceDocument.addPage([300, 400]);
+  const pdfBytes = new Uint8Array(await sourceDocument.save());
+  const { assetStore } = createMockReadLaterStores({
+    covers: {
+      'pdf-existing-cover': {
+        base64: COVER_PNG_BASE64,
+        contentType: 'image/png',
+        createdAt: '2026-02-22T00:02:00.000Z'
+      }
+    }
+  });
+
+  globalThis.fetch = async (url) => {
+    if (String(url) === 'https://example.com/existing.pdf') {
+      return new Response(pdfBytes, {
+        status: 200,
+        headers: { 'content-type': 'application/pdf' }
+      });
+    }
+    throw new Error(`Unexpected fetch ${url}`);
+  };
+
+  const result = await buildPdfAttachmentResult(
+    { id: 'pdf-existing-cover', url: 'https://example.com/existing.pdf', title: 'Existing Cover' },
+    { assetStore }
+  );
+
+  assert.equal(result.coverEmbedded, true);
+  assert.equal(result.cover.createdAt, '2026-02-22T00:02:00.000Z');
+  const sentDocument = await PDFDocument.load(Buffer.from(result.attachment.content, 'base64'));
+  assert.equal(sentDocument.getPageCount(), 2);
+});
+
 test('buildEpubAttachment returns a zip payload', async () => {
   const item = { url: 'https://example.com', title: 'Example', id: 'test-1' };
   const reader = { title: 'Reader Title', contentHtml: '<p>Hi there.</p>' };
@@ -190,7 +320,7 @@ test('buildEpubAttachment prefers generated cover image', async () => {
     contentHtml: '<p>Hello.</p><img src="https://example.com/cover.jpg" alt="Cover" />'
   };
   const coverImage = {
-    base64: 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGNgYAAAAAMAASsJTYQAAAAASUVORK5CYII=',
+    base64: COVER_PNG_BASE64,
     contentType: 'image/png'
   };
 

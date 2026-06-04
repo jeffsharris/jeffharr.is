@@ -4,7 +4,8 @@ import {
   updateArticlePushReadiness
 } from './article-push-service.js';
 import { buildReaderContent, fetchAndCacheReader } from './reader.js';
-import { getCoverImage, ensureCoverImage } from './covers.js';
+import { getCoverImage, ensureCoverImage, ensurePdfCoverImage } from './covers.js';
+import { isLikelyPdfUrl } from './pdf-utils.js';
 import { isXStatusUrl } from './x-adapter.js';
 import { createReadLaterStores } from './stores.js';
 import { getReadLaterAssetItemId } from './asset-store.js';
@@ -444,6 +445,64 @@ async function processCoverSyncMessage(message, env, log) {
     return;
   }
 
+  if (isLikelyPdfUrl(item.url)) {
+    let cover = null;
+    try {
+      cover = await ensurePdfCoverImage({ item, env, assetStore, log });
+    } catch (error) {
+      const classified = classifyCoverError(error);
+      await markCoverSyncFailure({
+        readLaterStore,
+        assetStore,
+        env,
+        itemId,
+        jobId,
+        attempt,
+        maxAttempts,
+        queuedAt,
+        errorCode: classified.errorCode,
+        message: classified.message,
+        retryable: classified.retryable,
+        log
+      });
+      return;
+    }
+
+    if (!cover?.createdAt) {
+      await markCoverSyncFailure({
+        readLaterStore,
+        assetStore,
+        env,
+        itemId,
+        jobId,
+        attempt,
+        maxAttempts,
+        queuedAt,
+        errorCode: 'cover_missing_result',
+        message: 'Cover generation returned no image output',
+        retryable: true,
+        log
+      });
+      return;
+    }
+
+    await markCoverSyncSuccess({
+      readLaterStore,
+      assetStore,
+      env,
+      itemId,
+      jobId,
+      attempt,
+      maxAttempts,
+      queuedAt,
+      reader: null,
+      cover,
+      log,
+      source: 'pdf-cover-sync-complete'
+    });
+    return;
+  }
+
   let reader = null;
   const forceReaderRefresh = isXStatusUrl(item.url);
   try {
@@ -542,25 +601,58 @@ async function processCoverSyncMessage(message, env, log) {
     return;
   }
 
+  await markCoverSyncSuccess({
+    readLaterStore,
+    assetStore,
+    env,
+    itemId,
+    jobId,
+    attempt,
+    maxAttempts,
+    queuedAt,
+    reader,
+    cover,
+    log,
+    source: 'cover-sync-complete'
+  });
+}
+
+async function markCoverSyncSuccess({
+  readLaterStore,
+  assetStore,
+  env,
+  itemId,
+  jobId,
+  attempt,
+  maxAttempts,
+  queuedAt,
+  reader,
+  cover,
+  log,
+  source
+}) {
   const latestItem = await readLaterStore.getItem(itemId);
   if (!latestItem) return;
   if (!isCurrentCoverJob(latestItem, jobId)) return;
 
-  const resolvedTitle = preferReaderTitle(latestItem.title, reader?.title, latestItem.url);
-  if (resolvedTitle && resolvedTitle !== latestItem.title) {
-    latestItem.title = resolvedTitle;
+  if (reader?.title) {
+    const resolvedTitle = preferReaderTitle(latestItem.title, reader.title, latestItem.url);
+    if (resolvedTitle && resolvedTitle !== latestItem.title) {
+      latestItem.title = resolvedTitle;
+    }
   }
 
+  const completedAt = getNowIso();
   latestItem.cover = { updatedAt: cover.createdAt };
   latestItem.coverSync = buildCoverState(latestItem.coverSync, {
-    now: getNowIso(),
+    now: completedAt,
     status: COVER_SYNC_STATUS.SUCCEEDED,
     attempt,
     maxAttempts,
     jobId,
     queuedAt,
-    startedAt: latestItem?.coverSync?.startedAt || now,
-    completedAt: getNowIso(),
+    startedAt: latestItem?.coverSync?.startedAt || completedAt,
+    completedAt,
     nextRetryAt: null,
     lastError: null,
     errorCode: null,
@@ -577,9 +669,13 @@ async function processCoverSyncMessage(message, env, log) {
       attempt,
       maxAttempts,
       jobId,
-      coverCreatedAt: cover.createdAt
+      coverCreatedAt: cover.createdAt,
+      contentType: isLikelyPdfUrl(latestItem.url) ? 'pdf' : 'article'
     });
   }
+
+  const isPdf = isLikelyPdfUrl(latestItem.url);
+  if (!reader?.contentHtml && !isPdf) return;
 
   const readiness = await updateArticlePushReadiness(itemId, { readLaterStore, assetStore }, log);
   if (readiness?.ready && readiness?.item) {
@@ -588,7 +684,7 @@ async function processCoverSyncMessage(message, env, log) {
       env,
       readLaterStore,
       log,
-      source: 'cover-sync-complete'
+      source
     });
   }
 }

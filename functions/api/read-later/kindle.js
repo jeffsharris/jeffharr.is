@@ -1,14 +1,15 @@
+import { PDFDocument } from 'pdf-lib';
 import { deriveTitleFromUrl, shouldCacheReader } from './reader-utils.js';
 import { getYouTubeInfo } from './media-utils.js';
 import { buildReaderContent } from './reader.js';
 import { buildEpubAttachment } from './epub.js';
-import { ensureCoverImage } from './covers.js';
+import { ensureCoverImage, ensurePdfCoverImage } from './covers.js';
+import { fetchPdfBytes, isLikelyPdfUrl } from './pdf-utils.js';
 import { formatError, truncateString } from '../lib/logger.js';
 
 const RESEND_ENDPOINT = 'https://api.resend.com/emails';
 const RESEND_TIMEOUT_MS = 10000;
-const PDF_FETCH_TIMEOUT_MS = 10000;
-const PDF_MAX_BYTES = 35 * 1024 * 1024;
+const PDF_COVER_PAGE_WIDTH = 612;
 const KINDLE_STATUS = {
   SYNCED: 'synced',
   FAILED: 'failed',
@@ -217,13 +218,15 @@ async function syncKindleForItem(item, env, options = {}) {
 
   if (isLikelyPdfUrl(item.url)) {
     try {
-      const attachment = await buildPdfAttachment(item, { log });
+      const pdfResult = await buildPdfAttachmentResult(item, { env, assetStore, log });
+      const { attachment, cover, coverEmbedded } = pdfResult;
       await sendToKindle({ item, reader: null, env, attachment, log });
       if (log) {
         log('info', 'kindle_send_succeeded', {
           stage: 'kindle_send',
           ...logContext,
-          attachmentType: 'pdf'
+          attachmentType: 'pdf',
+          coverEmbedded
         });
       }
       return {
@@ -236,7 +239,7 @@ async function syncKindleForItem(item, env, options = {}) {
           errorCode: null,
           retryable: false
         },
-        cover: null
+        cover
       };
     } catch (error) {
       const errorCode = getKindleErrorCode(error);
@@ -386,66 +389,43 @@ function formatFilename(title) {
   return base || 'read-later';
 }
 
-function isLikelyPdfUrl(url) {
-  try {
-    const parsed = new URL(url);
-    return parsed.pathname.toLowerCase().endsWith('.pdf');
-  } catch {
-    return false;
-  }
+async function buildPdfAttachment(item, options = {}) {
+  const result = await buildPdfAttachmentResult(item, options);
+  return result.attachment;
 }
 
-async function buildPdfAttachment(item, { log } = {}) {
-  const response = await fetchWithTimeout(item.url, {
-    headers: {
-      'User-Agent': 'Mozilla/5.0 (compatible; jeffharr.is/1.0; +https://jeffharr.is)',
-      'Accept': 'application/pdf'
+async function buildPdfAttachmentResult(item, { env, assetStore, log } = {}) {
+  const { bytes: originalBytes } = await fetchPdfBytes(item, { log });
+  let attachmentBytes = originalBytes;
+  let cover = null;
+  let coverEmbedded = false;
+
+  if (assetStore) {
+    try {
+      cover = await ensurePdfCoverImage({ item, env, assetStore, log });
+      if (cover?.base64) {
+        attachmentBytes = await prependCoverToPdf({
+          pdfBytes: originalBytes,
+          cover,
+          title: item?.title || deriveTitleFromUrl(item?.url || '')
+        });
+        coverEmbedded = true;
+      }
+    } catch (error) {
+      if (log) {
+        log('warn', 'pdf_cover_attachment_failed', {
+          stage: 'pdf_cover_attach',
+          itemId: item?.id || null,
+          url: item?.url || null,
+          title: item?.title || null,
+          ...formatError(error)
+        });
+      } else {
+        console.warn('PDF cover attach failed, falling back to original PDF:', error);
+      }
+      attachmentBytes = originalBytes;
+      coverEmbedded = false;
     }
-  }, PDF_FETCH_TIMEOUT_MS);
-
-  if (!response.ok) {
-    throw new KindleSyncError(`PDF fetch failed with ${response.status}`, {
-      code: `pdf_fetch_${response.status}`,
-      retryable: isRetryableStatus(response.status)
-    });
-  }
-
-  const contentLength = Number.parseInt(response.headers.get('content-length') || '', 10);
-  if (Number.isFinite(contentLength) && contentLength > PDF_MAX_BYTES) {
-    throw new KindleSyncError('PDF is too large to send to Kindle', {
-      code: 'pdf_too_large',
-      retryable: false
-    });
-  }
-
-  const bytes = new Uint8Array(await response.arrayBuffer());
-  if (!bytes.length) {
-    throw new KindleSyncError('PDF response was empty', {
-      code: 'pdf_empty',
-      retryable: false
-    });
-  }
-
-  if (bytes.length > PDF_MAX_BYTES) {
-    throw new KindleSyncError('PDF is too large to send to Kindle', {
-      code: 'pdf_too_large',
-      retryable: false
-    });
-  }
-
-  const contentType = (response.headers.get('content-type') || '').split(';')[0].trim().toLowerCase();
-  if (contentType && contentType !== 'application/pdf' && !hasPdfMagic(bytes)) {
-    throw new KindleSyncError('PDF URL did not return a PDF', {
-      code: 'pdf_invalid_content_type',
-      retryable: false
-    });
-  }
-
-  if (!hasPdfMagic(bytes)) {
-    throw new KindleSyncError('PDF response did not contain PDF bytes', {
-      code: 'pdf_invalid_bytes',
-      retryable: false
-    });
   }
 
   if (log) {
@@ -454,23 +434,52 @@ async function buildPdfAttachment(item, { log } = {}) {
       itemId: item?.id || null,
       url: item?.url || null,
       title: item?.title || null,
-      bytes: bytes.length
+      originalBytes: originalBytes.length,
+      bytes: attachmentBytes.length,
+      coverEmbedded
     });
   }
 
   return {
-    filename: `${formatFilename(item?.title || deriveTitleFromUrl(item?.url || ''))}.pdf`,
-    content: bytesToBase64(bytes),
-    contentType: 'application/pdf'
+    attachment: {
+      filename: `${formatFilename(item?.title || deriveTitleFromUrl(item?.url || ''))}.pdf`,
+      content: bytesToBase64(attachmentBytes),
+      contentType: 'application/pdf'
+    },
+    cover,
+    coverEmbedded
   };
 }
 
-function hasPdfMagic(bytes) {
-  return bytes?.[0] === 0x25
-    && bytes?.[1] === 0x50
-    && bytes?.[2] === 0x44
-    && bytes?.[3] === 0x46
-    && bytes?.[4] === 0x2d;
+async function prependCoverToPdf({ pdfBytes, cover, title }) {
+  if (!cover?.base64) return pdfBytes;
+
+  const coverBytes = base64ToBytes(cover.base64);
+  const outputDocument = await PDFDocument.create();
+  const coverImage = isJpegContentType(cover.contentType)
+    ? await outputDocument.embedJpg(coverBytes)
+    : await outputDocument.embedPng(coverBytes);
+
+  const coverPageHeight = PDF_COVER_PAGE_WIDTH * (coverImage.height / coverImage.width);
+  const coverPage = outputDocument.addPage([PDF_COVER_PAGE_WIDTH, coverPageHeight]);
+  coverPage.drawImage(coverImage, {
+    x: 0,
+    y: 0,
+    width: PDF_COVER_PAGE_WIDTH,
+    height: coverPageHeight
+  });
+
+  const sourceDocument = await PDFDocument.load(pdfBytes);
+  const copiedPages = await outputDocument.copyPages(sourceDocument, sourceDocument.getPageIndices());
+  copiedPages.forEach((page) => outputDocument.addPage(page));
+
+  if (title) {
+    outputDocument.setTitle(title);
+  }
+  outputDocument.setProducer('jeffharr.is read-later');
+  outputDocument.setCreator('jeffharr.is read-later');
+
+  return new Uint8Array(await outputDocument.save());
 }
 
 function escapeHtml(value) {
@@ -513,6 +522,28 @@ function bytesToBase64(bytes) {
   }
 
   throw new Error('Base64 encoding unavailable');
+}
+
+function base64ToBytes(base64) {
+  if (typeof Buffer !== 'undefined') {
+    return new Uint8Array(Buffer.from(base64, 'base64'));
+  }
+
+  if (typeof atob === 'function') {
+    const binary = atob(base64);
+    const bytes = new Uint8Array(binary.length);
+    for (let index = 0; index < binary.length; index += 1) {
+      bytes[index] = binary.charCodeAt(index);
+    }
+    return bytes;
+  }
+
+  throw new Error('Base64 decoding unavailable');
+}
+
+function isJpegContentType(contentType) {
+  const normalized = String(contentType || '').toLowerCase();
+  return normalized === 'image/jpeg' || normalized === 'image/jpg';
 }
 
 async function fetchWithTimeout(url, options = {}, timeoutMs = RESEND_TIMEOUT_MS) {
@@ -596,6 +627,9 @@ export {
   buildKindleAttachment,
   sendToKindle,
   syncKindleForItem,
+  buildPdfAttachment,
+  buildPdfAttachmentResult,
+  prependCoverToPdf,
   formatFilename,
   shouldCacheKindleReader
 };

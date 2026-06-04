@@ -1,12 +1,18 @@
 import { parseHTML } from 'linkedom';
 import { deriveTitleFromUrl } from './reader-utils.js';
 import { getReadLaterAssetItemId } from './asset-store.js';
+import { isLikelyPdfUrl } from './pdf-utils.js';
 import { formatError, truncateString } from '../lib/logger.js';
 
 const MAX_SNIPPET_WORDS = 1000;
 const MIN_SNIPPET_WORDS = 40;
 const OPENAI_TIMEOUT_MS = 150000;
 const OPENAI_ENDPOINT = 'https://api.openai.com/v1/responses';
+const OPENAI_COVER_MODEL = 'gpt-5.5';
+const OPENAI_COVER_IMAGE_MODEL = 'gpt-image-2';
+const COVER_IMAGE_SIZE = '1024x1536';
+const COVER_IMAGE_QUALITY = 'high';
+const COVER_IMAGE_FORMAT = 'png';
 
 async function getCoverImage(assetStore, itemOrId) {
   const itemId = getReadLaterAssetItemId(itemOrId);
@@ -84,6 +90,19 @@ function buildFallbackCoverPrompt({ title, url, excerpt }) {
   ].filter(Boolean).join('\n\n');
 }
 
+function buildPdfCoverPrompt({ title, url }) {
+  const source = url ? `Source: ${url}` : '';
+  return [
+    'Design a portrait book cover inspired by the attached PDF.',
+    `Title: "${title}".`,
+    'Include only the title as text on the cover (no subtitle, byline, or logo).',
+    'Make the typography large, clean, and high-contrast for readability on Kindle.',
+    'Choose a single evocative visual motif that matches the PDF’s theme.',
+    source,
+    'Use the PDF text and page images to infer the document’s overall theme. Do not reproduce charts, logos, screenshots, or dense page layouts directly.'
+  ].filter(Boolean).join('\n\n');
+}
+
 function findImageResult(data) {
   const output = Array.isArray(data?.output) ? data.output : [];
   const imageCall = output.find((item) => item.type === 'image_generation_call' && item.result);
@@ -93,28 +112,45 @@ function findImageResult(data) {
   };
 }
 
-async function requestCoverResult({ prompt, apiKey, log, itemId, url, title }) {
+function buildImageGenerationTool(options = {}) {
+  return {
+    type: 'image_generation',
+    model: OPENAI_COVER_IMAGE_MODEL,
+    size: COVER_IMAGE_SIZE,
+    quality: COVER_IMAGE_QUALITY,
+    output_format: COVER_IMAGE_FORMAT,
+    ...options
+  };
+}
+
+function buildCoverInputContent({ prompt, content }) {
+  if (Array.isArray(content) && content.length) return content;
+  return [
+    { type: 'input_text', text: prompt }
+  ];
+}
+
+function buildCoverRequestPayload({ prompt, content, stream = false, toolOptions = {} }) {
   const payload = {
-    model: 'gpt-5.5',
+    model: OPENAI_COVER_MODEL,
     input: [
       {
         role: 'user',
-        content: [
-          { type: 'input_text', text: prompt }
-        ]
+        content: buildCoverInputContent({ prompt, content })
       }
     ],
     tool_choice: { type: 'image_generation' },
     tools: [
-      {
-        type: 'image_generation',
-        model: 'gpt-image-2',
-        size: '1024x1536',
-        quality: 'high',
-        output_format: 'png'
-      }
+      buildImageGenerationTool(toolOptions)
     ]
   };
+
+  if (stream) payload.stream = true;
+  return payload;
+}
+
+async function requestCoverResult({ prompt, content, apiKey, log, itemId, url, title }) {
+  const payload = buildCoverRequestPayload({ prompt, content });
 
   const response = await fetchWithTimeout(OPENAI_ENDPOINT, {
     method: 'POST',
@@ -213,6 +249,66 @@ async function generateCoverImage({ title, url, snippet, truncated, env, log, it
   };
 }
 
+async function generatePdfCoverImage({ title, url, env, log, itemId }) {
+  const apiKey = env?.OPENAI_API_KEY;
+  if (!apiKey) {
+    if (log) {
+      log('warn', 'cover_api_key_missing', {
+        stage: 'cover_generation',
+        itemId: itemId || null,
+        url: url || null,
+        title: title || null
+      });
+    }
+    return null;
+  }
+
+  if (!isLikelyPdfUrl(url)) {
+    if (log) {
+      log('warn', 'pdf_cover_url_invalid', {
+        stage: 'cover_generation',
+        itemId: itemId || null,
+        url: url || null,
+        title: title || null
+      });
+    }
+    return null;
+  }
+
+  const prompt = buildPdfCoverPrompt({ title, url });
+  const primary = await requestCoverResult({
+    content: [
+      { type: 'input_file', file_url: url },
+      { type: 'input_text', text: prompt }
+    ],
+    apiKey,
+    log,
+    itemId,
+    url,
+    title
+  });
+
+  if (!primary.result) {
+    if (log) {
+      log('warn', 'cover_result_missing', {
+        stage: 'cover_generation',
+        itemId: itemId || null,
+        url: url || null,
+        title: title || null,
+        attempt: 'pdf',
+        outputTypes: primary.outputTypes.join(',')
+      });
+    }
+    return null;
+  }
+
+  return {
+    base64: primary.result,
+    contentType: 'image/png',
+    createdAt: new Date().toISOString()
+  };
+}
+
 async function generateCoverImageStream({
   title,
   url,
@@ -237,29 +333,13 @@ async function generateCoverImageStream({
   }
 
   const prompt = buildCoverPrompt({ title, url, snippet, truncated });
-  const payload = {
-    model: 'gpt-5.5',
-    input: [
-      {
-        role: 'user',
-        content: [
-          { type: 'input_text', text: prompt }
-        ]
-      }
-    ],
+  const payload = buildCoverRequestPayload({
+    prompt,
     stream: true,
-    tool_choice: { type: 'image_generation' },
-    tools: [
-      {
-        type: 'image_generation',
-        model: 'gpt-image-2',
-        size: '1024x1536',
-        quality: 'high',
-        output_format: 'png',
-        partial_images: 2
-      }
-    ]
-  };
+    toolOptions: {
+      partial_images: 2
+    }
+  });
 
   const response = await fetchWithTimeout(OPENAI_ENDPOINT, {
     method: 'POST',
@@ -414,6 +494,50 @@ async function ensureCoverImage({ item, reader, env, assetStore, onPartial, log 
   }
 }
 
+async function ensurePdfCoverImage({ item, env, assetStore, log }) {
+  if (!assetStore || !item?.id || !item?.url) return null;
+
+  const existing = await getCoverImage(assetStore, item);
+  if (existing) return existing;
+
+  const title = item?.title || deriveTitleFromUrl(item?.url || '');
+  const cover = await generatePdfCoverImage({
+    title,
+    url: item?.url || '',
+    env,
+    log,
+    itemId: item?.id || null
+  });
+
+  if (!cover?.base64) {
+    if (log) {
+      log('warn', 'cover_missing_result', {
+        stage: 'cover_generation',
+        itemId: item?.id || null,
+        url: item?.url || null,
+        title: item?.title || null,
+        contentType: 'pdf'
+      });
+    }
+    return null;
+  }
+
+  try {
+    return saveCoverImage(assetStore, item, cover);
+  } catch (error) {
+    if (log) {
+      log('error', 'cover_save_failed', {
+        stage: 'cover_generation',
+        itemId: item?.id || null,
+        url: item?.url || null,
+        title: item?.title || null,
+        ...formatError(error)
+      });
+    }
+    throw error;
+  }
+}
+
 async function consumeEventStream(response, onEvent) {
   if (!response?.body) return;
 
@@ -484,5 +608,9 @@ async function readResponseBody(response) {
 
 export {
   getCoverImage,
-  ensureCoverImage
+  ensureCoverImage,
+  ensurePdfCoverImage,
+  buildCoverPrompt,
+  buildPdfCoverPrompt,
+  requestCoverResult
 };
