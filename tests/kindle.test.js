@@ -1,6 +1,11 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { buildKindleHtml, buildKindleAttachment, formatFilename } from '../functions/api/read-later/kindle.js';
+import {
+  buildKindleHtml,
+  buildKindleAttachment,
+  formatFilename,
+  syncKindleForItem
+} from '../functions/api/read-later/kindle.js';
 import { buildEpubAttachment } from '../functions/api/read-later/epub.js';
 import { unzipSync } from 'fflate';
 
@@ -32,6 +37,96 @@ test('buildKindleAttachment base64 encodes HTML', () => {
   assert.ok(attachment.filename.endsWith('.html'));
   assert.ok(decoded.includes('<h1>'));
   assert.ok(decoded.includes('Reader Title'));
+});
+
+test('syncKindleForItem sends PDF URLs as PDF attachments', async (t) => {
+  const originalFetch = globalThis.fetch;
+  t.after(() => {
+    globalThis.fetch = originalFetch;
+  });
+
+  const pdfBytes = new TextEncoder().encode('%PDF-1.4\n1 0 obj\n<<>>\nendobj\n%%EOF');
+  const resendPayloads = [];
+  const fetchCalls = [];
+
+  globalThis.fetch = async (url, options = {}) => {
+    fetchCalls.push({ url: String(url), options });
+    if (String(url) === 'https://example.com/book.pdf') {
+      return new Response(pdfBytes, {
+        status: 200,
+        headers: {
+          'content-type': 'application/pdf',
+          'content-length': String(pdfBytes.length)
+        }
+      });
+    }
+
+    if (String(url) === 'https://api.resend.com/emails') {
+      resendPayloads.push(JSON.parse(options.body));
+      return new Response(JSON.stringify({ id: 'email-1' }), {
+        status: 200,
+        headers: { 'content-type': 'application/json' }
+      });
+    }
+
+    throw new Error(`Unexpected fetch ${url}`);
+  };
+
+  const result = await syncKindleForItem(
+    { id: 'pdf-1', url: 'https://example.com/book.pdf', title: 'Book PDF' },
+    {
+      RESEND_API_KEY: 'test-key',
+      KINDLE_TO_EMAIL: 'kindle@example.com',
+      KINDLE_FROM_EMAIL: 'sender@example.com'
+    }
+  );
+
+  assert.equal(result.kindle.status, 'synced');
+  assert.equal(result.reader, null);
+  assert.equal(resendPayloads.length, 1);
+  assert.equal(resendPayloads[0].subject, 'Book PDF');
+  assert.equal(resendPayloads[0].attachments.length, 1);
+  const [attachment] = resendPayloads[0].attachments;
+  assert.equal(attachment.filename, 'book-pdf.pdf');
+  assert.equal(attachment.contentType, 'application/pdf');
+  assert.equal(Buffer.from(attachment.content, 'base64').toString('utf-8'), '%PDF-1.4\n1 0 obj\n<<>>\nendobj\n%%EOF');
+  assert.equal(fetchCalls[0].options.headers.Accept, 'application/pdf');
+});
+
+test('syncKindleForItem rejects PDF URLs that do not return PDF bytes', async (t) => {
+  const originalFetch = globalThis.fetch;
+  t.after(() => {
+    globalThis.fetch = originalFetch;
+  });
+
+  let resendCalled = false;
+  globalThis.fetch = async (url) => {
+    if (String(url) === 'https://example.com/not-a-pdf.pdf') {
+      return new Response('<html><body>Not a PDF</body></html>', {
+        status: 200,
+        headers: { 'content-type': 'text/html' }
+      });
+    }
+    if (String(url) === 'https://api.resend.com/emails') {
+      resendCalled = true;
+      return new Response(JSON.stringify({ id: 'email-1' }), { status: 200 });
+    }
+    throw new Error(`Unexpected fetch ${url}`);
+  };
+
+  const result = await syncKindleForItem(
+    { id: 'pdf-2', url: 'https://example.com/not-a-pdf.pdf', title: 'Not PDF' },
+    {
+      RESEND_API_KEY: 'test-key',
+      KINDLE_TO_EMAIL: 'kindle@example.com',
+      KINDLE_FROM_EMAIL: 'sender@example.com'
+    }
+  );
+
+  assert.equal(result.kindle.status, 'failed');
+  assert.equal(result.kindle.errorCode, 'pdf_invalid_content_type');
+  assert.equal(result.kindle.retryable, false);
+  assert.equal(resendCalled, false);
 });
 
 test('buildEpubAttachment returns a zip payload', async () => {

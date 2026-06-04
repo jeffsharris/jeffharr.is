@@ -7,6 +7,8 @@ import { formatError, truncateString } from '../lib/logger.js';
 
 const RESEND_ENDPOINT = 'https://api.resend.com/emails';
 const RESEND_TIMEOUT_MS = 10000;
+const PDF_FETCH_TIMEOUT_MS = 10000;
+const PDF_MAX_BYTES = 35 * 1024 * 1024;
 const KINDLE_STATUS = {
   SYNCED: 'synced',
   FAILED: 'failed',
@@ -81,7 +83,7 @@ function buildKindleAttachment(item, reader) {
   };
 }
 
-async function sendToKindle({ item, reader, env, cover, log }) {
+async function sendToKindle({ item, reader, env, cover, attachment, log }) {
   const apiKey = env?.RESEND_API_KEY;
   const toEmail = env?.KINDLE_TO_EMAIL;
   const fromEmail = env?.KINDLE_FROM_EMAIL;
@@ -104,7 +106,7 @@ async function sendToKindle({ item, reader, env, cover, log }) {
     });
   }
 
-  const attachment = await buildKindleAttachmentWithFallback(item, reader, cover, log);
+  const resolvedAttachment = attachment || await buildKindleAttachmentWithFallback(item, reader, cover, log);
   const subject = resolveTitle(item, reader);
 
   const payload = {
@@ -112,7 +114,7 @@ async function sendToKindle({ item, reader, env, cover, log }) {
     to: toEmail,
     subject,
     text: `Sent from jeffharr.is read-later: ${item?.url || ''}`,
-    attachments: [attachment]
+    attachments: [resolvedAttachment]
   };
 
   const response = await fetchWithTimeout(RESEND_ENDPOINT, {
@@ -211,6 +213,53 @@ async function syncKindleForItem(item, env, options = {}) {
       }),
       cover: null
     };
+  }
+
+  if (isLikelyPdfUrl(item.url)) {
+    try {
+      const attachment = await buildPdfAttachment(item, { log });
+      await sendToKindle({ item, reader: null, env, attachment, log });
+      if (log) {
+        log('info', 'kindle_send_succeeded', {
+          stage: 'kindle_send',
+          ...logContext,
+          attachmentType: 'pdf'
+        });
+      }
+      return {
+        reader: null,
+        kindle: {
+          status: KINDLE_STATUS.SYNCED,
+          lastAttemptAt: attemptedAt,
+          lastSyncedAt: attemptedAt,
+          lastError: null,
+          errorCode: null,
+          retryable: false
+        },
+        cover: null
+      };
+    } catch (error) {
+      const errorCode = getKindleErrorCode(error);
+      const retryable = isRetryableKindleError(error);
+      if (log) {
+        log('error', 'kindle_send_failed', {
+          stage: 'kindle_send',
+          ...logContext,
+          attachmentType: 'pdf',
+          errorCode,
+          retryable,
+          ...formatError(error)
+        });
+      }
+      return {
+        reader: null,
+        kindle: buildKindleState(KINDLE_STATUS.FAILED, attemptedAt, compactError(error), {
+          errorCode,
+          retryable
+        }),
+        cover: null
+      };
+    }
   }
 
   let reader = null;
@@ -337,6 +386,93 @@ function formatFilename(title) {
   return base || 'read-later';
 }
 
+function isLikelyPdfUrl(url) {
+  try {
+    const parsed = new URL(url);
+    return parsed.pathname.toLowerCase().endsWith('.pdf');
+  } catch {
+    return false;
+  }
+}
+
+async function buildPdfAttachment(item, { log } = {}) {
+  const response = await fetchWithTimeout(item.url, {
+    headers: {
+      'User-Agent': 'Mozilla/5.0 (compatible; jeffharr.is/1.0; +https://jeffharr.is)',
+      'Accept': 'application/pdf'
+    }
+  }, PDF_FETCH_TIMEOUT_MS);
+
+  if (!response.ok) {
+    throw new KindleSyncError(`PDF fetch failed with ${response.status}`, {
+      code: `pdf_fetch_${response.status}`,
+      retryable: isRetryableStatus(response.status)
+    });
+  }
+
+  const contentLength = Number.parseInt(response.headers.get('content-length') || '', 10);
+  if (Number.isFinite(contentLength) && contentLength > PDF_MAX_BYTES) {
+    throw new KindleSyncError('PDF is too large to send to Kindle', {
+      code: 'pdf_too_large',
+      retryable: false
+    });
+  }
+
+  const bytes = new Uint8Array(await response.arrayBuffer());
+  if (!bytes.length) {
+    throw new KindleSyncError('PDF response was empty', {
+      code: 'pdf_empty',
+      retryable: false
+    });
+  }
+
+  if (bytes.length > PDF_MAX_BYTES) {
+    throw new KindleSyncError('PDF is too large to send to Kindle', {
+      code: 'pdf_too_large',
+      retryable: false
+    });
+  }
+
+  const contentType = (response.headers.get('content-type') || '').split(';')[0].trim().toLowerCase();
+  if (contentType && contentType !== 'application/pdf' && !hasPdfMagic(bytes)) {
+    throw new KindleSyncError('PDF URL did not return a PDF', {
+      code: 'pdf_invalid_content_type',
+      retryable: false
+    });
+  }
+
+  if (!hasPdfMagic(bytes)) {
+    throw new KindleSyncError('PDF response did not contain PDF bytes', {
+      code: 'pdf_invalid_bytes',
+      retryable: false
+    });
+  }
+
+  if (log) {
+    log('info', 'pdf_attachment_built', {
+      stage: 'pdf_fetch',
+      itemId: item?.id || null,
+      url: item?.url || null,
+      title: item?.title || null,
+      bytes: bytes.length
+    });
+  }
+
+  return {
+    filename: `${formatFilename(item?.title || deriveTitleFromUrl(item?.url || ''))}.pdf`,
+    content: bytesToBase64(bytes),
+    contentType: 'application/pdf'
+  };
+}
+
+function hasPdfMagic(bytes) {
+  return bytes?.[0] === 0x25
+    && bytes?.[1] === 0x50
+    && bytes?.[2] === 0x44
+    && bytes?.[3] === 0x46
+    && bytes?.[4] === 0x2d;
+}
+
 function escapeHtml(value) {
   return String(value || '')
     .replace(/&/g, '&amp;')
@@ -353,6 +489,22 @@ function toBase64(value) {
 
   if (typeof btoa === 'function') {
     const bytes = new TextEncoder().encode(value);
+    let binary = '';
+    bytes.forEach((byte) => {
+      binary += String.fromCharCode(byte);
+    });
+    return btoa(binary);
+  }
+
+  throw new Error('Base64 encoding unavailable');
+}
+
+function bytesToBase64(bytes) {
+  if (typeof Buffer !== 'undefined') {
+    return Buffer.from(bytes).toString('base64');
+  }
+
+  if (typeof btoa === 'function') {
     let binary = '';
     bytes.forEach((byte) => {
       binary += String.fromCharCode(byte);
