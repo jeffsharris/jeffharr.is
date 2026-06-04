@@ -121,7 +121,8 @@ function withAttemptMetadata(kindle, {
     nextRetryAt: nextRetryAt || null,
     queuedAt: queuedAt || now,
     updatedAt: now,
-    syncVersion
+    syncVersion,
+    pdfAttachment: kindle?.pdfAttachment || null
   };
 }
 
@@ -603,7 +604,8 @@ async function processKindleSyncMessage(message, env, log) {
       kindleStatus: latestItem.kindle?.status || null,
       errorCode: latestItem.kindle?.errorCode || null,
       retryable: latestItem.kindle?.retryable !== false,
-      coverCreatedAt: cover?.createdAt || null
+      coverCreatedAt: cover?.createdAt || null,
+      pdfAttachment: latestItem.kindle?.pdfAttachment || null
     });
   }
 

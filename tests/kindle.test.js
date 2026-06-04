@@ -192,7 +192,7 @@ test('syncKindleForItem generates PDF cover and prepends it to Kindle attachment
       KINDLE_TO_EMAIL: 'kindle@example.com',
       KINDLE_FROM_EMAIL: 'sender@example.com'
     },
-    { assetStore }
+    { assetStore, log: () => {} }
   );
 
   assert.equal(result.kindle.status, 'synced');
@@ -210,13 +210,22 @@ test('syncKindleForItem generates PDF cover and prepends it to Kindle attachment
   assert.match(openAiPayloads[0].input[0].content[1].text, /attached PDF/);
 
   assert.equal(resendPayloads.length, 1);
+  assert.match(resendPayloads[0].subject, /^Covered PDF covered \d{8}-\d{6}Z$/);
   const [attachment] = resendPayloads[0].attachments;
-  assert.equal(attachment.filename, 'covered-pdf.pdf');
+  assert.match(attachment.filename, /^covered-pdf-covered-\d{8}-\d{6}Z\.pdf$/);
   assert.equal(attachment.contentType, 'application/pdf');
   const sentBytes = Buffer.from(attachment.content, 'base64');
   assert.notDeepEqual(sentBytes, Buffer.from(pdfBytes));
   const sentDocument = await PDFDocument.load(sentBytes);
   assert.equal(sentDocument.getPageCount(), 2);
+  assert.equal(result.kindle.pdfAttachment.coverEmbedded, true);
+  assert.equal(result.kindle.pdfAttachment.originalBytes, pdfBytes.length);
+  assert.equal(result.kindle.pdfAttachment.generatedBytes, sentBytes.length);
+  assert.equal(result.kindle.pdfAttachment.originalPageCount, 1);
+  assert.equal(result.kindle.pdfAttachment.generatedPageCount, 2);
+  assert.equal(result.kindle.pdfAttachment.filename, attachment.filename);
+  assert.equal(result.kindle.pdfAttachment.subject, resendPayloads[0].subject);
+  assert.equal(typeof result.kindle.pdfAttachment.generatedSha256, 'string');
 });
 
 test('buildPdfAttachmentResult reuses existing cover without calling OpenAI', async (t) => {
@@ -250,13 +259,75 @@ test('buildPdfAttachmentResult reuses existing cover without calling OpenAI', as
 
   const result = await buildPdfAttachmentResult(
     { id: 'pdf-existing-cover', url: 'https://example.com/existing.pdf', title: 'Existing Cover' },
-    { assetStore }
+    { assetStore, attemptedAt: '2026-02-22T00:03:04.000Z' }
   );
 
   assert.equal(result.coverEmbedded, true);
   assert.equal(result.cover.createdAt, '2026-02-22T00:02:00.000Z');
+  assert.equal(result.evidence.coverEmbedded, true);
+  assert.equal(result.evidence.originalBytes, pdfBytes.length);
+  assert.equal(result.evidence.originalPageCount, 1);
+  assert.equal(result.evidence.generatedPageCount, 2);
+  assert.equal(result.evidence.filename, 'existing-cover-covered-20260222-000304Z.pdf');
+  assert.equal(result.evidence.subject, 'Existing Cover covered 20260222-000304Z');
+  assert.equal(typeof result.evidence.originalSha256, 'string');
+  assert.equal(typeof result.evidence.generatedSha256, 'string');
+  assert.notEqual(result.evidence.originalSha256, result.evidence.generatedSha256);
   const sentDocument = await PDFDocument.load(Buffer.from(result.attachment.content, 'base64'));
   assert.equal(sentDocument.getPageCount(), 2);
+});
+
+test('syncKindleForItem fails instead of sending original PDF when existing cover cannot be embedded', async (t) => {
+  const originalFetch = globalThis.fetch;
+  t.after(() => {
+    globalThis.fetch = originalFetch;
+  });
+
+  const sourceDocument = await PDFDocument.create();
+  sourceDocument.addPage([300, 400]);
+  const pdfBytes = new Uint8Array(await sourceDocument.save());
+  const { assetStore } = createMockReadLaterStores({
+    covers: {
+      'pdf-bad-cover': {
+        base64: 'not-a-valid-image',
+        contentType: 'image/png',
+        createdAt: '2026-02-22T00:02:00.000Z'
+      }
+    }
+  });
+
+  let resendCalled = false;
+  globalThis.fetch = async (url) => {
+    if (String(url) === 'https://example.com/bad-cover.pdf') {
+      return new Response(pdfBytes, {
+        status: 200,
+        headers: { 'content-type': 'application/pdf' }
+      });
+    }
+
+    if (String(url) === 'https://api.resend.com/emails') {
+      resendCalled = true;
+      return new Response(JSON.stringify({ id: 'email-1' }), { status: 200 });
+    }
+
+    throw new Error(`Unexpected fetch ${url}`);
+  };
+
+  const result = await syncKindleForItem(
+    { id: 'pdf-bad-cover', url: 'https://example.com/bad-cover.pdf', title: 'Bad Cover' },
+    {
+      RESEND_API_KEY: 'test-key',
+      KINDLE_TO_EMAIL: 'kindle@example.com',
+      KINDLE_FROM_EMAIL: 'sender@example.com'
+    },
+    { assetStore, log: () => {} }
+  );
+
+  assert.equal(result.kindle.status, 'failed');
+  assert.equal(result.kindle.errorCode, 'pdf_cover_embed_failed');
+  assert.equal(result.kindle.retryable, true);
+  assert.equal(result.cover, null);
+  assert.equal(resendCalled, false);
 });
 
 test('buildEpubAttachment returns a zip payload', async () => {
