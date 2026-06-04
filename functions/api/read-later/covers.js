@@ -95,7 +95,7 @@ function findImageResult(data) {
 
 async function requestCoverResult({ prompt, apiKey, log, itemId, url, title }) {
   const payload = {
-    model: 'gpt-5',
+    model: 'gpt-5.5',
     input: [
       {
         role: 'user',
@@ -108,7 +108,7 @@ async function requestCoverResult({ prompt, apiKey, log, itemId, url, title }) {
     tools: [
       {
         type: 'image_generation',
-        model: 'gpt-image-1.5',
+        model: 'gpt-image-2',
         size: '1024x1536',
         quality: 'high',
         output_format: 'png'
@@ -238,7 +238,7 @@ async function generateCoverImageStream({
 
   const prompt = buildCoverPrompt({ title, url, snippet, truncated });
   const payload = {
-    model: 'gpt-5',
+    model: 'gpt-5.5',
     input: [
       {
         role: 'user',
@@ -252,7 +252,7 @@ async function generateCoverImageStream({
     tools: [
       {
         type: 'image_generation',
-        model: 'gpt-image-1.5',
+        model: 'gpt-image-2',
         size: '1024x1536',
         quality: 'high',
         output_format: 'png',
