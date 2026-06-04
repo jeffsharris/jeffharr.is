@@ -43,6 +43,8 @@
 - EPUB is attempted first (with embedded images when under the 50 MB email limit); if the EPUB build fails or exceeds the size cap, it falls back to the HTML attachment.
 - When over the size cap, inline images are replaced with placeholder text and only the cover image is retained (if possible).
 - Cover pages include the article title text above the first image to keep Kindle cover thumbnails on raster images.
+- PDF URLs are sent as PDF attachments with email subject `convert`, which asks Amazon to deliver an adjustable-layout Kindle document. The attachment preserves the source PDF filename when the URL exposes one.
+- Generated PDF covers are still stored for Read Later website/listing/iOS surfaces, but they are not prepended to Kindle PDF attachments; Kindle personal-document library thumbnails do not reliably use PDF cover pages.
 - If reader extraction fails, the item is saved but no email is sent (status becomes `needs-content`).
 - Failed sends are stored on the item and can be retried via the read-later UI.
 - Required environment variables (Cloudflare): `RESEND_API_KEY` (secret), `KINDLE_TO_EMAIL`, `KINDLE_FROM_EMAIL`.

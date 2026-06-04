@@ -89,12 +89,17 @@ test('syncKindleForItem sends PDF URLs as PDF attachments', async (t) => {
   assert.equal(result.kindle.status, 'synced');
   assert.equal(result.reader, null);
   assert.equal(resendPayloads.length, 1);
-  assert.equal(resendPayloads[0].subject, 'Book PDF');
+  assert.equal(resendPayloads[0].subject, 'convert');
   assert.equal(resendPayloads[0].attachments.length, 1);
   const [attachment] = resendPayloads[0].attachments;
-  assert.equal(attachment.filename, 'book-pdf.pdf');
+  assert.equal(attachment.filename, 'book.pdf');
   assert.equal(attachment.contentType, 'application/pdf');
   assert.equal(Buffer.from(attachment.content, 'base64').toString('utf-8'), '%PDF-1.4\n1 0 obj\n<<>>\nendobj\n%%EOF');
+  assert.equal(result.kindle.pdfAttachment.deliveryMode, 'pdf-convert');
+  assert.equal(result.kindle.pdfAttachment.convertRequested, true);
+  assert.equal(result.kindle.pdfAttachment.filename, 'book.pdf');
+  assert.equal(result.kindle.pdfAttachment.subject, 'convert');
+  assert.equal(result.kindle.pdfAttachment.attachmentBytes, pdfBytes.length);
   assert.equal(fetchCalls[0].options.headers.Accept, 'application/pdf');
 });
 
@@ -134,7 +139,7 @@ test('syncKindleForItem rejects PDF URLs that do not return PDF bytes', async (t
   assert.equal(resendCalled, false);
 });
 
-test('syncKindleForItem generates PDF cover and prepends it to Kindle attachment', async (t) => {
+test('syncKindleForItem generates PDF cover but sends original PDF through Kindle convert', async (t) => {
   const originalFetch = globalThis.fetch;
   t.after(() => {
     globalThis.fetch = originalFetch;
@@ -210,22 +215,25 @@ test('syncKindleForItem generates PDF cover and prepends it to Kindle attachment
   assert.match(openAiPayloads[0].input[0].content[1].text, /attached PDF/);
 
   assert.equal(resendPayloads.length, 1);
-  assert.match(resendPayloads[0].subject, /^Covered PDF covered \d{8}-\d{6}Z$/);
+  assert.equal(resendPayloads[0].subject, 'convert');
   const [attachment] = resendPayloads[0].attachments;
-  assert.match(attachment.filename, /^covered-pdf-covered-\d{8}-\d{6}Z\.pdf$/);
+  assert.equal(attachment.filename, 'covered.pdf');
   assert.equal(attachment.contentType, 'application/pdf');
   const sentBytes = Buffer.from(attachment.content, 'base64');
-  assert.notDeepEqual(sentBytes, Buffer.from(pdfBytes));
+  assert.deepEqual(sentBytes, Buffer.from(pdfBytes));
   const sentDocument = await PDFDocument.load(sentBytes);
-  assert.equal(sentDocument.getPageCount(), 2);
-  assert.equal(result.kindle.pdfAttachment.coverEmbedded, true);
+  assert.equal(sentDocument.getPageCount(), 1);
+  assert.equal(result.kindle.pdfAttachment.deliveryMode, 'pdf-convert');
+  assert.equal(result.kindle.pdfAttachment.convertRequested, true);
+  assert.equal(result.kindle.pdfAttachment.coverAvailable, true);
   assert.equal(result.kindle.pdfAttachment.originalBytes, pdfBytes.length);
-  assert.equal(result.kindle.pdfAttachment.generatedBytes, sentBytes.length);
+  assert.equal(result.kindle.pdfAttachment.attachmentBytes, sentBytes.length);
   assert.equal(result.kindle.pdfAttachment.originalPageCount, 1);
-  assert.equal(result.kindle.pdfAttachment.generatedPageCount, 2);
+  assert.equal(result.kindle.pdfAttachment.attachmentPageCount, 1);
   assert.equal(result.kindle.pdfAttachment.filename, attachment.filename);
   assert.equal(result.kindle.pdfAttachment.subject, resendPayloads[0].subject);
-  assert.equal(typeof result.kindle.pdfAttachment.generatedSha256, 'string');
+  assert.equal(typeof result.kindle.pdfAttachment.originalSha256, 'string');
+  assert.equal(result.kindle.pdfAttachment.attachmentSha256, result.kindle.pdfAttachment.originalSha256);
 });
 
 test('buildPdfAttachmentResult reuses existing cover without calling OpenAI', async (t) => {
@@ -259,25 +267,25 @@ test('buildPdfAttachmentResult reuses existing cover without calling OpenAI', as
 
   const result = await buildPdfAttachmentResult(
     { id: 'pdf-existing-cover', url: 'https://example.com/existing.pdf', title: 'Existing Cover' },
-    { assetStore, attemptedAt: '2026-02-22T00:03:04.000Z' }
+    { assetStore }
   );
 
-  assert.equal(result.coverEmbedded, true);
   assert.equal(result.cover.createdAt, '2026-02-22T00:02:00.000Z');
-  assert.equal(result.evidence.coverEmbedded, true);
+  assert.equal(result.evidence.deliveryMode, 'pdf-convert');
+  assert.equal(result.evidence.convertRequested, true);
+  assert.equal(result.evidence.coverAvailable, true);
   assert.equal(result.evidence.originalBytes, pdfBytes.length);
   assert.equal(result.evidence.originalPageCount, 1);
-  assert.equal(result.evidence.generatedPageCount, 2);
-  assert.equal(result.evidence.filename, 'existing-cover-covered-20260222-000304Z.pdf');
-  assert.equal(result.evidence.subject, 'Existing Cover covered 20260222-000304Z');
+  assert.equal(result.evidence.attachmentPageCount, 1);
+  assert.equal(result.evidence.filename, 'existing.pdf');
+  assert.equal(result.evidence.subject, 'convert');
   assert.equal(typeof result.evidence.originalSha256, 'string');
-  assert.equal(typeof result.evidence.generatedSha256, 'string');
-  assert.notEqual(result.evidence.originalSha256, result.evidence.generatedSha256);
+  assert.equal(result.evidence.attachmentSha256, result.evidence.originalSha256);
   const sentDocument = await PDFDocument.load(Buffer.from(result.attachment.content, 'base64'));
-  assert.equal(sentDocument.getPageCount(), 2);
+  assert.equal(sentDocument.getPageCount(), 1);
 });
 
-test('syncKindleForItem fails instead of sending original PDF when existing cover cannot be embedded', async (t) => {
+test('syncKindleForItem sends PDF even when an existing cover is invalid', async (t) => {
   const originalFetch = globalThis.fetch;
   t.after(() => {
     globalThis.fetch = originalFetch;
@@ -323,11 +331,13 @@ test('syncKindleForItem fails instead of sending original PDF when existing cove
     { assetStore, log: () => {} }
   );
 
-  assert.equal(result.kindle.status, 'failed');
-  assert.equal(result.kindle.errorCode, 'pdf_cover_embed_failed');
-  assert.equal(result.kindle.retryable, true);
-  assert.equal(result.cover, null);
-  assert.equal(resendCalled, false);
+  assert.equal(result.kindle.status, 'synced');
+  assert.equal(result.kindle.errorCode, null);
+  assert.equal(result.kindle.retryable, false);
+  assert.equal(result.cover?.base64, 'not-a-valid-image');
+  assert.equal(resendCalled, true);
+  assert.equal(result.kindle.pdfAttachment.deliveryMode, 'pdf-convert');
+  assert.equal(result.kindle.pdfAttachment.convertRequested, true);
 });
 
 test('buildEpubAttachment returns a zip payload', async () => {
