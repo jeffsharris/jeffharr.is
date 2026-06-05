@@ -86,7 +86,7 @@ test('audio manifest returns chunk metadata without exposing text', async () => 
   assert.equal(body.item.domain, 'example.com');
   assert.equal(body.audio.model, 'gpt-4o-mini-tts');
   assert.equal(body.audio.voice, 'cedar');
-  assert.equal(body.audio.format, 'aac');
+  assert.equal(body.audio.format, 'mp3');
   assert.equal(body.audio.chunkCount, body.audio.chunks.length);
   assert.equal(body.audio.chunks[0].text, undefined);
   assert.equal(Boolean(body.audio.chunks[0].cacheKey), true);
@@ -123,7 +123,7 @@ test('audio manifest returns a reader text error for unavailable reader content'
   assert.equal(body.error, 'Reader text unavailable');
 });
 
-test('audio chunk streams OpenAI speech with cedar voice and aac format', async (t) => {
+test('audio chunk streams OpenAI speech with cedar voice and mp3 format', async (t) => {
   const item = {
     id: 'item-stream',
     url: 'https://example.com/a',
@@ -145,7 +145,7 @@ test('audio chunk streams OpenAI speech with cedar voice and aac format', async 
     calls.push({ url, options });
     return new Response(new Uint8Array([1, 2, 3]), {
       status: 200,
-      headers: { 'content-type': 'audio/aac' }
+      headers: { 'content-type': 'audio/mpeg' }
     });
   };
 
@@ -160,12 +160,12 @@ test('audio chunk streams OpenAI speech with cedar voice and aac format', async 
   const payload = JSON.parse(calls[0].options.body);
 
   assert.equal(response.status, 200);
-  assert.equal(response.headers.get('content-type'), 'audio/aac');
+  assert.equal(response.headers.get('content-type'), 'audio/mpeg');
   assert.deepEqual(Array.from(body), [1, 2, 3]);
   assert.equal(calls[0].url, 'https://api.openai.com/v1/audio/speech');
   assert.equal(calls[0].options.headers.Authorization, 'Bearer test-key');
   assert.equal(payload.model, 'gpt-4o-mini-tts');
   assert.equal(payload.voice, 'cedar');
-  assert.equal(payload.response_format, 'aac');
+  assert.equal(payload.response_format, 'mp3');
   assert.equal(typeof payload.input, 'string');
 });

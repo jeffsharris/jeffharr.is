@@ -8,7 +8,7 @@ import { fetchAndCacheReader } from './reader.js';
 const OPENAI_SPEECH_URL = 'https://api.openai.com/v1/audio/speech';
 const OPENAI_SPEECH_MODEL = 'gpt-4o-mini-tts';
 const OPENAI_SPEECH_VOICE = 'cedar';
-const OPENAI_SPEECH_FORMAT = 'aac';
+const OPENAI_SPEECH_FORMAT = 'mp3';
 const FIRST_CHUNK_TARGET_CHARS = 900;
 const CHUNK_TARGET_CHARS = 2400;
 const MAX_CHUNK_CHARS = 3200;
@@ -232,7 +232,7 @@ async function streamSpeechChunk({ apiKey, item, chunk, log }) {
   return new Response(response.body, {
     status: 200,
     headers: {
-      'content-type': 'audio/aac',
+      'content-type': 'audio/mpeg',
       'cache-control': 'no-store',
       'x-sukha-audio-cache-key': chunk.cacheKey,
       'x-sukha-audio-chunk': String(chunk.index)
