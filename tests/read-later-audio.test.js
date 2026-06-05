@@ -90,6 +90,11 @@ test('audio manifest returns chunk metadata without exposing text', async () => 
   assert.equal(body.audio.chunkCount, body.audio.chunks.length);
   assert.equal(body.audio.chunks[0].text, undefined);
   assert.equal(Boolean(body.audio.chunks[0].cacheKey), true);
+  assert.equal(body.audio.chunks[0].startWordIndex, 0);
+  assert.equal(body.audio.chunks[0].endWordIndex, body.audio.chunks[0].wordCount);
+  if (body.audio.chunks.length > 1) {
+    assert.equal(body.audio.chunks[1].startWordIndex, body.audio.chunks[0].endWordIndex);
+  }
 });
 
 test('audio manifest returns a reader text error for unavailable reader content', async () => {

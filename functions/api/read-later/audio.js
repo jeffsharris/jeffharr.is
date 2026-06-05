@@ -144,18 +144,30 @@ async function prepareSpeechChunks({ id, env, readLaterStore, assetStore, log })
     return { ok: false, status: 200, error: 'Reader text unavailable' };
   }
 
-  const chunks = chunkSpeechText(speechText).map((text, index) => ({
-    index,
-    text,
-    cacheKey: buildCacheKey({
-      itemId: id,
-      readerRetrievedAt: reader.retrievedAt || '',
+  let wordOffset = 0;
+  let characterOffset = 0;
+  const chunks = chunkSpeechText(speechText).map((text, index) => {
+    const chunkWordCount = countWords(text);
+    const chunk = {
       index,
-      text
-    }),
-    characterCount: text.length,
-    wordCount: countWords(text)
-  }));
+      text,
+      cacheKey: buildCacheKey({
+        itemId: id,
+        readerRetrievedAt: reader.retrievedAt || '',
+        index,
+        text
+      }),
+      characterCount: text.length,
+      wordCount: chunkWordCount,
+      startWordIndex: wordOffset,
+      endWordIndex: wordOffset + chunkWordCount,
+      startCharacterIndex: characterOffset,
+      endCharacterIndex: characterOffset + text.length
+    };
+    wordOffset += chunkWordCount;
+    characterOffset += text.length;
+    return chunk;
+  });
 
   return {
     ok: true,
@@ -188,11 +200,24 @@ function buildManifestResponse({ item, reader, chunks, wordCount }) {
       voice: OPENAI_SPEECH_VOICE,
       format: OPENAI_SPEECH_FORMAT,
       chunkCount: chunks.length,
-      chunks: chunks.map(({ index, cacheKey, characterCount, wordCount }) => ({
+      chunks: chunks.map(({
         index,
         cacheKey,
         characterCount,
-        wordCount
+        wordCount,
+        startWordIndex,
+        endWordIndex,
+        startCharacterIndex,
+        endCharacterIndex
+      }) => ({
+        index,
+        cacheKey,
+        characterCount,
+        wordCount,
+        startWordIndex,
+        endWordIndex,
+        startCharacterIndex,
+        endCharacterIndex
       }))
     }
   };
