@@ -82,6 +82,8 @@
   const VIDEO_PROGRESS_DEBOUNCE_MS = 1500;
   const VIDEO_PROGRESS_INTERVAL_MS = 8000;
   const VIDEO_PROGRESS_MIN_SECONDS = 300;
+  const LOAD_ITEMS_MAX_ATTEMPTS = 3;
+  const LOAD_ITEMS_RETRY_DELAY_MS = 450;
   let toastTimeout = null;
   let undoAction = null;
   let toastRayId = null;
@@ -107,11 +109,7 @@
     renderStatus();
 
     try {
-      const response = await fetch('/api/read-later');
-      if (!response.ok) {
-        throw new Error('Failed to load items');
-      }
-      const data = await response.json();
+      const data = await fetchReadLaterItems();
       state.items = Array.isArray(data.items) ? data.items : [];
       reconcileCoverStatusPollers();
     } catch (error) {
@@ -121,6 +119,34 @@
       state.loading = false;
       render();
     }
+  }
+
+  async function fetchReadLaterItems() {
+    let lastError = null;
+
+    for (let attempt = 1; attempt <= LOAD_ITEMS_MAX_ATTEMPTS; attempt += 1) {
+      try {
+        const response = await fetch('/api/read-later', {
+          cache: 'no-store',
+          headers: { accept: 'application/json' }
+        });
+        if (!response.ok) {
+          throw new Error(`Failed to load items (${response.status})`);
+        }
+        return await response.json();
+      } catch (error) {
+        lastError = error;
+        if (attempt < LOAD_ITEMS_MAX_ATTEMPTS) {
+          await delay(LOAD_ITEMS_RETRY_DELAY_MS * attempt);
+        }
+      }
+    }
+
+    throw lastError || new Error('Failed to load items');
+  }
+
+  function delay(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
   }
 
   function render() {
