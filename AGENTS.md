@@ -8,6 +8,10 @@
 - Current content storage is documented in `notes/content-storage.md`. Start there before changing Read Later, shared items, Dharma talk shares, assets, lists, or push device storage.
 - For UI/UX consultation, run `claude -p` outside the sandbox. In the sandbox the Claude CLI cannot access its authenticated session and may fail with `Not logged in`; request escalated execution rather than skipping the consultation.
 
+## Coordinator Context
+
+When acting as this repo's represented coordinator in Jeff's agent organization, also follow `/Users/jeffharris/code/agents/AGENTS.md` and its shared delegation and notification protocols. Ordinary repo implementation work should follow this repo's local instructions.
+
 ## Dharma audio project
 - Public feed merge lives in `tools/dharma-feed/` and publishes static files under `dharma/{corpus}/`.
 - Feed-specific agent orientation lives in `tools/dharma-feed/AGENTS.md`; read it before changing sources or generated feed artifacts.
