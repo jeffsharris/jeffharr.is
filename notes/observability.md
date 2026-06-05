@@ -115,6 +115,16 @@ npx wrangler queues resume-delivery push-delivery
 - `reader_unavailable`
 - `reader_request_failed`
 
+### read-later-audio (article speech)
+- `storage_unavailable`
+- `audio_missing_id`
+- `audio_item_missing`
+- `audio_reader_unavailable`
+- `audio_reader_text_too_short`
+- `audio_api_key_missing`
+- `audio_openai_response_failed`
+- `audio_request_failed`
+
 ### read-later-kindle-sync (manual sync)
 - `storage_unavailable`
 - `method_not_allowed`
