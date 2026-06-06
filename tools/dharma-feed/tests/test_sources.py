@@ -59,9 +59,91 @@ class SourceParsingTests(unittest.TestCase):
         )
         self.assertEqual(len(talks), 1)
         self.assertEqual(talks[0].id, "audiodharma:24555")
+        self.assertEqual(talks[0].speaker, "Matthew Brensilver")
         self.assertEqual(talks[0].duration, "16:01")
         self.assertEqual(talks[0].audio_type, "audio/mpeg")
         self.assertIsNone(talks[0].image_url)
+
+    def test_audiodharma_listing_parser_preserves_co_taught_speaker_rows(self):
+        html = """
+        <table>
+          <tr>
+            <td class="playable-table-name"><a href="/talks/25574">Dialogue</a></td>
+            <td class="playable-table-speaker">
+              <a href="/speakers/231">Matthew Brensilver</a>,
+              <a href="/speakers/487">Dana DePalma, MA</a>
+            </td>
+            <td class="d-none d-md-table-cell playable-table-date">2026.05.27</td>
+            <td class="d-none d-md-table-cell">50:29</td>
+            <td>
+              <a class="js-audio-select"
+                 data-url="https://example.test/dialogue.mp3"
+                 data-speakers="Matthew Brensilver, Dana DePalma, MA"
+                 data-title="Releasing Judging, Comparing, Fixing: Dialogue Between Dana and Matthew"
+                 data-type="audio/mp3"
+                 data-id="25574"
+                 href="#"></a>
+            </td>
+          </tr>
+        </table>
+        """
+
+        [talk] = list(
+            parse_audiodharma_listing(
+                html,
+                {
+                    "name": "AudioDharma",
+                    "speaker": "Matthew Brensilver",
+                    "listing_url": "https://www.audiodharma.org/speakers/231",
+                },
+            )
+        )
+
+        self.assertEqual(talk.speaker, "Matthew Brensilver, Dana DePalma, MA")
+        self.assertEqual(talk.co_teachers, ["Dana DePalma, MA"])
+
+    def test_audiodharma_listing_parser_filters_configured_speaker(self):
+        html = """
+        <table>
+          <tr>
+            <td><a href="/talks/1">Dana Only</a></td>
+            <td class="d-none d-md-table-cell playable-table-date">2026.05.26</td>
+            <td class="d-none d-md-table-cell">46:48</td>
+            <td>
+              <a class="js-audio-select"
+                 data-url="https://example.test/dana.mp3"
+                 data-speakers="Dana DePalma, MA"
+                 data-title="Dana Only"
+                 data-id="1"></a>
+            </td>
+          </tr>
+          <tr>
+            <td><a href="/talks/2">Matthew Talk</a></td>
+            <td class="d-none d-md-table-cell playable-table-date">2026.05.27</td>
+            <td class="d-none d-md-table-cell">41:48</td>
+            <td>
+              <a class="js-audio-select"
+                 data-url="https://example.test/matthew.mp3"
+                 data-speakers="Matthew Brensilver"
+                 data-title="Matthew Talk"
+                 data-id="2"></a>
+            </td>
+          </tr>
+        </table>
+        """
+
+        talks = list(
+            parse_audiodharma_listing(
+                html,
+                {
+                    "name": "AudioDharma",
+                    "speaker": "Matthew Brensilver",
+                    "listing_url": "https://www.audiodharma.org/speakers/231",
+                },
+            )
+        )
+
+        self.assertEqual([talk.id for talk in talks], ["audiodharma:2"])
 
     def test_dharmaseed_feed_parser_extracts_items(self):
         xml = """<?xml version="1.0" encoding="utf-8"?>

@@ -1,5 +1,964 @@
 [
   {
+    "id": "dharmaseed:97515",
+    "source": "Dharma Seed",
+    "source_id": "97515",
+    "title": "Guided Meditation on Auditory Thinking",
+    "speaker": "Matthew Brensilver",
+    "published_at": "2026-06-05T09:44:01+00:00",
+    "link": "https://dharmaseed.org/talks/97515/",
+    "audio_url": "https://dharmaseed.org/talks/97515/20260605-Matthew_Brensilver--guided_meditation_on_auditory_thinking-97515.mp3?rss=",
+    "audio_type": "audio/mpeg",
+    "audio_length": 17217993,
+    "duration": "35:49",
+    "description": "(Online)",
+    "image_url": "https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+    "canonical_url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-97515/",
+    "podcast_description": "What happens when thought is treated not as a private voice, but as something heard within experience? The talk uses auditory thinking as a doorway into mindfulness, showing how deep listening can loosen identification and reveal the gap between a thought and the story built around it. From there it turns toward a quieter practice: allowing unpleasantness, giving up the impulse to control, and meeting experience without making enemies of it.",
+    "short_summary": "A guided meditation on listening to thoughts as sound, loosening identification, and meeting experience without defensive narration.",
+    "episode_image_url": "https://jeffharr.is/dharma/brensilver/artwork/dharmaseed-97515.jpg",
+    "chapters_url": "https://jeffharr.is/dharma/brensilver/chapters/dharmaseed-97515.json",
+    "chapters": [
+      {
+        "start": 0.0,
+        "title": "Sound and Silence",
+        "description": "The meditation begins by opening attention to hearing itself, with sound and silence as the first field of practice.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-97515/?t=0",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 30.0,
+        "title": "Thinking as Sound",
+        "description": "The talk invites the soundscape to move through awareness so verbal thinking can be included rather than excluded.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-97515/?t=30",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 118.0,
+        "title": "De-reifying Thought",
+        "description": "Thought is noticed directly as experience, not as a command or identity, and the tendency to take it as self is gently exposed.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-97515/?t=118",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 320.0,
+        "title": "Narrative and Impermanence",
+        "description": "Impermanence is presented as something the mind resists through storytelling, control, and quick replacement of one thought with another.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-97515/?t=320",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 754.0,
+        "title": "Pain and Narration",
+        "description": "The talk names the discomfort around thinking and not thinking, then points to a more bodily, less defended way of meeting unpleasantness.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-97515/?t=754",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 966.0,
+        "title": "Open Awareness",
+        "description": "The practice widens into a very open stance, where self and sense data are not held apart so tightly.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-97515/?t=966",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1358.686,
+        "title": "No Enemies",
+        "description": "A brief reference underscores that even the meditator self can narrate experience, while the instruction remains to listen without making thought an enemy.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-97515/?t=1359",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1506.686,
+        "title": "Who Are You?",
+        "description": "The closing movement looks at identification more closely, asking who one is when autobiography is not being repeated.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-97515/?t=1507",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1775.686,
+        "title": "Closing Silence",
+        "description": "The talk settles into a quiet ending after the central inquiry has been laid open.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-97515/?t=1776",
+        "img": null,
+        "toc": true
+      }
+    ],
+    "venue": "Online",
+    "series": null,
+    "tags": [],
+    "transcript": {
+      "status": "pending",
+      "url": null,
+      "text_path": null
+    }
+  },
+  {
+    "id": "dharmaseed:97508",
+    "source": "Dharma Seed",
+    "source_id": "97508",
+    "title": "Compassion and Equanimity",
+    "speaker": "Matthew Brensilver",
+    "published_at": "2026-06-04T23:13:32+00:00",
+    "link": "https://dharmaseed.org/talks/97508/",
+    "audio_url": "https://dharmaseed.org/talks/97508/20260604-Matthew_Brensilver--compassion_and_equanimity-97508.mp3?rss=",
+    "audio_type": "audio/mpeg",
+    "audio_length": 17095583,
+    "duration": "35:34",
+    "description": "(Online)",
+    "image_url": "https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+    "canonical_url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-97508/",
+    "podcast_description": "How do compassion and equanimity answer the different faces of suffering? The talk begins with a simple metta practice and then widens into a careful distinction: first letting the heart receive tenderness, then meeting another’s pain without becoming overwhelmed, and finally resting in the quiet strength of equanimity when nothing can be controlled. It closes by showing how these two forms of love keep one another honest—compassion preventing coldness, equanimity preventing burnout or grandiosity.",
+    "short_summary": "A guided exploration of metta, compassion, and equanimity as two complementary ways of loving what cannot be controlled.",
+    "episode_image_url": "https://jeffharr.is/dharma/brensilver/artwork/dharmaseed-97508.jpg",
+    "chapters_url": "https://jeffharr.is/dharma/brensilver/chapters/dharmaseed-97508.json",
+    "chapters": [
+      {
+        "start": 13.0,
+        "title": "Opening the Heart",
+        "description": "The talk begins with a simple practice of choosing someone easy to care about and letting metta arise without strain.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-97508/?t=13",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 91.0,
+        "title": "Receiving Tenderness",
+        "description": "The focus shifts to receiving care anonymously and allowing the mind to be infused with tenderness.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-97508/?t=91",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 242.0,
+        "title": "Metta for All Beings",
+        "description": "The practice expands from one person to all beings, emphasizing ease, safety, peace, and a calm heart.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-97508/?t=242",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 565.0,
+        "title": "Turning Toward Suffering",
+        "description": "A new contemplation brings to mind someone who is suffering, and the instruction is to get close enough to feel the weight without becoming drowned in it.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-97508/?t=565",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 867.0,
+        "title": "Compassion as Release",
+        "description": "The movement shifts from feeling suffering to pouring love into it, wishing that burden to be lifted and the pain reduced.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-97508/?t=867",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1238.0,
+        "title": "Love and Helplessness",
+        "description": "The talk reflects on the limits of care: our love is larger than our power, and the heart must face helplessness without collapsing into frenzy or despair.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-97508/?t=1238",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1500.205,
+        "title": "The Quiet Love of Equanimity",
+        "description": "Equanimity is described as a deep, wide, long view that stops trying to control what cannot be governed while keeping love intact.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-97508/?t=1500",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1822.965,
+        "title": "Balancing the Two",
+        "description": "The talk closes by joining compassion and equanimity as mutually correcting forms of love that prepare us for suffering, change, and even dying well.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-97508/?t=1823",
+        "img": null,
+        "toc": true
+      }
+    ],
+    "venue": "Online",
+    "series": null,
+    "tags": [],
+    "transcript": {
+      "status": "pending",
+      "url": null,
+      "text_path": null
+    }
+  },
+  {
+    "id": "dharmaseed:97502",
+    "source": "Dharma Seed",
+    "source_id": "97502",
+    "title": "Reification and Dereification",
+    "speaker": "Matthew Brensilver",
+    "published_at": "2026-06-04T16:29:58+00:00",
+    "link": "https://dharmaseed.org/talks/97502/",
+    "audio_url": "https://dharmaseed.org/talks/97502/20260604-Matthew_Brensilver--reification_and_dereification-97502.mp3?rss=",
+    "audio_type": "audio/mpeg",
+    "audio_length": 20095359,
+    "duration": "41:48",
+    "description": "(Online)",
+    "image_url": "https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+    "canonical_url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-97502/",
+    "podcast_description": "How do we practice without turning every insight, method, or identity into something fixed and unquestioned? The talk traces a careful path between reification and de-reification, showing how wisdom sometimes depends on grounding, reverence, and even deliberate solidifying, while at other times it depends on seeing that mind is shaping what seems obviously real. Along the way, it uses examples from meditation instruction, self-modeling, and Dharma language to show why practice keeps moving between holding on and letting go.",
+    "short_summary": "A talk on balancing reification and de-reification in practice, and how wisdom moves between grounding what matters and seeing through what seems solid.",
+    "episode_image_url": "https://jeffharr.is/dharma/brensilver/artwork/dharmaseed-97502.jpg",
+    "chapters_url": "https://jeffharr.is/dharma/brensilver/chapters/dharmaseed-97502.json",
+    "chapters": [
+      {
+        "start": 0.0,
+        "title": "Teaching and Readiness",
+        "description": "The talk opens by saying Dharma teaching is hard because people learn differently, and because real learning requires a mind that is soft, porous, and ready.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-97502/?t=0",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 259.44,
+        "title": "Mistakes and Context",
+        "description": "Wisdom is presented as improvisational rather than algorithmic, with the Miles Davis quote framing mistakes as part of the path and Ajahn Chah used to balance letting go with compassionate engagement.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-97502/?t=259",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 484.6,
+        "title": "Naming Reification",
+        "description": "The speaker introduces reification and explains it as taking thoughts, feelings, and perceptions to be unquestioned reality, especially through a naive realism that forgets the role of mind.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-97502/?t=485",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 844.36,
+        "title": "Mind Precedes Experience",
+        "description": "Using the Dhammapada, the talk shows how de-reification means recognizing experience as mediated by mind and learning to see representations as representations.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-97502/?t=844",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1017.68,
+        "title": "Between Two Poles",
+        "description": "Practice is described as moving gracefully between making things real enough to ground us and dissolving them enough to see clearly, with stability serving as the basis for deeper change.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-97502/?t=1018",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1184.48,
+        "title": "Grounding and Reverence",
+        "description": "An earthy-body instruction, reverence for signs and lineage, and references to Pascal, Maggie Nelson, and Roland Barthes are used to show why some forms need to be held while still remaining open to revision.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-97502/?t=1184",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1477.746,
+        "title": "Method, Concentration, and Self",
+        "description": "The talk turns to how concentration practice can intentionally reify an object, why different minds may need opposite instructions, and how the self-model can be seen as a representation rather than a solid essence.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-97502/?t=1478",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1984.866,
+        "title": "Flexible Identification",
+        "description": "The closing section explores how identification can become more wholesome and less painful, ending with the idea that the Dharma is about flexibility in the face of suffering rather than any fixed hierarchy of views.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-97502/?t=1985",
+        "img": null,
+        "toc": true
+      }
+    ],
+    "venue": "Online",
+    "series": null,
+    "tags": [],
+    "transcript": {
+      "status": "pending",
+      "url": null,
+      "text_path": null
+    }
+  },
+  {
+    "id": "dharmaseed:97489",
+    "source": "Dharma Seed",
+    "source_id": "97489",
+    "title": "Forgiving Conditioning",
+    "speaker": "Matthew Brensilver",
+    "published_at": "2026-06-03T23:54:14+00:00",
+    "link": "https://dharmaseed.org/talks/97489/",
+    "audio_url": "https://dharmaseed.org/talks/97489/20260603-Matthew_Brensilver--forgiving_conditioning-97489.mp3?rss=",
+    "audio_type": "audio/mpeg",
+    "audio_length": 16192937,
+    "duration": "33:41",
+    "description": "(Online)",
+    "image_url": "https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+    "canonical_url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-97489/",
+    "podcast_description": "What happens if the first move is not self-improvement, but forgiveness of what has already arisen? The talk traces a quiet shift from body posture and metta into a deep practice of forgiving conditioning, habit, shame, and self-judgment without confusing forgiveness with passivity or condoning harm. It then widens into acceptance, loving-kindness, and a poetic sense of meeting life beyond the usual right and wrong.",
+    "short_summary": "A guided talk on forgiving conditioning, loosening self-judgment, and letting acceptance open naturally into loving-kindness.",
+    "episode_image_url": "https://jeffharr.is/dharma/brensilver/artwork/dharmaseed-97489.jpg",
+    "chapters_url": "https://jeffharr.is/dharma/brensilver/chapters/dharmaseed-97489.json",
+    "chapters": [
+      {
+        "start": 0.0,
+        "title": "Settling the posture",
+        "description": "The talk begins by inviting a sustainable posture and a balance of relaxation and alertness.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-97489/?t=0",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 81.88,
+        "title": "Longing for peace",
+        "description": "Body and mind are framed as movements that often express a hidden longing for Dharma and peace.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-97489/?t=82",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 162.52,
+        "title": "Forgiving what arises",
+        "description": "The central practice is introduced: forgiving the world, oneself, and the already-arisen stream of conditioning without passivity.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-97489/?t=163",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 474.24,
+        "title": "Habits and shame",
+        "description": "The talk examines long-held habits, fear of forgiveness, and the harsh inner program of self-correction.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-97489/?t=474",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 892.4,
+        "title": "Putting down the list",
+        "description": "Self-judgment and the egoic pros-and-cons ledger are set aside in favor of simple, repeated forgiveness.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-97489/?t=892",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1217.978,
+        "title": "Love as acceptance",
+        "description": "Forgiveness is named as a form of love that leaves fear and self-discipline aside for the moment.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-97489/?t=1218",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1447.418,
+        "title": "Metta from forgiveness",
+        "description": "The practice turns toward the loving-kindness phrases and the sense that they arise naturally from forgiveness.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-97489/?t=1447",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1859.418,
+        "title": "Beyond right and wrong",
+        "description": "The talk closes with a poetic image of a field beyond moral dualism, where meeting can happen in silence.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-97489/?t=1859",
+        "img": null,
+        "toc": true
+      }
+    ],
+    "venue": "Online",
+    "series": null,
+    "tags": [],
+    "transcript": {
+      "status": "pending",
+      "url": null,
+      "text_path": null
+    }
+  },
+  {
+    "id": "dharmaseed:97464",
+    "source": "Dharma Seed",
+    "source_id": "97464",
+    "title": "Guided Meditation: Breath and Sound",
+    "speaker": "Matthew Brensilver",
+    "published_at": "2026-06-03T09:55:48+00:00",
+    "link": "https://dharmaseed.org/talks/97464/",
+    "audio_url": "https://dharmaseed.org/talks/97464/20260603-Matthew_Brensilver--guided_meditation_breath_and_sound-97464.mp3?rss=",
+    "audio_type": "audio/mpeg",
+    "audio_length": 18058283,
+    "duration": "37:34",
+    "description": "(Online)",
+    "image_url": "https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+    "canonical_url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-97464/",
+    "podcast_description": "What happens if meditation is less about forcing calm and more about making room for what is already here? The talk guides a gradual settling into posture, then into breath, and then into sound and silence, repeatedly returning to the idea that practice is simple, humble, and can include imperfection, hope, and fear without fighting them. A brief reference to Sharon Salzberg sharpens the contrast between trying to make practice work and simply doing the practice.",
+    "short_summary": "A guided meditation that moves from posture to breath to sound, emphasizing spaciousness, imperfection, and simple, unforced practice.",
+    "episode_image_url": "https://jeffharr.is/dharma/brensilver/artwork/dharmaseed-97464.jpg",
+    "chapters_url": "https://jeffharr.is/dharma/brensilver/chapters/dharmaseed-97464.json",
+    "chapters": [
+      {
+        "start": 0.0,
+        "title": "Settling the posture",
+        "description": "The practice begins with small adjustments to find a posture that balances relaxation and alertness.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-97464/?t=0",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 138.76,
+        "title": "Good enough to begin",
+        "description": "The talk invites commitment to an imperfect posture and a willingness to rest in the goodness already present.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-97464/?t=139",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 360.76,
+        "title": "Arriving with mindfulness",
+        "description": "Attention widens to the edge of thinking and to whatever needs to feel safe before settling in.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-97464/?t=361",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 553.36,
+        "title": "A bigger room",
+        "description": "Practice is framed as opening into spaciousness rather than squeezing the mind into a narrow slot.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-97464/?t=553",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 768.4,
+        "title": "Breath as enjoyment",
+        "description": "Breathing becomes more vivid, with emphasis on the felt pleasure of inhalation and exhalation.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-97464/?t=768",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1126.4,
+        "title": "Simply doing practice",
+        "description": "A brief reference to Sharon Salzberg underscores the shift from trying to make meditation work to just practicing.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-97464/?t=1126",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1427.954,
+        "title": "Breathing with hope and fear",
+        "description": "Hope and fear are not pushed away but met through the breath, so the practice stays open to difficulty.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-97464/?t=1428",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1730.954,
+        "title": "Sound, silence, and trust",
+        "description": "The anchor shifts to sound and silence, including the ends of sounds, faint sounds, and silence as a kind of hearing, before closing in quiet trust.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-97464/?t=1731",
+        "img": null,
+        "toc": true
+      }
+    ],
+    "venue": "Online",
+    "series": null,
+    "tags": [],
+    "transcript": {
+      "status": "pending",
+      "url": null,
+      "text_path": null
+    }
+  },
+  {
+    "id": "audiodharma:25573",
+    "source": "AudioDharma",
+    "source_id": "25573",
+    "title": "Releasing Judging, Comparing, Fixing: Guided Meditation: Non-Fixing",
+    "speaker": "Matthew Brensilver",
+    "published_at": "2026-05-27T12:00:00+00:00",
+    "link": "https://www.audiodharma.org/talks/25573",
+    "audio_url": "https://audiodharma.us-east-1.linodeobjects.com/talks/25573/20260527-matthew_brensilver-releasing_judging_comparing_fixing_guided_meditation_non-fixing.mp3",
+    "audio_type": "audio/mpeg",
+    "audio_length": null,
+    "duration": "41:48",
+    "description": "AudioDharma talk by Matthew Brensilver.",
+    "image_url": "https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+    "canonical_url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25573/",
+    "podcast_description": "What if meditation is not about making goodness happen, but noticing what is already here? The talk moves from releasing the habit of control and fixing toward a quieter practice of forgiving phenomena, where attention becomes reverential and the mind softens into love. It ends by holding the path as a living balance between dissolving and reification, light and heavy, surrender and power.",
+    "short_summary": "A guided meditation on non-fixing: relaxing control, forgiving experience, and discovering reverential attention.",
+    "episode_image_url": "https://jeffharr.is/dharma/brensilver/artwork/audiodharma-25573.jpg",
+    "chapters_url": "https://jeffharr.is/dharma/brensilver/chapters/audiodharma-25573.json",
+    "chapters": [
+      {
+        "start": 1.0,
+        "title": "Goodness Already Here",
+        "description": "The guided opening asks what goodness is already present and invites a shift away from self-made striving.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25573/?t=1",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 105.0,
+        "title": "Settling Into Practice",
+        "description": "The instruction turns toward simply beginning meditation without confusing effort with the creation of goodness.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25573/?t=105",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 365.0,
+        "title": "Letting Go of Control",
+        "description": "The talk reflects on how many ways the mind tries to govern experience and how relieving it is to stop.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25573/?t=365",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 430.0,
+        "title": "Long Quiet Unfolding",
+        "description": "A sustained stretch of silence and repetition supports the practice of non-fixing and listening without interference.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25573/?t=430",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1216.305,
+        "title": "Space and Stillness",
+        "description": "The practice widens into sensory space, mountains, and the sense of stillness running through awareness.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25573/?t=1216",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1392.585,
+        "title": "Forgiveness and Reverence",
+        "description": "Forgiving all phenomena is presented as a way of uncovering an attention that feels reverential rather than grasping.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25573/?t=1393",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 2096.585,
+        "title": "Surrender and Love",
+        "description": "The talk says power is found through surrender and that spaciousness lets the mind take on the coloration of love.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25573/?t=2097",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 2342.437,
+        "title": "Light and Heavy",
+        "description": "An attributed saying about making what is light heavy and what is heavy light summarizes the path as a balance of dissolving and reifying.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25573/?t=2342",
+        "img": null,
+        "toc": true
+      }
+    ],
+    "venue": null,
+    "series": null,
+    "tags": [],
+    "transcript": {
+      "status": "pending",
+      "url": null,
+      "text_path": null
+    }
+  },
+  {
+    "id": "audiodharma:25574",
+    "source": "AudioDharma",
+    "source_id": "25574",
+    "title": "Releasing Judging, Comparing, Fixing: Dialogue Between Dana and Matthew",
+    "speaker": "Matthew Brensilver, Dana DePalma, MA",
+    "published_at": "2026-05-27T12:00:00+00:00",
+    "link": "https://www.audiodharma.org/talks/25574",
+    "audio_url": "https://audiodharma.us-east-1.linodeobjects.com/talks/25574/20260527-matthew_brensilver-releasing_judging_comparing_fixing_dialogue_between_dana_and_matthew.mp3",
+    "audio_type": "audio/mpeg",
+    "audio_length": null,
+    "duration": "50:29",
+    "description": "AudioDharma talk by Matthew Brensilver.",
+    "image_url": "https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+    "canonical_url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25574/",
+    "podcast_description": "What happens when practice stops trying to fix experience and instead learns to stay with it? The talk draws a careful line between reactive judging, comparing, and fixing, and a more intimate discernment that can meet difficulty without immediately contracting. From there it widens into retreat practice, daily life, ethics, mortality, and the question of how love can remain open without turning into control or collapse.",
+    "short_summary": "A dialogue about releasing fixing mind and learning to meet experience, ethics, and mortality with discernment, patience, and love.",
+    "episode_image_url": "https://jeffharr.is/dharma/brensilver/artwork/audiodharma-25574.jpg",
+    "chapters_url": "https://jeffharr.is/dharma/brensilver/chapters/audiodharma-25574.json",
+    "chapters": [
+      {
+        "start": 0.0,
+        "title": "Opening the questions",
+        "description": "The conversation begins by organizing listener questions into themes and setting up a back-and-forth on judging, comparing, and fixing.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25574/?t=0",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 80.64,
+        "title": "Fixing versus discernment",
+        "description": "The talk defines fixing mind as the urge to immediately change experience and contrasts it with discernment that stays intimate and responsive.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25574/?t=81",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 344.12,
+        "title": "Renunciation without perfection",
+        "description": "The speakers frame a retreat vow to renounce reactive mind states as a realistic practice, centered on 'as best I am able' rather than harsh ideals.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25574/?t=344",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 519.16,
+        "title": "Arriving and aligning",
+        "description": "A practice sequence of arriving, becoming available, and aligning is described as a way out of results-driven doing, supported by dignity, humility, and integrity.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25574/?t=519",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 797.4,
+        "title": "Three characteristics",
+        "description": "The talk turns to dukkha, impermanence, and not-self as realities that cannot be fixed away, and to wisdom as making good guesses about happiness.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25574/?t=797",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1023.48,
+        "title": "Living out of karma",
+        "description": "The conversation explores habit energy, karmic corners, and the long, patient process of living our way into a Dharma life.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25574/?t=1023",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1291.317,
+        "title": "Mortality and daily life",
+        "description": "Mortality is named as part of the equation of happiness, then the discussion shifts to how retreat practice can be carried into ordinary life.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25574/?t=1291",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1613.557,
+        "title": "Practice in relationship",
+        "description": "The talk uses examples like sunscreen and fixing energy to show how care, control, and embodied discernment operate in complex relationships.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25574/?t=1614",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1956.557,
+        "title": "Ethics, helplessness, and love",
+        "description": "The closing section moves through moral care, the limits of mindfulness, the fifth precept, global suffering, helplessness, and the difference between fear and love.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25574/?t=1957",
+        "img": null,
+        "toc": true
+      }
+    ],
+    "venue": null,
+    "series": null,
+    "co_teachers": [
+      "Dana DePalma, MA"
+    ],
+    "tags": [],
+    "transcript": {
+      "status": "pending",
+      "url": null,
+      "text_path": null
+    }
+  },
+  {
+    "id": "audiodharma:25572",
+    "source": "AudioDharma",
+    "source_id": "25572",
+    "title": "Releasing Judging, Comparing, Fixing: Urge to Fix",
+    "speaker": "Matthew Brensilver",
+    "published_at": "2026-05-26T12:00:00+00:00",
+    "link": "https://www.audiodharma.org/talks/25572",
+    "audio_url": "https://audiodharma.us-east-1.linodeobjects.com/talks/25572/20260526-matthew_brensilver-releasing_judging_comparing_fixing_urge_to_fix.mp3",
+    "audio_type": "audio/mpeg",
+    "audio_length": null,
+    "duration": "46:10",
+    "description": "AudioDharma talk by Matthew Brensilver.",
+    "image_url": "https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+    "canonical_url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25572/",
+    "podcast_description": "What happens when the mind’s reflex to improve, manage, and explain is itself the thing causing strain? The talk explores the “urge to fix” as a subtle form of suffering, then turns toward a different stance: non-intervention, curiosity, self-soothing, and a more honest look at what motivates practice. It closes by widening the frame to illness, mortality, and the kind of care that can witness pain without pretending to solve everything.",
+    "short_summary": "A talk on how compulsive fixing fuels suffering, and how practice can mature into curiosity, soothing, and non-intervention.",
+    "episode_image_url": "https://jeffharr.is/dharma/brensilver/artwork/audiodharma-25572.jpg",
+    "chapters_url": "https://jeffharr.is/dharma/brensilver/chapters/audiodharma-25572.json",
+    "chapters": [
+      {
+        "start": 0.8,
+        "title": "The Problem of Fidgeting",
+        "description": "The talk opens with the sense that peace always feels just one fidget away, and questions the habit of restless self-improvement.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25572/?t=1",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 77.92,
+        "title": "Fixing as a Reflex",
+        "description": "The speaker distinguishes useful change from the deeper energy of fixing that keeps reaching for better conditions.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25572/?t=78",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 177.36,
+        "title": "Progress and Fatigue",
+        "description": "Human life as a story of progress is examined as both understandable and exhausting, especially when practice is pulled into that same momentum.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25572/?t=177",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 365.6,
+        "title": "Alarm, Story, Self",
+        "description": "The talk traces how feeling turns into alarm, language, narrative, and self-protection, creating a sense that everything must be managed.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25572/?t=366",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 718.16,
+        "title": "Practice Without Answers",
+        "description": "The speaker describes a form of awareness that is unfamiliar to the system: patient, non-interventionist, and not organized around explanations.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25572/?t=718",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 971.84,
+        "title": "Secret Motives",
+        "description": "The talk turns to hidden ambitions in practice, including the wish to get something from meditation or to improve the self indirectly.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25572/?t=972",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1219.846,
+        "title": "Self-Soothing and Refuge",
+        "description": "Rather than forcing change, the talk emphasizes creating enough safety through breath, space, love, ethics, and bodily regulation to let go more easily.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25572/?t=1220",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1770.006,
+        "title": "History, Samadhi, Softening",
+        "description": "The discussion widens to healing the past, settling the mind into presence, and noticing how the boundaries between self and world soften when friction eases.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25572/?t=1770",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 2334.406,
+        "title": "Mortality and Witness",
+        "description": "The ending places non-fixing in the context of illness and death, with the ICU example showing that suffering may call more for presence and witness than solutions.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25572/?t=2334",
+        "img": null,
+        "toc": true
+      }
+    ],
+    "venue": null,
+    "series": null,
+    "tags": [],
+    "transcript": {
+      "status": "pending",
+      "url": null,
+      "text_path": null
+    }
+  },
+  {
+    "id": "audiodharma:25569",
+    "source": "AudioDharma",
+    "source_id": "25569",
+    "title": "Releasing Judging, Comparing, Fixing: Landing Here",
+    "speaker": "Matthew Brensilver",
+    "published_at": "2026-05-25T12:00:00+00:00",
+    "link": "https://www.audiodharma.org/talks/25569",
+    "audio_url": "https://audiodharma.us-east-1.linodeobjects.com/talks/25569/20260525-matthew_brensilver-releasing_judging_comparing_fixing_landing_here.mp3",
+    "audio_type": "audio/mpeg",
+    "audio_length": null,
+    "duration": "38:15",
+    "description": "AudioDharma talk by Matthew Brensilver.",
+    "image_url": "https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+    "canonical_url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25569/",
+    "podcast_description": "What happens when the habit of judging, comparing, and fixing drops away long enough for experience to settle on its own? The talk moves from simple questions about what is already still and what needs soothing, into a practice of softening the body and mind so attention can land here without measuring against an ideal. It then opens into a sustained reflection on how comparison creates suffering, and how mindfulness can become just being a body breathing, with less and less reference to self-story.",
+    "short_summary": "A quiet exploration of how softening judgment and comparison lets awareness land in the body and rest in what is already here.",
+    "episode_image_url": "https://jeffharr.is/dharma/brensilver/artwork/audiodharma-25569.jpg",
+    "chapters_url": "https://jeffharr.is/dharma/brensilver/chapters/audiodharma-25569.json",
+    "chapters": [
+      {
+        "start": 0.0,
+        "title": "What Is Already Still",
+        "description": "The talk begins by asking what is already still and what, if anything, needs to be soothed before attention can settle.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25569/?t=0",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 144.0,
+        "title": "Softening Toward Arrival",
+        "description": "The speaker explores using breath, memory, images, and words as supports that help the mind arrive and become learning-ready.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25569/?t=144",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 429.0,
+        "title": "Mind in the Mind",
+        "description": "The emphasis turns toward softening posture, body, and mental strain so awareness can be present without trying to correct everything.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25569/?t=429",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 761.0,
+        "title": "Breath Without Fixing",
+        "description": "Rather than reaching out to fix sensations or thoughts, the practice becomes simply noticing how everything affects the breathing body.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25569/?t=761",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1227.0,
+        "title": "Renouncing Comparison",
+        "description": "The talk names the suffering built into measuring self against ideals, other moments, or other minds, and points toward a field of awareness uninterested in that comparison.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25569/?t=1227",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1418.52,
+        "title": "Just a Breathing Body",
+        "description": "The inquiry narrows to what it is like to be only a body breathing, with less and less referencing to story or identity.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25569/?t=1419",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1798.52,
+        "title": "Experience and Experiencer",
+        "description": "The closing reflection suggests that when experience is complete, the distinction between experiencer and experience fades, and mindfulness no longer depends on remembering who you are.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25569/?t=1799",
+        "img": null,
+        "toc": true
+      }
+    ],
+    "venue": null,
+    "series": null,
+    "tags": [],
+    "transcript": {
+      "status": "pending",
+      "url": null,
+      "text_path": null
+    }
+  },
+  {
+    "id": "audiodharma:25568",
+    "source": "AudioDharma",
+    "source_id": "25568",
+    "title": "Releasing Judging, Comparing, Fixing: Imperfection and Judging",
+    "speaker": "Matthew Brensilver",
+    "published_at": "2026-05-24T12:00:00+00:00",
+    "link": "https://www.audiodharma.org/talks/25568",
+    "audio_url": "https://audiodharma.us-east-1.linodeobjects.com/talks/25568/20260524-matthew_brensilver-releasing_judging_comparing_fixing_imperfection_and_judging.mp3",
+    "audio_type": "audio/mpeg",
+    "audio_length": null,
+    "duration": "42:39",
+    "description": "AudioDharma talk by Matthew Brensilver.",
+    "image_url": "https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+    "canonical_url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25568/",
+    "podcast_description": "What if unpleasantness is not a mistake to solve, but a condition to meet without adding self-blame, explanation, or control? The talk follows that question from the raw difficulty of retreat into a steadier way of relating to pain, helplessness, judgment, anger, and preference. It gradually turns toward compassion and discernment, and ends by pointing to a more radical surrender: seeing experience clearly enough that nothing needs to be forced.",
+    "short_summary": "A talk on meeting imperfection directly, loosening judgment and control, and discovering a quieter freedom in non-preferential awareness.",
+    "episode_image_url": "https://jeffharr.is/dharma/brensilver/artwork/audiodharma-25568.jpg",
+    "chapters_url": "https://jeffharr.is/dharma/brensilver/chapters/audiodharma-25568.json",
+    "chapters": [
+      {
+        "start": 0.0,
+        "title": "Starting With Difficulty",
+        "description": "The talk opens by naming the hard, ordinary fact of unhappiness and retreat discomfort without pretending it is easy.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25568/?t=0",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 152.68,
+        "title": "How Suffering Takes Shape",
+        "description": "It traces how early dependence, misattunement, and the body’s discomfort shape identity and make suffering feel personal.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25568/?t=153",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 423.76,
+        "title": "Let Pain Be Pain",
+        "description": "The speaker argues for allowing unpleasantness to remain simply unpleasant rather than turning it into a problem to control.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25568/?t=424",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 661.52,
+        "title": "Staying Still For Help",
+        "description": "A short story about getting lost in the woods points to the value of stopping the frantic urge to fix everything and letting help arrive.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25568/?t=662",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 821.68,
+        "title": "Judging As Pressure Release",
+        "description": "The talk distinguishes pain from self-criticism and shows how judgment often functions as a desperate way to discharge strain.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25568/?t=822",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1141.28,
+        "title": "Pleasure, Pain, And Discernment",
+        "description": "It broadens the frame to include the usefulness of pleasure, equanimity with both pleasure and pain, and the difference between discernment and desperate control.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25568/?t=1141",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1564.584,
+        "title": "Anger, Blame, Forgiveness",
+        "description": "The speaker explores anger as a deep condition, the way blame tries to restore a sense of control, and why forgiveness matters.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25568/?t=1565",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1978.024,
+        "title": "No Preferences, Vast Space",
+        "description": "A Zen passage on no preferences leads into a final teaching on draining compulsivity, releasing the need to control, and perceiving the three characteristics as freeing.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25568/?t=1978",
+        "img": null,
+        "toc": true
+      }
+    ],
+    "venue": null,
+    "series": null,
+    "tags": [],
+    "transcript": {
+      "status": "pending",
+      "url": null,
+      "text_path": null
+    }
+  },
+  {
     "id": "audiodharma:25498",
     "source": "AudioDharma",
     "source_id": "25498",
@@ -23616,7 +24575,7 @@
     "source": "AudioDharma",
     "source_id": "21141",
     "title": "Formal Opening Part 2 (welcome and theme)",
-    "speaker": "Matthew Brensilver",
+    "speaker": "Ines Freedman, Matthew Brensilver",
     "published_at": "2024-08-28T12:00:00+00:00",
     "link": "https://www.audiodharma.org/talks/21141",
     "audio_url": "https://audiodharma.us-east-1.linodeobjects.com/talks/21141/20240828-Unknown-IRC-retreat_talk_8_28_2024_8_41_25_pm.mp3",
@@ -23718,7 +24677,7 @@
     "source": "AudioDharma",
     "source_id": "21138",
     "title": "Formal Opening Part 1 (sit)",
-    "speaker": "Matthew Brensilver",
+    "speaker": "Ines Freedman, Matthew Brensilver",
     "published_at": "2024-08-28T12:00:00+00:00",
     "link": "https://www.audiodharma.org/talks/21138",
     "audio_url": "https://audiodharma.us-east-1.linodeobjects.com/talks/21138/20240828-Unknown-IRC-retreat_talk_8_28_2024_7_52_31_pm.mp3",
@@ -36411,7 +37370,7 @@
     "source": "AudioDharma",
     "source_id": "17242",
     "title": "Conversation about Insight",
-    "speaker": "Matthew Brensilver",
+    "speaker": "Max Erdstein, Matthew Brensilver",
     "published_at": "2022-11-05T12:00:00+00:00",
     "link": "https://www.audiodharma.org/talks/17242",
     "audio_url": "https://audiodharma.us-east-1.linodeobjects.com/talks/17242/20221105-Max_Erdstein-IRC-conversation_about_insight.mp3",
@@ -36505,7 +37464,7 @@
     "source": "AudioDharma",
     "source_id": "17240",
     "title": "Whole Presence Samadhi",
-    "speaker": "Matthew Brensilver",
+    "speaker": "Max Erdstein, Matthew Brensilver",
     "published_at": "2022-11-04T12:00:00+00:00",
     "link": "https://www.audiodharma.org/talks/17240",
     "audio_url": "https://audiodharma.us-east-1.linodeobjects.com/talks/17240/20221104-Max_Erdstein-IRC-whole_presence_samadhi.mp3",

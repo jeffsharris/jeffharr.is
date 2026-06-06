@@ -3,7 +3,7 @@ from __future__ import annotations
 import re
 from datetime import datetime, timezone
 from html.parser import HTMLParser
-from typing import Dict, Iterable, List, Optional
+from typing import Any, Dict, Iterable, List, Optional
 from urllib.parse import urljoin
 
 from dharma_feed.fetch import fetch_text, probe_content_length
@@ -16,7 +16,7 @@ PAGE_RE = re.compile(r"[?&]page=(\d+)")
 
 
 def fetch_audiodharma_talks(
-    source: Dict[str, str], probe_lengths: bool = False
+    source: Dict[str, Any], probe_lengths: bool = False
 ) -> Iterable[Talk]:
     first_html = fetch_text(source["listing_url"])
     first_parser = AudioDharmaListingParser(source["listing_url"])
@@ -32,7 +32,7 @@ def fetch_audiodharma_talks(
 
 
 def parse_audiodharma_listing(
-    html_text: str, source: Dict[str, str], probe_lengths: bool = False
+    html_text: str, source: Dict[str, Any], probe_lengths: bool = False
 ) -> Iterable[Talk]:
     parser = AudioDharmaListingParser(source["listing_url"])
     parser.feed(html_text)
@@ -75,6 +75,7 @@ class AudioDharmaListingParser(HTMLParser):
                 self._row["audio_url"] = attrs_dict.get("data-url", "")
                 self._row["download_url"] = attrs_dict.get("data-download-url", "")
                 self._row["title"] = attrs_dict.get("data-title", "")
+                self._row["speaker"] = attrs_dict.get("data-speakers", "")
                 self._row["source_id"] = attrs_dict.get("data-id", "")
                 self._row["audio_type"] = _normalize_audio_type(attrs_dict.get("data-type", ""))
 
@@ -112,14 +113,18 @@ class AudioDharmaListingParser(HTMLParser):
 
 
 def _talks_from_entries(
-    entries: List[Dict[str, str]], source: Dict[str, str], probe_lengths: bool
+    entries: List[Dict[str, str]], source: Dict[str, Any], probe_lengths: bool
 ) -> Iterable[Talk]:
     talks = []
-    speaker = " ".join((source.get("speaker") or "").split())
+    source_speaker = " ".join(str(source.get("speaker") or "").split())
     description = source.get("description") or (
-        f"AudioDharma talk by {speaker}." if speaker else "AudioDharma talk."
+        f"AudioDharma talk by {source_speaker}." if source_speaker else "AudioDharma talk."
     )
     for entry in entries:
+        speaker = " ".join((entry.get("speaker") or source_speaker or "Unknown").split())
+        if not _speaker_allowed(source, speaker):
+            continue
+
         published_at = _parse_date(entry.get("date", ""))
         source_id = entry["source_id"]
         audio_url = entry["audio_url"]
@@ -140,6 +145,7 @@ def _talks_from_entries(
                 duration=entry.get("duration") or None,
                 description=description,
                 image_url=None,
+                co_teachers=_co_teachers_from_speakers(speaker, source_speaker),
             )
         )
     return talks
@@ -154,3 +160,38 @@ def _normalize_audio_type(value: str) -> str:
     if value == "audio/mp3":
         return "audio/mpeg"
     return value or "audio/mpeg"
+
+
+def _speaker_allowed(source: Dict[str, Any], speaker: str) -> bool:
+    allowed = source.get("include_speakers") or source.get("speaker")
+    if not allowed:
+        return True
+    if isinstance(allowed, str):
+        allowed = [allowed]
+
+    normalized_speaker = _normalize_person_name(speaker)
+    if not normalized_speaker:
+        return False
+
+    return any(
+        normalized_allowed in normalized_speaker
+        for normalized_allowed in (_normalize_person_name(str(name)) for name in allowed)
+        if normalized_allowed
+    )
+
+
+def _co_teachers_from_speakers(speaker: str, primary_speaker: str) -> List[str]:
+    if not primary_speaker:
+        return []
+    if _normalize_person_name(speaker) == _normalize_person_name(primary_speaker):
+        return []
+
+    prefix_match = re.match(rf"^\s*{re.escape(primary_speaker)}\s*,?\s*(.+)$", speaker)
+    if prefix_match:
+        co_teacher = " ".join(prefix_match.group(1).split())
+        return [co_teacher] if co_teacher else []
+    return []
+
+
+def _normalize_person_name(value: str) -> str:
+    return " ".join(re.sub(r"[^a-z0-9]+", " ", value.lower()).split())

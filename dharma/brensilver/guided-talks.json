@@ -1,5 +1,295 @@
 [
   {
+    "id": "dharmaseed:97515",
+    "source": "Dharma Seed",
+    "source_id": "97515",
+    "title": "Guided Meditation on Auditory Thinking",
+    "speaker": "Matthew Brensilver",
+    "published_at": "2026-06-05T09:44:01+00:00",
+    "link": "https://dharmaseed.org/talks/97515/",
+    "audio_url": "https://dharmaseed.org/talks/97515/20260605-Matthew_Brensilver--guided_meditation_on_auditory_thinking-97515.mp3?rss=",
+    "audio_type": "audio/mpeg",
+    "audio_length": 17217993,
+    "duration": "35:49",
+    "description": "(Online)",
+    "image_url": "https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+    "canonical_url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-97515/",
+    "podcast_description": "What happens when thought is treated not as a private voice, but as something heard within experience? The talk uses auditory thinking as a doorway into mindfulness, showing how deep listening can loosen identification and reveal the gap between a thought and the story built around it. From there it turns toward a quieter practice: allowing unpleasantness, giving up the impulse to control, and meeting experience without making enemies of it.",
+    "short_summary": "A guided meditation on listening to thoughts as sound, loosening identification, and meeting experience without defensive narration.",
+    "episode_image_url": "https://jeffharr.is/dharma/brensilver/artwork/dharmaseed-97515.jpg",
+    "chapters_url": "https://jeffharr.is/dharma/brensilver/chapters/dharmaseed-97515.json",
+    "chapters": [
+      {
+        "start": 0.0,
+        "title": "Sound and Silence",
+        "description": "The meditation begins by opening attention to hearing itself, with sound and silence as the first field of practice.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-97515/?t=0",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 30.0,
+        "title": "Thinking as Sound",
+        "description": "The talk invites the soundscape to move through awareness so verbal thinking can be included rather than excluded.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-97515/?t=30",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 118.0,
+        "title": "De-reifying Thought",
+        "description": "Thought is noticed directly as experience, not as a command or identity, and the tendency to take it as self is gently exposed.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-97515/?t=118",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 320.0,
+        "title": "Narrative and Impermanence",
+        "description": "Impermanence is presented as something the mind resists through storytelling, control, and quick replacement of one thought with another.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-97515/?t=320",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 754.0,
+        "title": "Pain and Narration",
+        "description": "The talk names the discomfort around thinking and not thinking, then points to a more bodily, less defended way of meeting unpleasantness.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-97515/?t=754",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 966.0,
+        "title": "Open Awareness",
+        "description": "The practice widens into a very open stance, where self and sense data are not held apart so tightly.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-97515/?t=966",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1358.686,
+        "title": "No Enemies",
+        "description": "A brief reference underscores that even the meditator self can narrate experience, while the instruction remains to listen without making thought an enemy.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-97515/?t=1359",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1506.686,
+        "title": "Who Are You?",
+        "description": "The closing movement looks at identification more closely, asking who one is when autobiography is not being repeated.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-97515/?t=1507",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1775.686,
+        "title": "Closing Silence",
+        "description": "The talk settles into a quiet ending after the central inquiry has been laid open.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-97515/?t=1776",
+        "img": null,
+        "toc": true
+      }
+    ],
+    "venue": "Online",
+    "series": null,
+    "tags": [],
+    "transcript": {
+      "status": "pending",
+      "url": null,
+      "text_path": null
+    }
+  },
+  {
+    "id": "dharmaseed:97464",
+    "source": "Dharma Seed",
+    "source_id": "97464",
+    "title": "Guided Meditation: Breath and Sound",
+    "speaker": "Matthew Brensilver",
+    "published_at": "2026-06-03T09:55:48+00:00",
+    "link": "https://dharmaseed.org/talks/97464/",
+    "audio_url": "https://dharmaseed.org/talks/97464/20260603-Matthew_Brensilver--guided_meditation_breath_and_sound-97464.mp3?rss=",
+    "audio_type": "audio/mpeg",
+    "audio_length": 18058283,
+    "duration": "37:34",
+    "description": "(Online)",
+    "image_url": "https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+    "canonical_url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-97464/",
+    "podcast_description": "What happens if meditation is less about forcing calm and more about making room for what is already here? The talk guides a gradual settling into posture, then into breath, and then into sound and silence, repeatedly returning to the idea that practice is simple, humble, and can include imperfection, hope, and fear without fighting them. A brief reference to Sharon Salzberg sharpens the contrast between trying to make practice work and simply doing the practice.",
+    "short_summary": "A guided meditation that moves from posture to breath to sound, emphasizing spaciousness, imperfection, and simple, unforced practice.",
+    "episode_image_url": "https://jeffharr.is/dharma/brensilver/artwork/dharmaseed-97464.jpg",
+    "chapters_url": "https://jeffharr.is/dharma/brensilver/chapters/dharmaseed-97464.json",
+    "chapters": [
+      {
+        "start": 0.0,
+        "title": "Settling the posture",
+        "description": "The practice begins with small adjustments to find a posture that balances relaxation and alertness.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-97464/?t=0",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 138.76,
+        "title": "Good enough to begin",
+        "description": "The talk invites commitment to an imperfect posture and a willingness to rest in the goodness already present.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-97464/?t=139",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 360.76,
+        "title": "Arriving with mindfulness",
+        "description": "Attention widens to the edge of thinking and to whatever needs to feel safe before settling in.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-97464/?t=361",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 553.36,
+        "title": "A bigger room",
+        "description": "Practice is framed as opening into spaciousness rather than squeezing the mind into a narrow slot.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-97464/?t=553",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 768.4,
+        "title": "Breath as enjoyment",
+        "description": "Breathing becomes more vivid, with emphasis on the felt pleasure of inhalation and exhalation.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-97464/?t=768",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1126.4,
+        "title": "Simply doing practice",
+        "description": "A brief reference to Sharon Salzberg underscores the shift from trying to make meditation work to just practicing.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-97464/?t=1126",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1427.954,
+        "title": "Breathing with hope and fear",
+        "description": "Hope and fear are not pushed away but met through the breath, so the practice stays open to difficulty.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-97464/?t=1428",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1730.954,
+        "title": "Sound, silence, and trust",
+        "description": "The anchor shifts to sound and silence, including the ends of sounds, faint sounds, and silence as a kind of hearing, before closing in quiet trust.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-97464/?t=1731",
+        "img": null,
+        "toc": true
+      }
+    ],
+    "venue": "Online",
+    "series": null,
+    "tags": [],
+    "transcript": {
+      "status": "pending",
+      "url": null,
+      "text_path": null
+    }
+  },
+  {
+    "id": "audiodharma:25573",
+    "source": "AudioDharma",
+    "source_id": "25573",
+    "title": "Releasing Judging, Comparing, Fixing: Guided Meditation: Non-Fixing",
+    "speaker": "Matthew Brensilver",
+    "published_at": "2026-05-27T12:00:00+00:00",
+    "link": "https://www.audiodharma.org/talks/25573",
+    "audio_url": "https://audiodharma.us-east-1.linodeobjects.com/talks/25573/20260527-matthew_brensilver-releasing_judging_comparing_fixing_guided_meditation_non-fixing.mp3",
+    "audio_type": "audio/mpeg",
+    "audio_length": null,
+    "duration": "41:48",
+    "description": "AudioDharma talk by Matthew Brensilver.",
+    "image_url": "https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+    "canonical_url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25573/",
+    "podcast_description": "What if meditation is not about making goodness happen, but noticing what is already here? The talk moves from releasing the habit of control and fixing toward a quieter practice of forgiving phenomena, where attention becomes reverential and the mind softens into love. It ends by holding the path as a living balance between dissolving and reification, light and heavy, surrender and power.",
+    "short_summary": "A guided meditation on non-fixing: relaxing control, forgiving experience, and discovering reverential attention.",
+    "episode_image_url": "https://jeffharr.is/dharma/brensilver/artwork/audiodharma-25573.jpg",
+    "chapters_url": "https://jeffharr.is/dharma/brensilver/chapters/audiodharma-25573.json",
+    "chapters": [
+      {
+        "start": 1.0,
+        "title": "Goodness Already Here",
+        "description": "The guided opening asks what goodness is already present and invites a shift away from self-made striving.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25573/?t=1",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 105.0,
+        "title": "Settling Into Practice",
+        "description": "The instruction turns toward simply beginning meditation without confusing effort with the creation of goodness.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25573/?t=105",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 365.0,
+        "title": "Letting Go of Control",
+        "description": "The talk reflects on how many ways the mind tries to govern experience and how relieving it is to stop.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25573/?t=365",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 430.0,
+        "title": "Long Quiet Unfolding",
+        "description": "A sustained stretch of silence and repetition supports the practice of non-fixing and listening without interference.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25573/?t=430",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1216.305,
+        "title": "Space and Stillness",
+        "description": "The practice widens into sensory space, mountains, and the sense of stillness running through awareness.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25573/?t=1216",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1392.585,
+        "title": "Forgiveness and Reverence",
+        "description": "Forgiving all phenomena is presented as a way of uncovering an attention that feels reverential rather than grasping.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25573/?t=1393",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 2096.585,
+        "title": "Surrender and Love",
+        "description": "The talk says power is found through surrender and that spaciousness lets the mind take on the coloration of love.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25573/?t=2097",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 2342.437,
+        "title": "Light and Heavy",
+        "description": "An attributed saying about making what is light heavy and what is heavy light summarizes the path as a balance of dissolving and reifying.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25573/?t=2342",
+        "img": null,
+        "toc": true
+      }
+    ],
+    "venue": null,
+    "series": null,
+    "tags": [],
+    "transcript": {
+      "status": "pending",
+      "url": null,
+      "text_path": null
+    }
+  },
+  {
     "id": "audiodharma:25499",
     "source": "AudioDharma",
     "source_id": "25499",
@@ -10012,7 +10302,7 @@
     "source": "AudioDharma",
     "source_id": "21138",
     "title": "Formal Opening Part 1 (sit)",
-    "speaker": "Matthew Brensilver",
+    "speaker": "Ines Freedman, Matthew Brensilver",
     "published_at": "2024-08-28T12:00:00+00:00",
     "link": "https://www.audiodharma.org/talks/21138",
     "audio_url": "https://audiodharma.us-east-1.linodeobjects.com/talks/21138/20240828-Unknown-IRC-retreat_talk_8_28_2024_7_52_31_pm.mp3",
