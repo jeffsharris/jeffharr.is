@@ -48,6 +48,7 @@ DHARMA_FEED_TITLE_PATTERNS = [
 
 GUIDED_FEED_TALK_IDS = {
     "audiodharma:25569",
+    "dharmaseed:97489",
 }
 
 

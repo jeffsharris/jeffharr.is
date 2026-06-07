@@ -725,6 +725,14 @@ class PodcastMetadataTests(unittest.TestCase):
                 )
             )
         )
+        self.assertTrue(
+            is_guided_practice(
+                Talk(
+                    title="Forgiving Conditioning",
+                    **{**base, "id": "dharmaseed:97489", "source": "Dharma Seed"},
+                )
+            )
+        )
 
     def test_split_talks_for_feeds(self):
         base = {
@@ -743,12 +751,20 @@ class PodcastMetadataTests(unittest.TestCase):
                 title="Releasing Judging, Comparing, Fixing: Landing Here",
                 **base,
             ),
+            Talk(
+                id="dharmaseed:97489",
+                title="Forgiving Conditioning",
+                **{**base, "source": "Dharma Seed"},
+            ),
         ]
 
         dharma, guided = split_talks_for_feeds(talks)
 
         self.assertEqual([talk.id for talk in dharma], ["talk"])
-        self.assertEqual([talk.id for talk in guided], ["guided", "audiodharma:25569"])
+        self.assertEqual(
+            [talk.id for talk in guided],
+            ["guided", "audiodharma:25569", "dharmaseed:97489"],
+        )
 
     def test_metadata_enrichment_writes_chapters_and_episode_artwork(self):
         with tempfile.TemporaryDirectory() as tmp:
