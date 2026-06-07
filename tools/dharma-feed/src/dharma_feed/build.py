@@ -46,6 +46,10 @@ DHARMA_FEED_TITLE_PATTERNS = [
     ]
 ]
 
+GUIDED_FEED_TALK_IDS = {
+    "audiodharma:25569",
+}
+
 
 def main(argv: Iterable[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Build configured Dharma podcast feeds.")
@@ -322,6 +326,8 @@ def is_guided_practice(talk: Talk) -> bool:
     title = " ".join(talk.title.split())
     if any(pattern.search(title) for pattern in DHARMA_FEED_TITLE_PATTERNS):
         return False
+    if talk.id in GUIDED_FEED_TALK_IDS:
+        return True
     return any(pattern.search(title) for pattern in GUIDED_FEED_TITLE_PATTERNS)
 
 

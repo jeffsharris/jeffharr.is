@@ -717,6 +717,14 @@ class PodcastMetadataTests(unittest.TestCase):
             self.assertTrue(is_guided_practice(Talk(title=title, **base)), title)
         for title in dharma_titles:
             self.assertFalse(is_guided_practice(Talk(title=title, **base)), title)
+        self.assertTrue(
+            is_guided_practice(
+                Talk(
+                    title="Releasing Judging, Comparing, Fixing: Landing Here",
+                    **{**base, "id": "audiodharma:25569"},
+                )
+            )
+        )
 
     def test_split_talks_for_feeds(self):
         base = {
@@ -730,12 +738,17 @@ class PodcastMetadataTests(unittest.TestCase):
         talks = [
             Talk(id="talk", title="The Dharma of Practice", **base),
             Talk(id="guided", title="Guided Meditation: Breath", **base),
+            Talk(
+                id="audiodharma:25569",
+                title="Releasing Judging, Comparing, Fixing: Landing Here",
+                **base,
+            ),
         ]
 
         dharma, guided = split_talks_for_feeds(talks)
 
         self.assertEqual([talk.id for talk in dharma], ["talk"])
-        self.assertEqual([talk.id for talk in guided], ["guided"])
+        self.assertEqual([talk.id for talk in guided], ["guided", "audiodharma:25569"])
 
     def test_metadata_enrichment_writes_chapters_and_episode_artwork(self):
         with tempfile.TemporaryDirectory() as tmp:
