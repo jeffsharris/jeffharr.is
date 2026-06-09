@@ -103,7 +103,7 @@ def build_rss(talks: Iterable[Talk], site: Dict[str, str]) -> str:
                 "type": talk.audio_type or "audio/mpeg",
             },
         )
-        _text(item, f"{{{ITUNES_NS}}}author", talk.speaker)
+        _text(item, f"{{{ITUNES_NS}}}author", site.get("author") or talk.speaker)
         _text(item, f"{{{ITUNES_NS}}}explicit", "no")
         if talk.duration:
             _text(item, f"{{{ITUNES_NS}}}duration", talk.duration)

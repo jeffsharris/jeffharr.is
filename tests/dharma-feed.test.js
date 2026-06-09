@@ -64,7 +64,7 @@ test('dynamic Dharma feed filters by search query', async () => {
   assert.equal(response.headers.get('content-type'), 'application/rss+xml; charset=utf-8');
   assert.match(body, /Metta and Attention/);
   assert.doesNotMatch(body, /Equanimity/);
-  assert.match(body, /matching &quot;metta&quot;/);
+  assert.match(body, /Matching &quot;Metta&quot;/);
 });
 
 test('dynamic Dharma feed filters by maximum duration', async () => {
@@ -100,7 +100,7 @@ test('dynamic Dharma feed combines text and duration range filters', async () =>
   assert.equal(response.status, 200);
   assert.match(body, /Metta and Attention/);
   assert.doesNotMatch(body, /Equanimity/);
-  assert.match(body, /matching &quot;metta&quot;/);
+  assert.match(body, /Matching &quot;Metta&quot;/);
   assert.match(body, /duration:20m\.\.40m/);
 });
 
@@ -149,6 +149,38 @@ test('dynamic Dharma feed defaults to Dharma talks when scope is omitted', async
   assert.match(body, /scope=dharma/);
 });
 
+test('dynamic Dharma feed title-cases custom search titles and uses corpus authors', async () => {
+  const guidedTalk = {
+    id: 'audiodharma:guided',
+    source: 'AudioDharma',
+    source_id: 'guided',
+    title: 'Guided Body Scan',
+    speaker: 'Matthew Brensilver, Dana DePalma, MA',
+    published_at: '2026-01-04T00:00:00.000Z',
+    canonical_url: 'https://jeffharr.is/dharma/brensilver/talks/audiodharma-guided/',
+    link: 'https://example.com/talks/guided',
+    audio_url: 'https://media.example/guided.mp3',
+    audio_type: 'audio/mpeg',
+    podcast_description: 'A guided body scan practice.',
+    duration: '25:00'
+  };
+  const response = await onRequest({
+    request: new Request('https://jeffharr.is/api/feeds/dharma.xml?corpus=brensilver&scope=guided&q=guided'),
+    env: {
+      ASSETS: createAssets({
+        '/dharma/brensilver/guided-talks.json': [guidedTalk]
+      }),
+      CONTENT_DB: createStarredDb([])
+    }
+  });
+  const body = await response.text();
+  const authors = [...body.matchAll(/<itunes:author>(.*?)<\/itunes:author>/g)].map((match) => match[1]);
+
+  assert.equal(response.status, 200);
+  assert.match(body, /<title>Matthew Brensilver Guided Meditations Matching &quot;Guided&quot;<\/title>/);
+  assert.deepEqual(authors, ['Matthew Brensilver', 'Matthew Brensilver']);
+});
+
 test('dynamic Dharma feed can span corpora and filter to starred talks', async () => {
   const response = await onRequest({
     request: new Request('https://jeffharr.is/api/feeds/dharma.xml?corpus=brensilver,burbea&starred=1'),
@@ -179,7 +211,7 @@ test('dynamic Dharma feed can span corpora and filter to starred talks', async (
   assert.match(body, /Metta and Attention/);
   assert.match(body, /Imaginal Practice/);
   assert.doesNotMatch(body, /Equanimity/);
-  assert.match(body, /Dharma archive starred Dharma talks/);
+  assert.match(body, /Dharma Archive Starred Dharma Talks/);
 });
 
 test('dynamic Dharma feed treats is:starred search as starred filter', async () => {
@@ -204,7 +236,7 @@ test('dynamic Dharma feed treats is:starred search as starred filter', async () 
   assert.equal(response.status, 200);
   assert.match(body, /Metta and Attention/);
   assert.doesNotMatch(body, /Equanimity/);
-  assert.match(body, /matching &quot;metta&quot;/);
+  assert.match(body, /Matching &quot;Metta&quot;/);
   assert.match(body, /starred/);
 });
 

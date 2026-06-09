@@ -15,10 +15,45 @@ const SCOPE_FILES = {
   guided: 'guided-talks.json'
 };
 const SCOPE_LABELS = {
-  all: 'recordings',
-  dharma: 'Dharma talks',
-  guided: 'guided meditations'
+  all: 'Recordings',
+  dharma: 'Dharma Talks',
+  guided: 'Guided Meditations'
 };
+const CORPUS_METADATA = {
+  brensilver: {
+    title: 'Matthew Brensilver',
+    author: 'Matthew Brensilver'
+  },
+  burbea: {
+    title: 'Rob Burbea',
+    author: 'Rob Burbea'
+  },
+  watts: {
+    title: 'Alan Watts',
+    author: 'Alan Watts'
+  }
+};
+const TITLE_MINOR_WORDS = new Set([
+  'a',
+  'an',
+  'and',
+  'as',
+  'at',
+  'but',
+  'by',
+  'for',
+  'in',
+  'nor',
+  'of',
+  'on',
+  'or',
+  'per',
+  'the',
+  'to',
+  'vs',
+  'via',
+  'with'
+]);
 
 export async function onRequest(context) {
   const { request, env } = context;
@@ -284,7 +319,7 @@ function renderRss({ requestUrl, query, talks, starredRefs, hasAnyStarred }) {
   const imageUrl = talks.find((talk) => talk.episode_image_url || talk.image_url)?.episode_image_url
     || talks.find((talk) => talk.image_url)?.image_url
     || '';
-  const author = feedAuthor(talks);
+  const author = feedAuthor(query, talks);
   const baseUrl = feedBaseUrl(query);
 
   return `<?xml version="1.0" encoding="utf-8"?>
@@ -318,7 +353,7 @@ function renderItem(talk, starredRefs, hasAnyStarred) {
 <guid isPermaLink="false">${escapeXml(talk.id || `${talk.__corpus}:${talk.source_id || title}`)}</guid>
 <description>${escapeXml(talkDescription(talk))}</description>
 <enclosure url="${escapeXml(talk.audio_url || '')}" length="${escapeXml(String(talk.audio_length || 0))}" type="${escapeXml(talk.audio_type || 'audio/mpeg')}"/>
-<itunes:author>${escapeXml(talk.speaker || '')}</itunes:author>
+<itunes:author>${escapeXml(talkAuthor(talk))}</itunes:author>
 <itunes:explicit>no</itunes:explicit>
 ${talk.duration ? `<itunes:duration>${escapeXml(talk.duration)}</itunes:duration>` : ''}
 <itunes:summary>${escapeXml(talkSummary(talk))}</itunes:summary>
@@ -330,12 +365,12 @@ ${talk.chapters_url ? `<podcast:chapters url="${escapeXml(talk.chapters_url)}" t
 function feedTitle(query, talks) {
   const corpusTitle = query.corpora.length === 1
     ? corpusDisplayName(query.corpora[0], talks)
-    : 'Dharma archive';
+    : 'Dharma Archive';
   const parts = [corpusTitle];
-  if (query.starred) parts.push('starred');
-  parts.push(SCOPE_LABELS[query.scope] || 'recordings');
-  if (query.search) parts.push(`matching "${query.search}"`);
-  if (query.durationLabels?.length) parts.push(query.durationLabels.join(' '));
+  if (query.starred) parts.push('Starred');
+  parts.push(SCOPE_LABELS[query.scope] || 'Recordings');
+  if (query.search) parts.push(`Matching "${titleCaseText(query.search)}"`);
+  if (query.durationLabels?.length) parts.push(query.durationLabels.map(formatDurationLabel).join(' '));
   return parts.join(' ');
 }
 
@@ -352,6 +387,8 @@ function feedDescription(query, count) {
 }
 
 function corpusDisplayName(corpus, talks) {
+  const metadataTitle = CORPUS_METADATA[corpus]?.title;
+  if (metadataTitle) return metadataTitle;
   const speaker = talks.find((talk) => talk.speaker)?.speaker;
   if (speaker) return speaker;
   return String(corpus || 'Dharma')
@@ -360,9 +397,42 @@ function corpusDisplayName(corpus, talks) {
     .join(' ');
 }
 
-function feedAuthor(talks) {
-  const authors = Array.from(new Set(talks.map((talk) => talk.speaker).filter(Boolean)));
+function feedAuthor(query, talks) {
+  if (query.corpora.length === 1) {
+    return corpusAuthor(query.corpora[0], talks);
+  }
+  const authors = Array.from(new Set(talks.map(talkAuthor).filter(Boolean)));
   return authors.length ? authors.slice(0, 4).join(', ') : 'Jeff Harris';
+}
+
+function talkAuthor(talk) {
+  return corpusAuthor(talk.__corpus, [talk]);
+}
+
+function corpusAuthor(corpus, talks) {
+  const metadataAuthor = CORPUS_METADATA[corpus]?.author;
+  if (metadataAuthor) return metadataAuthor;
+  return talks.find((talk) => talk.speaker)?.speaker || 'Jeff Harris';
+}
+
+function formatDurationLabel(label) {
+  return String(label || '').replace(/^duration:/i, 'Duration:');
+}
+
+function titleCaseText(value) {
+  const raw = String(value || '');
+  const matches = Array.from(raw.matchAll(/[A-Za-z][A-Za-z0-9'’-]*/g));
+  let index = 0;
+  return raw.replace(/[A-Za-z][A-Za-z0-9'’-]*/g, (word) => {
+    const wordIndex = index;
+    index += 1;
+    if (word.length > 1 && word === word.toUpperCase()) return word;
+    const lower = word.toLowerCase();
+    if (wordIndex > 0 && wordIndex < matches.length - 1 && TITLE_MINOR_WORDS.has(lower)) {
+      return lower;
+    }
+    return lower[0].toUpperCase() + lower.slice(1);
+  });
 }
 
 function feedBaseUrl(query) {

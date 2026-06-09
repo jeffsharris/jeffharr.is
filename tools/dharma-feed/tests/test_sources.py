@@ -997,6 +997,35 @@ class PodcastMetadataTests(unittest.TestCase):
             "application/json+chapters",
         )
 
+    def test_rss_uses_site_author_for_episode_authors(self):
+        talk = Talk(
+            id="audiodharma:1",
+            source="AudioDharma",
+            source_id="1",
+            title="Guided Practice",
+            speaker="Matthew Brensilver, Dana DePalma, MA",
+            published_at=datetime(2026, 1, 1, tzinfo=timezone.utc),
+            link="https://example.test/source",
+            audio_url="https://example.test/audio.mp3",
+        )
+        xml = build_rss(
+            [talk],
+            {
+                "title": "Matthew Brensilver Dharma Talks",
+                "base_url": "https://jeffharr.is/dharma/brensilver/",
+                "feed_url": "https://jeffharr.is/dharma/brensilver/feed.xml",
+                "author": "Matthew Brensilver",
+                "description": "Merged talks.",
+            },
+        )
+        root = ET.fromstring(xml)
+        namespaces = {"itunes": "http://www.itunes.com/dtds/podcast-1.0.dtd"}
+        channel = root.find("./channel")
+        item = root.find("./channel/item")
+
+        self.assertEqual(channel.findtext("itunes:author", namespaces=namespaces), "Matthew Brensilver")
+        self.assertEqual(item.findtext("itunes:author", namespaces=namespaces), "Matthew Brensilver")
+
     def test_talk_page_social_preview_uses_episode_artwork(self):
         talk = Talk(
             id="audiodharma:1",
