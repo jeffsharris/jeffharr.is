@@ -1,5 +1,51 @@
 [
   {
+    "id": "audiodharma:25632",
+    "source": "AudioDharma",
+    "source_id": "25632",
+    "title": "Short Talk: We don't do freedom",
+    "speaker": "Matthew Brensilver",
+    "published_at": "2026-06-10T12:00:00+00:00",
+    "link": "https://www.audiodharma.org/talks/25632",
+    "audio_url": "https://audiodharma.us-east-1.linodeobjects.com/talks/25632/20260610-matthew_brensilver-imc-short_talk_we_don_t_do_freedom.mp3",
+    "audio_type": "audio/mpeg",
+    "audio_length": null,
+    "duration": "16:59",
+    "description": "AudioDharma talk by Matthew Brensilver.",
+    "image_url": "https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+    "venue": null,
+    "series": null,
+    "tags": [],
+    "transcript": {
+      "status": "pending",
+      "url": null,
+      "text_path": null
+    }
+  },
+  {
+    "id": "audiodharma:25633",
+    "source": "AudioDharma",
+    "source_id": "25633",
+    "title": "Guided Meditation: Goodness and Equanimity",
+    "speaker": "Matthew Brensilver",
+    "published_at": "2026-06-10T12:00:00+00:00",
+    "link": "https://www.audiodharma.org/talks/25633",
+    "audio_url": "https://audiodharma.us-east-1.linodeobjects.com/talks/25633/20260610-matthew_brensilver-imc-guided_meditation_goodness_and_equanimity.mp3",
+    "audio_type": "audio/mpeg",
+    "audio_length": null,
+    "duration": "26:31",
+    "description": "AudioDharma talk by Matthew Brensilver.",
+    "image_url": "https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+    "venue": null,
+    "series": null,
+    "tags": [],
+    "transcript": {
+      "status": "pending",
+      "url": null,
+      "text_path": null
+    }
+  },
+  {
     "id": "dharmaseed:97515",
     "source": "Dharma Seed",
     "source_id": "97515",
