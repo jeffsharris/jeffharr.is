@@ -22,7 +22,7 @@ jobs:
         run: python3 scripts/build-dharma-feed.py brensilver
 
       - name: Check feed freshness
-        run: python3 scripts/check-brensilver-feed-freshness.py
+        run: python3 scripts/check-brensilver-feed-freshness.py --require-enriched-feed-items
 
       - name: Commit generated feed
         run: |

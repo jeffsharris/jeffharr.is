@@ -30,7 +30,7 @@ enrichment artifacts.
 
 ## Normal Ongoing Operation
 
-The Mac Mini should run this every six hours:
+The Mac Mini should run this every two hours:
 
 ```sh
 cd <repo-root>
@@ -40,7 +40,7 @@ scripts/run-dharma-ingestion.sh brensilver
 The installed launchd job should use:
 
 - label: `com.jeffharris.dharma-ingestion`
-- interval: `21600` seconds
+- interval: `7200` seconds
 - script: `<repo-root>/scripts/run-dharma-ingestion.sh brensilver`
 
 For unattended publishing, the environment sets:
@@ -58,8 +58,9 @@ BRENSILVER_CHAPTERS_BASE_URL=https://jeffharr.is/dharma/brensilver/
 artwork/chapter bases for new automation; keep both same-site for preview mode,
 or move only artwork to media/R2 once that upload path exists.
 
-The runner refuses to auto-publish from a dirty worktree. That is intentional:
-scheduled jobs should not accidentally commit an agent's unrelated edits.
+The runner refuses to auto-publish when staged changes already exist. Unrelated
+unstaged local edits should not block ingestion; the runner stages and commits
+only generated `dharma/<corpus>/` artifacts.
 
 Cloudflare Pages deploys the site from GitHub pushes to `main`. Normal
 Brensilver publishing should therefore commit generated `dharma/brensilver/` artifacts

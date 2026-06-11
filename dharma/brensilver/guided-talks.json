@@ -13,6 +13,77 @@
     "duration": "26:31",
     "description": "AudioDharma talk by Matthew Brensilver.",
     "image_url": "https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+    "canonical_url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25633/",
+    "podcast_description": "How do we stay open to the moment when the mind begins from tension, aversion, or the sense that something is wrong? This guided meditation starts by grounding attention in small, easily missed forms of goodness—a tiny smile, an uplift in the face, a remembered kindness—and then uses that felt goodness to hold unpleasant sensation without tightening around it. The movement of the practice is from bracing and self-protection toward equanimity: allowing the unpleasant to be known directly, with less control and more heart.",
+    "short_summary": "A guided practice that begins with small goodness and uses it to meet unpleasant experience with less bracing and more equanimity.",
+    "episode_image_url": "https://jeffharr.is/dharma/brensilver/artwork/audiodharma-25633.jpg",
+    "chapters_url": "https://jeffharr.is/dharma/brensilver/chapters/audiodharma-25633.json",
+    "chapters": [
+      {
+        "start": 12.0,
+        "title": "Opening to goodness",
+        "description": "The talk begins by suggesting that openness depends on connecting with goodness rather than starting from desolation.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25633/?t=12",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 53.0,
+        "title": "Finding a small smile",
+        "description": "The practice looks for the smallest accessible signs of uplift, kindness, or warmth, even if they are barely noticeable.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25633/?t=53",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 133.0,
+        "title": "Enveloped in goodness",
+        "description": "Goodness is framed as something already surrounding us, and the instruction is to marinate in that felt sense.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25633/?t=133",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 259.0,
+        "title": "Forgiving imperfection",
+        "description": "From the richness of goodness, the talk turns toward forgiving samsara and coming to terms with ongoing imperfection.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25633/?t=259",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 505.0,
+        "title": "Meeting unpleasant feeling",
+        "description": "The emphasis shifts to unpleasant vedana and the deep habit of wanting to adjust the moment.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25633/?t=505",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 762.0,
+        "title": "Breathing into tension",
+        "description": "The practice turns to the little whirlpools of tension and the ways the body braces, using the breath to soften around them.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25633/?t=762",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1129.0,
+        "title": "Holding the unpleasant",
+        "description": "The talk asks what the unpleasantness collides with and points to how suffering becomes self-referential.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25633/?t=1129",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1261.628,
+        "title": "Closing reflection",
+        "description": "A closing poetic passage, associated with Osho, frames the talk in a reflective mood with the question of waking from dreams.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25633/?t=1262",
+        "img": null,
+        "toc": true
+      }
+    ],
     "venue": null,
     "series": null,
     "tags": [],

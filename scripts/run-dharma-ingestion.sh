@@ -88,8 +88,8 @@ chapters_base_url="${(P)chapters_base_name:-$media_base_url}"
 auto_publish="${(P)auto_publish_name:-0}"
 
 if [[ "$auto_publish" == "1" ]]; then
-  if [[ -n "$(git status --porcelain)" ]]; then
-    echo "Working tree is not clean; refusing unattended auto-publish." >&2
+  if ! git diff --cached --quiet; then
+    echo "Staged changes are present; refusing unattended auto-publish." >&2
     git status --short >&2
     exit 1
   fi
@@ -99,7 +99,7 @@ if [[ "$auto_publish" == "1" ]]; then
     echo "Cannot auto-publish from a detached HEAD." >&2
     exit 1
   fi
-  git pull --ff-only origin "$branch"
+  git pull --ff-only --autostash origin "$branch"
 fi
 
 echo "[$(timestamp)] Refreshing $label source feeds"
@@ -127,11 +127,11 @@ if [[ "$auto_publish" == "1" ]]; then
   git add "dharma/$corpus"
   if git diff --cached --quiet -- "dharma/$corpus"; then
     echo "No $label generated artifact changes to publish."
-    git pull --ff-only origin "$branch"
+    git pull --ff-only --autostash origin "$branch"
   else
     git commit -m "Update $label generated feed artifacts"
     git fetch origin "$branch"
-    git rebase "origin/$branch"
+    git rebase --autostash "origin/$branch"
     git push origin "$branch"
   fi
 fi

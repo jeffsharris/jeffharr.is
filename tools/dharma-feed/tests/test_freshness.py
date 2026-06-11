@@ -2,7 +2,11 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from dharma_feed.freshness import generated_feed_guids, latest_upstream_expectations
+from dharma_feed.freshness import (
+    feed_enrichment_issues,
+    generated_feed_guids,
+    latest_upstream_expectations,
+)
 
 
 class FreshnessTests(unittest.TestCase):
@@ -101,6 +105,114 @@ class FreshnessTests(unittest.TestCase):
                 generated_feed_guids(out_dir),
                 {"dharmaseed:2", "audiodharma:11"},
             )
+
+    def test_feed_enrichment_issues_accepts_fully_enriched_feed_items(self):
+        with tempfile.TemporaryDirectory() as raw_dir:
+            out_dir = Path(raw_dir)
+            image_url = "https://example.test/dharma/brensilver/artwork/audiodharma-11.jpg"
+            chapters_url = "https://example.test/dharma/brensilver/chapters/audiodharma-11.json"
+            (out_dir / "feed.xml").write_text(
+                f"""<rss xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd"
+                         xmlns:podcast="https://podcastindex.org/namespace/1.0">
+                  <channel>
+                    <item>
+                      <title>Latest AudioDharma</title>
+                      <guid>audiodharma:11</guid>
+                      <itunes:image href="{image_url}" />
+                      <podcast:chapters url="{chapters_url}" type="application/json+chapters" />
+                    </item>
+                  </channel>
+                </rss>""",
+                encoding="utf-8",
+            )
+            (out_dir / "talks.json").write_text(
+                f"""[
+                  {{
+                    "id": "audiodharma:11",
+                    "title": "Latest AudioDharma",
+                    "podcast_description": "A generated episode description.",
+                    "episode_image_url": "{image_url}",
+                    "chapters_url": "{chapters_url}",
+                    "chapters": [{{"start": 0, "title": "Beginning"}}]
+                  }}
+                ]""",
+                encoding="utf-8",
+            )
+            (out_dir / "artwork").mkdir()
+            (out_dir / "artwork" / "audiodharma-11.jpg").write_bytes(b"image")
+            (out_dir / "chapters").mkdir()
+            (out_dir / "chapters" / "audiodharma-11.json").write_text(
+                """{"version":"1.2.0","chapters":[{"startTime":0,"title":"Beginning"}]}""",
+                encoding="utf-8",
+            )
+
+            self.assertEqual(feed_enrichment_issues(out_dir), [])
+
+    def test_feed_enrichment_issues_reports_feed_only_items(self):
+        with tempfile.TemporaryDirectory() as raw_dir:
+            out_dir = Path(raw_dir)
+            (out_dir / "feed.xml").write_text(
+                """<rss><channel>
+                  <item><title>Latest AudioDharma</title><guid>audiodharma:11</guid></item>
+                </channel></rss>""",
+                encoding="utf-8",
+            )
+            (out_dir / "talks.json").write_text(
+                """[
+                  {"id": "audiodharma:11", "title": "Latest AudioDharma"}
+                ]""",
+                encoding="utf-8",
+            )
+
+            issues = feed_enrichment_issues(out_dir)
+
+            self.assertEqual(len(issues), 1)
+            self.assertEqual(issues[0].id, "audiodharma:11")
+            self.assertEqual(
+                issues[0].missing_requirements,
+                ("podcast_description", "episode_image_url", "chapters_url", "chapters"),
+            )
+
+    def test_feed_enrichment_issues_reports_stale_rss_media_tags(self):
+        with tempfile.TemporaryDirectory() as raw_dir:
+            out_dir = Path(raw_dir)
+            image_url = "https://example.test/dharma/brensilver/artwork/audiodharma-11.jpg"
+            chapters_url = "https://example.test/dharma/brensilver/chapters/audiodharma-11.json"
+            (out_dir / "feed.xml").write_text(
+                """<rss xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd"
+                         xmlns:podcast="https://podcastindex.org/namespace/1.0">
+                  <channel>
+                    <item>
+                      <title>Latest AudioDharma</title>
+                      <guid>audiodharma:11</guid>
+                      <itunes:image href="https://example.test/default.jpg" />
+                      <podcast:chapters url="https://example.test/default.json" type="application/json+chapters" />
+                    </item>
+                  </channel>
+                </rss>""",
+                encoding="utf-8",
+            )
+            (out_dir / "talks.json").write_text(
+                f"""[
+                  {{
+                    "id": "audiodharma:11",
+                    "title": "Latest AudioDharma",
+                    "podcast_description": "A generated episode description.",
+                    "episode_image_url": "{image_url}",
+                    "chapters_url": "{chapters_url}",
+                    "chapters": [{{"start": 0, "title": "Beginning"}}]
+                  }}
+                ]""",
+                encoding="utf-8",
+            )
+
+            issues = feed_enrichment_issues(out_dir)
+
+            self.assertEqual(len(issues), 1)
+            self.assertIn("artwork/audiodharma-11.jpg", issues[0].missing_requirements)
+            self.assertIn("chapters/audiodharma-11.json", issues[0].missing_requirements)
+            self.assertIn("rss itunes:image", issues[0].missing_requirements)
+            self.assertIn("rss podcast:chapters", issues[0].missing_requirements)
 
 
 if __name__ == "__main__":
