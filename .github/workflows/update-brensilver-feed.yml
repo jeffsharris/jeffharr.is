@@ -1,4 +1,4 @@
-name: Update Brensilver feed
+name: Check Brensilver feed
 
 on:
   workflow_dispatch:
@@ -6,10 +6,10 @@ on:
     - cron: "17 */6 * * *"
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
-  update-feed:
+  check-feed:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -18,20 +18,12 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Build feed
-        run: python3 scripts/build-dharma-feed.py brensilver
+      - name: Build checked-in feed artifacts
+        run: python3 scripts/build-dharma-feed.py brensilver --talks-json dharma/brensilver/talks.json --copy-artwork
 
-      - name: Check feed freshness
-        run: python3 scripts/check-brensilver-feed-freshness.py --require-enriched-feed-items
+      - name: Check feed health
+        run: python3 scripts/check-brensilver-feed-freshness.py --require-enriched-feed-items --freshness-grace-hours 12
 
-      - name: Commit generated feed
+      - name: Verify generated artifacts are committed
         run: |
-          if git diff --quiet -- dharma/brensilver; then
-            echo "No feed changes."
-            exit 0
-          fi
-          git config user.name "brensilver-feed-bot"
-          git config user.email "brensilver-feed-bot@users.noreply.github.com"
-          git add dharma/brensilver
-          git commit -m "Update Brensilver podcast feed"
-          git push
+          git diff --exit-code -- dharma/brensilver

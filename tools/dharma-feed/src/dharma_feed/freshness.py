@@ -5,6 +5,7 @@ import json
 import os
 import xml.etree.ElementTree as ET
 from dataclasses import dataclass
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Callable, Iterable, Sequence
 
@@ -24,6 +25,7 @@ class FreshnessExpectation:
     source: str
     title: str
     upstream_url: str
+    published_at: datetime
 
 
 @dataclass(frozen=True)
@@ -56,28 +58,57 @@ def main(argv: Sequence[str] | None = None) -> int:
             "episode artwork, chapter JSON, or matching RSS item media tags."
         ),
     )
+    parser.add_argument(
+        "--skip-upstream-freshness",
+        action="store_true",
+        help="Only validate generated feed artifacts; do not fetch upstream source listings.",
+    )
+    parser.add_argument(
+        "--freshness-grace-hours",
+        type=float,
+        default=0.0,
+        help="Allow missing latest upstream items until they are this many hours old.",
+    )
     args = parser.parse_args(list(argv) if argv is not None else None)
 
     config_path = Path(args.config)
     out_dir = Path(args.out_dir)
-    config = json.loads(config_path.read_text(encoding="utf-8"))
-    expectations = latest_upstream_expectations(config)
     feed_guids = generated_feed_guids(out_dir)
-    missing = [expectation for expectation in expectations if expectation.id not in feed_guids]
     status = 0
 
-    print("Freshness expectations:")
-    for expectation in expectations:
-        expectation_status = "ok" if expectation.id in feed_guids else "missing"
-        print(f"- {expectation_status}: {expectation.source} {expectation.id} {expectation.title}")
+    if not args.skip_upstream_freshness:
+        config = json.loads(config_path.read_text(encoding="utf-8"))
+        expectations = latest_upstream_expectations(config)
+        missing, pending = missing_freshness_expectations(
+            expectations,
+            feed_guids,
+            grace_hours=args.freshness_grace_hours,
+        )
 
-    if missing:
-        print("\nGenerated feeds are missing latest upstream item(s):")
-        for expectation in missing:
-            print(f"- {expectation.source} {expectation.id} {expectation.upstream_url}")
-        status = 1
+        print("Freshness expectations:")
+        for expectation in expectations:
+            if expectation.id in feed_guids:
+                expectation_status = "ok"
+            elif expectation in pending:
+                expectation_status = "pending"
+            else:
+                expectation_status = "missing"
+            print(f"- {expectation_status}: {expectation.source} {expectation.id} {expectation.title}")
+
+        if pending:
+            print(f"\nLatest upstream item(s) are within the {args.freshness_grace_hours:g}h grace window:")
+            for expectation in pending:
+                print(f"- {expectation.source} {expectation.id} {expectation.upstream_url}")
+
+        if missing:
+            print("\nGenerated feeds are missing latest upstream item(s):")
+            for expectation in missing:
+                print(f"- {expectation.source} {expectation.id} {expectation.upstream_url}")
+            status = 1
+        else:
+            print("Generated Brensilver feeds include the latest checked upstream items.")
     else:
-        print("Generated Brensilver feeds include the latest checked upstream items.")
+        print("Skipping upstream freshness fetch; checking generated feed artifacts only.")
 
     if args.require_enriched_feed_items:
         issues = feed_enrichment_issues(out_dir)
@@ -117,6 +148,7 @@ def latest_upstream_expectations(
                 source=latest.source,
                 title=latest.title,
                 upstream_url=latest.link,
+                published_at=latest.published_at,
             )
         )
     if not expectations:
@@ -149,6 +181,32 @@ def latest_talk(talks: Iterable[Talk]) -> Talk | None:
     if not talk_list:
         return None
     return max(talk_list, key=lambda talk: (talk.published_at, talk.title, talk.id))
+
+
+def missing_freshness_expectations(
+    expectations: Sequence[FreshnessExpectation],
+    feed_guids: set[str],
+    grace_hours: float = 0.0,
+    now: datetime | None = None,
+) -> tuple[list[FreshnessExpectation], list[FreshnessExpectation]]:
+    now = now or datetime.now(timezone.utc)
+    missing: list[FreshnessExpectation] = []
+    pending: list[FreshnessExpectation] = []
+    grace_seconds = max(0.0, grace_hours) * 3600
+
+    for expectation in expectations:
+        if expectation.id in feed_guids:
+            continue
+        published_at = expectation.published_at
+        if published_at.tzinfo is None:
+            published_at = published_at.replace(tzinfo=timezone.utc)
+        age_seconds = (now - published_at.astimezone(timezone.utc)).total_seconds()
+        if grace_seconds and age_seconds < grace_seconds:
+            pending.append(expectation)
+        else:
+            missing.append(expectation)
+
+    return missing, pending
 
 
 def generated_feed_guids(out_dir: Path) -> set[str]:

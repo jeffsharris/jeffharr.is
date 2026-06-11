@@ -72,6 +72,13 @@ generated commit onto the latest remote immediately before pushing, which avoids
 publishing stale local files if another project changes the site during a long
 ingestion run.
 
+The GitHub Actions Brensilver workflow is a read-only monitor/validator, not a
+publisher. It rebuilds from checked-in `dharma/brensilver/talks.json`, verifies
+generated artifacts are deterministic and enriched, and alerts if the latest
+public upstream source remains absent after the grace window. New talk discovery,
+local transcript/artwork ingestion, generated artifact commits, and pushes all
+belong to the Mac Mini runner.
+
 ## Adding More Matthew Brensilver Sources
 
 1. Add the source to `tools/dharma-feed/config/brensilver.json`.

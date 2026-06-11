@@ -33,6 +33,7 @@ case "$corpus" in
     default_limit="20"
     default_feed_every="20"
     default_media_base_url="https://jeffharr.is/dharma/brensilver/"
+    strict_check_script="scripts/check-brensilver-feed-freshness.py"
     ;;
   burbea)
     label="Burbea"
@@ -41,6 +42,7 @@ case "$corpus" in
     default_limit="1000"
     default_feed_every="20"
     default_media_base_url="https://jeffharr.is/dharma/burbea/"
+    strict_check_script=""
     ;;
   watts)
     label="Watts"
@@ -49,6 +51,7 @@ case "$corpus" in
     default_limit="50"
     default_feed_every="10"
     default_media_base_url="https://jeffharr.is/dharma/watts/"
+    strict_check_script=""
     ;;
   *)
     echo "Unknown Dharma corpus: $corpus" >&2
@@ -123,6 +126,11 @@ PYTHONPATH=tools/dharma-transcripts/src \
   --build-feedback-viewer
 
 if [[ "$auto_publish" == "1" ]]; then
+  if [[ -n "$strict_check_script" ]]; then
+    echo "[$(timestamp)] Checking generated $label feed artifacts before publishing"
+    python3 "$strict_check_script" --skip-upstream-freshness --require-enriched-feed-items
+  fi
+
   echo "[$(timestamp)] Publishing generated $label artifacts"
   git add "dharma/$corpus"
   if git diff --cached --quiet -- "dharma/$corpus"; then

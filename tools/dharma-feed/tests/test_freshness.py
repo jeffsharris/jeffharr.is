@@ -1,11 +1,14 @@
 import tempfile
 import unittest
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 from dharma_feed.freshness import (
+    FreshnessExpectation,
     feed_enrichment_issues,
     generated_feed_guids,
     latest_upstream_expectations,
+    missing_freshness_expectations,
 )
 
 
@@ -88,6 +91,33 @@ class FreshnessTests(unittest.TestCase):
             [(expectation.source, expectation.id) for expectation in expectations],
             [("Dharma Seed", "dharmaseed:2"), ("AudioDharma", "audiodharma:11")],
         )
+
+    def test_missing_freshness_expectations_honors_grace_window(self):
+        now = datetime(2026, 6, 11, 12, tzinfo=timezone.utc)
+        recent = FreshnessExpectation(
+            id="audiodharma:11",
+            source="AudioDharma",
+            title="Recent",
+            upstream_url="https://example.test/11",
+            published_at=now - timedelta(hours=3),
+        )
+        stale = FreshnessExpectation(
+            id="dharmaseed:2",
+            source="Dharma Seed",
+            title="Stale",
+            upstream_url="https://example.test/2",
+            published_at=now - timedelta(hours=16),
+        )
+
+        missing, pending = missing_freshness_expectations(
+            [recent, stale],
+            set(),
+            grace_hours=12,
+            now=now,
+        )
+
+        self.assertEqual(missing, [stale])
+        self.assertEqual(pending, [recent])
 
     def test_generated_feed_guids_reads_main_and_guided_feeds(self):
         with tempfile.TemporaryDirectory() as raw_dir:
