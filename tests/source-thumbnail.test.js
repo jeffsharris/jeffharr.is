@@ -66,6 +66,25 @@ test('resolveSourceThumbnail follows t.co redirects to YouTube thumbnails', asyn
   assert.equal(result.sourceUrl, 'https://www.youtube.com/watch?v=v1wZwxY3CMg&feature=youtu.be');
 });
 
+test('resolveSourceThumbnail reads X social preview images', async () => {
+  const result = await resolveSourceThumbnail(
+    { url: 'https://x.com/nunosempere/status/2064816940817002763?s=12' },
+    null,
+    {
+      fetchImpl: async () => new Response(
+        '<html><head><meta property="og:image" content="https://pbs.twimg.com/media/HKe0CPcbIAAbiE2.png:large"></head></html>',
+        {
+          status: 200,
+          headers: { 'content-type': 'text/html' }
+        }
+      )
+    }
+  );
+
+  assert.equal(result.thumbnailUrl, 'https://pbs.twimg.com/media/HKe0CPcbIAAbiE2.png:large');
+  assert.equal(result.sourceKind, 'x');
+});
+
 test('ensureSourceThumbnail saves source thumbnail through asset store', async () => {
   const item = {
     id: 'CcP-I5RG0fg',

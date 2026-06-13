@@ -4,6 +4,8 @@ import { isXStatusUrl } from './x-adapter.js';
 import { formatError } from '../lib/logger.js';
 
 const REDIRECT_TIMEOUT_MS = 8000;
+const HTML_FETCH_TIMEOUT_MS = 10000;
+const MAX_HTML_CHARS = 250000;
 const SHORT_LINK_HOSTS = new Set(['t.co']);
 
 function normalizeHttpUrl(value) {
@@ -58,6 +60,15 @@ async function resolveSourceThumbnail(itemOrUrl, reader = null, options = {}) {
     };
   }
 
+  if (isXStatusUrl(url)) {
+    const xImageUrl = await fetchSocialImageUrl(url, options.fetchImpl);
+    return {
+      thumbnailUrl: xImageUrl,
+      sourceUrl: url,
+      sourceKind: 'x'
+    };
+  }
+
   if (!isShortLinkUrl(url)) {
     return {
       thumbnailUrl: null,
@@ -77,8 +88,9 @@ async function resolveSourceThumbnail(itemOrUrl, reader = null, options = {}) {
   }
 
   if (isXStatusUrl(resolvedUrl)) {
+    const xImageUrl = await fetchSocialImageUrl(resolvedUrl, options.fetchImpl);
     return {
-      thumbnailUrl: null,
+      thumbnailUrl: xImageUrl,
       sourceUrl: resolvedUrl,
       sourceKind: 'x'
     };
@@ -173,6 +185,66 @@ async function resolveRedirectUrl(url, fetchImpl = fetch) {
   } finally {
     clearTimeout(timeoutId);
   }
+}
+
+async function fetchSocialImageUrl(url, fetchImpl = fetch) {
+  if (!url || typeof fetchImpl !== 'function') return null;
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), HTML_FETCH_TIMEOUT_MS);
+  try {
+    const response = await fetchImpl(url, {
+      method: 'GET',
+      redirect: 'follow',
+      headers: {
+        'User-Agent': 'jeffharr.is read-later thumbnail resolver (+https://jeffharr.is/read-later)',
+        Accept: 'text/html,application/xhtml+xml'
+      },
+      signal: controller.signal
+    });
+    if (!response?.ok && response?.ok !== undefined) return null;
+    const html = String(await response.text()).slice(0, MAX_HTML_CHARS);
+    return extractSocialImageUrl(html, response?.url || url);
+  } catch {
+    return null;
+  } finally {
+    clearTimeout(timeoutId);
+  }
+}
+
+function extractSocialImageUrl(html, baseUrl) {
+  if (typeof html !== 'string' || !html) return null;
+
+  const metaPattern = /<meta\b[^>]*>/gi;
+  let match;
+  while ((match = metaPattern.exec(html)) !== null) {
+    const tag = match[0];
+    const property = getMetaAttr(tag, 'property') || getMetaAttr(tag, 'name');
+    if (!/^(og:image|twitter:image(?::src)?)$/i.test(property || '')) continue;
+    const content = decodeHtmlEntities(getMetaAttr(tag, 'content') || '');
+    const imageUrl = normalizeHttpUrl(content);
+    if (imageUrl) return imageUrl;
+    try {
+      return new URL(content, baseUrl).toString();
+    } catch {}
+  }
+
+  return null;
+}
+
+function getMetaAttr(tag, attr) {
+  const pattern = new RegExp(`\\s${attr}=("[^"]*"|'[^']*'|[^\\s>]+)`, 'i');
+  const match = String(tag || '').match(pattern);
+  if (!match) return '';
+  return match[1].replace(/^['"]|['"]$/g, '').trim();
+}
+
+function decodeHtmlEntities(value) {
+  return String(value || '')
+    .replace(/&amp;/g, '&')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>');
 }
 
 export {
