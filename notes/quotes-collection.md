@@ -367,7 +367,7 @@ Author: Louise Erdrich, Tracks (1988)
 
 > Granted: I am an inmate of a mental hospital; my keeper is watching me, he never lets me out of his sight; there’s a peephole in the door, and my keeper’s eye is the shade of brown that can never see through a blue-eyed type like me.
 
-Author: GŸnter Grass, The Tin Drum (1959)
+Author: Günter Grass, The Tin Drum (1959)
 
 > Justice? — You get justice in the next world, in this world you have the law.
 
