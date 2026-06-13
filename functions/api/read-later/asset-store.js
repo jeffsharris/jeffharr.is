@@ -41,6 +41,10 @@ function createD1ReadLaterAssetStore({ db, bucket }) {
 
     async saveCover(itemId, cover) {
       return putCoverAsset({ db, bucket, itemId, cover });
+    },
+
+    async saveThumbnail(itemId, thumbnail) {
+      return putThumbnailAsset({ db, itemId, thumbnail });
     }
   };
 }
@@ -99,7 +103,16 @@ async function putReaderAsset({ db, bucket, itemId, reader }) {
 }
 
 async function putReaderThumbnailAsset({ db, itemId, reader }) {
-  const imageUrl = stringOrNull(reader?.coverImageUrl || reader?.imageUrl);
+  const imageUrl = stringOrNull(
+    reader?.coverImageUrl ||
+    reader?.imageUrl ||
+    (Array.isArray(reader?.imageUrls) ? reader.imageUrls[0] : '')
+  );
+  return putThumbnailAsset({ db, itemId, thumbnail: { url: imageUrl } });
+}
+
+async function putThumbnailAsset({ db, itemId, thumbnail }) {
+  const imageUrl = stringOrNull(thumbnail?.url);
   if (!db || !itemId || !imageUrl) return null;
 
   const asset = await upsertAsset(db, {
@@ -221,5 +234,6 @@ function arrayBufferToBinaryString(buffer) {
 export {
   createD1ReadLaterAssetStore,
   createReadLaterAssetStore,
-  getReadLaterAssetItemId
+  getReadLaterAssetItemId,
+  putThumbnailAsset
 };

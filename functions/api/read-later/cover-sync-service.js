@@ -7,6 +7,7 @@ import { buildReaderContent, fetchAndCacheReader } from './reader.js';
 import { getCoverImage, ensureCoverImage, ensurePdfCoverImage } from './covers.js';
 import { isLikelyPdfUrl } from './pdf-utils.js';
 import { isXStatusUrl } from './x-adapter.js';
+import { ensureSourceThumbnail } from './source-thumbnail.js';
 import { createReadLaterStores } from './stores.js';
 import { getReadLaterAssetItemId } from './asset-store.js';
 import { formatError } from '../lib/logger.js';
@@ -427,25 +428,27 @@ async function processCoverSyncMessage(message, env, log) {
   });
   await saveItem(readLaterStore, item);
 
-  if (!env?.OPENAI_API_KEY) {
-    await markCoverSyncFailure({
-      readLaterStore,
-      assetStore,
-      env,
-      itemId,
-      jobId,
-      attempt,
-      maxAttempts,
-      queuedAt,
-      errorCode: 'cover_api_key_missing',
-      message: 'Cover generation is not configured',
-      retryable: false,
-      log
-    });
-    return;
-  }
+  await ensureSourceThumbnail({ item, assetStore, log });
 
   if (isLikelyPdfUrl(item.url)) {
+    if (!env?.OPENAI_API_KEY) {
+      await markCoverSyncFailure({
+        readLaterStore,
+        assetStore,
+        env,
+        itemId,
+        jobId,
+        attempt,
+        maxAttempts,
+        queuedAt,
+        errorCode: 'cover_api_key_missing',
+        message: 'Cover generation is not configured',
+        retryable: false,
+        log
+      });
+      return;
+    }
+
     let cover = null;
     try {
       cover = await ensurePdfCoverImage({ item, env, assetStore, log });
@@ -555,6 +558,26 @@ async function processCoverSyncMessage(message, env, log) {
       queuedAt,
       errorCode: 'reader_unavailable',
       message: 'Could not parse article content',
+      retryable: false,
+      log
+    });
+    return;
+  }
+
+  await ensureSourceThumbnail({ item, reader, assetStore, log });
+
+  if (!env?.OPENAI_API_KEY) {
+    await markCoverSyncFailure({
+      readLaterStore,
+      assetStore,
+      env,
+      itemId,
+      jobId,
+      attempt,
+      maxAttempts,
+      queuedAt,
+      errorCode: 'cover_api_key_missing',
+      message: 'Cover generation is not configured',
       retryable: false,
       log
     });

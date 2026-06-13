@@ -49,8 +49,14 @@ function getYouTubeInfo(url) {
   return { type: 'youtube', videoId, isShort };
 }
 
+function getYouTubeThumbnailUrl(input) {
+  const info = typeof input === 'string' ? getYouTubeInfo(input) : input;
+  if (!info?.videoId) return null;
+  return `https://img.youtube.com/vi/${encodeURIComponent(info.videoId)}/hqdefault.jpg`;
+}
+
 function isYouTubeUrl(url) {
   return Boolean(getYouTubeInfo(url));
 }
 
-export { getYouTubeInfo, isYouTubeUrl };
+export { getYouTubeInfo, getYouTubeThumbnailUrl, isYouTubeUrl };

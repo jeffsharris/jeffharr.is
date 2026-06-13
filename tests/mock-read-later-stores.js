@@ -45,6 +45,15 @@ function createMockReadLaterStores({ items = {}, readers = {}, covers = {} } = {
     async saveCover(id, cover) {
       coverStore.set(id, clone(cover));
       return clone(cover);
+    },
+
+    async saveThumbnail(id, thumbnail) {
+      const item = itemStore.get(id);
+      if (item) {
+        item.thumbnailUrl = thumbnail?.url || item.thumbnailUrl || '';
+        itemStore.set(id, clone(item));
+      }
+      return clone(thumbnail);
     }
   };
 

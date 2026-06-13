@@ -4,6 +4,7 @@ import {
   READ_LATER_LIST_ID,
   getAssetByRole,
   getItemByCanonicalKey,
+  upsertAsset,
   upsertItem,
   upsertItemSource,
   upsertListEntry
@@ -16,6 +17,7 @@ import {
   safeJsonParse,
   stringifyJson
 } from './ids.js';
+import { getYouTubeThumbnailUrl } from '../read-later/media-utils.js';
 
 const MAX_TITLE_LENGTH = 220;
 const MIN_VIDEO_SECONDS = 300;
@@ -65,6 +67,8 @@ async function saveReadLaterItem(db, payload) {
     publisher: hostnameFromUrl(normalizedUrl),
     resolvedAt: now
   });
+
+  await upsertSourceThumbnailForUrl(db, item.id, normalizedUrl);
 
   await upsertItemSource(db, {
     itemId: item.id,
@@ -168,6 +172,8 @@ async function restoreReadLaterItem(db, payload) {
     publisher: hostnameFromUrl(normalizedUrl),
     resolvedAt: getNowIso()
   });
+
+  await upsertSourceThumbnailForUrl(db, item.id, normalizedUrl);
 
   const entry = await upsertListEntry(db, {
     id,
@@ -507,6 +513,28 @@ function inferKindFromUrl(url) {
   if (host === 'x.com' || host === 'twitter.com') return 'x_post';
   if (host === 'youtube.com' || host === 'youtu.be') return 'video';
   return 'article';
+}
+
+async function upsertSourceThumbnailForUrl(db, itemId, url) {
+  const thumbnailUrl = getYouTubeThumbnailUrl(url);
+  if (!db || !itemId || !thumbnailUrl) return null;
+
+  const asset = await upsertAsset(db, {
+    itemId,
+    role: 'thumbnail',
+    kind: 'image',
+    url: thumbnailUrl,
+    mimeType: 'image/jpeg'
+  });
+
+  await db.prepare(
+    `UPDATE items
+     SET thumbnail_asset_id = COALESCE(thumbnail_asset_id, ?),
+         updated_at = ?
+     WHERE id = ?`
+  ).bind(asset.id, getNowIso(), itemId).run();
+
+  return asset;
 }
 
 function hostnameFromUrl(url) {

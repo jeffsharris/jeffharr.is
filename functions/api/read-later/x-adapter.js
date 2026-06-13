@@ -208,7 +208,8 @@ function getSourceText(tweet) {
   return normalizeTitleValue(expandTcoUrls(tweet?.text || '', tweet?.entities));
 }
 
-function getMediaUrls(tweet, mediaByKey) {
+function getMediaInfo(tweet, mediaByKey) {
+  const coverImageUrl = pickMediaUrl(mediaByKey.get(tweet?.article?.cover_media)) || null;
   const articleMediaKeys = Array.isArray(tweet?.article?.media_entities)
     ? tweet.article.media_entities
     : [];
@@ -223,7 +224,16 @@ function getMediaUrls(tweet, mediaByKey) {
     .map((key) => pickMediaUrl(mediaByKey.get(key)))
     .filter(Boolean);
 
-  return dedupeStrings([...articleMediaUrls, ...attachmentUrls]);
+  const imageUrls = dedupeStrings([
+    coverImageUrl,
+    ...articleMediaUrls,
+    ...attachmentUrls
+  ]);
+
+  return {
+    coverImageUrl: coverImageUrl || imageUrls[0] || null,
+    imageUrls
+  };
 }
 
 async function fetchWithTimeout(url, options = {}, timeoutMs = X_FETCH_TIMEOUT_MS, fetchImpl = fetch) {
@@ -324,7 +334,7 @@ async function buildXReaderFromUrl(url, fallbackTitle, bearerToken, options = {}
   const sourceText = getSourceText(tweet);
   if (!sourceText) return null;
 
-  const imageUrls = getMediaUrls(tweet, mediaByKey);
+  const { coverImageUrl, imageUrls } = getMediaInfo(tweet, mediaByKey);
   const contentHtml = buildXContentHtml(sourceText, imageUrls);
   if (!contentHtml) return null;
 
@@ -341,7 +351,7 @@ async function buildXReaderFromUrl(url, fallbackTitle, bearerToken, options = {}
     siteName: X_SITE_NAME,
     wordCount: countWords(sourceText),
     contentHtml,
-    coverImageUrl: null,
+    coverImageUrl,
     imageUrls,
     source: 'x-api',
     retrievedAt: new Date().toISOString()

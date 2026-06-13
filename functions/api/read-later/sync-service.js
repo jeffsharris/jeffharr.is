@@ -7,6 +7,7 @@ import { recordKindleChannelState } from './state.js';
 import { enqueueCoverGeneration } from './cover-sync-service.js';
 import { syncKindleForItem, shouldCacheKindleReader, KINDLE_STATUS } from './kindle.js';
 import { getYouTubeInfo } from './media-utils.js';
+import { ensureSourceThumbnail } from './source-thumbnail.js';
 import { createReadLaterStores } from './stores.js';
 import { getReadLaterAssetItemId } from './asset-store.js';
 import { formatError } from '../lib/logger.js';
@@ -416,7 +417,12 @@ async function processKindleSyncMessage(message, env, log) {
     });
   }
 
+  await ensureSourceThumbnail({ item, assetStore, log });
+
   const { reader, kindle, cover } = await syncKindleForItem(item, env, { assetStore, log });
+  if (reader) {
+    await ensureSourceThumbnail({ item, reader, assetStore, log });
+  }
 
   const resolvedTitle = preferReaderTitle(item.title, reader?.title, item.url);
 

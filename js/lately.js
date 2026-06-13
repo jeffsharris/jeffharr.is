@@ -331,11 +331,53 @@
 
   function readLaterCoverUrl(item) {
     if (item?.coverPreview) return `data:image/png;base64,${item.coverPreview}`;
-    if (!item?.id || !item?.cover?.updatedAt) return '';
-    const url = new URL('/api/read-later/cover', window.location.origin);
-    url.searchParams.set('id', item.id);
-    url.searchParams.set('v', item.cover.updatedAt);
-    return url.toString();
+    if (item?.id && item?.cover?.updatedAt) {
+      const url = new URL('/api/read-later/cover', window.location.origin);
+      url.searchParams.set('id', item.id);
+      url.searchParams.set('v', item.cover.updatedAt);
+      return url.toString();
+    }
+    if (item?.thumbnailUrl) return item.thumbnailUrl;
+    const youtubeInfo = getYouTubeInfo(item?.url || '');
+    return youtubeInfo?.videoId
+      ? `https://img.youtube.com/vi/${encodeURIComponent(youtubeInfo.videoId)}/hqdefault.jpg`
+      : '';
+  }
+
+  function getYouTubeInfo(url) {
+    if (typeof url !== 'string') return null;
+    let parsed;
+    try {
+      parsed = new URL(url);
+    } catch {
+      return null;
+    }
+
+    const hostname = parsed.hostname.toLowerCase().replace(/^www\./, '');
+    if (!['youtube.com', 'm.youtube.com', 'youtu.be', 'youtube-nocookie.com'].includes(hostname)) {
+      return null;
+    }
+
+    const segments = parsed.pathname.split('/').filter(Boolean);
+    let videoId = null;
+    if (hostname === 'youtu.be') {
+      videoId = normalizeYouTubeId(segments[0]);
+    } else {
+      const first = segments[0] || '';
+      if (first === 'shorts' || first === 'embed' || first === 'v' || first === 'live') {
+        videoId = normalizeYouTubeId(segments[1]);
+      } else {
+        videoId = normalizeYouTubeId(parsed.searchParams.get('v'));
+      }
+    }
+
+    return videoId ? { videoId } : null;
+  }
+
+  function normalizeYouTubeId(value) {
+    if (!value) return null;
+    const candidate = String(value).split(/[?#&/]/)[0];
+    return /^[a-zA-Z0-9_-]{11}$/.test(candidate) ? candidate : null;
   }
 
   function alignHeatmapDays(allDays, weeks) {
