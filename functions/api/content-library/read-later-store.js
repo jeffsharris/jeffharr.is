@@ -511,7 +511,15 @@ function inferKindFromUrl(url) {
   const parsed = safeParseUrl(url);
   const host = parsed?.hostname.replace(/^www\./, '') || '';
   if (host === 'x.com' || host === 'twitter.com') return 'x_post';
-  if (host === 'youtube.com' || host === 'youtu.be') return 'video';
+  if (
+    host === 'youtube.com' ||
+    host === 'm.youtube.com' ||
+    host === 'music.youtube.com' ||
+    host === 'youtube-nocookie.com' ||
+    host === 'youtu.be'
+  ) {
+    return 'video';
+  }
   return 'article';
 }
 

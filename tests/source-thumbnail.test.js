@@ -3,7 +3,8 @@ import assert from 'node:assert/strict';
 import {
   ensureSourceThumbnail,
   getSourceThumbnailUrl,
-  pickReaderThumbnailUrl
+  pickReaderThumbnailUrl,
+  resolveSourceThumbnail
 } from '../functions/api/read-later/source-thumbnail.js';
 import { getYouTubeThumbnailUrl } from '../functions/api/read-later/media-utils.js';
 import { createMockReadLaterStores } from './mock-read-later-stores.js';
@@ -47,6 +48,22 @@ test('getSourceThumbnailUrl falls back from reader media to YouTube thumbnail', 
     getSourceThumbnailUrl({ url: 'https://www.youtube.com/watch?v=CcP-I5RG0fg' }),
     'https://img.youtube.com/vi/CcP-I5RG0fg/hqdefault.jpg'
   );
+});
+
+test('resolveSourceThumbnail follows t.co redirects to YouTube thumbnails', async () => {
+  const result = await resolveSourceThumbnail(
+    { url: 'https://t.co/fMiK5ha6Qp?ssr=true' },
+    null,
+    {
+      fetchImpl: async () => ({
+        url: 'https://www.youtube.com/watch?v=v1wZwxY3CMg&feature=youtu.be'
+      })
+    }
+  );
+
+  assert.equal(result.thumbnailUrl, 'https://img.youtube.com/vi/v1wZwxY3CMg/hqdefault.jpg');
+  assert.equal(result.sourceKind, 'youtube');
+  assert.equal(result.sourceUrl, 'https://www.youtube.com/watch?v=v1wZwxY3CMg&feature=youtu.be');
 });
 
 test('ensureSourceThumbnail saves source thumbnail through asset store', async () => {

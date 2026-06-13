@@ -4,6 +4,7 @@ import { parseJson } from '../content-library/serialize.js';
 import { enqueueCoverGeneration } from './cover-sync-service.js';
 import { getReadLaterAssetItemId } from './asset-store.js';
 import { ensureSourceThumbnail } from './source-thumbnail.js';
+import { isXStatusUrl } from './x-adapter.js';
 import { createReadLaterStores } from './stores.js';
 import { createLogger, formatError } from '../lib/logger.js';
 
@@ -82,12 +83,14 @@ export async function onRequest(context) {
           itemId: item.itemId,
           kind: item.kind,
           action: 'thumbnail_saved',
-          thumbnailUrl: thumbnail.thumbnailUrl
+          thumbnailUrl: thumbnail.thumbnailUrl,
+          sourceUrl: thumbnail.sourceUrl || null,
+          sourceKind: thumbnail.sourceKind || null
         });
         continue;
       }
 
-      if (item.kind === 'x_post') {
+      if (item.kind === 'x_post' || thumbnail.sourceKind === 'x' || isXStatusUrl(thumbnail.sourceUrl)) {
         const queued = await enqueueCoverGeneration({
           item,
           readLaterStore: stores.readLaterStore,
@@ -102,6 +105,7 @@ export async function onRequest(context) {
           itemId: item.itemId,
           kind: item.kind,
           action: queued.queued ? 'x_queued' : 'x_queue_skipped',
+          sourceUrl: thumbnail.sourceUrl || null,
           reason: queued.queueMissing ? 'queue_missing' : queued.queueFailed ? 'queue_failed' : queued.inProgress ? 'in_progress' : null
         });
         continue;
@@ -112,6 +116,8 @@ export async function onRequest(context) {
         itemId: item.itemId,
         kind: item.kind,
         action: 'no_source_thumbnail',
+        sourceUrl: thumbnail.sourceUrl || null,
+        sourceKind: thumbnail.sourceKind || null,
         reason: thumbnail.reason || null
       });
     }
@@ -155,6 +161,8 @@ async function listThumbnailBackfillCandidates(db, { limit }) {
          OR i.canonical_url LIKE '%youtu.be%'
          OR i.canonical_url LIKE '%x.com/%/status/%'
          OR i.canonical_url LIKE '%twitter.com/%/status/%'
+         OR i.canonical_url LIKE '%t.co/%'
+         OR i.source_url LIKE '%t.co/%'
        )
      ORDER BY le.added_at DESC
      LIMIT ?`
