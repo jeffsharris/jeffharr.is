@@ -337,6 +337,86 @@ Author: Italo Calvino
 
 Author: Ta-Nehisi Coates
 
+> You are about to begin reading Italo Calvino’s new novel, If on a winter’s night a traveler.
+
+Author: Italo Calvino, If on a winter’s night a traveler (1979)
+
+> Many years later, as he faced the firing squad, Colonel Aureliano Buendía was to remember that distant afternoon when his father took him to discover ice.
+
+Author: Gabriel García Márquez, One Hundred Years of Solitude (1967)
+
+> The sun shone, having no alternative, on the nothing new.
+
+Author: Samuel Beckett, Murphy (1938)
+
+> Whether I shall turn out to be the hero of my own life, or whether that station will be held by anybody else, these pages must show.
+
+Author: Charles Dickens, David Copperfield (1850)
+
+> It was a wrong number that started it, the telephone ringing three times in the dead of night, and the voice on the other end asking for someone he was not.
+
+Author: Paul Auster, City of Glass (1985)
+
+> I was the shadow of the waxwing slain / By the false azure in the windowpane.
+
+Author: Vladimir Nabokov, Pale Fire (1962)
+
+> We started dying before the snow, and like the snow, we continued to fall.
+
+Author: Louise Erdrich, Tracks (1988)
+
+> Granted: I am an inmate of a mental hospital; my keeper is watching me, he never lets me out of his sight; there’s a peephole in the door, and my keeper’s eye is the shade of brown that can never see through a blue-eyed type like me.
+
+Author: GŸnter Grass, The Tin Drum (1959)
+
+> Justice? — You get justice in the next world, in this world you have the law.
+
+Author: William Gaddis, A Frolic of His Own (1994)
+
+> Vaughan died yesterday in his last car-crash.
+
+Author: J. G. Ballard, Crash (1973)
+
+> So we beat on, boats against the current, borne back ceaselessly into the past.
+
+Author: F. Scott Fitzgerald, The Great Gatsby (1925)
+
+> …I was a Flower of the mountain yes when I put the rose in my hair like the Andalusian girls used or shall I wear a red yes and how he kissed me under the Moorish wall and I thought well as well him as another and then I asked him with my eyes to ask again yes and then he asked me would I yes to say yes my mountain flower and first I put my arms around him yes and drew him down to me so he could feel my breasts all perfume yes and his heart was going like mad and yes I said yes I will Yes.
+
+Author: James Joyce, Ulysses (1922)
+
+> “Yes,” I said. “Isn’t it pretty to think so?”
+
+Author: Ernest Hemingway, The Sun Also Rises (1926)
+
+> I am thinking of aurochs and angels, the secret of durable pigments, prophetic sonnets, the refuge of art. And this is the only immortality you and I may share, my Lolita.
+
+Author: Vladimir Nabokov, Lolita (1955)
+
+> Then I went back into the house and wrote, It is midnight. The rain is beating on the windows. It was not midnight. It was not raining.
+
+Author: Samuel Beckett, Molloy (1951)
+
+> Is it possible for anyone in Germany, nowadays, to raise his right hand, for whatever the reason, and not be flooded by the memory of a dream to end all dreams?
+
+Author: Walter Abish, How German Is It? (1980)
+
+> He knew what those jubilant crowds did not know but could have learned from books: that the plague bacillus never dies or disappears for good; that it can lie dormant for years and years in furniture and linen-chests; that it bides its time in bedrooms, cellars, trunks, and bookshelves; and that perhaps the day would come when, for the bane and the enlightening of men, it would rouse up its rats again and send them forth to die in a happy city.
+
+Author: Albert Camus, The Plague (1947)
+
+> But that is the beginning of a new story — the story of the gradual renewal of a man, the story of his gradual regeneration, of his passing from one world into another, of his initiation into a new unknown life. That might be the subject of a new story, but our present story is ended.
+
+Author: Fyodor Dostoyevsky, Crime and Punishment (1866)
+
+> And he couldn’t do it. He could not fucking die. How could he leave? How could he go? Everything he hated was here.
+
+Author: Philip Roth, Sabbath’s Theater (1995)
+
+> And you say, “Just a moment, I’ve almost finished If on a winter’s night a traveler by Italo Calvino.”
+
+Author: Italo Calvino, If on a winter’s night a traveler (1979)
+
 ## Needs Additional Details
 
 > Computer science is no more about computers than astronomy is about telescopes.

@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "count": 83,
+  "count": 103,
   "quotes": [
     {
       "id": "q_d7c7f6890578ef40",
@@ -416,6 +416,106 @@
       "id": "kh_web_22952a390f663390",
       "quote": "In America, it is traditional to destroy the black body — it is heritage.",
       "author": "Ta-Nehisi Coates"
+    },
+    {
+      "id": "gmail_beginnings_endings_opening_calvino_winter",
+      "quote": "You are about to begin reading Italo Calvino’s new novel, If on a winter’s night a traveler.",
+      "author": "Italo Calvino, If on a winter’s night a traveler (1979)"
+    },
+    {
+      "id": "gmail_beginnings_endings_opening_marquez_solitude",
+      "quote": "Many years later, as he faced the firing squad, Colonel Aureliano Buendía was to remember that distant afternoon when his father took him to discover ice.",
+      "author": "Gabriel García Márquez, One Hundred Years of Solitude (1967)"
+    },
+    {
+      "id": "gmail_beginnings_endings_opening_beckett_murphy",
+      "quote": "The sun shone, having no alternative, on the nothing new.",
+      "author": "Samuel Beckett, Murphy (1938)"
+    },
+    {
+      "id": "gmail_beginnings_endings_opening_dickens_copperfield",
+      "quote": "Whether I shall turn out to be the hero of my own life, or whether that station will be held by anybody else, these pages must show.",
+      "author": "Charles Dickens, David Copperfield (1850)"
+    },
+    {
+      "id": "gmail_beginnings_endings_opening_auster_glass",
+      "quote": "It was a wrong number that started it, the telephone ringing three times in the dead of night, and the voice on the other end asking for someone he was not.",
+      "author": "Paul Auster, City of Glass (1985)"
+    },
+    {
+      "id": "gmail_beginnings_endings_opening_nabokov_pale_fire",
+      "quote": "I was the shadow of the waxwing slain / By the false azure in the windowpane.",
+      "author": "Vladimir Nabokov, Pale Fire (1962)"
+    },
+    {
+      "id": "gmail_beginnings_endings_opening_erdrich_tracks",
+      "quote": "We started dying before the snow, and like the snow, we continued to fall.",
+      "author": "Louise Erdrich, Tracks (1988)"
+    },
+    {
+      "id": "gmail_beginnings_endings_opening_grass_tin_drum",
+      "quote": "Granted: I am an inmate of a mental hospital; my keeper is watching me, he never lets me out of his sight; there’s a peephole in the door, and my keeper’s eye is the shade of brown that can never see through a blue-eyed type like me.",
+      "author": "GŸnter Grass, The Tin Drum (1959)"
+    },
+    {
+      "id": "gmail_beginnings_endings_opening_gaddis_frolic",
+      "quote": "Justice? — You get justice in the next world, in this world you have the law.",
+      "author": "William Gaddis, A Frolic of His Own (1994)"
+    },
+    {
+      "id": "gmail_beginnings_endings_opening_ballard_crash",
+      "quote": "Vaughan died yesterday in his last car-crash.",
+      "author": "J. G. Ballard, Crash (1973)"
+    },
+    {
+      "id": "gmail_beginnings_endings_closing_fitzgerald_gatsby",
+      "quote": "So we beat on, boats against the current, borne back ceaselessly into the past.",
+      "author": "F. Scott Fitzgerald, The Great Gatsby (1925)"
+    },
+    {
+      "id": "gmail_beginnings_endings_closing_joyce_ulysses",
+      "quote": "…I was a Flower of the mountain yes when I put the rose in my hair like the Andalusian girls used or shall I wear a red yes and how he kissed me under the Moorish wall and I thought well as well him as another and then I asked him with my eyes to ask again yes and then he asked me would I yes to say yes my mountain flower and first I put my arms around him yes and drew him down to me so he could feel my breasts all perfume yes and his heart was going like mad and yes I said yes I will Yes.",
+      "author": "James Joyce, Ulysses (1922)"
+    },
+    {
+      "id": "gmail_beginnings_endings_closing_hemingway_sun",
+      "quote": "“Yes,” I said. “Isn’t it pretty to think so?”",
+      "author": "Ernest Hemingway, The Sun Also Rises (1926)"
+    },
+    {
+      "id": "gmail_beginnings_endings_closing_nabokov_lolita",
+      "quote": "I am thinking of aurochs and angels, the secret of durable pigments, prophetic sonnets, the refuge of art. And this is the only immortality you and I may share, my Lolita.",
+      "author": "Vladimir Nabokov, Lolita (1955)"
+    },
+    {
+      "id": "gmail_beginnings_endings_closing_beckett_molloy",
+      "quote": "Then I went back into the house and wrote, It is midnight. The rain is beating on the windows. It was not midnight. It was not raining.",
+      "author": "Samuel Beckett, Molloy (1951)"
+    },
+    {
+      "id": "gmail_beginnings_endings_closing_abish_german",
+      "quote": "Is it possible for anyone in Germany, nowadays, to raise his right hand, for whatever the reason, and not be flooded by the memory of a dream to end all dreams?",
+      "author": "Walter Abish, How German Is It? (1980)"
+    },
+    {
+      "id": "gmail_beginnings_endings_closing_camus_plague",
+      "quote": "He knew what those jubilant crowds did not know but could have learned from books: that the plague bacillus never dies or disappears for good; that it can lie dormant for years and years in furniture and linen-chests; that it bides its time in bedrooms, cellars, trunks, and bookshelves; and that perhaps the day would come when, for the bane and the enlightening of men, it would rouse up its rats again and send them forth to die in a happy city.",
+      "author": "Albert Camus, The Plague (1947)"
+    },
+    {
+      "id": "gmail_beginnings_endings_closing_dostoyevsky_crime",
+      "quote": "But that is the beginning of a new story — the story of the gradual renewal of a man, the story of his gradual regeneration, of his passing from one world into another, of his initiation into a new unknown life. That might be the subject of a new story, but our present story is ended.",
+      "author": "Fyodor Dostoyevsky, Crime and Punishment (1866)"
+    },
+    {
+      "id": "gmail_beginnings_endings_closing_roth_sabbath",
+      "quote": "And he couldn’t do it. He could not fucking die. How could he leave? How could he go? Everything he hated was here.",
+      "author": "Philip Roth, Sabbath’s Theater (1995)"
+    },
+    {
+      "id": "gmail_beginnings_endings_closing_calvino_winter",
+      "quote": "And you say, “Just a moment, I’ve almost finished If on a winter’s night a traveler by Italo Calvino.”",
+      "author": "Italo Calvino, If on a winter’s night a traveler (1979)"
     }
   ]
 }
