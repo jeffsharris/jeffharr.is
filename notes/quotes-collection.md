@@ -417,6 +417,34 @@ Author: Philip Roth, Sabbath’s Theater (1995)
 
 Author: Italo Calvino, If on a winter’s night a traveler (1979)
 
+> “Maybe…you’ll fall in love with me all over again.” “Hell,” I said, “I love you enough now. What do you want to do? Ruin me?” “Yes. I want to ruin you.” “Good,” I said. “That’s what I want too.”
+
+Author: Ernest Hemingway, A Farewell to Arms
+
+> To be with you or not to be with you is the measure of my time. Estar contigo o no estar contigo es la medida de mi tiempo.
+
+Author: Jorge Luis Borges, The Threatened Man (El Amenazado)
+
+> Piglet sidled up to Pooh from behind. “Pooh?” he whispered. “Yes, Piglet?” “Nothing,” said Piglet, taking Pooh’s hand. “I just wanted to be sure of you.”
+
+Author: A. A. Milne
+
+> As the days went by, the evolution of like into love was accelerated. White Fang himself began to grow aware of it, though in his consciousness he knew not what love was. It manifested itself to him as a void in his being — a hungry, aching, yearning void that clamoured to be filled. It was a pain and an unrest; and it received easement only by the touch of the new god’s presence. At such times love was joy to him, a wild, keen-thrilling satisfaction. But when away from his god, the pain and the unrest returned; the void in him sprang up and pressed against him with its emptiness, and the hunger gnawed and gnawed unceasingly.
+
+Author: Jack London, White Fang
+
+> Your absence has gone through me like thread through a needle. Everything I do is stitched with its color.
+
+Author: W. S. Merwin, Separation
+
+> She wasn’t doing a thing that I could see, except standing there leaning on the balcony railing, holding the universe together.
+
+Author: J. D. Salinger
+
+> One day many years ago a man walked along and stood in the sound of the ocean on a cold sunless shore and said, “We need a voice to call across the water, to warn ships; I’ll make one. I’ll make a voice like all of time and all of the fog that ever was; I’ll make a voice that is like an empty bed beside you all night long, and like an empty house when you open the door, and like trees in autumn with no leaves. A sound like the birds flying south, crying, and a sound like November wind and the sea on the hard, cold shore. I’ll make a sound that’s so alone that no one can miss it, that whoever hears it will weep in their souls, and hearths will seem warmer, and being inside will seem better to all who hear it in the distant towns. I’ll make me a sound and an apparatus and they’ll call it a Fog Horn and whoever hears it will know the sadness of eternity and the briefness of life.”
+
+Author: Ray Bradbury, The Fog Horn
+
 ## Needs Additional Details
 
 > Computer science is no more about computers than astronomy is about telescopes.
