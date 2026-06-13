@@ -17,11 +17,11 @@ Author: Rainer Maria Rilke
 
 Author: Anne Lamott
 
-> You can safely assume you've created God in your own image when it turns out that God hates all the same people you do.
+> You can safely assume you’ve created God in your own image when it turns out that God hates all the same people you do.
 
 Author: Tom Weston, via Anne Lamott
 
-> If I love you, I have to make you conscious of the things you don't see.
+> If I love you, I have to make you conscious of the things you don’t see.
 
 Author: James Baldwin
 
@@ -29,7 +29,7 @@ Author: James Baldwin
 
 Author: Kathryn Schulz
 
-> Like it or not, you have been entered into a state of sacred volatility. Whatever you thought you possessed - love, security, a picture of the future, a sense of being lovable - is shaken loose from its appearance, rendered momentarily formless through the fire of heartbreak. Now, depending on your approach, you can attempt to squelch this process and retain possession of whatever old beliefs you have left - or, through the grace of your attention and acceptance, you can open the door wide, let some air in, and watch the flames grow.
+> Like it or not, you have been entered into a state of sacred volatility. Whatever you thought you possessed — love, security, a picture of the future, a sense of being lovable — is shaken loose from its appearance, rendered momentarily formless through the fire of heartbreak. Now, depending on your approach, you can attempt to squelch this process and retain possession of whatever old beliefs you have left — or, through the grace of your attention and acceptance, you can open the door wide, let some air in, and watch the flames grow.
 
 Author: Susan Piver
 
@@ -45,11 +45,11 @@ Author: Rainer Maria Rilke
 
 Author: Thomas Szasz
 
-> The opposite of love is not hate, it's indifference. The opposite of art is not ugliness, it's indifference. The opposite of faith is not heresy, it's indifference. And the opposite of life is not death, it's indifference.
+> The opposite of love is not hate, it’s indifference. The opposite of art is not ugliness, it’s indifference. The opposite of faith is not heresy, it’s indifference. And the opposite of life is not death, it’s indifference.
 
 Author: Elie Wiesel
 
-> We cannot put off living until we are ready. The most salient characteristic of life is its coerciveness: it is always urgent, 'here and now,' without any possible postponement. Life is fired at us point-blank.
+> We cannot put off living until we are ready. The most salient characteristic of life is its coerciveness: it is always urgent, ‘here and now,’ without any possible postponement. Life is fired at us point-blank.
 
 Author: Jose Ortega y Gasset
 
@@ -85,7 +85,7 @@ Author: Rainer Maria Rilke
 
 Author: Rainer Maria Rilke
 
-> I used to think of love as a visceral experience, something that envelops you because of the way another person makes you feel. In love, I found courage, a willingness to race forward into new places, new experiences, new risks. The world became large for me when romantic love became real, perhaps because I myself felt full with new capacities for thought and need and feeling. I wasn't alone. The annals of popular music, archives of cinema and a great parcel of the canon of enduring literature concern themselves with love between two people. But now, because I am a parent, perhaps, I am striving for the courage and the skill to embody another manner of love. I find myself asking what might happen if, without asking anything of you in return, I were to choose to see you, whoever you are, as another version of myself, one worthy of my acknowledgment, my concern, my devotion?
+> I used to think of love as a visceral experience, something that envelops you because of the way another person makes you feel. In love, I found courage, a willingness to race forward into new places, new experiences, new risks. The world became large for me when romantic love became real, perhaps because I myself felt full with new capacities for thought and need and feeling. I wasn’t alone. The annals of popular music, archives of cinema and a great parcel of the canon of enduring literature concern themselves with love between two people. But now, because I am a parent, perhaps, I am striving for the courage and the skill to embody another manner of love. I find myself asking what might happen if, without asking anything of you in return, I were to choose to see you, whoever you are, as another version of myself, one worthy of my acknowledgment, my concern, my devotion?
 
 Author: Tracy K. Smith
 
@@ -104,6 +104,238 @@ Author: Eckhart Tolle
 > The greatest flaw of the species is its overwhelming tendency to mistake agreement for truth.
 
 Author: Richard Powers
+
+> What we call ego is simply the mechanism our mind uses to resist life as it is. In that way, ego isn’t a thing as much as it is a verb. It is the resistance to what is. It is the pushing away or pulling toward.
+
+Author: Adyashanti
+
+> In truth, if it is to be true and real, awakening must be different from what we imagine it to be. This is because all of our imaginings about awakening are happening within the paradigm of the dream state. It is not possible to imagine something outside of the dream state when our consciousness is still within it.
+
+Author: Adyashanti
+
+> “Enlightenment is absolute cooperation with the inevitable.”
+
+Author: Adyashanti
+
+> Everything is fleeting; everything is of the nature of a dream. We come to realize that even our greatest realizations, our greatest moments of “aha,” are actually dreams within the infinity of the unborn. It is almost like we realize that even one’s own great awakening was just another dream that never happened.
+
+Author: Adyashanti
+
+> In almost every tradition, caring deeply is seen to be the essence of being human.
+
+Author: David Whyte
+
+> Anger is the unspoken and helplessly destructive inability to feel the full depth of how much we care.
+
+Author: David Whyte
+
+> Love one another, but make not a bond of love: Let it rather be a moving sea between the shores of your souls. Fill each other’s cup but drink not from one cup. Give one another of your bread but eat not from the same loaf. Sing and dance together and be joyous, but let each one of you be alone, Even as the strings of a lute are alone though they quiver with the same music.
+
+Author: Kahlil Gibran
+
+> Your children are not your children. They are the sons and daughters of Life’s longing for itself.
+
+Author: Kahlil Gibran
+
+> The deeper that sorrow carves into your being, the more joy you can contain.
+
+Author: Kahlil Gibran
+
+> If he is indeed wise he does not bid you enter the house of his wisdom, but rather leads you to the threshold of your own mind.
+
+Author: Kahlil Gibran
+
+> What is word knowledge but a shadow of wordless knowledge?
+
+Author: Kahlil Gibran
+
+> Beauty is the harvest of presence, the evanescent moment of seeing or hearing on the outside what already lives far inside us.
+
+Author: David Whyte
+
+> Courage is what love looks like when tested by the simple everyday necessities of being alive.
+
+Author: David Whyte
+
+> Heartbreak is unpreventable: the natural outcome of caring for people and things over which we have no control.
+
+Author: David Whyte
+
+> Shyness is the exquisite and vulnerable frontier between what we think is possible and what we think we deserve.
+
+Author: David Whyte
+
+> The seventh day is a palace in time which we build. It is made of soul, of joy and reticence. In its atmosphere, a discipline is a reminder of adjacency to eternity.
+
+Author: Abraham Joshua Heschel, Ilya Schor, and Susannah Heschel
+
+> Time is like a wasteland. It has grandeur but no beauty. Its strange, frightful power is always feared but rarely cheered. Then we arrive at the seventh day, and the Sabbath is endowed with a felicity which enraptures the soul, which glides into our thoughts with a healing sympathy. It is a day on which hours do not oust one another.
+
+Author: Abraham Joshua Heschel, Ilya Schor, and Susannah Heschel
+
+> I like to describe mindfulness as a threefold attentional skill set: concentration power, sensory clarity, and equanimity working together.
+
+Author: Shinzen Young
+
+> When she kisses you in a McDonald’s parking lot in Indiana, you both look up to see a group of men — a risk of men, a murder of men — standing there watching, laughing, pointing.
+
+Author: Carmen Maria Machado
+
+> “If you want to be my friend, you must do two things. First, forget I am a lesbian. And second, never forget I am a lesbian.”
+
+Author: Carmen Maria Machado
+
+> Gradually the reason for his silence was hidden away, entombed somewhere deep in the soothing folds of the fact of it.
+
+Author: Arundhati Roy
+
+> A book, they thought, was not a living mind yet pretended to be one.
+
+Author: Ken Liu
+
+> We are all Godseed, but no more or less so than any other aspect of the universe, Godseed is all there is — all that Changes. Earthseed is all that spreads Earthlife to new earths. The universe is Godseed. Only we are Earthseed. And the Destiny of Earthseed is to take root among the stars.
+
+Author: Octavia E. Butler
+
+> You are looking outwards, and of all things that is what you must now not do. Nobody can advise and help you, nobody. There is only one single means. Go inside yourself. Discover the motive that bids you write; examine whether it sends its roots down to the deepest places of your heart, confess to yourself whether you would have to die if writing were denied you.
+
+Author: Rainer Maria Rilke
+
+> If your everyday life seems poor to you, do not accuse it; accuse yourself, tell yourself you are not poet enough to summon up its riches; since for the creator there is no poverty and no poor or unimportant place.
+
+Author: Rainer Maria Rilke
+
+> Have patience with everything that is unsolved in your heart and to try to cherish the questions themselves, like closed rooms and like books written in a very strange tongue. Do not search now for the answers which cannot be given you because you could not live them. It is a matter of living everything. Live the questions now. Perhaps you will then gradually, without noticing it, one distant day live right into the answer.
+
+Author: Rainer Maria Rilke
+
+> We can’t have change without loss, which is why so often people say they want change but nonetheless stay exactly the same.
+
+Author: Lori Gottlieb
+
+> A therapist is supposed to be a container for the hope that a depressed person can’t yet hold.
+
+Author: Lori Gottlieb
+
+> “The opposite of depression isn’t happiness, but vitality.”
+
+Author: Lori Gottlieb
+
+> We marry our unfinished business.
+
+Author: Lori Gottlieb
+
+> “The nature of life is change and the nature of people is to resist change.”
+
+Author: Lori Gottlieb
+
+> We grow in connection with others.
+
+Author: Lori Gottlieb
+
+> Dostoevski said once, “There is only one thing that I dread: not to be worthy of my sufferings.”
+
+Author: Viktor E. Frankl, Harold S. Kushner, and William J. Winslade
+
+> I dreamed and saw women in my dreams, and only my heart, crimson with murder, screeched and bled.
+
+Author: Isaac Babel, Nathalie Babel, Michael Dirda, and Peter Constantine
+
+> “The present is the past rolled up for action, and the past is the present unrolled for understanding”
+
+Author: Will Durant and Ariel Durant
+
+> Nature smiles at the union of freedom and equality in our utopias. For freedom and equality are sworn and everlasting enemies, and when one prevails the other dies.
+
+Author: Will Durant and Ariel Durant
+
+> Man’s sins may be the relics of his rise rather than the stigmata of his fall.
+
+Author: Will Durant and Ariel Durant
+
+> There are no gods in the universe, no nations, no money, no human rights, no laws, and no justice outside the common imagination of human beings.
+
+Author: Yuval Noah Harari
+
+> The most important economic resource is trust in the future.
+
+Author: Yuval Noah Harari
+
+> I wanted to drive for long enough to molt my urgent need.
+
+Author: Leslie Jamison
+
+> Where we had once been free to be ourselves online, we were now chained to ourselves online, and this made us self-conscious.
+
+Author: Jia Tolentino
+
+> I’ve been thinking about five intersecting problems: first, how the internet is built to distend our sense of identity; second, how it encourages us to overvalue our opinions; third, how it maximizes our sense of opposition; fourth, how it cheapens our understanding of solidarity; and, finally, how it destroys our sense of scale.
+
+Author: Jia Tolentino
+
+> Capitalism has no land left to cultivate but the self.
+
+Author: Jia Tolentino
+
+> The distance between the place that formed me and the form I had taken was out in the open, and widening.
+
+Author: Jia Tolentino
+
+> There are feelings, like ecstasy, that provide an unbreakable link between virtue and vice.
+
+Author: Jia Tolentino
+
+> Because freedom, I am told, is nothing but the distance between the hunter and its prey.
+
+Author: Ocean Vuong
+
+> I am writing you from inside a body that used to be yours. Which is to say, I am writing as a son.
+
+Author: Ocean Vuong
+
+> Because a bullet without a body is a song without ears.
+
+Author: Ocean Vuong
+
+> Gardens are simultaneously a material and a spiritual undertaking.
+
+Author: Robin Wall Kimmerer
+
+> When that boy read a book it stayed read.
+
+Author: Truman Capote
+
+> The things you think about determine the quality of your mind. Your soul takes on the color of your thoughts.
+
+Author: Marcus Aurelius, Ryan Holiday, and Gregory Hays
+
+> They have the eyes of people who can tell what time it is by the color of the sky.
+
+Author: Toni Morrison and Jacqueline Woodson
+
+> They beat us differently in the spring.
+
+Author: Toni Morrison and Jacqueline Woodson
+
+> Their marriage was shredded with quarrels.
+
+Author: Toni Morrison and Jacqueline Woodson
+
+> Ceaseless change is an unreliable basis for lasting fulfillment.
+
+Author: Sam Harris
+
+> We read for the pleasure of thinking another person’s thoughts.
+
+Author: Sam Harris
+
+> The city, however, does not tell its past, but contains it like the lines of a hand, written in the corners of the streets, the gratings of the windows, the banisters of the steps, the antennae of the lightning rods, the poles of the flags, every segment marked in turn with scratches, indentations, scrolls.
+
+Author: Italo Calvino
+
+> In America, it is traditional to destroy the black body — it is heritage.
+
+Author: Ta-Nehisi Coates
 
 ## Needs Additional Details
 

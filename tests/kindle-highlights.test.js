@@ -4,9 +4,11 @@ import {
   buildQuotesCollectionMarkdown,
   mergeImportedHighlights,
   normalizeState,
+  normalizePublishedQuoteText,
   parseKindleClippings,
   parseKindleNotebookExport,
   parseQuotesMarkdown,
+  serializePublicQuotes,
   serializeQuotesMarkdown
 } from '../scripts/lib/kindle-highlights.mjs';
 
@@ -175,4 +177,34 @@ test('buildQuotesCollectionMarkdown writes the tracked collection shape', () => 
   assert.match(markdown, /Author: Anne Lamott/);
   assert.match(markdown, /## Needs Additional Details/);
   assert.match(markdown, /Edsger W\. Dijkstra/);
+});
+
+test('normalizePublishedQuoteText cleans punctuation for display without requiring state edits', () => {
+  assert.equal(
+    normalizePublishedQuoteText('beauty is already here;'),
+    'Beauty is already here.'
+  );
+  assert.equal(
+    normalizePublishedQuoteText('What you possessed - love, security - is shaken loose.'),
+    'What you possessed — love, security — is shaken loose.'
+  );
+  assert.equal(
+    normalizePublishedQuoteText("The past gives you an identity and it isn't yours"),
+    'The past gives you an identity and it isn’t yours.'
+  );
+});
+
+test('serializePublicQuotes exports accepted quotes only with display-normalized text', () => {
+  const state = normalizeState({
+    items: {
+      a: { quote: 'accepted quote;', author: 'Author', status: 'accepted' },
+      b: { quote: 'needs quote.', author: 'Author', status: 'needs_details' },
+      c: { quote: 'rejected quote.', author: 'Author', status: 'rejected' }
+    },
+    order: ['a', 'b', 'c']
+  });
+  const quotes = serializePublicQuotes(state);
+
+  assert.equal(quotes.length, 1);
+  assert.equal(quotes[0].quote, 'Accepted quote.');
 });

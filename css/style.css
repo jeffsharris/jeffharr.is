@@ -369,6 +369,13 @@ a {
                radial-gradient(circle at 70% 70%, rgba(216, 122, 105, 0.35), transparent 60%);
 }
 
+.collection-tile--quotes {
+  --tile-accent: #9C6B56;
+  --tile-bg: #4C3A32;
+  --tile-halo: radial-gradient(circle at 26% 30%, rgba(156, 107, 86, 0.54), transparent 62%),
+               radial-gradient(circle at 74% 72%, rgba(201, 168, 119, 0.30), transparent 60%);
+}
+
 .collection-tile--dharma {
   --tile-accent: #6A6FA5;
   --tile-bg: #16233d;

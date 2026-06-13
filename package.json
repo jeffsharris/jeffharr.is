@@ -7,6 +7,7 @@
     "poem-images:publish": "node scripts/publish-poem-images.mjs",
     "quotes:review": "node scripts/quote-highlight-review-server.mjs",
     "quotes:import-kindle-notebook": "node scripts/import-kindle-notebook-export.mjs",
+    "quotes:publish": "node scripts/publish-quotes.mjs",
     "test": "npm run test:js",
     "test:js": "node --test tests/*.test.js",
     "test:dharma-feed": "PYTHONPATH=tools/dharma-feed/src python3 -m unittest discover tools/dharma-feed/tests",

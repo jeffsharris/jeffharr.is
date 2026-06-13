@@ -36,6 +36,17 @@ reading history. The tracked export remains:
 Use **Export collection** in the UI to rewrite the tracked collection from the
 local state. Only `Accepted` and `Needs refinement` quotes are exported.
 
+Use the publish command to generate the public quotes page and JSON from the
+local state:
+
+```sh
+npm run quotes:publish
+```
+
+The public page uses `Accepted` quotes only. The command normalizes display
+punctuation and capitalization in the generated artifacts without changing the
+gitignored review state.
+
 ## Kindle Importer Scope
 
 The review UI supports pasted Kindle `My Clippings.txt` content.

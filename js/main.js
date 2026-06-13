@@ -116,6 +116,10 @@
       const learning = Array.isArray(data.learning) ? data.learning.length : 0;
       return memorized + learning || null;
     }
+    if (kind === 'quotes') {
+      if (Number.isFinite(data.count)) return data.count;
+      if (Array.isArray(data.quotes)) return data.quotes.length;
+    }
     if (kind === 'read-later') {
       if (Number.isFinite(data.count)) return data.count;
       if (Array.isArray(data.items)) return data.items.length;

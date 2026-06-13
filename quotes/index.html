@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quotes | Jeff Harris</title>
+  <meta name="description" content="Quotes I love">
+  <link rel="canonical" href="https://jeffharr.is/quotes/">
+  <meta property="og:title" content="Quotes | Jeff Harris">
+  <meta property="og:description" content="Quotes I love">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://jeffharr.is/quotes/">
+  <meta property="og:image" content="https://jeffharr.is/images/social/quotes-card.jpg">
+  <meta property="og:image:secure_url" content="https://jeffharr.is/images/social/quotes-card.jpg">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="A quiet page of favorite quotes">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Quotes | Jeff Harris">
+  <meta name="twitter:description" content="Quotes I love">
+  <meta name="twitter:image" content="https://jeffharr.is/images/social/quotes-card.jpg">
+  <link rel="apple-touch-icon" sizes="180x180" href="/quotes/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-title" content="Quotes">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <link rel="icon" href="/favicon.ico">
+  <style>
+    :root {
+      --bg: #FDFCFA;
+      --bg-elev: #FFFFFF;
+      --bg-hover: #F8F6F3;
+      --text: #2D2A26;
+      --text-muted: #6B6560;
+      --text-light: #9A9590;
+      --accent: #6F5743;
+      --accent-soft: rgba(111, 87, 67, 0.10);
+      --border: rgba(0, 0, 0, 0.08);
+      --font-serif: 'Cormorant Garamond', Georgia, serif;
+      --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1A1918;
+        --bg-elev: #242220;
+        --bg-hover: #2D2A28;
+        --text: #E8E4DF;
+        --text-muted: #A49C94;
+        --text-light: #756E68;
+        --accent: #C9A877;
+        --accent-soft: rgba(201, 168, 119, 0.14);
+        --border: rgba(255, 255, 255, 0.10);
+      }
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      min-height: 100%;
+    }
+
+    body {
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-sans);
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    .header {
+      width: min(720px, 100%);
+      margin: 0 auto;
+      padding: 32px 24px 24px;
+      text-align: center;
+    }
+
+    .header__back {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 16px;
+      color: var(--text-muted);
+      font-size: 13px;
+      text-decoration: none;
+    }
+
+    .header__back:hover {
+      color: var(--accent);
+    }
+
+    .header__title {
+      margin: 0 0 8px;
+      font-family: var(--font-serif);
+      font-size: 2.5rem;
+      font-weight: 400;
+      line-height: 1.1;
+      letter-spacing: 0;
+    }
+
+    .header__subtitle {
+      margin: 0;
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+
+    .tools {
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      border-block: 1px solid var(--border);
+      background: color-mix(in srgb, var(--bg) 94%, transparent);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    .tools__inner {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(180px, 260px) auto;
+      align-items: center;
+      gap: 12px;
+      width: min(720px, 100%);
+      margin: 0 auto;
+      padding: 14px 24px;
+    }
+
+    .search,
+    .author-filter {
+      width: 100%;
+      min-width: 0;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--bg-elev);
+      color: var(--text);
+      font: inherit;
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .search {
+      padding: 10px 12px;
+    }
+
+    .author-filter {
+      padding: 10px 34px 10px 12px;
+    }
+
+    .search:focus,
+    .author-filter:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-soft);
+    }
+
+    .tools__count {
+      color: var(--text-light);
+      font-size: 12px;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .quotes {
+      width: min(720px, 100%);
+      margin: 0 auto;
+      padding: 8px 24px 72px;
+    }
+
+    .quote {
+      margin: 0;
+      padding: 30px 0 28px;
+      border-top: 1px solid var(--border);
+      scroll-margin-top: 92px;
+    }
+
+    .quote:first-child {
+      border-top: 0;
+    }
+
+    .quote.is-hidden {
+      display: none;
+    }
+
+    .quote__text {
+      margin: 0;
+      max-width: 64ch;
+      color: var(--text);
+      font-family: var(--font-serif);
+      font-size: 1.28rem;
+      font-weight: 400;
+      line-height: 1.58;
+      letter-spacing: 0;
+      overflow-wrap: break-word;
+    }
+
+    .quote--short .quote__text {
+      font-size: 1.42rem;
+      line-height: 1.48;
+    }
+
+    .quote__author {
+      margin-top: 14px;
+      color: var(--text-muted);
+      font-size: 13px;
+      font-style: normal;
+      line-height: 1.45;
+    }
+
+    .empty {
+      display: none;
+      width: min(720px, 100%);
+      margin: 0 auto;
+      padding: 56px 24px 72px;
+      color: var(--text-muted);
+      text-align: center;
+    }
+
+    .empty.is-visible {
+      display: block;
+    }
+
+    @media (max-width: 640px) {
+      .header {
+        padding: 26px 18px 20px;
+      }
+
+      .header__title {
+        font-size: 2.15rem;
+      }
+
+      .tools {
+        position: static;
+      }
+
+      .tools__inner {
+        grid-template-columns: 1fr;
+        padding: 12px 18px;
+      }
+
+      .tools__count {
+        justify-self: start;
+      }
+
+      .quotes {
+        padding: 4px 18px 56px;
+      }
+
+      .quote {
+        padding: 25px 0 24px;
+      }
+
+      .quote__text,
+      .quote--short .quote__text {
+        font-size: 1.18rem;
+        line-height: 1.6;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <a class="header__back" href="/" aria-label="Back to home">&larr; Home</a>
+    <h1 class="header__title">Quotes</h1>
+    <p class="header__subtitle">Lines I keep coming back to.</p>
+  </header>
+
+  <section class="tools" aria-label="Quote filters">
+    <div class="tools__inner">
+      <input class="search" id="search" type="search" placeholder="Search quotes or authors..." autocomplete="off">
+      <select class="author-filter" id="author-filter" aria-label="Filter by author">
+        <option value="">All authors</option>
+        <option value="Abraham Joshua Heschel, Ilya Schor, and Susannah Heschel">Abraham Joshua Heschel, Ilya Schor, and Susannah Heschel (2)</option>
+        <option value="Adyashanti">Adyashanti (4)</option>
+        <option value="Anne Lamott">Anne Lamott (1)</option>
+        <option value="Arundhati Roy">Arundhati Roy (1)</option>
+        <option value="Carmen Maria Machado">Carmen Maria Machado (2)</option>
+        <option value="David Whyte">David Whyte (6)</option>
+        <option value="Eckhart Tolle">Eckhart Tolle (1)</option>
+        <option value="Elie Wiesel">Elie Wiesel (1)</option>
+        <option value="Esther Perel">Esther Perel (2)</option>
+        <option value="Isaac Babel, Nathalie Babel, Michael Dirda, and Peter Constantine">Isaac Babel, Nathalie Babel, Michael Dirda, and Peter Constantine (1)</option>
+        <option value="Italo Calvino">Italo Calvino (1)</option>
+        <option value="James Baldwin">James Baldwin (1)</option>
+        <option value="Jia Tolentino">Jia Tolentino (5)</option>
+        <option value="Jose Ortega y Gasset">Jose Ortega y Gasset (1)</option>
+        <option value="Kahlil Gibran">Kahlil Gibran (5)</option>
+        <option value="Kathryn Schulz">Kathryn Schulz (1)</option>
+        <option value="Ken Liu">Ken Liu (1)</option>
+        <option value="Leslie Jamison">Leslie Jamison (1)</option>
+        <option value="Lori Gottlieb">Lori Gottlieb (6)</option>
+        <option value="Marcus Aurelius, Ryan Holiday, and Gregory Hays">Marcus Aurelius, Ryan Holiday, and Gregory Hays (1)</option>
+        <option value="Marshall McLuhan">Marshall McLuhan (1)</option>
+        <option value="Naval Ravikant, on Jiddu Krishnamurti">Naval Ravikant, on Jiddu Krishnamurti (1)</option>
+        <option value="Ocean Vuong">Ocean Vuong (3)</option>
+        <option value="Octavia E. Butler">Octavia E. Butler (1)</option>
+        <option value="Rainer Maria Rilke">Rainer Maria Rilke (11)</option>
+        <option value="Richard P. Feynman">Richard P. Feynman (1)</option>
+        <option value="Richard Powers">Richard Powers (1)</option>
+        <option value="Robin Wall Kimmerer">Robin Wall Kimmerer (1)</option>
+        <option value="Sam Harris">Sam Harris (2)</option>
+        <option value="Shinzen Young">Shinzen Young (1)</option>
+        <option value="Susan Piver">Susan Piver (1)</option>
+        <option value="Ta-Nehisi Coates">Ta-Nehisi Coates (1)</option>
+        <option value="Teijitsu">Teijitsu (1)</option>
+        <option value="Thomas Szasz">Thomas Szasz (1)</option>
+        <option value="Tom Weston, via Anne Lamott">Tom Weston, via Anne Lamott (1)</option>
+        <option value="Toni Morrison and Jacqueline Woodson">Toni Morrison and Jacqueline Woodson (3)</option>
+        <option value="Tracy K. Smith">Tracy K. Smith (1)</option>
+        <option value="Truman Capote">Truman Capote (1)</option>
+        <option value="Viktor E. Frankl, Harold S. Kushner, and William J. Winslade">Viktor E. Frankl, Harold S. Kushner, and William J. Winslade (1)</option>
+        <option value="Will Durant and Ariel Durant">Will Durant and Ariel Durant (3)</option>
+        <option value="Yuval Noah Harari">Yuval Noah Harari (2)</option>
+      </select>
+      <span class="tools__count" id="count">83 quotes</span>
+    </div>
+  </section>
+
+  <main class="quotes" id="quotes" aria-live="polite">
+    <figure class="quote" id="q_d7c7f6890578ef40" data-author="rainer maria rilke" data-search="the point of marriage is not to create a quick commonality by tearing down all boundaries; on the contrary, a good marriage is one in which each partner appoints the other to be the guardian of his solitude, and thus they show each other the greatest possible trust. a merging of two people is an impossibility, and where it seems to exist, it is a hemming-in, a mutual consent that robs one party or both parties of their fullest freedom and development. but once the realization is accepted that even between the closest people infinite distances exist, a marvelous living side-by-side can grow up for them, if they succeed in loving the expanse between them, which gives them the possibility of always seeing each other as a whole and before an immense sky. rainer maria rilke">
+      <blockquote class="quote__text">The point of marriage is not to create a quick commonality by tearing down all boundaries; on the contrary, a good marriage is one in which each partner appoints the other to be the guardian of his solitude, and thus they show each other the greatest possible trust. A merging of two people is an impossibility, and where it seems to exist, it is a hemming-in, a mutual consent that robs one party or both parties of their fullest freedom and development. But once the realization is accepted that even between the closest people infinite distances exist, a marvelous living side-by-side can grow up for them, if they succeed in loving the expanse between them, which gives them the possibility of always seeing each other as a whole and before an immense sky.</blockquote>
+      <figcaption class="quote__author">&mdash; Rainer Maria Rilke</figcaption>
+    </figure>
+    <figure class="quote" id="q_a60f17f00934e580" data-author="rainer maria rilke" data-search="i hold this to be the highest task of a bond between two people: that each should stand guard over the solitude of the other. for, if it lies in the nature of indifference and of the crowd to recognize no solitude, then love and friendship are there for the purpose of continually providing the opportunity for solitude. and only those are the true sharings which rhythmically interrupt periods of deep isolation. rainer maria rilke">
+      <blockquote class="quote__text">I hold this to be the highest task of a bond between two people: that each should stand guard over the solitude of the other. For, if it lies in the nature of indifference and of the crowd to recognize no solitude, then love and friendship are there for the purpose of continually providing the opportunity for solitude. And only those are the true sharings which rhythmically interrupt periods of deep isolation.</blockquote>
+      <figcaption class="quote__author">&mdash; Rainer Maria Rilke</figcaption>
+    </figure>
+    <figure class="quote quote--short" id="q_a4b9f0f87c2f7c12" data-author="anne lamott" data-search="laughter is carbonated holiness. anne lamott">
+      <blockquote class="quote__text">Laughter is carbonated holiness.</blockquote>
+      <figcaption class="quote__author">&mdash; Anne Lamott</figcaption>
+    </figure>
+    <figure class="quote quote--short" id="q_aba868805ff45a04" data-author="tom weston, via anne lamott" data-search="you can safely assume you’ve created god in your own image when it turns out that god hates all the same people you do. tom weston, via anne lamott">
+      <blockquote class="quote__text">You can safely assume you’ve created God in your own image when it turns out that God hates all the same people you do.</blockquote>
+      <figcaption class="quote__author">&mdash; Tom Weston, via Anne Lamott</figcaption>
+    </figure>
+    <figure class="quote quote--short" id="q_c5545e6171390dab" data-author="james baldwin" data-search="if i love you, i have to make you conscious of the things you don’t see. james baldwin">
+      <blockquote class="quote__text">If I love you, I have to make you conscious of the things you don’t see.</blockquote>
+      <figcaption class="quote__author">&mdash; James Baldwin</figcaption>
+    </figure>
+    <figure class="quote" id="q_b7d3de2404cce61c" data-author="kathryn schulz" data-search="the world itself seemed ephemeral, glaciers and species and ecosystems vanishing, the pace of change as swift as in a time-lapse, as if those of us alive today had been permitted to see it from the harrowing perspective of eternity. everything felt fragile, everything felt vulnerable; the idea of loss pressed in all around me, like a hidden order to existence that emerged only in the presence of grief. kathryn schulz">
+      <blockquote class="quote__text">The world itself seemed ephemeral, glaciers and species and ecosystems vanishing, the pace of change as swift as in a time-lapse, as if those of us alive today had been permitted to see it from the harrowing perspective of eternity. Everything felt fragile, everything felt vulnerable; the idea of loss pressed in all around me, like a hidden order to existence that emerged only in the presence of grief.</blockquote>
+      <figcaption class="quote__author">&mdash; Kathryn Schulz</figcaption>
+    </figure>
+    <figure class="quote" id="q_73aa1f6dbe49d1f4" data-author="susan piver" data-search="like it or not, you have been entered into a state of sacred volatility. whatever you thought you possessed — love, security, a picture of the future, a sense of being lovable — is shaken loose from its appearance, rendered momentarily formless through the fire of heartbreak. now, depending on your approach, you can attempt to squelch this process and retain possession of whatever old beliefs you have left — or, through the grace of your attention and acceptance, you can open the door wide, let some air in, and watch the flames grow. susan piver">
+      <blockquote class="quote__text">Like it or not, you have been entered into a state of sacred volatility. Whatever you thought you possessed — love, security, a picture of the future, a sense of being lovable — is shaken loose from its appearance, rendered momentarily formless through the fire of heartbreak. Now, depending on your approach, you can attempt to squelch this process and retain possession of whatever old beliefs you have left — or, through the grace of your attention and acceptance, you can open the door wide, let some air in, and watch the flames grow.</blockquote>
+      <figcaption class="quote__author">&mdash; Susan Piver</figcaption>
+    </figure>
+    <figure class="quote quote--short" id="q_5627cb36615767db" data-author="teijitsu" data-search="she opened the clenched fist of her mind, let go, and fell into the midst of everything. teijitsu">
+      <blockquote class="quote__text">She opened the clenched fist of her mind, let go, and fell into the midst of everything.</blockquote>
+      <figcaption class="quote__author">&mdash; Teijitsu</figcaption>
+    </figure>
+    <figure class="quote quote--short" id="q_66c6ae17885f9d4d" data-author="rainer maria rilke" data-search="the purpose of life is to be defeated by greater and greater things. rainer maria rilke">
+      <blockquote class="quote__text">The purpose of life is to be defeated by greater and greater things.</blockquote>
+      <figcaption class="quote__author">&mdash; Rainer Maria Rilke</figcaption>
+    </figure>
+    <figure class="quote quote--short" id="q_1032a315936c8b2a" data-author="thomas szasz" data-search="boredom is the feeling that everything is a waste of time; serenity, that nothing is. thomas szasz">
+      <blockquote class="quote__text">Boredom is the feeling that everything is a waste of time; serenity, that nothing is.</blockquote>
+      <figcaption class="quote__author">&mdash; Thomas Szasz</figcaption>
+    </figure>
+    <figure class="quote" id="q_71f47bcc3125aab2" data-author="elie wiesel" data-search="the opposite of love is not hate, it’s indifference. the opposite of art is not ugliness, it’s indifference. the opposite of faith is not heresy, it’s indifference. and the opposite of life is not death, it’s indifference. elie wiesel">
+      <blockquote class="quote__text">The opposite of love is not hate, it’s indifference. The opposite of art is not ugliness, it’s indifference. The opposite of faith is not heresy, it’s indifference. And the opposite of life is not death, it’s indifference.</blockquote>
+      <figcaption class="quote__author">&mdash; Elie Wiesel</figcaption>
+    </figure>
+    <figure class="quote" id="q_8cf3723219cd0330" data-author="jose ortega y gasset" data-search="we cannot put off living until we are ready. the most salient characteristic of life is its coerciveness: it is always urgent, ‘here and now,’ without any possible postponement. life is fired at us point-blank. jose ortega y gasset">
+      <blockquote class="quote__text">We cannot put off living until we are ready. The most salient characteristic of life is its coerciveness: it is always urgent, ‘here and now,’ without any possible postponement. Life is fired at us point-blank.</blockquote>
+      <figcaption class="quote__author">&mdash; Jose Ortega y Gasset</figcaption>
+    </figure>
+    <figure class="quote quote--short" id="q_6ea0b684c016bd99" data-author="marshall mcluhan" data-search="myth is anything seen at very high speeds; any process seen at a very high speed is a myth. marshall mcluhan">
+      <blockquote class="quote__text">Myth is anything seen at very high speeds; any process seen at a very high speed is a myth.</blockquote>
+      <figcaption class="quote__author">&mdash; Marshall McLuhan</figcaption>
+    </figure>
+    <figure class="quote" id="q_d6c471cee3d1d521" data-author="esther perel" data-search="in every relationship, you will find that there is one person who is more in touch with the fear of losing the other and one person who is more in touch with the fear of losing themselves. esther perel">
+      <blockquote class="quote__text">In every relationship, you will find that there is one person who is more in touch with the fear of losing the other and one person who is more in touch with the fear of losing themselves.</blockquote>
+      <figcaption class="quote__author">&mdash; Esther Perel</figcaption>
+    </figure>
+    <figure class="quote quote--short" id="q_fd0bac70843d2484" data-author="esther perel" data-search="the quality of our relationships determines the quality of our lives. esther perel">
+      <blockquote class="quote__text">The quality of our relationships determines the quality of our lives.</blockquote>
+      <figcaption class="quote__author">&mdash; Esther Perel</figcaption>
+    </figure>
+    <figure class="quote" id="q_f5e0d4440150d19f" data-author="rainer maria rilke" data-search="if your everyday life seems poor to you, do not accuse it; accuse yourself, tell yourself you are not poet enough to summon up its riches; since for the creator there is no poverty and no poor or unimportant place. rainer maria rilke">
+      <blockquote class="quote__text">If your everyday life seems poor to you, do not accuse it; accuse yourself, tell yourself you are not poet enough to summon up its riches; since for the creator there is no poverty and no poor or unimportant place.</blockquote>
+      <figcaption class="quote__author">&mdash; Rainer Maria Rilke</figcaption>
+    </figure>
+    <figure class="quote quote--short" id="q_4183afd26367b88e" data-author="rainer maria rilke" data-search="a work of art is good if it has grown out of necessity. rainer maria rilke">
+      <blockquote class="quote__text">A work of art is good if it has grown out of necessity.</blockquote>
+      <figcaption class="quote__author">&mdash; Rainer Maria Rilke</figcaption>
+    </figure>
+    <figure class="quote quote--short" id="q_8004a8a11a432afb" data-author="rainer maria rilke" data-search="fundamentally, and precisely in the deepest and most important things, we are unspeakably alone. rainer maria rilke">
+      <blockquote class="quote__text">Fundamentally, and precisely in the deepest and most important things, we are unspeakably alone.</blockquote>
+      <figcaption class="quote__author">&mdash; Rainer Maria Rilke</figcaption>
+    </figure>
+    <figure class="quote" id="q_b35f9bc94f1437a5" data-author="rainer maria rilke" data-search="if you hold to nature, to the simplicity that is in her, to the small detail that scarcely one man sees, which can so unexpectedly grow into something great and boundless; if you have this love for insignificant things and seek, simply as one who serves, to win the confidence of what seems to be poor: then everything will become easier for you, more coherent and somehow more conciliatory, not perhaps in the understanding, which lags wondering behind, but in your innermost consciousness, wakefulness and knowing. rainer maria rilke">
+      <blockquote class="quote__text">If you hold to Nature, to the simplicity that is in her, to the small detail that scarcely one man sees, which can so unexpectedly grow into something great and boundless; if you have this love for insignificant things and seek, simply as one who serves, to win the confidence of what seems to be poor: then everything will become easier for you, more coherent and somehow more conciliatory, not perhaps in the understanding, which lags wondering behind, but in your innermost consciousness, wakefulness and knowing.</blockquote>
+      <figcaption class="quote__author">&mdash; Rainer Maria Rilke</figcaption>
+    </figure>
+    <figure class="quote" id="q_470a6d029e0d0ddd" data-author="rainer maria rilke" data-search="there is only one solitude, and it is great and is not easy to bear, and to almost everyone there come hours when they would gladly exchange it for some kind of communion, however banal and cheap, for the appearance of some slight harmony with the most easily available, with the most undeserving. rainer maria rilke">
+      <blockquote class="quote__text">There is only one solitude, and it is great and is not easy to bear, and to almost everyone there come hours when they would gladly exchange it for some kind of communion, however banal and cheap, for the appearance of some slight harmony with the most easily available, with the most undeserving.</blockquote>
+      <figcaption class="quote__author">&mdash; Rainer Maria Rilke</figcaption>
+    </figure>
+    <figure class="quote" id="q_b8bfd9e797b6ef66" data-author="tracy k. smith" data-search="i used to think of love as a visceral experience, something that envelops you because of the way another person makes you feel. in love, i found courage, a willingness to race forward into new places, new experiences, new risks. the world became large for me when romantic love became real, perhaps because i myself felt full with new capacities for thought and need and feeling. i wasn’t alone. the annals of popular music, archives of cinema and a great parcel of the canon of enduring literature concern themselves with love between two people. but now, because i am a parent, perhaps, i am striving for the courage and the skill to embody another manner of love. i find myself asking what might happen if, without asking anything of you in return, i were to choose to see you, whoever you are, as another version of myself, one worthy of my acknowledgment, my concern, my devotion? tracy k. smith">
+      <blockquote class="quote__text">I used to think of love as a visceral experience, something that envelops you because of the way another person makes you feel. In love, I found courage, a willingness to race forward into new places, new experiences, new risks. The world became large for me when romantic love became real, perhaps because I myself felt full with new capacities for thought and need and feeling. I wasn’t alone. The annals of popular music, archives of cinema and a great parcel of the canon of enduring literature concern themselves with love between two people. But now, because I am a parent, perhaps, I am striving for the courage and the skill to embody another manner of love. I find myself asking what might happen if, without asking anything of you in return, I were to choose to see you, whoever you are, as another version of myself, one worthy of my acknowledgment, my concern, my devotion?</blockquote>
+      <figcaption class="quote__author">&mdash; Tracy K. Smith</figcaption>
+    </figure>
+    <figure class="quote quote--short" id="q_5676101bf6ce5ff0" data-author="richard p. feynman" data-search="the first principle is that you must not fool yourself, and you are the easiest person to fool. richard p. feynman">
+      <blockquote class="quote__text">The first principle is that you must not fool yourself, and you are the easiest person to fool.</blockquote>
+      <figcaption class="quote__author">&mdash; Richard P. Feynman</figcaption>
+    </figure>
+    <figure class="quote quote--short" id="q_1892240cc5b745c0" data-author="naval ravikant, on jiddu krishnamurti" data-search="be in an internal state of revolution. naval ravikant, on jiddu krishnamurti">
+      <blockquote class="quote__text">Be in an internal state of revolution.</blockquote>
+      <figcaption class="quote__author">&mdash; Naval Ravikant, on Jiddu Krishnamurti</figcaption>
+    </figure>
+    <figure class="quote" id="q_cfdeacefa1febe43" data-author="eckhart tolle" data-search="the past gives you an identity and the future holds the promise of salvation, of fulfillment in whatever form. both are illusions. eckhart tolle">
+      <blockquote class="quote__text">The past gives you an identity and the future holds the promise of salvation, of fulfillment in whatever form. Both are illusions.</blockquote>
+      <figcaption class="quote__author">&mdash; Eckhart Tolle</figcaption>
+    </figure>
+    <figure class="quote quote--short" id="q_990a0b8d6567b3f3" data-author="richard powers" data-search="the greatest flaw of the species is its overwhelming tendency to mistake agreement for truth. richard powers">
+      <blockquote class="quote__text">The greatest flaw of the species is its overwhelming tendency to mistake agreement for truth.</blockquote>
+      <figcaption class="quote__author">&mdash; Richard Powers</figcaption>
+    </figure>
+    <figure class="quote" id="kh_web_85c7399576d6f47b" data-author="adyashanti" data-search="what we call ego is simply the mechanism our mind uses to resist life as it is. in that way, ego isn’t a thing as much as it is a verb. it is the resistance to what is. it is the pushing away or pulling toward. adyashanti">
+      <blockquote class="quote__text">What we call ego is simply the mechanism our mind uses to resist life as it is. In that way, ego isn’t a thing as much as it is a verb. It is the resistance to what is. It is the pushing away or pulling toward.</blockquote>
+      <figcaption class="quote__author">&mdash; Adyashanti</figcaption>
+    </figure>
+    <figure class="quote" id="kh_web_3c434d3d9e1f3ce2" data-author="adyashanti" data-search="in truth, if it is to be true and real, awakening must be different from what we imagine it to be. this is because all of our imaginings about awakening are happening within the paradigm of the dream state. it is not possible to imagine something outside of the dream state when our consciousness is still within it. adyashanti">
+      <blockquote class="quote__text">In truth, if it is to be true and real, awakening must be different from what we imagine it to be. This is because all of our imaginings about awakening are happening within the paradigm of the dream state. It is not possible to imagine something outside of the dream state when our consciousness is still within it.</blockquote>
+      <figcaption class="quote__author">&mdash; Adyashanti</figcaption>
+    </figure>
+    <figure class="quote quote--short" id="kh_web_958c13dd0993ba15" data-author="adyashanti" data-search="“enlightenment is absolute cooperation with the inevitable.” adyashanti">
+      <blockquote class="quote__text">“Enlightenment is absolute cooperation with the inevitable.”</blockquote>
+      <figcaption class="quote__author">&mdash; Adyashanti</figcaption>
+    </figure>
+    <figure class="quote" id="kh_web_cfc7651a12de563b" data-author="adyashanti" data-search="everything is fleeting; everything is of the nature of a dream. we come to realize that even our greatest realizations, our greatest moments of “aha,” are actually dreams within the infinity of the unborn. it is almost like we realize that even one’s own great awakening was just another dream that never happened. adyashanti">
+      <blockquote class="quote__text">Everything is fleeting; everything is of the nature of a dream. We come to realize that even our greatest realizations, our greatest moments of “aha,” are actually dreams within the infinity of the unborn. It is almost like we realize that even one’s own great awakening was just another dream that never happened.</blockquote>
+      <figcaption class="quote__author">&mdash; Adyashanti</figcaption>
+    </figure>
+    <figure class="quote quote--short" id="kh_web_c56b325e21ff3573" data-author="david whyte" data-search="in almost every tradition, caring deeply is seen to be the essence of being human. david whyte">
+      <blockquote class="quote__text">In almost every tradition, caring deeply is seen to be the essence of being human.</blockquote>
+      <figcaption class="quote__author">&mdash; David Whyte</figcaption>
+    </figure>
+    <figure class="quote quote--short" id="kh_web_75ed0842cb40cdba" data-author="david whyte" data-search="anger is the unspoken and helplessly destructive inability to feel the full depth of how much we care. david whyte">
+      <blockquote class="quote__text">Anger is the unspoken and helplessly destructive inability to feel the full depth of how much we care.</blockquote>
+      <figcaption class="quote__author">&mdash; David Whyte</figcaption>
+    </figure>
+    <figure class="quote" id="kh_web_fee64e2a7c5805d3" data-author="kahlil gibran" data-search="love one another, but make not a bond of love: let it rather be a moving sea between the shores of your souls. fill each other’s cup but drink not from one cup. give one another of your bread but eat not from the same loaf. sing and dance together and be joyous, but let each one of you be alone, even as the strings of a lute are alone though they quiver with the same music. kahlil gibran">
+      <blockquote class="quote__text">Love one another, but make not a bond of love: Let it rather be a moving sea between the shores of your souls. Fill each other’s cup but drink not from one cup. Give one another of your bread but eat not from the same loaf. Sing and dance together and be joyous, but let each one of you be alone, Even as the strings of a lute are alone though they quiver with the same music.</blockquote>
+      <figcaption class="quote__author">&mdash; Kahlil Gibran</figcaption>
+    </figure>
+    <figure class="quote quote--short" id="kh_web_eff3567a5cf360c3" data-author="kahlil gibran" data-search="your children are not your children. they are the sons and daughters of life’s longing for itself. kahlil gibran">
+      <blockquote class="quote__text">Your children are not your children. They are the sons and daughters of Life’s longing for itself.</blockquote>
+      <figcaption class="quote__author">&mdash; Kahlil Gibran</figcaption>
+    </figure>
+    <figure class="quote quote--short" id="kh_web_163cc6883c0ef2b4" data-author="kahlil gibran" data-search="the deeper that sorrow carves into your being, the more joy you can contain. kahlil gibran">
+      <blockquote class="quote__text">The deeper that sorrow carves into your being, the more joy you can contain.</blockquote>
+      <figcaption class="quote__author">&mdash; Kahlil Gibran</figcaption>
+    </figure>
+    <figure class="quote" id="kh_web_928380ae5ff99318" data-author="kahlil gibran" data-search="if he is indeed wise he does not bid you enter the house of his wisdom, but rather leads you to the threshold of your own mind. kahlil gibran">
+      <blockquote class="quote__text">If he is indeed wise he does not bid you enter the house of his wisdom, but rather leads you to the threshold of your own mind.</blockquote>
+      <figcaption class="quote__author">&mdash; Kahlil Gibran</figcaption>
+    </figure>
+    <figure class="quote quote--short" id="kh_web_7d34b90743ee74ad" data-author="kahlil gibran" data-search="what is word knowledge but a shadow of wordless knowledge? kahlil gibran">
+      <blockquote class="quote__text">What is word knowledge but a shadow of wordless knowledge?</blockquote>
+      <figcaption class="quote__author">&mdash; Kahlil Gibran</figcaption>
+    </figure>
+    <figure class="quote" id="kh_web_c3239dc992f3bb4f" data-author="david whyte" data-search="beauty is the harvest of presence, the evanescent moment of seeing or hearing on the outside what already lives far inside us. david whyte">
+      <blockquote class="quote__text">Beauty is the harvest of presence, the evanescent moment of seeing or hearing on the outside what already lives far inside us.</blockquote>
+      <figcaption class="quote__author">&mdash; David Whyte</figcaption>
+    </figure>
+    <figure class="quote quote--short" id="kh_web_0e7edc269e103482" data-author="david whyte" data-search="courage is what love looks like when tested by the simple everyday necessities of being alive. david whyte">
+      <blockquote class="quote__text">Courage is what love looks like when tested by the simple everyday necessities of being alive.</blockquote>
+      <figcaption class="quote__author">&mdash; David Whyte</figcaption>
+    </figure>
+    <figure class="quote quote--short" id="kh_web_f5683a1ce5d714ca" data-author="david whyte" data-search="heartbreak is unpreventable: the natural outcome of caring for people and things over which we have no control. david whyte">
+      <blockquote class="quote__text">Heartbreak is unpreventable: the natural outcome of caring for people and things over which we have no control.</blockquote>
+      <figcaption class="quote__author">&mdash; David Whyte</figcaption>
+    </figure>
+    <figure class="quote quote--short" id="kh_web_42a3fe24800e9c79" data-author="david whyte" data-search="shyness is the exquisite and vulnerable frontier between what we think is possible and what we think we deserve. david whyte">
+      <blockquote class="quote__text">Shyness is the exquisite and vulnerable frontier between what we think is possible and what we think we deserve.</blockquote>
+      <figcaption class="quote__author">&mdash; David Whyte</figcaption>
+    </figure>
+    <figure class="quote" id="kh_web_5fae18bb6f294359" data-author="abraham joshua heschel, ilya schor, and susannah heschel" data-search="the seventh day is a palace in time which we build. it is made of soul, of joy and reticence. in its atmosphere, a discipline is a reminder of adjacency to eternity. abraham joshua heschel, ilya schor, and susannah heschel">
+      <blockquote class="quote__text">The seventh day is a palace in time which we build. It is made of soul, of joy and reticence. In its atmosphere, a discipline is a reminder of adjacency to eternity.</blockquote>
+      <figcaption class="quote__author">&mdash; Abraham Joshua Heschel, Ilya Schor, and Susannah Heschel</figcaption>
+    </figure>
+    <figure class="quote" id="kh_web_c1b1dbefbc851549" data-author="abraham joshua heschel, ilya schor, and susannah heschel" data-search="time is like a wasteland. it has grandeur but no beauty. its strange, frightful power is always feared but rarely cheered. then we arrive at the seventh day, and the sabbath is endowed with a felicity which enraptures the soul, which glides into our thoughts with a healing sympathy. it is a day on which hours do not oust one another. abraham joshua heschel, ilya schor, and susannah heschel">
+      <blockquote class="quote__text">Time is like a wasteland. It has grandeur but no beauty. Its strange, frightful power is always feared but rarely cheered. Then we arrive at the seventh day, and the Sabbath is endowed with a felicity which enraptures the soul, which glides into our thoughts with a healing sympathy. It is a day on which hours do not oust one another.</blockquote>
+      <figcaption class="quote__author">&mdash; Abraham Joshua Heschel, Ilya Schor, and Susannah Heschel</figcaption>
+    </figure>
+    <figure class="quote" id="kh_web_46a69f8bcbb9e34f" data-author="shinzen young" data-search="i like to describe mindfulness as a threefold attentional skill set: concentration power, sensory clarity, and equanimity working together. shinzen young">
+      <blockquote class="quote__text">I like to describe mindfulness as a threefold attentional skill set: concentration power, sensory clarity, and equanimity working together.</blockquote>
+      <figcaption class="quote__author">&mdash; Shinzen Young</figcaption>
+    </figure>
+    <figure class="quote" id="kh_web_4683722220b776fb" data-author="carmen maria machado" data-search="when she kisses you in a mcdonald’s parking lot in indiana, you both look up to see a group of men — a risk of men, a murder of men — standing there watching, laughing, pointing. carmen maria machado">
+      <blockquote class="quote__text">When she kisses you in a McDonald’s parking lot in Indiana, you both look up to see a group of men — a risk of men, a murder of men — standing there watching, laughing, pointing.</blockquote>
+      <figcaption class="quote__author">&mdash; Carmen Maria Machado</figcaption>
+    </figure>
+    <figure class="quote" id="kh_web_c97bc39917008abd" data-author="carmen maria machado" data-search="“if you want to be my friend, you must do two things. first, forget i am a lesbian. and second, never forget i am a lesbian.” carmen maria machado">
+      <blockquote class="quote__text">“If you want to be my friend, you must do two things. First, forget I am a lesbian. And second, never forget I am a lesbian.”</blockquote>
+      <figcaption class="quote__author">&mdash; Carmen Maria Machado</figcaption>
+    </figure>
+    <figure class="quote quote--short" id="kh_web_55554a78bf1d5598" data-author="arundhati roy" data-search="gradually the reason for his silence was hidden away, entombed somewhere deep in the soothing folds of the fact of it. arundhati roy">
+      <blockquote class="quote__text">Gradually the reason for his silence was hidden away, entombed somewhere deep in the soothing folds of the fact of it.</blockquote>
+      <figcaption class="quote__author">&mdash; Arundhati Roy</figcaption>
+    </figure>
+    <figure class="quote quote--short" id="kh_web_8ba41645c294cb8a" data-author="ken liu" data-search="a book, they thought, was not a living mind yet pretended to be one. ken liu">
+      <blockquote class="quote__text">A book, they thought, was not a living mind yet pretended to be one.</blockquote>
+      <figcaption class="quote__author">&mdash; Ken Liu</figcaption>
+    </figure>
+    <figure class="quote" id="kh_web_bb0b553cb5c3ddc7" data-author="octavia e. butler" data-search="we are all godseed, but no more or less so than any other aspect of the universe, godseed is all there is — all that changes. earthseed is all that spreads earthlife to new earths. the universe is godseed. only we are earthseed. and the destiny of earthseed is to take root among the stars. octavia e. butler">
+      <blockquote class="quote__text">We are all Godseed, but no more or less so than any other aspect of the universe, Godseed is all there is — all that Changes. Earthseed is all that spreads Earthlife to new earths. The universe is Godseed. Only we are Earthseed. And the Destiny of Earthseed is to take root among the stars.</blockquote>
+      <figcaption class="quote__author">&mdash; Octavia E. Butler</figcaption>
+    </figure>
+    <figure class="quote" id="kh_web_925ea9e2eeb8767b" data-author="rainer maria rilke" data-search="you are looking outwards, and of all things that is what you must now not do. nobody can advise and help you, nobody. there is only one single means. go inside yourself. discover the motive that bids you write; examine whether it sends its roots down to the deepest places of your heart, confess to yourself whether you would have to die if writing were denied you. rainer maria rilke">
+      <blockquote class="quote__text">You are looking outwards, and of all things that is what you must now not do. Nobody can advise and help you, nobody. There is only one single means. Go inside yourself. Discover the motive that bids you write; examine whether it sends its roots down to the deepest places of your heart, confess to yourself whether you would have to die if writing were denied you.</blockquote>
+      <figcaption class="quote__author">&mdash; Rainer Maria Rilke</figcaption>
+    </figure>
+    <figure class="quote" id="kh_web_1dbd65b5daae0a28" data-author="rainer maria rilke" data-search="if your everyday life seems poor to you, do not accuse it; accuse yourself, tell yourself you are not poet enough to summon up its riches; since for the creator there is no poverty and no poor or unimportant place. rainer maria rilke">
+      <blockquote class="quote__text">If your everyday life seems poor to you, do not accuse it; accuse yourself, tell yourself you are not poet enough to summon up its riches; since for the creator there is no poverty and no poor or unimportant place.</blockquote>
+      <figcaption class="quote__author">&mdash; Rainer Maria Rilke</figcaption>
+    </figure>
+    <figure class="quote" id="kh_web_e0fa304ed4dc361f" data-author="rainer maria rilke" data-search="have patience with everything that is unsolved in your heart and to try to cherish the questions themselves, like closed rooms and like books written in a very strange tongue. do not search now for the answers which cannot be given you because you could not live them. it is a matter of living everything. live the questions now. perhaps you will then gradually, without noticing it, one distant day live right into the answer. rainer maria rilke">
+      <blockquote class="quote__text">Have patience with everything that is unsolved in your heart and to try to cherish the questions themselves, like closed rooms and like books written in a very strange tongue. Do not search now for the answers which cannot be given you because you could not live them. It is a matter of living everything. Live the questions now. Perhaps you will then gradually, without noticing it, one distant day live right into the answer.</blockquote>
+      <figcaption class="quote__author">&mdash; Rainer Maria Rilke</figcaption>
+    </figure>
+    <figure class="quote" id="kh_web_c3e65f9f8811eed8" data-author="lori gottlieb" data-search="we can’t have change without loss, which is why so often people say they want change but nonetheless stay exactly the same. lori gottlieb">
+      <blockquote class="quote__text">We can’t have change without loss, which is why so often people say they want change but nonetheless stay exactly the same.</blockquote>
+      <figcaption class="quote__author">&mdash; Lori Gottlieb</figcaption>
+    </figure>
+    <figure class="quote quote--short" id="kh_web_4b04b35344ad540b" data-author="lori gottlieb" data-search="a therapist is supposed to be a container for the hope that a depressed person can’t yet hold. lori gottlieb">
+      <blockquote class="quote__text">A therapist is supposed to be a container for the hope that a depressed person can’t yet hold.</blockquote>
+      <figcaption class="quote__author">&mdash; Lori Gottlieb</figcaption>
+    </figure>
+    <figure class="quote quote--short" id="kh_web_d1ffd7948d066ca1" data-author="lori gottlieb" data-search="“the opposite of depression isn’t happiness, but vitality.” lori gottlieb">
+      <blockquote class="quote__text">“The opposite of depression isn’t happiness, but vitality.”</blockquote>
+      <figcaption class="quote__author">&mdash; Lori Gottlieb</figcaption>
+    </figure>
+    <figure class="quote quote--short" id="kh_web_a771af012fdc76b4" data-author="lori gottlieb" data-search="we marry our unfinished business. lori gottlieb">
+      <blockquote class="quote__text">We marry our unfinished business.</blockquote>
+      <figcaption class="quote__author">&mdash; Lori Gottlieb</figcaption>
+    </figure>
+    <figure class="quote quote--short" id="kh_web_4b0cb519d644ba69" data-author="lori gottlieb" data-search="“the nature of life is change and the nature of people is to resist change.” lori gottlieb">
+      <blockquote class="quote__text">“The nature of life is change and the nature of people is to resist change.”</blockquote>
+      <figcaption class="quote__author">&mdash; Lori Gottlieb</figcaption>
+    </figure>
+    <figure class="quote quote--short" id="kh_web_6609da6a56cb5525" data-author="lori gottlieb" data-search="we grow in connection with others. lori gottlieb">
+      <blockquote class="quote__text">We grow in connection with others.</blockquote>
+      <figcaption class="quote__author">&mdash; Lori Gottlieb</figcaption>
+    </figure>
+    <figure class="quote quote--short" id="kh_web_ccc7d1790f3f2aa0" data-author="viktor e. frankl, harold s. kushner, and william j. winslade" data-search="dostoevski said once, “there is only one thing that i dread: not to be worthy of my sufferings.” viktor e. frankl, harold s. kushner, and william j. winslade">
+      <blockquote class="quote__text">Dostoevski said once, “There is only one thing that I dread: not to be worthy of my sufferings.”</blockquote>
+      <figcaption class="quote__author">&mdash; Viktor E. Frankl, Harold S. Kushner, and William J. Winslade</figcaption>
+    </figure>
+    <figure class="quote quote--short" id="kh_web_48a4922a21abb12d" data-author="isaac babel, nathalie babel, michael dirda, and peter constantine" data-search="i dreamed and saw women in my dreams, and only my heart, crimson with murder, screeched and bled. isaac babel, nathalie babel, michael dirda, and peter constantine">
+      <blockquote class="quote__text">I dreamed and saw women in my dreams, and only my heart, crimson with murder, screeched and bled.</blockquote>
+      <figcaption class="quote__author">&mdash; Isaac Babel, Nathalie Babel, Michael Dirda, and Peter Constantine</figcaption>
+    </figure>
+    <figure class="quote quote--short" id="kh_web_8d752518ac5d5947" data-author="will durant and ariel durant" data-search="“the present is the past rolled up for action, and the past is the present unrolled for understanding” will durant and ariel durant">
+      <blockquote class="quote__text">“The present is the past rolled up for action, and the past is the present unrolled for understanding”</blockquote>
+      <figcaption class="quote__author">&mdash; Will Durant and Ariel Durant</figcaption>
+    </figure>
+    <figure class="quote" id="kh_web_185c16f552d22d4f" data-author="will durant and ariel durant" data-search="nature smiles at the union of freedom and equality in our utopias. for freedom and equality are sworn and everlasting enemies, and when one prevails the other dies. will durant and ariel durant">
+      <blockquote class="quote__text">Nature smiles at the union of freedom and equality in our utopias. For freedom and equality are sworn and everlasting enemies, and when one prevails the other dies.</blockquote>
+      <figcaption class="quote__author">&mdash; Will Durant and Ariel Durant</figcaption>
+    </figure>
+    <figure class="quote quote--short" id="kh_web_241ba898a9bd3867" data-author="will durant and ariel durant" data-search="man’s sins may be the relics of his rise rather than the stigmata of his fall. will durant and ariel durant">
+      <blockquote class="quote__text">Man’s sins may be the relics of his rise rather than the stigmata of his fall.</blockquote>
+      <figcaption class="quote__author">&mdash; Will Durant and Ariel Durant</figcaption>
+    </figure>
+    <figure class="quote" id="kh_web_d46419d240954667" data-author="yuval noah harari" data-search="there are no gods in the universe, no nations, no money, no human rights, no laws, and no justice outside the common imagination of human beings. yuval noah harari">
+      <blockquote class="quote__text">There are no gods in the universe, no nations, no money, no human rights, no laws, and no justice outside the common imagination of human beings.</blockquote>
+      <figcaption class="quote__author">&mdash; Yuval Noah Harari</figcaption>
+    </figure>
+    <figure class="quote quote--short" id="kh_web_4bc970225140741a" data-author="yuval noah harari" data-search="the most important economic resource is trust in the future. yuval noah harari">
+      <blockquote class="quote__text">The most important economic resource is trust in the future.</blockquote>
+      <figcaption class="quote__author">&mdash; Yuval Noah Harari</figcaption>
+    </figure>
+    <figure class="quote quote--short" id="kh_web_1d8cc71a01be4035" data-author="leslie jamison" data-search="i wanted to drive for long enough to molt my urgent need. leslie jamison">
+      <blockquote class="quote__text">I wanted to drive for long enough to molt my urgent need.</blockquote>
+      <figcaption class="quote__author">&mdash; Leslie Jamison</figcaption>
+    </figure>
+    <figure class="quote" id="kh_web_909e28488214d11c" data-author="jia tolentino" data-search="where we had once been free to be ourselves online, we were now chained to ourselves online, and this made us self-conscious. jia tolentino">
+      <blockquote class="quote__text">Where we had once been free to be ourselves online, we were now chained to ourselves online, and this made us self-conscious.</blockquote>
+      <figcaption class="quote__author">&mdash; Jia Tolentino</figcaption>
+    </figure>
+    <figure class="quote" id="kh_web_a2841a97da541782" data-author="jia tolentino" data-search="i’ve been thinking about five intersecting problems: first, how the internet is built to distend our sense of identity; second, how it encourages us to overvalue our opinions; third, how it maximizes our sense of opposition; fourth, how it cheapens our understanding of solidarity; and, finally, how it destroys our sense of scale. jia tolentino">
+      <blockquote class="quote__text">I’ve been thinking about five intersecting problems: first, how the internet is built to distend our sense of identity; second, how it encourages us to overvalue our opinions; third, how it maximizes our sense of opposition; fourth, how it cheapens our understanding of solidarity; and, finally, how it destroys our sense of scale.</blockquote>
+      <figcaption class="quote__author">&mdash; Jia Tolentino</figcaption>
+    </figure>
+    <figure class="quote quote--short" id="kh_web_e008976599f9caff" data-author="jia tolentino" data-search="capitalism has no land left to cultivate but the self. jia tolentino">
+      <blockquote class="quote__text">Capitalism has no land left to cultivate but the self.</blockquote>
+      <figcaption class="quote__author">&mdash; Jia Tolentino</figcaption>
+    </figure>
+    <figure class="quote quote--short" id="kh_web_ccf5aa15edefaf86" data-author="jia tolentino" data-search="the distance between the place that formed me and the form i had taken was out in the open, and widening. jia tolentino">
+      <blockquote class="quote__text">The distance between the place that formed me and the form I had taken was out in the open, and widening.</blockquote>
+      <figcaption class="quote__author">&mdash; Jia Tolentino</figcaption>
+    </figure>
+    <figure class="quote quote--short" id="kh_web_b5d415d3c3dd11fc" data-author="jia tolentino" data-search="there are feelings, like ecstasy, that provide an unbreakable link between virtue and vice. jia tolentino">
+      <blockquote class="quote__text">There are feelings, like ecstasy, that provide an unbreakable link between virtue and vice.</blockquote>
+      <figcaption class="quote__author">&mdash; Jia Tolentino</figcaption>
+    </figure>
+    <figure class="quote quote--short" id="kh_web_dabb43be30c59246" data-author="ocean vuong" data-search="because freedom, i am told, is nothing but the distance between the hunter and its prey. ocean vuong">
+      <blockquote class="quote__text">Because freedom, I am told, is nothing but the distance between the hunter and its prey.</blockquote>
+      <figcaption class="quote__author">&mdash; Ocean Vuong</figcaption>
+    </figure>
+    <figure class="quote quote--short" id="kh_web_5ba80353f2c12e4d" data-author="ocean vuong" data-search="i am writing you from inside a body that used to be yours. which is to say, i am writing as a son. ocean vuong">
+      <blockquote class="quote__text">I am writing you from inside a body that used to be yours. Which is to say, I am writing as a son.</blockquote>
+      <figcaption class="quote__author">&mdash; Ocean Vuong</figcaption>
+    </figure>
+    <figure class="quote quote--short" id="kh_web_e5e1a122ce9b507e" data-author="ocean vuong" data-search="because a bullet without a body is a song without ears. ocean vuong">
+      <blockquote class="quote__text">Because a bullet without a body is a song without ears.</blockquote>
+      <figcaption class="quote__author">&mdash; Ocean Vuong</figcaption>
+    </figure>
+    <figure class="quote quote--short" id="kh_web_e9580d8ee231192f" data-author="robin wall kimmerer" data-search="gardens are simultaneously a material and a spiritual undertaking. robin wall kimmerer">
+      <blockquote class="quote__text">Gardens are simultaneously a material and a spiritual undertaking.</blockquote>
+      <figcaption class="quote__author">&mdash; Robin Wall Kimmerer</figcaption>
+    </figure>
+    <figure class="quote quote--short" id="kh_web_d36d811090fd4112" data-author="truman capote" data-search="when that boy read a book it stayed read. truman capote">
+      <blockquote class="quote__text">When that boy read a book it stayed read.</blockquote>
+      <figcaption class="quote__author">&mdash; Truman Capote</figcaption>
+    </figure>
+    <figure class="quote quote--short" id="kh_web_de225050915948d0" data-author="marcus aurelius, ryan holiday, and gregory hays" data-search="the things you think about determine the quality of your mind. your soul takes on the color of your thoughts. marcus aurelius, ryan holiday, and gregory hays">
+      <blockquote class="quote__text">The things you think about determine the quality of your mind. Your soul takes on the color of your thoughts.</blockquote>
+      <figcaption class="quote__author">&mdash; Marcus Aurelius, Ryan Holiday, and Gregory Hays</figcaption>
+    </figure>
+    <figure class="quote quote--short" id="kh_web_65eadc347fa748c3" data-author="toni morrison and jacqueline woodson" data-search="they have the eyes of people who can tell what time it is by the color of the sky. toni morrison and jacqueline woodson">
+      <blockquote class="quote__text">They have the eyes of people who can tell what time it is by the color of the sky.</blockquote>
+      <figcaption class="quote__author">&mdash; Toni Morrison and Jacqueline Woodson</figcaption>
+    </figure>
+    <figure class="quote quote--short" id="kh_web_cf325d5acdf10122" data-author="toni morrison and jacqueline woodson" data-search="they beat us differently in the spring. toni morrison and jacqueline woodson">
+      <blockquote class="quote__text">They beat us differently in the spring.</blockquote>
+      <figcaption class="quote__author">&mdash; Toni Morrison and Jacqueline Woodson</figcaption>
+    </figure>
+    <figure class="quote quote--short" id="kh_web_05425527e55c1216" data-author="toni morrison and jacqueline woodson" data-search="their marriage was shredded with quarrels. toni morrison and jacqueline woodson">
+      <blockquote class="quote__text">Their marriage was shredded with quarrels.</blockquote>
+      <figcaption class="quote__author">&mdash; Toni Morrison and Jacqueline Woodson</figcaption>
+    </figure>
+    <figure class="quote quote--short" id="kh_web_c8c384c30705fac8" data-author="sam harris" data-search="ceaseless change is an unreliable basis for lasting fulfillment. sam harris">
+      <blockquote class="quote__text">Ceaseless change is an unreliable basis for lasting fulfillment.</blockquote>
+      <figcaption class="quote__author">&mdash; Sam Harris</figcaption>
+    </figure>
+    <figure class="quote quote--short" id="kh_web_8204ed72df1cfcbb" data-author="sam harris" data-search="we read for the pleasure of thinking another person’s thoughts. sam harris">
+      <blockquote class="quote__text">We read for the pleasure of thinking another person’s thoughts.</blockquote>
+      <figcaption class="quote__author">&mdash; Sam Harris</figcaption>
+    </figure>
+    <figure class="quote" id="kh_web_f8898fe6420c8b6c" data-author="italo calvino" data-search="the city, however, does not tell its past, but contains it like the lines of a hand, written in the corners of the streets, the gratings of the windows, the banisters of the steps, the antennae of the lightning rods, the poles of the flags, every segment marked in turn with scratches, indentations, scrolls. italo calvino">
+      <blockquote class="quote__text">The city, however, does not tell its past, but contains it like the lines of a hand, written in the corners of the streets, the gratings of the windows, the banisters of the steps, the antennae of the lightning rods, the poles of the flags, every segment marked in turn with scratches, indentations, scrolls.</blockquote>
+      <figcaption class="quote__author">&mdash; Italo Calvino</figcaption>
+    </figure>
+    <figure class="quote quote--short" id="kh_web_22952a390f663390" data-author="ta-nehisi coates" data-search="in america, it is traditional to destroy the black body — it is heritage. ta-nehisi coates">
+      <blockquote class="quote__text">In America, it is traditional to destroy the black body — it is heritage.</blockquote>
+      <figcaption class="quote__author">&mdash; Ta-Nehisi Coates</figcaption>
+    </figure>
+  </main>
+  <p class="empty" id="empty">No quotes match that filter.</p>
+
+  <script>
+    (function() {
+      const searchInput = document.getElementById('search');
+      const authorFilter = document.getElementById('author-filter');
+      const count = document.getElementById('count');
+      const empty = document.getElementById('empty');
+      const quotes = Array.from(document.querySelectorAll('.quote'));
+
+      function normalize(value) {
+        return String(value || '').trim().toLowerCase();
+      }
+
+      function renderCount(visible) {
+        count.textContent = visible === 1 ? '1 quote' : visible + ' quotes';
+      }
+
+      function applyFilters() {
+        const query = normalize(searchInput.value);
+        const author = normalize(authorFilter.value);
+        let visible = 0;
+
+        quotes.forEach((quote) => {
+          const matchesQuery = !query || quote.dataset.search.includes(query);
+          const matchesAuthor = !author || quote.dataset.author === author;
+          const show = matchesQuery && matchesAuthor;
+          quote.classList.toggle('is-hidden', !show);
+          if (show) visible += 1;
+        });
+
+        renderCount(visible);
+        empty.classList.toggle('is-visible', visible === 0);
+      }
+
+      searchInput.addEventListener('input', applyFilters);
+      authorFilter.addEventListener('change', applyFilters);
+      applyFilters();
+    })();
+  </script>
+</body>
+</html>

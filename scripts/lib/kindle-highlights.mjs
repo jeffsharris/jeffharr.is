@@ -309,10 +309,23 @@ function buildQuotesCollectionMarkdown(state) {
 
 function serializeQuoteBlocks(items) {
   return items.map((item) => {
-    const quote = normalizeQuoteText(item.quote || item.originalQuote || '');
-    const author = normalizeAuthor(item.author) || 'Unknown';
+    const quote = normalizePublishedQuoteText(item.quote || item.originalQuote || '');
+    const author = normalizePublishedAuthor(item.author) || 'Unknown';
     return `> ${quote}\n\nAuthor: ${author}`;
   }).join('\n\n');
+}
+
+function serializePublicQuotes(state) {
+  const normalized = normalizeState(state);
+  return normalized.order
+    .map((id) => normalized.items[id])
+    .filter((item) => item?.status === CATEGORY.ACCEPTED)
+    .map((item) => ({
+      id: item.id,
+      quote: normalizePublishedQuoteText(item.quote || item.originalQuote || ''),
+      author: normalizePublishedAuthor(item.author) || 'Unknown'
+    }))
+    .filter((item) => item.quote);
 }
 
 function statusForMarkdownHeading(value) {
@@ -388,6 +401,30 @@ function normalizeQuoteText(value) {
     .trim();
 }
 
+function normalizePublishedQuoteText(value) {
+  let text = normalizeQuoteText(value)
+    .replace(/\.{3}/g, '…')
+    .replace(/\s+-\s+/g, ' — ')
+    .replace(/\s*[—–]\s*/g, ' — ')
+    .replace(/\s+([,.;:!?])/g, '$1')
+    .replace(/([([{])\s+/g, '$1')
+    .replace(/\s+([)\]}])/g, '$1')
+    .replace(/\s+/g, ' ')
+    .trim();
+
+  text = text.replace(
+    /^([A-Z]{2,})(?=\s+(?:is|are|was|were|can|could|has|have|means|does|do|will|would|must|should)\b)/,
+    (word) => word.charAt(0) + word.slice(1).toLowerCase()
+  );
+  text = text.replace(/^([("'\[]*)([a-z])/, (_, prefix, letter) => `${prefix}${letter.toUpperCase()}`);
+  text = normalizeTerminalPunctuation(text);
+  return smartenPunctuation(text);
+}
+
+function normalizePublishedAuthor(value) {
+  return smartenPunctuation(normalizeAuthor(value));
+}
+
 function normalizeAuthor(value) {
   return String(value || '').replace(/\s+/g, ' ').trim();
 }
@@ -412,14 +449,33 @@ function hashValue(value) {
   return createHash('sha256').update(String(value || '')).digest('hex');
 }
 
+function normalizeTerminalPunctuation(value) {
+  let text = String(value || '').trim();
+  if (!text) return text;
+  text = text.replace(/[,;:]\s*$/, '.');
+  if (!/[.!?…)"'\]\}”’]$/.test(text)) text = `${text}.`;
+  return text;
+}
+
+function smartenPunctuation(value) {
+  return String(value || '')
+    .replace(/(^|[\s([{])"(?=\S)/g, '$1“')
+    .replace(/"/g, '”')
+    .replace(/(^|[\s([{])'(?=\S)/g, '$1‘')
+    .replace(/'/g, '’');
+}
+
 export {
   CATEGORY,
   buildQuotesCollectionMarkdown,
   mergeImportedHighlights,
   normalizeState,
+  normalizePublishedAuthor,
+  normalizePublishedQuoteText,
   parseKindleClippings,
   parseKindleEntry,
   parseKindleNotebookExport,
   parseQuotesMarkdown,
+  serializePublicQuotes,
   serializeQuotesMarkdown
 };

@@ -12,6 +12,7 @@ from PIL import Image, ImageDraw, ImageFilter, ImageFont, ImageOps
 REPO_ROOT = Path(__file__).resolve().parent.parent
 CARD_SIZE = (1200, 630)
 OUT_DIR = REPO_ROOT / "images/social"
+COLLECTIONS_DIR = REPO_ROOT / "images/collections"
 
 FONT_CANDIDATES = {
     "regular": [
@@ -143,8 +144,65 @@ def draw_share_card() -> None:
     save_card(canvas, OUT_DIR / "share-card.jpg")
 
 
+def draw_quotes_assets() -> None:
+    draw_quotes_card()
+    draw_quotes_tile()
+
+
+def draw_quotes_card() -> None:
+    canvas = Image.new("RGBA", CARD_SIZE, (248, 246, 241, 255))
+    draw = ImageDraw.Draw(canvas)
+
+    draw.rounded_rectangle((66, 66, 1134, 564), radius=34, fill=(255, 255, 255, 238))
+    draw.rounded_rectangle((66, 66, 1134, 564), radius=34, outline=(219, 210, 197, 255), width=2)
+    draw.text((126, 116), "Quotes", font=font(76, "bold"), fill=(43, 39, 35, 255))
+    draw.text((130, 210), "Lines I keep coming back to.", font=font(34), fill=(107, 100, 91, 255))
+
+    quote_lines = [
+        "The first principle is that you must not fool yourself,",
+        "and you are the easiest person to fool.",
+    ]
+    y = 326
+    for line in quote_lines:
+        draw.text((130, y), line, font=font(36), fill=(51, 47, 42, 255))
+        y += 50
+    draw.text((132, y + 16), "- Richard P. Feynman", font=font(24), fill=(124, 103, 84, 255))
+
+    for offset, alpha in [(0, 80), (22, 44), (44, 26)]:
+        draw.arc((760 + offset, 126 + offset, 1070 + offset, 436 + offset), 204, 318, fill=(156, 107, 86, alpha), width=8)
+
+    save_card(canvas, OUT_DIR / "quotes-card.jpg")
+
+
+def draw_quotes_tile() -> None:
+    size = (900, 1350)
+    canvas = Image.new("RGBA", size, (58, 45, 39, 255))
+    draw = ImageDraw.Draw(canvas)
+
+    for index, bounds in enumerate([
+        (82, 126, 818, 426),
+        (122, 498, 778, 754),
+        (82, 830, 818, 1168),
+    ]):
+        fill = (252, 248, 240, 238) if index != 1 else (239, 224, 207, 238)
+        draw.rounded_rectangle(bounds, radius=26, fill=fill)
+        x0, y0, x1, _ = bounds
+        draw.line((x0 + 46, y0 + 72, x1 - 46, y0 + 72), fill=(188, 162, 138, 255), width=4)
+        draw.line((x0 + 46, y0 + 134, x1 - 118, y0 + 134), fill=(214, 199, 184, 255), width=4)
+        draw.line((x0 + 46, y0 + 196, x1 - 72, y0 + 196), fill=(214, 199, 184, 255), width=4)
+        draw.line((x0 + 46, y0 + 246, x0 + 218, y0 + 246), fill=(157, 121, 96, 255), width=5)
+
+    draw.text((82, 1228), "Quotes", font=font(74, "bold"), fill=(252, 248, 240, 255))
+    draw.text((86, 1310), "favorite lines", font=font(30), fill=(210, 190, 170, 255))
+
+    COLLECTIONS_DIR.mkdir(parents=True, exist_ok=True)
+    canvas.convert("RGB").save(COLLECTIONS_DIR / "quotes-tile.jpg", format="JPEG", quality=92, optimize=True)
+    print("wrote images/collections/quotes-tile.jpg")
+
+
 def main() -> int:
     generate_poems_card()
+    draw_quotes_assets()
     draw_read_later_card()
     draw_share_card()
     return 0

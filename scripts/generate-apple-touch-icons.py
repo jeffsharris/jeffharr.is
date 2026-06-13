@@ -18,6 +18,7 @@ STATIC_ICONS = [
     ("images/jeff-editorial-portrait.jpg", "apple-touch-icon.png"),
     ("images/collections/dharma-tile.jpg", "dharma/apple-touch-icon.png"),
     ("images/collections/poems-tile.jpg", "poems/apple-touch-icon.png"),
+    ("images/collections/quotes-tile.jpg", "quotes/apple-touch-icon.png"),
     ("images/collections/read-later-tile.jpg", "read-later/apple-touch-icon.png"),
     (
         "dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",

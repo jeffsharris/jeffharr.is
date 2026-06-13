@@ -22,6 +22,15 @@ const PAGES = [
     appTitle: 'Poems'
   },
   {
+    file: 'quotes/index.html',
+    canonical: 'https://jeffharr.is/quotes/',
+    title: 'Quotes | Jeff Harris',
+    description: 'Quotes I love',
+    image: 'https://jeffharr.is/images/social/quotes-card.jpg',
+    icon: '/quotes/apple-touch-icon.png',
+    appTitle: 'Quotes'
+  },
+  {
     file: 'read-later/index.html',
     canonical: 'https://jeffharr.is/read-later/',
     title: 'Read Later | Jeff Harris',
@@ -70,7 +79,7 @@ test('static consumable pages expose social preview metadata', () => {
 });
 
 test('new static social cards use large preview dimensions', () => {
-  for (const file of ['poems/index.html', 'read-later/index.html', 'share/index.html']) {
+  for (const file of ['poems/index.html', 'quotes/index.html', 'read-later/index.html', 'share/index.html']) {
     const html = readFileSync(file, 'utf8');
     assert.match(html, /<meta property="og:image:width" content="1200">/, file);
     assert.match(html, /<meta property="og:image:height" content="630">/, file);
