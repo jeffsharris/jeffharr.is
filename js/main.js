@@ -87,49 +87,8 @@
     }
   }
 
-  function initCollectionCounts() {
-    document.querySelectorAll('[data-count-src]').forEach(tile => {
-      const meta = tile.querySelector('.collection-tile__meta');
-      const countEl = tile.querySelector('[data-count]');
-      if (!meta || !countEl) return;
-
-      fetch(tile.dataset.countSrc, { headers: { accept: 'application/json' } })
-        .then(response => response.ok ? response.json() : null)
-        .then(data => {
-          const count = collectionCount(tile.dataset.countKind, data);
-          if (count == null) {
-            meta.hidden = true;
-            return;
-          }
-          countEl.textContent = String(count);
-        })
-        .catch(() => {
-          meta.hidden = true;
-        });
-    });
-  }
-
-  function collectionCount(kind, data) {
-    if (!data) return null;
-    if (kind === 'poems') {
-      const memorized = Array.isArray(data.memorized) ? data.memorized.length : 0;
-      const learning = Array.isArray(data.learning) ? data.learning.length : 0;
-      return memorized + learning || null;
-    }
-    if (kind === 'quotes') {
-      if (Number.isFinite(data.count)) return data.count;
-      if (Array.isArray(data.quotes)) return data.quotes.length;
-    }
-    if (kind === 'read-later') {
-      if (Number.isFinite(data.count)) return data.count;
-      if (Array.isArray(data.items)) return data.items.length;
-    }
-    return null;
-  }
-
   function init() {
     initTheme();
-    initCollectionCounts();
   }
 
   if (document.readyState === 'loading') {

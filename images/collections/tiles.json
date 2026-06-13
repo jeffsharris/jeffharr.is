@@ -9,6 +9,14 @@
       "prompt": "Editorial illustration. Portrait orientation, 2:3 aspect ratio, 1024x1536. Hand-painted feel with soft paper texture; gentle gradients; no harsh outlines. Restrained, palette-aware composition that leaves the bottom-right quarter visually quiet and uncluttered, a soft empty area suitable for hosting a small square inset. No text, no logos, no human figures, no captions, no brand marks. Avoid AI-generic fantasy art gloss, lens flares, or chromatic aberration; aim for a printed magazine cover sensibility. A warm interior at the blue hour: an open book on a wooden table, a slender glass of water catching the last light, a single pressed flower between the pages, an open window with linen curtains stirring. Outside, an indistinct landscape with hills and a small road. Palette: warm rose-amber, soft umber, parchment cream, with one breath of dusty blue from the window. The mood is intimate, contemplative, the moment just before a poem is read aloud."
     },
     {
+      "slug": "quotes",
+      "name": "Quotes",
+      "output": "images/collections/quotes-tile.jpg",
+      "size": "1024x1536",
+      "model": "gpt-image-2",
+      "prompt": "Editorial illustration. Portrait orientation, 2:3 aspect ratio, 1024x1536. Hand-painted feel with soft paper texture; gentle gradients; no harsh outlines. Restrained, palette-aware composition that leaves the bottom-right quarter visually quiet and uncluttered, a soft empty area suitable for hosting a small square inset. No text, no logos, no human figures, no captions, no brand marks. Avoid AI-generic fantasy art gloss, lens flares, or chromatic aberration; aim for a printed magazine cover sensibility. A quiet study at the blue hour: an open window, a dark wooden table, and small loose fragments of blank paper or warm light drifting upward through lamplight like half-remembered thoughts. Outside, a softened indigo landscape recedes into evening. Palette: warm umber, parchment cream, muted gold, dusty rose, charcoal, with one breath of deep blue from the window. The mood is intimate and contemplative, fragments of beautiful thoughts in the minds of others. Ensure there is no readable text anywhere, including on paper fragments or books."
+    },
+    {
       "slug": "dharma",
       "name": "Dharma",
       "output": "images/collections/dharma-tile.jpg",

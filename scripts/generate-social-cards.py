@@ -146,7 +146,7 @@ def draw_share_card() -> None:
 
 def draw_quotes_assets() -> None:
     draw_quotes_card()
-    draw_quotes_tile()
+    ensure_quotes_tile()
 
 
 def draw_quotes_card() -> None:
@@ -174,7 +174,15 @@ def draw_quotes_card() -> None:
     save_card(canvas, OUT_DIR / "quotes-card.jpg")
 
 
-def draw_quotes_tile() -> None:
+def ensure_quotes_tile() -> None:
+    tile_path = COLLECTIONS_DIR / "quotes-tile.jpg"
+    if tile_path.exists():
+        print(f"preserved {tile_path.relative_to(REPO_ROOT)}")
+        return
+    draw_quotes_tile_placeholder()
+
+
+def draw_quotes_tile_placeholder() -> None:
     size = (900, 1350)
     canvas = Image.new("RGBA", size, (58, 45, 39, 255))
     draw = ImageDraw.Draw(canvas)
@@ -196,8 +204,9 @@ def draw_quotes_tile() -> None:
     draw.text((86, 1310), "favorite lines", font=font(30), fill=(210, 190, 170, 255))
 
     COLLECTIONS_DIR.mkdir(parents=True, exist_ok=True)
-    canvas.convert("RGB").save(COLLECTIONS_DIR / "quotes-tile.jpg", format="JPEG", quality=92, optimize=True)
-    print("wrote images/collections/quotes-tile.jpg")
+    tile_path = COLLECTIONS_DIR / "quotes-tile.jpg"
+    canvas.convert("RGB").save(tile_path, format="JPEG", quality=92, optimize=True)
+    print(f"wrote {tile_path.relative_to(REPO_ROOT)}")
 
 
 def main() -> int:

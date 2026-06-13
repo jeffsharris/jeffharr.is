@@ -164,7 +164,6 @@ a {
 
 .hero__eyebrow,
 .section__eyebrow,
-.collection-tile__meta,
 .lately-card__source,
 .lately-card__meta,
 .lately-card__byline,
@@ -255,10 +254,18 @@ a {
 
 .collections-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 32px;
-  width: min(1080px, 100%);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 28px;
+  width: min(840px, 100%);
   margin: 0 auto;
+}
+
+@media (min-width: 1180px) {
+  .collections-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 24px;
+    width: min(1180px, 100%);
+  }
 }
 
 .collection-tile {
@@ -351,15 +358,6 @@ a {
   font-weight: 600;
   line-height: 1.12;
   letter-spacing: 0;
-}
-
-.collection-tile__meta {
-  color: var(--ink-muted);
-}
-
-.collection-tile__meta [data-count] {
-  color: var(--tile-accent);
-  font-variant-numeric: tabular-nums;
 }
 
 .collection-tile--poems {
