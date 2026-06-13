@@ -54,7 +54,6 @@ async function loadState({ statePath, legacyStatePath, quotesPath }) {
 }
 
 function buildQuotesPage(quotes) {
-  const authors = authorOptions(quotes);
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -85,17 +84,19 @@ function buildQuotesPage(quotes) {
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
   <link rel="icon" href="/favicon.ico">
+  <script>document.documentElement.className += ' js';</script>
   <style>
     :root {
       --bg: #FDFCFA;
-      --bg-elev: #FFFFFF;
-      --bg-hover: #F8F6F3;
+      --bg-card: #FFFFFF;
       --text: #2D2A26;
       --text-muted: #6B6560;
       --text-light: #9A9590;
       --accent: #6F5743;
       --accent-soft: rgba(111, 87, 67, 0.10);
       --border: rgba(0, 0, 0, 0.08);
+      --shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.10);
       --font-serif: 'Cormorant Garamond', Georgia, serif;
       --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     }
@@ -103,14 +104,15 @@ function buildQuotesPage(quotes) {
     @media (prefers-color-scheme: dark) {
       :root {
         --bg: #1A1918;
-        --bg-elev: #242220;
-        --bg-hover: #2D2A28;
+        --bg-card: #242220;
         --text: #E8E4DF;
         --text-muted: #A49C94;
         --text-light: #756E68;
         --accent: #C9A877;
         --accent-soft: rgba(201, 168, 119, 0.14);
         --border: rgba(255, 255, 255, 0.10);
+        --shadow: 0 2px 12px rgba(0, 0, 0, 0.30);
+        --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.50);
       }
     }
 
@@ -123,7 +125,9 @@ function buildQuotesPage(quotes) {
 
     body {
       min-height: 100vh;
-      background: var(--bg);
+      background:
+        radial-gradient(1100px 540px at 50% -160px, var(--accent-soft), transparent 70%),
+        var(--bg);
       color: var(--text);
       font-family: var(--font-sans);
       -webkit-font-smoothing: antialiased;
@@ -133,7 +137,7 @@ function buildQuotesPage(quotes) {
     .header {
       width: min(720px, 100%);
       margin: 0 auto;
-      padding: 32px 24px 24px;
+      padding: 36px 24px 6px;
       text-align: center;
     }
 
@@ -145,6 +149,7 @@ function buildQuotesPage(quotes) {
       color: var(--text-muted);
       font-size: 13px;
       text-decoration: none;
+      transition: color 0.2s;
     }
 
     .header__back:hover {
@@ -154,7 +159,7 @@ function buildQuotesPage(quotes) {
     .header__title {
       margin: 0 0 8px;
       font-family: var(--font-serif);
-      font-size: 2.5rem;
+      font-size: 2.6rem;
       font-weight: 400;
       line-height: 1.1;
       letter-spacing: 0;
@@ -166,115 +171,199 @@ function buildQuotesPage(quotes) {
       font-size: 14px;
     }
 
-    .tools {
-      position: sticky;
-      top: 0;
-      z-index: 2;
-      border-block: 1px solid var(--border);
-      background: color-mix(in srgb, var(--bg) 94%, transparent);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-    }
-
-    .tools__inner {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) minmax(180px, 260px) auto;
+    .finder {
+      display: flex;
+      flex-direction: column;
       align-items: center;
-      gap: 12px;
       width: min(720px, 100%);
       margin: 0 auto;
-      padding: 14px 24px;
+      padding: 18px 24px 26px;
     }
 
-    .search,
-    .author-filter {
+    .finder__field {
+      position: relative;
+      width: min(300px, 100%);
+    }
+
+    .finder__icon {
+      position: absolute;
+      left: 2px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-light);
+      pointer-events: none;
+      transition: color 0.25s;
+    }
+
+    .finder__field:focus-within .finder__icon {
+      color: var(--accent);
+    }
+
+    .search {
       width: 100%;
-      min-width: 0;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      background: var(--bg-elev);
+      padding: 7px 6px 7px 24px;
+      border: 0;
+      border-bottom: 1px solid var(--border);
+      border-radius: 0;
+      background: transparent;
       color: var(--text);
       font: inherit;
       font-size: 14px;
       outline: none;
-      transition: border-color 0.2s, box-shadow 0.2s;
+      transition: border-color 0.25s;
     }
 
-    .search {
-      padding: 10px 12px;
-    }
-
-    .author-filter {
-      padding: 10px 34px 10px 12px;
-    }
-
-    .search:focus,
-    .author-filter:focus {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 3px var(--accent-soft);
-    }
-
-    .tools__count {
+    .search::placeholder {
       color: var(--text-light);
-      font-size: 12px;
-      font-variant-numeric: tabular-nums;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      white-space: nowrap;
+      font-style: italic;
     }
 
-    .quotes {
-      width: min(720px, 100%);
+    .search:focus {
+      border-bottom-color: var(--accent);
+    }
+
+    .finder__count {
+      min-height: 16px;
+      margin-top: 10px;
+      color: var(--text-light);
+      font-size: 11px;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    .mosaic {
+      width: min(1280px, 100%);
       margin: 0 auto;
-      padding: 8px 24px 72px;
+      padding: 0 28px 24px;
+      columns: 300px;
+      column-gap: 22px;
     }
 
     .quote {
-      margin: 0;
-      padding: 30px 0 28px;
-      border-top: 1px solid var(--border);
-      scroll-margin-top: 92px;
+      position: relative;
+      margin: 0 0 22px;
+      padding: 24px 24px 22px;
+      break-inside: avoid;
+      -webkit-column-break-inside: avoid;
+      page-break-inside: avoid;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      scroll-margin-top: 24px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
     }
 
-    .quote:first-child {
-      border-top: 0;
+    .quote:nth-child(4n+2) {
+      background: color-mix(in srgb, var(--bg-card) 96%, var(--accent));
+    }
+
+    .quote:nth-child(7n+5) {
+      background: color-mix(in srgb, var(--bg-card) 93%, var(--accent));
+    }
+
+    .quote:hover {
+      transform: translateY(-3px);
+      border-color: color-mix(in srgb, var(--accent) 32%, var(--border));
+      box-shadow: var(--shadow-lg);
     }
 
     .quote.is-hidden {
       display: none;
     }
 
+    .js .quote {
+      animation: quote-rise 0.55s ease both;
+      animation-delay: var(--d, 0ms);
+    }
+
+    @keyframes quote-rise {
+      from {
+        opacity: 0;
+        transform: translateY(14px);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .js .quote {
+        animation: none;
+      }
+
+      .quote,
+      .quote:hover {
+        transform: none;
+      }
+    }
+
+    .quote::before {
+      content: "\\201C";
+      display: block;
+      height: 0.45em;
+      font-family: var(--font-serif);
+      font-size: 2.7rem;
+      font-weight: 500;
+      line-height: 1;
+      color: var(--accent);
+      opacity: 0.4;
+    }
+
     .quote__text {
-      margin: 0;
-      max-width: 64ch;
+      margin: 10px 0 0;
       color: var(--text);
       font-family: var(--font-serif);
-      font-size: 1.28rem;
       font-weight: 400;
-      line-height: 1.58;
       letter-spacing: 0;
       overflow-wrap: break-word;
     }
 
-    .quote--short .quote__text {
-      font-size: 1.42rem;
-      line-height: 1.48;
+    .quote--display {
+      padding: 30px 26px 26px;
+      text-align: center;
+    }
+
+    .quote--display .quote__text {
+      font-size: 1.58rem;
+      font-weight: 500;
+      line-height: 1.3;
+    }
+
+    .quote--lg .quote__text {
+      font-size: 1.32rem;
+      line-height: 1.42;
+    }
+
+    .quote--md .quote__text {
+      font-size: 1.16rem;
+      line-height: 1.52;
+    }
+
+    .quote--sm .quote__text {
+      font-size: 1.04rem;
+      line-height: 1.6;
     }
 
     .quote__author {
-      margin-top: 14px;
-      color: var(--text-muted);
-      font-size: 13px;
+      margin-top: 16px;
+      color: var(--text-light);
+      font-size: 10.5px;
       font-style: normal;
-      line-height: 1.45;
+      letter-spacing: 0.16em;
+      line-height: 1.5;
+      text-transform: uppercase;
+    }
+
+    .quote__author::before {
+      content: "\\2014\\00A0";
     }
 
     .empty {
       display: none;
-      width: min(720px, 100%);
-      margin: 0 auto;
-      padding: 56px 24px 72px;
+      padding: 40px 24px 56px;
       color: var(--text-muted);
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-size: 1.15rem;
       text-align: center;
     }
 
@@ -282,40 +371,46 @@ function buildQuotesPage(quotes) {
       display: block;
     }
 
+    .coda {
+      padding: 12px 0 64px;
+      color: var(--text-light);
+      font-size: 14px;
+      text-align: center;
+    }
+
     @media (max-width: 640px) {
       .header {
-        padding: 26px 18px 20px;
+        padding: 28px 18px 4px;
       }
 
       .header__title {
-        font-size: 2.15rem;
+        font-size: 2.2rem;
       }
 
-      .tools {
-        position: static;
+      .finder {
+        padding: 14px 18px 20px;
       }
 
-      .tools__inner {
-        grid-template-columns: 1fr;
-        padding: 12px 18px;
+      .search {
+        font-size: 16px;
       }
 
-      .tools__count {
-        justify-self: start;
-      }
-
-      .quotes {
-        padding: 4px 18px 56px;
+      .mosaic {
+        padding: 0 16px 16px;
+        column-gap: 14px;
       }
 
       .quote {
-        padding: 25px 0 24px;
+        margin-bottom: 14px;
+        padding: 20px 20px 18px;
       }
 
-      .quote__text,
-      .quote--short .quote__text {
-        font-size: 1.18rem;
-        line-height: 1.6;
+      .quote--display {
+        padding: 26px 22px 22px;
+      }
+
+      .quote--display .quote__text {
+        font-size: 1.42rem;
       }
     }
   </style>
@@ -324,61 +419,69 @@ function buildQuotesPage(quotes) {
   <header class="header">
     <a class="header__back" href="/" aria-label="Back to home">&larr; Home</a>
     <h1 class="header__title">Quotes</h1>
-    <p class="header__subtitle">Lines I keep coming back to.</p>
+    <p class="header__subtitle"><em>lines I keep coming back to</em></p>
   </header>
 
-  <section class="tools" aria-label="Quote filters">
-    <div class="tools__inner">
-      <input class="search" id="search" type="search" placeholder="Search quotes or authors..." autocomplete="off">
-      <select class="author-filter" id="author-filter" aria-label="Filter by author">
-        <option value="">All authors</option>
-${authors.map((author) => `        <option value="${escapeAttribute(author.name)}">${escapeHtml(author.name)} (${author.count})</option>`).join('\n')}
-      </select>
-      <span class="tools__count" id="count">${quotes.length} quotes</span>
+  <div class="finder">
+    <div class="finder__field">
+      <svg class="finder__icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <circle cx="11" cy="11" r="8"/>
+        <path d="M21 21l-4.35-4.35"/>
+      </svg>
+      <input class="search" id="search" type="search" placeholder="find a line&hellip;" autocomplete="off" aria-label="Search quotes">
     </div>
-  </section>
+    <span class="finder__count" id="count" aria-live="polite"></span>
+  </div>
 
-  <main class="quotes" id="quotes" aria-live="polite">
+  <main class="mosaic" id="quotes">
 ${quotes.map(renderQuote).join('\n')}
   </main>
-  <p class="empty" id="empty">No quotes match that filter.</p>
+  <p class="empty" id="empty">Nothing matches &mdash; try fewer words.</p>
+  <footer class="coda" aria-hidden="true">&#10022;</footer>
 
   <script>
     (function() {
+      const grid = document.getElementById('quotes');
       const searchInput = document.getElementById('search');
-      const authorFilter = document.getElementById('author-filter');
       const count = document.getElementById('count');
       const empty = document.getElementById('empty');
-      const quotes = Array.from(document.querySelectorAll('.quote'));
+      const cards = Array.from(grid.querySelectorAll('.quote'));
+      const total = cards.length;
 
-      function normalize(value) {
-        return String(value || '').trim().toLowerCase();
+      // Shuffle so each visit lays a fresh mosaic.
+      for (let i = cards.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        const swap = cards[i];
+        cards[i] = cards[j];
+        cards[j] = swap;
+      }
+      cards.forEach((card, index) => {
+        card.style.setProperty('--d', Math.min(index * 35, 650) + 'ms');
+        grid.appendChild(card);
+      });
+
+      // Re-aim deep links after the shuffle moves their target.
+      const hash = window.location.hash.replace('#', '');
+      if (hash) {
+        const target = document.getElementById(hash);
+        if (target) target.scrollIntoView();
       }
 
-      function renderCount(visible) {
-        count.textContent = visible === 1 ? '1 quote' : visible + ' quotes';
-      }
-
-      function applyFilters() {
-        const query = normalize(searchInput.value);
-        const author = normalize(authorFilter.value);
+      function applyFilter() {
+        const query = String(searchInput.value || '').trim().toLowerCase();
         let visible = 0;
 
-        quotes.forEach((quote) => {
-          const matchesQuery = !query || quote.dataset.search.includes(query);
-          const matchesAuthor = !author || quote.dataset.author === author;
-          const show = matchesQuery && matchesAuthor;
-          quote.classList.toggle('is-hidden', !show);
+        cards.forEach((card) => {
+          const show = !query || card.dataset.search.includes(query);
+          card.classList.toggle('is-hidden', !show);
           if (show) visible += 1;
         });
 
-        renderCount(visible);
+        count.textContent = query ? visible + ' of ' + total : '';
         empty.classList.toggle('is-visible', visible === 0);
       }
 
-      searchInput.addEventListener('input', applyFilters);
-      authorFilter.addEventListener('change', applyFilters);
-      applyFilters();
+      searchInput.addEventListener('input', applyFilter);
     })();
   </script>
 </body>
@@ -387,22 +490,18 @@ ${quotes.map(renderQuote).join('\n')}
 }
 
 function renderQuote(quote) {
-  const shortClass = quote.quote.length <= 120 ? ' quote--short' : '';
   const search = `${quote.quote} ${quote.author}`.toLowerCase();
-  return `    <figure class="quote${shortClass}" id="${escapeAttribute(quote.id)}" data-author="${escapeAttribute(quote.author.toLowerCase())}" data-search="${escapeAttribute(search)}">
+  return `    <figure class="quote ${sizeClass(quote.quote.length)}" id="${escapeAttribute(quote.id)}" data-search="${escapeAttribute(search)}">
       <blockquote class="quote__text">${escapeHtml(quote.quote)}</blockquote>
-      <figcaption class="quote__author">&mdash; ${escapeHtml(quote.author)}</figcaption>
+      <figcaption class="quote__author">${escapeHtml(quote.author)}</figcaption>
     </figure>`;
 }
 
-function authorOptions(quotes) {
-  const counts = new Map();
-  for (const quote of quotes) {
-    counts.set(quote.author, (counts.get(quote.author) || 0) + 1);
-  }
-  return [...counts.entries()]
-    .map(([name, count]) => ({ name, count }))
-    .sort((a, b) => a.name.localeCompare(b.name));
+function sizeClass(length) {
+  if (length <= 80) return 'quote--display';
+  if (length <= 170) return 'quote--lg';
+  if (length <= 330) return 'quote--md';
+  return 'quote--sm';
 }
 
 async function readJsonIfPresent(filePath) {
