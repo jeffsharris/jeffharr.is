@@ -419,7 +419,7 @@ function buildQuotesPage(quotes) {
   <header class="header">
     <a class="header__back" href="/" aria-label="Back to home">&larr; Home</a>
     <h1 class="header__title">Quotes</h1>
-    <p class="header__subtitle"><em>lines I keep coming back to</em></p>
+    <p class="header__subtitle"><em>favorite fragments of other minds</em></p>
   </header>
 
   <div class="finder">
