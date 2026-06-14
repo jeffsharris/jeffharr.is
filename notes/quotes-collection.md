@@ -445,6 +445,18 @@ Author: J. D. Salinger
 
 Author: Ray Bradbury, The Fog Horn
 
+> Self is a wound masquerading as a nurse.
+
+Author: Matthew Brensilver
+
+> Death defines life Despair defines hope Desire defines hatred Destiny defines freedom Dream defines reality.
+
+Author: Neil Gaiman
+
+> Wisdom tells me I am nothing. Love tells me I am everything. And between the two my life flows.
+
+Author: Nisargadatta Maharaj
+
 ## Needs Additional Details
 
 > Computer science is no more about computers than astronomy is about telescopes.
