@@ -41,7 +41,19 @@ The installed launchd job should use:
 
 - label: `com.jeffharris.dharma-ingestion`
 - interval: `7200` seconds
-- script: `<repo-root>/scripts/run-dharma-ingestion.sh brensilver`
+- script: `<repo-root>/scripts/run-dharma-ingestion-keychain.sh`
+
+The launchd job must be able to run without interactive 1Password access. Seed
+the user's login keychain with generic-password items using service
+`com.jeffharris.dharma-ingestion` and accounts:
+
+```txt
+OPENAI_API_KEY
+DHARMASEED_RETREAT_6753_ACCESS_KEY
+```
+
+The keychain wrapper reads those values, exports them only for the ingestion
+process, then runs `scripts/run-dharma-ingestion.sh brensilver`.
 
 For unattended publishing, the environment sets:
 

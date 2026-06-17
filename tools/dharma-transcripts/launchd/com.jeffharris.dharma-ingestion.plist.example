@@ -11,8 +11,7 @@
 
   <key>ProgramArguments</key>
   <array>
-    <string>/path/to/jeffharr.is/scripts/run-dharma-ingestion.sh</string>
-    <string>brensilver</string>
+    <string>/path/to/jeffharr.is/scripts/run-dharma-ingestion-keychain.sh</string>
   </array>
 
   <key>EnvironmentVariables</key>
@@ -25,7 +24,16 @@
     <string>20</string>
     <key>BRENSILVER_AUTO_PUBLISH</key>
     <string>1</string>
+    <key>BRENSILVER_MEDIA_BASE_URL</key>
+    <string>https://jeffharr.is/dharma/brensilver/</string>
+    <key>BRENSILVER_ARTWORK_BASE_URL</key>
+    <string>https://jeffharr.is/dharma/brensilver/</string>
+    <key>BRENSILVER_CHAPTERS_BASE_URL</key>
+    <string>https://jeffharr.is/dharma/brensilver/</string>
   </dict>
+
+  <key>RunAtLoad</key>
+  <true/>
 
   <key>StartInterval</key>
   <integer>7200</integer>

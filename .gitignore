@@ -14,3 +14,4 @@ notes/kindle-highlights-import.txt
 .pycache-check/
 node_modules/
 .local-corpus/
+.env.1password*
