@@ -27,6 +27,7 @@ from dharma_feed.sources.dharmaseed import (
     fetch_dharmaseed_player_talks,
     parse_dharmaseed_feed,
     parse_dharmaseed_player,
+    parse_dharmaseed_retreat_code_page,
 )
 from dharma_feed.sources.podcast_rss import parse_podcast_rss_feed
 
@@ -306,6 +307,82 @@ class SourceParsingTests(unittest.TestCase):
         with patch("dharma_feed.sources.dharmaseed.fetch_text", side_effect=error):
             with self.assertRaises(HTTPError):
                 list(fetch_dharmaseed_player_talks(source))
+
+    def test_dharmaseed_retreat_code_parser_extracts_private_rows(self):
+        html = """
+        <h2>Wisdom and Love</h2>
+        <img src="/static/images/DS-rss-logo.jpg">
+        <table width='100%'>
+          <tr><td colspan=2>
+            2026-06-27
+            <a class="talkteacher" href="/talks/98116?access_key=opening-key">
+              Opening Night (Retreat at Spirit Rock)
+            </a>
+            <i>60:31</i>
+          </td></tr>
+          <tr>
+            <td>
+              <i><a class='talkteacher' href="/teacher/215">Vinny Ferraro</a></i>,
+              <i><a class='talkteacher' href="/teacher/496">Matthew Brensilver</a></i>
+            </td>
+            <td>
+              <a href="/talks/98116/20260627-Vinny_Ferraro-SR-opening_night-98116.mp3?access_key=opening-key">Download</a>
+              <a href="/talks/player/98116.html?access_key=opening-key">Listen</a>
+            </td>
+          </tr>
+        </table>
+        <table width='100%'>
+          <tr><td colspan=2>
+            2026-06-28
+            <a class="talkteacher" href="/talks/98115?access_key=arriving-key">
+              Arriving and Releasing Urgencies (Retreat at Spirit Rock)
+            </a>
+            <i>64:40</i>
+          </td></tr>
+          <tr>
+            <td><i><a class='talkteacher' href="/teacher/496">Matthew Brensilver</a></i></td>
+            <td>
+              <a href="/talks/98115/20260628-Matthew_Brensilver-SR-arriving-98115.mp3?access_key=arriving-key">Download</a>
+            </td>
+          </tr>
+        </table>
+        <table width='100%'>
+          <tr><td colspan=2>
+            2026-06-28
+            <a class="talkteacher" href="/talks/98120?access_key=vinny-key">
+              In the Absence of Your Concerns (Retreat at Spirit Rock)
+            </a>
+            <i>41:21</i>
+          </td></tr>
+          <tr>
+            <td><i><a class='talkteacher' href="/teacher/215">Vinny Ferraro</a></i></td>
+            <td>
+              <a href="/talks/98120/20260628-Vinny_Ferraro-SR-concerns-98120.mp3?access_key=vinny-key">Download</a>
+            </td>
+          </tr>
+        </table>
+        """
+
+        talks = list(
+            parse_dharmaseed_retreat_code_page(
+                html,
+                {
+                    "name": "Dharma Seed",
+                    "include_speakers": ["Matthew Brensilver"],
+                    "speaker": "Matthew Brensilver",
+                    "venue": "Spirit Rock Meditation Center",
+                },
+            )
+        )
+
+        self.assertEqual([talk.id for talk in talks], ["dharmaseed:98116", "dharmaseed:98115"])
+        self.assertEqual(talks[0].speaker, "Vinny Ferraro, Matthew Brensilver")
+        self.assertEqual(talks[0].co_teachers, ["Vinny Ferraro"])
+        self.assertEqual(talks[0].duration, "60:31")
+        self.assertEqual(talks[0].published_at.date().isoformat(), "2026-06-27")
+        self.assertEqual(talks[0].venue, "Spirit Rock Meditation Center")
+        self.assertIn("access_key=opening-key", talks[0].audio_url)
+        self.assertEqual(talks[1].title, "Arriving and Releasing Urgencies (Retreat at Spirit Rock)")
 
     def test_json_shape_contains_transcript_placeholder(self):
         html = """

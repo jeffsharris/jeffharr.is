@@ -50,6 +50,7 @@ the user's login keychain with generic-password items using service
 ```txt
 OPENAI_API_KEY
 DHARMASEED_RETREAT_6753_ACCESS_KEY
+DHARMASEED_RETREAT_6810_CODE
 ```
 
 The keychain wrapper reads those values, exports them only for the ingestion

@@ -16,6 +16,7 @@ from dharma_feed.rss import build_rss, merge_talks
 from dharma_feed.sources import (
     fetch_audiodharma_talks,
     fetch_dharmaseed_player_talks,
+    fetch_dharmaseed_retreat_code_talks,
     fetch_dharmaseed_talks,
     fetch_podcast_rss_talks,
 )
@@ -203,6 +204,8 @@ def collect_talks(config: Dict, probe_lengths: bool = False) -> List[Talk]:
             talks.extend(fetch_dharmaseed_talks(source))
         elif source["type"] == "dharmaseed_player":
             talks.extend(fetch_dharmaseed_player_talks(source))
+        elif source["type"] == "dharmaseed_retreat_code":
+            talks.extend(fetch_dharmaseed_retreat_code_talks(source))
         elif source["type"] == "audiodharma":
             talks.extend(fetch_audiodharma_talks(source, probe_lengths=probe_lengths))
         elif source["type"] == "podcast_rss":

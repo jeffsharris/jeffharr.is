@@ -38,6 +38,17 @@
       "include_speakers": ["Matthew Brensilver"]
     },
     {
+      "type": "dharmaseed_retreat_code",
+      "name": "Dharma Seed",
+      "retreat_id": "6810",
+      "title": "Wisdom and Love",
+      "search_url": "https://dharmaseed.org/retreats",
+      "code_env": "DHARMASEED_RETREAT_6810_CODE",
+      "include_speakers": ["Matthew Brensilver"],
+      "speaker": "Matthew Brensilver",
+      "venue": "Spirit Rock Meditation Center"
+    },
+    {
       "type": "podcast_rss",
       "name": "AudioDharma",
       "id_prefix": "audiodharma",

@@ -39,6 +39,14 @@ def fetch_dharmaseed_player_talks(source: Dict[str, Any]) -> Iterable[Talk]:
     return [talk] if talk is not None else []
 
 
+def fetch_dharmaseed_retreat_code_talks(source: Dict[str, Any]) -> Iterable[Talk]:
+    search_url = _retreat_code_search_url(source)
+    if search_url is None:
+        return []
+    html_text = fetch_text(search_url)
+    return parse_dharmaseed_retreat_code_page(html_text, source)
+
+
 def parse_dharmaseed_feed(xml_text: str, source: Dict[str, Any]) -> Iterable[Talk]:
     root = ET.fromstring(xml_text)
     channel = root.find("channel")
@@ -83,6 +91,59 @@ def parse_dharmaseed_feed(xml_text: str, source: Dict[str, Any]) -> Iterable[Tal
                 description=description,
                 image_url=image_url,
                 venue=_venue_from_description(description),
+            )
+        )
+    return talks
+
+
+def parse_dharmaseed_retreat_code_page(html_text: str, source: Dict[str, Any]) -> Iterable[Talk]:
+    image_url = _retreat_page_image_url(html_text)
+    talks = []
+    for block in re.findall(r"<table\s+width=['\"]100%['\"]>(.*?)</table>", html_text, flags=re.I | re.S):
+        talk_link = re.search(
+            r"<a\b[^>]*class=['\"]talkteacher['\"][^>]*href=['\"]([^'\"]*/talks/(\d+)[^'\"]*)['\"][^>]*>(.*?)</a>",
+            block,
+            flags=re.I | re.S,
+        )
+        if not talk_link:
+            continue
+
+        source_id = talk_link.group(2)
+        title = _html_text(talk_link.group(3))
+        date_match = re.search(r"\b(\d{4}-\d{2}-\d{2})\b", block)
+        if not title or not date_match:
+            continue
+
+        speaker = _retreat_code_speaker(block)
+        if not _speaker_allowed(source, speaker):
+            continue
+
+        audio_match = re.search(r"href=['\"]([^'\"]+\.mp3[^'\"]*)['\"]", block, flags=re.I)
+        if not audio_match:
+            continue
+
+        duration_match = re.search(r"</a>\s*<i>([^<]+)</i>", block, flags=re.I | re.S)
+        duration = _html_text(duration_match.group(1)) if duration_match else None
+        description = source.get("description")
+        if not isinstance(description, str):
+            description = None
+
+        talks.append(
+            Talk(
+                id=f"dharmaseed:{source_id}",
+                source=source.get("name", "Dharma Seed"),
+                source_id=source_id,
+                title=title,
+                speaker=speaker,
+                published_at=_retreat_page_date(date_match.group(1)),
+                link=urllib.parse.urljoin("https://dharmaseed.org/", _html_unescape(talk_link.group(1))),
+                audio_url=urllib.parse.urljoin("https://dharmaseed.org/", _html_unescape(audio_match.group(1))),
+                audio_type="audio/mpeg",
+                duration=duration,
+                description=description,
+                image_url=image_url,
+                venue=source.get("venue") if isinstance(source.get("venue"), str) else None,
+                co_teachers=_co_teachers_from_speakers(speaker, _source_speaker(source)),
             )
         )
     return talks
@@ -203,6 +264,26 @@ def _player_url(source: Dict[str, Any]) -> Optional[str]:
     return _source_url(source, "player_url")
 
 
+def _retreat_code_search_url(source: Dict[str, Any]) -> Optional[str]:
+    code = source.get("code")
+    env_name = source.get("code_env")
+    if env_name:
+        code = os.environ.get(str(env_name))
+        if not code:
+            return None
+    if not code:
+        return None
+
+    base_url = str(source.get("search_url") or "https://dharmaseed.org/retreats")
+    params = {"search": str(code)}
+    if source.get("page_items"):
+        params["page_items"] = str(source["page_items"])
+    if source.get("sort"):
+        params["sort"] = str(source["sort"])
+    separator = "&" if urllib.parse.urlsplit(base_url).query else "?"
+    return f"{base_url}{separator}{urllib.parse.urlencode(params)}"
+
+
 def _source_url(source: Dict[str, Any], key: str) -> Optional[str]:
     return _source_url_value(source, source[key])
 
@@ -263,6 +344,51 @@ def _source_speaker(source: Dict[str, Any]) -> str:
     if isinstance(allowed, list) and len(allowed) == 1:
         return " ".join(str(allowed[0]).split())
     return ""
+
+
+def _co_teachers_from_speakers(speaker: str, primary_speaker: str) -> list[str]:
+    if not primary_speaker:
+        return []
+    return [
+        name
+        for name in (_html_text(part) for part in speaker.split(","))
+        if name and _normalize_person_name(name) != _normalize_person_name(primary_speaker)
+    ]
+
+
+def _retreat_code_speaker(block: str) -> str:
+    speakers = [
+        _html_text(match)
+        for match in re.findall(r"href=['\"]/teacher/\d+['\"][^>]*>(.*?)</a>", block, flags=re.I | re.S)
+    ]
+    speakers = [speaker for speaker in speakers if speaker]
+    return ", ".join(speakers)
+
+
+def _retreat_page_date(value: str) -> datetime:
+    return datetime.strptime(value, "%Y-%m-%d").replace(hour=12, tzinfo=timezone.utc)
+
+
+def _retreat_page_image_url(html_text: str) -> Optional[str]:
+    match = re.search(r"<img\b[^>]*src=['\"]([^'\"]*DS-rss-logo[^'\"]*)['\"]", html_text, flags=re.I)
+    if not match:
+        return None
+    return urllib.parse.urljoin("https://dharmaseed.org/", _html_unescape(match.group(1)))
+
+
+def _html_text(value: str) -> str:
+    text = re.sub(r"<[^>]+>", " ", value)
+    return " ".join(_html_unescape(text).split())
+
+
+def _html_unescape(value: str) -> str:
+    return (
+        value.replace("&amp;", "&")
+        .replace("&lt;", "<")
+        .replace("&gt;", ">")
+        .replace("&quot;", '"')
+        .replace("&#39;", "'")
+    )
 
 
 def _normalize_person_name(value: str) -> str:

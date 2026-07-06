@@ -19,7 +19,17 @@ read_secret() {
   print -rn -- "$value"
 }
 
+read_optional_secret() {
+  local account="$1"
+  /usr/bin/security find-generic-password -s "$SERVICE" -a "$account" -w 2>/dev/null || true
+}
+
 export OPENAI_API_KEY="$(read_secret OPENAI_API_KEY)"
 export DHARMASEED_RETREAT_6753_ACCESS_KEY="$(read_secret DHARMASEED_RETREAT_6753_ACCESS_KEY)"
+
+dharmaseed_retreat_6810_code="$(read_optional_secret DHARMASEED_RETREAT_6810_CODE)"
+if [[ -n "$dharmaseed_retreat_6810_code" ]]; then
+  export DHARMASEED_RETREAT_6810_CODE="$dharmaseed_retreat_6810_code"
+fi
 
 exec "$ROOT/scripts/run-dharma-ingestion.sh" brensilver
