@@ -3,6 +3,8 @@ import tempfile
 import unittest
 from datetime import datetime, timezone
 from pathlib import Path
+from unittest.mock import patch
+from urllib.error import HTTPError
 from xml.etree import ElementTree as ET
 
 from dharma_feed.artifacts import format_prune_report, plan_generated_artifact_prune
@@ -21,7 +23,11 @@ from dharma_feed.models import PodcastChapter, Talk
 from dharma_feed.rss import build_rss
 from dharma_feed.rss import merge_talks
 from dharma_feed.sources.audiodharma import parse_audiodharma_listing
-from dharma_feed.sources.dharmaseed import parse_dharmaseed_feed, parse_dharmaseed_player
+from dharma_feed.sources.dharmaseed import (
+    fetch_dharmaseed_player_talks,
+    parse_dharmaseed_feed,
+    parse_dharmaseed_player,
+)
 from dharma_feed.sources.podcast_rss import parse_podcast_rss_feed
 
 
@@ -262,6 +268,44 @@ class SourceParsingTests(unittest.TestCase):
         )
         self.assertEqual(talk.venue, "Spirit Rock Meditation Center")
         self.assertIn("access_key=private-key", talk.audio_url)
+
+    def test_optional_dharmaseed_player_source_skips_fetch_errors(self):
+        error = HTTPError(
+            "https://dharmaseed.org/talks/player/96948.html",
+            404,
+            "Not Found",
+            {},
+            None,
+        )
+        source = {
+            "name": "Dharma Seed",
+            "talk_id": "96948",
+            "player_url": "https://dharmaseed.org/talks/player/96948.html",
+            "optional": True,
+        }
+
+        with patch("dharma_feed.sources.dharmaseed.fetch_text", side_effect=error):
+            talks = list(fetch_dharmaseed_player_talks(source))
+
+        self.assertEqual(talks, [])
+
+    def test_required_dharmaseed_player_source_raises_fetch_errors(self):
+        error = HTTPError(
+            "https://dharmaseed.org/talks/player/96948.html",
+            404,
+            "Not Found",
+            {},
+            None,
+        )
+        source = {
+            "name": "Dharma Seed",
+            "talk_id": "96948",
+            "player_url": "https://dharmaseed.org/talks/player/96948.html",
+        }
+
+        with patch("dharma_feed.sources.dharmaseed.fetch_text", side_effect=error):
+            with self.assertRaises(HTTPError):
+                list(fetch_dharmaseed_player_talks(source))
 
     def test_json_shape_contains_transcript_placeholder(self):
         html = """

@@ -8,6 +8,7 @@ import urllib.parse
 from datetime import datetime, timezone
 from email.utils import parsedate_to_datetime
 from typing import Any, Dict, Iterable, Optional
+from urllib.error import HTTPError, URLError
 
 from dharma_feed.fetch import fetch_text, probe_content_length
 from dharma_feed.models import Talk
@@ -28,7 +29,12 @@ def fetch_dharmaseed_player_talks(source: Dict[str, Any]) -> Iterable[Talk]:
     player_url = _player_url(source)
     if player_url is None:
         return []
-    html_text = fetch_text(player_url)
+    try:
+        html_text = fetch_text(player_url)
+    except (HTTPError, URLError):
+        if source.get("optional"):
+            return []
+        raise
     talk = parse_dharmaseed_player(html_text, source, player_url)
     return [talk] if talk is not None else []
 
