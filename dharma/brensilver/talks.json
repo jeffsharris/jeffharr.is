@@ -1,5 +1,521 @@
 [
   {
+    "id": "dharmaseed:98122",
+    "source": "Dharma Seed",
+    "source_id": "98122",
+    "title": "Closing Session (Retreat at Spirit Rock)",
+    "speaker": "Vinny Ferraro, Matthew Brensilver",
+    "published_at": "2026-06-30T12:00:00+00:00",
+    "link": "https://dharmaseed.org/talks/98122?access_key=k4w1L75Mme",
+    "audio_url": "https://dharmaseed.org/talks/98122/20260630-Vinny_Ferraro-SR-closing_session_retreat_at_spirit_rock-98122.mp3?access_key=k4w1L75Mme",
+    "audio_type": "audio/mpeg",
+    "audio_length": null,
+    "duration": "68:29",
+    "description": null,
+    "image_url": "https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+    "canonical_url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-98122/",
+    "podcast_description": "How do you leave a retreat without losing what was good, and without asking practice to fix everything at once? The talk moves from a few minutes of resting in kind awareness into reflections on what to leave behind, what to carry home, and how sangha makes both possible. From there it opens into a conversation about boundaries, joy, grief, karmic knots, phone habits, and the slow training of a heart that can be both open and protected.",
+    "short_summary": "A closing retreat talk on leaving with what helps, releasing what does not, and trusting gradual practice, joy, and community.",
+    "episode_image_url": "https://jeffharr.is/dharma/brensilver/artwork/dharmaseed-98122.jpg",
+    "chapters_url": "https://jeffharr.is/dharma/brensilver/chapters/dharmaseed-98122.json",
+    "chapters": [
+      {
+        "start": 0.0,
+        "title": "Resting in kind awareness",
+        "description": "The retreat begins by settling the body and mind into gentle awareness, making room for whatever is present.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-98122/?t=0",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 202.0,
+        "title": "What to leave behind",
+        "description": "The talk turns to reflection on the retreat, inviting listeners to name one pattern, tone, or habit to release.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-98122/?t=202",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 321.0,
+        "title": "What to carry home",
+        "description": "The next question is what to take with you: a practice, an insight, or a more caring way of relating.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-98122/?t=321",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 452.0,
+        "title": "Community and shared practice",
+        "description": "The group is invited to turn toward one another, speak briefly, and let gratitude for support become part of the closing.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-98122/?t=452",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 904.0,
+        "title": "Boundaries, joy, and tenderness",
+        "description": "Questions about defended hearts and joy lead into teachings on the Brahma-viharas, the First Noble Truth, and the possibility of half-smile and gratitude without denying grief.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-98122/?t=904",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1612.812,
+        "title": "Working with karmic knots",
+        "description": "Persistent anxiety, shame, and doubt are framed as lifelong knots that ask for patience, softness, and reverence rather than self-blame.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-98122/?t=1613",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 2187.452,
+        "title": "Signs, vision, and the tone of reaching",
+        "description": "The discussion moves through unusual retreat experiences and the difference between insight and compulsive seeking, with attention on the quality of the mind's reaching.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-98122/?t=2187",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 2804.853,
+        "title": "Devices, exile, and returning",
+        "description": "Phone use, information overload, and the rhythm of leaving and coming back are explored as part of staying in right relationship with practice and with the world.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-98122/?t=2805",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 3208.853,
+        "title": "Sangha, repair, and harmony",
+        "description": "The closing broadens into service, gradual training, forgiveness, and the wish that the community depart in harmony and keep practice alive after retreat.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-98122/?t=3209",
+        "img": null,
+        "toc": true
+      }
+    ],
+    "venue": "Spirit Rock Meditation Center",
+    "series": "Retreat at Spirit Rock",
+    "co_teachers": [
+      "Vinny Ferraro"
+    ],
+    "tags": [],
+    "transcript": {
+      "status": "pending",
+      "url": null,
+      "text_path": null
+    }
+  },
+  {
+    "id": "dharmaseed:98118",
+    "source": "Dharma Seed",
+    "source_id": "98118",
+    "title": "Buddhist Perspectives on the Serenity Prayer (Retreat at Spirit Rock)",
+    "speaker": "Matthew Brensilver",
+    "published_at": "2026-06-29T12:00:00+00:00",
+    "link": "https://dharmaseed.org/talks/98118?access_key=3EpGaLMiKX",
+    "audio_url": "https://dharmaseed.org/talks/98118/20260629-Matthew_Brensilver-SR-buddhist_perspectives_on_the_serenity_prayer_retreat_at_spirit_rock-98118.mp3?access_key=3EpGaLMiKX",
+    "audio_type": "audio/mpeg",
+    "audio_length": null,
+    "duration": "39:30",
+    "description": null,
+    "image_url": "https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+    "canonical_url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-98118/",
+    "podcast_description": "What if the Serenity Prayer is not mainly about accepting what cannot change, but about learning when not to fix at all? The talk moves from the familiar balance of serenity, courage, and wisdom into a Buddhist emphasis on non-fixing, showing how acceptance can weaken compulsive willfulness while making clearer action possible. Along the way, it uses ocean waves, retreat practice, and a series of Buddhist references to explore how practice shapes a life that is less driven by fear and more responsive to suffering.",
+    "short_summary": "A Buddhist reading of the Serenity Prayer centered on non-fixing, discernment, and the courage that grows from acceptance.",
+    "episode_image_url": "https://jeffharr.is/dharma/brensilver/artwork/dharmaseed-98118.jpg",
+    "chapters_url": "https://jeffharr.is/dharma/brensilver/chapters/dharmaseed-98118.json",
+    "chapters": [
+      {
+        "start": 39.0,
+        "title": "The Serenity Prayer",
+        "description": "The talk opens with the prayer's familiar language and the claim that it can be read through a Buddhist lens.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-98118/?t=39",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 104.0,
+        "title": "What Cannot Be Changed",
+        "description": "Using memories of waves and the limits of control, the talk distinguishes what can be influenced from what must be accepted.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-98118/?t=104",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 263.0,
+        "title": "A Deeper Kind of Fixing",
+        "description": "A passage from the Majjhima Nikaya is used to shift the frame from conditions to the training of the heart-mind.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-98118/?t=263",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 327.0,
+        "title": "Practice Shapes Life",
+        "description": "The speaker argues that practice should influence choices, relationships, and the conditions that support wisdom and love.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-98118/?t=327",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 545.0,
+        "title": "Respecting Our Limits",
+        "description": "Equanimity is presented as real but limited, and the talk turns toward the need to acknowledge grief, finitude, and imperfection.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-98118/?t=545",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 717.0,
+        "title": "Acceptance Creates Change",
+        "description": "The talk reframes acceptance as the basis of wisdom and shows how non-fixing can soften compulsion and strengthen love.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-98118/?t=717",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 963.0,
+        "title": "The Urge to Fix",
+        "description": "Drawing on Buddhist and Tibetan references, the talk examines the restless habit of treating life as a problem to solve.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-98118/?t=963",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1284.779,
+        "title": "Feeling and Story",
+        "description": "The speaker traces how arousal, language, and thought quickly build narratives that keep the fixing impulse in motion.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-98118/?t=1285",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1582.779,
+        "title": "Hidden Agendas",
+        "description": "With humor and retreat anecdotes, the talk exposes subtle bargaining in practice and points toward non-intervention and self-soothing.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-98118/?t=1583",
+        "img": null,
+        "toc": true
+      }
+    ],
+    "venue": "Spirit Rock Meditation Center",
+    "series": "Retreat at Spirit Rock",
+    "tags": [],
+    "transcript": {
+      "status": "pending",
+      "url": null,
+      "text_path": null
+    }
+  },
+  {
+    "id": "dharmaseed:98119",
+    "source": "Dharma Seed",
+    "source_id": "98119",
+    "title": "Forgiving Oneself, Opening to Kindness (Retreat at Spirit Rock)",
+    "speaker": "Matthew Brensilver",
+    "published_at": "2026-06-28T12:00:00+00:00",
+    "link": "https://dharmaseed.org/talks/98119?access_key=0in2XLbsrl",
+    "audio_url": "https://dharmaseed.org/talks/98119/20260628-Matthew_Brensilver-SR-forgiving_oneself_opening_to_kindness_retreat_at_spirit_rock-98119.mp3?access_key=0in2XLbsrl",
+    "audio_type": "audio/mpeg",
+    "audio_length": null,
+    "duration": "37:14",
+    "description": null,
+    "image_url": "https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+    "canonical_url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-98119/",
+    "podcast_description": "What if forgiving yourself is not excusing anything, but stepping out of the whole game of shame and self-attack? The talk begins by framing kindness as a necessity, then moves through the Brahma-viharas, the way practice reveals what has not yet been loved, and why grief can be part of softening rather than a sign that something is wrong. It then turns into a sustained meditation on forgiving the day, the body, the mind, and the past, until self-kindness feels less like self-indulgence and more like a clear path to change and rest.",
+    "short_summary": "A talk on kindness as a necessity, and on self-forgiveness as the softening that makes true change and rest possible.",
+    "episode_image_url": "https://jeffharr.is/dharma/brensilver/artwork/dharmaseed-98119.jpg",
+    "chapters_url": "https://jeffharr.is/dharma/brensilver/chapters/dharmaseed-98119.json",
+    "chapters": [
+      {
+        "start": 0.0,
+        "title": "Kindness as necessity",
+        "description": "The talk opens by treating kindness and love as necessities, not luxuries, and grounds that claim in Buddhist psychology and the Dalai Lama reference.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-98119/?t=0",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 123.0,
+        "title": "The four abodes",
+        "description": "The Brahma-viharas are introduced as ways the mind can dwell, with each form of love meeting goodness, suffering, good fortune, and helplessness.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-98119/?t=123",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 289.24,
+        "title": "Trusting love",
+        "description": "The speaker describes practice as cultivating trust in love, often through quiet moments of care rather than dramatic feeling.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-98119/?t=289",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 396.44,
+        "title": "What practice reveals",
+        "description": "Kindness can expose the places in us that have not yet been loved, and that uncovering may feel like grief, not failure.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-98119/?t=396",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 552.92,
+        "title": "Forgiving the self",
+        "description": "After the silence, the talk moves into forgiving all phenomena, then the deeper work of forgiving self-judgment without avoiding responsibility.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-98119/?t=553",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 866.36,
+        "title": "Shame and softening",
+        "description": "The practice is presented as a way out of self-harshness as motivation, loosening shame and softening conditioned patterns.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-98119/?t=866",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1356.936,
+        "title": "Wishes from the heart",
+        "description": "The language of forgiveness turns into simple wishes for happiness, safety, and peace, held as a present-tense connection to love.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-98119/?t=1357",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1587.936,
+        "title": "Abiding in care",
+        "description": "The listener is invited to repeat the wishes, notice whatever arises, and let time become an ally while simply abiding in kindness.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-98119/?t=1588",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1908.936,
+        "title": "What remains forgiven",
+        "description": "The talk closes by suggesting that our ideas about ourselves are partly wrong, and that when all is forgiven there is nothing left to do but rest.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-98119/?t=1909",
+        "img": null,
+        "toc": true
+      }
+    ],
+    "venue": "Spirit Rock Meditation Center",
+    "series": "Retreat at Spirit Rock",
+    "tags": [],
+    "transcript": {
+      "status": "pending",
+      "url": null,
+      "text_path": null
+    }
+  },
+  {
+    "id": "dharmaseed:98115",
+    "source": "Dharma Seed",
+    "source_id": "98115",
+    "title": "Arriving and Releasing Urgencies (Retreat at Spirit Rock)",
+    "speaker": "Matthew Brensilver",
+    "published_at": "2026-06-28T12:00:00+00:00",
+    "link": "https://dharmaseed.org/talks/98115?access_key=00IhbqDjUM",
+    "audio_url": "https://dharmaseed.org/talks/98115/20260628-Matthew_Brensilver-SR-arriving_and_releasing_urgencies_retreat_at_spirit_rock-98115.mp3?access_key=00IhbqDjUM",
+    "audio_type": "audio/mpeg",
+    "audio_length": null,
+    "duration": "64:40",
+    "description": null,
+    "image_url": "https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+    "canonical_url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-98115/",
+    "podcast_description": "What if the mind’s urgency could be met without struggle, and the present moment were already good enough for practice? This talk moves from an opening ritual of giving up the phone into a careful look at renunciation, mindfulness, and the ordinary effort to stop managing experience. It then settles into instructions for sitting and walking meditation, emphasizing that practice is not a story, not a performance, and not a project of making conditions perfect.",
+    "short_summary": "A retreat-day instruction on arriving, releasing urgencies, and practicing mindfulness as clarity, stability, and equanimity.",
+    "episode_image_url": "https://jeffharr.is/dharma/brensilver/artwork/dharmaseed-98115.jpg",
+    "chapters_url": "https://jeffharr.is/dharma/brensilver/chapters/dharmaseed-98115.json",
+    "chapters": [
+      {
+        "start": 0.0,
+        "title": "Renouncing the phone",
+        "description": "The talk begins with the retreat’s small ritual of surrendering the phone and framing renunciation as part of the path.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-98115/?t=0",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 98.36,
+        "title": "Entering silence",
+        "description": "After the opening logistics, the talk turns toward silence and the invitation to come into practice without pretending anything is different.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-98115/?t=98",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 608.36,
+        "title": "Good enough conditions",
+        "description": "The speaker encourages trust that conditions are always sufficient for awakening, even when they are not ideal.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-98115/?t=608",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 990.04,
+        "title": "Three qualities of mindfulness",
+        "description": "Mindfulness is described through clarity, stability, and equanimity, with attention compared to a telescope that can settle and see clearly.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-98115/?t=990",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1287.692,
+        "title": "Not a story of self",
+        "description": "The talk challenges autobiographical identity, status comparisons, and the urge to make mindfulness into another self-story.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-98115/?t=1288",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1549.452,
+        "title": "Meeting urgency gently",
+        "description": "The instruction shifts into feeling urgency, control, and doubt in the body, then blessing those experiences with awareness and love.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-98115/?t=1549",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 2040.412,
+        "title": "Breath, release, and resting",
+        "description": "Breathing becomes the main field of practice, with attention resting in the aliveness of the body and the pause between release and hunger.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-98115/?t=2040",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 2635.708,
+        "title": "Helplessness and continuity",
+        "description": "The talk names helplessness, self-harshness, and blame as common retreat experiences, then offers tiny acts of grace and continuity through the day.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-98115/?t=2636",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 3416.308,
+        "title": "Walking as arrival",
+        "description": "Walking meditation is introduced as a way to stop postponing arrival, with Thich Nhat Hanh’s image of each step kissing the earth adding tenderness to the form.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-98115/?t=3416",
+        "img": null,
+        "toc": true
+      }
+    ],
+    "venue": "Spirit Rock Meditation Center",
+    "series": "Retreat at Spirit Rock",
+    "tags": [],
+    "transcript": {
+      "status": "pending",
+      "url": null,
+      "text_path": null
+    }
+  },
+  {
+    "id": "dharmaseed:98116",
+    "source": "Dharma Seed",
+    "source_id": "98116",
+    "title": "Opening Night (Retreat at Spirit Rock)",
+    "speaker": "Vinny Ferraro, Matthew Brensilver",
+    "published_at": "2026-06-27T12:00:00+00:00",
+    "link": "https://dharmaseed.org/talks/98116?access_key=14nsI4lL7D",
+    "audio_url": "https://dharmaseed.org/talks/98116/20260627-Vinny_Ferraro-SR-opening_night_retreat_at_spirit_rock-98116.mp3?access_key=14nsI4lL7D",
+    "audio_type": "audio/mpeg",
+    "audio_length": null,
+    "duration": "60:31",
+    "description": null,
+    "image_url": "https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+    "canonical_url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-98116/",
+    "podcast_description": "How do you arrive in a retreat when part of you is still busy, guarded, or afraid? The talk begins with a few minutes of settling, then unfolds into an invitation to let the room, the body, and the mind be welcomed just as they are. From there it moves into retreat as a place to meet both pleasantness and discomfort, to trust the support of others, and to take the precepts as a way of creating non-fear.",
+    "short_summary": "A retreat-opening talk on arriving, soothing fear, and building a shared container of trust and non-harming.",
+    "episode_image_url": "https://jeffharr.is/dharma/brensilver/artwork/dharmaseed-98116.jpg",
+    "chapters_url": "https://jeffharr.is/dharma/brensilver/chapters/dharmaseed-98116.json",
+    "chapters": [
+      {
+        "start": 8.08,
+        "title": "Arriving on the cushion",
+        "description": "The talk opens with settling the body, feeling contact points, and noticing how hard it can be to simply arrive as oneself.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-98116/?t=8",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 135.92,
+        "title": "Welcoming what’s here",
+        "description": "It turns toward allowing excitement, nervousness, and whatever the body and mind are carrying to be present without being pushed away.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-98116/?t=136",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 586.0,
+        "title": "A retreat memory",
+        "description": "A brief personal story about earlier retreat connections and a visit back to old friends leads into the sense of shared practice history.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-98116/?t=586",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 792.16,
+        "title": "Koyasan and lineage",
+        "description": "A memory of Koyasan, silence, and temple bells becomes a reflection on lineage, sacredness, and why retreat can feel so charged.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-98116/?t=792",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 983.84,
+        "title": "Feeling good, feeling bad",
+        "description": "The talk reframes retreat as a rhythm of pleasant and unpleasant experience, where soothing and trust help us digest what has not yet been loved.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-98116/?t=984",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1318.562,
+        "title": "Being here together",
+        "description": "The focus shifts to the room itself: presence, friendly contact, introductions, and making a temporary monastery together.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-98116/?t=1319",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 2009.362,
+        "title": "Refuge and community",
+        "description": "The Triple Gem is introduced as trust in awareness, in the truth of experience, and in the support of sangha.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-98116/?t=2009",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 2187.362,
+        "title": "Fear and non-fear",
+        "description": "The teaching deepens into fear as a root of suffering and mindfulness as a way to touch non-fear and loosen vigilance.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-98116/?t=2187",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 2457.129,
+        "title": "Precepts as care",
+        "description": "The precepts are described as a practical ethics of non-harming, restraint, silence, and putting down the phone so the retreat can protect attention and tenderness.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-98116/?t=2457",
+        "img": null,
+        "toc": true
+      }
+    ],
+    "venue": "Spirit Rock Meditation Center",
+    "series": "Retreat at Spirit Rock",
+    "co_teachers": [
+      "Vinny Ferraro"
+    ],
+    "tags": [],
+    "transcript": {
+      "status": "pending",
+      "url": null,
+      "text_path": null
+    }
+  },
+  {
     "id": "audiodharma:25632",
     "source": "AudioDharma",
     "source_id": "25632",
@@ -1924,7 +2440,7 @@
     "link": "https://dharmaseed.org/talks/player/96948.html?access_key=RMLI47PRFc",
     "audio_url": "https://dharmaseed.org/talks/96948/20260504-Matthew_Brensilver-SR-dharma_talk_retreat_at_spirit_rock-96948.mp3?access_key=RMLI47PRFc",
     "audio_type": "audio/mpeg",
-    "audio_length": 22940538,
+    "audio_length": 22767829,
     "duration": "47:22",
     "description": "(Spirit Rock Meditation Center)",
     "image_url": "https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
