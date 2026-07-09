@@ -1,5 +1,91 @@
 [
   {
+    "id": "audiodharma:25828",
+    "source": "AudioDharma",
+    "source_id": "25828",
+    "title": "The Idea of the Bodhisattva",
+    "speaker": "Matthew Brensilver",
+    "published_at": "2026-07-08T12:00:00+00:00",
+    "link": "https://www.audiodharma.org/talks/25828",
+    "audio_url": "https://audiodharma.us-east-1.linodeobjects.com/talks/25828/20260708-matthew_brensilver-imc-the_idea_of_the_bodhisattva.mp3",
+    "audio_type": "audio/mpeg",
+    "audio_length": null,
+    "duration": "14:14",
+    "description": "AudioDharma talk by Matthew Brensilver.",
+    "image_url": "https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+    "canonical_url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25828/",
+    "podcast_description": "How can an ordinary practitioner think of themselves as a bodhisattva without turning the ideal into a measurement game? The talk begins with Shantideva’s vast vows and then turns toward the discomfort they can arouse: admiration, self-doubt, and the sense of being nowhere near the standard. From there, the teaching gently reframes the bodhisattva as a lens for perceiving self and other, and as a vow of love that can be begun in whatever way is possible now. It closes by bringing the ideal down to an ordinary mishap, suggesting that the vow may show itself most clearly in the middle of daily embarrassment and repair.",
+    "short_summary": "A reflection on Shantideva’s bodhisattva vows that turns from lofty ideal to ordinary, workable acts of love and selflessness.",
+    "episode_image_url": "https://jeffharr.is/dharma/brensilver/artwork/audiodharma-25828.jpg",
+    "chapters_url": "https://jeffharr.is/dharma/brensilver/chapters/audiodharma-25828.json",
+    "chapters": [
+      {
+        "start": 17.0,
+        "title": "Shantideva’s vast vow",
+        "description": "The talk opens with verses of radical compassion, dedicating body, possessions, and endurance to the relief of beings’ suffering.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25828/?t=17",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 112.0,
+        "title": "What the words do",
+        "description": "The speaker asks how such vows affect the mind and points to love as the basis of ethics and Dharma wisdom.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25828/?t=112",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 215.0,
+        "title": "Admiration and distance",
+        "description": "He names the beauty of the ideal while also acknowledging the feeling of not being that kind of person.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25828/?t=215",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 344.0,
+        "title": "Try on the lens",
+        "description": "The bodhisattva is reframed as a way of seeing self and other rather than a badge of attainment, and the listener is invited to begin where they are.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25828/?t=344",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 580.0,
+        "title": "Love against fear",
+        "description": "The talk turns to fear, mortality, and pride, suggesting that love and selflessness are the medicine.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25828/?t=580",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 686.0,
+        "title": "Daily remembrance",
+        "description": "The speaker emphasizes repeating the vow, asking what love and goodness mean in practice and how life looks through that commitment.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25828/?t=686",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 773.0,
+        "title": "Coffee on the floor",
+        "description": "An everyday accident becomes the closing illustration of the bodhisattva vow arriving in real time, amid apology and cleanup.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25828/?t=773",
+        "img": null,
+        "toc": true
+      }
+    ],
+    "venue": null,
+    "series": null,
+    "tags": [],
+    "transcript": {
+      "status": "pending",
+      "url": null,
+      "text_path": null
+    }
+  },
+  {
     "id": "dharmaseed:98122",
     "source": "Dharma Seed",
     "source_id": "98122",

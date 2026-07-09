@@ -1,5 +1,91 @@
 [
   {
+    "id": "audiodharma:25827",
+    "source": "AudioDharma",
+    "source_id": "25827",
+    "title": "Guided Meditation: Awareness isn't a technique",
+    "speaker": "Matthew Brensilver",
+    "published_at": "2026-07-08T12:00:00+00:00",
+    "link": "https://www.audiodharma.org/talks/25827",
+    "audio_url": "https://audiodharma.us-east-1.linodeobjects.com/talks/25827/20260708-matthew_brensilver-imc-guided_meditation_awareness_isn_t_a_technique.mp3",
+    "audio_type": "audio/mpeg",
+    "audio_length": null,
+    "duration": "26:26",
+    "description": "AudioDharma talk by Matthew Brensilver.",
+    "image_url": "https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+    "canonical_url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25827/",
+    "podcast_description": "What if awareness is not something you manufacture, but the simple openness that lets experience be seen? This guided meditation moves from settling the body and feeling the breath broadly to including sounds, thoughts, and even resistance without pressure. The emphasis is on trusting goodness, holding what feels split, and resting in a way of practice that is more like feeling one’s way into the moment than applying a technique.",
+    "short_summary": "A guided meditation that treats awareness as open presence rather than technique, emphasizing breadth, ease, and trust in changing experience.",
+    "episode_image_url": "https://jeffharr.is/dharma/brensilver/artwork/audiodharma-25827.jpg",
+    "chapters_url": "https://jeffharr.is/dharma/brensilver/chapters/audiodharma-25827.json",
+    "chapters": [
+      {
+        "start": 12.0,
+        "title": "Settling the body",
+        "description": "The talk begins by gradually stilling the body and noticing that stillness can reveal a great deal of movement.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25827/?t=12",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 118.0,
+        "title": "Breath across the body",
+        "description": "The breath is introduced as something that can soothe, enliven, and unify the field of sensation across the whole body.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25827/?t=118",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 449.0,
+        "title": "Holding what is split",
+        "description": "The practice opens toward places of inner division, inviting a way of holding experience that does not force anything away.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25827/?t=449",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 603.0,
+        "title": "Awareness, not technique",
+        "description": "The talk turns to releasing the need to prove progress and to sensing the moment more intuitively rather than through effort.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25827/?t=603",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 751.0,
+        "title": "No pressure",
+        "description": "Through repetition and emphasis, the speaker underlines that awareness matters more than technique and that there is no need to strain.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25827/?t=751",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 980.0,
+        "title": "Soundscape and silence",
+        "description": "Environmental sound, internal thinking, and silence are gathered into one field, showing how meditation can include everything that is present.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25827/?t=980",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1287.554,
+        "title": "Nothing is final",
+        "description": "Rilke’s line about the non-finality of feeling supports a gentle perseverance through changing states and uncertainty.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25827/?t=1288",
+        "img": null,
+        "toc": true
+      }
+    ],
+    "venue": null,
+    "series": null,
+    "tags": [],
+    "transcript": {
+      "status": "pending",
+      "url": null,
+      "text_path": null
+    }
+  },
+  {
     "id": "audiodharma:25633",
     "source": "AudioDharma",
     "source_id": "25633",
