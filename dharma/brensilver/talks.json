@@ -1,5 +1,99 @@
 [
   {
+    "id": "audiodharma:25875",
+    "source": "AudioDharma",
+    "source_id": "25875",
+    "title": "Dharmette: Rumination and Intrusive Thought",
+    "speaker": "Matthew Brensilver",
+    "published_at": "2026-07-15T12:00:00+00:00",
+    "link": "https://www.audiodharma.org/talks/25875",
+    "audio_url": "https://audiodharma.us-east-1.linodeobjects.com/talks/25875/20260715-matthew_brensilver-imc-dharmette_rumination_and_intrusive_thought.mp3",
+    "audio_type": "audio/mpeg",
+    "audio_length": null,
+    "duration": "15:41",
+    "description": "AudioDharma talk by Matthew Brensilver.",
+    "image_url": "https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+    "canonical_url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25875/",
+    "podcast_description": "Rumination is treated here not as a failure of meditation, but as a kind of thinking that asks too much of words. The talk traces how intrusive thought can masquerade as problem-solving, existential inquiry, or even self-protection, while actually tightening suffering and reducing clarity. It then turns toward a quieter response: listening for the shape of thought, tolerating feeling, cultivating equanimity and tranquility, and sometimes breaking the cycle with clear action.",
+    "short_summary": "A practical talk on how rumination works, why words often cannot solve it, and how steadiness, silence, and wise action can loosen its grip.",
+    "episode_image_url": "https://jeffharr.is/dharma/brensilver/artwork/audiodharma-25875.jpg",
+    "chapters_url": "https://jeffharr.is/dharma/brensilver/chapters/audiodharma-25875.json",
+    "chapters": [
+      {
+        "start": 18.0,
+        "title": "What story is doing",
+        "description": "The talk begins with the question of how thinking and personal story can intensify suffering, while noting that inquiry can sometimes interrupt it.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25875/?t=18",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 71.0,
+        "title": "Thought as double-edged",
+        "description": "It then balances critique with appreciation, describing thought as useful for contemplation, reminders, and insight, yet not something to fight outright.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25875/?t=71",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 147.0,
+        "title": "When thinking overreaches",
+        "description": "Rumination is defined as thinking that tries to do what only action, wisdom, or silence can do, and practice is framed as learning to hear the noise without mistaking it for failure.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25875/?t=147",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 248.0,
+        "title": "Contour over content",
+        "description": "The talk names rumination as repetitive, intrusive, and often trans-diagnostic, emphasizing that the real issue is complete identification with thought rather than its topic.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25875/?t=248",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 392.0,
+        "title": "Words cannot heal all",
+        "description": "It explores intrusive memory and painful affect, arguing that the wounds of the past are not mainly healed by language but by love, patience, and feeling through experience.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25875/?t=392",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 555.0,
+        "title": "Avoidance in disguise",
+        "description": "The speaker looks at how compulsive thinking can hide fear of the past, the future, or uncertainty, and how anxiety feeds a demand for information that rumination cannot actually provide.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25875/?t=555",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 727.0,
+        "title": "Equanimity and stillness",
+        "description": "Equanimity is presented as a confidence that pain will not become harm, and tranquility as a way of reducing the stickiness and salience of thought.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25875/?t=727",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 859.0,
+        "title": "Wise action breaks spin",
+        "description": "The talk closes by naming another function of rumination: delaying action and punishing the self, with the reminder that clear, timely action can break internal spin.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25875/?t=859",
+        "img": null,
+        "toc": true
+      }
+    ],
+    "venue": null,
+    "series": null,
+    "tags": [],
+    "transcript": {
+      "status": "pending",
+      "url": null,
+      "text_path": null
+    }
+  },
+  {
     "id": "audiodharma:25828",
     "source": "AudioDharma",
     "source_id": "25828",
