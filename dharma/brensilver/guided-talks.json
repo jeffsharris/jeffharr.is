@@ -1,5 +1,83 @@
 [
   {
+    "id": "audiodharma:25880",
+    "source": "AudioDharma",
+    "source_id": "25880",
+    "title": "Guided Meditation: here, now",
+    "speaker": "Matthew Brensilver",
+    "published_at": "2026-07-15T12:00:00+00:00",
+    "link": "https://www.audiodharma.org/talks/25880",
+    "audio_url": "https://audiodharma.us-east-1.linodeobjects.com/talks/25880/20260715-matthew_brensilver-imc-guided_meditation_here_now.mp3",
+    "audio_type": "audio/mpeg",
+    "audio_length": null,
+    "duration": "27:01",
+    "description": "AudioDharma talk by Matthew Brensilver.",
+    "image_url": "https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+    "canonical_url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25880/",
+    "podcast_description": "What happens when the mind stops treating the present as a means to a future and meets what is actually here? The talk begins with a voicemail about discovering that practice is not really about getting somewhere later, and then turns that insight into a careful inquiry: what is present, what is only imagined, and what does it mean to renounce becoming for a moment. The guided sitting returns again and again to breath, body, sensation, and the surprising possibility that freedom is found not by trying to get free, but by not leaning away from now.",
+    "short_summary": "A guided sitting on dropping future-oriented grasping and resting in the immediacy of breath, body, and present-moment awareness.",
+    "episode_image_url": "https://jeffharr.is/dharma/brensilver/artwork/audiodharma-25880.jpg",
+    "chapters_url": "https://jeffharr.is/dharma/brensilver/chapters/audiodharma-25880.json",
+    "chapters": [
+      {
+        "start": 0.0,
+        "title": "A message about now",
+        "description": "The talk opens with a voicemail that points to a simple but unsettling realization: practice can become a way of relating to the future instead of the present.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25880/?t=0",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 163.0,
+        "title": "Beginning the sitting",
+        "description": "The guided meditation settles into silence and repeated invitations to come back to what is actually here rather than what it might lead to later.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25880/?t=163",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 360.0,
+        "title": "Breath and body",
+        "description": "Attention is directed to one moment at a time, with the breath, body, and immediate sensations treated as the concrete field of practice.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25880/?t=360",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 717.0,
+        "title": "How future is built",
+        "description": "The talk examines how thought, prediction, and imagination create the sense that the future is already present and asks what courage it takes to let that pattern go, even briefly.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25880/?t=717",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1116.0,
+        "title": "The illusion of elsewhere",
+        "description": "The speaker returns to the idea that the future keeps appearing without ever being found in the present moment itself.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25880/?t=1116",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1432.649,
+        "title": "Freedom without grasping",
+        "description": "The closing insight is stark and simple: there may be freedom only when the mind is no longer trying to secure it.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25880/?t=1433",
+        "img": null,
+        "toc": true
+      }
+    ],
+    "venue": null,
+    "series": null,
+    "tags": [],
+    "transcript": {
+      "status": "pending",
+      "url": null,
+      "text_path": null
+    }
+  },
+  {
     "id": "audiodharma:25827",
     "source": "AudioDharma",
     "source_id": "25827",
