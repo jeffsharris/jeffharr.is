@@ -1,5 +1,99 @@
 [
   {
+    "id": "audiodharma:25911",
+    "source": "AudioDharma",
+    "source_id": "25911",
+    "title": "Guided Meditation: We don't choose to let go",
+    "speaker": "Matthew Brensilver",
+    "published_at": "2026-07-22T12:00:00+00:00",
+    "link": "https://www.audiodharma.org/talks/25911",
+    "audio_url": "https://audiodharma.us-east-1.linodeobjects.com/talks/25911/20260722-matthew_brensilver-imc-guided_meditation_we_don_t_choose_to_let_go.mp3",
+    "audio_type": "audio/mpeg",
+    "audio_length": null,
+    "duration": "20:58",
+    "description": "AudioDharma talk by Matthew Brensilver.",
+    "image_url": "https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+    "canonical_url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25911/",
+    "podcast_description": "How do you let go when letting go is not really something you can decide to do? The talk explores clinging, fear, and the subtle drive to fix ourselves, then turns toward a quieter practice of seeing how experience arises on its own. Again and again it returns to the idea that mindfulness is not a bargain or a personal achievement, but a moment-by-moment surrender to what is already happening.",
+    "short_summary": "A guided meditation on surrender, showing that release happens by seeing conditions clearly rather than by forcing oneself to let go.",
+    "episode_image_url": "https://jeffharr.is/dharma/brensilver/artwork/audiodharma-25911.jpg",
+    "chapters_url": "https://jeffharr.is/dharma/brensilver/chapters/audiodharma-25911.json",
+    "chapters": [
+      {
+        "start": 0.0,
+        "title": "Seeing no one home",
+        "description": "The talk opens with dependent arising and the image of awareness without a solid self, softening the habit of self-blame.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25911/?t=0",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 62.0,
+        "title": "Fear beneath grasping",
+        "description": "It turns to the subtle fear that sponsors greed and hate, asking how much that fear can be soothed.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25911/?t=62",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 230.0,
+        "title": "The urge to fix",
+        "description": "The practice examines how trying to solve or improve ourselves can become another form of grasping and aversion.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25911/?t=230",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 311.0,
+        "title": "Resting in this moment",
+        "description": "Attention is invited into the future-lessness of the present, with more emphasis on resting than on striving.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25911/?t=311",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 547.0,
+        "title": "Not by choosing release",
+        "description": "The talk states plainly that we do not choose the end of clinging; instead we notice what happens to it in awareness.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25911/?t=547",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 580.0,
+        "title": "Problems that ease themselves",
+        "description": "A longer guided stretch explores how some difficulties soften when the pressure to fix them is released.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25911/?t=580",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 851.0,
+        "title": "Surrender as mindfulness",
+        "description": "The closing teaching names surrender as a moment-by-moment gesture, not a barter or special accomplishment.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25911/?t=851",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 901.0,
+        "title": "Closing silence",
+        "description": "The meditation settles into the bell and silence, leaving the listener with the felt sense of release.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25911/?t=901",
+        "img": null,
+        "toc": true
+      }
+    ],
+    "venue": null,
+    "series": null,
+    "tags": [],
+    "transcript": {
+      "status": "pending",
+      "url": null,
+      "text_path": null
+    }
+  },
+  {
     "id": "audiodharma:25880",
     "source": "AudioDharma",
     "source_id": "25880",
