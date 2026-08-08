@@ -1,5 +1,99 @@
 [
   {
+    "id": "audiodharma:25937",
+    "source": "AudioDharma",
+    "source_id": "25937",
+    "title": "Guided meditation Anicca and Feelings",
+    "speaker": "Matthew Brensilver",
+    "published_at": "2026-07-29T12:00:00+00:00",
+    "link": "https://www.audiodharma.org/talks/25937",
+    "audio_url": "https://audiodharma.us-east-1.linodeobjects.com/talks/25937/20260729-matthew_brensilver-irc-guided_meditation_anicca_and_feelings.mp3",
+    "audio_type": "audio/mpeg",
+    "audio_length": null,
+    "duration": "40:42",
+    "description": "AudioDharma talk by Matthew Brensilver.",
+    "image_url": "https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+    "canonical_url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25937/",
+    "podcast_description": "How do you meet feeling without immediately defending against it? The talk begins with forgiveness and compassion, then moves into a close investigation of mood, emotion, craving, and self-story as all being shaped by feeling. Again and again, the practice turns toward letting awareness saturate sensation, so that change can be known directly rather than managed from a distance.",
+    "short_summary": "A guided meditation on meeting feeling with forgiveness, allowing, and clear awareness of change.",
+    "episode_image_url": "https://jeffharr.is/dharma/brensilver/artwork/audiodharma-25937.jpg",
+    "chapters_url": "https://jeffharr.is/dharma/brensilver/chapters/audiodharma-25937.json",
+    "chapters": [
+      {
+        "start": 1.0,
+        "title": "Compassion First",
+        "description": "The meditation opens by softening toward oneself, the body, and the world through forgiveness and gratitude.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25937/?t=1",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 155.0,
+        "title": "Opening Into Allowing",
+        "description": "Forgiveness is linked to opening, and the talk begins shifting from protection toward simple allowing.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25937/?t=155",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 349.0,
+        "title": "Feeling Shapes Perception",
+        "description": "The speaker explores how all phenomena converge on feeling, how moods color perception, and how self-story is charged with affect.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25937/?t=349",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 803.0,
+        "title": "Meeting Friction",
+        "description": "Grasping and aversion around feeling are examined, along with the fear that feeling will threaten the inner self.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25937/?t=803",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1139.0,
+        "title": "Steer Without Force",
+        "description": "The practice is briefly framed as steering rather than controlling, with a reminder to stay present in the immediacy of now.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25937/?t=1139",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1281.553,
+        "title": "Craving and Impermanence",
+        "description": "Craving is named as feeling-based and marked by dukkha, anicca, and anatta, shifting attention from promise to direct observation.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25937/?t=1282",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1601.553,
+        "title": "Let Awareness Saturate",
+        "description": "The talk broadens to include discomfort, urge, stories, and even how the meditation is judged, all as feeling to be known calmly.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25937/?t=1602",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 2152.96,
+        "title": "Prediction and Rebirth",
+        "description": "The closing turns to the mind's habit of predicting itself, then returns to the central practice of gently caressing arousal, tension, and feeling.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-25937/?t=2153",
+        "img": null,
+        "toc": true
+      }
+    ],
+    "venue": null,
+    "series": null,
+    "tags": [],
+    "transcript": {
+      "status": "pending",
+      "url": null,
+      "text_path": null
+    }
+  },
+  {
     "id": "audiodharma:26012",
     "source": "AudioDharma",
     "source_id": "26012",
@@ -112,7 +206,7 @@
     "audio_url": "https://audiodharma.us-east-1.linodeobjects.com/talks/26006/20260727-matthew_brensilver-irc-guided_meditation_arriving_in_the_breath.mp3",
     "audio_type": "audio/mpeg",
     "audio_length": null,
-    "duration": "52:48",
+    "duration": "52:29",
     "description": "AudioDharma talk by Matthew Brensilver.",
     "image_url": "https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
     "canonical_url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26006/",
