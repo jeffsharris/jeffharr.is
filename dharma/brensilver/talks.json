@@ -1,5 +1,397 @@
 [
   {
+    "id": "audiodharma:26012",
+    "source": "AudioDharma",
+    "source_id": "26012",
+    "title": "Guided Meditation: Anicca and Feeling",
+    "speaker": "Matthew Brensilver",
+    "published_at": "2026-07-29T12:00:00+00:00",
+    "link": "https://www.audiodharma.org/talks/26012",
+    "audio_url": "https://audiodharma.us-east-1.linodeobjects.com/talks/26012/20260729-matthew_brensilver-irc-guided_meditation_anicca_and_feeling.mp3",
+    "audio_type": "audio/mpeg",
+    "audio_length": null,
+    "duration": "41:35",
+    "description": "AudioDharma talk by Matthew Brensilver.",
+    "image_url": "https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+    "canonical_url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26012/",
+    "podcast_description": "What happens if feeling is not a problem to solve but the very place where the mind, craving, and self-making can be known? The talk moves from compassion and forgiveness into a close investigation of vedanā: how arousal and valence shape moods, stories about self, and the push to control experience. It then settles into a guided practice of relaxing, staying, and letting awareness saturate feeling so change can be directly seen.",
+    "short_summary": "A guided meditation on forgiving experience, sensing feeling as the basis of craving and selfing, and resting in awareness as change is noticed.",
+    "episode_image_url": "https://jeffharr.is/dharma/brensilver/artwork/audiodharma-26012.jpg",
+    "chapters_url": "https://jeffharr.is/dharma/brensilver/chapters/audiodharma-26012.json",
+    "chapters": [
+      {
+        "start": 51.0,
+        "title": "Begin with forgiveness",
+        "description": "The practice opens with compassion for oneself and a broad forgiveness toward body, mind, world, and phenomena.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26012/?t=51",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 285.32,
+        "title": "Feeling as the center",
+        "description": "The talk frames feeling as the place where phenomena converge and where moods quietly confirm our experience.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26012/?t=285",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 459.32,
+        "title": "Arousal and valence",
+        "description": "Emotion is described as beginning with bodily feeling, with attention to arousal, pleasantness, unpleasantness, and neutrality.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26012/?t=459",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 713.32,
+        "title": "Thought charged with feeling",
+        "description": "Self-stories and inner drama are shown as thoughts energized by feeling, and the invitation is to release friction around them.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26012/?t=713",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 871.32,
+        "title": "Consent and relax",
+        "description": "The guidance emphasizes consenting to feeling, softening the guarding of the self, and repeatedly relaxing.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26012/?t=871",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1215.455,
+        "title": "Craving and promise",
+        "description": "The talk turns to craving, noticing how objects overpromise and how the imagined gain is made of feeling and marked by impermanence and nonself.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26012/?t=1215",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1419.455,
+        "title": "Known directly",
+        "description": "The listener is encouraged to see feeling in discomfort, urge, memory, and even judgments about the meditation, and to let awareness saturate it.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26012/?t=1419",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1739.455,
+        "title": "Noticing change",
+        "description": "The practice settles into calmly noticing change without taking a fixed vantage point on life.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26012/?t=1739",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 2206.001,
+        "title": "Rebirth of the next moment",
+        "description": "The final movement explores how we keep predicting ourselves into the next moment and ends by returning to the basic rhythm of feeling and arousal.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26012/?t=2206",
+        "img": null,
+        "toc": true
+      }
+    ],
+    "venue": null,
+    "series": null,
+    "tags": [],
+    "transcript": {
+      "status": "pending",
+      "url": null,
+      "text_path": null
+    }
+  },
+  {
+    "id": "audiodharma:26011",
+    "source": "AudioDharma",
+    "source_id": "26011",
+    "title": "Evening Reflection: The goodness that does not care who you think you are",
+    "speaker": "Matthew Brensilver",
+    "published_at": "2026-07-29T12:00:00+00:00",
+    "link": "https://www.audiodharma.org/talks/26011",
+    "audio_url": "https://audiodharma.us-east-1.linodeobjects.com/talks/26011/20260729-matthew_brensilver-irc-evening_reflection_the_goodness_that_does_not_care_who_you_think_you_are.mp3",
+    "audio_type": "audio/mpeg",
+    "audio_length": null,
+    "duration": "06:26",
+    "description": "AudioDharma talk by Matthew Brensilver.",
+    "image_url": "https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+    "canonical_url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26011/",
+    "podcast_description": "What if the night asks for nothing at all—no self-improvement, no performance, no story about who you are? This short reflection moves from quieting the mind to resting in a current of metta that is already here, already including everyone. The talk closes with a simple, repeated phrase: a goodness that does not care who you think you are.",
+    "short_summary": "A brief evening reflection inviting the listener to let go of self-image and join an existing stream of goodness and metta.",
+    "episode_image_url": "https://jeffharr.is/dharma/brensilver/artwork/audiodharma-26011.jpg",
+    "chapters_url": "https://jeffharr.is/dharma/brensilver/chapters/audiodharma-26011.json",
+    "chapters": [
+      {
+        "start": 0.0,
+        "title": "Settling into silence",
+        "description": "The talk begins by inviting the mind to let the silence of the night pass through without grasping.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26011/?t=0",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 45.6,
+        "title": "Nothing to get",
+        "description": "It turns toward the ease of having nothing to think about because there is nothing to obtain.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26011/?t=46",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 115.6,
+        "title": "Already forgiven imperfection",
+        "description": "The speaker points to a freedom rooted in imperfection already being accepted, though the wording is a little unclear.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26011/?t=116",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 139.6,
+        "title": "Part of an old stream",
+        "description": "The evening sitting is placed in a long human lineage of people gathering quietly and practicing.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26011/?t=140",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 167.6,
+        "title": "Metta in the world",
+        "description": "The talk widens to the possibility that somewhere, right now, others are practicing loving-kindness for all beings.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26011/?t=168",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 222.84,
+        "title": "Joining the goodness",
+        "description": "Rather than manufacture anything, the listener is invited to simply join that stream of goodness.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26011/?t=223",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 277.84,
+        "title": "Beyond self-image",
+        "description": "The closing refrain repeats the central insight: this goodness does not care who you think you are.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26011/?t=278",
+        "img": null,
+        "toc": true
+      }
+    ],
+    "venue": null,
+    "series": null,
+    "tags": [],
+    "transcript": {
+      "status": "pending",
+      "url": null,
+      "text_path": null
+    }
+  },
+  {
+    "id": "audiodharma:26009",
+    "source": "AudioDharma",
+    "source_id": "26009",
+    "title": "3 Characteristics: Impermanence & Uncertainty (Anicca)",
+    "speaker": "Matthew Brensilver",
+    "published_at": "2026-07-28T12:00:00+00:00",
+    "link": "https://www.audiodharma.org/talks/26009",
+    "audio_url": "https://audiodharma.us-east-1.linodeobjects.com/talks/26009/20260728-matthew_brensilver-irc-3_characteristics_impermanence_uncertainty_anicca.mp3",
+    "audio_type": "audio/mpeg",
+    "audio_length": null,
+    "duration": "49:08",
+    "description": "AudioDharma talk by Matthew Brensilver.",
+    "image_url": "https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+    "canonical_url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26009/",
+    "podcast_description": "What changes when we stop treating experience as something to sort, secure, and control? The talk begins with the pressure of uncertainty and develops into a close look at anicca as both impermanence and instability, showing how insight matures through letting go rather than by solving life. Along the way, the speaker connects retreat structure, anxiety, grief, gratitude, and mortality to the gradual softening of grasping and the possibility of a steadier, less defended way of meeting the present.",
+    "short_summary": "A reflection on anicca as uncertainty and impermanence, and on how letting go, grief, and stable practice conditions make insight possible.",
+    "episode_image_url": "https://jeffharr.is/dharma/brensilver/artwork/audiodharma-26009.jpg",
+    "chapters_url": "https://jeffharr.is/dharma/brensilver/chapters/audiodharma-26009.json",
+    "chapters": [
+      {
+        "start": 83.02,
+        "title": "Three characteristics",
+        "description": "The talk introduces the three characteristics as a challenge to our habitual drive to organize life into yes and no, pleasant and unpleasant.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26009/?t=83",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 294.94,
+        "title": "Insight turns searing",
+        "description": "A cited passage on the force of the three characteristics shows how clear seeing can release craving and make grasping feel futile.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26009/?t=295",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 420.06,
+        "title": "Insight as process",
+        "description": "The speaker describes insight as gestational, shaped by investigation, and requiring kindness as illusion and false ground are grieved.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26009/?t=420",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 800.14,
+        "title": "Stability before novelty",
+        "description": "A neuroscience reference helps frame retreat as a careful balance between predictability and the openness needed for new perception.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26009/?t=800",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 970.38,
+        "title": "Anicca as uncertainty",
+        "description": "The talk shifts to uncertainty as a lived force that arouses stress, worry, and the mind's urge to seek information and control.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26009/?t=970",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1210.211,
+        "title": "Thinking as defense",
+        "description": "The speaker explores how thinking becomes a way to manage uncertainty, how feeling is quickly turned into story, and how hope and fear shape attention.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26009/?t=1210",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1555.531,
+        "title": "Preferences and fear",
+        "description": "A Zen line on having no preferences is used to show that likes and dislikes often arise from grasping and fear rather than simple greed.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26009/?t=1556",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1934.171,
+        "title": "Present care and impermanence",
+        "description": "The talk moves through present-centered practice, dependent origination, grief, and the way love makes impermanence personal and painful.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26009/?t=1934",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 2422.762,
+        "title": "Mortality, gratitude, release",
+        "description": "The ending turns toward mortality, gratitude, and late-life reflection, suggesting that some inconsolability remains even as the heart grows more spacious.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26009/?t=2423",
+        "img": null,
+        "toc": true
+      }
+    ],
+    "venue": null,
+    "series": null,
+    "tags": [],
+    "transcript": {
+      "status": "pending",
+      "url": null,
+      "text_path": null
+    }
+  },
+  {
+    "id": "audiodharma:26006",
+    "source": "AudioDharma",
+    "source_id": "26006",
+    "title": "Guided Meditation: Arriving in the Breath",
+    "speaker": "Matthew Brensilver",
+    "published_at": "2026-07-27T12:00:00+00:00",
+    "link": "https://www.audiodharma.org/talks/26006",
+    "audio_url": "https://audiodharma.us-east-1.linodeobjects.com/talks/26006/20260727-matthew_brensilver-irc-guided_meditation_arriving_in_the_breath.mp3",
+    "audio_type": "audio/mpeg",
+    "audio_length": null,
+    "duration": "52:48",
+    "description": "AudioDharma talk by Matthew Brensilver.",
+    "image_url": "https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+    "canonical_url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26006/",
+    "podcast_description": "What would it mean to leave yourself alone, and let the breath be enough? The talk begins with settling into the body, resting with something not urgent, and letting attention soften away from the usual pressure to manage experience. It then moves from breath awareness into forgiveness of the mind, and finally into practical walking meditation instructions that emphasize continuity, ease, and a pace that suits the body.",
+    "short_summary": "A guided meditation that starts with resting in the breath and ends with detailed walking meditation instructions rooted in ease, continuity, and bodily connection.",
+    "episode_image_url": "https://jeffharr.is/dharma/brensilver/artwork/audiodharma-26006.jpg",
+    "chapters_url": "https://jeffharr.is/dharma/brensilver/chapters/audiodharma-26006.json",
+    "chapters": [
+      {
+        "start": 0.0,
+        "title": "Arriving and letting go",
+        "description": "The talk opens by inviting a simple kind of arrival: sitting down, leaving oneself alone, and not immediately trying to shape experience.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26006/?t=0",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 149.24,
+        "title": "Settling in the body",
+        "description": "Attention widens to body sensations as a constellation, including the front and back of the body and the field in which breathing is noticed.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26006/?t=149",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 399.0,
+        "title": "Breath as tether",
+        "description": "The breath is presented as a steady place to rest, stay grounded in the present, and step out of the usual pull of opportunities and threats.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26006/?t=399",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 605.32,
+        "title": "Resting with the breath",
+        "description": "The guidance deepens into repeated resting with the breath at the nostrils, chest, or belly while keeping the mind relaxed.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26006/?t=605",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 889.32,
+        "title": "Letting the world pass",
+        "description": "The talk asks for permission for the rest of the world to arise and pass in the background, with a sustained rhythm of attention on the breath.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26006/?t=889",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1316.368,
+        "title": "Forgiving the mind",
+        "description": "The speaker encourages forgiving preoccupations, fear, and obsession, and bowing to concern rather than fighting it.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26006/?t=1316",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1776.368,
+        "title": "Suffering and ease",
+        "description": "The talk reflects on craving, suffering, and the possibility of finding deeper safety by softening around experience and caring for what matters most.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26006/?t=1776",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 2441.13,
+        "title": "Walking meditation basics",
+        "description": "The second half turns to walking meditation as a practice equal in value to sitting, centered on continuity of attention and a manageable path length.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26006/?t=2441",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 2876.09,
+        "title": "Rhythm, speed, and stance",
+        "description": "The guidance closes with practical advice on internal attention, labeling steps, syncing breath with movement, and using a pace and posture that feel natural.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26006/?t=2876",
+        "img": null,
+        "toc": true
+      }
+    ],
+    "venue": null,
+    "series": null,
+    "tags": [],
+    "transcript": {
+      "status": "pending",
+      "url": null,
+      "text_path": null
+    }
+  },
+  {
     "id": "audiodharma:25910",
     "source": "AudioDharma",
     "source_id": "25910",
