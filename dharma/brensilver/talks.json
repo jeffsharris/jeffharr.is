@@ -1,5 +1,193 @@
 [
   {
+    "id": "audiodharma:26079",
+    "source": "AudioDharma",
+    "source_id": "26079",
+    "title": "Guided Meditation: Too busy knowing to know who you are",
+    "speaker": "Matthew Brensilver",
+    "published_at": "2026-08-12T12:00:00+00:00",
+    "link": "https://www.audiodharma.org/talks/26079",
+    "audio_url": "https://audiodharma.us-east-1.linodeobjects.com/talks/26079/20260812-matthew_brensilver-imc-guided_meditation_too_busy_knowing_to_know_who_you_are.mp3",
+    "audio_type": "audio/mpeg",
+    "audio_length": null,
+    "duration": "26:24",
+    "description": "AudioDharma talk by Matthew Brensilver.",
+    "image_url": "https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+    "canonical_url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26079/",
+    "podcast_description": "How do you rest in meditation without turning it into another project of knowing? The talk keeps returning to a simple, embodied balance: relax, stay alert, and let experience be fresh rather than crowded with memory, strategy, or self-reference. From that ground, it explores how the mind builds a story of meditator, meditation, and object—and how practice can soften that triangle without forcing anything.",
+    "short_summary": "A guided meditation on relaxed alertness, fresh perception, and loosening the habit of being too busy knowing.",
+    "episode_image_url": "https://jeffharr.is/dharma/brensilver/artwork/audiodharma-26079.jpg",
+    "chapters_url": "https://jeffharr.is/dharma/brensilver/chapters/audiodharma-26079.json",
+    "chapters": [
+      {
+        "start": 0.0,
+        "title": "Settling the body",
+        "description": "The practice begins with tiredness, relaxation, and the instruction to avoid slipping into unconsciousness.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26079/?t=0",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 37.0,
+        "title": "Balanced presence",
+        "description": "The talk invites a posture of gentle breathing and being stretched between heaven and earth, balancing ease and wakefulness.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26079/?t=37",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 117.0,
+        "title": "Opening to the world",
+        "description": "The meditation widens into a simple, non-grasping relation to whatever seems like self or world, with repeated encouragement to keep relaxing.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26079/?t=117",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 205.0,
+        "title": "Beyond problems",
+        "description": "The speaker turns from problem-solving to simplicity, asking for the smallest unit of experience and what is actually here.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26079/?t=205",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 403.0,
+        "title": "Freshness and memory",
+        "description": "The talk explores how memory coats experience and why freshness requires forgetting a great deal, even with something as ordinary as the breath.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26079/?t=403",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 818.0,
+        "title": "Too busy knowing",
+        "description": "A central teaching emerges: the mind can become so occupied with referential knowing that it misses who or what is present.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26079/?t=818",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1087.0,
+        "title": "Self and strategy",
+        "description": "Selfhood, world, and strategy are included as part of practice, with the invitation to love even the arising of self.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26079/?t=1087",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1309.059,
+        "title": "Relax and notice",
+        "description": "The meditation closes by pointing to clinging, urging relaxation, and gently noticing how practice reveals something about who we are.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26079/?t=1309",
+        "img": null,
+        "toc": true
+      }
+    ],
+    "venue": null,
+    "series": null,
+    "tags": [],
+    "transcript": {
+      "status": "pending",
+      "url": null,
+      "text_path": null
+    }
+  },
+  {
+    "id": "audiodharma:26078",
+    "source": "AudioDharma",
+    "source_id": "26078",
+    "title": "Dharmette: Flexibility",
+    "speaker": "Matthew Brensilver",
+    "published_at": "2026-08-12T12:00:00+00:00",
+    "link": "https://www.audiodharma.org/talks/26078",
+    "audio_url": "https://audiodharma.us-east-1.linodeobjects.com/talks/26078/20260812-matthew_brensilver-imc-dharmette_flexibility.mp3",
+    "audio_type": "audio/mpeg",
+    "audio_length": null,
+    "duration": "14:55",
+    "description": "AudioDharma talk by Matthew Brensilver.",
+    "image_url": "https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+    "canonical_url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26078/",
+    "podcast_description": "What happens when wisdom is less about being strong and more about being able to change shape? The talk argues that flexibility is central to practice: seeing impermanence, loosening clinging, and learning to meet each moment without defending a fixed self. It moves from the practical costs of rigidity in conflict and relationships to a dependent-arising view of self and world, ending with a quiet invitation to become useful rather than self-protective.",
+    "short_summary": "A talk on how flexibility, not rigidity, helps us meet impermanence, reduce suffering, and navigate relationship without defending the self.",
+    "episode_image_url": "https://jeffharr.is/dharma/brensilver/artwork/audiodharma-26078.jpg",
+    "chapters_url": "https://jeffharr.is/dharma/brensilver/chapters/audiodharma-26078.json",
+    "chapters": [
+      {
+        "start": 10.0,
+        "title": "Wisdom Depends",
+        "description": "The talk opens by questioning fixed answers and suggesting that effective response to life depends on context and flexibility.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26078/?t=10",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 93.0,
+        "title": "Strength as Fluidity",
+        "description": "Impermanence and the trembling of things are framed as reasons that practice must be adaptable rather than rigid.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26078/?t=93",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 160.0,
+        "title": "One Play Fails",
+        "description": "Using a playful example, the speaker shows how repeating one strategy for every situation leads to trouble.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26078/?t=160",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 260.0,
+        "title": "Clinging Narrows Us",
+        "description": "Clinging, convention, and a narrow idea of happiness are described as the main forces that contract the heart and reduce freedom.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26078/?t=260",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 355.0,
+        "title": "Self and Shame",
+        "description": "The talk turns to ego, defensiveness, and shame, connecting inflexibility to the need to protect a fixed self-image.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26078/?t=355",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 460.0,
+        "title": "Arguments and Wrongness",
+        "description": "Being wrong is shown to feel threatening because it stirs identity-protection, especially in conflict, politics, and family life.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26078/?t=460",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 605.0,
+        "title": "Many Arms, Many Faces",
+        "description": "Avalokiteshvara becomes an image for meeting suffering with many possible responses, and dependent arising is used to question fixed divisions between self and world.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26078/?t=605",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 724.0,
+        "title": "Living Point of Practice",
+        "description": "Awareness shifts to the immediate psychological conditions where self and world congeal, leading to an invitation to take the other side and soften into relationship.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26078/?t=724",
+        "img": null,
+        "toc": true
+      }
+    ],
+    "venue": null,
+    "series": null,
+    "tags": [],
+    "transcript": {
+      "status": "pending",
+      "url": null,
+      "text_path": null
+    }
+  },
+  {
     "id": "audiodharma:25937",
     "source": "AudioDharma",
     "source_id": "25937",

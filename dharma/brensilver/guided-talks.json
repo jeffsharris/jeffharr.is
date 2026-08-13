@@ -1,5 +1,99 @@
 [
   {
+    "id": "audiodharma:26079",
+    "source": "AudioDharma",
+    "source_id": "26079",
+    "title": "Guided Meditation: Too busy knowing to know who you are",
+    "speaker": "Matthew Brensilver",
+    "published_at": "2026-08-12T12:00:00+00:00",
+    "link": "https://www.audiodharma.org/talks/26079",
+    "audio_url": "https://audiodharma.us-east-1.linodeobjects.com/talks/26079/20260812-matthew_brensilver-imc-guided_meditation_too_busy_knowing_to_know_who_you_are.mp3",
+    "audio_type": "audio/mpeg",
+    "audio_length": null,
+    "duration": "26:24",
+    "description": "AudioDharma talk by Matthew Brensilver.",
+    "image_url": "https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+    "canonical_url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26079/",
+    "podcast_description": "How do you rest in meditation without turning it into another project of knowing? The talk keeps returning to a simple, embodied balance: relax, stay alert, and let experience be fresh rather than crowded with memory, strategy, or self-reference. From that ground, it explores how the mind builds a story of meditator, meditation, and object—and how practice can soften that triangle without forcing anything.",
+    "short_summary": "A guided meditation on relaxed alertness, fresh perception, and loosening the habit of being too busy knowing.",
+    "episode_image_url": "https://jeffharr.is/dharma/brensilver/artwork/audiodharma-26079.jpg",
+    "chapters_url": "https://jeffharr.is/dharma/brensilver/chapters/audiodharma-26079.json",
+    "chapters": [
+      {
+        "start": 0.0,
+        "title": "Settling the body",
+        "description": "The practice begins with tiredness, relaxation, and the instruction to avoid slipping into unconsciousness.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26079/?t=0",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 37.0,
+        "title": "Balanced presence",
+        "description": "The talk invites a posture of gentle breathing and being stretched between heaven and earth, balancing ease and wakefulness.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26079/?t=37",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 117.0,
+        "title": "Opening to the world",
+        "description": "The meditation widens into a simple, non-grasping relation to whatever seems like self or world, with repeated encouragement to keep relaxing.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26079/?t=117",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 205.0,
+        "title": "Beyond problems",
+        "description": "The speaker turns from problem-solving to simplicity, asking for the smallest unit of experience and what is actually here.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26079/?t=205",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 403.0,
+        "title": "Freshness and memory",
+        "description": "The talk explores how memory coats experience and why freshness requires forgetting a great deal, even with something as ordinary as the breath.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26079/?t=403",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 818.0,
+        "title": "Too busy knowing",
+        "description": "A central teaching emerges: the mind can become so occupied with referential knowing that it misses who or what is present.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26079/?t=818",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1087.0,
+        "title": "Self and strategy",
+        "description": "Selfhood, world, and strategy are included as part of practice, with the invitation to love even the arising of self.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26079/?t=1087",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1309.059,
+        "title": "Relax and notice",
+        "description": "The meditation closes by pointing to clinging, urging relaxation, and gently noticing how practice reveals something about who we are.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26079/?t=1309",
+        "img": null,
+        "toc": true
+      }
+    ],
+    "venue": null,
+    "series": null,
+    "tags": [],
+    "transcript": {
+      "status": "pending",
+      "url": null,
+      "text_path": null
+    }
+  },
+  {
     "id": "audiodharma:25937",
     "source": "AudioDharma",
     "source_id": "25937",
