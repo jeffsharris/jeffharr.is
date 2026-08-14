@@ -94,6 +94,108 @@
     }
   },
   {
+    "id": "dharmaseed:98733",
+    "source": "Dharma Seed",
+    "source_id": "98733",
+    "title": "Young Adulthood and Uncertainty (Retreat at Spirit Rock)",
+    "speaker": "Matthew Brensilver",
+    "published_at": "2026-08-07T19:14:44+00:00",
+    "link": "https://dharmaseed.org/talks/98733/",
+    "audio_url": "https://dharmaseed.org/talks/98733/20260807-Matthew_Brensilver-SR-young_adulthood_and_uncertainty_retreat_at_spirit_rock-98733.mp3?rss=",
+    "audio_type": "audio/mpeg",
+    "audio_length": 22413076,
+    "duration": "46:38",
+    "description": "(Spirit Rock Meditation Center)",
+    "image_url": "https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+    "canonical_url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-98733/",
+    "podcast_description": "What happens when uncertainty is not a problem to solve but the ground of ordinary life? The talk starts with the pressure to give advice and moves instead into a Buddhist reading of uncertainty: how it shows up in the body, in worry, in comparison, and in the stories we tell to feel safer. From there it turns toward the stabilizing work of ethics, meditation, equanimity, and a more honest relationship to change, grief, and gratitude.",
+    "short_summary": "A Dharma talk on uncertainty, showing how ethics, mindfulness, and equanimity help us meet change without being ruled by fear.",
+    "episode_image_url": "https://jeffharr.is/dharma/brensilver/artwork/dharmaseed-98733.jpg",
+    "chapters_url": "https://jeffharr.is/dharma/brensilver/chapters/dharmaseed-98733.json",
+    "chapters": [
+      {
+        "start": 0.0,
+        "title": "Opening Into Not-Knowing",
+        "description": "The talk begins by setting aside advice-giving and framing the future as something older people do not fully understand.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-98733/?t=0",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 100.32,
+        "title": "Why Uncertainty Matters",
+        "description": "Uncertainty is named as central both to young adulthood and to the wider moment of technological and social change.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-98733/?t=100",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 243.32,
+        "title": "Anicca and Fear",
+        "description": "Anicca is introduced as impermanence and uncertainty, with an early Buddhist passage evoking fear, trembling, and the absence of any unscathed place.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-98733/?t=243",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 406.24,
+        "title": "The Road Before the Bend",
+        "description": "Pessoa's poem is used to show the discipline of staying with what can actually be seen rather than projecting into what cannot.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-98733/?t=406",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 561.12,
+        "title": "Worry as Safety Behavior",
+        "description": "The talk describes anxiety, planning, and information-seeking as efforts to reduce uncertainty and avoid being startled by life.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-98733/?t=561",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 970.28,
+        "title": "Ethics as Refuge",
+        "description": "A Zen line on no preferences leads into the claim that ethical living stabilizes life by reducing regret and creating a network of care.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-98733/?t=970",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1329.048,
+        "title": "Signal and Noise",
+        "description": "Meditation is presented as clarifying what is trustworthy, reducing mental noise such as greed, hatred, ego, and comparison.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-98733/?t=1329",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1584.888,
+        "title": "Listening More Closely",
+        "description": "Attention is trained on the breath, the body, and what is actually present, while craving and autobiography lose some of their force.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-98733/?t=1585",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1983.688,
+        "title": "Equanimity, Change, and Gratitude",
+        "description": "The talk closes with equanimity, self-soothing, impermanence, grief, and a gratitude that arises from fully seeing change.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-98733/?t=1984",
+        "img": null,
+        "toc": true
+      }
+    ],
+    "venue": "Spirit Rock Meditation Center",
+    "series": "Retreat at Spirit Rock",
+    "tags": [],
+    "transcript": {
+      "status": "pending",
+      "url": null,
+      "text_path": null
+    }
+  },
+  {
     "id": "audiodharma:26011",
     "source": "AudioDharma",
     "source_id": "26011",

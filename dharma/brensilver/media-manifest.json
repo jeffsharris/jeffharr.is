@@ -13,6 +13,18 @@
       "url": "https://jeffharr.is/dharma/brensilver/chapters/audiodharma-26078.json"
     },
     {
+      "talk_id": "dharmaseed:98733",
+      "key": "chapters/dharmaseed-98733.json",
+      "source_path": "chapters/dharmaseed-98733.json",
+      "url": "https://jeffharr.is/dharma/brensilver/chapters/dharmaseed-98733.json"
+    },
+    {
+      "talk_id": "dharmaseed:98726",
+      "key": "chapters/dharmaseed-98726.json",
+      "source_path": "chapters/dharmaseed-98726.json",
+      "url": "https://jeffharr.is/dharma/brensilver/chapters/dharmaseed-98726.json"
+    },
+    {
       "talk_id": "audiodharma:25937",
       "key": "chapters/audiodharma-25937.json",
       "source_path": "chapters/audiodharma-25937.json",
@@ -4183,6 +4195,18 @@
       "key": "artwork/audiodharma-26078.jpg",
       "source_path": "artwork/audiodharma-26078.jpg",
       "url": "https://jeffharr.is/dharma/brensilver/artwork/audiodharma-26078.jpg"
+    },
+    {
+      "talk_id": "dharmaseed:98733",
+      "key": "artwork/dharmaseed-98733.jpg",
+      "source_path": "artwork/dharmaseed-98733.jpg",
+      "url": "https://jeffharr.is/dharma/brensilver/artwork/dharmaseed-98733.jpg"
+    },
+    {
+      "talk_id": "dharmaseed:98726",
+      "key": "artwork/dharmaseed-98726.jpg",
+      "source_path": "artwork/dharmaseed-98726.jpg",
+      "url": "https://jeffharr.is/dharma/brensilver/artwork/dharmaseed-98726.jpg"
     },
     {
       "talk_id": "audiodharma:25937",

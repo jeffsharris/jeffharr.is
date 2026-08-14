@@ -188,6 +188,213 @@
     }
   },
   {
+    "id": "dharmaseed:98733",
+    "source": "Dharma Seed",
+    "source_id": "98733",
+    "title": "Young Adulthood and Uncertainty (Retreat at Spirit Rock)",
+    "speaker": "Matthew Brensilver",
+    "published_at": "2026-08-07T19:14:44+00:00",
+    "link": "https://dharmaseed.org/talks/98733/",
+    "audio_url": "https://dharmaseed.org/talks/98733/20260807-Matthew_Brensilver-SR-young_adulthood_and_uncertainty_retreat_at_spirit_rock-98733.mp3?rss=",
+    "audio_type": "audio/mpeg",
+    "audio_length": 22413076,
+    "duration": "46:38",
+    "description": "(Spirit Rock Meditation Center)",
+    "image_url": "https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+    "canonical_url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-98733/",
+    "podcast_description": "What happens when uncertainty is not a problem to solve but the ground of ordinary life? The talk starts with the pressure to give advice and moves instead into a Buddhist reading of uncertainty: how it shows up in the body, in worry, in comparison, and in the stories we tell to feel safer. From there it turns toward the stabilizing work of ethics, meditation, equanimity, and a more honest relationship to change, grief, and gratitude.",
+    "short_summary": "A Dharma talk on uncertainty, showing how ethics, mindfulness, and equanimity help us meet change without being ruled by fear.",
+    "episode_image_url": "https://jeffharr.is/dharma/brensilver/artwork/dharmaseed-98733.jpg",
+    "chapters_url": "https://jeffharr.is/dharma/brensilver/chapters/dharmaseed-98733.json",
+    "chapters": [
+      {
+        "start": 0.0,
+        "title": "Opening Into Not-Knowing",
+        "description": "The talk begins by setting aside advice-giving and framing the future as something older people do not fully understand.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-98733/?t=0",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 100.32,
+        "title": "Why Uncertainty Matters",
+        "description": "Uncertainty is named as central both to young adulthood and to the wider moment of technological and social change.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-98733/?t=100",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 243.32,
+        "title": "Anicca and Fear",
+        "description": "Anicca is introduced as impermanence and uncertainty, with an early Buddhist passage evoking fear, trembling, and the absence of any unscathed place.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-98733/?t=243",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 406.24,
+        "title": "The Road Before the Bend",
+        "description": "Pessoa's poem is used to show the discipline of staying with what can actually be seen rather than projecting into what cannot.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-98733/?t=406",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 561.12,
+        "title": "Worry as Safety Behavior",
+        "description": "The talk describes anxiety, planning, and information-seeking as efforts to reduce uncertainty and avoid being startled by life.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-98733/?t=561",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 970.28,
+        "title": "Ethics as Refuge",
+        "description": "A Zen line on no preferences leads into the claim that ethical living stabilizes life by reducing regret and creating a network of care.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-98733/?t=970",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1329.048,
+        "title": "Signal and Noise",
+        "description": "Meditation is presented as clarifying what is trustworthy, reducing mental noise such as greed, hatred, ego, and comparison.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-98733/?t=1329",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1584.888,
+        "title": "Listening More Closely",
+        "description": "Attention is trained on the breath, the body, and what is actually present, while craving and autobiography lose some of their force.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-98733/?t=1585",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1983.688,
+        "title": "Equanimity, Change, and Gratitude",
+        "description": "The talk closes with equanimity, self-soothing, impermanence, grief, and a gratitude that arises from fully seeing change.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-98733/?t=1984",
+        "img": null,
+        "toc": true
+      }
+    ],
+    "venue": "Spirit Rock Meditation Center",
+    "series": "Retreat at Spirit Rock",
+    "tags": [],
+    "transcript": {
+      "status": "pending",
+      "url": null,
+      "text_path": null
+    }
+  },
+  {
+    "id": "dharmaseed:98726",
+    "source": "Dharma Seed",
+    "source_id": "98726",
+    "title": "Matthew Brensilver, Vinny Ferraro: Guided Meditation: Mindfulness and Landing in the Breath (Retreat at Spirit Rock)",
+    "speaker": "Vinny Ferraro",
+    "published_at": "2026-08-05T08:27:08+00:00",
+    "link": "https://dharmaseed.org/talks/98726/",
+    "audio_url": "https://dharmaseed.org/talks/98726/20260805-Vinny_Ferraro-SR-guided_meditation_mindfulness_and_landing_in_the_breath_retreat_at_spirit_rock-98726.mp3?rss=",
+    "audio_type": "audio/mpeg",
+    "audio_length": 26228351,
+    "duration": "54:34",
+    "description": "(Spirit Rock Meditation Center)",
+    "image_url": "https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+    "canonical_url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-98726/",
+    "podcast_description": "What does it mean to stop wrestling with this moment long enough to actually feel it? The talk begins with a retreat ceremony for turning in phones, then unfolds into a clear introduction to mindfulness as stable, uncluttered awareness of direct experience rather than a story about experience. After that, it moves into guided sitting and walking practice, with practical advice on posture, breath, and how to keep returning without self-judgment.",
+    "short_summary": "A retreat opening that frames mindfulness as letting go of devices, stories, and inner struggle, then guides sitting and walking practice.",
+    "episode_image_url": "https://jeffharr.is/dharma/brensilver/artwork/dharmaseed-98726.jpg",
+    "chapters_url": "https://jeffharr.is/dharma/brensilver/chapters/dharmaseed-98726.json",
+    "chapters": [
+      {
+        "start": 6.0,
+        "title": "Turning in Devices",
+        "description": "The retreat opens with a ceremony for relinquishing phones as a way of simplifying the field of attention.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-98726/?t=6",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 532.0,
+        "title": "What Practice Is",
+        "description": "The talk explains mindfulness as awareness of present experience rather than living inside story, meaning, and mental comparison.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-98726/?t=532",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 793.0,
+        "title": "Stability and Equanimity",
+        "description": "Mindfulness is described through stability, clarity, and not fighting what is pleasant or unpleasant, with grasping and aversion named as the main habits to soften.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-98726/?t=793",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1204.876,
+        "title": "Humility Over Shame",
+        "description": "The talk acknowledges that practice can feel impossible at times, and encourages a patient, non-humiliating way of meeting difficulty.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-98726/?t=1205",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1380.676,
+        "title": "Posture and Softening",
+        "description": "Guidance turns to balance in the body: a strong back, soft front, and relaxation in the face, belly, and shoulders without turning tension into an enemy.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-98726/?t=1381",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1913.476,
+        "title": "Breath Meditation",
+        "description": "The guided sitting practice centers on the breath, returning again and again without needing to prove that mindfulness is working.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-98726/?t=1913",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 2523.498,
+        "title": "First Day on Retreat",
+        "description": "The speaker normalizes sleepiness, restlessness, doubt, and confusion as common first-day conditions and encourages not drawing conclusions too quickly.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-98726/?t=2523",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 2640.498,
+        "title": "Walking Meditation",
+        "description": "Walking practice is introduced as mindfulness in motion: slower steps, back-and-forth paths, open senses, and coming back to the raw felt moment.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-98726/?t=2640",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 3043.498,
+        "title": "Logistics and Gentle Notes",
+        "description": "The talk closes with practical retreat announcements, posture guidance, and alternatives for anyone who cannot walk comfortably.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/dharmaseed-98726/?t=3043",
+        "img": null,
+        "toc": true
+      }
+    ],
+    "venue": "Spirit Rock Meditation Center",
+    "series": "Retreat at Spirit Rock",
+    "co_teachers": [
+      "Matthew Brensilver"
+    ],
+    "tags": [],
+    "transcript": {
+      "status": "pending",
+      "url": null,
+      "text_path": null
+    }
+  },
+  {
     "id": "audiodharma:25937",
     "source": "AudioDharma",
     "source_id": "25937",
