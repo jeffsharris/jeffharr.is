@@ -1,5 +1,107 @@
 [
   {
+    "id": "audiodharma:26131",
+    "source": "AudioDharma",
+    "source_id": "26131",
+    "title": "Dharmette: A few reflections on pedagogy",
+    "speaker": "Matthew Brensilver",
+    "published_at": "2026-08-19T12:00:00+00:00",
+    "link": "https://www.audiodharma.org/talks/26131",
+    "audio_url": "https://audiodharma.us-east-1.linodeobjects.com/talks/26131/20260819-matthew_brensilver-imc-dharmette_a_few_reflections_on_pedagogy.mp3",
+    "audio_type": "audio/mpeg",
+    "audio_length": null,
+    "duration": "15:18",
+    "description": "AudioDharma talk by Matthew Brensilver.",
+    "image_url": "https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+    "canonical_url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26131/",
+    "podcast_description": "What if a Dharma talk is less a finished answer than a way of helping listeners trust their own mind? The talk moves through stories, quotations, and a candid reflection on teaching itself, asking how much of what we learn is shaped by attention, habit, and the hidden autobiography of the teacher. It ends in a quiet claim: confidence and humility can coexist, and the listener’s job is to make meaning and test it honestly.",
+    "short_summary": "A reflection on the difficulty of teaching, the limits of stories, and the need for humility and confidence in practice.",
+    "episode_image_url": "https://jeffharr.is/dharma/brensilver/artwork/audiodharma-26131.jpg",
+    "chapters_url": "https://jeffharr.is/dharma/brensilver/chapters/audiodharma-26131.json",
+    "chapters": [
+      {
+        "start": 12.0,
+        "title": "Teaching is hard",
+        "description": "The talk opens with an honest confession that teaching is difficult and that the best approach is not always clear.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26131/?t=12",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 73.0,
+        "title": "Story and mindfulness",
+        "description": "A movie-theater image and references to Joseph Goldstein and Martha Nussbaum frame the tension between being inside a story and seeing its constructed nature.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26131/?t=73",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 192.0,
+        "title": "Ajahn Chah's warning",
+        "description": "A remembered exchange about a 'good talk' becomes a way to unsettle fixed judgments about teaching and listening.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26131/?t=192",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 266.0,
+        "title": "Entering the teaching",
+        "description": "A quotation from Suzuki Roshi emphasizes not staying at the edge of the teaching, but engaging it fully and honestly.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26131/?t=266",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 336.0,
+        "title": "Unclear feedback",
+        "description": "The speaker reflects on uncertainty about how practice unfolds, how causes are interpreted, and why feedback about teaching is hard to read.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26131/?t=336",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 424.0,
+        "title": "Who stays, who leaves",
+        "description": "Selective attrition and missing data are used to show why the people still listening are not a neutral sample.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26131/?t=424",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 500.0,
+        "title": "Attention shapes teaching",
+        "description": "A story about students conditioning a professor illustrates how teachers can be shaped by audience response, even without noticing it.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26131/?t=500",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 614.0,
+        "title": "Information overload",
+        "description": "The talk turns to the modern Dharma environment, consumer expectations, and the difference between passive listening and deeper grappling.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26131/?t=614",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 738.0,
+        "title": "Humility and confidence",
+        "description": "Nietzsche’s idea of philosophy as confession leads to a closing call for epistemic humility, broad wisdom, and trust in one’s own mind.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26131/?t=738",
+        "img": null,
+        "toc": true
+      }
+    ],
+    "venue": null,
+    "series": null,
+    "tags": [],
+    "transcript": {
+      "status": "pending",
+      "url": null,
+      "text_path": null
+    }
+  },
+  {
     "id": "audiodharma:26078",
     "source": "AudioDharma",
     "source_id": "26078",
