@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>An assignment - crafting a lovingkindness practice for yourself - Matthew Brensilver Dharma Talks</title>
+  <link rel="canonical" href="https://jeffharr.is/dharma/brensilver/talks/audiodharma-26151/">
+  <meta name="description" content="What if lovingkindness practice had to be tailored so closely to your own heart that it felt almost uncomfortably specific? The talk frames this as a short workshop: devise, write, and practice a kindness meditation that is native to you, not polished for anyone else. It emphasizes that the right words may be simple, quiet, and even slightly challenging before they become medicine.">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Matthew Brensilver Dharma Talks">
+  <meta property="og:title" content="An assignment - crafting a lovingkindness practice for yourself">
+  <meta property="og:description" content="What if lovingkindness practice had to be tailored so closely to your own heart that it felt almost uncomfortably specific? The talk frames this as a short workshop: devise, write, and practice a kindness meditation that is native to you, not polished for anyone else. It emphasizes that the right words may be simple, quiet, and even slightly challenging before they become medicine.">
+  <meta property="og:url" content="https://jeffharr.is/dharma/brensilver/talks/audiodharma-26151/">
+  <meta property="og:image" content="https://jeffharr.is/dharma/brensilver/artwork/audiodharma-26151.jpg">
+  <meta property="og:image:secure_url" content="https://jeffharr.is/dharma/brensilver/artwork/audiodharma-26151.jpg">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="1024">
+  <meta property="og:image:height" content="1024">
+  <meta name="twitter:image" content="https://jeffharr.is/dharma/brensilver/artwork/audiodharma-26151.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="An assignment - crafting a lovingkindness practice for yourself">
+  <meta name="twitter:description" content="What if lovingkindness practice had to be tailored so closely to your own heart that it felt almost uncomfortably specific? The talk frames this as a short workshop: devise, write, and practice a kindness meditation that is native to you, not polished for anyone else. It emphasizes that the right words may be simple, quiet, and even slightly challenging before they become medicine.">
+  <link rel="apple-touch-icon" sizes="180x180" href="/dharma/brensilver/touch-icons/audiodharma-26151.png">
+  <meta name="apple-mobile-web-app-title" content="An assignment - crafting a lovingkindness practice for yourself">
+  <link rel="stylesheet" href="/dharma/talk-page.css?v=3">
+</head>
+<body>
+  <main>
+    <a class="back" href="../../">Matthew Brensilver Dharma Talks</a>
+    <div class="hero">
+      <div>
+        <h1>An assignment - crafting a lovingkindness practice for yourself</h1>
+        <div class="meta">
+          <span>AudioDharma</span>
+          <span>03:55</span>
+          <span>2026-08-22</span>
+        </div>
+        <p class="description">What if lovingkindness practice had to be tailored so closely to your own heart that it felt almost uncomfortably specific? The talk frames this as a short workshop: devise, write, and practice a kindness meditation that is native to you, not polished for anyone else. It emphasizes that the right words may be simple, quiet, and even slightly challenging before they become medicine.</p>
+      </div>
+      <img class="art" src="/dharma/brensilver/artwork/audiodharma-26151.jpg" alt="">
+    </div>
+    <div class="primary-player">
+      <audio id="audio" controls preload="none" src="https://audiodharma.us-east-1.linodeobjects.com/talks/26151/20260822-unknown-retreat_talk_8_22_2026_2_48_01_pm.mp3"></audio>
+      <a class="download-link" href="https://audiodharma.us-east-1.linodeobjects.com/talks/26151/20260822-unknown-retreat_talk_8_22_2026_2_48_01_pm.mp3" download>Download MP3</a>
+    </div>
+    <section>
+      <h2>Chapters</h2>
+      <ol class="chapters">
+        <li><a href="?t=30" data-start="30.0">00:30</a> <strong>The assignment</strong> - The talk introduces the task of creating and practicing a kindness meditation that is devised for oneself.</li>
+<li><a href="?t=86" data-start="85.68">01:26</a> <strong>Tailored to your heart</strong> - It asks how precisely the practice can be shaped to one’s own inner life, rather than borrowed from a general template.</li>
+<li><a href="?t=137" data-start="136.88">02:17</a> <strong>Simple, not ornate</strong> - The speaker suggests that the most helpful phrases may be plain, quiet, and not necessarily the most elaborate expressions.</li>
+<li><a href="?t=160" data-start="160.4">02:40</a> <strong>Workshop the words</strong> - The next stretch is framed as a period to experiment with and refine a highly personalized lovingkindness practice.</li>
+<li><a href="?t=201" data-start="201.28">03:21</a> <strong>Native to the heart</strong> - The talk closes by returning to the idea that heart practice is often about finding words that feel natural and fitting.</li>
+      </ol>
+    </section>
+    <section>
+      <h2>Source</h2>
+      <p><a href="https://www.audiodharma.org/talks/26151">Original talk page</a></p>
+    </section>
+  </main>
+  <script>
+    const audio = document.getElementById('audio');
+    function seekFromLocation() {
+      if (!audio) return;
+      const value = new URLSearchParams(location.search).get('t');
+      const seconds = Number(value || 0);
+      if (Number.isFinite(seconds) && seconds > 0) {
+        audio.currentTime = seconds;
+      }
+    }
+    document.querySelectorAll('[data-start]').forEach(link => {
+      link.addEventListener('click', event => {
+        if (!audio) return;
+        event.preventDefault();
+        const seconds = Number(link.dataset.start || 0);
+        history.replaceState(null, '', '?t=' + Math.round(seconds));
+        audio.currentTime = seconds;
+        audio.play().catch(() => {});
+      });
+    });
+    audio?.addEventListener('loadedmetadata', seekFromLocation, { once: true });
+  </script>
+  <script src="/js/admin-presence.js?v=2"></script>
+</body>
+</html>

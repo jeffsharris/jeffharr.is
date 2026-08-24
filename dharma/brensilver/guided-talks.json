@@ -1,5 +1,177 @@
 [
   {
+    "id": "audiodharma:26149",
+    "source": "AudioDharma",
+    "source_id": "26149",
+    "title": "Guided reflections on kindness",
+    "speaker": "Matthew Brensilver",
+    "published_at": "2026-08-22T12:00:00+00:00",
+    "link": "https://www.audiodharma.org/talks/26149",
+    "audio_url": "https://audiodharma.us-east-1.linodeobjects.com/talks/26149/20260822-unknown-retreat_talk_8_22_2026_12_08_31_pm.mp3",
+    "audio_type": "audio/mpeg",
+    "audio_length": null,
+    "duration": "32:01",
+    "description": "AudioDharma talk by Matthew Brensilver.",
+    "image_url": "https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+    "canonical_url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26149/",
+    "podcast_description": "What if kindness is not something we manufacture, but something already here that we learn to notice? The talk moves from a spacious “yes” to simple practices of breathing, softening shame, and inwardly wishing well for oneself, treating kindness as a patient way of seeing rather than a forced feeling. It ends by framing the Brahma-vihara as a place to dwell, where time can help love ripen and hatred become less tenable.",
+    "short_summary": "A guided reflection on kindness as a patient, already-available ground for love.",
+    "episode_image_url": "https://jeffharr.is/dharma/brensilver/artwork/audiodharma-26149.jpg",
+    "chapters_url": "https://jeffharr.is/dharma/brensilver/chapters/audiodharma-26149.json",
+    "chapters": [
+      {
+        "start": 120.0,
+        "title": "Settling into yes",
+        "description": "The talk opens by entering silence and introducing the idea of a patient, unwavering yes without pretending everything is pleasant.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26149/?t=120",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 269.88,
+        "title": "Breath and activation",
+        "description": "Breath is offered as a way to enliven what is numbed and soothe what is overly activated.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26149/?t=270",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 519.4,
+        "title": "Love versus clinging",
+        "description": "The speaker contrasts clinging, with its complexity and strategizing, with the simplicity of love and small signs of goodness.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26149/?t=519",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 922.2,
+        "title": "Seen with kindness",
+        "description": "The reflection turns toward being seen through infinite kindness and meeting whatever appears without forcing a conclusion.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26149/?t=922",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1110.56,
+        "title": "Wishing well inwardly",
+        "description": "The talk moves into simple phrases of metta and the practice of listening for their effect in body and mind.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26149/?t=1111",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1462.043,
+        "title": "Beyond shame",
+        "description": "Shame is contrasted with remorse, and the listener is encouraged to meet what is not yet love with respect and patience.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26149/?t=1462",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1719.043,
+        "title": "A place to dwell",
+        "description": "The closing section names the Brahma-vihara as a dwelling-place and presents kindness as patient, steady, and quietly transformative.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26149/?t=1719",
+        "img": null,
+        "toc": true
+      }
+    ],
+    "venue": null,
+    "series": null,
+    "tags": [],
+    "transcript": {
+      "status": "pending",
+      "url": null,
+      "text_path": null
+    }
+  },
+  {
+    "id": "audiodharma:26148",
+    "source": "AudioDharma",
+    "source_id": "26148",
+    "title": "Guided Meditation: All the facts are friendly",
+    "speaker": "Matthew Brensilver",
+    "published_at": "2026-08-22T12:00:00+00:00",
+    "link": "https://www.audiodharma.org/talks/26148",
+    "audio_url": "https://audiodharma.us-east-1.linodeobjects.com/talks/26148/20260822-matthew_brensilver-bfuu_daylong_10_51_am.mp3",
+    "audio_type": "audio/mpeg",
+    "audio_length": null,
+    "duration": "14:31",
+    "description": "AudioDharma talk by Matthew Brensilver.",
+    "image_url": "https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+    "canonical_url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26148/",
+    "podcast_description": "What if the mind’s movements were not enemies, but attempts at peace? This guided meditation turns that question toward pleasure and pain, love and hate, and the ordinary ways we seek relief, using the phrase “all the facts are friendly” as an invitation to stay open rather than divided. From there, the talk moves between direct kindness and the more circuitous paths through grief, rage, and suffering, suggesting that love can become clearer when pain is met without fear.",
+    "short_summary": "A guided meditation on meeting every part of inner experience as friendly, and letting that openness reveal the urgency of love.",
+    "episode_image_url": "https://jeffharr.is/dharma/brensilver/artwork/audiodharma-26148.jpg",
+    "chapters_url": "https://jeffharr.is/dharma/brensilver/chapters/audiodharma-26148.json",
+    "chapters": [
+      {
+        "start": 0.0,
+        "title": "No enemies inside",
+        "description": "The meditation begins by reframing inner experience as something to turn toward without treating any part of it as an enemy.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26148/?t=0",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 298.48,
+        "title": "Ordinariness of goodness",
+        "description": "It emphasizes that goodness is not special or self-flattering, but found in the ordinary heart and in the wish to let love grow more urgent through pain.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26148/?t=298",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 365.48,
+        "title": "Welcoming inner weather",
+        "description": "The practice settles into an attitude that includes pleasure, pain, love, hate, and the changing conditions of body and mind without splitting them into good and bad selves.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26148/?t=365",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 492.48,
+        "title": "Self-soothing toward peace",
+        "description": "The talk names many mental movements as forms of self-soothing, wise or not, but still innocent in their aim toward peace.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26148/?t=492",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 598.48,
+        "title": "Direct kindness",
+        "description": "A direct path into metta is introduced as a simple route into kindness that can be enough on its own.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26148/?t=598",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 624.48,
+        "title": "Detours through suffering",
+        "description": "The meditation then describes how pain, grief, or rage can become a circuitous path into love when they are met with vividness and forgiveness.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26148/?t=624",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 691.48,
+        "title": "Settling in silence",
+        "description": "The talk closes by resting in the practice for a few more minutes.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26148/?t=691",
+        "img": null,
+        "toc": true
+      }
+    ],
+    "venue": null,
+    "series": null,
+    "tags": [],
+    "transcript": {
+      "status": "pending",
+      "url": null,
+      "text_path": null
+    }
+  },
+  {
     "id": "audiodharma:26132",
     "source": "AudioDharma",
     "source_id": "26132",

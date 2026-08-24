@@ -1,5 +1,537 @@
 [
   {
+    "id": "audiodharma:26146",
+    "source": "AudioDharma",
+    "source_id": "26146",
+    "title": "The lure of aversion and the call of love",
+    "speaker": "Matthew Brensilver",
+    "published_at": "2026-08-22T12:00:00+00:00",
+    "link": "https://www.audiodharma.org/talks/26146",
+    "audio_url": "https://audiodharma.us-east-1.linodeobjects.com/talks/26146/20260822-unknown-retreat_talk_8_22_2026_10_51_43_am.mp3",
+    "audio_type": "audio/mpeg",
+    "audio_length": null,
+    "duration": "26:36",
+    "description": "AudioDharma talk by Matthew Brensilver.",
+    "image_url": "https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+    "canonical_url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26146/",
+    "podcast_description": "How do we meet anger without making it an enemy, and how do we keep turning toward love when aversion feels so compelling? The talk moves from a Buddhist warning about hatred, through patience, precepts, and the pull of compulsive habits, toward a practice of repeatedly saying yes to present-moment experience without condoning harm. It ends with a story about embarrassment, falling, and being met gently, as a small example of how unashamedness can open the heart again.",
+    "short_summary": "A reflection on meeting anger soberly, understanding compulsive habits, and returning to love through a steady practice of saying yes.",
+    "episode_image_url": "https://jeffharr.is/dharma/brensilver/artwork/audiodharma-26146.jpg",
+    "chapters_url": "https://jeffharr.is/dharma/brensilver/chapters/audiodharma-26146.json",
+    "chapters": [
+      {
+        "start": 0.0,
+        "title": "Love over aversion",
+        "description": "The talk opens with a thesis drawn from the Buddha: hatred does not end hatred, and love is the only viable path forward.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26146/?t=0",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 93.92,
+        "title": "Anger with sobriety",
+        "description": "A striking line from Shantideva is used to show anger’s force without turning the teaching into shame.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26146/?t=94",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 208.56,
+        "title": "Non-harming as practice",
+        "description": "The talk frames Dharma as ongoing training in non-harming, connecting ethical conduct with a freer heart.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26146/?t=209",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 385.84,
+        "title": "A deep yes",
+        "description": "Using Suzuki Roshi, the speaker explores saying yes to experience, including anger, without collapsing into self-identification or approval.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26146/?t=386",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 560.64,
+        "title": "Respecting symptoms",
+        "description": "The talk turns to compassion for our own tangled patterns and the way compulsivity narrows freedom.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26146/?t=561",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 722.32,
+        "title": "Ambivalence and dukkha",
+        "description": "Thich Nhat Hanh’s image of interbeing helps explain how pleasure and pain, gain and loss, are woven together.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26146/?t=722",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 867.44,
+        "title": "Anger as fever",
+        "description": "The speaker uses anger’s self-soothing function, then a fever analogy and Ruth King’s distinction between initiatory and transformative anger, to clarify its place.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26146/?t=867",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1085.04,
+        "title": "Freedom in expression",
+        "description": "A clinical story shows how anger can mark a real step toward freedom when it can be felt and spoken safely.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26146/?t=1085",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1314.475,
+        "title": "Falling without shame",
+        "description": "A story of a fall in the rain becomes a closing image for meeting difficulty with tenderness, humor, and trust, then turning more fully toward love.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26146/?t=1314",
+        "img": null,
+        "toc": true
+      }
+    ],
+    "venue": null,
+    "series": null,
+    "tags": [],
+    "transcript": {
+      "status": "pending",
+      "url": null,
+      "text_path": null
+    }
+  },
+  {
+    "id": "audiodharma:26150",
+    "source": "AudioDharma",
+    "source_id": "26150",
+    "title": "The four species of love as you move around the world",
+    "speaker": "Matthew Brensilver",
+    "published_at": "2026-08-22T12:00:00+00:00",
+    "link": "https://www.audiodharma.org/talks/26150",
+    "audio_url": "https://audiodharma.us-east-1.linodeobjects.com/talks/26150/20260822-unknown-retreat_talk_8_22_2026_12_14_11_pm.mp3",
+    "audio_type": "audio/mpeg",
+    "audio_length": null,
+    "duration": "05:20",
+    "description": "AudioDharma talk by Matthew Brensilver.",
+    "image_url": "https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+    "canonical_url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26150/",
+    "podcast_description": "The talk asks how loving-kindness can move beyond a single feeling and become a responsive practice in ordinary life. It sketches the four Brahma-viharas as four species of love—loving-kindness, compassion, sympathetic joy, and equanimity—and shows how they balance and support one another. From there, the focus turns to walking practice: noticing what kind of care a person, a moment, or a scene seems to call for, and offering a simple, precise wish in response.",
+    "short_summary": "A brief teaching on the four Brahma-viharas and how to use them as a responsive, moment-by-moment practice while walking among other people.",
+    "episode_image_url": "https://jeffharr.is/dharma/brensilver/artwork/audiodharma-26150.jpg",
+    "chapters_url": "https://jeffharr.is/dharma/brensilver/chapters/audiodharma-26150.json",
+    "chapters": [
+      {
+        "start": 0.0,
+        "title": "Opening the practice",
+        "description": "The talk begins with the day’s movement into instructions, a short period of walking, and then dialogue and questions.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26150/?t=0",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 53.92,
+        "title": "Four species of love",
+        "description": "The four Brahma-viharas are introduced as distinct forms of love that balance and refine one another.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26150/?t=54",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 114.44,
+        "title": "What each one meets",
+        "description": "Each quality is briefly defined by the kind of experience it meets: suffering, good fortune, and the limits of control.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26150/?t=114",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 154.48,
+        "title": "Reading the moment",
+        "description": "The walking period is framed as an opportunity to sense what kind of care a person, tree, or situation may need.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26150/?t=154",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 206.08,
+        "title": "Small data, careful response",
+        "description": "The speaker describes noticing the shape of another person's heart-mind with limited information and offering a fitting response.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26150/?t=206",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 249.36,
+        "title": "Simple wishes for others",
+        "description": "Examples of concise phrases show how kindness can be tailored to what is seen: ease, soothing, connection.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26150/?t=249",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 295.04,
+        "title": "Closing and questions",
+        "description": "The talk returns to the bell, quiet sitting, and a final invitation for questions about practice.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26150/?t=295",
+        "img": null,
+        "toc": true
+      }
+    ],
+    "venue": null,
+    "series": null,
+    "tags": [],
+    "transcript": {
+      "status": "pending",
+      "url": null,
+      "text_path": null
+    }
+  },
+  {
+    "id": "audiodharma:26152",
+    "source": "AudioDharma",
+    "source_id": "26152",
+    "title": "Q & A on metta",
+    "speaker": "Matthew Brensilver",
+    "published_at": "2026-08-22T12:00:00+00:00",
+    "link": "https://www.audiodharma.org/talks/26152",
+    "audio_url": "https://audiodharma.us-east-1.linodeobjects.com/talks/26152/20260822-unknown-retreat_talk_8_22_2026_1_06_46_pm.mp3",
+    "audio_type": "audio/mpeg",
+    "audio_length": null,
+    "duration": "22:34",
+    "description": "AudioDharma talk by Matthew Brensilver.",
+    "image_url": "https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+    "canonical_url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26152/",
+    "podcast_description": "How do gratitude, compassion, and a “big yes” stay honest when suffering is real and power has limits? The talk moves from a question about anger and a fever metaphor into a practical map of the Brahma-viharas, where gratitude is tied to mudita and sharpened by remembering dukkha, finitude, and change. It then turns to equanimity, showing how love can remain open without becoming compulsive, intrusive, or falsely promising an outcome.",
+    "short_summary": "A question-and-answer talk on metta that explores gratitude, compassion, equanimity, and the difference between genuine acceptance and spiritual bypassing.",
+    "episode_image_url": "https://jeffharr.is/dharma/brensilver/artwork/audiodharma-26152.jpg",
+    "chapters_url": "https://jeffharr.is/dharma/brensilver/chapters/audiodharma-26152.json",
+    "chapters": [
+      {
+        "start": 0.0,
+        "title": "Opening and first question",
+        "description": "The talk begins with a brief opening and a question about anger, framed through a fever metaphor as something that can be adaptive without being final.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26152/?t=0",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 145.88,
+        "title": "Gratitude and mudita",
+        "description": "Gratitude is placed within mudita, then explored as something that becomes more poignant when held together with awareness of dukkha, finitude, and change.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26152/?t=146",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 332.42,
+        "title": "Compassion with limits",
+        "description": "The talk turns to love in the face of suffering, asking how the heart stays open when it cannot fix what hurts and must let go of compulsive effort.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26152/?t=332",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 552.86,
+        "title": "What the big yes means",
+        "description": "A question about a \"big yes\" leads into a careful distinction between wholehearted acceptance and rationalizing greed or other habits of delusion.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26152/?t=553",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 896.74,
+        "title": "Defensiveness and rehearsal",
+        "description": "A new question shifts to defensiveness, rehearsed conversations, and the wish to respond freshly rather than from a protective script.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26152/?t=897",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1098.44,
+        "title": "Learning to say no",
+        "description": "The response suggests that a clear no may be needed before the heart can truly relax, especially when love has felt costly or careless.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26152/?t=1098",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1257.142,
+        "title": "Fever falls away",
+        "description": "The closing movement returns to the fever image, describing a gradual nursing process in which the old model of self loosens and love becomes safer and clearer.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26152/?t=1257",
+        "img": null,
+        "toc": true
+      }
+    ],
+    "venue": null,
+    "series": null,
+    "tags": [],
+    "transcript": {
+      "status": "pending",
+      "url": null,
+      "text_path": null
+    }
+  },
+  {
+    "id": "audiodharma:26153",
+    "source": "AudioDharma",
+    "source_id": "26153",
+    "title": "Dharma Talk: Reflections on Love and Kindness",
+    "speaker": "Matthew Brensilver",
+    "published_at": "2026-08-22T12:00:00+00:00",
+    "link": "https://www.audiodharma.org/talks/26153",
+    "audio_url": "https://audiodharma.us-east-1.linodeobjects.com/talks/26153/20260822-unknown-retreat_talk_8_22_2026_3_58_34_pm.mp3",
+    "audio_type": "audio/mpeg",
+    "audio_length": null,
+    "duration": "47:38",
+    "description": "AudioDharma talk by Matthew Brensilver.",
+    "image_url": "https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+    "canonical_url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26153/",
+    "podcast_description": "How do love and kindness show up when practice stops feeling abstract and starts loosening the grip of fear, selfing, and the need to win? The talk moves from a reflection on empty, radiant, responsive mind to a careful argument that insight is only trustworthy when it leaves love in its wake. It closes with a personal story of friendship, loss, and a visit to Koyasan, gathering the teaching into the sense that we are living inside a long lineage of care.",
+    "short_summary": "A meditation on how insight, self-softening, and courage lead not just to understanding, but to love that is less compulsive and more spacious.",
+    "episode_image_url": "https://jeffharr.is/dharma/brensilver/artwork/audiodharma-26153.jpg",
+    "chapters_url": "https://jeffharr.is/dharma/brensilver/chapters/audiodharma-26153.json",
+    "chapters": [
+      {
+        "start": 0.0,
+        "title": "Opening gratitude",
+        "description": "The talk begins by honoring volunteers and the conditions that make the gathering possible.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26153/?t=0",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 131.04,
+        "title": "Reading each other clearly",
+        "description": "A poem frames the need to know one another honestly so that life together does not drift into darkness.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26153/?t=131",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 388.16,
+        "title": "Conditioned mind, open experience",
+        "description": "The speaker contrasts essentializing language with a Theravada view of mind as conditioned process, then turns to the felt transparency of experience.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26153/?t=388",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 634.52,
+        "title": "What remains after letting go",
+        "description": "Through references to impermanence and rich vacuity, the talk explores how pain thickens when things feel solid and how practice reveals greater openness.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26153/?t=635",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1055.52,
+        "title": "Love as fruit and path",
+        "description": "Love is presented as the natural expression of wisdom, and also as what reduces friction so insight can deepen.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26153/?t=1056",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1526.791,
+        "title": "Courage and the wish to win",
+        "description": "The talk examines the courage to change, the circuitous path into kindness, and the way egoic competition blocks love.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26153/?t=1527",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1998.271,
+        "title": "Selfing grows less compelling",
+        "description": "Using the sutta line about ownership and the remark about thinking of oneself, the speaker points to the softening of autobiography and self-pressure.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26153/?t=1998",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 2378.791,
+        "title": "Lineage, loss, and care",
+        "description": "A family story in Japan and a rainy visit to Koyasan open into a closing sense of sacred time and a vow to contribute to a lineage of love.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26153/?t=2379",
+        "img": null,
+        "toc": true
+      }
+    ],
+    "venue": null,
+    "series": null,
+    "tags": [],
+    "transcript": {
+      "status": "pending",
+      "url": null,
+      "text_path": null
+    }
+  },
+  {
+    "id": "audiodharma:26151",
+    "source": "AudioDharma",
+    "source_id": "26151",
+    "title": "An assignment - crafting a lovingkindness practice for yourself",
+    "speaker": "Matthew Brensilver",
+    "published_at": "2026-08-22T12:00:00+00:00",
+    "link": "https://www.audiodharma.org/talks/26151",
+    "audio_url": "https://audiodharma.us-east-1.linodeobjects.com/talks/26151/20260822-unknown-retreat_talk_8_22_2026_2_48_01_pm.mp3",
+    "audio_type": "audio/mpeg",
+    "audio_length": null,
+    "duration": "03:55",
+    "description": "AudioDharma talk by Matthew Brensilver.",
+    "image_url": "https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+    "canonical_url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26151/",
+    "podcast_description": "What if lovingkindness practice had to be tailored so closely to your own heart that it felt almost uncomfortably specific? The talk frames this as a short workshop: devise, write, and practice a kindness meditation that is native to you, not polished for anyone else. It emphasizes that the right words may be simple, quiet, and even slightly challenging before they become medicine.",
+    "short_summary": "A brief guided assignment on crafting a personalized lovingkindness practice, with attention to finding words that truly fit one’s own heart.",
+    "episode_image_url": "https://jeffharr.is/dharma/brensilver/artwork/audiodharma-26151.jpg",
+    "chapters_url": "https://jeffharr.is/dharma/brensilver/chapters/audiodharma-26151.json",
+    "chapters": [
+      {
+        "start": 30.0,
+        "title": "The assignment",
+        "description": "The talk introduces the task of creating and practicing a kindness meditation that is devised for oneself.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26151/?t=30",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 85.68,
+        "title": "Tailored to your heart",
+        "description": "It asks how precisely the practice can be shaped to one’s own inner life, rather than borrowed from a general template.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26151/?t=86",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 136.88,
+        "title": "Simple, not ornate",
+        "description": "The speaker suggests that the most helpful phrases may be plain, quiet, and not necessarily the most elaborate expressions.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26151/?t=137",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 160.4,
+        "title": "Workshop the words",
+        "description": "The next stretch is framed as a period to experiment with and refine a highly personalized lovingkindness practice.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26151/?t=160",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 201.28,
+        "title": "Native to the heart",
+        "description": "The talk closes by returning to the idea that heart practice is often about finding words that feel natural and fitting.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26151/?t=201",
+        "img": null,
+        "toc": true
+      }
+    ],
+    "venue": null,
+    "series": null,
+    "tags": [],
+    "transcript": {
+      "status": "pending",
+      "url": null,
+      "text_path": null
+    }
+  },
+  {
+    "id": "audiodharma:26147",
+    "source": "AudioDharma",
+    "source_id": "26147",
+    "title": "A few words on walking - a continuous yes",
+    "speaker": "Matthew Brensilver",
+    "published_at": "2026-08-22T12:00:00+00:00",
+    "link": "https://www.audiodharma.org/talks/26147",
+    "audio_url": "https://audiodharma.us-east-1.linodeobjects.com/talks/26147/20260822-unknown-retreat_talk_8_22_2026_11_12_50_am.mp3",
+    "audio_type": "audio/mpeg",
+    "audio_length": null,
+    "duration": "04:05",
+    "description": "AudioDharma talk by Matthew Brensilver.",
+    "image_url": "https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+    "canonical_url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26147/",
+    "podcast_description": "The talk asks what it means to move through the world with a continuous yes: to change posture, walk if that is supportive, and meet experience without hiding in self-referential judgment. It points to how a quick, renewed yes can interrupt friction, alienation, arrogance, and self-hate without pretending that everything is pleasant. The emphasis is practical and immediate: see what is left when the habit of no and self-evaluation falls away.",
+    "short_summary": "A brief instruction on walking meditation as a practice of continuous, refreshing yes.",
+    "episode_image_url": "https://jeffharr.is/dharma/brensilver/artwork/audiodharma-26147.jpg",
+    "chapters_url": "https://jeffharr.is/dharma/brensilver/chapters/audiodharma-26147.json",
+    "chapters": [
+      {
+        "start": 0.0,
+        "title": "Change posture",
+        "description": "The talk opens with a simple invitation to shift posture and, if helpful, practice walking.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26147/?t=0",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 28.28,
+        "title": "A continuous yes",
+        "description": "Walking is framed as a kind of continuous yes, a way of meeting the moment without resistance.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26147/?t=28",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 55.56,
+        "title": "Not hiding out",
+        "description": "The teaching distinguishes this yes from losing track of conventional reality, while naming the tendency to retreat into referential thinking.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26147/?t=56",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 96.36,
+        "title": "Friction and alienation",
+        "description": "The talk describes how a habitual no can create dualism, persecution, friction, and clinging.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26147/?t=96",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 132.2,
+        "title": "Refreshing the yes",
+        "description": "The practice is to renew the yes quickly, before identity hardens again into an old self.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26147/?t=132",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 149.44,
+        "title": "No room for judgment",
+        "description": "With repeated yes, there is less room for self-evaluation, self-hate, arrogance, and the urge to set up a home base.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26147/?t=149",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 187.92,
+        "title": "See what remains",
+        "description": "The talk invites listeners to notice what is left in the wake of this skillful yes and then explains the retreat timing.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26147/?t=188",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 217.96,
+        "title": "Return to movement",
+        "description": "The final section gives practical instructions for alternating sitting and walking before closing in silence.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26147/?t=218",
+        "img": null,
+        "toc": true
+      }
+    ],
+    "venue": null,
+    "series": null,
+    "tags": [],
+    "transcript": {
+      "status": "pending",
+      "url": null,
+      "text_path": null
+    }
+  },
+  {
     "id": "audiodharma:26131",
     "source": "AudioDharma",
     "source_id": "26131",
