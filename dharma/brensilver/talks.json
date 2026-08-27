@@ -1,5 +1,201 @@
 [
   {
+    "id": "audiodharma:26168",
+    "source": "AudioDharma",
+    "source_id": "26168",
+    "title": "Short Talk: Trouble with Samadhi",
+    "speaker": "Matthew Brensilver",
+    "published_at": "2026-08-26T12:00:00+00:00",
+    "link": "https://www.audiodharma.org/talks/26168",
+    "audio_url": "https://audiodharma.us-east-1.linodeobjects.com/talks/26168/20260826-matthew_brensilver-imc-short_talk_trouble_with_samadhi.mp3",
+    "audio_type": "audio/mpeg",
+    "audio_length": null,
+    "duration": "15:26",
+    "description": "AudioDharma talk by Matthew Brensilver.",
+    "image_url": "https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+    "canonical_url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26168/",
+    "podcast_description": "What if the problem is not that the mind won’t go quiet, but that we have been measuring practice by the wrong sign? The talk starts with a listener’s discouragement about endless inner chatter and turns toward a broader view of samadhi: not just silence, but unification, bodily settling, receptivity, and surrender. It ends by loosening the identity built around “bad meditation,” pointing instead to many possible Dharma doors, ethical life, generosity, and a softer relationship to thought.",
+    "short_summary": "A talk on reframing samadhi so it is no longer limited to silence of mind, but understood as receptivity, surrender, and a less possessive relationship to thought.",
+    "episode_image_url": "https://jeffharr.is/dharma/brensilver/artwork/audiodharma-26168.jpg",
+    "chapters_url": "https://jeffharr.is/dharma/brensilver/chapters/audiodharma-26168.json",
+    "chapters": [
+      {
+        "start": 17.0,
+        "title": "The question of chatter",
+        "description": "The talk opens with a listener’s frustration, dread, and hope that meditation can become a different relationship with discursive thinking rather than a fight against it.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26168/?t=17",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 108.0,
+        "title": "Practical supports first",
+        "description": "Several direct tactics are offered for working with restless attention, including timing, verbal noting, cycling anchors, frequent bells, and listening practices.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26168/?t=108",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 258.0,
+        "title": "Not silencing thought",
+        "description": "The speaker briefly brings in ACT-style repetition of thoughts and a vivid image about not putting cotton in the ears, to challenge the idea that practice means suppressing thinking.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26168/?t=258",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 319.0,
+        "title": "Many Dharma doors",
+        "description": "The talk reassures the listener that discursive mind does not exclude them from the path and introduces the idea of many temperaments and many valid entry points.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26168/?t=319",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 426.0,
+        "title": "Sila, samadhi, paññā",
+        "description": "The threefold training is set out as a framework, with emphasis that wisdom is not simply the result of a quiet mind.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26168/?t=426",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 522.0,
+        "title": "What samadhi feels like",
+        "description": "Samadhi is expanded beyond graveyard silence to include gathered intention, bodily grounding, tranquility, porosity, and receptivity to the world.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26168/?t=522",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 629.0,
+        "title": "Surrender to the moment",
+        "description": "The talk argues that samadhi’s function is to make one more available to new information, and that surrender matters more than forcing silence.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26168/?t=629",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 761.0,
+        "title": "Ethics and generosity",
+        "description": "Ethical conduct, love, and generosity are presented as practical ways of training attention and gathering the mind without making concentration an identity project.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26168/?t=761",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 848.0,
+        "title": "Drop the self-story",
+        "description": "The ending warns against turning samadhi troubles into selfhood, using a Madhyamaka-style point about ownership and self to dissolve the melodrama of badges and demerits.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26168/?t=848",
+        "img": null,
+        "toc": true
+      }
+    ],
+    "venue": null,
+    "series": null,
+    "tags": [],
+    "transcript": {
+      "status": "pending",
+      "url": null,
+      "text_path": null
+    }
+  },
+  {
+    "id": "audiodharma:26167",
+    "source": "AudioDharma",
+    "source_id": "26167",
+    "title": "Guided Medtiation: Sound, Silence, Thinking",
+    "speaker": "Matthew Brensilver",
+    "published_at": "2026-08-26T12:00:00+00:00",
+    "link": "https://www.audiodharma.org/talks/26167",
+    "audio_url": "https://audiodharma.us-east-1.linodeobjects.com/talks/26167/20260826-matthew_brensilver-imc-guided_medtiation_sound_silence_thinking.mp3",
+    "audio_type": "audio/mpeg",
+    "audio_length": null,
+    "duration": "27:42",
+    "description": "AudioDharma talk by Matthew Brensilver.",
+    "image_url": "https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+    "canonical_url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26167/",
+    "podcast_description": "What happens if attention stops trying to fix experience and simply listens? This guided meditation moves from relaxing what can be relaxed, to opening to the soundscape, to hearing silence, and then to noticing thinking itself as an internal sound. The practice keeps returning to a simple, steady question: can mindfulness let thought arise without becoming a thinker or a critic of thinking?",
+    "short_summary": "A guided meditation on relaxing effort, opening to sound and silence, and listening to thinking without identifying with it.",
+    "episode_image_url": "https://jeffharr.is/dharma/brensilver/artwork/audiodharma-26167.jpg",
+    "chapters_url": "https://jeffharr.is/dharma/brensilver/chapters/audiodharma-26167.json",
+    "chapters": [
+      {
+        "start": 0.0,
+        "title": "Settling and the question",
+        "description": "The talk opens by naming the difficulty of trying to turn imperfection into something else and invites a softer way of approaching experience.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26167/?t=0",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 100.0,
+        "title": "Relax what can soften",
+        "description": "The instruction is to relax whatever can be relaxed, let the breath smooth and unify the body, and notice the limits of wanting.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26167/?t=100",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 237.0,
+        "title": "Put things down",
+        "description": "The teaching turns to stopping without force, distinguishing between what can be put down and what cannot be stopped by will.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26167/?t=237",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 354.0,
+        "title": "Opening to sound",
+        "description": "Attention shifts outward into the soundscape, with an emphasis on receptivity, rhythm, and the way sound gathers the field of experience.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26167/?t=354",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 581.0,
+        "title": "Sound fading into silence",
+        "description": "The practice narrows to distant sounds and the fading of sound into silence, learning to listen to the space where sound has been.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26167/?t=581",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 864.0,
+        "title": "Listening to silence",
+        "description": "Silence is treated as something heard directly rather than inferred, with a brief poetic redirection toward subtle listening.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26167/?t=864",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 990.0,
+        "title": "Thinking as sound",
+        "description": "Discursive thinking is reframed as auditory experience, including where it seems to occur in the head and how mindfulness can disrupt identification with it.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26167/?t=990",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1283.015,
+        "title": "Thought without self-critique",
+        "description": "The talk closes by repeating the tendency to become a thinker or a self-chastiser, then returning to poised, unembarrassed listening to the whole field of sound, silence, and thought.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26167/?t=1283",
+        "img": null,
+        "toc": true
+      }
+    ],
+    "venue": null,
+    "series": null,
+    "tags": [],
+    "transcript": {
+      "status": "pending",
+      "url": null,
+      "text_path": null
+    }
+  },
+  {
     "id": "audiodharma:26146",
     "source": "AudioDharma",
     "source_id": "26146",

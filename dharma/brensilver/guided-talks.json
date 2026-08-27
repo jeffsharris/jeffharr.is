@@ -1,5 +1,99 @@
 [
   {
+    "id": "audiodharma:26167",
+    "source": "AudioDharma",
+    "source_id": "26167",
+    "title": "Guided Medtiation: Sound, Silence, Thinking",
+    "speaker": "Matthew Brensilver",
+    "published_at": "2026-08-26T12:00:00+00:00",
+    "link": "https://www.audiodharma.org/talks/26167",
+    "audio_url": "https://audiodharma.us-east-1.linodeobjects.com/talks/26167/20260826-matthew_brensilver-imc-guided_medtiation_sound_silence_thinking.mp3",
+    "audio_type": "audio/mpeg",
+    "audio_length": null,
+    "duration": "27:42",
+    "description": "AudioDharma talk by Matthew Brensilver.",
+    "image_url": "https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+    "canonical_url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26167/",
+    "podcast_description": "What happens if attention stops trying to fix experience and simply listens? This guided meditation moves from relaxing what can be relaxed, to opening to the soundscape, to hearing silence, and then to noticing thinking itself as an internal sound. The practice keeps returning to a simple, steady question: can mindfulness let thought arise without becoming a thinker or a critic of thinking?",
+    "short_summary": "A guided meditation on relaxing effort, opening to sound and silence, and listening to thinking without identifying with it.",
+    "episode_image_url": "https://jeffharr.is/dharma/brensilver/artwork/audiodharma-26167.jpg",
+    "chapters_url": "https://jeffharr.is/dharma/brensilver/chapters/audiodharma-26167.json",
+    "chapters": [
+      {
+        "start": 0.0,
+        "title": "Settling and the question",
+        "description": "The talk opens by naming the difficulty of trying to turn imperfection into something else and invites a softer way of approaching experience.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26167/?t=0",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 100.0,
+        "title": "Relax what can soften",
+        "description": "The instruction is to relax whatever can be relaxed, let the breath smooth and unify the body, and notice the limits of wanting.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26167/?t=100",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 237.0,
+        "title": "Put things down",
+        "description": "The teaching turns to stopping without force, distinguishing between what can be put down and what cannot be stopped by will.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26167/?t=237",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 354.0,
+        "title": "Opening to sound",
+        "description": "Attention shifts outward into the soundscape, with an emphasis on receptivity, rhythm, and the way sound gathers the field of experience.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26167/?t=354",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 581.0,
+        "title": "Sound fading into silence",
+        "description": "The practice narrows to distant sounds and the fading of sound into silence, learning to listen to the space where sound has been.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26167/?t=581",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 864.0,
+        "title": "Listening to silence",
+        "description": "Silence is treated as something heard directly rather than inferred, with a brief poetic redirection toward subtle listening.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26167/?t=864",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 990.0,
+        "title": "Thinking as sound",
+        "description": "Discursive thinking is reframed as auditory experience, including where it seems to occur in the head and how mindfulness can disrupt identification with it.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26167/?t=990",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1283.015,
+        "title": "Thought without self-critique",
+        "description": "The talk closes by repeating the tendency to become a thinker or a self-chastiser, then returning to poised, unembarrassed listening to the whole field of sound, silence, and thought.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26167/?t=1283",
+        "img": null,
+        "toc": true
+      }
+    ],
+    "venue": null,
+    "series": null,
+    "tags": [],
+    "transcript": {
+      "status": "pending",
+      "url": null,
+      "text_path": null
+    }
+  },
+  {
     "id": "audiodharma:26149",
     "source": "AudioDharma",
     "source_id": "26149",
