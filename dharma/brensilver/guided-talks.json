@@ -1,5 +1,99 @@
 [
   {
+    "id": "audiodharma:26181",
+    "source": "AudioDharma",
+    "source_id": "26181",
+    "title": "Guided Meditation: Relaxation as the path",
+    "speaker": "Matthew Brensilver",
+    "published_at": "2026-08-31T12:00:00+00:00",
+    "link": "https://www.audiodharma.org/talks/26181",
+    "audio_url": "https://audiodharma.us-east-1.linodeobjects.com/talks/26181/20260831-matthew_brensilver-imc-guided_meditation_relaxation_as_the_path.mp3",
+    "audio_type": "audio/mpeg",
+    "audio_length": null,
+    "duration": "29:39",
+    "description": "AudioDharma talk by Matthew Brensilver.",
+    "image_url": "https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+    "canonical_url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26181/",
+    "podcast_description": "What if relaxation, rather than striving, is the path itself? This guided meditation invites a slow surrender into breathing, body, and mind, treating clinging as a kind of tension and practice as a deepening release. Over the course of the sit, the talk shifts from ease and wise effort to not knowing the moment, meeting thought as coping, and resting in the possibility of freshness, clarity, and love without trying to manufacture them.",
+    "short_summary": "A guided meditation on relaxation as a central quality of practice, moving from bodily ease to surrender, receptivity, and direct contact with the present moment.",
+    "episode_image_url": "https://jeffharr.is/dharma/brensilver/artwork/audiodharma-26181.jpg",
+    "chapters_url": "https://jeffharr.is/dharma/brensilver/chapters/audiodharma-26181.json",
+    "chapters": [
+      {
+        "start": 0.0,
+        "title": "Entering the retreat mood",
+        "description": "The talk opens by situating the meditation in a retreat atmosphere and inviting the group to settle into posture and attention.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26181/?t=0",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 104.0,
+        "title": "Relax what can soften",
+        "description": "The instruction turns toward simple relaxation, presenting it as a heart-level dimension of Dharma rather than just physical comfort.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26181/?t=104",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 346.0,
+        "title": "Surrender to the breath",
+        "description": "The long retreat frame becomes a lesson in giving up future orientation and placing full trust in this moment of breathing.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26181/?t=346",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 562.0,
+        "title": "Wise effort without strain",
+        "description": "The meditation emphasizes that effort need not be tense, since much goodness is already present and breathing can soothe and enliven what is numb.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26181/?t=562",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 851.0,
+        "title": "Not knowing the moment",
+        "description": "The talk warns against overlaying concepts onto experience and points to the small surprise that is always present in direct contact.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26181/?t=851",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1113.0,
+        "title": "Thinking as coping",
+        "description": "Thought is reframed compassionately as a strategy for meeting uncertainty, with a brief return to the fresh air of the present moment.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26181/?t=1113",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1206.788,
+        "title": "Settling into stillness",
+        "description": "The meditation continues in silence, supporting a quieter, more embodied presence without adding anything extra.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26181/?t=1207",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1552.808,
+        "title": "Ease, freshness, love",
+        "description": "In the closing invitation, the listener is asked to notice ease and aliveness already here and let the path unfold on its own.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26181/?t=1553",
+        "img": null,
+        "toc": true
+      }
+    ],
+    "venue": null,
+    "series": null,
+    "tags": [],
+    "transcript": {
+      "status": "pending",
+      "url": null,
+      "text_path": null
+    }
+  },
+  {
     "id": "audiodharma:26167",
     "source": "AudioDharma",
     "source_id": "26167",
