@@ -1,5 +1,193 @@
 [
   {
+    "id": "audiodharma:26192",
+    "source": "AudioDharma",
+    "source_id": "26192",
+    "title": "Guided Meditation: Falling Awake",
+    "speaker": "Matthew Brensilver",
+    "published_at": "2026-09-01T12:00:00+00:00",
+    "link": "https://www.audiodharma.org/talks/26192",
+    "audio_url": "https://audiodharma.us-east-1.linodeobjects.com/talks/26192/20260901-matthew_brensilver-imc-guided_meditation_falling_awake.mp3",
+    "audio_type": "audio/mpeg",
+    "audio_length": null,
+    "duration": "28:30",
+    "description": "AudioDharma talk by Matthew Brensilver.",
+    "image_url": "https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+    "canonical_url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26192/",
+    "podcast_description": "What if the task of meditation is not to manufacture awareness, but to show up, soften, and trust the process of falling awake? The talk uses a sleep-therapy analogy to turn the usual struggle with control inside out: we cannot force sleep, and we also cannot force awakening, but we can cultivate the conditions for both. From there, the guided practice settles into breathing, stillness, surrender, and a quiet willingness to let discomfort teach without turning it into a problem.",
+    "short_summary": "A guided meditation that reframes practice as showing up, relaxing control, and trusting the conditions for awakening to unfold.",
+    "episode_image_url": "https://jeffharr.is/dharma/brensilver/artwork/audiodharma-26192.jpg",
+    "chapters_url": "https://jeffharr.is/dharma/brensilver/chapters/audiodharma-26192.json",
+    "chapters": [
+      {
+        "start": 0.0,
+        "title": "Opening analogy",
+        "description": "The talk begins by introducing a sleep-therapy teaching about what can and cannot be controlled.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26192/?t=0",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 72.16,
+        "title": "What we can do",
+        "description": "The analogy is carried into Dharma practice: we do not control awakening, but we can direct attention and cultivate patience and kindness.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26192/?t=72",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 176.72,
+        "title": "Just being here",
+        "description": "The practice invitation shifts toward simple presence, willingness, and the sense that much of the job is already done by arriving.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26192/?t=177",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 266.72,
+        "title": "Relax and be still",
+        "description": "The guided instructions emphasize relaxation, stillness, and allowing discomfort or pain to be part of the practice rather than a failure.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26192/?t=267",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 416.72,
+        "title": "Surrender over control",
+        "description": "The talk returns to the theme of surrender, noting that awareness and concentration are not something to manufacture by force.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26192/?t=417",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 536.72,
+        "title": "Breath and trust",
+        "description": "Attention is gathered around breathing while the listener is asked to stop checking for progress and trust the process of falling awake.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26192/?t=537",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1087.72,
+        "title": "Peace with imperfection",
+        "description": "The practice deepens into making peace with imperfection instead of trying to create flawless goodness or awareness.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26192/?t=1088",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1371.492,
+        "title": "Lineage and closing bells",
+        "description": "The closing settles into shared breathing, lineage, and gentle phrases meant to soften the mind and create conditions for awakening.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26192/?t=1371",
+        "img": null,
+        "toc": true
+      }
+    ],
+    "venue": null,
+    "series": null,
+    "tags": [],
+    "transcript": {
+      "status": "pending",
+      "url": null,
+      "text_path": null
+    }
+  },
+  {
+    "id": "audiodharma:26193",
+    "source": "AudioDharma",
+    "source_id": "26193",
+    "title": "Dharmette: Not Knowing and Intimacy (Dharma & Interpersonal Life 2 of 5)",
+    "speaker": "Matthew Brensilver",
+    "published_at": "2026-09-01T12:00:00+00:00",
+    "link": "https://www.audiodharma.org/talks/26193",
+    "audio_url": "https://audiodharma.us-east-1.linodeobjects.com/talks/26193/20260901-matthew_brensilver-imc-dharmette_not_knowing_and_intimacy_dharma_interpersonal_life_2_of_5.mp3",
+    "audio_type": "audio/mpeg",
+    "audio_length": null,
+    "duration": "15:02",
+    "description": "AudioDharma talk by Matthew Brensilver.",
+    "image_url": "https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+    "canonical_url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26193/",
+    "podcast_description": "What happens when the stories we rely on to know ourselves and others become too fixed? The talk moves from the unease of asking “who am I?” into a practice of not knowing that makes room for intimacy, forgiveness, and a little more freedom in relationship. Along the way, it looks at the habits of mind that turn loved ones into roles, and it balances that with the need for some ordinary predictability in life.",
+    "short_summary": "A quiet reflection on how not knowing can soften fixed stories about self and others and open more intimate, less rehearsed relationships.",
+    "episode_image_url": "https://jeffharr.is/dharma/brensilver/artwork/audiodharma-26193.jpg",
+    "chapters_url": "https://jeffharr.is/dharma/brensilver/chapters/audiodharma-26193.json",
+    "chapters": [
+      {
+        "start": 12.0,
+        "title": "Who am I?",
+        "description": "The talk opens with the question of selfhood and the sense that any answer feels slightly false or too small.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26193/?t=12",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 116.0,
+        "title": "Mystery and space",
+        "description": "Practice is presented as creating space around the self-story, allowing a more direct and less verbal relationship to experience.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26193/?t=116",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 234.0,
+        "title": "Habit energies",
+        "description": "The speaker describes subtle conditioning and latent tendencies that shape perception, especially under interpersonal pressure.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26193/?t=234",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 381.0,
+        "title": "Meeting what is evoked",
+        "description": "The focus turns to how relationships reveal our assumptions, and why practice asks us to loosen our grip on what we think we know.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26193/?t=381",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 456.0,
+        "title": "Not knowing, forgiveness",
+        "description": "A Zen line and Simone Weil are used to show how recognizing that self and others exceed our concepts can lead to forgiveness.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26193/?t=456",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 562.0,
+        "title": "The need for safety",
+        "description": "The talk explores the mind's drive to make love and life predictable, and how that can protect us while also narrowing connection.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26193/?t=562",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 703.0,
+        "title": "Roles and flatness",
+        "description": "Relationships become choreographed when people are frozen into roles, which can flatten intimacy and hide the other's fuller life.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26193/?t=703",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 850.0,
+        "title": "Relaxing the grasp",
+        "description": "The talk closes by inviting attention to these habits over the next day and a willingness to set down certainty with some wonder.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26193/?t=850",
+        "img": null,
+        "toc": true
+      }
+    ],
+    "venue": null,
+    "series": null,
+    "tags": [],
+    "transcript": {
+      "status": "pending",
+      "url": null,
+      "text_path": null
+    }
+  },
+  {
     "id": "audiodharma:26181",
     "source": "AudioDharma",
     "source_id": "26181",
