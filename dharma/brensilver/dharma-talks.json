@@ -1,5 +1,99 @@
 [
   {
+    "id": "audiodharma:26198",
+    "source": "AudioDharma",
+    "source_id": "26198",
+    "title": "Dharmette: The Intolerance of Suffering is not Compassion",
+    "speaker": "Matthew Brensilver",
+    "published_at": "2026-09-02T12:00:00+00:00",
+    "link": "https://www.audiodharma.org/talks/26198",
+    "audio_url": "https://audiodharma.us-east-1.linodeobjects.com/talks/26198/20260902-matthew_brensilver-imc-dharmette_the_intolerance_of_suffering_is_not_compassion.mp3",
+    "audio_type": "audio/mpeg",
+    "audio_length": null,
+    "duration": "15:37",
+    "description": "AudioDharma talk by Matthew Brensilver.",
+    "image_url": "https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+    "canonical_url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26198/",
+    "podcast_description": "What if the refusal to bear suffering is what keeps compassion from becoming clear? This talk follows the thread from the First Noble Truth to the ways care gets tangled with fear, control, and the wish to make suffering disappear. It closes by turning toward equanimity, ambivalence, and a larger heart that can understand pain without being overtaken by it.",
+    "short_summary": "A talk on how true compassion includes equanimity, understanding, and the willingness to stay with suffering without trying to force it away.",
+    "episode_image_url": "https://jeffharr.is/dharma/brensilver/artwork/audiodharma-26198.jpg",
+    "chapters_url": "https://jeffharr.is/dharma/brensilver/chapters/audiodharma-26198.json",
+    "chapters": [
+      {
+        "start": 17.0,
+        "title": "First Truth, First Door",
+        "description": "The talk begins with the First Noble Truth and the claim that opening to dukkha can illuminate the path to freedom.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26198/?t=17",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 106.04,
+        "title": "Comprehending Suffering",
+        "description": "The Buddha's instruction to comprehend dukkha is presented as moving against habit and stopping the reflex to fight pain.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26198/?t=106",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 160.48,
+        "title": "When Pain Evokes Us",
+        "description": "The speaker explores how another person's suffering can stir our own unresolved pain, fear, and protective reactions.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26198/?t=160",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 214.04,
+        "title": "Loved Ones and Panic",
+        "description": "Care for family and loved ones can feel urgent and destabilizing, sometimes more like threat than compassion.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26198/?t=214",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 340.32,
+        "title": "Compassion Turns Coercive",
+        "description": "The talk describes how suffering resonates with suffering, and how the wish to help can become pressure, control, or a demand for change.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26198/?t=340",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 454.8,
+        "title": "Love Without Force",
+        "description": "Compassion is defined as love in the face of suffering, not the insistence that suffering dissolve, with equanimity helping keep love open.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26198/?t=455",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 628.88,
+        "title": "Forgiveness and Ambivalence",
+        "description": "The speaker turns to forgiveness, the limits of control, and Adam Phillips' idea that ambivalence belongs to what matters most.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26198/?t=629",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 816.2,
+        "title": "A Larger Heart",
+        "description": "Thich Nhat Hanh's salt-water image offers a final way to imagine a heart spacious enough to receive pain and still remain usable.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26198/?t=816",
+        "img": null,
+        "toc": true
+      }
+    ],
+    "venue": null,
+    "series": null,
+    "tags": [],
+    "transcript": {
+      "status": "pending",
+      "url": null,
+      "text_path": null
+    }
+  },
+  {
     "id": "audiodharma:26193",
     "source": "AudioDharma",
     "source_id": "26193",

@@ -1,5 +1,99 @@
 [
   {
+    "id": "audiodharma:26197",
+    "source": "AudioDharma",
+    "source_id": "26197",
+    "title": "Guided Meditation: Breathing with your life",
+    "speaker": "Matthew Brensilver",
+    "published_at": "2026-09-02T12:00:00+00:00",
+    "link": "https://www.audiodharma.org/talks/26197",
+    "audio_url": "https://audiodharma.us-east-1.linodeobjects.com/talks/26197/20260902-matthew_brensilver-imc-guided_meditation_breathing_with_your_life.mp3",
+    "audio_type": "audio/mpeg",
+    "audio_length": null,
+    "duration": "25:16",
+    "description": "AudioDharma talk by Matthew Brensilver.",
+    "image_url": "https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+    "canonical_url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26197/",
+    "podcast_description": "How closely can you listen to silence, and what happens when the breath becomes the place where life is fully felt? This guided meditation turns attention toward breathing as a way of meeting thinking, bodily sensation, love, longing, and loss without being cut off from them. The practice moves from simple listening and settling into a more inclusive sense of breath, where awareness can stay very simple while still honoring the whole of life.",
+    "short_summary": "A guided meditation that uses the breath to meet silence, soften thinking, and include the full impact of life.",
+    "episode_image_url": "https://jeffharr.is/dharma/brensilver/artwork/audiodharma-26197.jpg",
+    "chapters_url": "https://jeffharr.is/dharma/brensilver/chapters/audiodharma-26197.json",
+    "chapters": [
+      {
+        "start": 0.0,
+        "title": "Listening for silence",
+        "description": "The meditation opens by inviting very close listening, even toward the silence that may be present beneath noise.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26197/?t=0",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 113.0,
+        "title": "Breath as fresh sensation",
+        "description": "Attention shifts to the breathing as both familiar and new, with an emphasis on letting breath sensations fully fill awareness.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26197/?t=113",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 173.0,
+        "title": "Settling into practice",
+        "description": "The guided settling deepens as the speaker continues to orient the mind toward simple, steady contact with the breath.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26197/?t=173",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 334.0,
+        "title": "Why thought persists",
+        "description": "Thinking is framed as a useful form of coping and protection, which helps explain why it is hard to let go of.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26197/?t=334",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 478.0,
+        "title": "Undoing defensiveness",
+        "description": "When the moment feels safe enough, the invitation is to become undefended and place hope into this breath.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26197/?t=478",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 930.0,
+        "title": "Breath and the whole of life",
+        "description": "The teaching widens the frame, showing breath as a place where body, feeling, memory, longing, and loss are all honored.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26197/?t=930",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1005.88,
+        "title": "Keeping it simple",
+        "description": "The meditation continues in a very simple, quiet way, holding experience without adding complexity.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26197/?t=1006",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1281.079,
+        "title": "Awareness includes more",
+        "description": "The closing points to a basic rejoicing in being here and to awareness as something larger than whatever is immediately present.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26197/?t=1281",
+        "img": null,
+        "toc": true
+      }
+    ],
+    "venue": null,
+    "series": null,
+    "tags": [],
+    "transcript": {
+      "status": "pending",
+      "url": null,
+      "text_path": null
+    }
+  },
+  {
     "id": "audiodharma:26192",
     "source": "AudioDharma",
     "source_id": "26192",
