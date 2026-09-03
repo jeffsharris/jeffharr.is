@@ -1,9 +1,95 @@
 [
   {
+    "id": "audiodharma:26207",
+    "source": "AudioDharma",
+    "source_id": "26207",
+    "title": "Guided Meditation: Breathing and Thinking",
+    "speaker": "Matthew Brensilver",
+    "published_at": "2026-09-03T12:00:00+00:00",
+    "link": "https://www.audiodharma.org/talks/26207",
+    "audio_url": "https://audiodharma.us-east-1.linodeobjects.com/talks/26207/20260903-matthew_brensilver-imc-guided_meditation_breathing_and_thinking.mp3",
+    "audio_type": "audio/mpeg",
+    "audio_length": null,
+    "duration": "28:58",
+    "description": "AudioDharma talk by Matthew Brensilver.",
+    "image_url": "https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+    "canonical_url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26207/",
+    "podcast_description": "What happens if meditation is not a project to perfect, but a way of noticing where we are still holding on? The talk begins with a gentle invitation to relax posture, effort, and assumptions, then turns toward how breathing can soothe what is inflamed and enliven what is numb. From there it explores the texture of thinking as imagery and inner narration, before closing with a quiet argument for wanting what we have and allowing imperfection to be enough.",
+    "short_summary": "A guided meditation on relaxing effort, sensing the whole body through breath, and noticing thinking without being carried away by it.",
+    "episode_image_url": "https://jeffharr.is/dharma/brensilver/artwork/audiodharma-26207.jpg",
+    "chapters_url": "https://jeffharr.is/dharma/brensilver/chapters/audiodharma-26207.json",
+    "chapters": [
+      {
+        "start": 86.0,
+        "title": "Settling In",
+        "description": "The meditation begins by finding posture and allowing the body to shake out and land.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26207/?t=86",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 146.0,
+        "title": "Releasing Effort",
+        "description": "The talk emphasizes relaxing what can be relaxed and not straining against what cannot be changed.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26207/?t=146",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 267.0,
+        "title": "Relax Even Assumptions",
+        "description": "Attention widens to include the assumptions behind practice, with the invitation to soften ideas about what should happen next.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26207/?t=267",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 644.56,
+        "title": "Breath in the Whole Body",
+        "description": "Breathing is framed as a way to soothe inflammation, bring life to dullness, and feel the breath across the whole body.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26207/?t=645",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 958.16,
+        "title": "Noticing Thinking",
+        "description": "The talk turns to mental imagery and auditory thinking, including the urge to narrate and situate self and world.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26207/?t=958",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1111.36,
+        "title": "Listening for Silence",
+        "description": "The instruction shifts to hearing the space after a sentence ends and resting in the silence that follows sound.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26207/?t=1111",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1333.166,
+        "title": "Enough As It Is",
+        "description": "The closing reflects on wanting what we have, the satisfaction possible amid imperfection, and the line attributed to Suzuki Roshi that being alive is enough.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26207/?t=1333",
+        "img": null,
+        "toc": true
+      }
+    ],
+    "venue": null,
+    "series": null,
+    "tags": [],
+    "transcript": {
+      "status": "pending",
+      "url": null,
+      "text_path": null
+    }
+  },
+  {
     "id": "audiodharma:26206",
     "source": "AudioDharma",
     "source_id": "26206",
-    "title": "Love, Grief and Dharma (Dharma and Interpersonal Life 4 of 5)",
+    "title": "Dharmette: Dharma in Our Interpersonal Life (4 of 5) Love, Grief and Dharma",
     "speaker": "Matthew Brensilver",
     "published_at": "2026-09-03T12:00:00+00:00",
     "link": "https://www.audiodharma.org/talks/26206",
@@ -88,92 +174,6 @@
         "title": "Gratitude Without Denial",
         "description": "The closing movement asks for gratitude rooted in impermanence, while leaving room for wounds that cannot be fully consoled.",
         "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26206/?t=773",
-        "img": null,
-        "toc": true
-      }
-    ],
-    "venue": null,
-    "series": null,
-    "tags": [],
-    "transcript": {
-      "status": "pending",
-      "url": null,
-      "text_path": null
-    }
-  },
-  {
-    "id": "audiodharma:26207",
-    "source": "AudioDharma",
-    "source_id": "26207",
-    "title": "Guided Meditation: Breathing and Thinking",
-    "speaker": "Matthew Brensilver",
-    "published_at": "2026-09-03T12:00:00+00:00",
-    "link": "https://www.audiodharma.org/talks/26207",
-    "audio_url": "https://audiodharma.us-east-1.linodeobjects.com/talks/26207/20260903-matthew_brensilver-imc-guided_meditation_breathing_and_thinking.mp3",
-    "audio_type": "audio/mpeg",
-    "audio_length": null,
-    "duration": "28:58",
-    "description": "AudioDharma talk by Matthew Brensilver.",
-    "image_url": "https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
-    "canonical_url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26207/",
-    "podcast_description": "What happens if meditation is not a project to perfect, but a way of noticing where we are still holding on? The talk begins with a gentle invitation to relax posture, effort, and assumptions, then turns toward how breathing can soothe what is inflamed and enliven what is numb. From there it explores the texture of thinking as imagery and inner narration, before closing with a quiet argument for wanting what we have and allowing imperfection to be enough.",
-    "short_summary": "A guided meditation on relaxing effort, sensing the whole body through breath, and noticing thinking without being carried away by it.",
-    "episode_image_url": "https://jeffharr.is/dharma/brensilver/artwork/audiodharma-26207.jpg",
-    "chapters_url": "https://jeffharr.is/dharma/brensilver/chapters/audiodharma-26207.json",
-    "chapters": [
-      {
-        "start": 86.0,
-        "title": "Settling In",
-        "description": "The meditation begins by finding posture and allowing the body to shake out and land.",
-        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26207/?t=86",
-        "img": null,
-        "toc": true
-      },
-      {
-        "start": 146.0,
-        "title": "Releasing Effort",
-        "description": "The talk emphasizes relaxing what can be relaxed and not straining against what cannot be changed.",
-        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26207/?t=146",
-        "img": null,
-        "toc": true
-      },
-      {
-        "start": 267.0,
-        "title": "Relax Even Assumptions",
-        "description": "Attention widens to include the assumptions behind practice, with the invitation to soften ideas about what should happen next.",
-        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26207/?t=267",
-        "img": null,
-        "toc": true
-      },
-      {
-        "start": 644.56,
-        "title": "Breath in the Whole Body",
-        "description": "Breathing is framed as a way to soothe inflammation, bring life to dullness, and feel the breath across the whole body.",
-        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26207/?t=645",
-        "img": null,
-        "toc": true
-      },
-      {
-        "start": 958.16,
-        "title": "Noticing Thinking",
-        "description": "The talk turns to mental imagery and auditory thinking, including the urge to narrate and situate self and world.",
-        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26207/?t=958",
-        "img": null,
-        "toc": true
-      },
-      {
-        "start": 1111.36,
-        "title": "Listening for Silence",
-        "description": "The instruction shifts to hearing the space after a sentence ends and resting in the silence that follows sound.",
-        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26207/?t=1111",
-        "img": null,
-        "toc": true
-      },
-      {
-        "start": 1333.166,
-        "title": "Enough As It Is",
-        "description": "The closing reflects on wanting what we have, the satisfaction possible amid imperfection, and the line attributed to Suzuki Roshi that being alive is enough.",
-        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26207/?t=1333",
         "img": null,
         "toc": true
       }
@@ -473,7 +473,7 @@
     "id": "audiodharma:26198",
     "source": "AudioDharma",
     "source_id": "26198",
-    "title": "Dharmette: Dharma in Interpersonal Life; 3/5 The Intolerance of Suffering is not Compassion",
+    "title": "Dharmette: Dharma in Our Interpersonal Life (3 of 5) The Intolerance of Suffering is not Compassion",
     "speaker": "Matthew Brensilver",
     "published_at": "2026-09-02T12:00:00+00:00",
     "link": "https://www.audiodharma.org/talks/26198",
@@ -661,7 +661,7 @@
     "id": "audiodharma:26193",
     "source": "AudioDharma",
     "source_id": "26193",
-    "title": "Dharmette: Dharma in Interpersonal Life (2 of 5) Not Knowing and Intimacy",
+    "title": "Dharmette: Dharma in Our Interpersonal Life (2 of 5) Not Knowing and Intimacy",
     "speaker": "Matthew Brensilver",
     "published_at": "2026-09-01T12:00:00+00:00",
     "link": "https://www.audiodharma.org/talks/26193",
@@ -849,7 +849,7 @@
     "id": "audiodharma:26182",
     "source": "AudioDharma",
     "source_id": "26182",
-    "title": "Dharmette: Dharma in Interpersonal Life (1 of 5) Seeing Ourselves in the Mirror of the Other",
+    "title": "Dharmette: Dharma in Our Interpersonal Life (1 of 5) Seeing Ourselves in the Mirror of the Other",
     "speaker": "Matthew Brensilver",
     "published_at": "2026-08-31T12:00:00+00:00",
     "link": "https://www.audiodharma.org/talks/26182",
