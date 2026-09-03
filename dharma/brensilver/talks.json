@@ -1,5 +1,279 @@
 [
   {
+    "id": "audiodharma:26206",
+    "source": "AudioDharma",
+    "source_id": "26206",
+    "title": "Love, Grief and Dharma (Dharma and Interpersonal Life 4 of 5)",
+    "speaker": "Matthew Brensilver",
+    "published_at": "2026-09-03T12:00:00+00:00",
+    "link": "https://www.audiodharma.org/talks/26206",
+    "audio_url": "https://audiodharma.us-east-1.linodeobjects.com/talks/26206/20260903-matthew_brensilver-imc-love_grief_and_dharma.mp3",
+    "audio_type": "audio/mpeg",
+    "audio_length": null,
+    "duration": "15:14",
+    "description": "AudioDharma talk by Matthew Brensilver.",
+    "image_url": "https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+    "canonical_url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26206/",
+    "podcast_description": "What if grief is not a failure of practice, but part of what makes love and Dharma real? The talk moves from impermanence and mortality into a defense of grief as spiritually fertile, arguing that a love untouched by loss is a naive love. It then widens into gratitude, tenderness, and the sense that living fully means allowing both poignancy and inconsolability without retreating into detachment.",
+    "short_summary": "A reflection on how impermanence, love, and grief belong together in Dharma practice, and how that can open into gratitude.",
+    "episode_image_url": "https://jeffharr.is/dharma/brensilver/artwork/audiodharma-26206.jpg",
+    "chapters_url": "https://jeffharr.is/dharma/brensilver/chapters/audiodharma-26206.json",
+    "chapters": [
+      {
+        "start": 0.0,
+        "title": "Opening the Question",
+        "description": "The talk begins by framing the central link between love, finitude, and the meaning of life.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26206/?t=0",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 23.0,
+        "title": "Love Needs Impermanence",
+        "description": "Love is shown to matter because it ends, and the inevitability of loss is presented as woven into intimacy.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26206/?t=23",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 116.0,
+        "title": "Why Grief Matters",
+        "description": "The talk questions tidy spiritual language that places grief outside the path and argues for giving grief its due.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26206/?t=116",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 202.68,
+        "title": "A Buddha Who Grieves",
+        "description": "Understanding impermanence is distinguished from eliminating grief, and grief is defended as compatible with awakening.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26206/?t=203",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 289.52,
+        "title": "Grief and Awakened Heart",
+        "description": "A reference to Pema Chödrön is used to present grief as fertile, with love and art named as possible redemptions.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26206/?t=290",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 362.36,
+        "title": "Growth Feels Like Loss",
+        "description": "The talk turns to the way Dharma practice can itself feel like grieving as old assumptions about permanence fall away.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26206/?t=362",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 500.08,
+        "title": "Self and Absence",
+        "description": "Grief is described as part of loving relations deeply enough that the other becomes part of one’s self-model.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26206/?t=500",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 639.72,
+        "title": "Death at the Center",
+        "description": "A quotation from Naomi Shihab Nye leads into the idea that death is central to life and can make each day poignant.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26206/?t=640",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 773.08,
+        "title": "Gratitude Without Denial",
+        "description": "The closing movement asks for gratitude rooted in impermanence, while leaving room for wounds that cannot be fully consoled.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26206/?t=773",
+        "img": null,
+        "toc": true
+      }
+    ],
+    "venue": null,
+    "series": null,
+    "tags": [],
+    "transcript": {
+      "status": "pending",
+      "url": null,
+      "text_path": null
+    }
+  },
+  {
+    "id": "audiodharma:26207",
+    "source": "AudioDharma",
+    "source_id": "26207",
+    "title": "Guided Meditation: Breathing and Thinking",
+    "speaker": "Matthew Brensilver",
+    "published_at": "2026-09-03T12:00:00+00:00",
+    "link": "https://www.audiodharma.org/talks/26207",
+    "audio_url": "https://audiodharma.us-east-1.linodeobjects.com/talks/26207/20260903-matthew_brensilver-imc-guided_meditation_breathing_and_thinking.mp3",
+    "audio_type": "audio/mpeg",
+    "audio_length": null,
+    "duration": "28:58",
+    "description": "AudioDharma talk by Matthew Brensilver.",
+    "image_url": "https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+    "canonical_url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26207/",
+    "podcast_description": "What happens if meditation is not a project to perfect, but a way of noticing where we are still holding on? The talk begins with a gentle invitation to relax posture, effort, and assumptions, then turns toward how breathing can soothe what is inflamed and enliven what is numb. From there it explores the texture of thinking as imagery and inner narration, before closing with a quiet argument for wanting what we have and allowing imperfection to be enough.",
+    "short_summary": "A guided meditation on relaxing effort, sensing the whole body through breath, and noticing thinking without being carried away by it.",
+    "episode_image_url": "https://jeffharr.is/dharma/brensilver/artwork/audiodharma-26207.jpg",
+    "chapters_url": "https://jeffharr.is/dharma/brensilver/chapters/audiodharma-26207.json",
+    "chapters": [
+      {
+        "start": 86.0,
+        "title": "Settling In",
+        "description": "The meditation begins by finding posture and allowing the body to shake out and land.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26207/?t=86",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 146.0,
+        "title": "Releasing Effort",
+        "description": "The talk emphasizes relaxing what can be relaxed and not straining against what cannot be changed.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26207/?t=146",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 267.0,
+        "title": "Relax Even Assumptions",
+        "description": "Attention widens to include the assumptions behind practice, with the invitation to soften ideas about what should happen next.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26207/?t=267",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 644.56,
+        "title": "Breath in the Whole Body",
+        "description": "Breathing is framed as a way to soothe inflammation, bring life to dullness, and feel the breath across the whole body.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26207/?t=645",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 958.16,
+        "title": "Noticing Thinking",
+        "description": "The talk turns to mental imagery and auditory thinking, including the urge to narrate and situate self and world.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26207/?t=958",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1111.36,
+        "title": "Listening for Silence",
+        "description": "The instruction shifts to hearing the space after a sentence ends and resting in the silence that follows sound.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26207/?t=1111",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1333.166,
+        "title": "Enough As It Is",
+        "description": "The closing reflects on wanting what we have, the satisfaction possible amid imperfection, and the line attributed to Suzuki Roshi that being alive is enough.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26207/?t=1333",
+        "img": null,
+        "toc": true
+      }
+    ],
+    "venue": null,
+    "series": null,
+    "tags": [],
+    "transcript": {
+      "status": "pending",
+      "url": null,
+      "text_path": null
+    }
+  },
+  {
+    "id": "audiodharma:26204",
+    "source": "AudioDharma",
+    "source_id": "26204",
+    "title": "Guided Meditation: If you know where are you are, you're not here",
+    "speaker": "Matthew Brensilver",
+    "published_at": "2026-09-02T12:00:00+00:00",
+    "link": "https://www.audiodharma.org/talks/26204",
+    "audio_url": "https://audiodharma.us-east-1.linodeobjects.com/talks/26204/20260902-matthew_brensilver-imc-guided_meditation_if_you_know_where_are_you_are_you_re_not_here.mp3",
+    "audio_type": "audio/mpeg",
+    "audio_length": null,
+    "duration": "29:19",
+    "description": "AudioDharma talk by Matthew Brensilver.",
+    "image_url": "https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+    "canonical_url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26204/",
+    "podcast_description": "What happens if practice is less about doing and more about not stirring? The talk unfolds as a guided meditation on letting experience settle, using the Buddha’s invitation to stop what can be stopped and to leave the rest alone. Attention is then gathered around breathing, body, and sound, with the emphasis on relaxing the habit of reiterating oneself and predicting the next moment.",
+    "short_summary": "A guided meditation on relaxing the compulsion to stir experience and letting attention settle around breath, body, and sound.",
+    "episode_image_url": "https://jeffharr.is/dharma/brensilver/artwork/audiodharma-26204.jpg",
+    "chapters_url": "https://jeffharr.is/dharma/brensilver/chapters/audiodharma-26204.json",
+    "chapters": [
+      {
+        "start": 0.0,
+        "title": "Settling In",
+        "description": "The practice opens with a gentle invitation to arrive, make space, and begin together.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26204/?t=0",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 90.0,
+        "title": "Letting Things Settle",
+        "description": "The talk uses the image of nectar settling in juice to suggest allowing experience to quiet down on its own.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26204/?t=90",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 157.0,
+        "title": "What Can Stop",
+        "description": "The speaker turns to the Buddha’s instruction to stop what can be stopped, while letting what cannot stop continue.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26204/?t=157",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 255.0,
+        "title": "Not Stirring",
+        "description": "The emphasis narrows to the felt question of what it means not to interfere with experience.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26204/?t=255",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 410.0,
+        "title": "How Long Is Now",
+        "description": "A brief inquiry into the present moment points toward how quickly it passes and how little needs to be added.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26204/?t=410",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 470.0,
+        "title": "Gathering Attention",
+        "description": "Attention is gathered around breathing, body, and sound as a skillful support for steadiness.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26204/?t=470",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1127.0,
+        "title": "Releasing the Future",
+        "description": "The talk explores how the mind builds a future self and how practice can ease the agitation of prediction.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26204/?t=1127",
+        "img": null,
+        "toc": true
+      }
+    ],
+    "venue": null,
+    "series": null,
+    "tags": [],
+    "transcript": {
+      "status": "pending",
+      "url": null,
+      "text_path": null
+    }
+  },
+  {
     "id": "audiodharma:26197",
     "source": "AudioDharma",
     "source_id": "26197",
@@ -80,6 +354,108 @@
         "title": "Awareness includes more",
         "description": "The closing points to a basic rejoicing in being here and to awareness as something larger than whatever is immediately present.",
         "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26197/?t=1281",
+        "img": null,
+        "toc": true
+      }
+    ],
+    "venue": null,
+    "series": null,
+    "tags": [],
+    "transcript": {
+      "status": "pending",
+      "url": null,
+      "text_path": null
+    }
+  },
+  {
+    "id": "audiodharma:26205",
+    "source": "AudioDharma",
+    "source_id": "26205",
+    "title": "Dharmette: Transcendence and Service",
+    "speaker": "Matthew Brensilver",
+    "published_at": "2026-09-02T12:00:00+00:00",
+    "link": "https://www.audiodharma.org/talks/26205",
+    "audio_url": "https://audiodharma.us-east-1.linodeobjects.com/talks/26205/20260902-matthew_brensilver-imc-dharmette_transcendence_and_service.mp3",
+    "audio_type": "audio/mpeg",
+    "audio_length": null,
+    "duration": "14:17",
+    "description": "AudioDharma talk by Matthew Brensilver.",
+    "image_url": "https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+    "canonical_url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26205/",
+    "podcast_description": "What if insight into impermanence is not the end of practice, but the ground for a more responsive life? The talk explores a passage on truth, anicca, and the impersonal flow of experience, then turns to the question of how that freedom becomes goodness, service, and a steadier relationship with other beings. It ends by suggesting that the path is complete when depth and kindness are no longer separate.",
+    "short_summary": "A reflection on impermanence, de-identification, and why insight must be joined with goodness and service.",
+    "episode_image_url": "https://jeffharr.is/dharma/brensilver/artwork/audiodharma-26205.jpg",
+    "chapters_url": "https://jeffharr.is/dharma/brensilver/chapters/audiodharma-26205.json",
+    "chapters": [
+      {
+        "start": 0.0,
+        "title": "Opening the theme",
+        "description": "The talk begins by setting up the evening’s topic and introducing a passage that will frame the rest of the reflection.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26205/?t=0",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 53.64,
+        "title": "Truth as insight",
+        "description": "A quoted passage presents truth as clear experience of an effortless, impersonal process and says insight can transcend limited identity.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26205/?t=54",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 193.04,
+        "title": "Anicca as process",
+        "description": "The speaker unpacks impermanence as the forming and dissolving of phenomena, not only as loss but also as a way of seeing experience more fluidly.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26205/?t=193",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 316.76,
+        "title": "Safety in flow",
+        "description": "The talk explores how seeing self and world as process can reduce fear and loosen the sense of being a solid thing that gets clanked into.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26205/?t=317",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 383.92,
+        "title": "Insight is not enough",
+        "description": "The speaker turns from freedom and de-identification to the claim that a complete spiritual path also needs goodness and engaged relationship.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26205/?t=384",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 458.64,
+        "title": "Self, therapy, and depth",
+        "description": "There is a practical discussion of self-indulgence, the wish to help, and the role of psychological and therapeutic development alongside meditation.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26205/?t=459",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 590.02,
+        "title": "From depth to breadth",
+        "description": "The talk considers how practice can cultivate both inner freedom and the ability to be at home in feelings, habits, and ordinary life.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26205/?t=590",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 726.1,
+        "title": "Effortless service",
+        "description": "Service is described as increasingly natural, arising from overflow rather than strain, while burnout is named as a risk when depth is missing.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26205/?t=726",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 769.06,
+        "title": "Good heart, not identity",
+        "description": "A closing quotation brings the message into plain terms: the point is not to become a Buddhist identity, but to be a person with a good heart.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26205/?t=769",
         "img": null,
         "toc": true
       }

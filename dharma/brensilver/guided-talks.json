@@ -1,5 +1,177 @@
 [
   {
+    "id": "audiodharma:26207",
+    "source": "AudioDharma",
+    "source_id": "26207",
+    "title": "Guided Meditation: Breathing and Thinking",
+    "speaker": "Matthew Brensilver",
+    "published_at": "2026-09-03T12:00:00+00:00",
+    "link": "https://www.audiodharma.org/talks/26207",
+    "audio_url": "https://audiodharma.us-east-1.linodeobjects.com/talks/26207/20260903-matthew_brensilver-imc-guided_meditation_breathing_and_thinking.mp3",
+    "audio_type": "audio/mpeg",
+    "audio_length": null,
+    "duration": "28:58",
+    "description": "AudioDharma talk by Matthew Brensilver.",
+    "image_url": "https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+    "canonical_url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26207/",
+    "podcast_description": "What happens if meditation is not a project to perfect, but a way of noticing where we are still holding on? The talk begins with a gentle invitation to relax posture, effort, and assumptions, then turns toward how breathing can soothe what is inflamed and enliven what is numb. From there it explores the texture of thinking as imagery and inner narration, before closing with a quiet argument for wanting what we have and allowing imperfection to be enough.",
+    "short_summary": "A guided meditation on relaxing effort, sensing the whole body through breath, and noticing thinking without being carried away by it.",
+    "episode_image_url": "https://jeffharr.is/dharma/brensilver/artwork/audiodharma-26207.jpg",
+    "chapters_url": "https://jeffharr.is/dharma/brensilver/chapters/audiodharma-26207.json",
+    "chapters": [
+      {
+        "start": 86.0,
+        "title": "Settling In",
+        "description": "The meditation begins by finding posture and allowing the body to shake out and land.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26207/?t=86",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 146.0,
+        "title": "Releasing Effort",
+        "description": "The talk emphasizes relaxing what can be relaxed and not straining against what cannot be changed.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26207/?t=146",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 267.0,
+        "title": "Relax Even Assumptions",
+        "description": "Attention widens to include the assumptions behind practice, with the invitation to soften ideas about what should happen next.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26207/?t=267",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 644.56,
+        "title": "Breath in the Whole Body",
+        "description": "Breathing is framed as a way to soothe inflammation, bring life to dullness, and feel the breath across the whole body.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26207/?t=645",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 958.16,
+        "title": "Noticing Thinking",
+        "description": "The talk turns to mental imagery and auditory thinking, including the urge to narrate and situate self and world.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26207/?t=958",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1111.36,
+        "title": "Listening for Silence",
+        "description": "The instruction shifts to hearing the space after a sentence ends and resting in the silence that follows sound.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26207/?t=1111",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1333.166,
+        "title": "Enough As It Is",
+        "description": "The closing reflects on wanting what we have, the satisfaction possible amid imperfection, and the line attributed to Suzuki Roshi that being alive is enough.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26207/?t=1333",
+        "img": null,
+        "toc": true
+      }
+    ],
+    "venue": null,
+    "series": null,
+    "tags": [],
+    "transcript": {
+      "status": "pending",
+      "url": null,
+      "text_path": null
+    }
+  },
+  {
+    "id": "audiodharma:26204",
+    "source": "AudioDharma",
+    "source_id": "26204",
+    "title": "Guided Meditation: If you know where are you are, you're not here",
+    "speaker": "Matthew Brensilver",
+    "published_at": "2026-09-02T12:00:00+00:00",
+    "link": "https://www.audiodharma.org/talks/26204",
+    "audio_url": "https://audiodharma.us-east-1.linodeobjects.com/talks/26204/20260902-matthew_brensilver-imc-guided_meditation_if_you_know_where_are_you_are_you_re_not_here.mp3",
+    "audio_type": "audio/mpeg",
+    "audio_length": null,
+    "duration": "29:19",
+    "description": "AudioDharma talk by Matthew Brensilver.",
+    "image_url": "https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+    "canonical_url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26204/",
+    "podcast_description": "What happens if practice is less about doing and more about not stirring? The talk unfolds as a guided meditation on letting experience settle, using the Buddha’s invitation to stop what can be stopped and to leave the rest alone. Attention is then gathered around breathing, body, and sound, with the emphasis on relaxing the habit of reiterating oneself and predicting the next moment.",
+    "short_summary": "A guided meditation on relaxing the compulsion to stir experience and letting attention settle around breath, body, and sound.",
+    "episode_image_url": "https://jeffharr.is/dharma/brensilver/artwork/audiodharma-26204.jpg",
+    "chapters_url": "https://jeffharr.is/dharma/brensilver/chapters/audiodharma-26204.json",
+    "chapters": [
+      {
+        "start": 0.0,
+        "title": "Settling In",
+        "description": "The practice opens with a gentle invitation to arrive, make space, and begin together.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26204/?t=0",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 90.0,
+        "title": "Letting Things Settle",
+        "description": "The talk uses the image of nectar settling in juice to suggest allowing experience to quiet down on its own.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26204/?t=90",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 157.0,
+        "title": "What Can Stop",
+        "description": "The speaker turns to the Buddha’s instruction to stop what can be stopped, while letting what cannot stop continue.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26204/?t=157",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 255.0,
+        "title": "Not Stirring",
+        "description": "The emphasis narrows to the felt question of what it means not to interfere with experience.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26204/?t=255",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 410.0,
+        "title": "How Long Is Now",
+        "description": "A brief inquiry into the present moment points toward how quickly it passes and how little needs to be added.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26204/?t=410",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 470.0,
+        "title": "Gathering Attention",
+        "description": "Attention is gathered around breathing, body, and sound as a skillful support for steadiness.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26204/?t=470",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1127.0,
+        "title": "Releasing the Future",
+        "description": "The talk explores how the mind builds a future self and how practice can ease the agitation of prediction.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26204/?t=1127",
+        "img": null,
+        "toc": true
+      }
+    ],
+    "venue": null,
+    "series": null,
+    "tags": [],
+    "transcript": {
+      "status": "pending",
+      "url": null,
+      "text_path": null
+    }
+  },
+  {
     "id": "audiodharma:26197",
     "source": "AudioDharma",
     "source_id": "26197",
