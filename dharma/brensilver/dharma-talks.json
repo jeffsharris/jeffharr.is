@@ -1,5 +1,99 @@
 [
   {
+    "id": "audiodharma:26217",
+    "source": "AudioDharma",
+    "source_id": "26217",
+    "title": "Crowdsourced Questions: Feeling, Loss, Letting Go and Love (Interpersonal Dharma 5 of 5)",
+    "speaker": "Matthew Brensilver",
+    "published_at": "2026-09-04T12:00:00+00:00",
+    "link": "https://www.audiodharma.org/talks/26217",
+    "audio_url": "https://audiodharma.us-east-1.linodeobjects.com/talks/26217/20260904-matthew_brensilver-imc-crowdsourced_questions_feeling_loss_letting_go_and_love.mp3",
+    "audio_type": "audio/mpeg",
+    "audio_length": null,
+    "duration": "13:44",
+    "description": "AudioDharma talk by Matthew Brensilver.",
+    "image_url": "https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+    "canonical_url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26217/",
+    "podcast_description": "What if grief is not a problem to solve, but a way of learning how to love more widely? The talk moves from becoming unintimidated by feeling, to seeing impermanence clearly, to letting loss deepen gratitude rather than collapse into fear. It ends by treating grief as a call to radical love, something we contribute to across a lineage that exceeds one lifetime.",
+    "short_summary": "A talk on meeting feeling without fear, letting impermanence reshape love, and understanding grief as an invitation to wider care.",
+    "episode_image_url": "https://jeffharr.is/dharma/brensilver/artwork/audiodharma-26217.jpg",
+    "chapters_url": "https://jeffharr.is/dharma/brensilver/chapters/audiodharma-26217.json",
+    "chapters": [
+      {
+        "start": 17.0,
+        "title": "Feeling at the center",
+        "description": "The talk begins by locating feeling, grief, and love at the center of practice, and asking how to meet them without intimidation.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26217/?t=17",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 63.0,
+        "title": "Unintimidated by pain",
+        "description": "The speaker frames training as learning not to be destroyed by pain or longing, and as building confidence that feelings will move without overturning us.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26217/?t=63",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 171.0,
+        "title": "Reorganizing pleasure and pain",
+        "description": "Drawing on Ajahn Sucitto, the talk describes deeper practice as a fundamental reorientation toward pleasure, pain, and the felt tone of experience.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26217/?t=171",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 266.0,
+        "title": "Impermanence informs love",
+        "description": "Equanimity is linked with a less brittle life, one that can love impermanent things more openly and feel gratitude when the spell of permanence breaks.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26217/?t=266",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 354.0,
+        "title": "This is it",
+        "description": "The talk turns toward urgency and tenderness, stressing that life is not a rehearsal and that grief and love are woven together in the fact of being alive.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26217/?t=354",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 472.0,
+        "title": "Preparing for loss",
+        "description": "The speaker reflects on keeping impermanence close without forcing it, describing a kind of anticipatory grieving that slowly acclimatizes the heart.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26217/?t=472",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 579.0,
+        "title": "Grief's redemption",
+        "description": "Grief is presented as something redeemed through love, art, and a vow to make love vaster as the teachings on dukkha and anicca sink in.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26217/?t=579",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 720.0,
+        "title": "Love beyond one life",
+        "description": "The closing section reframes memorial and tribute as radical love and places each life within a lineage of care that extends before birth and after death.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26217/?t=720",
+        "img": null,
+        "toc": true
+      }
+    ],
+    "venue": null,
+    "series": null,
+    "tags": [],
+    "transcript": {
+      "status": "pending",
+      "url": null,
+      "text_path": null
+    }
+  },
+  {
     "id": "audiodharma:26206",
     "source": "AudioDharma",
     "source_id": "26206",

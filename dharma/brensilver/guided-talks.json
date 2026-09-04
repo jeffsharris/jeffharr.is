@@ -1,5 +1,99 @@
 [
   {
+    "id": "audiodharma:26216",
+    "source": "AudioDharma",
+    "source_id": "26216",
+    "title": "Guided Meditation: relaxing into kindness",
+    "speaker": "Matthew Brensilver",
+    "published_at": "2026-09-04T12:00:00+00:00",
+    "link": "https://www.audiodharma.org/talks/26216",
+    "audio_url": "https://audiodharma.us-east-1.linodeobjects.com/talks/26216/20260904-matthew_brensilver-imc-guided_meditation_relaxing_into_kindness.mp3",
+    "audio_type": "audio/mpeg",
+    "audio_length": null,
+    "duration": "25:07",
+    "description": "AudioDharma talk by Matthew Brensilver.",
+    "image_url": "https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+    "canonical_url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26216/",
+    "podcast_description": "What changes when the practice is not to improve the self, but to soften into the simple wish to be at peace? This guided meditation moves from letting words go, to relaxing bodily tension, to sensing that goodness is already present and does not need to be propped up. It then deepens into loving-kindness as an ordinary, quiet expression of the wish for safety, peace, and a heart open to the fullness of human experience.",
+    "short_summary": "A guided meditation that settles into relaxation, then opens into loving-kindness as a simple wish for peace.",
+    "episode_image_url": "https://jeffharr.is/dharma/brensilver/artwork/audiodharma-26216.jpg",
+    "chapters_url": "https://jeffharr.is/dharma/brensilver/chapters/audiodharma-26216.json",
+    "chapters": [
+      {
+        "start": 11.0,
+        "title": "Letting Words Go",
+        "description": "The practice begins by releasing discursive thought and settling into direct experience beyond words.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26216/?t=11",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 90.0,
+        "title": "Relax Into the Body",
+        "description": "Attention softens around tension, with breath and body filling one another in an easy, receptive way.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26216/?t=90",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 241.0,
+        "title": "Awareness Before Conditions",
+        "description": "The talk points to setting aside preoccupation with personal concerns in favor of awareness itself.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26216/?t=241",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 368.0,
+        "title": "A Slight Preference",
+        "description": "Practice is framed as a subtle willingness to stay, breathe, and choose presence over rumination.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26216/?t=368",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 786.0,
+        "title": "Goodness Already Here",
+        "description": "Dharma practice is described as a sensitization to goodness that does not depend on self-improvement.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26216/?t=786",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 927.0,
+        "title": "The Quiet Wish",
+        "description": "Letting go of self-melodrama leaves a simple wish: may I be happy, may I be at peace.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26216/?t=927",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1054.0,
+        "title": "Radiating Kindness",
+        "description": "Images and phrases are offered to help kindness feel warm, embodied, and naturally expansive.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26216/?t=1054",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1333.579,
+        "title": "Love With Wisdom",
+        "description": "The meditation ends by acknowledging complexity while still opening the heart to all of human experience.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26216/?t=1334",
+        "img": null,
+        "toc": true
+      }
+    ],
+    "venue": null,
+    "series": null,
+    "tags": [],
+    "transcript": {
+      "status": "pending",
+      "url": null,
+      "text_path": null
+    }
+  },
+  {
     "id": "audiodharma:26207",
     "source": "AudioDharma",
     "source_id": "26207",
