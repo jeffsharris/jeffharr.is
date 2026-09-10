@@ -1,5 +1,185 @@
 [
   {
+    "id": "audiodharma:26251",
+    "source": "AudioDharma",
+    "source_id": "26251",
+    "title": "Short Talk: Bearing Witness to Harm, Moral Responsibility & Hatred",
+    "speaker": "Matthew Brensilver",
+    "published_at": "2026-09-09T12:00:00+00:00",
+    "link": "https://www.audiodharma.org/talks/26251",
+    "audio_url": "https://audiodharma.us-east-1.linodeobjects.com/talks/26251/20260909-matthew_brensilver-imc-short_talk_bearing_witness_to_harm_moral_responsibility_hatred.mp3",
+    "audio_type": "audio/mpeg",
+    "audio_length": null,
+    "duration": "14:57",
+    "description": "AudioDharma talk by Matthew Brensilver.",
+    "image_url": "https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+    "canonical_url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26251/",
+    "podcast_description": "When harm feels so large that resentment seems like the only form of witness, how can care remain honest without turning into hate? The talk works through a listener’s question about outrage, conscience, and moral responsibility, then asks whether suffering always tracks awareness. From there it moves into Buddhist teaching, moral psychology, and the hard work of purifying love so it can stay responsive without becoming revenge.",
+    "short_summary": "The talk explores resentment, moral witness, and how to respond to harm without letting hate define care.",
+    "episode_image_url": "https://jeffharr.is/dharma/brensilver/artwork/audiodharma-26251.jpg",
+    "chapters_url": "https://jeffharr.is/dharma/brensilver/chapters/audiodharma-26251.json",
+    "chapters": [
+      {
+        "start": 12.0,
+        "title": "The Question of Witnessing",
+        "description": "A listener asks how to bear witness to harm without resentment becoming the only reminder that wrongdoing occurred.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26251/?t=12",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 119.0,
+        "title": "Taking the Bait",
+        "description": "The talk answers playfully, then sets a framework that treats stopping harm as more important than sorting out inner experience alone.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26251/?t=119",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 183.0,
+        "title": "Awareness and Suffering",
+        "description": "It considers whether suffering always rises with less awareness, and whether pleasure can coexist with deep delusion or lack of conscience.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26251/?t=183",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 290.0,
+        "title": "Resentment and Moral Duty",
+        "description": "The focus shifts to the feeling that moral responsibility itself demands hatred when one is powerless to stop harm.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26251/?t=290",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 370.0,
+        "title": "Non-Hatred as Practice",
+        "description": "A classic Buddhist teaching is used to frame the practice of meeting harm with non-hatred while still caring intensely.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26251/?t=370",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 503.0,
+        "title": "Disgust Becomes Revenge",
+        "description": "Research on moral disgust and a critique of justice-as-vengeance show how aversion can easily harden into punishment and enjoyment of suffering.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26251/?t=503",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 622.0,
+        "title": "Refining Love",
+        "description": "The talk describes Dharma practice as purifying love so it does not need hatred, nihilism, or cynicism when it cannot control outcomes.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26251/?t=622",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 723.0,
+        "title": "Humility and the Larger Order",
+        "description": "The ending widens into grief, lineage, and a call to humility before the world, where care continues by joining what already serves life.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26251/?t=723",
+        "img": null,
+        "toc": true
+      }
+    ],
+    "venue": null,
+    "series": null,
+    "tags": [],
+    "transcript": {
+      "status": "pending",
+      "url": null,
+      "text_path": null
+    }
+  },
+  {
+    "id": "audiodharma:26250",
+    "source": "AudioDharma",
+    "source_id": "26250",
+    "title": "Guided Meditation: Developing Learning Readiness",
+    "speaker": "Matthew Brensilver",
+    "published_at": "2026-09-09T12:00:00+00:00",
+    "link": "https://www.audiodharma.org/talks/26250",
+    "audio_url": "https://audiodharma.us-east-1.linodeobjects.com/talks/26250/20260909-matthew_brensilver-imc-guided_meditation_developing_learning_readiness.mp3",
+    "audio_type": "audio/mpeg",
+    "audio_length": null,
+    "duration": "25:40",
+    "description": "AudioDharma talk by Matthew Brensilver.",
+    "image_url": "https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+    "canonical_url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26250/",
+    "podcast_description": "What if no moment in meditation is wrong, and the work is simply to stop adding struggle? The talk moves from that basic trust into a set of instructions for letting go: putting down what can be put down, listening without preference, and noticing how tension shows up as greed, hatred, or lingering. It closes by reframing practice itself as learning readiness rather than acquisition, a way of entering experience with a heart-mind prepared to know suffering, peace, and conditioning more clearly.",
+    "short_summary": "A guided meditation on trusting that each moment is usable, releasing unnecessary effort, and cultivating learning readiness.",
+    "episode_image_url": "https://jeffharr.is/dharma/brensilver/artwork/audiodharma-26250.jpg",
+    "chapters_url": "https://jeffharr.is/dharma/brensilver/chapters/audiodharma-26250.json",
+    "chapters": [
+      {
+        "start": 12.0,
+        "title": "Every Moment Good Enough",
+        "description": "The talk opens by framing the Dharma as a field where no moment is wrong and each moment can point toward silence and release.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26250/?t=12",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 133.0,
+        "title": "Put Down What You Can",
+        "description": "The instruction turns practical: stop everything else, not by suppressing thought, but by setting aside whatever can be released.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26250/?t=133",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 303.0,
+        "title": "Listening Without Preference",
+        "description": "When thoughts obscure silence, they are heard as part of practice, with emphasis on relinquishing preference about what arises.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26250/?t=303",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 534.0,
+        "title": "Tension and Relaxing",
+        "description": "The talk names lingering, greed, and hatred as forms of tension and asks how deeply relaxation can be practiced.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26250/?t=534",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 605.0,
+        "title": "Stopping the Fight",
+        "description": "The practice challenge becomes ceasing to fight with ourselves, which depends on trusting that each moment is good enough.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26250/?t=605",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 795.0,
+        "title": "Wisdom and Compassion",
+        "description": "This trust is connected to the development of wisdom and compassion, showing why acceptance matters beyond comfort.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26250/?t=795",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1174.0,
+        "title": "Learning Readiness",
+        "description": "The closing teaching reframes meditation as developing readiness to learn from experience rather than trying to force insight.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26250/?t=1174",
+        "img": null,
+        "toc": true
+      }
+    ],
+    "venue": null,
+    "series": null,
+    "tags": [],
+    "transcript": {
+      "status": "pending",
+      "url": null,
+      "text_path": null
+    }
+  },
+  {
     "id": "audiodharma:26216",
     "source": "AudioDharma",
     "source_id": "26216",
