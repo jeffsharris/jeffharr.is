@@ -7,7 +7,12 @@ export function selectXVideo(media) {
   if (media?.type !== 'video') return null;
   const variants = (media.variants || []).filter(v => v.content_type === 'video/mp4' && /^https:\/\//.test(v.url || ''));
   variants.sort((a, b) => (b.bit_rate || 0) - (a.bit_rate || 0));
-  return { url: variants[0]?.url || null, contentType: variants[0] ? 'video/mp4' : null, provider: 'x' };
+  return {
+    url: variants[0]?.url || null,
+    contentType: variants[0] ? 'video/mp4' : null,
+    provider: 'x',
+    thumbnailUrl: /^https:\/\//.test(media.preview_image_url || '') ? media.preview_image_url : null
+  };
 }
 
 // Batch official X metadata, including negative results, so text posts stay in Read Later.
@@ -18,7 +23,8 @@ export async function enrichXVideos(db, items, env, fetchImpl = fetch) {
       const url = new URL(item.url);
       return /^(www\.|mobile\.)?(x\.com|twitter\.com)$/.test(url.hostname)
         && /\/status\/\d+/.test(url.pathname)
-        && (!item.videoCheckedAt || Date.now() - Date.parse(item.videoCheckedAt) > 86400000);
+        && (!item.videoCheckedAt || Date.now() - Date.parse(item.videoCheckedAt) > 86400000
+          || (item.video && !Object.hasOwn(item.video, 'thumbnailUrl')));
     } catch { return false; }
   }).slice(0, 50);
   if (!candidates.length) return;

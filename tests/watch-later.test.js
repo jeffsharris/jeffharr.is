@@ -4,6 +4,7 @@ import { readFileSync } from 'node:fs';
 import vm from 'node:vm';
 import { directVideo, isVideoUrl } from '../functions/api/read-later/media-utils.js';
 import { enrichXVideos, selectXVideo, onRequest } from '../functions/api/read-later/video.js';
+import { listReadLaterItems } from '../functions/api/content-library/read-later-store.js';
 
 test('video classification distinguishes provider videos from text and profile pages', () => {
   for (const url of ['https://youtu.be/dQw4w9WgXcQ', 'https://vimeo.com/12345', 'https://www.tiktok.com/@author/video/123', 'https://example.com/movie.MP4?token=value']) {
@@ -27,13 +28,14 @@ test('website recognizes legacy YouTube and direct videos, but keeps X text in R
 });
 
 test('X stream selection chooses the highest bitrate playable HTTPS MP4', () => {
-  const video = selectXVideo({ type: 'video', variants: [
+  const video = selectXVideo({ type: 'video', preview_image_url: 'https://pbs.twimg.com/preview.jpg', variants: [
     { content_type: 'application/x-mpegURL', url: 'https://video.twimg.com/a.m3u8' },
     { content_type: 'video/mp4', bit_rate: 800, url: 'https://video.twimg.com/low.mp4' },
     { content_type: 'video/mp4', bit_rate: 2000, url: 'https://video.twimg.com/high.mp4' },
     { content_type: 'video/mp4', bit_rate: 5000, url: 'javascript:bad' }
   ] });
   assert.equal(video.url, 'https://video.twimg.com/high.mp4');
+  assert.equal(video.thumbnailUrl, 'https://pbs.twimg.com/preview.jpg');
   assert.equal(selectXVideo({ type: 'photo', variants: [] }), null);
 });
 
@@ -41,6 +43,8 @@ test('X enrichment batches requests and caches both video and text results', asy
   const writes = [];
   const db = { prepare: () => ({ bind: (...args) => ({ run: async () => writes.push(args) }) }) };
   const items = [1, 2].map(id => ({ id: `entry-${id}`, itemId: `item-${id}`, url: `https://x.com/person/status/${id}` }));
+  items[0].video = { provider: 'x', url: 'https://video.twimg.com/older.mp4' };
+  items[0].videoCheckedAt = new Date().toISOString();
   let requests = 0;
   const fetchImpl = async endpoint => {
     requests++;
@@ -68,4 +72,16 @@ test('missing credentials and provider failures leave saved items available', as
   assert.deepEqual(items, original);
   const response = await onRequest({ request: new Request('https://example.com/api/read-later/video', { method: 'POST' }), env: {} });
   assert.equal(response.status, 405);
+});
+
+test('video preview fills missing legacy source thumbnails in list responses', async () => {
+  const row = {
+    entry_id: 'entry-1', item_id: 'item-1', item_kind: 'x_post',
+    canonical_url: 'https://x.com/person/status/1', title: 'Video',
+    item_extra_json: JSON.stringify({ video: { provider: 'x', thumbnailUrl: 'https://pbs.twimg.com/preview.jpg' } })
+  };
+  const db = { prepare: () => ({ bind: () => ({ all: async () => ({ results: [row] }) }) }) };
+  const [item] = await listReadLaterItems(db);
+  assert.equal(item.kind, 'video');
+  assert.equal(item.thumbnailUrl, 'https://pbs.twimg.com/preview.jpg');
 });

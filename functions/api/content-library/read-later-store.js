@@ -491,7 +491,7 @@ async function readLaterRowToItem(db, row) {
   if (row.summary) item.description = row.summary;
   if (row.creator) item.author = row.creator;
   if (row.publisher) item.publisher = row.publisher;
-  if (row.thumbnail_url) item.thumbnailUrl = row.thumbnail_url;
+  if (row.thumbnail_url || extra.video?.thumbnailUrl) item.thumbnailUrl = row.thumbnail_url || extra.video.thumbnailUrl;
   if (kindle) item.kindle = kindle;
   if (coverSync) item.coverSync = coverSync;
   const resolvedCoverUpdatedAt = coverUpdatedAt || coverAsset?.updated_at || null;
