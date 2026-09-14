@@ -17,7 +17,7 @@ import {
   safeJsonParse,
   stringifyJson
 } from './ids.js';
-import { getYouTubeThumbnailUrl } from '../read-later/media-utils.js';
+import { getYouTubeThumbnailUrl, isVideoUrl } from '../read-later/media-utils.js';
 
 const MAX_TITLE_LENGTH = 220;
 const MIN_VIDEO_SECONDS = 300;
@@ -472,10 +472,13 @@ async function readLaterRowToItem(db, row) {
   const coverAsset = coverUpdatedAt ? null : (db ? await getAssetByRole(db, row.item_id, 'generated_cover') : null);
   const url = row.canonical_url || row.source_url || '';
   const readAt = row.read_at || null;
+  const extra = safeJsonParse(row.item_extra_json, {}) || {};
   const item = {
     id: row.entry_id,
     itemId: row.item_id,
-    kind: row.item_kind || inferKindFromUrl(url),
+    kind: isVideoUrl(url) || extra.video ? 'video' : (row.item_kind || inferKindFromUrl(url)),
+    video: extra.video || null,
+    videoCheckedAt: extra.videoCheckedAt || null,
     url,
     canonicalUrl: row.canonical_url || null,
     title: row.title || normalizeTitle('', url),
@@ -508,6 +511,7 @@ function normalizeTitle(input, fallbackUrl) {
 }
 
 function inferKindFromUrl(url) {
+  if (isVideoUrl(url)) return 'video';
   const parsed = safeParseUrl(url);
   const host = parsed?.hostname.replace(/^www\./, '') || '';
   if (host === 'x.com' || host === 'twitter.com') return 'x_post';

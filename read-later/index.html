@@ -29,7 +29,7 @@
 
   <link rel="icon" href="/favicon.ico">
   <link rel="stylesheet" href="/css/favorites.css?v=1">
-  <link rel="stylesheet" href="/read-later/read-later.css?v=4">
+  <link rel="stylesheet" href="/read-later/read-later.css?v=5">
 </head>
 <body>
   <div class="bg-gradient"></div>
@@ -38,19 +38,21 @@
   <header class="header">
     <a class="back-link" href="/">← Home</a>
     <div class="header__content">
-      <h1>Read Later</h1>
-      <p>Essays, links, and videos waiting in the stack.</p>
+      <h1 id="queue-heading">Read Later</h1>
     </div>
   </header>
 
   <main class="main">
     <section class="controls">
-      <div class="filter-group" role="tablist" aria-label="Filter read later items">
+      <div class="filter-group" role="group" aria-label="Saved items">
         <button class="filter-btn is-active" data-filter="unread" aria-pressed="true">
-          Unread <span class="count" id="count-unread">0</span>
+          Read <span class="count" id="count-unread">0</span>
+        </button>
+        <button class="filter-btn" data-filter="watch" aria-pressed="false">
+          Watch <span class="count" id="count-watch">0</span>
         </button>
         <button class="filter-btn" data-filter="read" aria-pressed="false">
-          Read <span class="count" id="count-read">0</span>
+          Archive <span class="count" id="count-read">0</span>
         </button>
       </div>
       <label class="sort">
@@ -141,9 +143,9 @@
     </form>
   </dialog>
 
-  <script src="/js/media-utils.js?v=1"></script>
+  <script src="/js/media-utils.js?v=2"></script>
   <script src="/js/favorites.js?v=1"></script>
-  <script src="/read-later/read-later.js?v=6"></script>
+  <script src="/read-later/read-later.js?v=7"></script>
   <script src="/js/admin-presence.js?v=2"></script>
 </body>
 </html>

@@ -59,4 +59,25 @@ function isYouTubeUrl(url) {
   return Boolean(getYouTubeInfo(url));
 }
 
+export function directVideo(url) {
+  try {
+    const parsed = new URL(url);
+    if (!['https:', 'http:'].includes(parsed.protocol)) return null;
+    const extension = parsed.pathname.split('.').pop().toLowerCase();
+    const types = { mp4: 'video/mp4', m4v: 'video/mp4', mov: 'video/quicktime', m3u8: 'application/x-mpegURL', webm: 'video/webm' };
+    return types[extension] ? { url: parsed.href, contentType: types[extension], provider: 'direct' } : null;
+  } catch { return null; }
+}
+
+export function isVideoUrl(url) {
+  if (getYouTubeInfo(url) || directVideo(url)) return true;
+  try {
+    const parsed = new URL(url);
+    const host = parsed.hostname.replace(/^www\./, '').toLowerCase();
+    return (['vimeo.com', 'player.vimeo.com'].includes(host) && /\/\d+/.test(parsed.pathname))
+      || (host === 'tiktok.com' && /\/video\/\d+/.test(parsed.pathname))
+      || (host === 'dailymotion.com' && parsed.pathname.startsWith('/video/'));
+  } catch { return false; }
+}
+
 export { getYouTubeInfo, getYouTubeThumbnailUrl, isYouTubeUrl };

@@ -34,6 +34,16 @@ Current schema lives in `migrations/`. Apply all migrations; `0004_drop_migratio
 
 ## Runtime Surfaces
 
+### Read And Watch Queues
+
+Read and Watch are filters over the same `lst_read_later` entries. Archive still combines both. The website uses `?feed=watch` and `?feed=read` for Watch and Archive; an omitted feed selects Read.
+
+The Read Later API adds nullable `video` metadata and derives `kind: video` for known video links without changing read/archive semantics. `items.extra_json.video` stores an optional playable URL, content type, and provider; `videoCheckedAt` caches X metadata checks, including text-only negative results. X enrichment uses the existing Pages `X_API_BEARER_TOKEN` and runs in `waitUntil` on list reads so provider latency does not delay the queue. No schema migration is needed. Previously saved X videos may move to Watch on the next list refresh after enrichment.
+
+`GET /api/read-later/video?id=<entry-id>` resolves a saved item's native stream and refreshes older X media metadata. Missing credentials, unavailable streams, or provider restrictions preserve the source link as a fallback. YouTube URLs are not downloadable media URLs and must not be sent to the default Cast receiver. The iOS app uses provider playback/handoff for YouTube and native AirPlay/Chromecast for accessible MP4/HLS streams. The website uses HTML video controls where native streams exist.
+
+This feature deploys through Pages only; no queue-consumer behavior or schema was changed. Run `npm test`, then check Read/Watch/Archive, deep-link restoration, and video teardown at desktop and mobile widths before publishing.
+
 - Pages Functions (`functions/api/*`) serve API routes and use `wrangler.toml`.
 - `workers/read-later-sync/` consumes `read-later-sync` for Kindle sync and cover generation. It needs `CONTENT_DB`, `CONTENT_ASSETS`, `READ_LATER_SYNC_QUEUE`, `PUSH_DELIVERY_QUEUE`, and `BROWSER`.
 - `workers/push-delivery/` consumes `push-delivery` for APNs delivery. It needs `CONTENT_DB` and APNs secrets.

@@ -56,6 +56,11 @@
 
   window.JeffMedia = {
     getYouTubeInfo,
-    getYouTubeThumbnailUrl
+    getYouTubeThumbnailUrl,
+    isVideoItem(item) {
+      if (item?.kind === 'video' || item?.video || item?.progress?.video || getYouTubeInfo(item?.url)) return true;
+      const parsed = tryParseUrl(item?.url);
+      return Boolean(parsed && /\.(mp4|m4v|mov|m3u8|webm)$/i.test(parsed.pathname));
+    }
   };
 })();

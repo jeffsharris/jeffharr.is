@@ -7,6 +7,7 @@ import { enqueueKindleSync } from './read-later/sync-service.js';
 import { createLogger, formatError } from './lib/logger.js';
 import { getContentDb } from './content-library/db.js';
 import { jsonResponse, parseJson } from './content-library/serialize.js';
+import { enrichXVideos } from './read-later/video.js';
 import {
   createReadLaterItemStore,
   deleteReadLaterItem,
@@ -30,13 +31,14 @@ export async function onRequest(context) {
     );
   }
 
-  return handleReadLaterRequest({ request, env, db, readLaterStore, log });
+  return handleReadLaterRequest({ request, env, db, readLaterStore, log, waitUntil: context.waitUntil?.bind(context) });
 }
 
-async function handleReadLaterRequest({ request, env, db, readLaterStore, log }) {
+async function handleReadLaterRequest({ request, env, db, readLaterStore, log, waitUntil }) {
   try {
     if (request.method === 'GET') {
       const items = await listReadLaterItems(db);
+      if (waitUntil) waitUntil(enrichXVideos(db, items, env));
       return jsonResponse(
         { items, count: items.length },
         { status: 200, cache: 'no-store' }

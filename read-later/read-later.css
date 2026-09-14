@@ -716,6 +716,17 @@ body {
   margin-bottom: 12px;
 }
 
+.item__thumb.is-video,
+.item.is-open .item__thumb.is-video {
+  aspect-ratio: 16 / 9;
+  height: auto;
+}
+
+video.reader__video {
+  display: block;
+  object-fit: contain;
+}
+
 .reader__video {
   position: relative;
   width: 100%;

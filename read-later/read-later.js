@@ -8,6 +8,9 @@
   const sortSelect = document.getElementById('sort-select');
   const countUnreadEl = document.getElementById('count-unread');
   const countReadEl = document.getElementById('count-read');
+  const countWatchEl = document.getElementById('count-watch');
+  const queueHeading = document.getElementById('queue-heading');
+  const isVideoItem = item => window.JeffMedia.isVideoItem(item);
   const toastEl = document.getElementById('toast');
   const toastMessageEl = document.getElementById('toast-message');
   const toastUndoBtn = document.getElementById('toast-undo');
@@ -156,8 +159,10 @@
   }
 
   function renderCounts() {
-    const unreadCount = state.items.filter(item => !item.read).length;
+    const unreadCount = state.items.filter(item => !item.read && !isVideoItem(item)).length;
+    const watchCount = state.items.filter(item => !item.read && isVideoItem(item)).length;
     const readCount = state.items.filter(item => item.read).length;
+    countWatchEl.textContent = watchCount;
     countUnreadEl.textContent = unreadCount;
     countReadEl.textContent = readCount;
   }
@@ -301,8 +306,9 @@
     });
 
     toggle.innerHTML = item.read ? ICON_MARK_UNREAD : ICON_MARK_READ;
-    toggle.setAttribute('aria-label', item.read ? 'Mark unread' : 'Mark read');
-    toggle.title = item.read ? 'Mark unread' : 'Mark read';
+    const archiveLabel = item.read ? 'Restore to queue' : (isVideoItem(item) ? 'Mark watched' : 'Mark read');
+    toggle.setAttribute('aria-label', archiveLabel);
+    toggle.title = archiveLabel;
     toggle.addEventListener('click', () => updateReadStatus(item.id, !item.read));
 
     remove.innerHTML = ICON_DELETE;
@@ -358,7 +364,7 @@
     if (items.length === 0) {
       statusEl.textContent = state.filter === 'read'
         ? 'No finished items yet.'
-        : 'All caught up. No unread items.';
+        : state.filter === 'watch' ? 'No videos waiting.' : 'All caught up. No unread articles.';
       return;
     }
 
@@ -367,9 +373,9 @@
 
   function renderKindleState(item, linkEl) {
     if (!linkEl) return;
-    if (getYouTubeInfoFromItem(item)) {
-      linkEl.textContent = 'YouTube video';
-      linkEl.title = 'YouTube videos are not sent to Kindle';
+    if (isVideoItem(item)) {
+      linkEl.textContent = 'Video';
+      linkEl.title = 'Videos are not sent to Kindle';
       linkEl.disabled = true;
       linkEl.classList.remove('is-synced', 'is-failed');
       return;
@@ -392,7 +398,7 @@
     imgEl.removeAttribute('src');
     thumbEl.classList.add('is-empty');
     thumbEl.classList.toggle('is-loading', Boolean(item?.saving) || isCoverSyncActive(item));
-    thumbEl.classList.remove('is-video');
+    thumbEl.classList.toggle('is-video', isVideoItem(item));
 
     const youtubeInfo = getYouTubeInfoFromItem(item);
     if (youtubeInfo) {
@@ -779,7 +785,7 @@
 
   function getFilteredItems() {
     const filtered = state.items.filter(item => (
-      state.filter === 'read' ? item.read : !item.read
+      state.filter === 'read' ? item.read : !item.read && (state.filter === 'watch' ? isVideoItem(item) : !isVideoItem(item))
     ));
 
     const sorted = [...filtered].sort((a, b) => {
@@ -792,7 +798,16 @@
   }
 
   function setFilter(filter) {
+    if (!['unread', 'watch', 'read'].includes(filter)) filter = 'unread';
+    if (state.openId) destroyVideoPlayer(state.openId);
+    state.openId = null;
     state.filter = filter;
+    queueHeading.textContent = { unread: 'Read Later', watch: 'Watch Later', read: 'Archive' }[filter];
+    document.title = queueHeading.textContent + ' | Jeff Harris';
+    const url = new URL(window.location.href);
+    if (filter === 'unread') url.searchParams.delete('feed');
+    else url.searchParams.set('feed', filter);
+    history.replaceState(null, '', url);
     filterButtons.forEach(button => {
       const isActive = button.dataset.filter === filter;
       button.classList.toggle('is-active', isActive);
@@ -874,6 +889,11 @@
         readerBody,
         readerRefresh
       });
+      return;
+    }
+
+    if (isVideoItem(item)) {
+      await openNativeVideoReader(elements);
       return;
     }
 
@@ -1037,6 +1057,64 @@
     }
     if (readerBody) {
       readerBody.classList.remove('is-video');
+    }
+  }
+
+  async function openNativeVideoReader({ item, readerKicker, readerTitle, readerMeta, readerStatus, readerMedia, readerBody, readerRefresh }) {
+    setReaderKicker(readerKicker, 'Video');
+    readerTitle.textContent = item.title || 'Untitled video';
+    readerMeta.textContent = formatDomain(item.url);
+    readerRefresh.hidden = true;
+    readerBody.classList.add('is-video');
+    readerBody.replaceChildren();
+    const link = document.createElement('a');
+    link.href = item.url;
+    link.target = '_blank';
+    link.rel = 'noopener';
+    link.className = 'reader__video-link';
+    link.textContent = 'Open original video';
+    readerBody.append(link);
+    readerStatus.textContent = 'Loading video...';
+    try {
+      const response = await fetch(`/api/read-later/video?id=${encodeURIComponent(item.id)}`);
+      if (!response.ok) throw new Error('Video unavailable');
+      const payload = await response.json();
+      if (state.openId !== item.id || !readerMedia.isConnected) return;
+      if (!payload.video?.url) {
+        readerStatus.textContent = 'This video requires its original player.';
+        return;
+      }
+      const url = new URL(payload.video.url);
+      if (!['http:', 'https:'].includes(url.protocol)) throw new Error('Invalid video URL');
+      const video = document.createElement('video');
+      video.className = 'reader__video';
+      video.controls = true;
+      video.playsInline = true;
+      video.preload = 'metadata';
+      video.setAttribute('x-webkit-airplay', 'allow');
+      video.src = url.href;
+      if (item.thumbnailUrl) video.poster = item.thumbnailUrl;
+      const adapter = {
+        getCurrentTime: () => video.currentTime,
+        getDuration: () => video.duration,
+        seekTo: time => { video.currentTime = time; },
+        destroy: () => { video.pause(); video.removeAttribute('src'); video.load(); }
+      };
+      video.addEventListener('loadedmetadata', () => handleYouTubeReady(item, adapter, readerStatus));
+      video.addEventListener('play', () => startVideoProgressWatcher(item, adapter));
+      for (const event of ['pause', 'ended']) video.addEventListener(event, () => {
+        stopVideoProgressWatcher(item.id);
+        captureVideoProgress(item, adapter, { immediate: true });
+      });
+      video.addEventListener('error', () => {
+        readerStatus.textContent = 'Playback unavailable. Open the original video to continue.';
+      });
+      readerMedia.replaceChildren(video);
+      readerMedia.hidden = false;
+      videoPlayers.set(item.id, adapter);
+      readerStatus.textContent = '';
+    } catch {
+      readerStatus.textContent = 'Video unavailable right now. Open the original video to continue.';
     }
   }
 
@@ -1914,6 +1992,7 @@
 
   async function init() {
     const params = new URLSearchParams(window.location.search);
+    setFilter(params.get('feed'));
     const hasUrlToSave = params.has('url') || params.has('u');
 
     if (hasUrlToSave) {
