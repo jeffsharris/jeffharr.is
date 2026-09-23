@@ -1,0 +1,5 @@
+{
+  "version": 1,
+  "include": ["/api/*", "/admin", "/admin/*", "/share/*", "/os/*", "/poems", "/poems/*", "/dharma/*", "/.*", "/notes/*", "/scripts/*", "/tests/*", "/tools/*", "/workers/*", "/migrations/*", "/functions/*", "/tmp/*", "/node_modules/*", "/AGENTS.md", "/package.json", "/package-lock.json", "/wrangler.toml"],
+  "exclude": ["/poems/images/*", "/poems/content/*", "/poems/manifest.json", "/poems/collection.json"]
+}

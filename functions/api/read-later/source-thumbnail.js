@@ -2,6 +2,7 @@ import { getReadLaterAssetItemId } from './asset-store.js';
 import { getYouTubeThumbnailUrl } from './media-utils.js';
 import { isXStatusUrl } from './x-adapter.js';
 import { formatError } from '../lib/logger.js';
+import { publicFetch } from '../lib/public-fetch.js';
 
 const REDIRECT_TIMEOUT_MS = 8000;
 const HTML_FETCH_TIMEOUT_MS = 10000;
@@ -170,7 +171,7 @@ async function resolveRedirectUrl(url, fetchImpl = fetch) {
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), REDIRECT_TIMEOUT_MS);
   try {
-    const response = await fetchImpl(url, {
+    const response = await publicFetch(url, {
       method: 'GET',
       redirect: 'follow',
       headers: {
@@ -178,7 +179,7 @@ async function resolveRedirectUrl(url, fetchImpl = fetch) {
         Accept: 'text/html,application/xhtml+xml'
       },
       signal: controller.signal
-    });
+    }, { fetchImpl, timeoutMs: REDIRECT_TIMEOUT_MS, maxBytes: 1024 * 1024 });
     return normalizeHttpUrl(response?.url || url);
   } catch {
     return null;
@@ -192,7 +193,7 @@ async function fetchSocialImageUrl(url, fetchImpl = fetch) {
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), HTML_FETCH_TIMEOUT_MS);
   try {
-    const response = await fetchImpl(url, {
+    const response = await publicFetch(url, {
       method: 'GET',
       redirect: 'follow',
       headers: {
@@ -200,7 +201,7 @@ async function fetchSocialImageUrl(url, fetchImpl = fetch) {
         Accept: 'text/html,application/xhtml+xml'
       },
       signal: controller.signal
-    });
+    }, { fetchImpl, timeoutMs: HTML_FETCH_TIMEOUT_MS, maxBytes: 1024 * 1024 });
     if (!response?.ok && response?.ok !== undefined) return null;
     const html = String(await response.text()).slice(0, MAX_HTML_CHARS);
     return extractSocialImageUrl(html, response?.url || url);
@@ -224,7 +225,7 @@ function extractSocialImageUrl(html, baseUrl) {
     const imageUrl = normalizeHttpUrl(content);
     if (imageUrl) return imageUrl;
     try {
-      return new URL(content, baseUrl).toString();
+      return normalizeHttpUrl(new URL(content, baseUrl).toString());
     } catch {}
   }
 

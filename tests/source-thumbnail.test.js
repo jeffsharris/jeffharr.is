@@ -55,9 +55,9 @@ test('resolveSourceThumbnail follows t.co redirects to YouTube thumbnails', asyn
     { url: 'https://t.co/fMiK5ha6Qp?ssr=true' },
     null,
     {
-      fetchImpl: async () => ({
-        url: 'https://www.youtube.com/watch?v=v1wZwxY3CMg&feature=youtu.be'
-      })
+      fetchImpl: async (url) => url.startsWith('https://t.co/')
+        ? new Response(null, { status: 302, headers: { location: 'https://www.youtube.com/watch?v=v1wZwxY3CMg&feature=youtu.be' } })
+        : new Response('YouTube')
     }
   );
 

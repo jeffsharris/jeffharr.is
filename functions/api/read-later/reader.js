@@ -21,6 +21,9 @@ import { createReadLaterStores } from './stores.js';
 import { getReadLaterAssetItemId } from './asset-store.js';
 import { createLogger, formatError } from '../lib/logger.js';
 import { jsonResponse } from '../content-library/serialize.js';
+import { publicFetch, publicUrl } from '../lib/public-fetch.js';
+import { unauthorizedResponse } from '../content-library/auth.js';
+import { getLibraryUser } from '../lib/client-auth.js';
 
 const FETCH_TIMEOUT_MS = 10000;
 const RENDER_TIMEOUT_MS = 15000;
@@ -113,7 +116,9 @@ async function handleReadLaterReader({ request, env, readLaterStore, assetStore,
       );
     }
 
-    const reader = await fetchAndCacheReader({
+    const cachedReader = !forceRefresh ? await assetStore.getReader(getReadLaterAssetItemId(item)) : null;
+    if (!cachedReader?.contentHtml && !(await getLibraryUser(request, env))) return unauthorizedResponse();
+    const reader = cachedReader?.contentHtml ? cachedReader : await fetchAndCacheReader({
       assetStore,
       entryId: id,
       itemId: getReadLaterAssetItemId(item),
@@ -484,7 +489,7 @@ function extractReaderFromDocument(document, url, fallbackTitle) {
 
   return {
     ...metadata,
-    wordCount: reader.length || 0,
+    wordCount: countWords(reader.textContent || ''),
     contentHtml,
     retrievedAt: new Date().toISOString()
   };
@@ -746,13 +751,7 @@ function pickItem(item) {
 }
 
 async function fetchWithTimeout(url, options = {}, timeoutMs = FETCH_TIMEOUT_MS) {
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
-  try {
-    return await fetch(url, { ...options, signal: controller.signal });
-  } finally {
-    clearTimeout(timeoutId);
-  }
+  return publicFetch(url, options, { timeoutMs });
 }
 
 async function renderWithBrowser(url, browserBinding, log = null, logContext = null) {
@@ -760,8 +759,14 @@ async function renderWithBrowser(url, browserBinding, log = null, logContext = n
   let page;
 
   try {
+    publicUrl(url);
     browser = await puppeteer.launch(browserBinding);
     page = await browser.newPage();
+    await page.setRequestInterception(true);
+    page.on('request', (request) => {
+      try { publicUrl(request.url()); request.continue(); }
+      catch { request.abort(); }
+    });
     await page.setUserAgent(USER_AGENT);
     await page.setViewport({ width: 1280, height: 720 });
     page.setDefaultNavigationTimeout(RENDER_TIMEOUT_MS);

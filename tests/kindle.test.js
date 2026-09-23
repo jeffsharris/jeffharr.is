@@ -100,7 +100,7 @@ test('syncKindleForItem sends PDF URLs as PDF attachments', async (t) => {
   assert.equal(result.kindle.pdfAttachment.filename, 'book.pdf');
   assert.equal(result.kindle.pdfAttachment.subject, 'convert');
   assert.equal(result.kindle.pdfAttachment.attachmentBytes, pdfBytes.length);
-  assert.equal(fetchCalls[0].options.headers.Accept, 'application/pdf');
+  assert.equal(new Headers(fetchCalls[0].options.headers).get('accept'), 'application/pdf');
 });
 
 test('syncKindleForItem rejects PDF URLs that do not return PDF bytes', async (t) => {

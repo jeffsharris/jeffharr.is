@@ -45,7 +45,7 @@ async function getReadLaterItem(db, entryId) {
   return row ? readLaterRowToItem(db, row) : null;
 }
 
-async function saveReadLaterItem(db, payload) {
+async function saveReadLaterItem(db, payload, { allowDuplicateChanges = true } = {}) {
   const normalizedUrl = normalizeHttpUrl(payload?.url);
   if (!normalizedUrl) {
     return { ok: false, status: 400, error: 'Invalid URL' };
@@ -54,11 +54,15 @@ async function saveReadLaterItem(db, payload) {
   const now = getNowIso();
   const canonicalKey = canonicalKeyForUrl(normalizedUrl, inferKindFromUrl(normalizedUrl));
   const existingItem = await getItemByCanonicalKey(db, canonicalKey);
+  if (existingItem && !allowDuplicateChanges) {
+    const existing = await getReadLaterEntryForItem(db, existingItem.id);
+    if (existing) return {ok:true,status:200,item:await getReadLaterItem(db,existing.id),duplicate:true,unarchived:false};
+  }
   const hasIncomingTitle = typeof payload?.title === 'string' && payload.title.trim();
   const title = existingItem && !hasIncomingTitle
     ? existingItem.title
     : normalizeTitle(payload?.title, normalizedUrl);
-  const item = await upsertItem(db, {
+  const item = existingItem && !allowDuplicateChanges ? existingItem : await upsertItem(db, {
     kind: inferKindFromUrl(normalizedUrl),
     canonicalKey,
     canonicalUrl: normalizedUrl,

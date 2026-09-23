@@ -8,6 +8,9 @@ import { createLogger, formatError } from './lib/logger.js';
 import { getContentDb } from './content-library/db.js';
 import { jsonResponse, parseJson } from './content-library/serialize.js';
 import { enrichXVideos } from './read-later/video.js';
+import { getAdminUser } from './content-library/auth.js';
+import { getLibraryUser } from './lib/client-auth.js';
+import { allowPublicSave } from './lib/public-save.js';
 import {
   createReadLaterItemStore,
   deleteReadLaterItem,
@@ -38,7 +41,7 @@ async function handleReadLaterRequest({ request, env, db, readLaterStore, log, w
   try {
     if (request.method === 'GET') {
       const items = await listReadLaterItems(db);
-      if (waitUntil) waitUntil(enrichXVideos(db, items, env));
+      if (waitUntil && await getAdminUser(request, env)) waitUntil(enrichXVideos(db, items, env));
       return jsonResponse(
         { items, count: items.length },
         { status: 200, cache: 'no-store' }
@@ -46,18 +49,23 @@ async function handleReadLaterRequest({ request, env, db, readLaterStore, log, w
     }
 
     if (request.method === 'POST') {
+      const trusted = Boolean(await getLibraryUser(request, env));
+      if (!trusted && !(await allowPublicSave(request, env))) {
+        return jsonResponse({ok:false,error:'Public saving limit reached. Try again later or sign in.'}, {status:429,cache:'no-store'});
+      }
       if (shouldStreamResponse(request)) {
-        return handleReadLaterSaveStream(request, db, readLaterStore, env, log);
+        return handleReadLaterSaveStream(request, db, readLaterStore, env, log, trusted);
       }
 
-      const result = await saveReadLaterItem(db, await parseJson(request));
+      const payload = await parseJson(request);
+      const result = await saveReadLaterItem(db, trusted ? payload : publicSavePayload(payload), {allowDuplicateChanges:trusted});
       if (!result.ok) {
         return jsonResponse(
           { ok: false, error: result.error },
           { status: result.status, cache: 'no-store' }
         );
       }
-      const enqueueResult = await enqueueReadLaterSync({
+      const enqueueResult = !trusted && result.duplicate ? null : await enqueueReadLaterSync({
         item: result.item,
         readLaterStore,
         env,
@@ -122,13 +130,14 @@ async function handleReadLaterRequest({ request, env, db, readLaterStore, log, w
   );
 }
 
-async function handleReadLaterSaveStream(request, db, readLaterStore, env, log) {
+async function handleReadLaterSaveStream(request, db, readLaterStore, env, log, trusted) {
   const stream = createEventStream(log);
 
   (async () => {
     let savedItem = null;
     try {
-      const result = await saveReadLaterItem(db, await parseJson(request));
+      const payload = await parseJson(request);
+      const result = await saveReadLaterItem(db, trusted ? payload : publicSavePayload(payload), {allowDuplicateChanges:trusted});
       if (!result.ok) {
         await safeStreamSend(stream, 'error', { ok: false, error: result.error });
         return;
@@ -137,7 +146,7 @@ async function handleReadLaterSaveStream(request, db, readLaterStore, env, log) 
       savedItem = result.item;
       await safeStreamSend(stream, 'saved', { ok: true, item: { ...result.item } });
 
-      const enqueueResult = await enqueueReadLaterSync({
+      const enqueueResult = !trusted && result.duplicate ? null : await enqueueReadLaterSync({
         item: result.item,
         readLaterStore,
         env,
@@ -149,7 +158,7 @@ async function handleReadLaterSaveStream(request, db, readLaterStore, env, log) 
       savedItem = result.item;
       await safeStreamSend(stream, 'status', {
         ok: true,
-        message: 'Queued Kindle sync'
+        message: !trusted && result.duplicate ? 'Already saved' : 'Queued Kindle sync'
       });
 
       await safeStreamSend(stream, 'done', {
@@ -189,6 +198,14 @@ function shouldStreamResponse(request) {
   if (url.searchParams.get('stream') === '1') return true;
   const accept = request.headers.get('accept') || '';
   return accept.includes('text/event-stream');
+}
+
+function publicSavePayload(payload) {
+  return {
+    url: typeof payload?.url === 'string' && payload.url.length <= 4096 ? payload.url : '',
+    title: typeof payload?.title === 'string' ? payload.title.slice(0, 220) : '',
+    read: false
+  };
 }
 
 function createEventStream(log) {

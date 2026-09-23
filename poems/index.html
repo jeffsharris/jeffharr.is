@@ -1884,34 +1884,12 @@
     // Load poems
     async function loadPoems() {
       try {
-        const manifestRes = await fetch('/poems/manifest.json');
+        const manifestRes = await fetch('/poems/collection.json');
         if (!manifestRes.ok) throw new Error('Manifest unavailable');
         const manifest = await manifestRes.json();
-        const imageMap = manifest.images || {};
-
-        // Combine memorized and learning into single list
         const memorizedSlugs = manifest.memorized || [];
-        const learningSlugs = manifest.learning || [];
-        const allSlugs = [...memorizedSlugs, ...learningSlugs];
         memorizedSet = new Set(memorizedSlugs);
-
-        const poems = await Promise.all(
-          allSlugs.map(async (slug) => {
-            try {
-              const res = await fetch(`/poems/content/${slug}.md`);
-              if (!res.ok) return null;
-              const markdown = await res.text();
-              const poem = parsePoem(markdown);
-              if (poem) poem.slug = slug;
-              if (poem) poem.image = imageMap[slug] || '';
-              return poem;
-            } catch {
-              return null;
-            }
-          })
-        );
-
-        const validPoems = poems.filter(Boolean);
+        const validPoems = manifest.poems || [];
         const randomized = shuffle(validPoems);
 
         allPoems = validPoems;

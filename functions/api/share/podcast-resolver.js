@@ -1,4 +1,5 @@
 import { DOMParser, parseHTML } from 'linkedom';
+import { publicFetch } from '../lib/public-fetch.js';
 import { parseXStatusUrl, resolveXShareUrl } from './x-resolver.js';
 
 const FETCH_TIMEOUT_MS = 12000;
@@ -1237,21 +1238,14 @@ async function fetchText(url, fetchImpl, { maxBytes = MAX_HTML_BYTES } = {}) {
 }
 
 async function fetchWithTimeout(url, fetchImpl, options = {}) {
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
-  try {
-    return await fetchImpl(url, {
+    return publicFetch(url, {
       ...options,
-      signal: controller.signal,
       headers: {
         'user-agent': USER_AGENT,
         accept: 'application/rss+xml, application/xml, text/xml, text/html, application/json;q=0.9, */*;q=0.8',
         ...(options.headers || {})
       }
-    });
-  } finally {
-    clearTimeout(timeout);
-  }
+    }, { fetchImpl, timeoutMs: FETCH_TIMEOUT_MS, maxBytes: MAX_FEED_BYTES });
 }
 
 function looksLikePodcastFeed(url, contentType, body) {

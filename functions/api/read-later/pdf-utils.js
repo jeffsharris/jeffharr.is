@@ -1,3 +1,5 @@
+import { publicFetch } from '../lib/public-fetch.js';
+
 const PDF_FETCH_TIMEOUT_MS = 10000;
 const PDF_MAX_BYTES = 35 * 1024 * 1024;
 
@@ -105,13 +107,7 @@ function hasPdfMagic(bytes) {
 }
 
 async function fetchWithTimeout(url, options = {}, timeoutMs = PDF_FETCH_TIMEOUT_MS) {
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
-  try {
-    return await fetch(url, { ...options, signal: controller.signal });
-  } finally {
-    clearTimeout(timeoutId);
-  }
+  return publicFetch(url, options, { timeoutMs, maxBytes: PDF_MAX_BYTES });
 }
 
 function isRetryableStatus(status) {

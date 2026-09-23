@@ -1,3 +1,5 @@
+import { publicUrl } from '../lib/public-fetch.js';
+
 const MAX_URL_LENGTH = 2048;
 
 function getNowIso() {
@@ -30,6 +32,7 @@ function normalizeHttpUrl(input) {
   if (!trimmed) return null;
   const parsed = tryParseUrl(trimmed) || tryParseUrl(`https://${trimmed}`);
   if (!parsed || !['http:', 'https:'].includes(parsed.protocol)) return null;
+  try { publicUrl(parsed); } catch { return null; }
   parsed.hash = '';
   const normalized = parsed.toString();
   if (normalized.length > MAX_URL_LENGTH) return null;

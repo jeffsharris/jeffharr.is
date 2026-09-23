@@ -2,6 +2,7 @@ import { getContentDb } from '../content-library/db.js';
 import { getReadLaterItem } from '../content-library/read-later-store.js';
 import { jsonResponse } from '../content-library/serialize.js';
 import { getYouTubeInfo, directVideo } from './media-utils.js';
+import { getAdminUser } from '../content-library/auth.js';
 
 export function selectXVideo(media) {
   if (media?.type !== 'video') return null;
@@ -67,7 +68,9 @@ export async function onRequest({ request, env }) {
   if (!item) return jsonResponse({ error: 'Item not found' }, { status: 404 });
   // Refresh expiring media on playback, but avoid repeated provider calls for quick reopens.
   const recentlyChecked = Date.now() - Date.parse(item.videoCheckedAt) < 900000;
-  await enrichXVideos(db, [{ ...item, videoCheckedAt: recentlyChecked ? item.videoCheckedAt : null }], env);
+  if (await getAdminUser(request, env)) {
+    await enrichXVideos(db, [{ ...item, videoCheckedAt: recentlyChecked ? item.videoCheckedAt : null }], env);
+  }
   const refreshed = await getReadLaterItem(db, item.id);
   const video = refreshed?.video || directVideo(item.url);
   return jsonResponse({ video, provider: getYouTubeInfo(item.url) ? 'youtube' : (video?.provider || 'web') }, { cache: 'no-store' });

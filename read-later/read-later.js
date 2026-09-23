@@ -77,6 +77,10 @@
     savingItem: null  // Placeholder item while saving
   };
 
+  document.addEventListener('jeff-admin:session', event => {
+    document.documentElement.dataset.owner = event.detail?.admin ? 'true' : 'false';
+  });
+
   const REFRESH_INTERVAL_MS = 60000;
   const COVER_STATUS_POLL_INTERVAL_MS = 3500;
   const COVER_STATUS_MAX_ERRORS = 3;
@@ -261,6 +265,7 @@
     domain.textContent = formatDomain(item.url);
     time.textContent = formatDate(item.savedAt);
     renderKindleState(item, kindleLink);
+    kindleLink.dataset.ownerAction = '';
 
     kindleLink.addEventListener('click', () => {
       syncKindle(item.id);
@@ -273,6 +278,7 @@
 
     // Regenerate cover button (only visible on hover for items without covers)
     if (thumbRegenerate) {
+      thumbRegenerate.dataset.ownerAction = '';
       thumbRegenerate.classList.toggle('is-loading', isCoverGenerating || coverRequests.has(item.id));
       thumbRegenerate.disabled = isCoverGenerating || coverRequests.has(item.id);
       thumbRegenerate.title = isCoverGenerating ? 'Generating cover...' : 'Generate cover';
@@ -306,12 +312,14 @@
     });
 
     toggle.innerHTML = item.read ? ICON_MARK_UNREAD : ICON_MARK_READ;
+    toggle.dataset.ownerAction = '';
     const archiveLabel = item.read ? 'Restore to queue' : (isVideoItem(item) ? 'Mark watched' : 'Mark read');
     toggle.setAttribute('aria-label', archiveLabel);
     toggle.title = archiveLabel;
     toggle.addEventListener('click', () => updateReadStatus(item.id, !item.read));
 
     remove.innerHTML = ICON_DELETE;
+    remove.dataset.ownerAction = '';
     remove.classList.add('is-danger');
     remove.title = 'Delete';
     remove.addEventListener('click', () => deleteItem(item.id));
@@ -522,6 +530,7 @@
   }
 
   async function syncKindle(id) {
+    if (!window.jeffAdmin?.isSignedIn()) return;
     if (!id || kindleRequests.has(id)) return;
     const item = state.items.find(entry => entry.id === id);
     if (item && (getYouTubeInfoFromItem(item) || isKindleQueued(getKindleStatus(item)))) return;
@@ -974,6 +983,7 @@
   function attachRefreshListener(elements) {
     const { item, readerTitle, readerMeta, readerStatus, readerBody, readerRefresh } = elements;
     if (!readerRefresh) return;
+    readerRefresh.dataset.ownerAction = '';
     readerRefresh.hidden = false;
     readerRefresh.disabled = false;
     readerRefresh.innerHTML = ICON_REFRESH;
@@ -1360,6 +1370,7 @@
   }
 
   async function saveVideoProgress(id, progress) {
+    if (!window.jeffAdmin?.isSignedIn()) return;
     if (!id || !progress) return;
     if (progress.duration < VIDEO_PROGRESS_MIN_SECONDS) return;
 
@@ -1379,6 +1390,7 @@
   }
 
   async function clearVideoProgress(id, duration) {
+    if (!window.jeffAdmin?.isSignedIn()) return;
     if (!id || !Number.isFinite(duration)) return;
 
     try {
@@ -1482,6 +1494,7 @@
   }
 
   async function saveProgress(id, scrollTop, scrollRatio, updatedAt) {
+    if (!window.jeffAdmin?.isSignedIn()) return;
     try {
       await fetch('/api/read-later/progress', {
         method: 'PATCH',

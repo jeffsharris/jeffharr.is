@@ -311,19 +311,20 @@
   </div>
 
   <script>
-    // Fetch each teacher's talks.json once and replace the placeholder count.
     (async () => {
       const tiles = document.querySelectorAll('[data-talks-src]');
+      const counts = await fetch('/dharma/counts.json').then(response => {
+        if (!response.ok) throw new Error('Counts unavailable');
+        return response.json();
+      }).catch(() => ({}));
       await Promise.all(Array.from(tiles).map(async (tile) => {
         const src = tile.dataset.talksSrc;
         const countEl = tile.querySelector('[data-talk-count]');
         if (!countEl) return;
         try {
-          const res = await fetch(src, { cache: 'force-cache' });
-          if (!res.ok) throw new Error(`status ${res.status}`);
-          const json = await res.json();
-          const list = Array.isArray(json) ? json : (json.talks || json.items || []);
-          countEl.textContent = list.length.toLocaleString();
+          const count = counts[src.split('/')[2]];
+          if (!Number.isInteger(count)) throw new Error('Count unavailable');
+          countEl.textContent = count.toLocaleString();
         } catch (err) {
           countEl.textContent = '';
           // hide the surrounding "— talks" line if we couldn't get a count

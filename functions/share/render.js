@@ -96,7 +96,7 @@ function renderXSharePage(item, requestUrl) {
   const shareText = sharedPost?.author?.username
     ? `${sharedPost.author.name || `@${sharedPost.author.username}`} on X`
     : title;
-  const originalUrl = item.canonicalUrl || sharedPost?.url || '';
+  const originalUrl = safeWebUrl(item.canonicalUrl || sharedPost?.url || '');
   const warnings = item.x?.warnings || item.resolution?.warnings || [];
 
   return htmlDocument({
@@ -284,7 +284,7 @@ export function renderRedirectPage(shareUrl) {
           <a class="primary-btn" href="${escapeAttribute(shareUrl)}">Open share page</a>
         </section>
       </main>
-      <script>location.replace(${JSON.stringify(shareUrl)});</script>
+      <script>location.replace(${JSON.stringify(shareUrl).replace(/</g, '\\u003c')});</script>
     `
   });
 }
@@ -354,11 +354,11 @@ function renderPlatformSection(platforms) {
 function renderPlatformLinks(platforms) {
   return PLATFORM_ORDER
     .map((key) => [key, platforms[key]])
-    .filter(([, platform]) => platform?.url)
+    .filter(([, platform]) => safeWebUrl(platform?.url))
     .map(([key, platform]) => `
       <a class="platform-btn platform-btn--${escapeAttribute(key)}"
          data-platform="${escapeAttribute(key)}"
-         href="${escapeAttribute(platform.url)}"
+         href="${escapeAttribute(safeWebUrl(platform.url))}"
          target="_blank"
          rel="noopener">
         <span class="platform-btn__icon" aria-hidden="true">${platformIconSvg(key)}</span>
@@ -505,7 +505,7 @@ function renderXPostCard(post) {
         ${post.quotedPost ? renderQuotedXPost(post.quotedPost) : ''}
         <footer class="x-post__footer">
           ${metrics ? `<span>${escapeHtml(metrics)}</span>` : '<span>Post on X</span>'}
-          ${post.url ? `<a href="${escapeAttribute(post.url)}" target="_blank" rel="noopener">View original</a>` : ''}
+          ${safeWebUrl(post.url) ? `<a href="${escapeAttribute(safeWebUrl(post.url))}" target="_blank" rel="noopener">View original</a>` : ''}
         </footer>
       </div>
     </article>
@@ -655,4 +655,12 @@ function escapeHtml(value) {
 
 function escapeAttribute(value) {
   return escapeHtml(value);
+}
+
+function safeWebUrl(value) {
+  if (typeof value !== 'string') return '';
+  try {
+    const url = new URL(value);
+    return ['https:', 'http:'].includes(url.protocol) && !url.username && !url.password ? url.href : '';
+  } catch { return ''; }
 }

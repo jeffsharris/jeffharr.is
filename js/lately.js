@@ -25,14 +25,14 @@
   ];
 
   async function init() {
-    const [goodreads, letterboxd, github, readLater, x] = await Promise.all([
-      fetchJson(SOURCES.goodreads),
-      fetchJson(SOURCES.letterboxd),
-      fetchJson(SOURCES.github),
-      fetchJson(SOURCES.readLater),
-      fetchJson(SOURCES.x)
-    ]);
+    const data = {};
+    await Promise.all(Object.entries(SOURCES).map(async ([name, url]) => {
+      data[name] = await fetchJson(url);
+      renderSources(data);
+    }));
+  }
 
+  function renderSources({ goodreads, letterboxd, github, readLater, x }) {
     const githubItem = normalizeGithubSummary(github);
     const buckets = [
       normalizeFinishedBooks(goodreads),
@@ -51,10 +51,11 @@
     try {
       const response = await fetch(url, {
         headers: { accept: 'application/json' },
-        cache: 'default'
+        cache: 'default',
+        signal: AbortSignal.timeout(12000)
       });
       if (!response.ok) return null;
-      return response.json();
+      return await response.json();
     } catch {
       return null;
     }

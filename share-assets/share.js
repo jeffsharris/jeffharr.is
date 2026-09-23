@@ -116,6 +116,11 @@
           headers: { 'content-type': 'application/json' },
           body: JSON.stringify({ url })
         });
+        if (response.status === 401) {
+          const back = `/share/?url=${encodeURIComponent(url)}`;
+          location.assign(`/api/admin/session?redirect=${encodeURIComponent(back)}`);
+          return;
+        }
         const body = await response.json();
         if (!response.ok || !body.ok) {
           throw new Error(body.error || 'Unable to create share link');
@@ -195,6 +200,12 @@
           headers: { 'content-type': 'application/json' },
           body: JSON.stringify({ url: sourceUrl })
         });
+        if (response.status === 401) {
+          done = true;
+          clearInterval(timer);
+          location.assign(`/api/admin/session?redirect=${encodeURIComponent(location.pathname + location.search)}`);
+          return;
+        }
         const body = await response.json();
         if (!response.ok || !body.ok) {
           throw new Error(body.error || 'Unable to create share link');

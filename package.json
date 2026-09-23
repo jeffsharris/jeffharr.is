@@ -3,6 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "build": "node scripts/build-site.mjs",
     "poem-images:review": "node scripts/poem-image-review-server.mjs",
     "poem-images:publish": "node scripts/publish-poem-images.mjs",
     "quotes:review": "node scripts/quote-highlight-review-server.mjs",
@@ -16,8 +17,8 @@
   },
   "dependencies": {
     "@cloudflare/puppeteer": "^1.0.4",
-    "@mozilla/readability": "^0.5.0",
-    "fflate": "^0.8.2",
+    "@mozilla/readability": "^0.6.0",
+    "fflate": "^0.8.3",
     "linkedom": "^0.15.1",
     "pdf-lib": "^1.17.1"
   }

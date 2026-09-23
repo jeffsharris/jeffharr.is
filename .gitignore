@@ -13,5 +13,6 @@ notes/kindle-highlights-import.txt
 .wrangler/
 .pycache-check/
 node_modules/
+dist/
 .local-corpus/
 .env.1password*

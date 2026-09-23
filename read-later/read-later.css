@@ -1232,3 +1232,6 @@ video.reader__video {
     transition-duration: 1ms !important;
   }
 }
+:root:not([data-owner="true"]) [data-owner-action] {
+  display: none !important;
+}

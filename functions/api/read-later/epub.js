@@ -560,16 +560,11 @@ async function fetchImageBytes(url, timeoutMs = FETCH_TIMEOUT_MS) {
 }
 
 async function fetchWithTimeout(url, options = {}, timeoutMs = FETCH_TIMEOUT_MS) {
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
-  try {
-    return await fetch(url, { ...options, signal: controller.signal });
-  } finally {
-    clearTimeout(timeoutId);
-  }
+  return publicFetch(url, options, { timeoutMs, maxBytes: 10 * 1024 * 1024 });
 }
 
 export {
   MAX_EMAIL_BYTES,
   buildEpubAttachment
 };
+import { publicFetch } from '../lib/public-fetch.js';
