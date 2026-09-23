@@ -85,6 +85,22 @@ npx wrangler queues resume-delivery push-delivery
 ```
 
 ## Event catalog
+### native-auth (Sukha connection)
+- `native_sign_in_started`: the app is redirected to the Access-protected session URL.
+- `native_consent_shown`: owner identity verified; the device consent page is displayed.
+- `native_authorization_rejected`: the protected session could not verify an owner.
+- `native_code_issued`: consent submitted and the single-use PKCE code returned to the app.
+- `native_exchange_rejected`: code expired, already used, or the verifier did not match.
+- `native_connection_created`: the code exchange created the device credential.
+
+Consent lives at `/api/admin/session?native=1`, not an unprotected sibling URL.
+Use `Referrer-Policy: same-origin` on its HTML form: `no-referrer` makes browser
+form submissions send `Origin: null`, which the CSRF check correctly rejects.
+Code exchange remains at `/api/auth/native?action=exchange` for the native client.
+Never log authorization headers, cookies, query strings, codes, verifiers, tokens,
+or owner email addresses while diagnosing this flow. Pages logs are live-only;
+start the tail before asking for a retry.
+
 ### read-later (save/list/update/delete)
 - `storage_unavailable` (init)
 - `list_failed`

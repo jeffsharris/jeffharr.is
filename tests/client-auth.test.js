@@ -4,6 +4,7 @@ import { DatabaseSync } from 'node:sqlite';
 import { readFileSync } from 'node:fs';
 import { onRequest as native } from '../functions/api/auth/native.js';
 import { onRequest as middleware } from '../functions/_middleware.js';
+import { onRequest as adminSession } from '../functions/api/admin/session.js';
 import { getLibraryUser, hashCredential, randomCredential } from '../functions/api/lib/client-auth.js';
 import { allowPublicSave } from '../functions/api/lib/public-save.js';
 import { saveReadLaterItem, updateReadLaterRead } from '../functions/api/content-library/read-later-store.js';
@@ -88,8 +89,61 @@ test('native credentials are scoped, expire, and are revoked on disconnect', asy
 });
 
 test('native authorization requires existing owner sign-in and never accepts arbitrary redirects', async t => {
-  const response = await native({env:{CONTENT_DB:database(t)},request:new Request('https://jeffharr.is/api/auth/native?redirect_uri=https://evil.example')});
+  const response = await native({env:{CONTENT_DB:database(t)},request:new Request(`https://jeffharr.is/api/auth/native?challenge=${'a'.repeat(43)}&state=${'b'.repeat(43)}&redirect_uri=https://evil.example`)});
   assert.equal(response.status,302);
   assert.equal(new URL(response.headers.get('location')).origin,'https://jeffharr.is');
   assert.equal(new URL(response.headers.get('location')).pathname,'/api/admin/session');
+  assert.equal(new URL(response.headers.get('location')).searchParams.get('native'),'1');
+  assert.equal(new URL(response.headers.get('location')).searchParams.has('redirect_uri'),false);
+});
+
+test('native sign-in stays behind Access through consent and exchanges without browser cookies', async t => {
+  const db = database(t);
+  const keys = await crypto.subtle.generateKey({name:'RSASSA-PKCS1-v1_5',modulusLength:2048,publicExponent:new Uint8Array([1,0,1]),hash:'SHA-256'},true,['sign','verify']);
+  const jwk = {...await crypto.subtle.exportKey('jwk',keys.publicKey),kid:'native-test'};
+  t.mock.method(globalThis,'fetch',async()=>Response.json({keys:[jwk]}));
+  const logs = [];
+  t.mock.method(console,'log',line=>logs.push(line));
+  t.mock.method(console,'warn',line=>logs.push(line));
+  const encode = value=>Buffer.from(JSON.stringify(value)).toString('base64url');
+  const input = `${encode({alg:'RS256',kid:jwk.kid})}.${encode({iss:'https://native-test.cloudflareaccess.com',aud:'native-test',exp:Math.floor(Date.now()/1000)+300,email:'owner@example.com'})}`;
+  const token = `${input}.${Buffer.from(await crypto.subtle.sign('RSASSA-PKCS1-v1_5',keys.privateKey,new TextEncoder().encode(input))).toString('base64url')}`;
+  const env = {CONTENT_DB:db,CLOUDFLARE_ACCESS_TEAM_DOMAIN:'native-test.cloudflareaccess.com',ADMIN_ACCESS_AUD:'native-test',ADMIN_ALLOWED_EMAILS:'owner@example.com'};
+  const verifier = randomCredential();
+  const challenge = await hashCredential(verifier);
+  const state = randomCredential();
+  const start = await native({env,request:new Request(`https://jeffharr.is/api/auth/native?challenge=${challenge}&state=${state}`)});
+  const consentURL = start.headers.get('location');
+  const route = request => middleware({request,env,next:nextRequest=>adminSession({request:nextRequest || request,env})});
+  const headers = {'cf-access-jwt-assertion':token,accept:'text/html'};
+  const consent = await route(new Request(consentURL,{headers}));
+  assert.equal(consent.status,200);
+  assert.match(await consent.text(),/Connect this device/);
+  assert.equal(consent.headers.get('referrer-policy'),'same-origin');
+  assert.match(consent.headers.get('content-security-policy'),/form-action 'self' sukha:/);
+  assert.equal((await db.prepare('SELECT COUNT(*) AS count FROM client_authorization_codes').bind().first()).count,0);
+  assert.equal((await route(new Request(consentURL))).status,401);
+  assert.equal((await route(new Request(consentURL,{method:'POST',headers:{...headers,origin:'null'}}))).status,403);
+  assert.equal((await route(new Request(consentURL,{method:'POST',headers:{...headers,origin:'https://evil.example'}}))).status,403);
+  const approved = await route(new Request(consentURL,{method:'POST',headers:{...headers,origin:'https://jeffharr.is','sec-fetch-site':'same-origin'},body:''}));
+  assert.equal(approved.status,302);
+  const callback = new URL(approved.headers.get('location'));
+  assert.equal(callback.protocol,'sukha:');
+  assert.equal(callback.host,'auth');
+  assert.equal(callback.pathname,'/callback');
+  assert.equal(callback.searchParams.get('state'),state);
+  const code = callback.searchParams.get('code');
+  const exchanged = await native({env,request:new Request('https://jeffharr.is/api/auth/native?action=exchange',{method:'POST',body:JSON.stringify({code,verifier})})});
+  assert.equal(exchanged.status,200);
+  const credential = await exchanged.json();
+  assert.ok(await getLibraryUser(new Request('https://jeffharr.is/api/read-later',{headers:{authorization:`Bearer ${credential.token}`}}),env));
+  assert.ok(logs.some(line=>line.includes('native_connection_created')));
+  for (const secret of [token,verifier,state,challenge,code,credential.token,'owner@example.com']) assert.equal(logs.some(line=>line.includes(secret)),false);
+});
+
+test('native attempts reject malformed or repeated parameters without entering sign-in', async t => {
+  const env = {CONTENT_DB:database(t)};
+  for (const query of ['',`challenge=${'a'.repeat(43)}&state=short`,`challenge=${'a'.repeat(43)}&state=${'b'.repeat(43)}&state=${'c'.repeat(43)}`]) {
+    assert.equal((await native({env,request:new Request(`https://jeffharr.is/api/auth/native?${query}`)})).status,400);
+  }
 });

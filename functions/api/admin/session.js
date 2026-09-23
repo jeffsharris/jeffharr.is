@@ -1,8 +1,12 @@
 import { getAdminUser, unauthorizedResponse } from '../content-library/auth.js';
 import { jsonResponse } from '../content-library/serialize.js';
+import { authorizeNativeDevice } from '../lib/native-authorization.js';
 
 export async function onRequest(context) {
   const { request, env } = context;
+  const url = new URL(request.url);
+
+  if (url.searchParams.get('native') === '1') return authorizeNativeDevice(context);
 
   if (request.method === 'OPTIONS') {
     return new Response(null, { status: 204 });
@@ -15,7 +19,6 @@ export async function onRequest(context) {
   const user = await getAdminUser(request, env);
   if (!user) return unauthorizedResponse();
 
-  const url = new URL(request.url);
   const redirect = safeRedirect(url.searchParams.get('redirect'), request.url);
   if (redirect && acceptsHtml(request)) {
     return Response.redirect(redirect, 302);
