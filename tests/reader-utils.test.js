@@ -1,5 +1,14 @@
 import test from 'node:test';
+import { normalizeReaderWordCount } from '../functions/api/read-later/asset-store.js';
 import assert from 'node:assert/strict';
+
+test('legacy reader character counts are normalized without changing HTML', () => {
+  const reader = {contentHtml:'<p>Hello <strong>reader</strong>, welcome home.</p>',wordCount:47,title:'Example'};
+  const normalized = normalizeReaderWordCount(reader);
+  assert.equal(normalized.wordCount,4);
+  assert.equal(normalized.contentHtml,reader.contentHtml);
+  assert.equal(reader.wordCount,47);
+});
 import {
   shouldCacheReader,
   absolutizeUrl,

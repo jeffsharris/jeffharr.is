@@ -57,7 +57,7 @@ abuse; it does not make a public intake abuse-proof. An attacker could consume t
 daily quota or add unwanted items. Requiring a device-specific save credential is
 the stronger alternative if that tradeoff becomes unacceptable.
 
-### S2: Internal files in published deployments (high)
+### S2: Internal files and historical deployment bypass (critical)
 
 Confirmed that an internal push runbook was publicly served. The build now creates
 an explicit public-assets-only `dist/`; notes, tools, tests, source functions,
@@ -67,6 +67,9 @@ rejects internal paths as defense in depth. The build has automated exclusion te
 **Historical exposure remains pending approval:** immutable old Pages deployment
 URLs still serve old code and assets. Protecting `*.jeffharr-is.pages.dev` with the
 existing owner allowlist was blocked by auto-review and requires explicit approval.
+Old deployments can also retain access to the production storage and older,
+unauthenticated handlers. Until they are protected, they are a potential bypass
+around the new custom-domain controls, not merely a source-code disclosure issue.
 The current custom-domain deployment alone cannot remove that historical exposure.
 Do not roll back to a pre-audit build, since that would restore the vulnerabilities.
 
@@ -143,7 +146,9 @@ versions need the update and one initial connection before protected operations 
 These are asset/request measurements, not invented Lighthouse scores or field
 Core Web Vitals. Individual Dharma corpus views still load their full indexes;
 incremental search/index loading is a further opportunity. Reader word counts now
-count words instead of using Readability's character count for newly extracted items.
+count words instead of using Readability's character count. Cached legacy readers
+are normalized on retrieval too, with a bounded scalar cache and no source re-fetch
+or content rewrite.
 
 ## Journey audit
 
@@ -231,6 +236,15 @@ rejected and are not evidence. Screenshots alone do not establish WCAG complianc
   changes require updating the queue Worker too. Push Worker behavior did not change.
 - Preserve D1/R2 data; the new database migrations add only client-credential and
   anonymous-submission-limit tables. No existing content migration is required.
+- Production checks after the first deployment: all primary pages, collection
+  assets, and the Dharma feed returned 200; internal files returned 404;
+  unauthenticated delete/audio/forced-refresh returned 401; cross-site POST returned
+  403; public favorite lookup returned 200. An anonymous duplicate save returned
+  200 while preserving read state, saved date, and the last Kindle sync timestamp.
+- Cloudflare's build settings were changed to `npm run build` / `dist`, migrations
+  0005 and 0006 were applied, and the Read Later queue Worker was deployed separately.
+  The app update is in release tag `testflight-42`; delivery status must be checked
+  in its GitHub Actions run rather than inferred from the tag push.
 - This is a thorough application pass, not a guarantee of perfect security. No
   disaster-recovery drill, full historical secret audit, sustained abuse test, or
   full assistive-technology conformance audit was performed.

@@ -11,6 +11,10 @@ import {
   putJsonAsset
 } from '../content-library/assets.js';
 import { getNowIso } from '../content-library/ids.js';
+import { parseHTML } from 'linkedom';
+import { countWords } from './reader-utils.js';
+
+const readerWordCounts = new Map();
 
 function createReadLaterAssetStore(env, { requireAssets = true } = {}) {
   const db = getContentDb(env);
@@ -58,7 +62,24 @@ async function getReaderAsset({ db, bucket, itemId }) {
   if (!db || !bucket || !itemId) return null;
   const asset = await getAssetByRole(db, itemId, 'reader_html');
   if (!asset?.r2_key) return null;
-  return getJsonAsset({ bucket, asset });
+  const reader = await getJsonAsset({ bucket, asset });
+  if (!reader?.contentHtml) return reader;
+  // Older cached readers used character counts. Repair responses without rewriting
+  // content or re-fetching sources; retain only scalar counts in a bounded cache.
+  const key = `${asset.id}:${asset.updated_at}`;
+  let wordCount = readerWordCounts.get(key);
+  if (wordCount === undefined) {
+    wordCount = normalizeReaderWordCount(reader).wordCount;
+    if (readerWordCounts.size >= 128) readerWordCounts.delete(readerWordCounts.keys().next().value);
+    readerWordCounts.set(key, wordCount);
+  }
+  return {...reader, wordCount};
+}
+
+function normalizeReaderWordCount(reader) {
+  if (!reader?.contentHtml) return reader;
+  const { document } = parseHTML(`<html><body>${reader.contentHtml}</body></html>`);
+  return {...reader, wordCount:countWords(document.body.textContent || '')};
 }
 
 async function putReaderAsset({ db, bucket, itemId, reader }) {
@@ -234,6 +255,7 @@ function arrayBufferToBinaryString(buffer) {
 export {
   createD1ReadLaterAssetStore,
   createReadLaterAssetStore,
+  normalizeReaderWordCount,
   getReadLaterAssetItemId,
   putThumbnailAsset
 };
