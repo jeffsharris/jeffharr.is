@@ -1,5 +1,107 @@
 [
   {
+    "id": "audiodharma:26374",
+    "source": "AudioDharma",
+    "source_id": "26374",
+    "title": "Dharmette: Dharma is a relational path",
+    "speaker": "Matthew Brensilver",
+    "published_at": "2026-09-30T12:00:00+00:00",
+    "link": "https://www.audiodharma.org/talks/26374",
+    "audio_url": "https://audiodharma.us-east-1.linodeobjects.com/talks/26374/20260930-matthew_brensilver-imc-dharmette_dharma_is_a_relational_path.mp3",
+    "audio_type": "audio/mpeg",
+    "audio_length": null,
+    "duration": "15:35",
+    "description": "AudioDharma talk by Matthew Brensilver.",
+    "image_url": "https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+    "canonical_url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26374/",
+    "podcast_description": "What if practice is not something we do alone, but something that becomes possible through being met, known, and helped by others? The talk traces Dharma as a relational path: from early encounters that awaken possibility, to the role of transmission, sangha, vulnerability, and the way another person can steady us when our usual inner reference points fall away. It moves quietly toward the claim that even the deepest forms of meditation and healing may require another mind, another voice, and endless cycles of giving and receiving.",
+    "short_summary": "A reflection on Dharma as a relational path shaped by transmission, sangha, and the help of others.",
+    "episode_image_url": "https://jeffharr.is/dharma/brensilver/artwork/audiodharma-26374.jpg",
+    "chapters_url": "https://jeffharr.is/dharma/brensilver/chapters/audiodharma-26374.json",
+    "chapters": [
+      {
+        "start": 19.0,
+        "title": "Time and the path",
+        "description": "The talk opens with a brief reflection on time and the sense of continuing along the path together.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26374/?t=19",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 42.0,
+        "title": "Need for one another",
+        "description": "Anonymous questions about love and heartache lead into the claim that practice is fundamentally relational and human beings are formed with others.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26374/?t=42",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 111.0,
+        "title": "Warm hand to warm hand",
+        "description": "The speaker expands the idea of transmission, saying the Dharma is learned through other people, being known, and seeing ourselves in the mirror of the other.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26374/?t=111",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 179.0,
+        "title": "Lineage as relationship",
+        "description": "Tradition is described as a living chain of giving and receiving, where what has been offered by teachers is carried through gratitude and sharing.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26374/?t=179",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 238.0,
+        "title": "Awakening through encounter",
+        "description": "The Buddha’s encounter with a renunciate and a personal story from adolescence are used to show how a sense of possibility often begins with meeting someone who knows something important.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26374/?t=238",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 324.0,
+        "title": "What Dharma transmits",
+        "description": "The talk turns to how we notice others' words, bodies, and hearts, and why meditation is not mainly informational but something lived together.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26374/?t=324",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 413.0,
+        "title": "Beyond summaries",
+        "description": "A T.S. Eliot quotation frames the difficulty of summarizing Dharma talks, emphasizing that their real work is relational and experiential rather than merely verbal.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26374/?t=413",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 506.0,
+        "title": "Receiving support",
+        "description": "An unnamed psychological definition of maturity is used to argue that growth includes both self-regulation and the capacity to receive emotional support and share pain with others.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26374/?t=506",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 646.0,
+        "title": "When another mind helps",
+        "description": "The talk closes by describing shame, desperation, and groundlessness as moments when another person’s care, reassurance, and voice can make the path intelligible again.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26374/?t=646",
+        "img": null,
+        "toc": true
+      }
+    ],
+    "venue": null,
+    "series": null,
+    "tags": [],
+    "transcript": {
+      "status": "pending",
+      "url": null,
+      "text_path": null
+    }
+  },
+  {
     "id": "audiodharma:26251",
     "source": "AudioDharma",
     "source_id": "26251",

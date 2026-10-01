@@ -1,5 +1,91 @@
 [
   {
+    "id": "audiodharma:26373",
+    "source": "AudioDharma",
+    "source_id": "26373",
+    "title": "Guided Meditation: all phenomena become equally salient",
+    "speaker": "Matthew Brensilver",
+    "published_at": "2026-09-30T12:00:00+00:00",
+    "link": "https://www.audiodharma.org/talks/26373",
+    "audio_url": "https://audiodharma.us-east-1.linodeobjects.com/talks/26373/20260930-matthew_brensilver-imc-guided_meditation_all_phenomena_become_equally_salient.mp3",
+    "audio_type": "audio/mpeg",
+    "audio_length": null,
+    "duration": "25:59",
+    "description": "AudioDharma talk by Matthew Brensilver.",
+    "image_url": "https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+    "canonical_url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26373/",
+    "podcast_description": "The talk asks what practice feels like when nothing in experience gets promoted above anything else. It moves from settling in, to softening where attention snags, to the quieter recognition that knowing and letting go can become nearly the same movement. Rather than pushing for a special state, the guidance keeps returning to steady attunement, equanimity, and a kind of listening that allows all phenomena to become equally salient.",
+    "short_summary": "A guided meditation on steady attunement, softening attention, and letting all phenomena appear with the same salience.",
+    "episode_image_url": "https://jeffharr.is/dharma/brensilver/artwork/audiodharma-26373.jpg",
+    "chapters_url": "https://jeffharr.is/dharma/brensilver/chapters/audiodharma-26373.json",
+    "chapters": [
+      {
+        "start": 11.56,
+        "title": "Settling Into This Moment",
+        "description": "The talk begins by inviting a fresh settling, not just into sitting, but into the immediacy of this moment.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26373/?t=12",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 60.0,
+        "title": "Breathing Energy and Life",
+        "description": "Attention is guided toward what is highly activated and what feels frozen or flat, with the breath bringing energy or aliveness where needed.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26373/?t=60",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 120.0,
+        "title": "Attuned and Present",
+        "description": "The practice turns toward being exquisitely and empathically connected with what it is like to be here now, while asking how unwavering that attunement can be.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26373/?t=120",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 294.0,
+        "title": "Equanimity Without Intervening",
+        "description": "Equanimity is framed as not chasing urgency, and the talk suggests that attention itself can be a form of care, even of love.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26373/?t=294",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 600.96,
+        "title": "Softening Where Attention Snags",
+        "description": "When experience becomes viscous or snagged, the instruction is to soften and listen more deeply rather than grip the phenomenon.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26373/?t=601",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 822.96,
+        "title": "Equal Salience of All Things",
+        "description": "The central insight is named plainly: all phenomena have the same level of salience when letting go, with nothing more meaningful, sticky, or urgent than anything else.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26373/?t=823",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1141.2,
+        "title": "Knowing and Letting Go",
+        "description": "The talk closes by drawing together knowing and letting go as nearly the same movement.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26373/?t=1141",
+        "img": null,
+        "toc": true
+      }
+    ],
+    "venue": null,
+    "series": null,
+    "tags": [],
+    "transcript": {
+      "status": "pending",
+      "url": null,
+      "text_path": null
+    }
+  },
+  {
     "id": "audiodharma:26250",
     "source": "AudioDharma",
     "source_id": "26250",
