@@ -9,6 +9,7 @@ import { getLibraryUser, hashCredential, randomCredential } from '../functions/a
 import { allowPublicSave } from '../functions/api/lib/public-save.js';
 import { saveReadLaterItem, updateReadLaterRead } from '../functions/api/content-library/read-later-store.js';
 import { ensureSystemLists } from '../functions/api/content-library/db.js';
+import { onRequest as video } from '../functions/api/read-later/video.js';
 
 function database(t) {
   const sqlite = new DatabaseSync(':memory:');
@@ -21,6 +22,44 @@ function database(t) {
     return {bind(...args) {return {first: async () => statement.get(...args) || null, all:async()=>({results:statement.all(...args)}),run: async () => statement.run(...args)};}};
   }};
 }
+
+test('native credentials refresh X streams for casting and revoked credentials cannot', async t => {
+  const db = database(t);
+  await ensureSystemLists(db);
+  const saved = await saveReadLaterItem(db, { url: 'https://x.com/person/status/123', title: 'Saved video' });
+  const token = `sukha_${randomCredential()}`;
+  const now = Math.floor(Date.now() / 1000);
+  await db.prepare('INSERT INTO client_credentials VALUES (?, ?, ?, ?, ?)')
+    .bind(await hashCredential(token), 'owner@example.com', 'sukha', now, now + 60).run();
+  const stale = JSON.stringify({ videoCheckedAt: '2026-01-01T00:00:00Z', video: {
+    url: 'https://video.twimg.com/old.mp4', contentType: 'video/mp4', provider: 'x', thumbnailUrl: null
+  } });
+  const setStale = () => db.prepare('UPDATE items SET extra_json = ? WHERE id = ?').bind(stale, saved.item.itemId).run();
+  await setStale();
+  let calls = 0;
+  t.mock.method(globalThis, 'fetch', async url => {
+    assert.equal(url.hostname, 'api.x.com');
+    calls++;
+    return Response.json({ data: [{ id: '123', attachments: { media_keys: ['v'] } }], includes: { media: [{
+      media_key: 'v', type: 'video', variants: [{ content_type: 'video/mp4', url: 'https://video.twimg.com/fresh.mp4', bit_rate: 100 }]
+    }] } });
+  });
+  const env = { CONTENT_DB: db, ADMIN_ALLOWED_EMAILS: 'owner@example.com', X_API_BEARER_TOKEN: 'test-only' };
+  const request = authorized => new Request(`https://jeffharr.is/api/read-later/video?id=${saved.item.id}`, {
+    headers: authorized ? { authorization: `Bearer ${token}` } : {}
+  });
+  const refreshed = await video({ request: request(true), env });
+  assert.equal((await refreshed.json()).video.url, 'https://video.twimg.com/fresh.mp4');
+  assert.equal(calls, 1);
+  await video({ request: request(true), env });
+  assert.equal(calls, 1, 'recent metadata should not call the provider again');
+  await setStale();
+  await video({ request: request(false), env });
+  assert.equal(calls, 1, 'anonymous requests must not initiate refreshes');
+  await db.prepare('DELETE FROM client_credentials').bind().run();
+  await video({ request: request(true), env });
+  assert.equal(calls, 1, 'revoked devices must not initiate refreshes');
+});
 
 test('public duplicate saves cannot change titles or unarchive items', async t => {
   const db = database(t);

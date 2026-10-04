@@ -42,6 +42,8 @@ The Read Later API adds nullable `video` metadata and derives `kind: video` for 
 
 `GET /api/read-later/video?id=<entry-id>` resolves a saved item's native stream and refreshes older X media metadata. Missing credentials, unavailable streams, or provider restrictions preserve the source link as a fallback. YouTube URLs are not downloadable media URLs and must not be sent to the default Cast receiver. The iOS app uses provider playback/handoff for YouTube and native AirPlay/Chromecast for accessible MP4/HLS streams. The website uses HTML video controls where native streams exist.
 
+Stream refresh authorization accepts both website owner sign-ins and valid Sukha device credentials through `getLibraryUser`. Anonymous and revoked devices cannot trigger provider refreshes. Recent X metadata is reused for 15 minutes.
+
 This feature deploys through Pages only; no queue-consumer behavior or schema was changed. Run `npm test`, then check Read/Watch/Archive, deep-link restoration, and video teardown at desktop and mobile widths before publishing.
 
 - Pages Functions (`functions/api/*`) serve API routes and use `wrangler.toml`.
