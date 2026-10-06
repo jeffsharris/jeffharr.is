@@ -41,18 +41,25 @@ export async function buildPdfReader({ url, title, bytes, filename, assetStore, 
   const extraction = previous?.fingerprint === fingerprint && previous?.version === EXTRACTION_VERSION
     ? previous : { version: EXTRACTION_VERSION, fingerprint, pages: [], title: '', author: '' };
 
-  for (let start = 0; start < pageCount; start += PAGES_PER_BATCH) {
-    const end = Math.min(start + PAGES_PER_BATCH, pageCount);
-    if (extraction.pages.slice(start, end).filter(Boolean).length === end - start) continue;
+  async function extractRange(start, end) {
+    if (extraction.pages.slice(start, end).filter(Boolean).length === end - start) return;
     if (!env.OPENAI_API_KEY) throw pdfError('PDF text extraction is not configured.', false);
     const batch = await PDFDocument.create();
     const pages = await batch.copyPages(document, Array.from({ length: end - start }, (_, index) => start + index));
     pages.forEach((page) => batch.addPage(page));
     const batchBytes = await batch.save();
     if (batchBytes.length > 8 * 1024 * 1024) throw pdfError('These PDF pages are too large for text extraction. The original PDF is still available.', false);
-    const result = await extractPdfBatch(batchBytes, {
-      pageCount: end - start, firstPage: start === 0, apiKey: env.OPENAI_API_KEY
-    });
+    let result;
+    try {
+      result = await extractPdfBatch(batchBytes, {
+        pageCount: end - start, firstPage: start === 0, apiKey: env.OPENAI_API_KEY
+      });
+    } catch (error) {
+      if (error.code !== 'pdf_transcription_incomplete' || end - start === 1) throw error;
+      log?.('info', 'pdf_text_batch_split', { itemId, firstPage: start + 1, lastPage: end });
+      for (let index = start; index < end; index++) await extractRange(index, index + 1);
+      return;
+    }
     for (const [index, page] of result.pages.entries()) extraction.pages[start + index] = page;
     if (start === 0) {
       extraction.title = result.title;
@@ -60,6 +67,9 @@ export async function buildPdfReader({ url, title, bytes, filename, assetStore, 
     }
     await assetStore?.savePdfExtraction?.(itemId, extraction);
     log?.('info', 'pdf_text_batch_complete', { itemId, pagesCompleted: end, pageCount });
+  }
+  for (let start = 0; start < pageCount; start += PAGES_PER_BATCH) {
+    await extractRange(start, Math.min(start + PAGES_PER_BATCH, pageCount));
   }
 
   const metadataTitle = cleanTitle(document.getTitle());
@@ -94,6 +104,7 @@ export async function extractPdfBatch(bytes, { pageCount, firstPage, apiKey }) {
           'Transcribe ALL text on EVERY supplied page verbatim, using embedded text when available and OCR for image-only pages.',
           'Do not summarize, paraphrase, omit passages, add facts, or repair the author\'s wording. Preserve headings, paragraphs, list items, quotations, captions, and footnotes in reading order.',
           'Merge visual line wraps within paragraphs; do not merge distinct paragraphs. Exclude only repeated running headers, running footers, and page numbers.',
+          'A paragraph or list item may start or end mid-sentence at a supplied page boundary. Transcribe the visible fragment; this does not make the supplied page incomplete. Do not infer text from unsupplied pages.',
           `Return exactly ${pageCount} pages numbered 1 through ${pageCount}, including blank pages with empty blocks. Set complete=false if any text is unreadable or omitted.`,
           firstPage ? 'Set title to the actual document title visible on its first page and author to the stated author. Do not guess missing metadata.' : 'Set title and author to empty strings; these are continuation pages.'
         ].join(' '),
@@ -106,7 +117,7 @@ export async function extractPdfBatch(bytes, { pageCount, firstPage, apiKey }) {
     });
     if (!response.ok) throw pdfError(`PDF transcription failed (${response.status}).`, response.status === 429 || response.status >= 500);
     const data = await response.json();
-    if (data.status !== 'completed') throw pdfError('PDF transcription was incomplete.');
+    if (data.status !== 'completed') throw Object.assign(pdfError('PDF transcription was incomplete.'), { code: 'pdf_transcription_incomplete' });
     const text = (data.output || []).filter((item) => item.type === 'message')
       .flatMap((item) => item.content || []).filter((part) => part.type === 'output_text')
       .map((part) => part.text).join('');
@@ -117,7 +128,9 @@ export async function extractPdfBatch(bytes, { pageCount, firstPage, apiKey }) {
 }
 
 export function validatePdfBatch(result, pageCount) {
-  if (!result?.complete || !Array.isArray(result.pages) || result.pages.length !== pageCount) throw pdfError('PDF transcription omitted pages or text.');
+  if (!result?.complete || !Array.isArray(result.pages) || result.pages.length !== pageCount) {
+    throw Object.assign(pdfError(`PDF transcription omitted pages or text (complete=${result?.complete === true}, pages=${result?.pages?.length ?? 0}/${pageCount}).`), { code: 'pdf_transcription_incomplete' });
+  }
   for (const [index, page] of result.pages.entries()) {
     if (page.pageNumber !== index + 1 || !Array.isArray(page.blocks)) throw pdfError('PDF transcription returned invalid page order.');
     for (const block of page.blocks) {

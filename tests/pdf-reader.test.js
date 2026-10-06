@@ -94,6 +94,47 @@ test('PDF extraction batches all pages, resumes cached work, and never refetches
   assert.equal(shouldCacheReader(reader), true);
 });
 
+test('incomplete batches split into pages and resume each successful page after a transient failure', async (t) => {
+  const originalFetch = globalThis.fetch; t.after(() => { globalThis.fetch = originalFetch; });
+  const bytes = await pdfBytes(3);
+  let savedExtraction, calls = 0;
+  const pageCounts = [];
+  const assetStore = {
+    getReader: async () => null,
+    getOriginalPdf: async () => ({ bytes, filename: 'Title.pdf' }),
+    getPdfExtraction: async () => savedExtraction,
+    savePdfExtraction: async (_, value) => { savedExtraction = structuredClone(value); }
+  };
+  globalThis.fetch = async (_, options) => {
+    const input = JSON.parse(options.body).input[0].content[0];
+    const submitted = await PDFDocument.load(Buffer.from(input.file_data.split(',')[1], 'base64'));
+    const count = submitted.getPageCount();
+    pageCounts.push(count); calls++;
+    if (count > 1) return responseFor({ ...batch(count), complete: false });
+    if (calls === 3) return new Response('retry later', { status: 503 });
+    return responseFor(batch(count));
+  };
+  const args = { url: 'https://example.com/expired.pdf', assetStore, itemId: 'asset', env: { OPENAI_API_KEY: 'test-key' } };
+  await assert.rejects(buildPdfReader(args), /503/);
+  assert.equal(savedExtraction.pages.length, 1);
+  const reader = await buildPdfReader(args);
+  assert.deepEqual(pageCounts, [3, 1, 1, 3, 1, 1]);
+  assert.equal(savedExtraction.pages.length, 3);
+  assert.equal(reader.title, 'The Real Document Title');
+  assert.equal(reader.pageCount, 3);
+});
+
+test('a single-page omission still fails instead of publishing partial text', async (t) => {
+  const originalFetch = globalThis.fetch; t.after(() => { globalThis.fetch = originalFetch; });
+  let calls = 0, saves = 0;
+  globalThis.fetch = async () => { calls++; return responseFor({ ...batch(1), complete: false }); };
+  await assert.rejects(buildPdfReader({ url: 'https://example.com/book.pdf', bytes: await pdfBytes(), itemId: 'asset',
+    env: { OPENAI_API_KEY: 'test-key' }, assetStore: { getReader: async () => null, savePdfExtraction: async () => { saves++; } }
+  }), (error) => error.code === 'pdf_transcription_incomplete');
+  assert.equal(calls, 1);
+  assert.equal(saves, 0);
+});
+
 test('PDFs without filename extensions are detected by bytes and preserved before extraction', async (t) => {
   const originalFetch = globalThis.fetch; t.after(() => { globalThis.fetch = originalFetch; });
   const bytes = await pdfBytes(); let saved = false;
