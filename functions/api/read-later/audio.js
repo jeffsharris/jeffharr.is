@@ -4,6 +4,7 @@ import { jsonResponse } from '../content-library/serialize.js';
 import { createReadLaterStores } from './stores.js';
 import { getReadLaterAssetItemId } from './asset-store.js';
 import { fetchAndCacheReader } from './reader.js';
+import { isReadableText } from './reader-utils.js';
 
 const OPENAI_SPEECH_URL = 'https://api.openai.com/v1/audio/speech';
 const OPENAI_SPEECH_MODEL = 'gpt-4o-mini-tts';
@@ -118,6 +119,7 @@ async function prepareSpeechChunks({ id, env, readLaterStore, assetStore, log })
       title: item.title,
       browser: env.BROWSER,
       xBearerToken: env.X_API_BEARER_TOKEN,
+      env,
       forceRefresh: false,
       log
     });
@@ -135,7 +137,7 @@ async function prepareSpeechChunks({ id, env, readLaterStore, assetStore, log })
 
   const speechText = readerHtmlToSpeechText(reader.contentHtml);
   const wordCount = countWords(speechText);
-  if (wordCount < MIN_SPEECH_WORDS) {
+  if (wordCount < MIN_SPEECH_WORDS || !isReadableText(speechText)) {
     log?.('warn', 'audio_reader_text_too_short', {
       stage: 'reader',
       itemId: id,

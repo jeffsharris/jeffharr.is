@@ -88,6 +88,7 @@ async function hashBytes(bytes) {
 export {
   getBinaryAsset,
   getJsonAsset,
+  hashBytes,
   putBinaryAsset,
   putJsonAsset
 };

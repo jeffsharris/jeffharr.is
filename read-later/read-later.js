@@ -923,8 +923,9 @@
 
     try {
       const payload = await fetchReader(item.id);
+      if (payload?.documentUrl) item.originalDocumentUrl = payload.documentUrl;
       if (!payload?.reader) {
-        throw new Error('Reader unavailable');
+        throw new Error(payload?.error || 'Reader unavailable');
       }
 
       if (payload.item) {
@@ -936,7 +937,7 @@
       attachProgressListener(item, readerBody);
     } catch (error) {
       console.error(error);
-      renderReaderError(item, readerStatus, readerBody);
+      renderReaderError(item, readerStatus, readerBody, error.message);
     }
   }
 
@@ -953,7 +954,7 @@
 
     const request = fetch(url.toString())
       .then(response => response.json())
-      .then(data => (data.ok ? { reader: data.reader, item: data.item } : null))
+      .then(data => ({ reader: data.ok ? data.reader : null, item: data.item, documentUrl: data.documentUrl, error: data.error }))
       .finally(() => {
         if (!refresh) {
           readerRequests.delete(id);
@@ -1003,8 +1004,9 @@
 
     try {
       const payload = await fetchReader(item.id, { refresh: true });
+      if (payload?.documentUrl) item.originalDocumentUrl = payload.documentUrl;
       if (!payload?.reader) {
-        throw new Error('Reader unavailable');
+        throw new Error(payload?.error || 'Reader unavailable');
       }
       if (payload.item) {
         updateItemTitle(item, payload.item);
@@ -1015,7 +1017,7 @@
       attachProgressListener(item, readerBody);
     } catch (error) {
       console.error(error);
-      renderReaderError(item, readerStatus, readerBody);
+      renderReaderError(item, readerStatus, readerBody, error.message);
     } finally {
       readerRefresh.disabled = false;
     }
@@ -1029,7 +1031,7 @@
 
     // Check for poor extraction (too short or empty content)
     const MIN_WORD_COUNT = 50;
-    if (!reader.contentHtml || reader.wordCount < MIN_WORD_COUNT) {
+    if (!reader.contentHtml || reader.wordCount < (reader.sourceType === 'pdf' ? 1 : MIN_WORD_COUNT)) {
       renderReaderError(item, readerStatus, readerBody);
       return;
     }
@@ -1037,19 +1039,20 @@
     readerBody.innerHTML = reader.contentHtml;
   }
 
-  function renderReaderError(item, readerStatus, readerBody) {
+  function renderReaderError(item, readerStatus, readerBody, message) {
     readerStatus.innerHTML = '';
     readerBody.innerHTML = '';
     const container = document.createElement('div');
     container.className = 'reader__fallback';
     const text = document.createElement('p');
-    text.textContent = 'Reader view isn\'t available for this page—some sites load content dynamically.';
+    const isPDF = item.originalDocumentUrl || /\.pdf$/i.test(new URL(item.url).pathname);
+    text.textContent = isPDF ? (message || 'PDF text is not available yet.') : 'Reader view isn\'t available for this page—some sites load content dynamically.';
     const link = document.createElement('a');
-    link.href = item.url;
+    link.href = item.originalDocumentUrl || item.url;
     link.target = '_blank';
     link.rel = 'noopener';
     link.className = 'reader__fallback-link';
-    link.textContent = 'Read on ' + formatDomain(item.url) + ' →';
+    link.textContent = isPDF ? 'Open PDF' : 'Read on ' + formatDomain(item.url) + ' →';
     container.appendChild(text);
     container.appendChild(link);
     readerBody.appendChild(container);

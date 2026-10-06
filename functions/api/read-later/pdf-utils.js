@@ -21,8 +21,13 @@ function isLikelyPdfUrl(url) {
   }
 }
 
-async function fetchPdfBytes(itemOrUrl, { log } = {}) {
+async function fetchPdfBytes(itemOrUrl, { log, assetStore, itemId } = {}) {
   const url = typeof itemOrUrl === 'string' ? itemOrUrl : itemOrUrl?.url;
+  const assetItemId = itemId || itemOrUrl?.itemId || itemOrUrl?.id;
+  if (assetItemId && assetStore?.getOriginalPdf) {
+    const stored = await assetStore.getOriginalPdf(assetItemId);
+    if (stored?.bytes) return { ...stored, bytes: new Uint8Array(stored.bytes) };
+  }
   if (!url) {
     throw new PdfFetchError('Missing PDF URL', {
       code: 'pdf_missing_url',
@@ -86,16 +91,37 @@ async function fetchPdfBytes(itemOrUrl, { log } = {}) {
     log('info', 'pdf_fetched', {
       stage: 'pdf_fetch',
       itemId: itemOrUrl?.id || null,
-      url: itemOrUrl?.url || null,
+      url: new URL(url).origin + new URL(url).pathname,
       title: itemOrUrl?.title || null,
       bytes: bytes.length
     });
   }
 
+  const filename = pdfFilename(response.headers.get('content-disposition'), url);
+  if (assetItemId && assetStore?.saveOriginalPdf) {
+    await assetStore.saveOriginalPdf(assetItemId, { bytes, filename });
+  }
   return {
     bytes,
+    filename,
     contentType: contentType || 'application/pdf'
   };
+}
+
+function pdfFilename(disposition, url) {
+  let name = '';
+  const extended = /filename\*=UTF-8''([^;]+)/i.exec(disposition || '');
+  const ordinary = /filename\s*=\s*(?:"([^"]+)"|([^;]+))/i.exec(disposition || '');
+  try {
+    name = extended ? decodeURIComponent(extended[1]) : ordinary?.[1] || ordinary?.[2] || '';
+    if (!name && url) {
+      const parsed = new URL(url);
+      const downloadDisposition = parsed.searchParams.get('response-content-disposition');
+      if (downloadDisposition) return pdfFilename(downloadDisposition, null);
+      name = decodeURIComponent(parsed.pathname.split('/').pop() || '');
+    }
+  } catch { /* Use a safe filename when source headers are malformed. */ }
+  return name.replace(/[\\/\u0000-\u001f\u007f]/g, '').trim().slice(0, 180) || 'document.pdf';
 }
 
 function hasPdfMagic(bytes) {
@@ -120,5 +146,6 @@ export {
   PdfFetchError,
   fetchPdfBytes,
   hasPdfMagic,
-  isLikelyPdfUrl
+  isLikelyPdfUrl,
+  pdfFilename
 };

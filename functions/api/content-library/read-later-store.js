@@ -387,6 +387,7 @@ async function listReadLaterRows(db, { limit = 1000 } = {}) {
       i.language,
       i.thumbnail_asset_id,
       i.primary_asset_id,
+      original_document.mime_type AS document_mime_type,
       i.extra_json AS item_extra_json,
       rs.read_at,
       rs.progress_json,
@@ -397,6 +398,7 @@ async function listReadLaterRows(db, { limit = 1000 } = {}) {
       COALESCE(thumbnail_by_role.url, thumbnail_by_id.url) AS thumbnail_url
      FROM list_entries le
      JOIN items i ON i.id = le.item_id
+     LEFT JOIN assets original_document ON original_document.id = i.primary_asset_id
      LEFT JOIN read_state rs ON rs.entry_id = le.id
      LEFT JOIN assets cover ON cover.id = (
        SELECT a.id
@@ -454,6 +456,7 @@ async function getReadLaterRow(db, entryId) {
       i.language,
       i.thumbnail_asset_id,
       i.primary_asset_id,
+      original_document.mime_type AS document_mime_type,
       i.extra_json AS item_extra_json,
       rs.read_at,
       rs.progress_json,
@@ -462,6 +465,7 @@ async function getReadLaterRow(db, entryId) {
       rs.push_channels_json
      FROM list_entries le
      JOIN items i ON i.id = le.item_id
+     LEFT JOIN assets original_document ON original_document.id = i.primary_asset_id
      LEFT JOIN read_state rs ON rs.entry_id = le.id
      WHERE le.id = ? AND le.list_id = ?`
   ).bind(entryId, READ_LATER_LIST_ID).first();
@@ -485,6 +489,8 @@ async function readLaterRowToItem(db, row) {
     videoCheckedAt: extra.videoCheckedAt || null,
     url,
     canonicalUrl: row.canonical_url || null,
+    originalDocumentUrl: row.document_mime_type === 'application/pdf'
+      ? `/api/read-later/document?id=${encodeURIComponent(row.entry_id)}` : null,
     title: row.title || normalizeTitle('', url),
     savedAt: row.added_at,
     read: Boolean(readAt) || row.entry_status === 'done',

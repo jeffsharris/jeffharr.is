@@ -28,6 +28,7 @@ function preferReaderTitle(currentTitle, readerTitle, url) {
 
   if (!candidate) return current;
   if (!current) return candidate;
+  if (/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}(?:\.pdf)?$/i.test(current)) return candidate;
 
   if (current.toLowerCase() === candidate.toLowerCase()) {
     return current;
@@ -59,6 +60,7 @@ function shouldCacheReader(reader, minWords = DEFAULT_MIN_WORD_COUNT) {
   if (!reader || !reader.contentHtml) return false;
   const text = extractTextFromHtml(reader.contentHtml);
   if (!text) return false;
+  if (!isReadableText(text)) return false;
 
   const lowered = text.toLowerCase();
   if (READER_PLACEHOLDER_MARKERS.some((marker) => lowered.includes(marker))) {
@@ -66,11 +68,20 @@ function shouldCacheReader(reader, minWords = DEFAULT_MIN_WORD_COUNT) {
   }
 
   const htmlWordCount = countWords(text);
-  if (!Number.isFinite(htmlWordCount) || htmlWordCount < minWords) {
+  if (!Number.isFinite(htmlWordCount) || htmlWordCount < (reader.sourceType === 'pdf' ? 1 : minWords)) {
     return false;
   }
 
   return true;
+}
+
+function isReadableText(text) {
+  if (typeof text !== 'string' || !text.trim()) return false;
+  if (text.trimStart().startsWith('%PDF-')) return false;
+  const replacements = (text.match(/\uFFFD/g) || []).length;
+  const controls = (text.match(/[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f]/g) || []).length;
+  return replacements <= Math.max(2, text.length * 0.01)
+    && controls <= Math.max(1, text.length * 0.005);
 }
 
 function countWords(text) {
@@ -139,6 +150,7 @@ export {
   preferReaderTitle,
   normalizeTitleValue,
   shouldCacheReader,
+  isReadableText,
   countWords,
   extractTextFromHtml,
   looksClientRendered,

@@ -24,6 +24,8 @@ import { jsonResponse } from '../content-library/serialize.js';
 import { publicFetch, publicUrl } from '../lib/public-fetch.js';
 import { unauthorizedResponse } from '../content-library/auth.js';
 import { getLibraryUser } from '../lib/client-auth.js';
+import { buildPdfReader } from './pdf-reader.js';
+import { hasPdfMagic, isLikelyPdfUrl, pdfFilename, PDF_MAX_BYTES } from './pdf-utils.js';
 
 const FETCH_TIMEOUT_MS = 10000;
 const RENDER_TIMEOUT_MS = 15000;
@@ -117,8 +119,21 @@ async function handleReadLaterReader({ request, env, readLaterStore, assetStore,
     }
 
     const cachedReader = !forceRefresh ? await assetStore.getReader(getReadLaterAssetItemId(item)) : null;
-    if (!cachedReader?.contentHtml && !(await getLibraryUser(request, env))) return unauthorizedResponse();
-    const reader = cachedReader?.contentHtml ? cachedReader : await fetchAndCacheReader({
+    const cachedValid = shouldCacheReader(cachedReader);
+    const savedPdf = !cachedValid && await assetStore.getOriginalPdf?.(getReadLaterAssetItemId(item));
+    if (!cachedValid && (isLikelyPdfUrl(item.url) || savedPdf)) {
+      if (forceRefresh && !(await getLibraryUser(request, env))) return unauthorizedResponse();
+      if (forceRefresh && env.READ_LATER_SYNC_QUEUE) {
+        await env.READ_LATER_SYNC_QUEUE.send(JSON.stringify({ type: 'pdf-reader', itemId: item.id }));
+      }
+      return jsonResponse({
+        ok: false, reader: null,
+        documentUrl: savedPdf ? `/api/read-later/document?id=${encodeURIComponent(item.id)}` : null,
+        error: savedPdf ? 'PDF text is processing. The original PDF is available.' : 'Save a fresh PDF link to extract its text.'
+      }, { status: 200, cache: 'no-store' });
+    }
+    if (!cachedValid && !(await getLibraryUser(request, env))) return unauthorizedResponse();
+    const reader = cachedValid ? cachedReader : await fetchAndCacheReader({
       assetStore,
       entryId: id,
       itemId: getReadLaterAssetItemId(item),
@@ -126,6 +141,8 @@ async function handleReadLaterReader({ request, env, readLaterStore, assetStore,
       title: item.title,
       browser: env.BROWSER,
       xBearerToken: env.X_API_BEARER_TOKEN,
+      env,
+      deferPdfExtraction: true,
       forceRefresh,
       log
     });
@@ -152,10 +169,16 @@ async function handleReadLaterReader({ request, env, readLaterStore, assetStore,
     }
 
     return jsonResponse(
-      { ok: true, item: pickItem(item), reader },
+      { ok: true, item: pickItem(item), reader,
+        documentUrl: reader.sourceType === 'pdf' ? `/api/read-later/document?id=${encodeURIComponent(item.id)}` : null },
       { status: 200, cache: 'public, max-age=3600' }
     );
   } catch (error) {
+    if (error.pdfPending) {
+      await env.READ_LATER_SYNC_QUEUE?.send(JSON.stringify({ type: 'pdf-reader', itemId: id }));
+      return jsonResponse({ ok: false, reader: null, documentUrl: `/api/read-later/document?id=${encodeURIComponent(id)}`,
+        error: 'PDF text is processing. The original PDF is available.' }, { status: 200, cache: 'no-store' });
+    }
     log('error', 'reader_request_failed', {
       stage: 'reader_fetch',
       itemId: id,
@@ -176,6 +199,10 @@ async function buildReaderContent(url, fallbackTitle, browserBinding, options = 
     url,
     title: fallbackTitle
   };
+  if (isLikelyPdfUrl(url) || (options.itemId && await options.assetStore?.getOriginalPdf?.(options.itemId))) {
+    if (options.deferPdfExtraction) throw Object.assign(new Error('PDF text is processing.'), { pdfPending: true });
+    return buildPdfReader({ url, title: fallbackTitle, ...options });
+  }
 
   const xReader = await buildXReaderFromUrl(url, fallbackTitle, xBearerToken, {
     log,
@@ -195,7 +222,15 @@ async function buildReaderContent(url, fallbackTitle, browserBinding, options = 
 
   let html;
   try {
-    html = await fetchHtml(url);
+    const source = await fetchSourceDocument(url);
+    if (source.pdf) {
+      if (options.itemId && options.assetStore?.saveOriginalPdf) {
+        await options.assetStore.saveOriginalPdf(options.itemId, source.pdf);
+      }
+      if (options.deferPdfExtraction) throw Object.assign(new Error('PDF text is processing.'), { pdfPending: true });
+      return buildPdfReader({ url, title: fallbackTitle, ...options, ...source.pdf });
+    }
+    html = source.html;
   } catch (error) {
     if (log) {
       log('error', 'reader_fetch_failed', {
@@ -365,6 +400,8 @@ async function fetchAndCacheReader({
   title,
   browser,
   xBearerToken,
+  env = {},
+  deferPdfExtraction = false,
   forceRefresh = false,
   log
 }) {
@@ -379,8 +416,12 @@ async function fetchAndCacheReader({
 
   const reader = await buildReaderContent(url, title, browser, {
     log,
-    itemId: logItemId,
-    xBearerToken
+    xBearerToken,
+    env,
+    deferPdfExtraction,
+    assetStore,
+    // Asset ids remain stable when a deleted list entry is saved again.
+    itemId: assetItemId
   });
   if (!reader?.contentHtml || !shouldCacheReader(reader)) {
     if (forceRefresh && cached?.contentHtml && shouldCacheReader(cached)) {
@@ -402,19 +443,26 @@ async function fetchAndCacheReader({
   return reader;
 }
 
-async function fetchHtml(url) {
-  const response = await fetchWithTimeout(url, {
+async function fetchSourceDocument(url) {
+  const response = await publicFetch(url, {
     headers: {
       'User-Agent': USER_AGENT,
-      'Accept': 'text/html,application/xhtml+xml'
+      'Accept': 'text/html,application/xhtml+xml,application/pdf'
     }
-  }, FETCH_TIMEOUT_MS);
+  }, { timeoutMs: FETCH_TIMEOUT_MS, maxBytes: PDF_MAX_BYTES });
 
   if (!response.ok) {
     throw new Error(`Reader fetch failed with ${response.status}`);
   }
 
-  return response.text();
+  const bytes = new Uint8Array(await response.arrayBuffer());
+  const type = (response.headers.get('content-type') || '').split(';')[0].trim().toLowerCase();
+  if (hasPdfMagic(bytes)) return { pdf: { bytes, filename: pdfFilename(response.headers.get('content-disposition'), url) } };
+  if (type === 'application/pdf' || (type && !['text/html', 'application/xhtml+xml', 'text/plain'].includes(type))) {
+    throw new Error('Unsupported document content type');
+  }
+  if (bytes.length > 8 * 1024 * 1024) throw new Error('HTML document is too large');
+  return { html: new TextDecoder().decode(bytes) };
 }
 
 function extractReader(html, url, fallbackTitle) {
@@ -871,5 +919,6 @@ async function waitForDelay(page, ms) {
 export {
   sanitizeContent,
   fetchAndCacheReader,
-  buildReaderContent
+  buildReaderContent,
+  handleReadLaterReader
 };

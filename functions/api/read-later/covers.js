@@ -1,7 +1,7 @@
 import { parseHTML } from 'linkedom';
-import { deriveTitleFromUrl } from './reader-utils.js';
+import { deriveTitleFromUrl, shouldCacheReader } from './reader-utils.js';
 import { getReadLaterAssetItemId } from './asset-store.js';
-import { isLikelyPdfUrl } from './pdf-utils.js';
+import { isLikelyPdfUrl, fetchPdfBytes } from './pdf-utils.js';
 import { formatError, truncateString } from '../lib/logger.js';
 
 const MAX_SNIPPET_WORDS = 1000;
@@ -249,7 +249,7 @@ async function generateCoverImage({ title, url, snippet, truncated, env, log, it
   };
 }
 
-async function generatePdfCoverImage({ title, url, env, log, itemId }) {
+async function generatePdfCoverImage({ title, url, env, log, itemId, pdf }) {
   const apiKey = env?.OPENAI_API_KEY;
   if (!apiKey) {
     if (log) {
@@ -278,7 +278,8 @@ async function generatePdfCoverImage({ title, url, env, log, itemId }) {
   const prompt = buildPdfCoverPrompt({ title, url });
   const primary = await requestCoverResult({
     content: [
-      { type: 'input_file', file_url: url },
+      pdf ? { type: 'input_file', filename: pdf.filename || 'document.pdf', file_data: `data:application/pdf;base64,${toPdfBase64(pdf.bytes)}` }
+        : { type: 'input_file', file_url: url },
       { type: 'input_text', text: prompt }
     ],
     apiKey,
@@ -500,13 +501,21 @@ async function ensurePdfCoverImage({ item, env, assetStore, log }) {
   const existing = await getCoverImage(assetStore, item);
   if (existing) return existing;
 
+  const reader = await assetStore.getReader(getReadLaterAssetItemId(item));
+  if (reader?.sourceType === 'pdf' && shouldCacheReader(reader)) {
+    return ensureCoverImage({ item, reader, env, assetStore, log });
+  }
+  const pdf = assetStore.getOriginalPdf
+    ? await fetchPdfBytes(item, { assetStore, log }) : null;
+
   const title = item?.title || deriveTitleFromUrl(item?.url || '');
   const cover = await generatePdfCoverImage({
     title,
     url: item?.url || '',
     env,
     log,
-    itemId: item?.id || null
+    itemId: item?.id || null,
+    pdf
   });
 
   if (!cover?.base64) {
@@ -536,6 +545,12 @@ async function ensurePdfCoverImage({ item, env, assetStore, log }) {
     }
     throw error;
   }
+}
+
+function toPdfBase64(bytes) {
+  let binary = '';
+  for (let offset = 0; offset < bytes.length; offset += 8192) binary += String.fromCharCode(...bytes.subarray(offset, offset + 8192));
+  return btoa(binary);
 }
 
 async function consumeEventStream(response, onEvent) {

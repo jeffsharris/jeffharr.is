@@ -11,6 +11,9 @@ import { enrichXVideos } from './read-later/video.js';
 import { getAdminUser } from './content-library/auth.js';
 import { getLibraryUser } from './lib/client-auth.js';
 import { allowPublicSave } from './lib/public-save.js';
+import { createReadLaterAssetStore, getReadLaterAssetItemId } from './read-later/asset-store.js';
+import { fetchPdfBytes, isLikelyPdfUrl } from './read-later/pdf-utils.js';
+import { preferReaderTitle } from './read-later/reader-utils.js';
 import {
   createReadLaterItemStore,
   deleteReadLaterItem,
@@ -242,6 +245,18 @@ function createEventStream(log) {
 
 async function enqueueReadLaterSync({ item, readLaterStore, env, log, reason, force = false }) {
   if (!readLaterStore || !item?.id) return { queued: false, item };
+  if (isLikelyPdfUrl(item.url)) {
+    try {
+      const assetStore = createReadLaterAssetStore(env);
+      const pdf = await fetchPdfBytes(item, { assetStore, itemId: getReadLaterAssetItemId(item), log });
+      const filenameTitle = pdf.filename.replace(/\.pdf$/i, '').replace(/[_-]+/g, ' ');
+      item.title = preferReaderTitle(item.title, filenameTitle, item.url);
+      item.originalDocumentUrl = `/api/read-later/document?id=${encodeURIComponent(item.id)}`;
+      await readLaterStore.saveItem(item);
+    } catch (error) {
+      log?.('warn', 'pdf_capture_failed', { itemId: item.id, ...formatError(error) });
+    }
+  }
   return enqueueKindleSync({
     item,
     readLaterStore,

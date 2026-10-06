@@ -517,14 +517,16 @@ async function processCoverSyncMessage(message, env, log) {
       title: item.title,
       browser: env?.BROWSER,
       xBearerToken: env?.X_API_BEARER_TOKEN,
+      env,
       forceRefresh: forceReaderRefresh,
       log
     });
     if (!reader?.contentHtml) {
       reader = await buildReaderContent(item.url, item.title, env?.BROWSER, {
         log,
-        itemId,
-        xBearerToken: env?.X_API_BEARER_TOKEN
+        itemId: getReadLaterAssetItemId(item),
+        xBearerToken: env?.X_API_BEARER_TOKEN,
+        env, assetStore
       });
     }
   } catch (error) {

@@ -54,6 +54,16 @@ Pages deploys do not deploy either worker. When changing queue behavior, deploy 
 
 ## Current Content Shapes
 
+### PDF Documents
+
+PDF saves capture the original bytes in R2 (`original_pdf`, linked through `items.primary_asset_id`) before queueing work, so signed source URLs can expire safely. The library returns `originalDocumentUrl`; `/api/read-later/document?id=<entry-id>` serves the saved file without fetching the source. Existing public-read visibility is unchanged.
+
+The queue worker extracts all pages through the existing OpenAI Responses PDF input integration (`gpt-4.1-mini`, `store: false`): embedded text is available to the model and image-only pages are transcribed with OCR. Three-page batches use strict structured output, with complete-page/order checks and HTML escaping. Successful batches are checkpointed in `pdf_extraction` so retries reuse completed work. Documents are bounded to 35 MiB and 60 pages; unsupported/encrypted/unreadable documents retain their original PDF fallback. No new dependency or schema migration is required.
+
+Only a complete, readable extraction is published as `reader_html`. The first-page title replaces UUID/download fallbacks, and audio consumes the same validated reader text. Binary-corrupted readers cannot pass cache or speech validation. Refreshing a PDF reader queues a `pdf-reader` job without sending another Kindle email; regular saves prepare PDF text before Kindle/cover processing. Deploy both Pages and `workers/read-later-sync` when changing this path.
+
+Old bad assets are not migrated in bulk. Save a fresh source link after deleting a corrupted entry, or use Refresh Reader when an original PDF is already stored. A deleted entry's underlying item/assets can be reused, but a bad reader is rejected and rebuilt. Sukha also discards corrupt local readers; original PDFs are kept in Application Support for offline reopening.
+
 - Read Later article/video saves create or reuse an `items` row, add/update a `list_entries` row in `lst_read_later`, store state in `read_state`, and store extracted reader/cover assets in R2 via `assets`.
 - Shared items create or reuse an `items` row, upsert one `share_details` row by share slug, and append `share_events`.
 - Shared Dharma talks resolve from static Dharma corpus JSON through `functions/api/content-library/resolve.js`, then store a canonical `items` row plus `dharma_talk_details` and relevant assets.

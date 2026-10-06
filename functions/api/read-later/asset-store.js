@@ -10,7 +10,7 @@ import {
   putBinaryAsset,
   putJsonAsset
 } from '../content-library/assets.js';
-import { getNowIso } from '../content-library/ids.js';
+import { getNowIso, safeJsonParse } from '../content-library/ids.js';
 import { parseHTML } from 'linkedom';
 import { countWords } from './reader-utils.js';
 
@@ -33,6 +33,33 @@ function createD1ReadLaterAssetStore({ db, bucket }) {
 
     async saveReader(itemId, reader) {
       return putReaderAsset({ db, bucket, itemId, reader });
+    },
+
+    async getOriginalPdf(itemId) {
+      const asset = await getAssetByRole(db, itemId, 'original_pdf');
+      const stored = await getBinaryAsset({ bucket, asset });
+      if (!stored?.bytes) return null;
+      return { ...stored, filename: safeJsonParse(asset?.extra_json, {})?.filename || 'document.pdf' };
+    },
+
+    async saveOriginalPdf(itemId, { bytes, filename }) {
+      const asset = await putBinaryAsset({
+        db, bucket, itemId, role: 'original_pdf', kind: 'document',
+        key: `items/${itemId}/original.pdf`, bytes, contentType: 'application/pdf',
+        extra: { filename: filename || 'document.pdf' }
+      });
+      await db.prepare('UPDATE items SET primary_asset_id = ?, updated_at = ? WHERE id = ?')
+        .bind(asset.id, getNowIso(), itemId).run();
+      return asset;
+    },
+
+    async getPdfExtraction(itemId) {
+      const asset = await getAssetByRole(db, itemId, 'pdf_extraction');
+      return getJsonAsset({ bucket, asset });
+    },
+
+    async savePdfExtraction(itemId, value) {
+      return putJsonAsset({ db, bucket, itemId, role: 'pdf_extraction', key: `items/${itemId}/pdf-extraction.json`, value });
     },
 
     async getCover(itemId) {

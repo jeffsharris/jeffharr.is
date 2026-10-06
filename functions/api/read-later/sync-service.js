@@ -1,4 +1,6 @@
 import { preferReaderTitle } from './reader-utils.js';
+import { fetchAndCacheReader } from './reader.js';
+import { isLikelyPdfUrl } from './pdf-utils.js';
 import {
   maybeQueueIosPush,
   updateArticlePushReadiness
@@ -419,12 +421,29 @@ async function processKindleSyncMessage(message, env, log) {
 
   await ensureSourceThumbnail({ item, assetStore, log });
 
-  const { reader, kindle, cover } = await syncKindleForItem(item, env, { assetStore, log });
+  let pdfReader = null;
+  if (isLikelyPdfUrl(item.url) || await assetStore.getOriginalPdf?.(getReadLaterAssetItemId(item))) {
+    try {
+      pdfReader = await fetchAndCacheReader({
+        assetStore, itemId: getReadLaterAssetItemId(item), entryId: item.id,
+        url: item.url, title: item.title, env, log
+      });
+      if (pdfReader) item.title = pdfReader.title;
+    } catch (error) {
+      log?.('warn', 'pdf_reader_failed', { itemId: item.id, ...formatError(error) });
+      if (error.retryable !== false) {
+        await env.READ_LATER_SYNC_QUEUE?.send(JSON.stringify({ type: 'pdf-reader', itemId: item.id }), { delaySeconds: 60 });
+      }
+    }
+  }
+  const synced = await syncKindleForItem(item, env, { assetStore, log });
+  const { kindle, cover } = synced;
+  const reader = pdfReader || synced.reader;
   if (reader) {
     await ensureSourceThumbnail({ item, reader, assetStore, log });
   }
 
-  const resolvedTitle = preferReaderTitle(item.title, reader?.title, item.url);
+  const resolvedTitle = reader?.sourceType === 'pdf' ? reader.title : preferReaderTitle(item.title, reader?.title, item.url);
 
   if (reader && shouldCacheKindleReader(reader)) {
     await assetStore.saveReader(getReadLaterAssetItemId(item), reader);

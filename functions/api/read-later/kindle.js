@@ -6,6 +6,7 @@ import { buildEpubAttachment } from './epub.js';
 import { ensureCoverImage, ensurePdfCoverImage } from './covers.js';
 import { fetchPdfBytes, isLikelyPdfUrl } from './pdf-utils.js';
 import { formatError, truncateString } from '../lib/logger.js';
+import { getReadLaterAssetItemId } from './asset-store.js';
 
 const RESEND_ENDPOINT = 'https://api.resend.com/emails';
 const RESEND_TIMEOUT_MS = 10000;
@@ -280,7 +281,9 @@ async function syncKindleForItem(item, env, options = {}) {
     reader = await buildReaderContent(item.url, item.title, env?.BROWSER, {
       log,
       ...logContext,
-      xBearerToken: env?.X_API_BEARER_TOKEN
+      itemId: getReadLaterAssetItemId(item),
+      xBearerToken: env?.X_API_BEARER_TOKEN,
+      env, assetStore
     });
   } catch (error) {
     if (log) {
@@ -405,7 +408,7 @@ async function buildPdfAttachment(item, options = {}) {
 }
 
 async function buildPdfAttachmentResult(item, { env, assetStore, log } = {}) {
-  const { bytes: originalBytes } = await fetchPdfBytes(item, { log });
+  const { bytes: originalBytes } = await fetchPdfBytes(item, { log, assetStore });
   let cover = null;
   let originalPageCount = null;
   const title = item?.title || deriveTitleFromUrl(item?.url || '');
