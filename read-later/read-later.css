@@ -828,11 +828,11 @@ video.reader__video {
   line-height: 1.6;
 }
 
-.reader__fallback-link {
+.reader__body .reader__fallback-link {
   display: inline-block;
   padding: 10px 20px;
   background: var(--accent);
-  color: white;
+  color: var(--bg-card);
   text-decoration: none;
   border-radius: 7px;
   font-size: 14px;
@@ -840,7 +840,7 @@ video.reader__video {
   transition: background var(--transition);
 }
 
-.reader__fallback-link:hover {
+.reader__body .reader__fallback-link:hover {
   background: var(--accent-strong);
 }
 
