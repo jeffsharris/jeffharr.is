@@ -79,6 +79,10 @@ test('PDF extraction batches all pages, resumes cached work, and never refetches
     assert.equal(options.headers.authorization, 'Bearer test-key');
     const input = payload.input[0].content[0];
     const submitted = await PDFDocument.load(Buffer.from(input.file_data.split(',')[1], 'base64'));
+    const pageSchema = payload.text.format.schema.properties.pages;
+    assert.equal(pageSchema.minItems, submitted.getPageCount());
+    assert.equal(pageSchema.maxItems, submitted.getPageCount());
+    assert.deepEqual(pageSchema.items.properties.pageNumber.enum, Array.from({ length: submitted.getPageCount() }, (_, index) => index + 1));
     calls++;
     if (calls === 2) return new Response('retry later', { status: 503 });
     return responseFor(batch(submitted.getPageCount()));

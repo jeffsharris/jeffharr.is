@@ -105,6 +105,7 @@ export async function extractPdfBatch(bytes, { pageCount, firstPage, apiKey }) {
           'Do not summarize, paraphrase, omit passages, add facts, or repair the author\'s wording. Preserve headings, paragraphs, list items, quotations, captions, and footnotes in reading order.',
           'Merge visual line wraps within paragraphs; do not merge distinct paragraphs. Exclude only repeated running headers, running footers, and page numbers.',
           'A paragraph or list item may start or end mid-sentence at a supplied page boundary. Transcribe the visible fragment; this does not make the supplied page incomplete. Do not infer text from unsupplied pages.',
+          'Footnote numbers are not page numbers. Include each footnote in the blocks of the physical page where it appears, never as a separate page.',
           `Return exactly ${pageCount} pages numbered 1 through ${pageCount}, including blank pages with empty blocks. Set complete=false if any text is unreadable or omitted.`,
           firstPage ? 'Set title to the actual document title visible on its first page and author to the stated author. Do not guess missing metadata.' : 'Set title and author to empty strings; these are continuation pages.'
         ].join(' '),
@@ -112,7 +113,7 @@ export async function extractPdfBatch(bytes, { pageCount, firstPage, apiKey }) {
           type: 'input_file', filename: 'pages.pdf', detail: 'high',
           file_data: `data:application/pdf;base64,${toBase64(bytes)}`
         }] }],
-        text: { format: { type: 'json_schema', name: 'pdf_transcription', strict: true, schema: PAGE_SCHEMA } }
+        text: { format: { type: 'json_schema', name: 'pdf_transcription', strict: true, schema: schemaForPages(pageCount) } }
       })
     });
     if (!response.ok) throw pdfError(`PDF transcription failed (${response.status}).`, response.status === 429 || response.status >= 500);
@@ -125,6 +126,26 @@ export async function extractPdfBatch(bytes, { pageCount, firstPage, apiKey }) {
   } finally {
     clearTimeout(timer);
   }
+}
+
+function schemaForPages(pageCount) {
+  const pages = PAGE_SCHEMA.properties.pages;
+  return {
+    ...PAGE_SCHEMA,
+    properties: {
+      ...PAGE_SCHEMA.properties,
+      pages: {
+        ...pages, minItems: pageCount, maxItems: pageCount,
+        items: {
+          ...pages.items,
+          properties: {
+            ...pages.items.properties,
+            pageNumber: { type: 'integer', enum: Array.from({ length: pageCount }, (_, index) => index + 1) }
+          }
+        }
+      }
+    }
+  };
 }
 
 export function validatePdfBatch(result, pageCount) {
