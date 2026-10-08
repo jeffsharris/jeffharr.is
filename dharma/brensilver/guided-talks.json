@@ -1,5 +1,91 @@
 [
   {
+    "id": "audiodharma:26403",
+    "source": "AudioDharma",
+    "source_id": "26403",
+    "title": "Guided Meditation: Uncertainty and information hunger",
+    "speaker": "Matthew Brensilver",
+    "published_at": "2026-10-07T12:00:00+00:00",
+    "link": "https://www.audiodharma.org/talks/26403",
+    "audio_url": "https://audiodharma.us-east-1.linodeobjects.com/talks/26403/20261007-matthew_brensilver-imc-guided_meditation_uncertainty_and_information_hunger.mp3",
+    "audio_type": "audio/mpeg",
+    "audio_length": null,
+    "duration": "21:04",
+    "description": "AudioDharma talk by Matthew Brensilver.",
+    "image_url": "https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+    "canonical_url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26403/",
+    "podcast_description": "How do we meet uncertainty without reaching for more and more information? This guided meditation treats anicca as a direct bodily experience: when the body is soothed and the moment is made safe enough, the compulsion to fabricate, explain, and manage begins to loosen. The practice moves from calming the body to narrowing attention, using the anchor as a gentle renunciation of information hunger.",
+    "short_summary": "A guided meditation on soothing the body and meeting uncertainty without feeding the mind’s hunger for more information.",
+    "episode_image_url": "https://jeffharr.is/dharma/brensilver/artwork/audiodharma-26403.jpg",
+    "chapters_url": "https://jeffharr.is/dharma/brensilver/chapters/audiodharma-26403.json",
+    "chapters": [
+      {
+        "start": 12.0,
+        "title": "Dharma in the body",
+        "description": "The talk begins by linking clear perception of the path to a deep soothing of the body.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26403/?t=12",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 90.0,
+        "title": "Microscopic self-soothing",
+        "description": "The practice is framed as small, repeated gestures of settling that reconnect wisdom and love when fragmentation and hyper-arousal fray them.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26403/?t=90",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 271.0,
+        "title": "Uncertainty and craving",
+        "description": "Anicca is presented as something that mobilizes information hunger and the urge to reduce uncertainty through data and meaning-making.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26403/?t=271",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 365.0,
+        "title": "Letting go now",
+        "description": "The talk turns to the immediacy of release, noticing how fear shapes the effort to cope and how softening makes room for trust.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26403/?t=365",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 584.0,
+        "title": "Make the moment safe",
+        "description": "Rather than relying on more thinking, the instruction is to practice making the present moment safe enough for uncertainty to be felt directly.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26403/?t=584",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 822.0,
+        "title": "The anchor as renunciation",
+        "description": "Breath, body sound, or other phenomena can serve as an anchor that restricts the information channels and renounces the hunger for more input.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26403/?t=822",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1072.0,
+        "title": "Receiving the Dharma",
+        "description": "The closing blessing points toward receiving the information available from this moment as Dharma, ending with the bell.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26403/?t=1072",
+        "img": null,
+        "toc": true
+      }
+    ],
+    "venue": null,
+    "series": null,
+    "tags": [],
+    "transcript": {
+      "status": "pending",
+      "url": null,
+      "text_path": null
+    }
+  },
+  {
     "id": "audiodharma:26373",
     "source": "AudioDharma",
     "source_id": "26373",
