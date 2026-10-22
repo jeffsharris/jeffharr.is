@@ -1,5 +1,193 @@
 [
   {
+    "id": "audiodharma:26489",
+    "source": "AudioDharma",
+    "source_id": "26489",
+    "title": "Guided Meditation: Letting the voltage course through",
+    "speaker": "Matthew Brensilver",
+    "published_at": "2026-10-21T12:00:00+00:00",
+    "link": "https://www.audiodharma.org/talks/26489",
+    "audio_url": "https://audiodharma.us-east-1.linodeobjects.com/talks/26489/20261021-matthew_brensilver-imc-guided_meditation_letting_the_voltage_course_through.mp3",
+    "audio_type": "audio/mpeg",
+    "audio_length": null,
+    "duration": "26:36",
+    "description": "AudioDharma talk by Matthew Brensilver.",
+    "image_url": "https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+    "canonical_url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26489/",
+    "podcast_description": "What if practice is less about getting rid of experience and more about widening the system that can hold it? The talk uses the image of “voltage” to explore how awareness can be stabilized so that love, sensation, suffering, and memory can move through without strain, grasping, or resistance. It returns again and again to the question of whether the mind can trust experience enough not to clamp down when intensity arises.",
+    "short_summary": "A guided meditation on softening, stabilizing awareness, and letting experience move through without resistance.",
+    "episode_image_url": "https://jeffharr.is/dharma/brensilver/artwork/audiodharma-26489.jpg",
+    "chapters_url": "https://jeffharr.is/dharma/brensilver/chapters/audiodharma-26489.json",
+    "chapters": [
+      {
+        "start": 11.56,
+        "title": "Beginning in Love",
+        "description": "The practice opens by centering the mind on one point of love, if that can be done without strain.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26489/?t=12",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 52.52,
+        "title": "Softening the Moment",
+        "description": "The talk settles into breathing, softness, and the sense that this is the atmosphere for the whole practice.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26489/?t=53",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 122.92,
+        "title": "Training for Voltage",
+        "description": "Dharma practice is framed as training to expand what the system can hold without coping or delusion.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26489/?t=123",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 203.48,
+        "title": "Stabilizing Awareness",
+        "description": "The emphasis shifts to holding phenomena fully so awareness can stay steady rather than fragmenting under pressure.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26489/?t=203",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 336.24,
+        "title": "When Experience Bumps Up",
+        "description": "Thought, feeling, memory, and sound are examined as they meet fear and trigger grasping, hating, or other forms of coping.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26489/?t=336",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 561.24,
+        "title": "No Resistance",
+        "description": "The talk asks whether suffering can be met exquisitely, with enough openness that it does not clink into anything in the mind.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26489/?t=561",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 992.6,
+        "title": "Deeper Fixations",
+        "description": "The practice moves beneath the surface to deeper holding, energetic blockages, and the possibility of tolerating them more fully.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26489/?t=993",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1215.843,
+        "title": "Background and Doing",
+        "description": "The closing stretch is partly obscured, but the thread suggests a reflection on habitual doing and how it continues before anything happens.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26489/?t=1216",
+        "img": null,
+        "toc": true
+      }
+    ],
+    "venue": null,
+    "series": null,
+    "tags": [],
+    "transcript": {
+      "status": "pending",
+      "url": null,
+      "text_path": null
+    }
+  },
+  {
+    "id": "audiodharma:26490",
+    "source": "AudioDharma",
+    "source_id": "26490",
+    "title": "Dharmette: The Strangeness",
+    "speaker": "Matthew Brensilver",
+    "published_at": "2026-10-21T12:00:00+00:00",
+    "link": "https://www.audiodharma.org/talks/26490",
+    "audio_url": "https://audiodharma.us-east-1.linodeobjects.com/talks/26490/20261021-matthew_brensilver-imc-dharmette_the_strangeness.mp3",
+    "audio_type": "audio/mpeg",
+    "audio_length": null,
+    "duration": "16:57",
+    "description": "AudioDharma talk by Matthew Brensilver.",
+    "image_url": "https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+    "canonical_url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26490/",
+    "podcast_description": "The talk begins with a sincere worry: does Dharma ask us to love the world less, or does it help us love it more honestly? From there, it explores how impermanence, grief, and gratitude can coexist with wonder, and why detachment is not the same as a cold defense against loss. The talk moves toward a quieter claim: awakening does not flatten life into mechanism, but points more deeply into its strangeness, wildness, and mystery.",
+    "short_summary": "A reflection on how Dharma can deepen love, grief, and wonder without turning life into something cold or mechanical.",
+    "episode_image_url": "https://jeffharr.is/dharma/brensilver/artwork/audiodharma-26490.jpg",
+    "chapters_url": "https://jeffharr.is/dharma/brensilver/chapters/audiodharma-26490.json",
+    "chapters": [
+      {
+        "start": 11.0,
+        "title": "A hard question",
+        "description": "A question from the text line asks whether Dharma is asking for less love, and whether that misunderstands the path.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26490/?t=11",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 125.0,
+        "title": "Sincerity and complexity",
+        "description": "The talk emphasizes sincerity, openness to transformation, and the need to tolerate ambivalence and messiness in the heart.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26490/?t=125",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 240.0,
+        "title": "Not knowing the path",
+        "description": "Loves may shift gradually, but the mind should not harden into tidy hierarchies or rigid pieties.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26490/?t=240",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 313.0,
+        "title": "A pathless land",
+        "description": "Krishnamurti is cited to challenge organized belief and to suggest that freedom comes through direct experience rather than fixed formulations.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26490/?t=313",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 409.0,
+        "title": "Love and impermanence",
+        "description": "The talk answers the question directly: detachment is not a hedge against loss, and wisdom about impermanence can deepen love instead of weakening it.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26490/?t=409",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 560.0,
+        "title": "Grief and gratitude",
+        "description": "Love and clinging are distinguished, and an everyday scene with children and firefighters becomes a reminder of life’s enchantment.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26490/?t=560",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 733.0,
+        "title": "Wildness of the heart",
+        "description": "The speaker reflects on how people’s inner lives can feel remote, ritualized, and astonishingly alive, even when they seem ordinary.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26490/?t=733",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 847.0,
+        "title": "Strangeness remains",
+        "description": "A mechanistic worldview is questioned in favor of awe, complexity, and the mystery that anything exists at all.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26490/?t=847",
+        "img": null,
+        "toc": true
+      }
+    ],
+    "venue": null,
+    "series": null,
+    "tags": [],
+    "transcript": {
+      "status": "pending",
+      "url": null,
+      "text_path": null
+    }
+  },
+  {
     "id": "audiodharma:26403",
     "source": "AudioDharma",
     "source_id": "26403",

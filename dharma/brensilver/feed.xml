@@ -1,5 +1,33 @@
 <?xml version='1.0' encoding='utf-8'?>
-<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" xmlns:media="http://search.yahoo.com/mrss/" xmlns:podcast="https://podcastindex.org/namespace/1.0" version="2.0"><channel><title>Matthew Brensilver Dharma Talks</title><link>https://jeffharr.is/dharma/brensilver/</link><description>A merged podcast feed of Matthew Brensilver Dharma talks from AudioDharma and Dharma Seed.</description><language>en</language><lastBuildDate>Wed, 07 Oct 2026 12:00:00 +0000</lastBuildDate><atom:link href="https://jeffharr.is/dharma/brensilver/feed.xml" rel="self" type="application/rss+xml" /><image><url>https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg</url><title>Matthew Brensilver Dharma Talks</title><link>https://jeffharr.is/dharma/brensilver/</link></image><itunes:author>Matthew Brensilver</itunes:author><itunes:summary>A merged podcast feed of Matthew Brensilver Dharma talks from AudioDharma and Dharma Seed.</itunes:summary><itunes:explicit>no</itunes:explicit><itunes:image href="https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg" /><itunes:category text="Religion &amp; Spirituality"><itunes:category text="Buddhism" /></itunes:category><item><title>Dharmette: The dharma and romantic love</title><link>https://jeffharr.is/dharma/brensilver/talks/audiodharma-26404/</link><pubDate>Wed, 07 Oct 2026 12:00:00 +0000</pubDate><guid isPermaLink="false">audiodharma:26404</guid><description>How does Dharma change romantic love without pretending love can be painless? The talk moves through heartbreak, longing, and the tension between clinging and natural grief, arguing that insight into not-self does not erase desire but can help love become less possessive and more honest. Along the way, it brings in Martha Nussbaum, Rilke, Suzuki Roshi, Octavio Paz, and a scene from Her to explore love as mutual recognition, freedom, and the willingness to let go.
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" xmlns:media="http://search.yahoo.com/mrss/" xmlns:podcast="https://podcastindex.org/namespace/1.0" version="2.0"><channel><title>Matthew Brensilver Dharma Talks</title><link>https://jeffharr.is/dharma/brensilver/</link><description>A merged podcast feed of Matthew Brensilver Dharma talks from AudioDharma and Dharma Seed.</description><language>en</language><lastBuildDate>Wed, 21 Oct 2026 12:00:00 +0000</lastBuildDate><atom:link href="https://jeffharr.is/dharma/brensilver/feed.xml" rel="self" type="application/rss+xml" /><image><url>https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg</url><title>Matthew Brensilver Dharma Talks</title><link>https://jeffharr.is/dharma/brensilver/</link></image><itunes:author>Matthew Brensilver</itunes:author><itunes:summary>A merged podcast feed of Matthew Brensilver Dharma talks from AudioDharma and Dharma Seed.</itunes:summary><itunes:explicit>no</itunes:explicit><itunes:image href="https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg" /><itunes:category text="Religion &amp; Spirituality"><itunes:category text="Buddhism" /></itunes:category><item><title>Dharmette: The Strangeness</title><link>https://jeffharr.is/dharma/brensilver/talks/audiodharma-26490/</link><pubDate>Wed, 21 Oct 2026 12:00:00 +0000</pubDate><guid isPermaLink="false">audiodharma:26490</guid><description>The talk begins with a sincere worry: does Dharma ask us to love the world less, or does it help us love it more honestly? From there, it explores how impermanence, grief, and gratitude can coexist with wonder, and why detachment is not the same as a cold defense against loss. The talk moves toward a quieter claim: awakening does not flatten life into mechanism, but points more deeply into its strangeness, wildness, and mystery.
+
+Chapters:
+00:11 A hard question
+02:05 Sincerity and complexity
+04:00 Not knowing the path
+05:13 A pathless land
+06:49 Love and impermanence
+09:20 Grief and gratitude
+12:13 Wildness of the heart
+14:07 Strangeness remains
+
+Source: AudioDharma
+
+Original page: https://www.audiodharma.org/talks/26490</description><enclosure url="https://audiodharma.us-east-1.linodeobjects.com/talks/26490/20261021-matthew_brensilver-imc-dharmette_the_strangeness.mp3" length="0" type="audio/mpeg" /><itunes:author>Matthew Brensilver</itunes:author><itunes:explicit>no</itunes:explicit><itunes:duration>16:57</itunes:duration><itunes:summary>The talk begins with a sincere worry: does Dharma ask us to love the world less, or does it help us love it more honestly? From there, it explores how impermanence, grief, and gratitude can coexist with wonder, and why detachment is not the same as a cold defense against loss. The talk moves toward a quieter claim: awakening does not flatten life into mechanism, but points more deeply into its strangeness, wildness, and mystery.
+
+Chapters:
+00:11 A hard question
+02:05 Sincerity and complexity
+04:00 Not knowing the path
+05:13 A pathless land
+06:49 Love and impermanence
+09:20 Grief and gratitude
+12:13 Wildness of the heart
+14:07 Strangeness remains
+
+Source: AudioDharma
+
+Original page: https://www.audiodharma.org/talks/26490</itunes:summary><itunes:image href="https://jeffharr.is/dharma/brensilver/artwork/audiodharma-26490.jpg" /><media:thumbnail url="https://jeffharr.is/dharma/brensilver/artwork/audiodharma-26490.jpg" width="1024" height="1024" /><podcast:chapters url="https://jeffharr.is/dharma/brensilver/chapters/audiodharma-26490.json" type="application/json+chapters" /></item><item><title>Dharmette: The dharma and romantic love</title><link>https://jeffharr.is/dharma/brensilver/talks/audiodharma-26404/</link><pubDate>Wed, 07 Oct 2026 12:00:00 +0000</pubDate><guid isPermaLink="false">audiodharma:26404</guid><description>How does Dharma change romantic love without pretending love can be painless? The talk moves through heartbreak, longing, and the tension between clinging and natural grief, arguing that insight into not-self does not erase desire but can help love become less possessive and more honest. Along the way, it brings in Martha Nussbaum, Rilke, Suzuki Roshi, Octavio Paz, and a scene from Her to explore love as mutual recognition, freedom, and the willingness to let go.
 
 Chapters:
 00:19 Love and dukkha

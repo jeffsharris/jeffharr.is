@@ -1,5 +1,99 @@
 [
   {
+    "id": "audiodharma:26490",
+    "source": "AudioDharma",
+    "source_id": "26490",
+    "title": "Dharmette: The Strangeness",
+    "speaker": "Matthew Brensilver",
+    "published_at": "2026-10-21T12:00:00+00:00",
+    "link": "https://www.audiodharma.org/talks/26490",
+    "audio_url": "https://audiodharma.us-east-1.linodeobjects.com/talks/26490/20261021-matthew_brensilver-imc-dharmette_the_strangeness.mp3",
+    "audio_type": "audio/mpeg",
+    "audio_length": null,
+    "duration": "16:57",
+    "description": "AudioDharma talk by Matthew Brensilver.",
+    "image_url": "https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+    "canonical_url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26490/",
+    "podcast_description": "The talk begins with a sincere worry: does Dharma ask us to love the world less, or does it help us love it more honestly? From there, it explores how impermanence, grief, and gratitude can coexist with wonder, and why detachment is not the same as a cold defense against loss. The talk moves toward a quieter claim: awakening does not flatten life into mechanism, but points more deeply into its strangeness, wildness, and mystery.",
+    "short_summary": "A reflection on how Dharma can deepen love, grief, and wonder without turning life into something cold or mechanical.",
+    "episode_image_url": "https://jeffharr.is/dharma/brensilver/artwork/audiodharma-26490.jpg",
+    "chapters_url": "https://jeffharr.is/dharma/brensilver/chapters/audiodharma-26490.json",
+    "chapters": [
+      {
+        "start": 11.0,
+        "title": "A hard question",
+        "description": "A question from the text line asks whether Dharma is asking for less love, and whether that misunderstands the path.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26490/?t=11",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 125.0,
+        "title": "Sincerity and complexity",
+        "description": "The talk emphasizes sincerity, openness to transformation, and the need to tolerate ambivalence and messiness in the heart.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26490/?t=125",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 240.0,
+        "title": "Not knowing the path",
+        "description": "Loves may shift gradually, but the mind should not harden into tidy hierarchies or rigid pieties.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26490/?t=240",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 313.0,
+        "title": "A pathless land",
+        "description": "Krishnamurti is cited to challenge organized belief and to suggest that freedom comes through direct experience rather than fixed formulations.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26490/?t=313",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 409.0,
+        "title": "Love and impermanence",
+        "description": "The talk answers the question directly: detachment is not a hedge against loss, and wisdom about impermanence can deepen love instead of weakening it.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26490/?t=409",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 560.0,
+        "title": "Grief and gratitude",
+        "description": "Love and clinging are distinguished, and an everyday scene with children and firefighters becomes a reminder of life’s enchantment.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26490/?t=560",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 733.0,
+        "title": "Wildness of the heart",
+        "description": "The speaker reflects on how people’s inner lives can feel remote, ritualized, and astonishingly alive, even when they seem ordinary.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26490/?t=733",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 847.0,
+        "title": "Strangeness remains",
+        "description": "A mechanistic worldview is questioned in favor of awe, complexity, and the mystery that anything exists at all.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26490/?t=847",
+        "img": null,
+        "toc": true
+      }
+    ],
+    "venue": null,
+    "series": null,
+    "tags": [],
+    "transcript": {
+      "status": "pending",
+      "url": null,
+      "text_path": null
+    }
+  },
+  {
     "id": "audiodharma:26404",
     "source": "AudioDharma",
     "source_id": "26404",
