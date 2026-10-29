@@ -1,5 +1,91 @@
 [
   {
+    "id": "audiodharma:26528",
+    "source": "AudioDharma",
+    "source_id": "26528",
+    "title": "Dharmette: Effort and Effortlessness",
+    "speaker": "Matthew Brensilver",
+    "published_at": "2026-10-28T12:00:00+00:00",
+    "link": "https://www.audiodharma.org/talks/26528",
+    "audio_url": "https://audiodharma.us-east-1.linodeobjects.com/talks/26528/20261028-matthew_brensilver-imc-dharmette_effort_and_effortlessness.mp3",
+    "audio_type": "audio/mpeg",
+    "audio_length": null,
+    "duration": "15:01",
+    "description": "AudioDharma talk by Matthew Brensilver.",
+    "image_url": "https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+    "canonical_url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26528/",
+    "podcast_description": "How do effort and surrender belong to the same path? The talk begins with the inspiration of rigorous practice, then turns toward the strange fact that the deepest shifts in meditation often feel less like self-improvement than like grace. Through reflections on attention, will, and exhaustion, it suggests that we are responsible for effort, but not for the arrival of effortlessness.",
+    "short_summary": "A quiet reflection on how disciplined practice and grace meet in meditation, and why attention may matter more than will.",
+    "episode_image_url": "https://jeffharr.is/dharma/brensilver/artwork/audiodharma-26528.jpg",
+    "chapters_url": "https://jeffharr.is/dharma/brensilver/chapters/audiodharma-26528.json",
+    "chapters": [
+      {
+        "start": 12.0,
+        "title": "Inspiration from effort",
+        "description": "The talk opens with an account of rigorous practice that feels natural and deeply inspiring rather than grim.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26528/?t=12",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 188.0,
+        "title": "Love, grit, and grace",
+        "description": "The speaker introduces a conversation about how gentleness, resolution, and effortlessness can coexist in practice.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26528/?t=188",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 249.0,
+        "title": "Training and the middle path",
+        "description": "Effort is framed as part of cultivation, balanced against cultural assumptions about austerity and what the middle path means.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26528/?t=249",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 378.0,
+        "title": "What effort can and cannot do",
+        "description": "Drawing on the suttas, the talk asks whether practice is sufficient and notes that striving can strengthen the sense of self.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26528/?t=378",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 470.0,
+        "title": "Attention versus will",
+        "description": "A book by Megan O'Giblin and Simone Weil's aphorism become a pivot for exploring why many things cannot be forced.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26528/?t=470",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 678.0,
+        "title": "Exhaustion and surrender",
+        "description": "The speaker turns to The Cloud of Unknowing to describe how, after effort is spent, receptivity can open the way for grace.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26528/?t=678",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 786.0,
+        "title": "Grace and self-governance",
+        "description": "The closing reflection emphasizes that the self cannot manufacture enlightenment, yet its flailing and willingness can help make room for it.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26528/?t=786",
+        "img": null,
+        "toc": true
+      }
+    ],
+    "venue": null,
+    "series": null,
+    "tags": [],
+    "transcript": {
+      "status": "pending",
+      "url": null,
+      "text_path": null
+    }
+  },
+  {
     "id": "audiodharma:26490",
     "source": "AudioDharma",
     "source_id": "26490",

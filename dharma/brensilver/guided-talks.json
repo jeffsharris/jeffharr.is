@@ -1,5 +1,83 @@
 [
   {
+    "id": "audiodharma:26527",
+    "source": "AudioDharma",
+    "source_id": "26527",
+    "title": "Lightly Guided Meditation",
+    "speaker": "Matthew Brensilver",
+    "published_at": "2026-10-28T12:00:00+00:00",
+    "link": "https://www.audiodharma.org/talks/26527",
+    "audio_url": "https://audiodharma.us-east-1.linodeobjects.com/talks/26527/20261028-matthew_brensilver-imc-lightly_guided_meditation.mp3",
+    "audio_type": "audio/mpeg",
+    "audio_length": null,
+    "duration": "26:49",
+    "description": "AudioDharma talk by Matthew Brensilver.",
+    "image_url": "https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+    "canonical_url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26527/",
+    "podcast_description": "This talk explores how practice can move from effort and self-conscious control toward reverence, gentleness, and ease. It asks what it means to sit within a wider lineage of care, and how attention becomes nonviolent and impeccable without strain. The closing emphasis is simple: notice how grasping and resistance make experience feel solid, then soften that congealing tendency with kind attention.",
+    "short_summary": "A lightly guided sit on reverence, effort, and softening the mind’s tendency to solidify experience.",
+    "episode_image_url": "https://jeffharr.is/dharma/brensilver/artwork/audiodharma-26527.jpg",
+    "chapters_url": "https://jeffharr.is/dharma/brensilver/chapters/audiodharma-26527.json",
+    "chapters": [
+      {
+        "start": 0.0,
+        "title": "Settling and arriving",
+        "description": "The talk opens with a brief welcome and a shift from joking around to simply sitting down together.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26527/?t=0",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 81.0,
+        "title": "Sangha and lineage",
+        "description": "Attention is drawn to community, ethical restraint, and a sense of belonging to a long lineage of wisdom and love.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26527/?t=81",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 278.0,
+        "title": "Reverence in attention",
+        "description": "The practice turns toward what can be bowed to right now, inviting reverential attention and nonviolence.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26527/?t=278",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 568.0,
+        "title": "Effort and grace",
+        "description": "The talk explores how diligent effort in practice can condition effortlessness, while keeping clear about what is and is not our job.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26527/?t=568",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 702.0,
+        "title": "Working with the mind",
+        "description": "The instruction continues through repeated reminders to stay with what is present, using effort without grasping at results.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26527/?t=702",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1392.621,
+        "title": "Softening what solidifies",
+        "description": "Near the end, the talk names how grasping and resistance turn experience into fixed things, and points back to gentle attention.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26527/?t=1393",
+        "img": null,
+        "toc": true
+      }
+    ],
+    "venue": null,
+    "series": null,
+    "tags": [],
+    "transcript": {
+      "status": "pending",
+      "url": null,
+      "text_path": null
+    }
+  },
+  {
     "id": "audiodharma:26489",
     "source": "AudioDharma",
     "source_id": "26489",
