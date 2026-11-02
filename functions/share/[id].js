@@ -18,16 +18,19 @@ export async function onRequest(context) {
 
   return htmlResponse(renderSharePage(item, request.url), {
     status: 200,
-    cache: 'public, max-age=300'
+    cache: 'public, max-age=300',
+    // X's public CDN rejects third-party Referer headers on MP4 requests.
+    referrerPolicy: item.type === 'x_post' ? 'no-referrer' : null
   });
 }
 
-function htmlResponse(body, { status = 200, cache = 'no-store' } = {}) {
+function htmlResponse(body, { status = 200, cache = 'no-store', referrerPolicy } = {}) {
   return new Response(body, {
     status,
     headers: {
       'content-type': 'text/html; charset=utf-8',
-      'cache-control': cache
+      'cache-control': cache,
+      ...(referrerPolicy ? { 'referrer-policy': referrerPolicy } : {})
     }
   });
 }

@@ -759,6 +759,35 @@ code {
   max-height: 220px;
 }
 
+.x-media--video {
+  grid-column: 1 / -1;
+}
+
+.x-media-grid--3 .x-media--video:first-child {
+  grid-row: auto;
+}
+
+.x-media video {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 70vh;
+  aspect-ratio: 16 / 9;
+  object-fit: contain;
+  background: #000;
+}
+
+.x-media__fallback {
+  padding: 10px 12px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.x-media__fallback a {
+  color: var(--text);
+  text-decoration: underline;
+}
+
 .x-media__type {
   position: absolute;
   right: 8px;

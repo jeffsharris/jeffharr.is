@@ -1,3 +1,5 @@
+import { selectXVideoVariant } from './x-media.js';
+
 const X_API_BASE = 'https://api.x.com/2';
 const X_FETCH_TIMEOUT_MS = 12000;
 const MAX_PARENT_POSTS = 12;
@@ -23,6 +25,7 @@ const EXPANSIONS = [
   'author_id',
   'attachments.media_keys',
   'referenced_tweets.id',
+  'referenced_tweets.id.attachments.media_keys',
   'referenced_tweets.id.author_id'
 ].join(',');
 
@@ -43,7 +46,8 @@ const MEDIA_FIELDS = [
   'width',
   'height',
   'alt_text',
-  'duration_ms'
+  'duration_ms',
+  'variants'
 ].join(',');
 
 export function parseXStatusUrl(urlString) {
@@ -415,9 +419,10 @@ function getTweetMedia(tweet, mediaByKey) {
       width: media.width || null,
       height: media.height || null,
       altText: media.alt_text || '',
-      durationMs: media.duration_ms || null
+      durationMs: media.duration_ms || null,
+      ...selectXVideoVariant(media)
     }))
-    .filter((media) => media.url || media.previewImageUrl);
+    .filter((media) => media.url || media.previewImageUrl || media.videoUrl);
 }
 
 function getReplyParentId(tweet) {

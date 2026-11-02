@@ -1,3 +1,5 @@
+import { safeXVideoUrl } from '../api/share/x-media.js';
+
 const PLATFORM_ORDER = [
   'x',
   'apple',
@@ -80,7 +82,7 @@ export function renderSharePage(item, requestUrl) {
           </div>
         </article>
       </main>
-      <script src="/share-assets/share.js?v=7"></script>
+      <script src="/share-assets/share.js?v=8"></script>
     `
   });
 }
@@ -107,6 +109,7 @@ function renderXSharePage(item, requestUrl) {
     appTitle: title,
     url: shareUrl,
     noindex: false,
+    referrerPolicy: 'no-referrer',
     body: `
       <header class="share-header">
         <a class="back-link" href="/share">Share</a>
@@ -134,7 +137,7 @@ function renderXSharePage(item, requestUrl) {
           ${warnings.length ? `<p class="x-thread-note">${escapeHtml(warnings[0])}</p>` : ''}
         </article>
       </main>
-      <script src="/share-assets/share.js?v=7"></script>
+      <script src="/share-assets/share.js?v=8"></script>
     `
   });
 }
@@ -263,7 +266,7 @@ export function renderLoadingPage(sourceUrl, requestUrl) {
           </div>
         </section>
       </main>
-      <script src="/share-assets/share.js?v=7"></script>
+      <script src="/share-assets/share.js?v=8"></script>
     `
   });
 }
@@ -289,12 +292,13 @@ export function renderRedirectPage(shareUrl) {
   });
 }
 
-function htmlDocument({ title, description, imageUrl, touchIconUrl, appTitle, url, body, noindex }) {
+function htmlDocument({ title, description, imageUrl, touchIconUrl, appTitle, url, body, noindex, referrerPolicy }) {
   const appleTouchIconUrl = touchIconUrl || '/share-assets/apple-touch-icon.png';
   const mobileAppTitle = appTitle || 'Share';
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
+  ${referrerPolicy ? `<meta name="referrer" content="${escapeAttribute(referrerPolicy)}">` : ''}
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>${escapeHtml(title)}</title>
@@ -318,7 +322,7 @@ function htmlDocument({ title, description, imageUrl, touchIconUrl, appTitle, ur
   <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="manifest" href="/share-assets/manifest.webmanifest">
   <link rel="stylesheet" href="/css/favorites.css?v=4">
-  <link rel="stylesheet" href="/share-assets/share.css?v=7">
+  <link rel="stylesheet" href="/share-assets/share.css?v=8">
 </head>
 <body>
   <div class="bg-gradient"></div>
@@ -501,7 +505,7 @@ function renderXPostCard(post) {
           ${post.isShared ? '<span class="x-post__badge">Shared</span>' : ''}
         </header>
         ${post.text ? `<div class="x-post__text">${renderLinkedText(post.text)}</div>` : ''}
-        ${renderXMediaGrid(post.media || [])}
+        ${renderXMediaGrid(post.media || [], false, post.url)}
         ${post.quotedPost ? renderQuotedXPost(post.quotedPost) : ''}
         <footer class="x-post__footer">
           ${metrics ? `<span>${escapeHtml(metrics)}</span>` : '<span>Post on X</span>'}
@@ -519,25 +523,43 @@ function renderQuotedXPost(post) {
     <aside class="x-quote">
       <strong>${escapeHtml(label)}</strong>
       ${post.text ? `<div>${renderLinkedText(truncate(post.text, 220))}</div>` : ''}
-      ${renderXMediaGrid((post.media || []).slice(0, 1), true)}
+      ${renderXMediaGrid(post.media || [], true, post.url)}
     </aside>
   `;
 }
 
-function renderXMediaGrid(mediaItems, compact = false) {
-  const usable = mediaItems.filter((media) => media.url || media.previewImageUrl).slice(0, compact ? 1 : 4);
+function renderXMediaGrid(mediaItems, compact = false, postUrl = '') {
+  const usable = mediaItems.filter((media) => safeWebUrl(media.url) || safeWebUrl(media.previewImageUrl) || safeXVideoUrl(media.videoUrl)).slice(0, 4);
   if (!usable.length) return '';
 
   return `
     <div class="x-media-grid x-media-grid--${usable.length}${compact ? ' x-media-grid--compact' : ''}">
       ${usable.map((media) => {
-        const src = media.url || media.previewImageUrl;
+        const src = safeWebUrl(media.previewImageUrl) || safeWebUrl(media.url);
         const alt = media.altText || '';
         const isVideo = media.type === 'video' || media.type === 'animated_gif';
+        const videoUrl = isVideo && safeXVideoUrl(media.videoUrl);
+        const original = safeWebUrl(postUrl);
+        const width = Number(media.width);
+        const height = Number(media.height);
+        const dimensions = Number.isInteger(width) && width > 0 && width <= 16384 &&
+          Number.isInteger(height) && height > 0 && height <= 16384
+          ? ` width="${width}" height="${height}" style="aspect-ratio: ${width} / ${height}"` : '';
+        if (videoUrl) {
+          return `
+            <figure class="x-media x-media--video">
+              <video data-x-video controls playsinline preload="none"${src ? ` poster="${escapeAttribute(src)}"` : ''}${dimensions} aria-label="${escapeAttribute(alt || 'Video from this post')}"${media.type === 'animated_gif' ? ' loop muted' : ''}>
+                <source src="${escapeAttribute(videoUrl)}" type="video/mp4">
+                Your browser does not support embedded video.
+              </video>
+              <figcaption class="x-media__fallback" data-video-error hidden role="status">This video could not be loaded.${original ? ` <a href="${escapeAttribute(original)}" target="_blank" rel="noopener">View original on X</a>` : ''}</figcaption>
+            </figure>
+          `;
+        }
         return `
           <figure class="x-media">
-            <img src="${escapeAttribute(src)}" alt="${escapeAttribute(alt)}" loading="lazy" decoding="async">
-            ${isVideo ? '<span class="x-media__type">Video</span>' : ''}
+            ${src ? `<img src="${escapeAttribute(src)}" alt="${escapeAttribute(alt)}" loading="lazy" decoding="async">` : ''}
+            ${isVideo ? `<figcaption class="x-media__fallback">Video unavailable here.${original ? ` <a href="${escapeAttribute(original)}" target="_blank" rel="noopener">View original on X</a>` : ''}</figcaption>` : ''}
           </figure>
         `;
       }).join('')}

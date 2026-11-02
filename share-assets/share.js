@@ -248,6 +248,22 @@
     }
   }
 
+  function initVideoPlayers() {
+    const videos = document.querySelectorAll('[data-x-video]');
+    for (const video of videos) {
+      const error = video.closest('figure').querySelector('[data-video-error]');
+      const showError = () => { if (error) error.hidden = false; };
+      video.addEventListener('error', showError);
+      video.querySelector('source')?.addEventListener('error', showError);
+      video.addEventListener('loadeddata', () => { if (error) error.hidden = true; });
+      video.addEventListener('play', () => {
+        for (const other of videos) if (other !== video) other.pause();
+      });
+      if (video.error) showError();
+    }
+  }
+
+  initVideoPlayers();
   reorderPlatformLinks();
   initCopyButtons();
   initNativeShareButtons();
