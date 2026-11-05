@@ -25,6 +25,7 @@ These files are gitignored workflow state. Do not use Chrome LocalStorage or bro
 1. Start or reuse the review server with `npm run poem-images:review`.
 2. Read `notes/poem-image-iteration-handoff.json`.
 3. Generate only `handoff.iterating` entries where `feedback.trim()` is non-empty for `currentContender`.
+   Use `gpt-image-2.6-sunburst` for new generations (`imageModel` in the handoff). Candidate `model` fields describe the model that made an existing image, not the next generation target. Preserve those historical values; record the actual model on each newly appended candidate.
 4. Treat `candidateNotes` and `feedbackHistory` as history attached to specific images; do not overwrite or collapse feedback across candidates.
 5. After generating a new pass, append candidates to `notes/poem-image-review-data.js`, update `preferredCandidateIds` for the regenerated slugs, and bump the review data cache query in `notes/poem-image-prompt-review.html`.
 6. Verify the review page through the local server, then run `npm test`.

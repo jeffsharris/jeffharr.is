@@ -207,7 +207,7 @@ test('syncKindleForItem generates PDF cover but sends original PDF through Kindl
   assert.equal(openAiPayloads.length, 1);
   assert.equal(openAiPayloads[0].model, 'gpt-5.5');
   assert.equal(openAiPayloads[0].tools[0].type, 'image_generation');
-  assert.equal(openAiPayloads[0].tools[0].model, 'gpt-image-2');
+  assert.equal(openAiPayloads[0].tools[0].model, 'gpt-image-2.6-sunburst');
   assert.equal(openAiPayloads[0].tools[0].size, '1024x1536');
   assert.equal(openAiPayloads[0].input[0].content[0].type, 'input_file');
   assert.equal(openAiPayloads[0].input[0].content[0].file_url, 'https://example.com/covered.pdf');

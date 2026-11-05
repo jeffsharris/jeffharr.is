@@ -1,6 +1,6 @@
 # Poem Image Prompt Drafts
 
-Draft prompt catalog for generating poem companion images with `gpt-image-2`.
+Draft prompt catalog for generating poem companion images with `gpt-image-2.6-sunburst`.
 
 These prompts intentionally give the image model poem context and exact selected lines, then only light stylistic guidance. The goal is to trust the model aesthetic judgment while supplying enough literary context to make a good image.
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Generate landing-tile images for each dharma teacher.
 
-Each tile is a portrait-orientation backdrop rendered by gpt-image-2 in the
+Each tile is a portrait-orientation backdrop rendered by gpt-image-2.6-sunburst in the
 teacher's signature visual vocabulary (drawn from the corpus image_style
 prompts in tools/dharma-transcripts/config/). The teacher's existing
 square podcast-cover is then composited into the bottom-right corner as a
@@ -34,7 +34,7 @@ from PIL import Image, ImageDraw, ImageFilter
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 OPENAI_URL = "https://api.openai.com/v1/images/generations"
-MODEL_FALLBACKS = ["gpt-image-2", "gpt-image-1.5", "gpt-image-1"]
+MODEL_FALLBACKS = ["gpt-image-2.6-sunburst", "gpt-image-1.5"]
 SIZE = "1024x1536"          # portrait
 QUALITY = "high"
 

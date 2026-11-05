@@ -76,7 +76,8 @@ DEFAULT_IMAGE_STYLE = (
     "bone white. No text, no logos, no literal teacher portrait, no ornate "
     "religious iconography. Clear at small podcast thumbnail size."
 )
-IMAGE_MODEL_FALLBACKS = ["gpt-image-1.5", "gpt-image-1"]
+DEFAULT_IMAGE_MODEL = "gpt-image-2.6-sunburst"
+IMAGE_MODEL_FALLBACKS = ["gpt-image-1.5"]
 
 
 DEFAULT_FALLBACK_ARTWORK_PROMPT = (
@@ -4329,7 +4330,7 @@ def build_parser() -> argparse.ArgumentParser:
     artwork.add_argument("--talk-id", action="append", default=[])
     artwork.add_argument("--config", type=Path, default=DEFAULT_PILOT_CONFIG)
     artwork.add_argument("--batch", action="store_true")
-    artwork.add_argument("--image-model", default="gpt-image-2")
+    artwork.add_argument("--image-model", default=DEFAULT_IMAGE_MODEL)
     artwork.add_argument("--image-size", default="1024x1024")
     artwork.add_argument("--image-quality", default="low")
     artwork.add_argument("--build-feedback-viewer", action="store_true")
@@ -4347,7 +4348,7 @@ def build_parser() -> argparse.ArgumentParser:
     corpus.add_argument("--skip-artwork", action="store_true")
     corpus.add_argument("--update-qmd", action="store_true")
     corpus.add_argument("--build-feedback-viewer", action="store_true")
-    corpus.add_argument("--image-model", default="gpt-image-2")
+    corpus.add_argument("--image-model", default=DEFAULT_IMAGE_MODEL)
     corpus.add_argument("--image-size", default="1024x1024")
     corpus.add_argument("--image-quality", default="low")
     corpus.add_argument(

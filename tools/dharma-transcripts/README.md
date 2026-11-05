@@ -84,7 +84,7 @@ The batch command runs each step in order:
 4. correct transcript accuracy with GPT-5.4 mini
 5. extract external reference moments with a separate GPT-5.4 mini pass
 6. generate episode descriptions, chapters, and image prompts with GPT-5.4 mini
-7. generate square episode artwork with `gpt-image-2`
+7. generate square episode artwork with `gpt-image-2.6-sunburst`
 8. write markdown for QMD
 9. rebuild the public feed when requested by `run-corpus`
 
@@ -139,7 +139,7 @@ PYTHONPATH=tools/dharma-transcripts/src \
   python3 -m dharma_transcripts.pipeline generate-artwork \
   --batch \
   --config tools/dharma-transcripts/config/twenty-talks.json \
-  --image-model gpt-image-2 \
+  --image-model gpt-image-2.6-sunburst \
   --image-quality low \
   --build-feedback-viewer
 ```

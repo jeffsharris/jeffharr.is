@@ -54,6 +54,17 @@ Pages deploys do not deploy either worker. When changing queue behavior, deploy 
 
 ## Current Content Shapes
 
+### Image Generation
+
+New image generation defaults to `gpt-image-2.6-sunburst`:
+
+- Read Later article, PDF, and streaming covers share `functions/api/read-later/covers.js`, including the background Kindle/cover worker. The Responses orchestration model remains `gpt-5.5`; image size, quality, and format remain `1024x1536`, `high`, and PNG.
+- Dharma episode artwork uses the transcript pipeline's `generate-artwork` and `run-corpus` defaults. Explicit `--image-model` overrides remain available. Square size, low quality, and JPEG output remain unchanged.
+- Dharma landing backdrops use `scripts/generate-dharma-tiles.py`, retaining portrait size and high quality.
+- Poem prompt catalogs and iteration handoffs specify Sunburst for future generation. Candidate metadata still describes the original generating model.
+
+The two local Dharma generators retain their existing `gpt-image-1.5` fallback; the retired `gpt-image-1` fallback has been removed. Cached images, published artwork, and historical manifests are not regenerated or relabeled by a model upgrade. Cover changes require both a Git-triggered Pages deploy and a separate `workers/read-later-sync` deploy; the push-delivery worker is unaffected.
+
 ### PDF Documents
 
 PDF saves capture the original bytes in R2 (`original_pdf`, linked through `items.primary_asset_id`) before queueing work, so signed source URLs can expire safely. The library returns `originalDocumentUrl`; `/api/read-later/document?id=<entry-id>` serves the saved file without fetching the source. Existing public-read visibility is unchanged.

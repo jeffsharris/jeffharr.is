@@ -5,6 +5,10 @@ from pathlib import Path
 from unittest.mock import patch
 
 from dharma_transcripts.pipeline import (
+    DEFAULT_IMAGE_MODEL,
+    IMAGE_MODEL_FALLBACKS,
+    build_parser,
+    generate_artwork,
     CorpusPaths,
     PipelineState,
     Talk,
@@ -45,6 +49,38 @@ class _JsonResponse:
 
 
 class PipelineTests(unittest.TestCase):
+    def test_artwork_commands_default_to_sunburst_and_keep_overrides(self):
+        for command in ("generate-artwork", "run-corpus"):
+            args = build_parser().parse_args([command])
+            self.assertEqual(args.image_model, "gpt-image-2.6-sunburst")
+            args = build_parser().parse_args([command, "--image-model", "custom-model"])
+            self.assertEqual(args.image_model, "custom-model")
+        self.assertNotIn("gpt-image-1", IMAGE_MODEL_FALLBACKS)
+
+    def test_artwork_sunburst_payload_and_historical_cache(self):
+        talk = Talk(
+            id="audiodharma:1", source="AudioDharma", source_id="1", title="Test",
+            speaker="Matthew Brensilver", published_at="2026-01-01T00:00:00+00:00",
+            link="https://example.com", audio_url="https://example.com/audio.mp3",
+            duration="01:00", description=None,
+        )
+        with tempfile.TemporaryDirectory() as tmp:
+            paths = CorpusPaths(Path(tmp))
+            write_json(paths.episode_metadata(talk), {"image_prompt": "A single leaf"})
+            with patch("dharma_transcripts.pipeline.openai_binary_image_request", return_value={"data": [{"b64_json": "aW1hZ2U="}]}) as request:
+                manifest = generate_artwork(talk, paths, "test-key", DEFAULT_IMAGE_MODEL)
+                payload = request.call_args.args[1]
+                self.assertEqual(payload["model"], "gpt-image-2.6-sunburst")
+                self.assertEqual(payload["quality"], "low")
+                self.assertEqual(payload["size"], "1024x1024")
+                self.assertEqual(payload["output_format"], "jpeg")
+                self.assertEqual(manifest["image_model"], DEFAULT_IMAGE_MODEL)
+                manifest["image_model"] = "gpt-image-2"
+                write_json(paths.artwork_manifest(talk), manifest)
+                cached = generate_artwork(talk, paths, "test-key", DEFAULT_IMAGE_MODEL)
+                self.assertEqual(cached["image_model"], "gpt-image-2")
+                request.assert_called_once()
+
     def test_safe_talk_id(self):
         self.assertEqual(safe_talk_id("audiodharma:25235"), "audiodharma-25235")
 
