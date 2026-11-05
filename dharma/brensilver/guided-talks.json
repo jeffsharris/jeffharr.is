@@ -1,5 +1,91 @@
 [
   {
+    "id": "audiodharma:26576",
+    "source": "AudioDharma",
+    "source_id": "26576",
+    "title": "Guided Meditation: Gravitational Pull of Presence",
+    "speaker": "Matthew Brensilver",
+    "published_at": "2026-11-04T12:00:00+00:00",
+    "link": "https://www.audiodharma.org/talks/26576",
+    "audio_url": "https://audiodharma.us-east-1.linodeobjects.com/talks/26576/20261104-matthew_brensilver-imc-guided_meditation_gravitational_pull_of_presence.mp3",
+    "audio_type": "audio/mpeg",
+    "audio_length": null,
+    "duration": "26:24",
+    "description": "AudioDharma talk by Matthew Brensilver.",
+    "image_url": "https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+    "canonical_url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26576/",
+    "podcast_description": "How do you enter practice without forcing it? The talk begins with a gentle image of wading into silence like water, then explores how attention can settle into presence without strain or immediate explanation. From there it turns to presence as something gravitational and self-reinforcing, before ending in a simple instruction to listen fully without grasping for a message.",
+    "short_summary": "A guided meditation on easing into quiet, letting presence gather attention, and listening without acquisition or control.",
+    "episode_image_url": "https://jeffharr.is/dharma/brensilver/artwork/audiodharma-26576.jpg",
+    "chapters_url": "https://jeffharr.is/dharma/brensilver/chapters/audiodharma-26576.json",
+    "chapters": [
+      {
+        "start": 11.56,
+        "title": "Wading into quiet",
+        "description": "The meditation opens with a water image: enter silence gently and let practice begin without pressure.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26576/?t=12",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 147.76,
+        "title": "Letting practice arise",
+        "description": "Attention is invited to find a technique organically rather than forcing a method from the start.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26576/?t=148",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 268.0,
+        "title": "The gravity of presence",
+        "description": "Presence is described as attractive and reinforcing, something that seems to draw attention back on its own.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26576/?t=268",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 483.0,
+        "title": "Objects of attention",
+        "description": "The focus broadens from breath, body, feeling, and sound to the subtler object of non-distracted attention itself.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26576/?t=483",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 702.0,
+        "title": "Renouncing acquisition",
+        "description": "The talk contrasts practice with the mind's habits of control, alarm, and immediate understanding.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26576/?t=702",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 764.0,
+        "title": "Knowing before understanding",
+        "description": "It emphasizes direct knowing of experience and staying with what is present before turning it into a story.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26576/?t=764",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1300.748,
+        "title": "Listening with everything",
+        "description": "The close invites full-bodied listening as if something important were coming, while letting go of any need for the answer to arrive.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26576/?t=1301",
+        "img": null,
+        "toc": true
+      }
+    ],
+    "venue": null,
+    "series": null,
+    "tags": [],
+    "transcript": {
+      "status": "pending",
+      "url": null,
+      "text_path": null
+    }
+  },
+  {
     "id": "audiodharma:26527",
     "source": "AudioDharma",
     "source_id": "26527",

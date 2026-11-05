@@ -1,5 +1,107 @@
 [
   {
+    "id": "audiodharma:26575",
+    "source": "AudioDharma",
+    "source_id": "26575",
+    "title": "Dharmette: Ordinary and Radical Versions of Mindfulness",
+    "speaker": "Matthew Brensilver",
+    "published_at": "2026-11-04T12:00:00+00:00",
+    "link": "https://www.audiodharma.org/talks/26575",
+    "audio_url": "https://audiodharma.us-east-1.linodeobjects.com/talks/26575/20261104-matthew_brensilver-imc-dharmette_ordinary_and_radical_versions_of_mindfulness.mp3",
+    "audio_type": "audio/mpeg",
+    "audio_length": null,
+    "duration": "14:41",
+    "description": "AudioDharma talk by Matthew Brensilver.",
+    "image_url": "https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+    "canonical_url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26575/",
+    "podcast_description": "What is mindfulness: a technique for steady attention, or a freedom that begins to undo identification itself? The talk moves from an ordinary, practical use of mindfulness as clear and continuous awareness to a more radical view in which mindfulness turns problems into processes, loosens fixation, and points toward cessation. Along the way, it holds the tension between improving conditions in daily life and relinquishing dependence on anything other than awareness.",
+    "short_summary": "A quiet exploration of mindfulness as both a practical method and a radical path toward freedom.",
+    "episode_image_url": "https://jeffharr.is/dharma/brensilver/artwork/audiodharma-26575.jpg",
+    "chapters_url": "https://jeffharr.is/dharma/brensilver/chapters/audiodharma-26575.json",
+    "chapters": [
+      {
+        "start": 21.0,
+        "title": "The question of mindfulness",
+        "description": "The talk opens by asking whether mindfulness is the practice or the goal, and why it can be hard to define without flattening it.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26575/?t=21",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 95.0,
+        "title": "The advice to be mindful",
+        "description": "An anecdote about retreat interviews leads to the repeated instruction, 'Can you be more mindful?', which the talk treats as deceptively simple but deep.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26575/?t=95",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 172.0,
+        "title": "Practice and goal",
+        "description": "Mindfulness is described as both what we intentionally cultivate and what emerges as freedom, with suffering indicating where mindfulness is still compromised.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26575/?t=172",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 260.0,
+        "title": "Ordinary mindfulness",
+        "description": "The talk sketches a mundane sense of mindfulness as steady, alert, non-fighting attention that recognizes phenomena as phenomena rather than final reality.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26575/?t=260",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 347.0,
+        "title": "A more radical vision",
+        "description": "Mindfulness is then presented as something more complete and wholesome, where partial mindfulness and half-heartedness become obstacles to be seen clearly.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26575/?t=347",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 445.0,
+        "title": "Wholehearted and disenchanted",
+        "description": "The speaker links the path to wholeheartedness, impermanence, and a willingness to give up hope in samsara, at least in some moments.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26575/?t=445",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 562.0,
+        "title": "Problems into verbs",
+        "description": "For lay practice, the talk explores the tension between ethical engagement and relinquishment, then asks what remains when a problem is no longer identified as a noun.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26575/?t=562",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 698.0,
+        "title": "Cessation and forgiveness",
+        "description": "The Mula Sutta is used to ground mindfulness in liberation and cessation, and the talk closes by acknowledging moments when mindfulness eludes us and forgiveness becomes the way back in.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26575/?t=698",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 812.0,
+        "title": "Warmth toward fixation",
+        "description": "The ending returns to the everyday practice of asking to be more mindful, now with the possibility that fixation and frozenness are where mindfulness is being invited forward.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26575/?t=812",
+        "img": null,
+        "toc": true
+      }
+    ],
+    "venue": null,
+    "series": null,
+    "tags": [],
+    "transcript": {
+      "status": "pending",
+      "url": null,
+      "text_path": null
+    }
+  },
+  {
     "id": "audiodharma:26528",
     "source": "AudioDharma",
     "source_id": "26528",
