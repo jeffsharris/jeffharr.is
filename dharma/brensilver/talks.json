@@ -1,5 +1,107 @@
 [
   {
+    "id": "audiodharma:26644",
+    "source": "AudioDharma",
+    "source_id": "26644",
+    "title": "Relaxing and landing in your breathing",
+    "speaker": "Matthew Brensilver",
+    "published_at": "2026-11-16T12:00:00+00:00",
+    "link": "https://www.audiodharma.org/talks/26644",
+    "audio_url": "https://audiodharma.us-east-1.linodeobjects.com/talks/26644/20261116-matthew_brensilver-irc-monday_morning_guided_meditation.mp3",
+    "audio_type": "audio/mpeg",
+    "audio_length": null,
+    "duration": "47:31",
+    "description": "AudioDharma talk by Matthew Brensilver.",
+    "image_url": "https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+    "canonical_url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26644/",
+    "podcast_description": "What happens if the mind stops treating each sensation as a signal to solve, and simply lands in breathing? The talk begins with the ordinary relief that can come at the end of a sit, then gently extends that ease into every moment: softening the face, releasing bracing, and letting the breath become the foreground of attention. From there it moves into equanimity, the difference between feeling an alarm and believing it, and the possibility that wise effort can be quiet trust rather than self-manufacture.",
+    "short_summary": "A guided exploration of softening, settling into breath, and meeting thoughts and feelings without over-interpreting them.",
+    "episode_image_url": "https://jeffharr.is/dharma/brensilver/artwork/audiodharma-26644.jpg",
+    "chapters_url": "https://jeffharr.is/dharma/brensilver/chapters/audiodharma-26644.json",
+    "chapters": [
+      {
+        "start": 0.0,
+        "title": "Relaxing after the bell",
+        "description": "The talk opens with the sense of relief that often comes when a sit ends, and invites that same ease to be present in every moment.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26644/?t=0",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 102.52,
+        "title": "Letting bracing drain away",
+        "description": "The instruction turns toward releasing forward-leaning energy, fear, and the feeling of being poised between hope and fear.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26644/?t=103",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 241.24,
+        "title": "Softening the body",
+        "description": "Attention moves through the face, jaw, shoulders, and belly, with repeated encouragement to soften whatever can be softened.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26644/?t=241",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 456.52,
+        "title": "Breath comes forward",
+        "description": "The breath is introduced as part of the body's felt constellation, able to take the foreground of awareness.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26644/?t=457",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 690.04,
+        "title": "Beginning, middle, end",
+        "description": "The practice narrows to the breath itself, noticing each inhalation and exhalation in its full arc and allowing that to cue softness.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26644/?t=690",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 972.6,
+        "title": "Alarm and mindfulness",
+        "description": "Emotional activation is described as an alarm that thoughts quickly follow, and mindfulness is presented as feeling it directly without turning it into a story.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26644/?t=973",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1257.144,
+        "title": "Sustaining the breath",
+        "description": "The breath is explored as nourishment, with attention to subtle pleasure, protection, and the way breathing can saturate awareness.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26644/?t=1257",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1889.464,
+        "title": "Equanimity and interpretation",
+        "description": "The talk contrasts simple experience with the habit of making meaning too quickly, including a warning against over-interpreting early retreat experience.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26644/?t=1889",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 2575.208,
+        "title": "Wise effort and trust",
+        "description": "The closing turns to the middle path between under- and over-interpreting, the limits of willfulness, and trust that goodness accumulates beneath awareness.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26644/?t=2575",
+        "img": null,
+        "toc": true
+      }
+    ],
+    "venue": null,
+    "series": null,
+    "tags": [],
+    "transcript": {
+      "status": "pending",
+      "url": null,
+      "text_path": null
+    }
+  },
+  {
     "id": "audiodharma:26576",
     "source": "AudioDharma",
     "source_id": "26576",
