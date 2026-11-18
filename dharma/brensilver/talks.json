@@ -1,5 +1,99 @@
 [
   {
+    "id": "audiodharma:26667",
+    "source": "AudioDharma",
+    "source_id": "26667",
+    "title": "Mindfulness of Emotions",
+    "speaker": "Matthew Brensilver",
+    "published_at": "2026-11-17T12:00:00+00:00",
+    "link": "https://www.audiodharma.org/talks/26667",
+    "audio_url": "https://audiodharma.us-east-1.linodeobjects.com/talks/26667/20261117-matthew_brensilver-irc-tuesday_dharma_talk.mp3",
+    "audio_type": "audio/mpeg",
+    "audio_length": null,
+    "duration": "49:37",
+    "description": "AudioDharma talk by Matthew Brensilver.",
+    "image_url": "https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+    "canonical_url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26667/",
+    "podcast_description": "What if emotion is not a side issue in practice, but the very place where suffering, clinging, and freedom are felt? The talk traces emotion as bodily signal and noise, showing how to distinguish mood and reactivity from the wisdom embedded in feeling itself. It then moves toward forgiveness, steadiness, and the possibility that fully meeting feeling can end in love, compassion, peace, and joy.",
+    "short_summary": "A talk on emotion as central to practice, where feeling becomes both the site of delusion and the doorway to freedom.",
+    "episode_image_url": "https://jeffharr.is/dharma/brensilver/artwork/audiodharma-26667.jpg",
+    "chapters_url": "https://jeffharr.is/dharma/brensilver/chapters/audiodharma-26667.json",
+    "chapters": [
+      {
+        "start": 0.0,
+        "title": "Body and emotion",
+        "description": "The talk begins by shifting from the body in practice to emotion as another essential facet of embodiment.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26667/?t=0",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 124.48,
+        "title": "Feeling as central",
+        "description": "Emotion is framed as foundational to suffering, clinging, and freedom, with references to the Buddha, Antonio Damasio, and Lisa Feldman Barrett.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26667/?t=124",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 491.92,
+        "title": "How feeling shapes life",
+        "description": "The speaker explores valence, arousal, mood, and memory, showing how emotional tone colors attention and autobiography.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26667/?t=492",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 864.8,
+        "title": "Urgency and forgiveness",
+        "description": "Samsara is described as the urge to fix, then the talk turns toward forgiveness as the relational stance that allows connection with experience.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26667/?t=865",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1486.296,
+        "title": "Attention and grace",
+        "description": "A quotation from Simone Weil leads into a memoir of relapse, mercy, and the depth of being forgiven in failure.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26667/?t=1486",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1856.776,
+        "title": "Suffering and purification",
+        "description": "The talk considers how emotion can reveal delusion or wisdom, and how tranquility and equanimity allow painful feeling to become purification.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26667/?t=1857",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 2305.936,
+        "title": "Signal from noise",
+        "description": "Practice is described as increasing the signal-to-noise ratio, so that wisdom can be recognized in the body rather than in stories.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26667/?t=2306",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 2689.573,
+        "title": "Emotion ends in love",
+        "description": "The final movement is simple and quiet: stay with the feeling until it ends, and what remains is love, compassion, peace, and kindness.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26667/?t=2690",
+        "img": null,
+        "toc": true
+      }
+    ],
+    "venue": null,
+    "series": null,
+    "tags": [],
+    "transcript": {
+      "status": "pending",
+      "url": null,
+      "text_path": null
+    }
+  },
+  {
     "id": "audiodharma:26644",
     "source": "AudioDharma",
     "source_id": "26644",
