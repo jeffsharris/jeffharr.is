@@ -1,5 +1,107 @@
 [
   {
+    "id": "audiodharma:26676",
+    "source": "AudioDharma",
+    "source_id": "26676",
+    "title": "Exploring emotion with breathing as an anchor",
+    "speaker": "Matthew Brensilver",
+    "published_at": "2026-11-18T12:00:00+00:00",
+    "link": "https://www.audiodharma.org/talks/26676",
+    "audio_url": "https://audiodharma.us-east-1.linodeobjects.com/talks/26676/20261118-matthew_brensilver-irc-wednesday_morning_guided_meditation.mp3",
+    "audio_type": "audio/mpeg",
+    "audio_length": null,
+    "duration": "42:30",
+    "description": "AudioDharma talk by Matthew Brensilver.",
+    "image_url": "https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+    "canonical_url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26676/",
+    "podcast_description": "What happens when breathing is not used to escape emotion, but as a steady place from which to feel it? The talk moves from the simple comfort of rain and embodied presence into a careful exploration of emotional currents, urgency, and the way mindfulness can make room for intensity without reacting to it. Again and again, the emphasis is on receiving experience directly: breathing, body, feeling, and the worlds they create.",
+    "short_summary": "A guided exploration of how breathing can anchor awareness while making room for emotion, urgency, and the changing worlds they create.",
+    "episode_image_url": "https://jeffharr.is/dharma/brensilver/artwork/audiodharma-26676.jpg",
+    "chapters_url": "https://jeffharr.is/dharma/brensilver/chapters/audiodharma-26676.json",
+    "chapters": [
+      {
+        "start": 0.0,
+        "title": "Rain and belonging",
+        "description": "The talk opens with the rain and the felt sense of being held by nature, setting a tone of coziness and embeddedness.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26676/?t=0",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 158.76,
+        "title": "Breathing as a check-in",
+        "description": "Breath becomes a pulse check for the whole being, offering a simple way to sense body, attention, emotion, and energy.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26676/?t=159",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 369.36,
+        "title": "Receiving the breath",
+        "description": "The practice shifts toward resting with breathing as a small light or open room, allowing relaxation rather than effort.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26676/?t=369",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 513.56,
+        "title": "Letting go of wanting",
+        "description": "Attention is contrasted with wanting, and the emphasis turns to receiving the rhythms of in-breath and out-breath without grasping.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26676/?t=514",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 835.16,
+        "title": "Making room for feeling",
+        "description": "The body is imagined as a wide pasture, spacious enough to meet emotional currents and bodily activation without needing to define them.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26676/?t=835",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1081.96,
+        "title": "Urgency meets permission",
+        "description": "The talk explores urgency, the pressure to fix or acquire something, and the possibility of meeting all of it with radical permission.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26676/?t=1082",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1343.302,
+        "title": "Safety for emotional currents",
+        "description": "Emotion is described as asking for responsiveness and care, while simple resting in breathing helps the inner life feel more secure.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26676/?t=1343",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1700.302,
+        "title": "Presence and disorientation",
+        "description": "The talk stays with the disorientation of presence and absence, then widens to the idea that clinging is what names and fixes identity.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26676/?t=1700",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 2340.302,
+        "title": "Feeling creates worlds",
+        "description": "In closing, the talk returns to how pleasant and unpleasant feeling give rise to strategy, perception, and whole worlds, all as part of mindfulness of the body.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26676/?t=2340",
+        "img": null,
+        "toc": true
+      }
+    ],
+    "venue": null,
+    "series": null,
+    "tags": [],
+    "transcript": {
+      "status": "pending",
+      "url": null,
+      "text_path": null
+    }
+  },
+  {
     "id": "audiodharma:26667",
     "source": "AudioDharma",
     "source_id": "26667",

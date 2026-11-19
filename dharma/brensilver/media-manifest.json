@@ -1,6 +1,12 @@
 {
   "chapters": [
     {
+      "talk_id": "audiodharma:26676",
+      "key": "chapters/audiodharma-26676.json",
+      "source_path": "chapters/audiodharma-26676.json",
+      "url": "https://jeffharr.is/dharma/brensilver/chapters/audiodharma-26676.json"
+    },
+    {
       "talk_id": "audiodharma:26667",
       "key": "chapters/audiodharma-26667.json",
       "source_path": "chapters/audiodharma-26667.json",
@@ -4412,6 +4418,12 @@
     }
   ],
   "artwork": [
+    {
+      "talk_id": "audiodharma:26676",
+      "key": "artwork/audiodharma-26676.jpg",
+      "source_path": "artwork/audiodharma-26676.jpg",
+      "url": "https://jeffharr.is/dharma/brensilver/artwork/audiodharma-26676.jpg"
+    },
     {
       "talk_id": "audiodharma:26667",
       "key": "artwork/audiodharma-26667.jpg",
