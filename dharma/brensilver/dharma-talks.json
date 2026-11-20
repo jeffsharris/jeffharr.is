@@ -1,5 +1,107 @@
 [
   {
+    "id": "audiodharma:26691",
+    "source": "AudioDharma",
+    "source_id": "26691",
+    "title": "Stillness",
+    "speaker": "Matthew Brensilver",
+    "published_at": "2026-11-19T12:00:00+00:00",
+    "link": "https://www.audiodharma.org/talks/26691",
+    "audio_url": "https://audiodharma.us-east-1.linodeobjects.com/talks/26691/20261119-matthew_brensilver-irc-stillness.mp3",
+    "audio_type": "audio/mpeg",
+    "audio_length": null,
+    "duration": "47:44",
+    "description": "AudioDharma talk by Matthew Brensilver.",
+    "image_url": "https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+    "canonical_url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26691/",
+    "podcast_description": "What if stillness is not a blank state, but the end of all the striving that keeps the mind in motion? The talk moves from dukkha and the limits of thinking, through craving, clinging, and the pressure to become, toward a quieter view in which surrender, grace, and receptivity matter as much as effort. Along the way, it asks what it would mean to stop not by force, but by letting the demand for movement fall away.",
+    "short_summary": "The talk traces how suffering, craving, and spiritual striving create mental movement, and how a deeper stillness appears when effort gives way to receptivity.",
+    "episode_image_url": "https://jeffharr.is/dharma/brensilver/artwork/audiodharma-26691.jpg",
+    "chapters_url": "https://jeffharr.is/dharma/brensilver/chapters/audiodharma-26691.json",
+    "chapters": [
+      {
+        "start": 117.52,
+        "title": "Meeting dukkha directly",
+        "description": "The talk begins by treating Buddhism as training in seeing suffering clearly, rather than bypassing it with technique or thought.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26691/?t=118",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 563.28,
+        "title": "What stopping means",
+        "description": "Angulimala's encounter with the Buddha opens a question about cessation, impermanence, and the mind's hidden assumption that things will continue.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26691/?t=563",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 827.68,
+        "title": "Rest, love, and fatigue",
+        "description": "A Rumi line and a memory of an intense lovingkindness practice explore the difference between ecstasy and the deeper rest that does not exhaust the heart.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26691/?t=828",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1220.871,
+        "title": "Clinging as movement",
+        "description": "The speaker maps clinging as friction in the system, including the subtle attachments to views, pleasure, and selfing.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26691/?t=1221",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1402.671,
+        "title": "The pressure to become",
+        "description": "Craving is expanded into the urge to become, showing how goals, progress, and even spiritual ambition can keep the mind under pressure.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26691/?t=1403",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 1898.631,
+        "title": "The still point",
+        "description": "A quotation from T. S. Eliot helps name a stillness that is not separate from motion, but the condition that makes the dance possible.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26691/?t=1899",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 2246.871,
+        "title": "Effort and receptivity",
+        "description": "Ajahn Brahm's leaf image and a phrase about self-governance underscore the limits of willpower and the need to let practice become more receptive.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26691/?t=2247",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 2563.274,
+        "title": "Still water, flowing water",
+        "description": "Ajahn Chah's teaching closes the arc with impermanence, peacefulness, and the image of a mind that is still even while phenomena continue to arise and pass.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26691/?t=2563",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 2692.154,
+        "title": "Letting go into stillness",
+        "description": "The talk ends with an invitation to stop whatever can stop, allow the rest to move on its own, and entrust the heart to a goodness beyond self-management.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26691/?t=2692",
+        "img": null,
+        "toc": true
+      }
+    ],
+    "venue": null,
+    "series": null,
+    "tags": [],
+    "transcript": {
+      "status": "pending",
+      "url": null,
+      "text_path": null
+    }
+  },
+  {
     "id": "audiodharma:26676",
     "source": "AudioDharma",
     "source_id": "26676",
