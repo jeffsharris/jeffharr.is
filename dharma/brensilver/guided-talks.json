@@ -1,5 +1,99 @@
 [
   {
+    "id": "audiodharma:26705",
+    "source": "AudioDharma",
+    "source_id": "26705",
+    "title": "Guided Meditation: Stillness and movement",
+    "speaker": "Matthew Brensilver",
+    "published_at": "2026-11-20T12:00:00+00:00",
+    "link": "https://www.audiodharma.org/talks/26705",
+    "audio_url": "https://audiodharma.us-east-1.linodeobjects.com/talks/26705/20261120-matthew_brensilver-irc-friday_morning_guided_meditation.mp3",
+    "audio_type": "audio/mpeg",
+    "audio_length": null,
+    "duration": "55:12",
+    "description": "AudioDharma talk by Matthew Brensilver.",
+    "image_url": "https://jeffharr.is/dharma/brensilver/artwork/matthew-brensilver-podcast-cover.jpg",
+    "canonical_url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26705/",
+    "podcast_description": "The talk turns on a simple but unsettling question: what if stillness does not care about our self-story, our preferences, or even the person we imagine we are becoming? Through repeated phrases and gentle insistence, the speaker invites listeners to rest in a stillness that undercuts struggle and softens the ways we fight ourselves. The final movement is less about attaining a special state than about learning how to meet silence with care and trust.",
+    "short_summary": "A guided meditation on resting in stillness beyond self-judgment, striving, and the idea of becoming.",
+    "episode_image_url": "https://jeffharr.is/dharma/brensilver/artwork/audiodharma-26705.jpg",
+    "chapters_url": "https://jeffharr.is/dharma/brensilver/chapters/audiodharma-26705.json",
+    "chapters": [
+      {
+        "start": 2468.536,
+        "title": "Entering Stillness",
+        "description": "The meditation opens by naming stillness as something impersonal and beyond ordinary self-concern.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26705/?t=2469",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 2510.776,
+        "title": "Beyond Pleasant and Unpleasant",
+        "description": "The teaching widens into a reminder that stillness is not organized around comfort, discomfort, or moral self-evaluation.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26705/?t=2511",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 2583.776,
+        "title": "Not Becoming Something",
+        "description": "The speaker repeatedly returns to the idea that stillness is not interested in the identity project of becoming.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26705/?t=2584",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 2643.296,
+        "title": "Stillness Beckons",
+        "description": "The refrain deepens into an invitation to stop, letting the listener feel how stillness gently calls rather than demands.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26705/?t=2643",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 2778.816,
+        "title": "Settling Into Repetition",
+        "description": "The repeated phrases become more spacious, allowing the emphasis on release and non-striving to land through rhythm.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26705/?t=2779",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 2898.816,
+        "title": "What We Are Becoming",
+        "description": "The language shifts slightly toward what is actually unfolding, while still refusing the pressure to manage spiritual progress.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26705/?t=2899",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 3005.816,
+        "title": "Misunderstanding Stillness",
+        "description": "The talk names inner conflict as a misunderstanding about stillness itself, reframing self-struggle as something to see differently.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26705/?t=3006",
+        "img": null,
+        "toc": true
+      },
+      {
+        "start": 3173.816,
+        "title": "Closing Blessing",
+        "description": "The meditation closes with gratitude, a light touch of humor, and a final encouragement to take good care of silence.",
+        "url": "https://jeffharr.is/dharma/brensilver/talks/audiodharma-26705/?t=3174",
+        "img": null,
+        "toc": true
+      }
+    ],
+    "venue": null,
+    "series": null,
+    "tags": [],
+    "transcript": {
+      "status": "pending",
+      "url": null,
+      "text_path": null
+    }
+  },
+  {
     "id": "audiodharma:26576",
     "source": "AudioDharma",
     "source_id": "26576",
